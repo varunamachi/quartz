@@ -21,7 +21,7 @@ void Parameters::removeParam( const QString &key )
 }
 
 
-const QVariant & Parameters::param( const QString &key ) const
+const QVariant Parameters::param( const QString &key ) const
 {
     return m_params.value( key );
 }

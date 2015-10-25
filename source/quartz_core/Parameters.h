@@ -17,7 +17,7 @@ public:
 
     void removeParam( const QString &key );
 
-    const QVariant & param( const QString &key ) const;
+    const QVariant param( const QString &key ) const;
 
 private:
     QHash< QString, QVariant > m_params;
