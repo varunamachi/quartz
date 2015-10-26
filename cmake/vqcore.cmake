@@ -17,7 +17,7 @@ endif()
 
 if( DEFINED VQ_PROJECT_${PROJECT_NAME}_DEFINED )
     message( FATAL_ERROR "Duplicate project found. Make sure that "
-                         "quartz.cmake is not included in any subdirectory's "
+                         "vqcore.cmake is not included in any subdirectory's "
                          "CMakeLists.txt" )
 endif()
 
@@ -33,7 +33,7 @@ elseif( ${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC )
     endif()
 endif()
 
-
+set( CMAKE_INSTALL_PREFIX ${VQ_OUTPUT_DIR} )
 set( VQ_PROJECT_DEFINED ON )
 set( "VQ_PROJECT_${PROJECT_NAME}_DEFINED" ON )
 set( VQ_LIB_EXT ".a" )

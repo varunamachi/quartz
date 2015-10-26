@@ -1,11 +1,14 @@
-include( $ENV{QUARTZ_ROOT}/cmake/DeployQt5.cmake)
+file( TO_CMAKE_PATH "$ENV{QUARTZ_ROOT}" QUARTZ_ROOT )
 
-set( VQ_BUILD_DIR       $ENV{QUARTZ_ROOT}/builds )
-set( VQ_OUTPUT_DIR      $ENV{QUARTZ_ROOT}/output )
-set( VQ_SRC_DIR         $ENV{QUARTZ_ROOT}/source )
-set( VQ_TEST_DIR        $ENV{QUARTZ_ROOT}/tests )
+include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
 
-include( $ENV{QUARTZ_ROOT}/cmake/vqcore.cmake)
+set( VQ_BUILD_DIR       ${QUARTZ_ROOT}/builds )
+set( VQ_OUTPUT_DIR      ${QUARTZ_ROOT}/output )
+set( VQ_SRC_DIR         ${QUARTZ_ROOT}/source )
+set( VQ_TEST_DIR        ${QUARTZ_ROOT}/tests )
+
+include( ${QUARTZ_ROOT}/cmake/vqcore.cmake)
+
 
 macro( qz_add_vqcore )
     vq_add_module( "quartz" "vqcore" )

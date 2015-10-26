@@ -10,7 +10,7 @@
 namespace Vam { namespace Quartz {
 
 
-VQ_INTERFACE QZ_CORE_EXPORT  IQuartzTitleBar
+VQ_INTERFACE IQuartzTitleBar
 {
     virtual void addItem( QuartzItem *widget ) = 0;
 

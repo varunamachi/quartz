@@ -7,7 +7,7 @@
 
 namespace Vam { namespace Quartz {
 
-VQ_INTERFACE QZ_CORE_EXPORT IMessageClient
+VQ_INTERFACE IMessageClient
 {
     virtual QString messageClientId() const = 0;
 

@@ -10,7 +10,7 @@
 
 namespace Vam { namespace Quartz {
 
-class QZ_CORE_EXPORT QuartzContext
+class QuartzContext
 {
 public:
     QuartzContext( IQuartzTitleBar &titleBar,

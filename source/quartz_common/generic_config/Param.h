@@ -63,7 +63,7 @@ public:
         return m_subParams;
     }
 
-    Param::Ptr subParam( std::size_t index )
+    Param::Ptr subParam( int index )
     {
         Param::Ptr subParam = nullptr;
         if( index < m_subParams.size() ) {
@@ -148,7 +148,7 @@ public:
         return value;
     }
 
-    QString value( std::size_t index ) const
+    QString value( int index ) const
     {
         QString result = "";
         if( m_names.size() > index ) {

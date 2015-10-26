@@ -10,7 +10,7 @@
 
 namespace Vam { namespace Quartz {
 
-class QZ_CORE_EXPORT PluginBundle
+class PluginBundle
 {
 public:
     PluginBundle( QString bundleId,
@@ -47,6 +47,7 @@ public:
         if( index < m_plugins.size() ) {
             plugin = m_plugins.at( index );
         }
+        return plugin;
     }
 
     void addDependency( QString bundleId )

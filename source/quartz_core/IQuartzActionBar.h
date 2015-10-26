@@ -9,7 +9,7 @@
 
 namespace Vam { namespace Quartz {
 
-VQ_INTERFACE QZ_CORE_EXPORT IQuartzActionBar
+VQ_INTERFACE IQuartzActionBar
 {
     virtual void addItem( QuartzItem *widget ) = 0;
 

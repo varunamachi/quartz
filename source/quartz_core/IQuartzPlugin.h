@@ -6,7 +6,7 @@
 
 namespace Vam { namespace Quartz {
 
-VQ_INTERFACE QZ_CORE_EXPORT  IQuartzPlugin
+VQ_INTERFACE IQuartzPlugin
 {
     virtual QString pluginId() const = 0;
 

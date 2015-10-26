@@ -6,12 +6,15 @@ if( DEFINED VQ_PROJECT_DEFINED )
 endif()
 set( VQ_IS_PROJECT_CONTAINER ON )
 
-set( VQ_BUILD_DIR       $ENV{QUARTZ_ROOT}/builds )
-set( VQ_OUTPUT_DIR      $ENV{QUARTZ_ROOT}/output )
-set( VQ_SRC_DIR         $ENV{QUARTZ_ROOT}/source )
-set( VQ_TEST_DIR        $ENV{QUARTZ_ROOT}/tests )
+file( TO_CMAKE_PATH "$ENV{QUARTZ_ROOT}" QUARTZ_ROOT )
 
-set( CMAKE_INSTALL_PREFIX  ${VQ_OUTPUT_DIR} )
+
+set( VQ_BUILD_DIR       ${QUARTZ_ROOT}/builds )
+set( VQ_OUTPUT_DIR      ${QUARTZ_ROOT}/output )
+set( VQ_SRC_DIR         ${QUARTZ_ROOT}/source )
+set( VQ_TEST_DIR        ${QUARTZ_ROOT}/tests )
+
+set( CMAKE_INSTALL_PREFIX ${VQ_OUTPUT_DIR} )
 
 macro( add_project MODULE_NAME )
     add_subdirectory( ${MODULE_NAME} )

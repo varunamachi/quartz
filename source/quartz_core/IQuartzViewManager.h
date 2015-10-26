@@ -11,7 +11,7 @@
 
 namespace Vam { namespace Quartz {
 
-class QZ_CORE_EXPORT  QuartzView : public QWidget
+class QuartzView : public QWidget
 {
 public:
     QuartzView( const QString &viewId,

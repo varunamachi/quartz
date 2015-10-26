@@ -24,7 +24,7 @@
 
 namespace Vam { namespace Logger {
 
-VQLogger *VQLogger::s_instance = 0;
+VQLogger * VQLogger::s_instance = 0;
 
 
 bool VQLogger::init( ILogDispatcher *dispatcher, VQLogLevel level )

@@ -10,7 +10,7 @@
 
 namespace Vam { namespace Quartz {
 
-class QZ_CORE_EXPORT QuartzPage : public QWidget
+class QuartzPage : public QWidget
 {
 public:
     QuartzPage( const QString &pageId,
