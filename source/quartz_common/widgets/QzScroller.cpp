@@ -3,6 +3,7 @@
 #include <QBoxLayout>
 #include <QScrollBar>
 #include <QComboBox>
+#include <QPushButton>
 
 #include "QzScroller.h"
 
@@ -38,11 +39,38 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
     m_scroll->horizontalScrollBar()->hide();
     m_scroll->verticalScrollBar()->hide();
     m_scroll->setWidget( innerWidget );
+
+    QPushButton *bckButton = new QPushButton( "<<", this );
+    QPushButton *fwdButton = new QPushButton( ">>", this );
+
     QHBoxLayout *mainLayout = new QHBoxLayout();
+    mainLayout->addWidget( bckButton );
     mainLayout->addWidget( m_scroll );
+    mainLayout->addWidget( fwdButton );
+    mainLayout->setContentsMargins( QMargins() );
     this->setLayout( mainLayout );
 
+    connect( bckButton,
+             SIGNAL( clicked( bool )),
+             this,
+             SLOT( whenBackward() ));
+    connect( fwdButton,
+             SIGNAL( clicked( bool )),
+             this,
+             SLOT( whenForward() ));
 
+}
+
+
+void QzScroller::whenForward()
+{
+    m_scroll->scroll( -5, 0 );
+}
+
+
+void QzScroller::whenBackward()
+{
+    m_scroll->scroll( +5, 0 );
 }
 
 

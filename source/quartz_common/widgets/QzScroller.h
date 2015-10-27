@@ -14,6 +14,11 @@ public:
     explicit QzScroller( Qt::Orientation orientation,
                          QWidget *parent = nullptr );
 
+private slots:
+    void whenForward();
+
+    void whenBackward();
+
 private:
     Qt::Orientation m_orientation;
 
