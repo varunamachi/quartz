@@ -1,7 +1,4 @@
-vq_headers(
-    LabeledSlider.h
-)
-
-
-vq_sources(
+vq_classes(
+    LabeledSlider
+    QzScroller
 )

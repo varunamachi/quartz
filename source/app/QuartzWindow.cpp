@@ -2,6 +2,8 @@
 
 #include <QVBoxLayout>
 
+#include <quartz_common/widgets/QzScroller.h>
+
 #include "QuartzWindow.h"
 
 namespace Vam { namespace Quartz {
@@ -14,6 +16,9 @@ QuartzWindow::QuartzWindow( QWidget *parent )
 
     widget->setContentsMargins( QMargins() );
     layout->setContentsMargins( QMargins() );
+
+    QzScroller *scroller = new QzScroller( Qt::Horizontal, this );
+    layout->addWidget( scroller );
 
     widget->setLayout( layout );
     setCentralWidget( widget );
