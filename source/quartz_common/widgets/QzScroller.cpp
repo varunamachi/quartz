@@ -4,6 +4,8 @@
 #include <QScrollBar>
 #include <QComboBox>
 #include <QPushButton>
+#include <QTimer>
+#include <QDebug>
 
 #include "QzScroller.h"
 
@@ -12,6 +14,10 @@ namespace Vam { namespace Quartz {
 QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
     : QWidget( parent )
     , m_orientation( orientation )
+    , m_bckButton( new QPushButton( "<<", this ))
+    , m_fwdButton( new QPushButton( ">>", this ))
+    , m_timer( new QTimer( this ))
+    , m_timeout( 0 )
 {
     QWidget *innerWidget = new QWidget( this );
     if( orientation == Qt::Horizontal ) {
@@ -35,44 +41,69 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
         m_layout->addWidget( box );
     }
 
-    m_scroll = new QScrollArea( /*this*/ );
-    m_scroll->horizontalScrollBar()->hide();
-    m_scroll->verticalScrollBar()->hide();
+    m_scroll = new QScrollArea( this );
+    m_scroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_scroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_scroll->setWidget( innerWidget );
 
-    QPushButton *bckButton = new QPushButton( "<<", this );
-    QPushButton *fwdButton = new QPushButton( ">>", this );
-
     QHBoxLayout *mainLayout = new QHBoxLayout();
-    mainLayout->addWidget( bckButton );
+    mainLayout->addWidget( m_bckButton );
     mainLayout->addWidget( m_scroll );
-    mainLayout->addWidget( fwdButton );
+    mainLayout->addWidget( m_fwdButton );
     mainLayout->setContentsMargins( QMargins() );
     this->setLayout( mainLayout );
 
-    connect( bckButton,
-             SIGNAL( clicked( bool )),
+    connect( m_fwdButton,
+             &QAbstractButton::pressed,
              this,
-             SLOT( whenBackward() ));
-    connect( fwdButton,
-             SIGNAL( clicked( bool )),
+             &QzScroller::start );
+    connect( m_fwdButton,
+             &QAbstractButton::released,
              this,
-             SLOT( whenForward() ));
+             &QzScroller::stop );
+    connect( m_bckButton,
+             &QAbstractButton::pressed,
+             this,
+             &QzScroller::start);
+    connect( m_bckButton,
+             &QAbstractButton::released,
+             this,
+             &QzScroller::stop );
+    connect( m_timer,
+             &QTimer::timeout,
+             this,
+             &QzScroller::onTimeout );
 
 }
 
 
-void QzScroller::whenForward()
+void QzScroller::start()
 {
-    m_scroll->scroll( -5, 0 );
+//    auto bar = m_scroll->horizontalScrollBar();
+//    bar->setValue( bar->value() - 5 );
+    m_timeout = 100;
+    onTimeout();
 }
 
-
-void QzScroller::whenBackward()
+void QzScroller::stop()
 {
-    m_scroll->scroll( +5, 0 );
+    m_timer->stop();
 }
 
+void QzScroller::onTimeout()
+{
+    if( m_timeout > 10 ) {
+        m_timer->start( m_timeout );
+        m_timeout = m_timeout - 10;
+    }
+    QScrollBar *bar = m_scroll->horizontalScrollBar();
+    if( m_fwdButton->isDown() ) {
+        bar->setValue( bar->value() - 5 );
+    }
+    else if( m_bckButton->isDown() ){
+        bar->setValue( bar->value() + 5 );
+    }
+}
 
 
 } }

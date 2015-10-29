@@ -4,6 +4,7 @@
 
 class QBoxLayout;
 class QScrollArea;
+class QPushButton;
 
 namespace Vam { namespace Quartz {
 
@@ -15,9 +16,11 @@ public:
                          QWidget *parent = nullptr );
 
 private slots:
-    void whenForward();
+    void start();
 
-    void whenBackward();
+    void stop();
+
+    void onTimeout();
 
 private:
     Qt::Orientation m_orientation;
@@ -25,6 +28,14 @@ private:
     QBoxLayout *m_layout;
 
     QScrollArea *m_scroll;
+
+    QPushButton *m_bckButton;
+
+    QPushButton *m_fwdButton;
+
+    QTimer *m_timer;
+
+    int m_timeout;
 
 };
 
