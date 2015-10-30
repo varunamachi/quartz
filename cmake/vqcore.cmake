@@ -244,6 +244,7 @@ macro( vq_install_plugin )
 endmacro( vq_install_plugin )
 
 macro( vq_install_headers )
+    get_property( VQ_HDR_LIST GLOBAL PROPERTY ${PROJECT_NAME}_HDR )
     foreach( HEADER ${VQ_HDR_LIST} )
         file( RELATIVE_PATH REL_PATH ${VQ_SRC_DIR} ${HEADER} )
         get_filename_component( DIR ${REL_PATH} DIRECTORY )

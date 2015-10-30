@@ -41,12 +41,19 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
         m_layout->addWidget( box );
     }
 
+
     m_scroll = new QScrollArea( this );
     m_scroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_scroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_scroll->setWidget( innerWidget );
 
-    QHBoxLayout *mainLayout = new QHBoxLayout();
+    QBoxLayout *mainLayout = nullptr;
+    if( orientation == Qt::Horizontal ) {
+        mainLayout = new QHBoxLayout();
+    }
+    else {
+        mainLayout = new QVBoxLayout();
+    }
     mainLayout->addWidget( m_bckButton );
     mainLayout->addWidget( m_scroll );
     mainLayout->addWidget( m_fwdButton );
@@ -79,16 +86,16 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
 
 void QzScroller::start()
 {
-//    auto bar = m_scroll->horizontalScrollBar();
-//    bar->setValue( bar->value() - 5 );
     m_timeout = 100;
     onTimeout();
 }
+
 
 void QzScroller::stop()
 {
     m_timer->stop();
 }
+
 
 void QzScroller::onTimeout()
 {
@@ -96,12 +103,14 @@ void QzScroller::onTimeout()
         m_timer->start( m_timeout );
         m_timeout = m_timeout - 10;
     }
-    QScrollBar *bar = m_scroll->horizontalScrollBar();
+    QScrollBar *bar = m_orientation == Qt::Horizontal
+            ? m_scroll->horizontalScrollBar()
+            : m_scroll->verticalScrollBar();
     if( m_fwdButton->isDown() ) {
-        bar->setValue( bar->value() - 5 );
+        bar->setValue( bar->value() + 8 );
     }
     else if( m_bckButton->isDown() ){
-        bar->setValue( bar->value() + 5 );
+        bar->setValue( bar->value() - 8 );
     }
 }
 

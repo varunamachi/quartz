@@ -17,7 +17,7 @@ QuartzWindow::QuartzWindow( QWidget *parent )
     widget->setContentsMargins( QMargins() );
     layout->setContentsMargins( QMargins() );
 
-    QzScroller *scroller = new QzScroller( Qt::Horizontal, this );
+    QzScroller *scroller = new QzScroller( Qt::Vertical, this );
     layout->addWidget( scroller );
 
     widget->setLayout( layout );
