@@ -13,6 +13,8 @@ class QzScroller : public QWidget
     Q_OBJECT
 public:
     explicit QzScroller( Qt::Orientation orientation,
+                         int minimumDim,
+                         int maximumDim,
                          QWidget *parent = nullptr );
 
 private slots:

@@ -11,7 +11,10 @@
 
 namespace Vam { namespace Quartz {
 
-QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
+QzScroller::QzScroller( Qt::Orientation orientation,
+                        int minimumDim,
+                        int maximumDim,
+                        QWidget *parent )
     : QWidget( parent )
     , m_orientation( orientation )
     , m_bckButton( new QPushButton( "<<", this ))
@@ -19,19 +22,31 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
     , m_timer( new QTimer( this ))
     , m_timeout( 0 )
 {
+    m_scroll = new QScrollArea( this );
+    m_scroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_scroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_scroll->setWidgetResizable( true );
+    m_scroll->setContentsMargins( QMargins() );
+    m_scroll->setStyleSheet( "QScrollArea{ border: 0px; }");
     QWidget *innerWidget = new QWidget( this );
     if( orientation == Qt::Horizontal ) {
         m_layout = new QHBoxLayout();
+        m_scroll->setMaximumHeight( maximumDim );
+        m_scroll->setMinimumHeight( minimumDim );
     }
     else {
         m_layout = new QVBoxLayout();
+        m_scroll->setMaximumWidth( maximumDim );
+        m_scroll->setMinimumWidth( minimumDim );
     }
-    innerWidget->setLayout( m_layout );
     m_layout->setContentsMargins( QMargins() );
-    innerWidget->setContentsMargins( QMargins() );
     m_layout->setMargin( 0 );
     m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
+    innerWidget->setLayout( m_layout );
+    innerWidget->setContentsMargins( QMargins() );
     innerWidget->setMinimumSize( QSize( 100, 20 ));
+    m_fwdButton->setFlat( true );
+    m_bckButton->setFlat( true );
 
     QStringList items;
     items << "One" << "Two" << "Three" << "Four";
@@ -42,11 +57,8 @@ QzScroller::QzScroller( Qt::Orientation orientation, QWidget *parent )
     }
 
 
-    m_scroll = new QScrollArea( this );
-    m_scroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_scroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_scroll->setWidget( innerWidget );
 
+    m_scroll->setWidget( innerWidget );
     QBoxLayout *mainLayout = nullptr;
     if( orientation == Qt::Horizontal ) {
         mainLayout = new QHBoxLayout();
