@@ -48,13 +48,13 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     m_fwdButton->setFlat( true );
     m_bckButton->setFlat( true );
 
-    QStringList items;
-    items << "One" << "Two" << "Three" << "Four";
-    for( int i = 0; i < 10; ++ i ) {
-        QComboBox *box = new QComboBox( innerWidget );
-        box->addItems( items );
-        m_layout->addWidget( box );
-    }
+//    QStringList items;
+//    items << "One" << "Two" << "Three" << "Four";
+//    for( int i = 0; i < 10; ++ i ) {
+//        QComboBox *box = new QComboBox( innerWidget );
+//        box->addItems( items );
+//        m_layout->addWidget( box );
+//    }
 
 
 
@@ -94,6 +94,37 @@ QzScroller::QzScroller( Qt::Orientation orientation,
              &QzScroller::onTimeout );
 
 }
+
+
+QWidgetList QzScroller::widget() const
+{
+    QWidgetList widgets;
+    for( int i = 0; i < m_layout->count(); ++ i ) {
+        QLayoutItem *item = m_layout->itemAt( i );
+        QWidget *widget = item->widget();
+        if( widget != nullptr ) {
+            widgets.append( widget );
+        }
+    }
+    return widgets;
+}
+
+
+void QzScroller::addWidget( QWidget *widget )
+{
+    if( widget != nullptr ) {
+        m_layout->addWidget( widget );
+    }
+}
+
+
+void QzScroller::removeWidget( QWidget *widget )
+{
+    if( widget != nullptr ) {
+        m_layout->removeWidget( widget );
+    }
+}
+
 
 
 void QzScroller::start()
