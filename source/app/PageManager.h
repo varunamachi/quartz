@@ -18,13 +18,15 @@ namespace Vam { namespace Quartz {
 
 namespace {
 
-class IndexButton : public QPushButton
+class IdButton : public QPushButton
 {
     Q_OBJECT
 public:
-    IndexButton( int index, QString text, QWidget *parent = 0 ) :
-        QPushButton( parent ),
-        m_index( index )
+    IndexButton( QString id,
+                 QString text,
+                 QWidget *parent = 0 )
+        : QPushButton( parent )
+        , m_id( index )
     {
         setCheckable( true );
         setStyleSheet(
@@ -48,16 +50,24 @@ protected:
     {
         if( ! isChecked() ) {
             QPushButton::mousePressEvent( evt );
-            emit activated( m_index );
+            emit activated( m_id );
         }
         evt->ignore();
     }
 
 signals:
-    void activated( int index );
+    void activated( QString id );
 
 private:
-    int m_index;
+    int m_id;
+};
+
+class PageContainer : public QWidget
+{
+    Q_OBJECT
+public:
+
+private:
 };
 
 }
@@ -95,6 +105,20 @@ public:
     void selectCategory( QString categoryId );
 
     void selectPage( QString pageId );
+
+private:
+    int m_holderHeight;
+
+    int m_selectorWidth;
+
+    QzScroller *m_catSelector;
+
+    QHash< QString, QzScroller *> m_pageHolders;
+
+    QHash< QString, QuartzPage *> m_pages;
+
+    QStackedWidget *m_mainWidget;
+
 };
 
 } }

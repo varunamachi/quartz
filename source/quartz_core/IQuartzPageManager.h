@@ -62,13 +62,19 @@ VQ_INTERFACE QZ_CORE_EXPORT IQuartzPageManager
 
     virtual QuartzPage * page( const QString &pageId ) const = 0;
 
-    virtual QuartzPage * currentPage() const = 0;
+    virtual QList< QuartzPage *> pages();
 
     virtual QList< QuartzPage *> pages( const QString &categoryId ) const = 0;
 
-    virtual const QString & currentCategory() const;
+    virtual QuartzPage * currentPage() const = 0;
 
-    virtual const QStringList categories() const;
+    virtual const QString & currentCategory() const = 0;
+
+    virtual QStringList categories() const = 0;
+
+    virtual void selectCategory( QString categoryId ) = 0;
+
+    virtual void selectPage( QString pageId ) = 0;
 
 };
 

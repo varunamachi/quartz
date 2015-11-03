@@ -4,3 +4,4 @@ builds/*
 output/lib/*
 output/include/*
 output/bin/*
+*.autosave
