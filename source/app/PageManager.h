@@ -11,28 +11,12 @@
 #include <QVBoxLayout>
 
 #include <quartz_core/IQuartzPageManager.h>
+#include <quartz_common/widgets/QzScroller.h>
 
 
 namespace Vam { namespace Quartz {
 
-//class QuartzComponent : public QWidget
-//{
-//    Q_OBJECT
-
-//public:
-//    QuartzComponent( QWidget *parent = 0 )
-//        : QWidget( parent )
-//    {
-
-//    }
-
-//    virtual QString componentId() const = 0;
-
-//    virtual QString componentName() const = 0;
-
-//    virtual const QIcon* icon() const = 0;
-//};
-
+namespace {
 
 class IndexButton : public QPushButton
 {
@@ -76,59 +60,41 @@ private:
     int m_index;
 };
 
+}
+
 
 class PageManager : public QWidget
                   , public IQuartzPageManager
 {
     Q_OBJECT
 public:
-    explicit PageManager( QWidget *parent = 0 );
+    explicit PageManager( int categoryWidth,
+                          int pagerHeight,
+                          QWidget *parent = 0 );
 
-    virtual ~PageManager();
+    void addPage( QuartzPage *page );
 
-    QList< QuartzPage *> pages() const;
+    void removePage( const QString &pageId );
 
-    QuartzPage * page( QString pageId ) const;
+    void removePage( QuartzPage *page );
+
+    void removePageCategory( const QString &categoryId );
+
+    QuartzPage * page( const QString &pageId ) const;
+
+    QList< QuartzPage *> pages();
+
+    QList< QuartzPage *> pages( const QString &categoryId ) const;
 
     QuartzPage * currentPage() const;
 
-    static void destroy();
+    const QString & currentCategory() const;
 
-    static PageManager* get();
+    QStringList categories() const;
 
-signals:
-    void componentSelected( const QuartzComponent *component );
+    void selectCategory( QString categoryId );
 
-    void componentAdded( const QuartzComponent *component );
-
-    void exitRequested();
-
-    void minimizeReqested();
-
-
-public slots:
-    void addComponent( QuartzComponent *component );
-
-    void selectComponent( QString componentId );
-
-private slots:
-    void onIndexSelected( int row );
-
-private:
-
-    void setupUi();
-
-    static PageManager *s_instance;
-
-    QHash< QString, QuartzComponent *> m_components;
-
-    QList< IndexButton *> m_buttons;
-
-    QHash< QString, int > m_nameToIndex;
-
-    QStackedWidget *m_mainWidget;
-
-    QVBoxLayout *m_buttonLayout;
+    void selectPage( QString pageId );
 };
 
 } }
