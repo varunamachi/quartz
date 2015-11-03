@@ -14,7 +14,7 @@ vq_headers (
     PageManager.h
     PluginManager.h
     BundleLoader.h
-    QuartzComponent.h
+#    QuartzComponent.h
 )
 
 vq_sources(
@@ -25,7 +25,7 @@ vq_sources(
     PageManager.cpp
     PluginManager.cpp
     BundleLoader.cpp
-    QuartzComponent.cpp
+#    QuartzComponent.cpp
 )
 
 vq_create_app()

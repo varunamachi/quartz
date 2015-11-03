@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 
 #include <quartz_core/IQuartzActionBar.h>
+#include <quartz_common/widgets/QzScroller.h>
 
 
 namespace Vam { namespace Quartz {
@@ -15,23 +16,24 @@ class ActionBar : public QWidget
 public:
     explicit ActionBar( int height, QWidget *parent = nullptr );
 
-    void addItem( QuartzItem *widget );
+    void addItem( QuartzItem *item );
 
-    void removeItem( QuartzItem *widget );
+    void removeItem( QuartzItem *item );
 
-    void removeItem( const QString &itemId );
-
-    void removeCategory( const QString &category );
+    void removeItem( const QString &item );
 
     QList< QuartzItem * > items() const;
 
-    QList< QuartzItem * > items( const QString category );
+    QList< QuartzItem * > items(const QString category);
+
+    void removeCategory( const QString &category );
 
 private:
     int m_height;
 
-    QHBoxLayout *m_layout;
+    QzScroller *m_scroller;
 
+    QHash< QString, QuartzItem *> m_items;
 };
 
 

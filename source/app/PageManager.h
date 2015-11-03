@@ -10,26 +10,28 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
+#include <quartz_core/IQuartzPageManager.h>
+
 
 namespace Vam { namespace Quartz {
 
-class QuartzComponent : public QWidget
-{
-    Q_OBJECT
+//class QuartzComponent : public QWidget
+//{
+//    Q_OBJECT
 
-public:
-    QuartzComponent( QWidget *parent = 0 )
-        : QWidget( parent )
-    {
+//public:
+//    QuartzComponent( QWidget *parent = 0 )
+//        : QWidget( parent )
+//    {
 
-    }
+//    }
 
-    virtual QString componentId() const = 0;
+//    virtual QString componentId() const = 0;
 
-    virtual QString componentName() const = 0;
+//    virtual QString componentName() const = 0;
 
-    virtual const QIcon* icon() const = 0;
-};
+//    virtual const QIcon* icon() const = 0;
+//};
 
 
 class IndexButton : public QPushButton
@@ -75,23 +77,24 @@ private:
 };
 
 
-class ComponentManager : public QWidget
+class PageManager : public QWidget
+                  , public IQuartzPageManager
 {
     Q_OBJECT
 public:
-    explicit ComponentManager( QWidget *parent = 0 );
+    explicit PageManager( QWidget *parent = 0 );
 
-    virtual ~ComponentManager();
+    virtual ~PageManager();
 
-    QList< QuartzComponent *> allComponents() const;
+    QList< QuartzPage *> pages() const;
 
-    const QuartzComponent* component( QString componentId ) const;
+    QuartzPage * page( QString pageId ) const;
 
-    const QuartzComponent* currentComponent() const;
+    QuartzPage * currentPage() const;
 
     static void destroy();
 
-    static ComponentManager* get();
+    static PageManager* get();
 
 signals:
     void componentSelected( const QuartzComponent *component );
@@ -115,7 +118,7 @@ private:
 
     void setupUi();
 
-    static ComponentManager *s_instance;
+    static PageManager *s_instance;
 
     QHash< QString, QuartzComponent *> m_components;
 

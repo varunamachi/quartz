@@ -4,7 +4,7 @@
 
 namespace Vam { namespace Quartz {
 
-class ComponentManager;
+class PageManager;
 class ActionBar;
 
 class QuartzWindow : public QMainWindow
