@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <QWidget>
 #include <QStackedWidget>
 #include <QPushButton>
@@ -71,32 +73,57 @@ public:
     QList< QString > allIds() const;
 
 public slots:
-    void addWidget( QString id, QWidget *widget );
+    void addWidget( const QString &id,
+                    const QString &displayName,
+                    QWidget *widget );
 
-    void removeWidget( QString id );
+    void removeWidget( const QString &id );
 
-    void removeWidget( QWidget widget );
+    void removeWidget( QWidget *widget );
 
-    void select( QString id );
+    void select( const QString &id );
 
 signals:
-    void sigSelected( QString &id );
+    void sigSelected( const QString &id );
 
-    void sigAdded( QString &id, QWidget *widget );
+    void sigAdded( const QString &id, QWidget *widget );
 
 private slots:
-    void onSelected( QString &id );
+    void updateIndeces();
 
 private:
+    struct Item {
+        using Ptr = std::shared_ptr< Item >;
+
+        IdButton *m_btn;
+
+        QWidget *m_widget;
+
+        int m_index;
+
+        inline Item( int index, IdButton *btn, QWidget *widget )
+            : m_index( index )
+            , m_btn( btn )
+            , m_widget( widget )
+        {
+
+        }
+
+        static inline Item::Ptr create( int index,
+                                        IdButton *btn,
+                                        QWidget *widget )
+        {
+            return std::make_shared< Item >( index, btn, widget );
+        }
+    };
+
     QzScroller *m_selector;
 
     QStackedWidget *m_stackWidget;
 
     QString m_selectedId;
 
-    QHash< QString, IdButton *> m_buttons;
-
-    QHash< QString, QWidget *> m_widgets;
+    QHash< QString, Item::Ptr > m_items;
 };
 
 
