@@ -6,6 +6,7 @@
 #include <QStackedWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QMouseEvent>
 
 #include "QzScroller.h"
 
@@ -52,9 +53,8 @@ signals:
     void activated( QString id );
 
 private:
-    int m_id;
+    QString m_id;
 };
-
 
 
 class StackedContainer : public QWidget

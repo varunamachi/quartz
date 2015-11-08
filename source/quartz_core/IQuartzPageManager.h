@@ -50,7 +50,7 @@ private:
 };
 
 
-VQ_INTERFACE QZ_CORE_EXPORT IQuartzPageManager
+VQ_INTERFACE IQuartzPageManager
 {
     virtual void addPage( QuartzPage *page ) = 0;
 
@@ -62,7 +62,7 @@ VQ_INTERFACE QZ_CORE_EXPORT IQuartzPageManager
 
     virtual QuartzPage * page( const QString &pageId ) const = 0;
 
-    virtual QList< QuartzPage *> pages();
+    virtual QList< QuartzPage *> pages() = 0;
 
     virtual QList< QuartzPage *> pages( const QString &categoryId ) const = 0;
 

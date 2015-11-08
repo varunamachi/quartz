@@ -1,11 +1,14 @@
+#include <QVariant>
+#include <QMouseEvent>
 
 #include "StackedContainer.h"
 
 namespace Vam { namespace Quartz {
 
+
 StackedContainer::StackedContainer( int selectorDimention,
                                     Qt::Orientation orientation,
-                                    QWidget *parent = nullptr )
+                                    QWidget *parent )
     : QWidget( parent )
     , m_selector( new QzScroller( orientation,
                                   selectorDimention,
@@ -13,7 +16,13 @@ StackedContainer::StackedContainer( int selectorDimention,
                                   this ))
     , m_stackWidget( new QStackedWidget( this ))
 {
-    QVBoxLayout *layout = new QVBoxLayout();
+    QBoxLayout *layout = nullptr;
+    if( orientation == Qt::Horizontal ) {
+        layout = new QHBoxLayout();
+    }
+    else {
+        layout = new QVBoxLayout();
+    }
     layout->addWidget( m_selector );
     layout->addWidget( m_stackWidget );
     layout->setContentsMargins( QMargins() );
@@ -21,6 +30,7 @@ StackedContainer::StackedContainer( int selectorDimention,
     m_stackWidget->setContentsMargins( QMargins() );
     this->setLayout( layout );
 }
+
 
 QWidget * StackedContainer::widget( const QString &id ) const
 {
@@ -59,23 +69,26 @@ void StackedContainer::addWidget( const QString &id,
         m_selectedId = id;
         m_stackWidget->setCurrentIndex( index );
         m_selector->addWidget( widget );
+        widget->setProperty( "item_id", id );
     }
 }
 
 
-void StackedContainer::removeWidget( QString id )
+void StackedContainer::removeWidget( const QString &id )
 {
     Item::Ptr item = m_items.value( id );
     if( item ) {
+        QWidget *theWidget = widget( id );
         m_selector->removeWidget( item->m_btn );
         m_stackWidget->removeWidget( item->m_widget );
         m_items.remove( id );
         updateIndeces();
+        theWidget->setProperty( "item_id", QVariant() );
     }
 }
 
 
-void StackedContainer::removeWidget( QWidget widget )
+void StackedContainer::removeWidget( QWidget *widget )
 {
     for( auto it = m_items.begin(); it != m_items.end(); ++ it ) {
         Item::Ptr item = it.value();
@@ -90,7 +103,7 @@ void StackedContainer::removeWidget( QWidget widget )
 }
 
 
-void StackedContainer::select( QString id )
+void StackedContainer::select( const QString &id )
 {
     Item::Ptr item = m_items.value( id );
     if( item ) {
@@ -103,6 +116,12 @@ void StackedContainer::updateIndeces()
 {
     for( int i = 0; i < m_stackWidget->count() && i < m_items.size() ; ++ i ) {
         QWidget *widget = m_stackWidget->widget( i );
+        QVariant itemId = widget->property( "item_id" );
+        if( itemId.isValid() ) {
+            QString id = itemId.toString();
+            Item::Ptr item = m_items.value( id );
+            item->m_index = i;
+        }
     }
 }
 

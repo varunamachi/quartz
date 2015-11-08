@@ -1,5 +1,10 @@
 #/bin/bash
 
-QUARTZ_ROOT=/mnt/Store/Kode/github/quartz/
+#QUARTZ_ROOT=/mnt/Store/Kode/github/quartz/
+QUARTZ_ROOT=`readlink -f .`
+echo "Using root $QUARTZ_ROOT"
 export QUARTZ_ROOT
-/home/varun/Bin/qtcreator350/bin/qtcreator &
+~/Bin/qtcreator.sh &
+
+
+
