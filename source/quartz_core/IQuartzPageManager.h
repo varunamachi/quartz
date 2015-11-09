@@ -14,12 +14,12 @@ class QuartzPage : public QWidget
 {
 public:
     QuartzPage( const QString &pageId,
-                const QString &categories,
+                const QString &category,
                 const QString &displayName,
                 QWidget *parent = nullptr )
         : QWidget( parent )
         , m_pageId( pageId )
-        , m_categories( categories )
+        , m_categoryId( category )
         , m_displayName( displayName )
     {
 
@@ -30,9 +30,9 @@ public:
         return m_pageId;
     }
 
-    const QStringList & pageCategories() const
+    const QString & pageCategoryId() const
     {
-        return m_categories;
+        return m_categoryId;
     }
 
     const QString & pageDisplayName() const
@@ -40,11 +40,17 @@ public:
         return m_displayName;
     }
 
-private:
+    const QString & pageCategoryName() const
+    {
+        return m_categoryName;
+    }
 
+private:
     QString m_pageId;
 
-    QStringList m_categories;
+    QString m_categoryId;
+
+    QString m_categoryName;
 
     QString m_displayName;
 };

@@ -12,6 +12,7 @@
 
 #include <quartz_core/IQuartzPageManager.h>
 #include <quartz_common/widgets/QzScroller.h>
+#include <quartz_common/widgets/StackedContainer.h>
 
 
 namespace Vam { namespace Quartz {
@@ -51,17 +52,12 @@ public:
     void selectPage( QString pageId );
 
 private:
-    int m_holderHeight;
+    StackedContainer *m_catContainer;
 
-    int m_selectorWidth;
-
-//    QzScroller *m_catSelector;
-
-//    QHash< QString, QzScroller *> m_pageHolders;
+    QHash< QString, StackedContainer *> m_pageContainers;
 
     QHash< QString, QuartzPage *> m_pages;
 
-//    QStackedWidget *m_mainWidget;
 
 };
 

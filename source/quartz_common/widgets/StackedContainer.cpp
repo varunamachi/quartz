@@ -7,6 +7,7 @@ namespace Vam { namespace Quartz {
 
 
 StackedContainer::StackedContainer( int selectorDimention,
+                                    int buttonDimention,
                                     Qt::Orientation orientation,
                                     QWidget *parent )
     : QWidget( parent )
@@ -19,9 +20,17 @@ StackedContainer::StackedContainer( int selectorDimention,
     QBoxLayout *layout = nullptr;
     if( orientation == Qt::Horizontal ) {
         layout = new QHBoxLayout();
+        this->setMaximumHeight( selectorDimention );
+        this->setMinimumHeight( selectorDimention );
+        m_btnHeight = selectorDimention;
+        m_btnWidth = buttonDimention;
     }
     else {
         layout = new QVBoxLayout();
+        this->setMaximumWidth( selectorDimention );
+        this->setMinimumWidth( selectorDimention );
+        m_btnHeight = buttonDimention;
+        m_btnWidth = selectorDimention;
     }
     layout->addWidget( m_selector );
     layout->addWidget( m_stackWidget );
@@ -62,7 +71,11 @@ void StackedContainer::addWidget( const QString &id,
                                   QWidget *widget )
 {
     if( widget != nullptr ) {
-        IdButton *btn = new IdButton( id, displayName, this );
+        IdButton *btn = new IdButton( id,
+                                      displayName,
+                                      m_btnHeight,
+                                      m_btnWidth,
+                                      this );
         int index = m_stackWidget->addWidget( widget );
         Item::Ptr item = Item::create( index, btn, widget );
         m_items.insert( id, item );
@@ -123,6 +136,18 @@ void StackedContainer::updateIndeces()
             item->m_index = i;
         }
     }
+}
+
+
+int StackedContainer::numWidgets() const
+{
+    return m_items.size();
+}
+
+
+bool StackedContainer::isEmpty()
+{
+    return m_items.isEmpty();
 }
 
 } }

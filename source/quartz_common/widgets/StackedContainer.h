@@ -9,52 +9,10 @@
 #include <QMouseEvent>
 
 #include "QzScroller.h"
+#include "IdButton.h"
 
 namespace Vam { namespace Quartz {
 
-class IdButton : public QPushButton
-{
-    Q_OBJECT
-public:
-    IdButton( QString id,
-              QString text,
-              QWidget *parent = 0 )
-        : QPushButton( parent )
-        , m_id( id )
-    {
-        setCheckable( true );
-        setStyleSheet(
-                    " QPushButton {"
-                    "     border-radius: 5px;"
-                    "     background-color: regba( 32, 32, 32, 200 );"
-                    "     min-width: 60px;"
-                    "     min-height: 60px;"
-                    "     font-size: 10px;"
-                    " }"
-                    " QPushButton:checked {"
-                    "     background-color: #FFA858;"
-                    "     color: #202020;"
-                    " }"
-                    );
-        setText( text );
-    }
-
-protected:
-    void mousePressEvent( QMouseEvent *evt )
-    {
-        if( ! isChecked() ) {
-            QPushButton::mousePressEvent( evt );
-            emit activated( m_id );
-        }
-        evt->ignore();
-    }
-
-signals:
-    void activated( QString id );
-
-private:
-    QString m_id;
-};
 
 
 class StackedContainer : public QWidget
@@ -62,6 +20,7 @@ class StackedContainer : public QWidget
     Q_OBJECT
 public:
     explicit StackedContainer( int selectorDimention,
+                               int buttonDimention,
                                Qt::Orientation orientation,
                                QWidget *parent = nullptr );
 
@@ -71,6 +30,8 @@ public:
     QString currentId() const;
 
     QList< QString > allIds() const;
+
+    int numWidgets() const;
 
 public slots:
     void addWidget( const QString &id,
@@ -116,6 +77,10 @@ private:
             return std::make_shared< Item >( index, btn, widget );
         }
     };
+
+    int m_btnHeight;
+
+    int m_btnWidth;
 
     QzScroller *m_selector;
 
