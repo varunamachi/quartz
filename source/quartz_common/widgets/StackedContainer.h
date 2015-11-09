@@ -33,6 +33,8 @@ public:
 
     int numWidgets() const;
 
+    bool isEmpty();
+
 public slots:
     void addWidget( const QString &id,
                     const QString &displayName,

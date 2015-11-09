@@ -88,6 +88,7 @@ void PageManager::removePage( QuartzPage *page )
 
 void PageManager::removePageCategory( const QString &categoryId )
 {
+
 }
 
 
