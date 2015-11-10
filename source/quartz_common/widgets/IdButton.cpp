@@ -1,4 +1,5 @@
 #include <QTextStream>
+#include <QMouseEvent>
 
 #include "IdButton.h"
 
@@ -8,7 +9,7 @@ IdButton::IdButton( QString id,
                     QString text,
                     int height,
                     int width,
-                    QWidget *parent = 0 )
+                    QWidget *parent )
     : QPushButton( parent )
     , m_id( id )
 {
@@ -16,7 +17,7 @@ IdButton::IdButton( QString id,
     QString qss;
     QTextStream qssStream;
     qssStream.setString( &qss );
-    qaaStream << " QPushButton {"
+    qssStream << " QPushButton {"
                  "     border-radius: 5px;"
                  "     background-color: regba( 32, 32, 32, 200 );"
                  "     min-width: " << width << "px;"

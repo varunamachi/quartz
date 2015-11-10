@@ -52,6 +52,10 @@ public:
     void selectPage( QString pageId );
 
 private:
+    int m_selectorWidth;
+
+    int m_holderHeight;
+
     StackedContainer *m_catContainer;
 
     QHash< QString, StackedContainer *> m_pageContainers;
