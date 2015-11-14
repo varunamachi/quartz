@@ -27,29 +27,29 @@ public:
                           int pagerHeight,
                           QWidget *parent = 0 );
 
-    void addPage( QuartzPage *page );
+    void addPage( QuartzPage *page ) override;
 
-    void removePage( const QString &pageId );
+    void removePage( const QString &pageId ) override;
 
-    void removePage( QuartzPage *page );
+    void removePage( QuartzPage *page ) override;
 
-    void removePageCategory( const QString &categoryId );
+    void removePageCategory( const QString &categoryId ) override;
 
-    QuartzPage * page( const QString &pageId ) const;
+    QuartzPage * page( const QString &pageId ) const override;
 
-    QList< QuartzPage *> pages();
+    QList< QuartzPage *> pages() const ;
 
-    QList< QuartzPage *> pages( const QString &categoryId ) const;
+    QList< QuartzPage *> pages( const QString &categoryId ) const override;
 
-    QuartzPage * currentPage() const;
+    QuartzPage * currentPage() const override;
 
-    const QString currentCategory() const;
+    const QString currentCategory() const override;
 
-    QStringList categories() const;
+    QStringList categories() const override;
 
-    void selectCategory( QString categoryId );
+    void selectCategory( QString categoryId ) override;
 
-    void selectPage( QString pageId );
+    void selectPage( QString pageId ) override;
 
 private:
     int m_selectorWidth;

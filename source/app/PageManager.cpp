@@ -120,7 +120,7 @@ QuartzPage * PageManager::page( const QString &pageId ) const
 }
 
 
-QList< QuartzPage * > PageManager::pages()
+QList< QuartzPage * > PageManager::pages() const
 {
     QList< QuartzPage *> pages;
     auto it = m_pages.begin();

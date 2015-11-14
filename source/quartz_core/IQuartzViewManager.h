@@ -15,12 +15,12 @@ class QuartzView : public QWidget
 {
 public:
     QuartzView( const QString &viewId,
-                const QStringList &categories,
+                const QString &category,
                 const QString &displayName,
                 QWidget *parent = nullptr )
         : QWidget( parent )
         , m_viewId( viewId )
-        , m_categories( categories )
+        , m_categoryId( category )
         , m_displayName( displayName )
     {
 
@@ -31,9 +31,9 @@ public:
         return m_viewId;
     }
 
-    const QStringList & viewCategories() const
+    const QString & viewCategoryId() const
     {
-        return m_categories;
+        return m_categoryId;
     }
 
     const QString & viewDisplayName() const
@@ -41,11 +41,17 @@ public:
         return m_displayName;
     }
 
-private:
+    const QString & viewCategoryName() const
+    {
+        return m_categoryName;
+    }
 
+private:
     QString m_viewId;
 
-    QStringList m_categories;
+    QString m_categoryId;
+
+    QString m_categoryName;
 
     QString m_displayName;
 };
@@ -55,15 +61,27 @@ VQ_INTERFACE IQuartzViewManager
 {
     virtual void addView( QuartzView *view ) = 0;
 
-    virtual void removeView( const QString &pageId ) = 0;
+    virtual void removeView( const QString &viewId ) = 0;
 
     virtual void removeView( QuartzView *view) = 0;
 
     virtual void removeViewCategory( const QString &categoryId ) = 0;
 
-    virtual QuartzView * page( const QString &pageId ) = 0;
+    virtual QuartzView * view( const QString &viewId ) const = 0;
 
-    virtual QList< QuartzView *> views( const QString &categoryId ) = 0;
+    virtual QList< QuartzView *> views() const = 0;
+
+    virtual QList< QuartzView *> views( const QString &categoryId ) const = 0;
+
+    virtual QuartzView * currentView() const = 0;
+
+    virtual const QString & currentCategory() const = 0;
+
+    virtual QStringList categories() const = 0;
+
+    virtual void selectCategory( QString categoryId ) = 0;
+
+    virtual void selectView( QString viewId ) = 0;
 };
 
 } }
