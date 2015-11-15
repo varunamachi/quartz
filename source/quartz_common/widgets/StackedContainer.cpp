@@ -95,6 +95,11 @@ void StackedContainer::removeWidget( const QString &id )
         m_selector->removeWidget( item->m_btn );
         m_stackWidget->removeWidget( item->m_widget );
         m_items.remove( id );
+        if( m_selectedId == id ) {
+            m_selectedId = m_items.isEmpty()
+                    ? ""
+                    : m_items.begin().key();
+        }
         updateIndeces();
         theWidget->setProperty( "item_id", QVariant() );
     }

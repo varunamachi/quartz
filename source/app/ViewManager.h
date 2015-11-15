@@ -33,11 +33,19 @@ public:
 
     void removeView( QuartzView *view ) override;
 
+    void removeViewCategory( const QString &categoryId ) override;
+
     QuartzView * view( const QString &viewId ) const override;
 
     QList< QuartzView *> views() const override;
 
+    QList< QuartzView *> views( const QString &categoryId ) const override;
+
     QuartzView * currentView() const override;
+
+    const QString currentCategory() const override;
+
+    QList< QString > categories() const override;
 
     void selectView( QString viewId ) override;
 

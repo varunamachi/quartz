@@ -67,14 +67,12 @@ void ViewManager::removeView( QuartzView *view )
 
 void ViewManager::removeViewCategory( const QString &categoryId )
 {
-    StackedContainer *container = m_viewContainers.value( categoryId );
-    if( container != nullptr ) {
-        QList< QString > allIds = container->allIds();
-        for( const QString &id : allIds ) {
-            m_views.remove( id );
+    QList< QuartzView *> views = m_categoriesToViews.values( categoryId );
+    if( ! views.isEmpty() ) {
+        for( QuartzView *view : views ) {
+            m_views.remove( view->viewId() );
         }
-        m_viewContainers.remove( categoryId );
-        delete container;
+        m_categoriesToViews.remove( categoryId );
     }
     else {
         VQ_ERROR( "Qz:ViewManager" )
@@ -104,81 +102,42 @@ QList< QuartzView * > ViewManager::views() const
 
 QList< QuartzView * > ViewManager::views( const QString &categoryId ) const
 {
-    QList< QuartzView *> views;
-    for( auto it = m_views.begin(); it != m_views.end(); ++ it ) {
-        QuartzView *view = it.value();
-        if( view->viewCategoryId() == categoryId ) {
-            views.append( view );
-        }
-    }
+    QList< QuartzView *> views = m_categoriesToViews.values( categoryId );
     return views;
 }
 
 
 QuartzView * ViewManager::currentView() const
 {
-    QuartzView *view = nullptr;
-    QString curCategory = m_viewContainer->currentId();
-    if( ! curCategory.isEmpty() ) {
-        StackedContainer *viewContnr = m_viewContainers.value( curCategory );
-        if( viewContnr != nullptr ) {
-            QString curViewId = viewContnr->currentId();
-            QWidget *widget = viewContnr->widget( curViewId );
-            view = dynamic_cast< QuartzView *>( widget );
-        }
-        else {
-            VQ_ERROR( "Qz:ViewManager" )
-                    << "Could not retrieve current view, there are no views in "
-                       "the current category"
-                    << curCategory;
-        }
-    }
-    else {
-        VQ_ERROR( "Qz:ViewManager" )
-                << "Could not retrieve current view There are no categories "
-                   "registered" << curCategory;
+    QString viewId = m_viewContainer->currentId();
+    QuartzView *view = m_views.value( viewId );
+    return view;
+}
+
+
+const QString ViewManager::currentCategory() const
+{
+    QString curCategory = "";
+    QuartzView *curView = currentView();
+    if( curView != nullptr ) {
+        curCategory = curView->viewCategoryId();
     }
 }
 
 
-const QString & ViewManager::currentCategory() const
+QList< QString > ViewManager::categories() const
 {
-    const QString &curCategory = m_viewContainer->currentId();
-    return curCategory;
-}
-
-
-QStringList ViewManager::categories() const
-{
-    QStringList categoies;
-    auto it = m_viewContainers.begin();
-    for( ; it != m_viewContainers.end(); ++ it ) {
-        categoies.append( it.key() );
-    }
-    return categoies;
-}
-
-
-void ViewManager::selectCategory( QString categoryId )
-{
-    m_viewContainer->select( categoryId );
+    QList< QString > categories = m_categoriesToViews.keys();
+    return categories;
 }
 
 
 void ViewManager::selectView( QString viewId )
 {
-    bool result = false;
-    QuartzView *view = m_views.value( viewId );
-    if( view != nullptr ) {
-        selectCategory( view->viewCategoryId() );
-        StackedContainer *viewCont = m_viewContainers.value(
-                    view->viewCategoryId() );
-        if( viewCont ) {
-            viewCont->select( viewId );
-            result = true;
-        }
+    if( m_views.contains( viewId ) ) {
+        m_viewContainer->select( viewId );
     }
-    if( ! result ){
+    else {
         VQ_ERROR( "Qz:ViewManager" )
                 << "Could not find a view with id " << viewId;
     }
