@@ -65,21 +65,13 @@ VQ_INTERFACE IQuartzViewManager
 
     virtual void removeView( QuartzView *view) = 0;
 
-    virtual void removeViewCategory( const QString &categoryId ) = 0;
+    virtual void removeCategory( const QString &categoryId );
 
     virtual QuartzView * view( const QString &viewId ) const = 0;
 
     virtual QList< QuartzView *> views() const = 0;
 
-    virtual QList< QuartzView *> views( const QString &categoryId ) const = 0;
-
     virtual QuartzView * currentView() const = 0;
-
-    virtual const QString & currentCategory() const = 0;
-
-    virtual QStringList categories() const = 0;
-
-    virtual void selectCategory( QString categoryId ) = 0;
 
     virtual void selectView( QString viewId ) = 0;
 };

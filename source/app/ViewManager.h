@@ -23,8 +23,8 @@ class ViewManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewManager( int categoryWidth,
-                          int viewrHeight,
+    explicit ViewManager( int height,
+                          int btnWidth,
                           QWidget *parent = 0 );
 
     void addView( QuartzView *view ) override;
@@ -33,36 +33,24 @@ public:
 
     void removeView( QuartzView *view ) override;
 
-    void removeViewCategory( const QString &categoryId ) override;
-
     QuartzView * view( const QString &viewId ) const override;
 
     QList< QuartzView *> views() const override;
 
-    QList< QuartzView *> views( const QString &categoryId ) const override;
-
     QuartzView * currentView() const override;
-
-    const QString & currentCategory() const override;
-
-    QStringList categories() const override;
-
-    void selectCategory( QString categoryId ) override;
 
     void selectView( QString viewId ) override;
 
 private:
-    int m_selectorWidth;
+    int m_height;
 
-    int m_holderHeight;
+    int m_btnWidth;
 
-    StackedContainer *m_catContainer;
-
-    QHash< QString, StackedContainer *> m_viewContainers;
+    StackedContainer *m_viewContainer;
 
     QHash< QString, QuartzView *> m_views;
 
-
+    QMultiHash< QString, QuartzView *> m_categoriesToViews;
 };
 
 } }

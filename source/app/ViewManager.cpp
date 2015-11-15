@@ -5,15 +5,15 @@
 
 namespace Vam { namespace Quartz {
 
-ViewManager::ViewManager( int categoryWidth,
-                          int holderHeight,
+ViewManager::ViewManager( int height,
+                          int btnWidth,
                           QWidget *parent )
-    : m_selectorWidth( categoryWidth )
-    , m_holderHeight( holderHeight )
-    , m_catContainer( new StackedContainer(
-                          m_selectorWidth,
-                          m_selectorWidth,
-                          Qt::Vertical,
+    : m_height( height )
+    , m_btnWidth( btnWidth )
+    , m_viewContainer( new StackedContainer(
+                          m_height,
+                          m_btnWidth,
+                          Qt::Horizontal,
                           this ))
     , QWidget( parent )
 {
@@ -24,19 +24,9 @@ ViewManager::ViewManager( int categoryWidth,
 void ViewManager::addView( QuartzView *view )
 {
     if( view != nullptr ) {
-        StackedContainer *container = m_viewContainers.value(
-                    view->viewCategoryName() );
-        if( container == nullptr ) {
-            container = new StackedContainer( m_holderHeight,
-                                              150,
-                                              Qt::Horizontal,
-                                              this );
-            m_catContainer->addWidget( view->viewCategoryId(),
-                                       view->viewCategoryName(),
-                                       container );
-
-        }
-        container->addWidget( view->viewId(), view->viewDisplayName(), view );
+        m_viewContainer->addWidget( view->viewId(),
+                                    view->viewDisplayName(),
+                                    view );
         m_views.insert( view->viewId(), view );
     }
     else {
@@ -62,30 +52,11 @@ void ViewManager::removeView( const QString &viewId )
 void ViewManager::removeView( QuartzView *view )
 {
     if( view != nullptr ) {
-        StackedContainer *container =
-                m_viewContainers.value( view->viewCategoryId() );
-        if( container ) {
-            container->removeWidget( view->viewId() );
+            m_viewContainer->removeWidget( view->viewId() );
             m_views.remove( view->viewId() );
-            if( container->isEmpty() ) {
-                VQ_INFO( "Qz:ViewManager" )
-                        << "There are no views left in the category with id "
-                        << view->viewCategoryId() << ". The container for this "
-                        << " category will be removed";
-                m_viewContainers.remove( view->viewCategoryId() );
-                delete container;
-            }
-        }
-        else {
-            VQ_ERROR( "Qz:ViewManager" )
-                    << "Could not remove view with ID " << view->viewId()
-                    << ". Could not find the category of the view - "
-                    << view->viewCategoryId();
-
-        }
-        VQ_INFO( "Qz:ViewManager" )
-                << "succesfully added  view with id " << view->viewId()
-                << " of category " << view->viewCategoryId();
+            VQ_INFO( "Qz:ViewManager" )
+                    << "succesfully removed view with id " << view->viewId()
+                    << " of category " << view->viewCategoryId();
     }
     else {
         VQ_ERROR( "Qz:ViewManager" )
@@ -147,7 +118,7 @@ QList< QuartzView * > ViewManager::views( const QString &categoryId ) const
 QuartzView * ViewManager::currentView() const
 {
     QuartzView *view = nullptr;
-    QString curCategory = m_catContainer->currentId();
+    QString curCategory = m_viewContainer->currentId();
     if( ! curCategory.isEmpty() ) {
         StackedContainer *viewContnr = m_viewContainers.value( curCategory );
         if( viewContnr != nullptr ) {
@@ -172,7 +143,7 @@ QuartzView * ViewManager::currentView() const
 
 const QString & ViewManager::currentCategory() const
 {
-    const QString &curCategory = m_catContainer->currentId();
+    const QString &curCategory = m_viewContainer->currentId();
     return curCategory;
 }
 
@@ -190,7 +161,7 @@ QStringList ViewManager::categories() const
 
 void ViewManager::selectCategory( QString categoryId )
 {
-    m_catContainer->select( categoryId );
+    m_viewContainer->select( categoryId );
 }
 
 
