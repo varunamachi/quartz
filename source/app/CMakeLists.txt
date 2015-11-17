@@ -28,6 +28,8 @@ vq_sources(
     ViewManager.cpp
 )
 
+add_subdirectory( adapted )
+
 vq_create_app()
 vq_install_bin()
 

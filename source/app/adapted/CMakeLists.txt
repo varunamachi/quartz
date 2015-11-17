@@ -1,0 +1,3 @@
+vq_classes(
+    CustomShadowEffect
+)
