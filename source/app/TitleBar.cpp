@@ -24,6 +24,12 @@ TitleBar::TitleBar( int height, QWidget *parent )
     layout->addWidget( m_minimizeBtn );
     layout->addWidget( m_maxRestoreBtn );
     layout->addWidget( m_closeBtn );
+    m_minimizeBtn->setMaximumSize( 20, 20 );
+    m_maxRestoreBtn->setMaximumSize( 20, 20 );
+    m_closeBtn->setMaximumSize( 20, 20 );
+    m_minimizeBtn->setMinimumSize( 20, 20 );
+    m_maxRestoreBtn->setMinimumSize( 20, 20 );
+    m_closeBtn->setMinimumSize( 20, 20 );
     this->setContentsMargins( QMargins() );
     this->setLayout( layout );
 

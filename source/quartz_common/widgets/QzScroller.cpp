@@ -17,8 +17,8 @@ QzScroller::QzScroller( Qt::Orientation orientation,
                         QWidget *parent )
     : QWidget( parent )
     , m_orientation( orientation )
-    , m_bckButton( new QPushButton( "<<", this ))
-    , m_fwdButton( new QPushButton( ">>", this ))
+    , m_bckButton( new QPushButton( "<", this ))
+    , m_fwdButton( new QPushButton( ">", this ))
     , m_timer( new QTimer( this ))
     , m_timeout( 0 )
 {
@@ -41,7 +41,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     }
     m_layout->setContentsMargins( QMargins() );
     m_layout->setMargin( 0 );
-    m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
+//    m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     innerWidget->setLayout( m_layout );
     innerWidget->setContentsMargins( QMargins() );
     innerWidget->setMinimumSize( QSize( 100, 20 ));
@@ -56,7 +56,8 @@ QzScroller::QzScroller( Qt::Orientation orientation,
 //        m_layout->addWidget( box );
 //    }
 
-
+    m_bckButton->setMaximumWidth( 20 );
+    m_fwdButton->setMaximumWidth( 20 );
 
     m_scroll->setWidget( innerWidget );
     QBoxLayout *mainLayout = nullptr;
@@ -67,7 +68,9 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         mainLayout = new QVBoxLayout();
     }
     mainLayout->addWidget( m_bckButton );
+    mainLayout->addStretch();
     mainLayout->addWidget( m_scroll );
+    mainLayout->addStretch();
     mainLayout->addWidget( m_fwdButton );
     mainLayout->setContentsMargins( QMargins() );
     this->setLayout( mainLayout );

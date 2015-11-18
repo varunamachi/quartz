@@ -7,25 +7,19 @@ qz_add_common()
 vq_add_qt()
 
 
-vq_headers (
-    QuartzWindow.h
-    ActionBar.h
-    TitleBar.h
-    PageManager.h
-    PluginManager.h
-    BundleLoader.h
-    ViewManager.h
+vq_classes (
+    QuartzWindow
+    ActionBar
+    TitleBar
+    PageManager
+    PluginManager
+    BundleLoader
+    ViewManager
+    WelcomePage
 )
 
 vq_sources(
     quartz.cpp
-    QuartzWindow.cpp
-    TitleBar.cpp
-    ActionBar.cpp
-    PageManager.cpp
-    PluginManager.cpp
-    BundleLoader.cpp
-    ViewManager.cpp
 )
 
 add_subdirectory( adapted )

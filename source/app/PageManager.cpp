@@ -17,7 +17,9 @@ PageManager::PageManager( int categoryWidth,
                           this ))
     , QWidget( parent )
 {
-
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget( m_catContainer );
+    this->setLayout( layout );
 }
 
 

@@ -6,13 +6,15 @@
 #include <QPainter>
 
 #include "QuartzWindow.h"
+#include "WelcomePage.h"
 #include "adapted/CustomShadowEffect.h"
+
 
 namespace Vam { namespace Quartz {
 
 QuartzWindow::QuartzWindow( QWidget *parent )
     : QMainWindow( parent )
-    , m_chilliWidget( new ChilliMainWidget( this ))
+    , m_chilliWidget( new QzMainWidget( this ))
     , m_maximised( false )
 {
     this->setWindowFlags( Qt::FramelessWindowHint
@@ -22,28 +24,22 @@ QuartzWindow::QuartzWindow( QWidget *parent )
 
 
     m_chilliWidget->setContentsMargins( 5, 5, 0, 0 );
-    m_layout = new QHBoxLayout( m_containerWidget );
+    m_layout = new QHBoxLayout( /*m_containerWidget*/ );
     m_layout->addWidget( m_chilliWidget );
     m_containerWidget->setAttribute( Qt::WA_TranslucentBackground, true );
-    this->setAttribute( Qt::WA_TranslucentBackground, true );
-    this->setCentralWidget( m_containerWidget );
     m_layout->setSpacing( 0 );
     m_layout->setContentsMargins( 5, 5, 0, 0 );
+    m_containerWidget->setLayout( m_layout );
 
     CustomShadowEffect *effect = new CustomShadowEffect( this );
     effect->setBlurRadius( 10.0 );
     effect->setDistance( 3.0 );
     effect->setColor( QColor( 0xA0, 0x52, 0x2D, 0x80 ));
     m_chilliWidget->setGraphicsEffect( effect );
-//    connect( m_chilliWidget->m_audioPlayer,
-//             SIGNAL( exit() ),
-//             QApplication::instance(),
-//             SLOT( quit() ));
-//    connect( m_chilliWidget->m_audioPlayer,
-//             SIGNAL( minimize() ),
-//             this,
-//             SLOT( onMinimize() ));
+
+    this->setAttribute( Qt::WA_TranslucentBackground, true );
     this->setContentsMargins( QMargins() );
+    this->setCentralWidget( m_containerWidget );
 }
 
 
@@ -157,84 +153,55 @@ void QuartzWindow::minimize()
 
 
 //////////////////////////////////////////////////////////////////////////////
-ChilliMainWidget::ChilliMainWidget( QWidget *parent )
+QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget( parent )
     , m_roundedRect( true )
 {
 
     this->setObjectName( "chillimain" );
 
-//    QHBoxLayout *topLayout = new QHBoxLayout();
-//    m_audioPlayer = new AudioPlayerWidget( this );
 
-//    m_playlist = new PlaylistWidget( this );
-//    m_audioPlayer->setContentsMargins( QMargins( 2, 2, 2, 2 ));
-//    m_playlist->setContentsMargins( QMargins( 2, 2, 2, 0 ));
-//    ComponentManager::get()->setContentsMargins( QMargins( 2, 2, 2, 0 ));
+    m_titleBar = new TitleBar( 20, this );
+    m_pageManager = new PageManager( 60, 20, this );
+    m_viewManager = new ViewManager( 20, 60, this );
+    m_actionBar = new ActionBar( 20, this );
+    auto page = new WelcomePage( this );
+    m_pageManager->addPage( page );
 
-//    QHBoxLayout *bottomLyt = new QHBoxLayout();
-//    bottomLyt->addWidget( m_playlist );
-//    bottomLyt->addWidget( ComponentManager::get() );
-//    bottomLyt->setContentsMargins( QMargins() );
-//    bottomLyt->setSpacing( 0 );
-
-//    auto *layout = new QVBoxLayout();
-//    layout->addWidget( m_audioPlayer );
-//    layout->addLayout( bottomLyt );
-//    layout->setContentsMargins( QMargins() );
-//    layout->setSpacing( 0 );
-
-
-//    m_sizeGrip = new QSizeGrip( this );
-//    m_sizeGrip->setContentsMargins( QMargins() );
-//    layout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
-
-//    this->setLayout( layout );
-////    m_si new QSizeGrip( this );
-
-//    QString css = createStyleSheet();
-//    ComponentManager::get()->setStyleSheet( css );
-//    m_playlist->setStyleSheet( css );
-//    m_audioPlayer->setStyleSheet( css );
-
-//    connect( m_audioPlayer, SIGNAL( urlsDropped( QList< QUrl > )),
-//             m_playlist, SLOT( addUrls( QList< QUrl > )));
-//    connect( m_audioPlayer, SIGNAL( playFromPlaylist() ),
-//             m_playlist, SLOT( setSelectedAsCurrent() ));
-//    connect( QCoreApplication::instance(),
-//             SIGNAL( aboutToQuit() ),
-//             this,
-//             SLOT( onAboutToQuit() ));
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addWidget( m_titleBar );
+//    mainLayout->addStretch();
+    mainLayout->addWidget( m_pageManager );
+//    mainLayout->addStretch();
+    mainLayout->addWidget( m_viewManager );
+    mainLayout->addWidget( m_actionBar);
+    mainLayout->setContentsMargins( QMargins() );
+    m_sizeGrip = new QSizeGrip( this );
+    m_sizeGrip->setContentsMargins( QMargins() );
+    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
+    this->setLayout( mainLayout );
 }
 
 
 
-void ChilliMainWidget::onAboutToQuit()
+void QzMainWidget::onAboutToQuit()
 {
-//    while( JOB_MANAGER()->hasPendingJobs() ) {
-//        QThread::currentThread()->sleep( 1 );
-//    }
-//    const QList< Tanyatu::Data::MediaItem *> *list =
-//            PLAYQUEUE()->getAllItemsInOrder();
-//    DATA_UPDATER()->saveCurrentPlaylist( *list );
-//    ComponentManager::destroy();
-//    CHILLI_CACHE()->destroy();
 }
 
 
-void ChilliMainWidget::paintEvent( QPaintEvent */*event*/ )
+void QzMainWidget::paintEvent( QPaintEvent */*event*/ )
 {
     QPainter painter( this );
     if( m_roundedRect ) {
         QPainterPath path;
         path.addRoundedRect( this->rect(), 10, 10 );
-        QBrush brush( Qt::black );
+        QBrush brush( Qt::white );
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setRenderHint(QPainter::HighQualityAntialiasing);
         painter.fillPath( path, brush );
     }
     else {
-        painter.fillRect( this->rect(), QBrush( Qt::black ));
+        painter.fillRect( this->rect(), QBrush( Qt::white ));
     }
 }
 

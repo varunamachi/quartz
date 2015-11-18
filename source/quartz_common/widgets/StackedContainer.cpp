@@ -20,15 +20,15 @@ StackedContainer::StackedContainer( int selectorDimention,
     QBoxLayout *layout = nullptr;
     if( orientation == Qt::Horizontal ) {
         layout = new QHBoxLayout();
-        this->setMaximumHeight( selectorDimention );
-        this->setMinimumHeight( selectorDimention );
+        m_selector->setMaximumHeight( selectorDimention );
+        m_selector->setMinimumHeight( selectorDimention );
         m_btnHeight = selectorDimention;
         m_btnWidth = buttonDimention;
     }
     else {
         layout = new QVBoxLayout();
-        this->setMaximumWidth( selectorDimention );
-        this->setMinimumWidth( selectorDimention );
+        m_selector->setMaximumWidth( selectorDimention );
+        m_selector->setMinimumWidth( selectorDimention );
         m_btnHeight = buttonDimention;
         m_btnWidth = selectorDimention;
     }

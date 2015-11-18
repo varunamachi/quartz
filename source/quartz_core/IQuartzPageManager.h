@@ -68,7 +68,7 @@ VQ_INTERFACE IQuartzPageManager
 
     virtual QuartzPage * page( const QString &pageId ) const = 0;
 
-    virtual QList< QuartzPage *> pages() = 0;
+    virtual QList< QuartzPage *> pages() const = 0;
 
     virtual QList< QuartzPage *> pages( const QString &categoryId ) const = 0;
 

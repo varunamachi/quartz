@@ -5,16 +5,21 @@
 #include <QPushButton>
 #include <QSizeGrip>
 
+#include "PageManager.h"
+#include "ViewManager.h"
+#include "ActionBar.h"
+#include "TitleBar.h"
+
 namespace Vam { namespace Quartz {
 
 class PageManager;
 class ActionBar;
 
-class ChilliMainWidget : public QWidget
+class QzMainWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ChilliMainWidget( QWidget *parent = 0 );
+    explicit QzMainWidget( QMainWindow *parent = 0 );
 
 public slots:
     void onAboutToQuit();
@@ -30,21 +35,17 @@ protected:
 private:
     QString createStyleSheet();
 
-    QPushButton *m_maxRestore;
-
-    QIcon *m_maximizeIcon;
-
-    QIcon *m_restoreIcon;
-
-    QWidget *m_leftWidget;
-
-//    PlaylistWidget *m_playlist;
-
-//    AudioPlayerWidget *m_audioPlayer;
-
     bool m_roundedRect;
 
     QSizeGrip *m_sizeGrip;
+
+    TitleBar *m_titleBar;
+
+    PageManager *m_pageManager;
+
+    ViewManager *m_viewManager;
+
+    ActionBar *m_actionBar;
 
     friend class ChilliWindow;
 
@@ -82,7 +83,7 @@ private:
     void minimize();
 
 //    ChilliMainWidget *m_chilliWidget;
-    ChilliMainWidget *m_chilliWidget;
+    QzMainWidget *m_chilliWidget;
 
     bool m_moving;
 
