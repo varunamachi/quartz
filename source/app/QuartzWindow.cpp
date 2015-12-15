@@ -111,7 +111,7 @@ void QuartzWindow::showEvent( QShowEvent *evt )
 }
 
 
-void QuartzWindow::resizeEvent( QResizeEvent */*evt*/ )
+void QuartzWindow::resizeEvent( QResizeEvent * )
 {
 
 }
@@ -170,11 +170,12 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
-//    mainLayout->addStretch();
+    mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
     mainLayout->addWidget( m_pageManager );
-//    mainLayout->addStretch();
     mainLayout->addWidget( m_viewManager );
+    mainLayout->setAlignment( m_viewManager, Qt::AlignBottom );
     mainLayout->addWidget( m_actionBar);
+    mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins() );
     m_sizeGrip = new QSizeGrip( this );
     m_sizeGrip->setContentsMargins( QMargins() );

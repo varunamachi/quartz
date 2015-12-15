@@ -13,7 +13,8 @@ class WelcomePage : public QuartzPage
 public:
     explicit WelcomePage( QWidget *parent = nullptr )
         : QuartzPage( "qz_welcome",
-                      tr("Quartz"),
+                      tr( "Quartz" ),
+                      tr( "Quartz" ),
                       tr("Welcome"),
                       parent )
     {

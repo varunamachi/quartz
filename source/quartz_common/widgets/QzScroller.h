@@ -17,7 +17,7 @@ public:
                          int maximumDim,
                          QWidget *parent = nullptr );
 
-    QWidgetList widget() const;
+    QWidgetList widgets() const;
 
 public slots:
     void addWidget( QWidget *widget );

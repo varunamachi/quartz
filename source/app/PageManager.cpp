@@ -11,15 +11,17 @@ PageManager::PageManager( int categoryWidth,
     : m_selectorWidth( categoryWidth )
     , m_holderHeight( pagerHeight )
     , m_catContainer( new StackedContainer(
-                          m_selectorWidth,
-                          m_selectorWidth,
+                          categoryWidth,
+                          40,
                           Qt::Vertical,
                           this ))
     , QWidget( parent )
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget( m_catContainer );
+    layout->setContentsMargins( QMargins() );
     this->setLayout( layout );
+
 }
 
 
@@ -36,7 +38,6 @@ void PageManager::addPage( QuartzPage *page )
             m_catContainer->addWidget( page->pageCategoryId(),
                                        page->pageCategoryName(),
                                        container );
-
         }
         container->addWidget( page->pageId(), page->pageDisplayName(), page );
         m_pages.insert( page->pageId(), page );
@@ -169,6 +170,7 @@ QuartzPage * PageManager::currentPage() const
                 << "Could not retrieve current page There are no categories "
                    "registered" << curCategory;
     }
+    return page;
 }
 
 

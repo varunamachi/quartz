@@ -15,11 +15,13 @@ class QuartzPage : public QWidget
 public:
     QuartzPage( const QString &pageId,
                 const QString &category,
+                const QString &categoryName,
                 const QString &displayName,
                 QWidget *parent = nullptr )
         : QWidget( parent )
         , m_pageId( pageId )
         , m_categoryId( category )
+        , m_categoryName( categoryName )
         , m_displayName( displayName )
     {
 

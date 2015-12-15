@@ -18,25 +18,27 @@ StackedContainer::StackedContainer( int selectorDimention,
     , m_stackWidget( new QStackedWidget( this ))
 {
     QBoxLayout *layout = nullptr;
-    if( orientation == Qt::Horizontal ) {
+    if( orientation == Qt::Vertical ) {
         layout = new QHBoxLayout();
-        m_selector->setMaximumHeight( selectorDimention );
-        m_selector->setMinimumHeight( selectorDimention );
-        m_btnHeight = selectorDimention;
-        m_btnWidth = buttonDimention;
+        m_selector->setMaximumWidth( selectorDimention );
+        m_selector->setMinimumWidth( selectorDimention );
+        m_btnWidth = selectorDimention;
+        m_btnHeight = buttonDimention;
     }
     else {
         layout = new QVBoxLayout();
-        m_selector->setMaximumWidth( selectorDimention );
-        m_selector->setMinimumWidth( selectorDimention );
-        m_btnHeight = buttonDimention;
-        m_btnWidth = selectorDimention;
+        m_selector->setMaximumHeight( selectorDimention );
+        m_selector->setMinimumHeight( selectorDimention );
+        m_btnWidth = buttonDimention;
+        m_btnHeight = selectorDimention;
     }
     layout->addWidget( m_selector );
     layout->addWidget( m_stackWidget );
     layout->setContentsMargins( QMargins() );
     m_selector->setContentsMargins( QMargins() );
     m_stackWidget->setContentsMargins( QMargins() );
+//    m_selector->setStyleSheet("background-color: blue;");
+//    m_stackWidget->setStyleSheet("background-color: red;");
     this->setLayout( layout );
 }
 
@@ -80,8 +82,10 @@ void StackedContainer::addWidget( const QString &id,
         Item::Ptr item = Item::create( index, btn, widget );
         m_items.insert( id, item );
         m_selectedId = id;
+        m_selector->addWidget( btn );
+        m_stackWidget->addWidget( widget );
         m_stackWidget->setCurrentIndex( index );
-        m_selector->addWidget( widget );
+        btn->setChecked( true );
         widget->setProperty( "item_id", id );
     }
 }

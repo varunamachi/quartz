@@ -19,7 +19,7 @@ TitleBar::TitleBar( int height, QWidget *parent )
     m_scroller->setContentsMargins( QMargins() );
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setContentsMargins( QMargins() );
-    layout->addStretch();
+//    layout->addStretch();
     layout->addWidget( m_scroller );
     layout->addWidget( m_minimizeBtn );
     layout->addWidget( m_maxRestoreBtn );

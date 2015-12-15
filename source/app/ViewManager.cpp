@@ -122,6 +122,7 @@ const QString ViewManager::currentCategory() const
     if( curView != nullptr ) {
         curCategory = curView->viewCategoryId();
     }
+    return curCategory;
 }
 
 

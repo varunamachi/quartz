@@ -20,14 +20,18 @@ IdButton::IdButton( QString id,
     qssStream << " QPushButton {"
                  "     border-radius: 5px;"
                  "     background-color: regba( 32, 32, 32, 200 );"
+                 "     max-width: " << width << "px;"
                  "     min-width: " << width << "px;"
+                 "     max-height: " << height << "px;"
                  "     min-height: " << height << "px;"
-                 "     font-size: 10px;"
+                 "     font-size: 12px;"
+                 "     color: white;"
                  " }"
                  " QPushButton:checked {"
                  "     background-color: #FFA858;"
                  "     color: #202020;"
                  " }";
+    qssStream.flush();
     setStyleSheet( qss );
     setText( text );
 }
