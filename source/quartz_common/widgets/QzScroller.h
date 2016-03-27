@@ -5,6 +5,7 @@
 class QBoxLayout;
 class QScrollArea;
 class QPushButton;
+class QResizeEvent;
 
 namespace Vam { namespace Quartz {
 
@@ -24,12 +25,17 @@ public slots:
 
     void removeWidget( QWidget *widget );
 
+protected:
+    void resizeEvent( QResizeEvent *event ) override;
+
 private slots:
     void start();
 
     void stop();
 
     void onTimeout();
+
+    void adjustArrows();
 
 private:
     Qt::Orientation m_orientation;

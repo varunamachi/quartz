@@ -21,6 +21,8 @@ class QzMainWidget : public QWidget
 public:
     explicit QzMainWidget( QMainWindow *parent = 0 );
 
+    TitleBar * titleBar();
+
 public slots:
     void onAboutToQuit();
 
@@ -36,8 +38,6 @@ private:
     QString createStyleSheet();
 
     bool m_roundedRect;
-
-    QSizeGrip *m_sizeGrip;
 
     TitleBar *m_titleBar;
 
@@ -58,6 +58,8 @@ class QuartzWindow : public QMainWindow
 
 public:
     explicit QuartzWindow( QWidget *parent = 0 );
+
+    void mouseMove( QPoint newPos, QPoint oldPos );
 
 private slots:
     void onMaximizeRestore();
@@ -96,6 +98,14 @@ private:
     QHBoxLayout *m_layout;
 
     QWidget *m_containerWidget;
+
+    bool m_cursorAtLeft;
+
+    bool m_cursorAtRight;
+
+    bool m_cursorAtBottom;
+
+    bool m_resizing;
 
 };
 

@@ -1,5 +1,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QStyle>
 
 #include "TitleBar.h"
 
@@ -11,16 +12,23 @@ TitleBar::TitleBar( int height, QWidget *parent )
     , m_height( height )
 
 {
+    QPixmap clspx = style()->standardPixmap( QStyle::SP_TitleBarCloseButton );
+    QPixmap maxpx = style()->standardPixmap( QStyle::SP_TitleBarMaxButton );
+    QPixmap minpx = style()->standardPixmap( QStyle::SP_TitleBarMinButton );
+
+
     m_scroller = new QzScroller( Qt::Horizontal, height, height, this );
-    m_minimizeBtn = new QPushButton( "_", this );
-    m_maxRestoreBtn = new QPushButton( "[]", this );
-    m_closeBtn = new QPushButton( "X", this );
+    m_minimizeBtn = new QPushButton( this );
+    m_maxRestoreBtn = new QPushButton( this );
+    m_closeBtn = new QPushButton( this );
+    m_closeBtn->setIcon( clspx );
+    m_minimizeBtn->setIcon( minpx );
+    m_maxRestoreBtn->setIcon( maxpx );
 
     m_scroller->setContentsMargins( QMargins() );
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setContentsMargins( QMargins() );
-//    layout->addStretch();
-    layout->addWidget( m_scroller );
+    layout->addStretch();
     layout->addWidget( m_minimizeBtn );
     layout->addWidget( m_maxRestoreBtn );
     layout->addWidget( m_closeBtn );
@@ -30,8 +38,23 @@ TitleBar::TitleBar( int height, QWidget *parent )
     m_minimizeBtn->setMinimumSize( 20, 20 );
     m_maxRestoreBtn->setMinimumSize( 20, 20 );
     m_closeBtn->setMinimumSize( 20, 20 );
-    this->setContentsMargins( QMargins() );
+    this->setContentsMargins( QMargins( 0, 0, 3, 0 ));
     this->setLayout( layout );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+
+    connect( m_closeBtn,
+             SIGNAL( clicked( bool )),
+             this,
+             SIGNAL( sigCloseRequested() ));
+    connect( m_maxRestoreBtn,
+             SIGNAL( clicked( bool )),
+             this,
+             SIGNAL( sigMaxRestoreRequested() ));
+    connect( m_minimizeBtn,
+             SIGNAL( clicked( bool )),
+             this,
+             SIGNAL( sigMinimizeRequested() ));
+
 
 }
 
@@ -89,6 +112,12 @@ void TitleBar::removeCategory( const QString &category )
     for( QuartzItem *item : itemList ) {
         removeItem( item );
     }
+}
+
+
+void TitleBar::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    emit sigMaxRestoreRequested();
 }
 
 } }

@@ -32,6 +32,9 @@ signals:
 
     void sigCloseRequested();
 
+protected:
+    void mouseDoubleClickEvent( QMouseEvent *event );
+
 private:
     int m_height;
 

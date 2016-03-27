@@ -48,6 +48,8 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     innerWidget->setMinimumSize( QSize( 100, 20 ));
     m_fwdButton->setFlat( true );
     m_bckButton->setFlat( true );
+    m_fwdButton->setVisible( false );
+    m_bckButton->setVisible( false );
 
 //    QStringList items;
 //    items << "One" << "Two" << "Three" << "Four";
@@ -59,6 +61,9 @@ QzScroller::QzScroller( Qt::Orientation orientation,
 
     m_bckButton->setMaximumWidth( 20 );
     m_fwdButton->setMaximumWidth( 20 );
+    m_bckButton->setMaximumHeight( 20 );
+    m_fwdButton->setMaximumHeight( 20 );
+
 
     m_scroll->setWidget( innerWidget );
     QBoxLayout *mainLayout = nullptr;
@@ -123,6 +128,7 @@ void QzScroller::addWidget( QWidget *widget )
 {
     if( widget != nullptr ) {
         m_layout->insertWidget( 0, widget );
+        adjustArrows();
     }
 }
 
@@ -131,7 +137,13 @@ void QzScroller::removeWidget( QWidget *widget )
 {
     if( widget != nullptr ) {
         m_layout->removeWidget( widget );
+        adjustArrows();
     }
+}
+
+void QzScroller::resizeEvent(QResizeEvent *event)
+{
+    adjustArrows();
 }
 
 
@@ -163,6 +175,36 @@ void QzScroller::onTimeout()
     }
     else if( m_bckButton->isDown() ){
         bar->setValue( bar->value() - 8 );
+    }
+}
+
+
+void QzScroller::adjustArrows()
+{
+    int occupied = 0;
+    QWidgetList widgets;
+    for( int i = 0; i < m_layout->count(); ++ i ) {
+        QLayoutItem *item = m_layout->itemAt( i );
+        QWidget *widget = item->widget();
+        QRect rect = item->geometry();
+        if( m_orientation == Qt::Horizontal ) {
+            occupied += rect.width();
+        }
+        else {
+            occupied += rect.height();
+        }
+    }
+    if( m_orientation == Qt::Horizontal && occupied > this->width() ) {
+        m_fwdButton->setVisible( true );
+        m_bckButton->setVisible( true );
+    }
+    else if( m_orientation == Qt::Vertical && occupied > this->height() ) {
+        m_fwdButton->setVisible( true );
+        m_bckButton->setVisible( true );
+    }
+    else {
+        m_fwdButton->setVisible( false );
+        m_bckButton->setVisible( false );
     }
 }
 

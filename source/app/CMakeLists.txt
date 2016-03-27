@@ -16,6 +16,7 @@ vq_classes (
     BundleLoader
     ViewManager
     WelcomePage
+    HoverMoveFilter
 )
 
 vq_sources(

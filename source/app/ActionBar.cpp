@@ -19,6 +19,7 @@ ActionBar::ActionBar( int height, QWidget *parent )
     layout->addWidget( m_scroller );
     this->setContentsMargins( QMargins() );
     this->setLayout( layout );
+//    this->setStyleSheet("QWidget{background-color:red;}");
 }
 
 
