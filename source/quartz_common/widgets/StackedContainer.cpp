@@ -81,12 +81,17 @@ void StackedContainer::addWidget( const QString &id,
         int index = m_stackWidget->addWidget( widget );
         Item::Ptr item = Item::create( index, btn, widget );
         m_items.insert( id, item );
-        m_selectedId = id;
         m_selector->addWidget( btn );
         m_stackWidget->addWidget( widget );
-        m_stackWidget->setCurrentIndex( index );
-        btn->setChecked( true );
+        connect( btn,
+                 SIGNAL( activated( QString )),
+                 this,
+                 SLOT( select( QString )));
+//        m_selectedId = id;
+//        m_stackWidget->setCurrentIndex( index - 1 );
+//        btn->setChecked( false );
         widget->setProperty( "item_id", id );
+        select( id );
     }
 }
 
@@ -129,7 +134,13 @@ void StackedContainer::select( const QString &id )
 {
     Item::Ptr item = m_items.value( id );
     if( item ) {
+        Item::Ptr prev = m_items.value( m_selectedId );
+        if( prev != nullptr ) {
+            prev->m_btn->setChecked( false );
+        }
+        item->m_btn->setChecked( true );
         m_stackWidget->setCurrentIndex( item->m_index );
+        m_selectedId = id;
     }
 }
 

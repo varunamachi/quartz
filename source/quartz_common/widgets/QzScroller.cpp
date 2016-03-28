@@ -127,7 +127,8 @@ QWidgetList QzScroller::widgets() const
 void QzScroller::addWidget( QWidget *widget )
 {
     if( widget != nullptr ) {
-        m_layout->insertWidget( 0, widget );
+        m_layout->insertWidget( m_layout->count() - 1, widget );
+//        m_layout->addWidget( widget );
         adjustArrows();
     }
 }

@@ -16,7 +16,7 @@ public:
               QWidget *parent = 0 );
 
 protected:
-    void mousePressEvent( QMouseEvent *evt );
+    void mouseReleaseEvent( QMouseEvent *evt );
 
 signals:
     void activated( QString id );

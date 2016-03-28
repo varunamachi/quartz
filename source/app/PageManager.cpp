@@ -29,7 +29,7 @@
     {
         if( page != nullptr ) {
             StackedContainer *container = m_pageContainers.value(
-                        page->pageCategoryName() );
+                        page->pageCategoryId() );
             if( container == nullptr ) {
                 container = new StackedContainer( m_holderHeight,
                                                   150,
@@ -38,8 +38,11 @@
                 m_catContainer->addWidget( page->pageCategoryId(),
                                            page->pageCategoryName(),
                                            container );
+                m_pageContainers.insert( page->pageCategoryId(), container );
             }
-            container->addWidget( page->pageId(), page->pageDisplayName(), page );
+            container->addWidget( page->pageId(),
+                                  page->pageDisplayName(),
+                                  page );
             m_pages.insert( page->pageId(), page );
         }
         else {
@@ -72,9 +75,10 @@
                 m_pages.remove( page->pageId() );
                 if( container->isEmpty() ) {
                     VQ_INFO( "Qz:PageManager" )
-                            << "There are no pages left in the category with id "
-                            << page->pageCategoryId() << ". The container for this "
-                            << " category will be removed";
+                            << "There are no pages left in the category with "
+                               "id " << page->pageCategoryId()
+                            << ". The container for this category will be "
+                               "removed";
                     m_pageContainers.remove( page->pageCategoryId() );
                     delete container;
                 }
@@ -92,7 +96,7 @@
         }
         else {
             VQ_ERROR( "Qz:PageManager" )
-                    << "Could not remove page with id " << ". Invalid page given";
+                    << "Could not remove page with id Invalid page given";
         }
     }
 
@@ -160,8 +164,8 @@
             }
             else {
                 VQ_ERROR( "Qz:PageManager" )
-                        << "Could not retrieve current page, there are no pages in "
-                           "the current category"
+                        << "Could not retrieve current page, there are no "
+                           "pages in the current category"
                         << curCategory;
             }
         }

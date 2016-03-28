@@ -101,6 +101,7 @@ void QuartzWindow::mousePressEvent( QMouseEvent* event )
         else {
             m_lastMousePosition = event->globalPos();
         }
+        QMainWindow::mousePressEvent( event );
     }
 }
 
@@ -126,6 +127,7 @@ void QuartzWindow::mouseMoveEvent( QMouseEvent* event )
         }
         m_lastMousePosition = event->globalPos();
     }
+    QWidget::mouseMoveEvent( event );
 }
 
 
@@ -135,6 +137,7 @@ void QuartzWindow::mouseReleaseEvent( QMouseEvent* event )
         m_moving = false;
         m_resizing = false;
     }
+    QWidget::mouseReleaseEvent( event );
 }
 
 
@@ -149,6 +152,7 @@ void QuartzWindow::showEvent( QShowEvent *evt )
 
 void QuartzWindow::resizeEvent( QResizeEvent *evt )
 {
+    QWidget::resizeEvent( evt );
 }
 
 
@@ -292,15 +296,16 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     mainLayout->setAlignment( m_viewManager, Qt::AlignBottom );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins( QMargins() );
+    mainLayout->setContentsMargins( QMargins( 0, 0, 3, 3 ));
 //    m_sizeGrip = new QSizeGrip( this );
 //    m_sizeGrip->setContentsMargins( QMargins() );
 //    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
     this->setLayout( mainLayout );
+    this->setStyleSheet( "border-color: red;");
 }
 
 
-TitleBar *QzMainWidget::titleBar()
+TitleBar * QzMainWidget::titleBar()
 {
     return m_titleBar;
 }

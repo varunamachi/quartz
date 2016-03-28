@@ -30,20 +30,27 @@ IdButton::IdButton( QString id,
                  " QPushButton:checked {"
                  "     background-color: #FFA858;"
                  "     color: #202020;"
-                 " }";
+                 " }"
+//                 "QPushButton:hover {"
+//                 "     background-color: #FFA858;"
+//                 "     color: #202020;"
+//                 " }"
+                 ;
     qssStream.flush();
     setStyleSheet( qss );
     setText( text );
 }
 
 
-void IdButton::mousePressEvent( QMouseEvent *evt )
+void IdButton::mouseReleaseEvent( QMouseEvent *evt )
 {
     if( ! isChecked() ) {
         QPushButton::mousePressEvent( evt );
+//        setChecked( true );
         emit activated( m_id );
     }
     evt->ignore();
+//    QPushButton::mousePressEvent( evt );
 }
 
 } }
