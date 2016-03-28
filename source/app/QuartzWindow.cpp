@@ -280,7 +280,9 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_viewManager = new ViewManager( 20, 60, this );
     m_actionBar = new ActionBar( 20, this );
     auto page = new WelcomePage( this );
+    auto apage = new AnotherPage( this );
     m_pageManager->addPage( page );
+    m_pageManager->addPage( apage );
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );

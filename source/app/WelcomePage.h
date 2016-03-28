@@ -15,7 +15,7 @@ public:
         : QuartzPage( "qz_welcome",
                       tr( "Quartz" ),
                       tr( "Quartz" ),
-                      tr("Welcome"),
+                      tr( "Welcome" ),
                       parent )
     {
         QVBoxLayout *layout = new QVBoxLayout();
@@ -23,6 +23,31 @@ public:
         layout->addWidget( label );
         this->setLayout( layout );
     }
+
+    virtual ~WelcomePage() {}
+
+private:
+
+};
+
+class AnotherPage : public QuartzPage
+{
+    Q_OBJECT
+public:
+    explicit AnotherPage( QWidget *parent = nullptr )
+        : QuartzPage( "qz_another",
+                      tr( "Quartz" ),
+                      tr( "Quartz" ),
+                      tr( "AnotherPage" ),
+                      parent )
+    {
+        QVBoxLayout *layout = new QVBoxLayout();
+        QLabel *label = new QLabel( tr( "This is Q U A R T Z" ));
+        layout->addWidget( label );
+        this->setLayout( layout );
+    }
+
+    virtual ~AnotherPage() { }
 
 private:
 
