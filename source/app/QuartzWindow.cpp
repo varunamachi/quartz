@@ -323,7 +323,7 @@ void QzMainWidget::paintEvent( QPaintEvent */*event*/ )
     auto color = this->palette().color( QPalette::Background );
     if( m_roundedRect ) {
         QPainterPath path;
-        path.addRoundedRect( this->rect(), 10, 10 );
+        path.addRoundedRect( this->rect(), 5, 5 );
         QBrush brush( color );
         painter.setRenderHint( QPainter::Antialiasing );
         painter.setRenderHint( QPainter::HighQualityAntialiasing );

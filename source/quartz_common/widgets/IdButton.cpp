@@ -12,6 +12,7 @@ IdButton::IdButton( QString id,
                     QWidget *parent )
     : QPushButton( parent )
     , m_id( id )
+    , m_dim( width, height )
 {
     setCheckable( true );
     QString qss;
@@ -39,6 +40,11 @@ IdButton::IdButton( QString id,
     qssStream.flush();
     setStyleSheet( qss );
     setText( text );
+}
+
+QSize IdButton::sizeHint() const
+{
+    return m_dim;
 }
 
 

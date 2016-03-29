@@ -45,7 +45,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
 //    m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     innerWidget->setLayout( m_layout );
     innerWidget->setContentsMargins( QMargins() );
-    innerWidget->setMinimumSize( QSize( 100, 20 ));
+    innerWidget->setMinimumSize( QSize( minimumDim, 20 ));
     m_fwdButton->setFlat( true );
     m_bckButton->setFlat( true );
     m_fwdButton->setVisible( false );
@@ -145,6 +145,7 @@ void QzScroller::removeWidget( QWidget *widget )
 void QzScroller::resizeEvent(QResizeEvent *event)
 {
     adjustArrows();
+    QWidget::resizeEvent(event);
 }
 
 

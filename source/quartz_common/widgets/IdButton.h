@@ -15,6 +15,8 @@ public:
               int width,
               QWidget *parent = 0 );
 
+    QSize sizeHint() const override;
+
 protected:
     void mouseReleaseEvent( QMouseEvent *evt );
 
@@ -23,5 +25,7 @@ signals:
 
 private:
     QString m_id;
+
+    QSize m_dim;
 };
 } }
