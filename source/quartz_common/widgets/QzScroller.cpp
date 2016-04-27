@@ -41,11 +41,11 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     }
     m_layout->setContentsMargins( QMargins() );
     m_layout->setMargin( 0 );
-    m_layout->addStretch();
-//    m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
+    m_layout->addStretch( 0 );
+    m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     innerWidget->setLayout( m_layout );
     innerWidget->setContentsMargins( QMargins() );
-    innerWidget->setMinimumSize( QSize( minimumDim, 20 ));
+    innerWidget->setMinimumSize( QSize( maximumDim, 20 ));
     m_fwdButton->setFlat( true );
     m_bckButton->setFlat( true );
     m_fwdButton->setVisible( false );
@@ -128,7 +128,6 @@ void QzScroller::addWidget( QWidget *widget )
 {
     if( widget != nullptr ) {
         m_layout->insertWidget( m_layout->count() - 1, widget );
-//        m_layout->addWidget( widget );
         adjustArrows();
     }
 }
@@ -172,11 +171,12 @@ void QzScroller::onTimeout()
     QScrollBar *bar = m_orientation == Qt::Horizontal
             ? m_scroll->horizontalScrollBar()
             : m_scroll->verticalScrollBar();
+    int val = bar->value();
     if( m_fwdButton->isDown() ) {
-        bar->setValue( bar->value() + 8 );
+        bar->setValue( val + 8 );
     }
     else if( m_bckButton->isDown() ){
-        bar->setValue( bar->value() - 8 );
+        bar->setValue( val - 8 );
     }
 }
 
@@ -184,10 +184,8 @@ void QzScroller::onTimeout()
 void QzScroller::adjustArrows()
 {
     int occupied = 0;
-    QWidgetList widgets;
     for( int i = 0; i < m_layout->count(); ++ i ) {
         QLayoutItem *item = m_layout->itemAt( i );
-        QWidget *widget = item->widget();
         QRect rect = item->geometry();
         if( m_orientation == Qt::Horizontal ) {
             occupied += rect.width();
@@ -208,6 +206,7 @@ void QzScroller::adjustArrows()
         m_fwdButton->setVisible( false );
         m_bckButton->setVisible( false );
     }
+    m_layout->update();
 }
 
 

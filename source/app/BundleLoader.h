@@ -44,11 +44,12 @@ public:
     }
 
 private:
-    bool m_isValid;
 
     QLibrary *m_library;
 
     PluginBundle *m_bundle;
+
+    bool m_isValid;
 };
 
 
