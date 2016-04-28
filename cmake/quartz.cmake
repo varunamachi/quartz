@@ -24,3 +24,8 @@ macro( qz_add_common )
     qz_add_core()
     vq_add_module( "quartz" "quartz_common" )
 endmacro( qz_add_common )
+
+
+macro( qz_install_plugin )
+
+endmacro()
