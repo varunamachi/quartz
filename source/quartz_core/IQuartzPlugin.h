@@ -10,9 +10,9 @@ VQ_INTERFACE IQuartzPlugin
 {
     virtual QString pluginId() const = 0;
 
-    virtual bool init( const QuartzContext &context );
+    virtual bool init( QuartzContext &context ) = 0;
 
-    virtual bool uninit( const QuartzContext &context );
+    virtual bool uninit( QuartzContext &context ) = 0;
 
 };
 

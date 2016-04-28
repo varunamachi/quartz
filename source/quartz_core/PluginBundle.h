@@ -31,7 +31,7 @@ public:
         return m_bundleName;
     }
 
-    void addPlugin( IQuartzPlugin *plugin )
+    virtual void addPlugin( IQuartzPlugin *plugin )
     {
         m_plugins.append( plugin );
     }
@@ -50,7 +50,7 @@ public:
         return plugin;
     }
 
-    void addDependency( QString bundleId )
+    virtual void addDependency( QString bundleId )
     {
         m_dependencies << bundleId;
     }
@@ -60,8 +60,20 @@ public:
         return m_dependencies;
     }
 
+protected:
+    QList< IQuartzPlugin > & mutablePluginList()
+    {
+        return m_plugins;
+    }
+
+    QStringList & mutalbleDependencyList()
+    {
+        return m_dependencies;
+    }
 
 private:
+
+
     QString m_bundleId;
 
     QString m_bundleName;

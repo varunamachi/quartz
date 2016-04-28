@@ -4,6 +4,7 @@ include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 
 qz_add_vqcore()
 qz_add_core()
+vq_add_qt()
 
 vq_sources(
     SampleBundleInterface.c
