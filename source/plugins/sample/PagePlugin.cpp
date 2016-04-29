@@ -14,27 +14,28 @@ QString PagePlugin::pluginId() const
 }
 
 
-void PagePlugin::init( Quartz::QuartzContext &context )
+bool PagePlugin::init( Quartz::QuartzContext &context )
 {
     context.pageManager().addPage( m_samplePage.get() );
 }
 
 
-void PagePlugin::uninit( Quartz::QuartzContext &context ) {
+bool PagePlugin::uninit( Quartz::QuartzContext &context ) {
     context.pageManager().removePage( m_samplePage.get() );
 }
 
 
 ////Sample page
-SamplePage::SamplePage( const QString &pageId,
-                        const QString &category,
-                        const QString &categoryName,
-                        const QString &displayName,
-                        QWidget *parent )
-    : QuartzPage( "the_page",
-                  "sample",
-                  "Sample",
-                  "Sample",
+const QString SamplePage::PAGE_ID( "the_page" );
+const QString SamplePage::PAGE_CATEGORY( "sample" );
+const QString SamplePage::PAGE_CATEGORY_NAME( "Sample" );
+const QString SamplePage::PAGE_DISPLAY_NAME( "Welcome" );
+
+SamplePage::SamplePage()
+    : QuartzPage( PAGE_ID,
+                  PAGE_CATEGORY,
+                  PAGE_CATEGORY_NAME,
+                  PAGE_DISPLAY_NAME,
                   nullptr )
 {
 

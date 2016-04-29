@@ -13,6 +13,7 @@ vq_headers(
 )
 
 add_subdirectory( logger )
+add_subdirectory( common )
 
 vq_create_staticlib()
 vq_install_lib()

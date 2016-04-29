@@ -16,6 +16,11 @@ public:
                 const QString &categoryName,
                 const QString &displayName,
                 QWidget *parent = nullptr );
+
+    const static QString PAGE_ID;
+    const static QString PAGE_CATEGORY;
+    const static QString PAGE_CATEGORY_NAME;
+    const static QString PAGE_DISPLAY_NAME;
 };
 
 class PagePlugin : public Quartz::IQuartzPlugin
