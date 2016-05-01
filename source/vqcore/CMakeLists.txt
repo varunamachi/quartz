@@ -12,8 +12,10 @@ vq_headers(
     VQCommon.h
 )
 
-add_subdirectory( logger )
 add_subdirectory( common )
+add_subdirectory( logger )
+add_subdirectory( job_handler )
+add_subdirectory( config_storage )
 
 vq_create_staticlib()
 vq_install_lib()

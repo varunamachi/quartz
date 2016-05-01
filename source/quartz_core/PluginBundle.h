@@ -61,7 +61,7 @@ public:
     }
 
 protected:
-    QList< IQuartzPlugin > & mutablePluginList()
+    QList< IQuartzPlugin *> & mutablePluginList()
     {
         return m_plugins;
     }

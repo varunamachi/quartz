@@ -20,6 +20,7 @@ vq_interfaces(
     IQuartzViewManager
     IQuartzActionBar
     IQuartzTitleBar
+    IQuartzPluginManager
 
 )
 

@@ -7,15 +7,16 @@
 
 namespace Vam { namespace Quartz {
 
-bool PluginManager::loadAll()
+Result< bool > PluginManager::loadAll()
 {
-    bool result = true;
+    Result< bool > result;
     m_libraries = m_loader.loadAll( m_location );
     QSet< QString > loadedBundles;
-    for( BundleLibrary::Ptr blib : m_libraries.values() ) {
-        const PluginBundle &bundle = blib->bundle();
+    for( auto &blib : m_libraries.values() ) {
+        auto &bundle = blib->bundle();
         if( ! loadedBundles.contains( bundle.bundleId() )) {
-            if( ! loadBundle( bundle, loadedBundles )) {
+            result = loadBundle( bundle, loadedBundles );
+            if( ! result ) {
                 VQ_ERROR( "Quartz:Core" )
                         << "Could not load bundle with ID "
                         << bundle.bundleId();
@@ -26,52 +27,64 @@ bool PluginManager::loadAll()
 }
 
 
-bool PluginManager::unloadAll()
+Result< bool > PluginManager::unloadAll()
 {
-    bool result = true;
+    Result< bool > result;
     m_libraries = m_loader.loadAll( m_location );
     QSet< QString > unloadedBundles;
-    for( BundleLibrary::Ptr blib : m_libraries.values() ) {
-        const PluginBundle &bundle = blib->bundle();
+    for( auto & blib : m_libraries.values() ) {
+        auto &bundle = blib->bundle();
         if( ! unloadedBundles.contains( bundle.bundleId() )) {
-            if( ! unloadBundle( bundle, unloadedBundles )) {
+            result = unloadBundle( bundle, unloadedBundles );
+            if( ! result ) {
                 VQ_ERROR( "Quartz:Core" )
                         << "Could not unload bundle with ID "
                         << bundle.bundleId();
             }
+
         }
     }
     return result;
 }
 
 
-bool PluginManager::reloadAll()
+Result< bool > PluginManager::reloadAll()
 {
-    bool result = unloadAll();
-    result = result && loadAll();
+    auto result = unloadAll();
+     if( result.result() ) {
+         result = loadAll();
+     }
     return result;
 }
 
 
-bool PluginManager::unload( QString bundleId )
+Result< bool > PluginManager::unload( QString bundleId )
 {
-    bool result = false;
+    Result< bool > result;
     BundleLibrary::Ptr blib = m_libraries.value( bundleId );
     if( blib != nullptr ) {
         QSet< QString > unloadedBundles;
         result = unloadBundle( blib->bundle(), unloadedBundles );
     }
+    else {
+        result =  = Result< bool >::failure(
+                    tr( "Could not find library for bundleID " + bundleId ));
+    }
     return result;
 }
 
 
-bool PluginManager::load( QString bundleId )
+Result< bool > PluginManager::load( QString bundleId )
 {
-    bool result = false;
-    BundleLibrary::Ptr blib = m_libraries.value( bundleId );
+    Result< bool > result;
+    auto &blib = m_libraries.value( bundleId );
     if( blib != nullptr ) {
         QSet< QString > loadedBundles;
         result = loadBundle( blib->bundle(), loadedBundles );
+    }
+    else {
+        result =  = Result< bool >::failure(
+                    tr( "Could not find library for bundleID " + bundleId ));
     }
     return result;
 }
@@ -79,8 +92,10 @@ bool PluginManager::load( QString bundleId )
 
 bool PluginManager::reload( QString bundleId )
 {
-    bool result = unload( bundleId );
-    result = result && load( bundleId );
+    Result< bool > result = unload( bundleId );
+    if( result.result() ) {
+        result = load( bundleId );
+    }
     return result;
 }
 
@@ -88,14 +103,15 @@ bool PluginManager::reload( QString bundleId )
 bool PluginManager::loadBundle( const PluginBundle &bundle,
                                 VQ_IN_OUT QSet< QString > &loadedBundles )
 {
-    bool result = true;
-    const QStringList &bundleDeps = bundle.dependencies();
-    for( const QString &dep : bundleDeps ) {
-        BundleLibrary::Ptr blib = m_libraries.value( dep );
+    Result< bool > result;
+    const auto &bundleDeps = bundle.dependencies();
+    for( const auto &dep : bundleDeps ) {
+        auto &blib = m_libraries.value( dep );
         if( blib != nullptr ) {
             PluginBundle &depBundle = blib->bundle();
             if( ! loadedBundles.contains( depBundle.bundleId() )) {
-                if( ! loadBundle( depBundle, loadedBundles )) {
+                result = loadBundle( depBundle, loadedBundles );
+                if( ! result ) {
                     result = false;
                     VQ_ERROR( "Quartz:Core" )
                             << "Could not load dependency bundle "

@@ -14,14 +14,16 @@ QString PagePlugin::pluginId() const
 }
 
 
-bool PagePlugin::init( Quartz::QuartzContext &context )
+Result< bool > PagePlugin::init( Quartz::QuartzContext &context )
 {
     context.pageManager().addPage( m_samplePage.get() );
+    return Result< bool >::success();
 }
 
 
-bool PagePlugin::uninit( Quartz::QuartzContext &context ) {
+Result< bool >PagePlugin::uninit( Quartz::QuartzContext &context ) {
     context.pageManager().removePage( m_samplePage.get() );
+    return Result< bool >::success();
 }
 
 

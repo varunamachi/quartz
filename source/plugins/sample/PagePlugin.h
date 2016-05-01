@@ -29,9 +29,9 @@ class PagePlugin : public Quartz::IQuartzPlugin
 public:
     QString pluginId() const;
 
-    bool init( Quartz::QuartzContext &context );
+    Result< bool > init( Quartz::QuartzContext &context );
 
-    bool uninit( Quartz::QuartzContext &context );
+    Result< bool > uninit( Quartz::QuartzContext &context );
 
     const static QString PLUGIN_ID;
 
