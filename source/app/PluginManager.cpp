@@ -112,7 +112,6 @@ bool PluginManager::loadBundle( const PluginBundle &bundle,
             if( ! loadedBundles.contains( depBundle.bundleId() )) {
                 result = loadBundle( depBundle, loadedBundles );
                 if( ! result ) {
-                    result = false;
                     VQ_ERROR( "Quartz:Core" )
                             << "Could not load dependency bundle "
                             << depBundle.bundleId();
@@ -126,14 +125,14 @@ bool PluginManager::loadBundle( const PluginBundle &bundle,
             }
         }
     }
-    if( result ) {
+    if( result.result() ) {
         for( int i = 0; i < bundle.pluginCount(); ++ i ) {
-            IQuartzPlugin *plugin = bundle.pluginAt( i );
+            auto *plugin = bundle.pluginAt( i );
             if( ! plugin->init( *m_context )) {
                 VQ_WARN( "Quartz:Core" )
                         << "Could not initialize plugin with ID "
                         << plugin->pluginId();
-                result = false;
+                result = Result< bool >::failure( );
             }
             else {
                 VQ_DEBUG( "Quartz:Core")

@@ -5,12 +5,13 @@
 #include <QMultiHash>
 
 #include <quartz_core/IQuartzPlugin.h>
+#include <quartz_core/IQuartzPluginManager.h>
 
 #include "BundleLoader.h"
 
 namespace Vam { namespace Quartz {
 
-class PluginManager
+class PluginManager : public IQuartzPluginManager
 {
 public:
     PluginManager( QuartzContext *context,
@@ -20,17 +21,21 @@ public:
 
     }
 
-    bool loadAll();
+    Result< bool > loadAll();
 
-    bool unloadAll();
+    Result< bool > unloadAll();
 
-    bool reloadAll();
+    Result< bool > reloadAll();
 
-    bool unload( QString bundleId );
+    Result< bool > unload( QString bundleId );
 
-    bool load( QString bundleId );
+    Result< bool > load( QString bundleId );
 
-    bool reload( QString bundleId );
+    Result< bool > reload( QString bundleId );
+
+    Result< PluginBundle * >pluginBundle( const QString &bundleId ) const;
+
+    Result< QList< const PluginBundle * >> allBundles() const;
 
 private:
     bool loadBundle( const PluginBundle &bundle,
