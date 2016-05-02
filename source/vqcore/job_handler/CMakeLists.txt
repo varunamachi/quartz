@@ -1,4 +1,10 @@
+vq_interfaces(
+    IJob
+)
+
 vq_classes(
-    JobHandler
     Job
+    JobSequence
+    JobHandler
+    JobContext
 )
