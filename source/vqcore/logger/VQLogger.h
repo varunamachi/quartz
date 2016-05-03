@@ -17,15 +17,6 @@ namespace Vam { namespace Logger {
 
 class VQLogger;
 
-VQ_INTERFACE ILogFormatter
-{
-    virtual QString format( const LogMessage *message ) = 0;
-
-    virtual ~ILogFormatter() { }
-};
-
-
-
 
 class VQ_CORE_EXPORT VQLogger
 {

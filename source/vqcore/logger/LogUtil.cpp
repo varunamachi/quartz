@@ -20,8 +20,12 @@
  * SOFTWARE.
  ******************************************************************************/
 
+#include <QString>
+
 #include "LogUtil.h"
-#include "VQLogger.h"
+#include "LogStructures.h"
+#include "LogMessage.h"
+
 
 namespace Vam { namespace Logger {
 
@@ -30,15 +34,16 @@ namespace Vam { namespace Logger {
 QString LogUtil::getSeverityString( VQLogLevel level )
 {
     switch( level ) {
-    case VQLogLevel::Trace : return "[ TRACE ]";
-    case VQLogLevel::Debug : return "[ DEBUG ]";
-    case VQLogLevel::Info  : return "[ INFO  ]";
-    case VQLogLevel::Warn  : return "[ WARNG ]";
-    case VQLogLevel::Error : return "[ ERROR ]";
-    case VQLogLevel::Fatal : return "[ FATAL ]";
+    case VQLogLevel::Trace  : return "[ TRACE ]";
+    case VQLogLevel::Debug  : return "[ DEBUG ]";
+    case VQLogLevel::Info   : return "[ INFO  ]";
+    case VQLogLevel::Warn   : return "[ WARNG ]";
+    case VQLogLevel::Error  : return "[ ERROR ]";
+    case VQLogLevel::Fatal  : return "[ FATAL ]";
+    case VQLogLevel::Special:
+    case VQLogLevel::Method :
     default                 : return "[ ***** ]";
     }
-    return "";
 }
 
 

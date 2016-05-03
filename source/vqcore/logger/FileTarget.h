@@ -21,12 +21,10 @@
  ******************************************************************************/
 #pragma once
 
-#include <QTextStream>
-#include <QPointer>
-#include <QFile>
+#include <memory>
 
-#include "VQLogger.h"
 #include "../VQ.h"
+#include "AbstractLogTarget.h"
 
 
 namespace Vam { namespace Logger {
@@ -36,26 +34,17 @@ namespace Vam { namespace Logger {
 class VQ_CORE_EXPORT FileTarget : public AbstractLogTarget
 {
 public:
-    FileTarget( const QString &fileSuffix );
+    explicit FileTarget( const QString &fileSuffix );
 
-//    ~FileTarget() {
-
-    void write( const QString message );
+    void write( const QString &&message );
 
     void flush();
 
     static const QString TARGET_ID;
 
 private:
-    void initFile();
-
-    QPointer< QFile > m_logFile;
-
-    QString m_fileSuffix;
-
-    QDateTime m_prevDate;
-
-    QTextStream m_stream;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
 };
 

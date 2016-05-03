@@ -21,16 +21,42 @@
  ******************************************************************************/
 #include <QFile>
 #include <QDebug>
+#include <QTextStream>
+#include <QPointer>
+#include <QFile>
 
 #include "FileTarget.h"
 #include "LogUtil.h"
 
 namespace Vam { namespace Logger {
 
+class FileTarget::Impl
+{
+public:
+    Impl( const QString &fileSuffix );
 
-const QString FileTarget::TARGET_ID = QString( "FileLogger" );
+    void write( const QString &&message );
 
-FileTarget::FileTarget( const QString &fileSuffix )
+    void flush();
+
+    static const QString TARGET_ID;
+
+private:
+    void initFile();
+
+    QPointer< QFile > m_logFile;
+
+    QString m_fileSuffix;
+
+    QDateTime m_prevDate;
+
+    QTextStream m_stream;
+
+};
+
+
+
+FileTarget::Impl::Impl( const QString &fileSuffix )
     : AbstractLogTarget( TARGET_ID )
     , m_fileSuffix( fileSuffix )
     , m_prevDate( QDateTime::currentDateTime() )
@@ -39,7 +65,7 @@ FileTarget::FileTarget( const QString &fileSuffix )
 }
 
 
-void FileTarget::write( const QString message )
+void FileTarget::Impl::write( const QString &&message )
 {
     if( m_prevDate.daysTo( QDateTime::currentDateTime() ) != 0 ) {
         m_stream.flush();
@@ -49,13 +75,13 @@ void FileTarget::write( const QString message )
 }
 
 
-void FileTarget::flush()
+void FileTarget::Impl::flush()
 {
     m_stream.flush();
 }
 
 
-void FileTarget::initFile()
+void FileTarget::Impl::initFile()
 {
     QString fileName = m_prevDate.toString( "yyyy_MM_dd_" )
                        + m_fileSuffix
@@ -70,5 +96,28 @@ void FileTarget::initFile()
         qDebug() << "Could not open the file....";
     }
 }
+
+
+
+//---------------- File Target -----------------------------
+const QString FileTarget::TARGET_ID = QString( "FileLogger" );
+
+FileTarget::FileTarget( const QString &fileSuffix )
+    : m_impl( std::make_unique( fileSuffix ))
+{
+
+}
+
+
+void FileTarget::write( const QString &&message )
+{
+    m_impl->write( std::move( message ));
+}
+
+void FileTarget::flush()
+{
+    m_impl->flush();
+}
+
 
 } } //end of namespaces

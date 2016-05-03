@@ -22,12 +22,15 @@
 
 #pragma once
 
-#include <QString>
 
-#include "LogStructures.h"
+class QString;
+
 #include "../VQ.h"
 
 namespace Vam { namespace Logger {
+
+enum class VQLogLevel : int;
+class LogMessage;
 
 class VQ_CORE_EXPORT  LogUtil
 {

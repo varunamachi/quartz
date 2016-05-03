@@ -24,7 +24,9 @@
 #include "ConsoleTarget.h"
 #include "ILogFormatter.h"
 #include "LogStructures.h"
+#include "LogMessage.h"
 #include "LogUtil.h"
+#include "AbstractLogTarget.h"
 
 #define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
                                              : LogUtil::format( x ))

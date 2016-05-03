@@ -12,7 +12,7 @@ class LogMessage;
 class AbstractLogTarget
 {
 public:
-    explicit AbstractLogTarget( QString &uniqueId );
+    explicit AbstractLogTarget( const QString &uniqueId );
 
     const QString & uniqueId() const;
 

@@ -31,7 +31,7 @@ public:
 
     inline ~Impl() { }
 
-    inline ILogFormatter * formatter()
+    inline ILogFormatter * formatter() const
     {
         return m_formatter.get();
     }
@@ -45,6 +45,7 @@ private:
 
 
 AbstractLogTarget::AbstractLogTarget( QString &uniqueId )
+    : m_impl( std::make_unique< AbstractLogTarget::Impl >( uniqueId ))
 {
 
 }
@@ -71,7 +72,7 @@ AbstractLogTarget::~AbstractLogTarget()
 
 }
 
-ILogFormatter * AbstractLogTarget::formatter()
+ILogFormatter * AbstractLogTarget::formatter() const
 {
     return m_impl->formatter();
 }

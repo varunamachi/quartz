@@ -12,6 +12,7 @@ vq_classes(
     AbstractLogTarget
     FileTarget
     ConsoleTarget
+    LogMessage
 )
 
 vq_headers(
