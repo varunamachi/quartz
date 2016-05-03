@@ -22,10 +22,11 @@
 #include <QDebug>
 
 #include "ConsoleTarget.h"
-#include "VQLogger.h"
+#include "ILogFormatter.h"
+#include "LogStructures.h"
 #include "LogUtil.h"
 
-#define format( x ) ( formatter() != nullptr ? formatter()->format( x )  \
+#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
                                              : LogUtil::format( x ))
 
 namespace Vam { namespace Logger {
@@ -42,21 +43,20 @@ void ConsoleTarget::write( const LogMessage *message )
 {
     if( message ) {
         if( message->logLevel() <= VQLogLevel::Info ) {
-            qDebug() << format( message );
+            qDebug() << FORMAT( message );
         }
         else if( message->logLevel() == VQLogLevel::Warn ) {
-            qWarning() << format( message );
+            qWarning() << FORMAT( message );
         }
         else {
-            qCritical() << format( message );
+            qCritical() << FORMAT( message );
         }
     }
 }
 
 
-void ConsoleTarget::write( const QString message )
+void ConsoleTarget::write( const QString &&/*message*/ )
 {
-    Q_UNUSED( message )
 }
 
 } }//end of namespace

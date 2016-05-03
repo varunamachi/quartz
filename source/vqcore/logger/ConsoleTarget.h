@@ -21,8 +21,8 @@
  ******************************************************************************/
 #pragma once
 
-#include "VQLogger.h"
 #include "../VQ.h"
+#include "AbstractLogTarget.h"
 
 namespace Vam { namespace Logger {
 
@@ -35,7 +35,7 @@ public:
 
     void write( const LogMessage *message );
 
-    void write( const QString message );
+    void write( const QString &&message );
 
     static const QString TARGET_ID;
 
