@@ -23,104 +23,27 @@
 
 #include <memory>
 
-#include <QThread>
-#include <QQueue>
-#include <QHash>
-#include <QReadWriteLock>
-
-#include "VQLogger.h"
 #include "../VQ.h"
+#include "AbstractLogDispatcher.h"
 
 namespace Vam { namespace Logger {
 
-
-
-class VQ_CORE_EXPORT SpooledDispatcher : public QThread
-                                       , public ILogDispatcher
+class VQ_CORE_EXPORT SpooledDispatcher: public AbstractLogDispatcher
 {
-    Q_OBJECT
 public:
-    SpooledDispatcher( QObject *parent );
+        SpooledDispatcher();
 
-    bool addTarget( AbstractLogTarget *target );
+        void write( LogMessage *message );
 
-    AbstractLogTarget * target( QString targetId );
+        void stopDispatch();
 
-    bool setTargetEnabledState( const QString &trgId, bool value );
+        void run();
 
-    bool removeTarget( const QString &targetId );
-
-    bool installFilter( ILogFilter *filter,
-                        const QString &trgtId );
-
-    bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId );
-
-    void write( LogMessage *message );
-
-    void flush();
-
-    void stopDispatch();
-
-    ~SpooledDispatcher();
-
-protected:
-    void run();
+        ~SpooledDispatcher();
 
 private:
-    struct TargetInfo
-    {
-        TargetInfo( AbstractLogTarget *target, bool enable )
-            : m_target( target )
-            , m_enabled( enable ) {}
-
-        ~TargetInfo()
-        {
-            delete m_target;
-        }
-
-        AbstractLogTarget *m_target;
-
-        bool m_enabled;
-
-        QList< ILogFilter *> m_targetFilters;
-    };
-
-    struct FilterInfo
-    {
-        FilterInfo( ILogFilter *filter )
-            : m_filter( filter )
-            , m_refs( 0 )
-            , m_enabled( true ) {}
-
-        ~FilterInfo()
-        {
-            delete m_filter;
-        }
-
-        ILogFilter *m_filter;
-
-        int m_refs;
-
-        bool m_enabled;
-    };
-
-    void writeToTargets( LogMessage *msg );
-
-    bool m_stop;
-
-    QQueue< LogMessage *> m_logQueue;
-
-    QHash< QString, FilterInfo *> m_allFilters;
-
-    QHash< QString, TargetInfo *> m_targets;
-
-    QReadWriteLock m_lock;
-
-    QReadWriteLock m_logIoLock;
-
-    bool m_shouldStop;
-
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
 } } // end of namespaces

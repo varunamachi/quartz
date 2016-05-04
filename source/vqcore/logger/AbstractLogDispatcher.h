@@ -28,14 +28,15 @@
 
 namespace Vam { namespace Logger {
 
-
+struct FilterInfo;
+struct TargetInfo;
 
 class VQ_CORE_EXPORT AbstractLogDispatcher : public ILogDispatcher
 {
 public:
     AbstractLogDispatcher();
 
-    bool addTarget( AbstractLogTarget *target );
+    bool addTarget( std::shared_ptr< AbstractLogTarget > target );
 
     AbstractLogTarget * target( QString targetId );
 
@@ -43,7 +44,7 @@ public:
 
     bool removeTarget( const QString &targetId );
 
-    bool installFilter( ILogFilter *filter,
+    bool installFilter( std::shared_ptr< ILogFilter > filter,
                         const QString &trgtId );
 
     bool uninstallFilter( const QString &filterId,
@@ -52,6 +53,9 @@ public:
     void flush();
 
     ~AbstractLogDispatcher();
+
+protected:
+    void writeToTargets( LogMessage *msg );
 
 private:
     class Impl;
