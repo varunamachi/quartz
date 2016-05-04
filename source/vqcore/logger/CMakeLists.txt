@@ -13,6 +13,7 @@ vq_classes(
     FileTarget
     ConsoleTarget
     LogMessage
+    AbstractLogDispatcher
 )
 
 vq_headers(

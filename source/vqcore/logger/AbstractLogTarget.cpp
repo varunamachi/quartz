@@ -44,7 +44,7 @@ private:
 };
 
 
-AbstractLogTarget::AbstractLogTarget( QString &uniqueId )
+AbstractLogTarget::AbstractLogTarget( const QString &uniqueId )
     : m_impl( std::make_unique< AbstractLogTarget::Impl >( uniqueId ))
 {
 

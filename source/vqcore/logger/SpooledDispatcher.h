@@ -51,10 +51,10 @@ public:
     bool removeTarget( const QString &targetId );
 
     bool installFilter( ILogFilter *filter,
-                        const QString &trgtId = "" );
+                        const QString &trgtId );
 
     bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId = "" );
+                          const QString &trgtId );
 
     void write( LogMessage *message );
 

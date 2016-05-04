@@ -2,10 +2,11 @@
 
 #include "../VQCommon.h"
 
+class QString;
+
 namespace Vam { namespace Logger {
 
 class LogMessage;
-class QString;
 
 VQ_INTERFACE ILogFilter
 {
