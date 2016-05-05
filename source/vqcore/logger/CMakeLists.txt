@@ -18,5 +18,6 @@ vq_classes(
 
 vq_headers(
     LogStructures.h
+    Logging.h
 )
 

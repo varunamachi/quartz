@@ -36,21 +36,21 @@ class VQ_CORE_EXPORT AbstractLogDispatcher : public ILogDispatcher
 public:
     AbstractLogDispatcher();
 
-    bool addTarget( std::shared_ptr< AbstractLogTarget > target );
+    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target ) override;
 
-    AbstractLogTarget * target( QString targetId );
+    AbstractLogTarget * target( QString targetId ) override;
 
-    bool setTargetEnabledState( const QString &trgId, bool value );
+    bool setTargetEnabledState( const QString &trgId, bool value ) override;
 
-    bool removeTarget( const QString &targetId );
+    bool removeTarget( const QString &targetId ) override;
 
     bool installFilter( std::shared_ptr< ILogFilter > filter,
-                        const QString &trgtId );
+                        const QString &trgtId ) override;
 
     bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId );
+                          const QString &trgtId ) override;
 
-    void flush();
+    void flush() override;
 
     ~AbstractLogDispatcher();
 

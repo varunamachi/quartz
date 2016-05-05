@@ -8,15 +8,15 @@ namespace Vam { namespace Logger {
 class LogMessage::Impl
 {
 public:
-    Impl( VQLogLevel &level,
-          const QDateTime &time,
+    Impl( const QDateTime &time,
+          VQLogLevel &level,
           std::uint64_t threadId,
           const QString &module,
           const QString &&method,
           int lineNum,
           const QString &message )
-        : m_logLevel( level )
-        , m_time( time )
+        : m_time( time )
+        , m_logLevel( level )
         , m_threadId( threadId )
         , m_moduleName( module )
         , m_methodName( std::move( method ))
@@ -27,15 +27,15 @@ public:
     }
 
 
-    Impl( VQLogLevel &level,
-          const QDateTime &time,
+    Impl( const QDateTime &time,
+          VQLogLevel &level,
           std::uint64_t threadId,
           const QString &module,
           const QString &&method,
           int lineNum,
           QString &&message )
-        : m_logLevel( level )
-        , m_time( time )
+        : m_time( time )
+        , m_logLevel( level )
         , m_threadId( threadId )
         , m_moduleName( module )
         , m_methodName( std::move( method ))
@@ -45,15 +45,15 @@ public:
 
     }
 
-    Impl( VQLogLevel &level,
-          const QDateTime &time,
+    Impl( const QDateTime &time,
+          VQLogLevel &level,
           std::uint64_t threadId,
           const QString &&module,
           const QString &&method,
           int lineNum,
           QString &&message )
-        : m_logLevel( level )
-        , m_time( time )
+        : m_time( time )
+        , m_logLevel( level )
         , m_threadId( threadId )
         , m_moduleName( std::move( module ))
         , m_methodName( std::move( method ))
@@ -105,9 +105,9 @@ public:
     }
 
 private:
-    VQLogLevel m_logLevel;
-
     QDateTime m_time;
+
+    VQLogLevel m_logLevel;
 
     std::uint64_t m_threadId;
 
@@ -121,16 +121,16 @@ private:
 };
 
 
-LogMessage::LogMessage( VQLogLevel &level,
-                        const QDateTime &time,
+LogMessage::LogMessage( const QDateTime &&time,
+                        VQLogLevel level,
                         std::uint64_t threadId,
                         const QString &module,
                         const QString &&method,
                         int lineNum,
-                        QString &message )
+                        const QString &message )
     : m_impl( std::make_unique< LogMessage::Impl >(
+                  std::move( time ),
                   level,
-                  time,
                   threadId,
                   module,
                   std::move( method ),
@@ -141,16 +141,16 @@ LogMessage::LogMessage( VQLogLevel &level,
 }
 
 
-LogMessage::LogMessage( VQLogLevel &level,
-                        const QDateTime &time,
+LogMessage::LogMessage( const QDateTime &&time,
+                        VQLogLevel level,
                         std::uint64_t threadId,
                         const QString &module,
                         const QString &&method,
                         int lineNum,
                         QString &&message )
     : m_impl( std::make_unique< LogMessage::Impl >(
+                  std::move( time ),
                   level,
-                  time,
                   threadId,
                   module,
                   std::move( method ),
@@ -162,16 +162,16 @@ LogMessage::LogMessage( VQLogLevel &level,
 
 
 
-LogMessage::LogMessage( VQLogLevel &level,
-                        const QDateTime &time,
+LogMessage::LogMessage( const QDateTime &&time,
+                        VQLogLevel level,
                         std::uint64_t threadId,
                         const QString &&module,
                         const QString &&method,
                         int lineNum,
                         QString &&message )
     : m_impl( std::make_unique< LogMessage::Impl >(
+                  std::move( time ),
                   level,
-                  time,
                   threadId,
                   std::move( module ),
                   std::move( method ),
@@ -227,6 +227,11 @@ const QString & LogMessage::message() const
 QString & LogMessage::mutableMessage() const
 {
     return m_impl->mutableMessage();
+}
+
+LogMessage::~LogMessage()
+{
+
 }
 
 

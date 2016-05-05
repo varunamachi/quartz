@@ -2,11 +2,13 @@
 
 #include <memory>
 
+#include "../VQCommon.h"
+
 class QString;
 
 namespace Vam { namespace Logger {
 
-class ILogFormatter;
+VQ_INTERFACE ILogFormatter;
 class LogMessage;
 
 class AbstractLogTarget

@@ -25,7 +25,7 @@ VQ_INTERFACE IQuartzPluginManager
     virtual Result< bool > load( QString bundleId );
 
     virtual Result< bool > reload( QString bundleId );
-}
+};
 
 
 } }

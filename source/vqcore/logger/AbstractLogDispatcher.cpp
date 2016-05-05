@@ -16,7 +16,7 @@ struct TargetInfo
 {
     using SPtr = std::shared_ptr< TargetInfo >;
 
-    TargetInfo( std::unique_ptr< AbstractLogTarget > target, bool enable )
+    TargetInfo( std::unique_ptr< AbstractLogTarget > &&target, bool enable )
         : m_target( std::move( target ))
         , m_enabled( enable ) {}
 
@@ -58,7 +58,7 @@ class AbstractLogDispatcher::Impl
 public:
     Impl();
 
-    bool addTarget( std::shared_ptr< AbstractLogTarget > target );
+    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
 
     AbstractLogTarget * target( const QString &targetId );
 
@@ -94,13 +94,14 @@ AbstractLogDispatcher::Impl::Impl()
 
 
 bool AbstractLogDispatcher::Impl::addTarget(
-        std::shared_ptr< AbstractLogTarget > target )
+        std::unique_ptr< AbstractLogTarget > &&target )
 {
     bool result = false;
     if( target != nullptr && ! m_targets.contains( target->uniqueId() )) {
         SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
         m_targets.insert( target->uniqueId(),
-                          std::make_shared< TargetInfo >( target, true ));
+                          std::make_shared< TargetInfo >( std::move( target ),
+                                                          true ));
         result = true;
     }
     return result;
@@ -292,9 +293,9 @@ AbstractLogDispatcher::AbstractLogDispatcher()
 
 
 bool AbstractLogDispatcher::addTarget(
-        std::shared_ptr< AbstractLogTarget > target )
+        std::unique_ptr< AbstractLogTarget > &&target )
 {
-    return m_impl->addTarget( target );
+    return m_impl->addTarget( std::move( target ));
 }
 
 
@@ -313,7 +314,7 @@ bool AbstractLogDispatcher::setTargetEnabledState( const QString &trgId,
 
 bool AbstractLogDispatcher::removeTarget( const QString &targetId )
 {
-    return removeTarget( targetId );
+    return m_impl->removeTarget( targetId );
 }
 
 

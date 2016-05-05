@@ -1,5 +1,5 @@
 
-    #include <vqcore/logger/VQLogger.h>
+    #include <vqcore/logger/Logging.h>
 
     #include "PageManager.h"
 

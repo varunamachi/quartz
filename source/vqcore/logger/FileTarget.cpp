@@ -24,6 +24,7 @@
 #include <QTextStream>
 #include <QPointer>
 #include <QFile>
+#include <QDateTime>
 
 #include "FileTarget.h"
 #include "LogUtil.h"
@@ -57,8 +58,7 @@ private:
 
 
 FileTarget::Impl::Impl( const QString &fileSuffix )
-    : AbstractLogTarget( TARGET_ID )
-    , m_fileSuffix( fileSuffix )
+    : m_fileSuffix( fileSuffix )
     , m_prevDate( QDateTime::currentDateTime() )
 {
     initFile();
@@ -103,7 +103,8 @@ void FileTarget::Impl::initFile()
 const QString FileTarget::TARGET_ID = QString( "FileLogger" );
 
 FileTarget::FileTarget( const QString &fileSuffix )
-    : m_impl( std::make_unique( fileSuffix ))
+    : AbstractLogTarget( TARGET_ID )
+    , m_impl( std::make_unique< Impl >( fileSuffix ))
 {
 
 }

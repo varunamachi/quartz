@@ -33,9 +33,9 @@ class VQ_CORE_EXPORT SpooledDispatcher: public AbstractLogDispatcher
 public:
         SpooledDispatcher();
 
-        void write( LogMessage *message );
+        void write( LogMessage *message ) override;
 
-        void stopDispatch();
+        void stopDispatch() override;
 
         void run();
 

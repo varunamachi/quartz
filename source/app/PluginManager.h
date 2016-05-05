@@ -38,11 +38,11 @@ public:
     Result< QList< const PluginBundle * >> allBundles() const;
 
 private:
-    bool loadBundle( const PluginBundle &bundle,
-                     VQ_IN_OUT QSet< QString > &loadedBundles );
+    Result< bool > loadBundle( const PluginBundle &bundle,
+                               VQ_IN_OUT QSet< QString > &loadedBundles );
 
-    bool unloadBundle( const PluginBundle &bundle,
-                       VQ_IN_OUT QSet< QString > &unloadedBundles );
+    Result< bool > unloadBundle( const PluginBundle &bundle,
+                                 VQ_IN_OUT QSet< QString > &unloadedBundles );
 
     QHash< QString, BundleLibrary::Ptr > m_libraries;
 

@@ -1,7 +1,7 @@
 #include <QSet>
 
-#include <vqcore/logger/VQLogger.h>
 #include <vqcore/VQCommon.h>
+#include <vqcore/logger/Logging.h>
 
 #include "PluginManager.h"
 
@@ -67,8 +67,9 @@ Result< bool > PluginManager::unload( QString bundleId )
         result = unloadBundle( blib->bundle(), unloadedBundles );
     }
     else {
-        result =  = Result< bool >::failure(
-                    tr( "Could not find library for bundleID " + bundleId ));
+        result = Result< bool >::failure(
+                    QObject::tr( "Could not find library for bundleID " )
+                                 + bundleId );
     }
     return result;
 }
@@ -83,14 +84,15 @@ Result< bool > PluginManager::load( QString bundleId )
         result = loadBundle( blib->bundle(), loadedBundles );
     }
     else {
-        result =  = Result< bool >::failure(
-                    tr( "Could not find library for bundleID " + bundleId ));
+        result = Result< bool >::failure(
+                    QObject::tr( "Could not find library for bundleID " )
+                    + bundleId );
     }
     return result;
 }
 
 
-bool PluginManager::reload( QString bundleId )
+Result< bool > PluginManager::reload( QString bundleId )
 {
     Result< bool > result = unload( bundleId );
     if( result.result() ) {
@@ -100,8 +102,9 @@ bool PluginManager::reload( QString bundleId )
 }
 
 
-bool PluginManager::loadBundle( const PluginBundle &bundle,
-                                VQ_IN_OUT QSet< QString > &loadedBundles )
+Result< bool > PluginManager::loadBundle(
+        const PluginBundle &bundle,
+        VQ_IN_OUT QSet< QString > &loadedBundles )
 {
     Result< bool > result;
     const auto &bundleDeps = bundle.dependencies();
@@ -132,7 +135,8 @@ bool PluginManager::loadBundle( const PluginBundle &bundle,
                 VQ_WARN( "Quartz:Core" )
                         << "Could not initialize plugin with ID "
                         << plugin->pluginId();
-                result = Result< bool >::failure( );
+                result = Result< bool >::failure(
+                            QObject::tr( "Could not initialize plugin" ));
             }
             else {
                 VQ_DEBUG( "Quartz:Core")
@@ -144,10 +148,11 @@ bool PluginManager::loadBundle( const PluginBundle &bundle,
 }
 
 
-bool PluginManager::unloadBundle( const PluginBundle &bundle,
-                                  VQ_IN_OUT QSet< QString > &unloadedBundles )
+Result< bool > PluginManager::unloadBundle(
+        const PluginBundle &bundle,
+        VQ_IN_OUT QSet< QString > &unloadedBundles )
 {
-    bool result = true;
+    Result< bool > result = Result< bool >::success();
     const QList< QString > dependents = m_dependents.values(
                 bundle.bundleId() );
     for( const QString &dep : dependents ) {
@@ -156,7 +161,8 @@ bool PluginManager::unloadBundle( const PluginBundle &bundle,
             PluginBundle &depBundle = blib->bundle();
             if( ! unloadedBundles.contains( depBundle.bundleId() )) {
                 if( unloadBundle( depBundle, unloadedBundles )) {
-                    result = false;
+                    result = Result< bool >::failure(
+                                "Could not unload dependent bundle" );
                     VQ_ERROR( "Quartz:Core" )
                             << "Could not unload bundle "
                             << depBundle.bundleId() << " on which bundle "
@@ -178,7 +184,7 @@ bool PluginManager::unloadBundle( const PluginBundle &bundle,
                 VQ_WARN( "Quartz:Core" )
                         << "Could not finalize plugin with ID "
                         << plugin->pluginId();
-                result = false;
+                result = Result< bool >::failure( "Failed to finalize plugin" );
             }
             else {
                 VQ_DEBUG( "Quartz:Core")
@@ -192,7 +198,7 @@ bool PluginManager::unloadBundle( const PluginBundle &bundle,
             VQ_ERROR( "Quartz:Core" )
                     << "Could not unload library for bundle "
                     << bundle.bundleId();
-            result = false;
+            result = Result< bool >::failure( "Library unload failed" );
         }
         else {
             VQ_DEBUG( "Quartz:Core" )

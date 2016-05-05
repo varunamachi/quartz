@@ -36,9 +36,9 @@ class VQ_CORE_EXPORT FileTarget : public AbstractLogTarget
 public:
     explicit FileTarget( const QString &fileSuffix );
 
-    void write( const QString &&message );
+    void write( const QString &&message ) override;
 
-    void flush();
+    void flush() override;
 
     static const QString TARGET_ID;
 

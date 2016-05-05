@@ -41,6 +41,12 @@ ConsoleTarget::ConsoleTarget()
 }
 
 
+void ConsoleTarget::flush()
+{
+    //nothing here...
+}
+
+
 void ConsoleTarget::write( const LogMessage *message )
 {
     if( message ) {

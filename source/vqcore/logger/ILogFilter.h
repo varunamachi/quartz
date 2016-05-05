@@ -14,7 +14,7 @@ VQ_INTERFACE ILogFilter
 
     virtual bool filterOut( LogMessage *message ) = 0;
 
-    inline virtual ~ILogFilter(){ }
+    virtual ~ILogFilter(){ }
 };
 
 

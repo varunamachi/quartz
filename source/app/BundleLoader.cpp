@@ -2,7 +2,7 @@
 #include <QDir>
 #include <QApplication>
 
-#include <vqcore/logger/VQLogger.h>
+#include <vqcore/logger/Logging.h>
 
 #include "BundleLoader.h"
 

@@ -1,6 +1,7 @@
 
 #include <QQueue>
 #include <QReadWriteLock>
+#include <QObject>
 
 #include "JobSequence.h"
 
@@ -35,8 +36,6 @@ private:
     QQueue< IJob::JobFunc > m_sequence;
 
     mutable QReadWriteLock m_lock;
-
-
 };
 
 
@@ -48,7 +47,7 @@ Result< bool > JobSequence::execute( const JobContext &context )
         result = jobFunc( context );
     }
     else {
-        result = Result< bool >::failure( tr( "Invalid job found" ));
+        result = Result< bool >::failure( QObject::tr( "Invalid job found" ));
     }
     return result;
 }

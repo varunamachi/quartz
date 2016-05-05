@@ -1,7 +1,9 @@
 #pragma once
 
-#include <vqcore/VQCommon.h>
-#include <vqcore/common/Result.h>
+#include <functional>
+
+#include "../VQCommon.h"
+#include "../common/Result.h"
 
 namespace Vam {
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "../VQCommon.h"
 
 class QString;
@@ -8,11 +10,11 @@ namespace Vam { namespace Logger {
 
 class AbstractLogTarget;
 class LogMessage;
-class ILogFilter;
+VQ_INTERFACE ILogFilter;
 
 VQ_INTERFACE ILogDispatcher
 {
-    virtual bool addTarget( AbstractLogTarget *target ) = 0;
+    virtual bool addTarget( std::unique_ptr< AbstractLogTarget > &&target ) = 0;
 
     virtual AbstractLogTarget * target( QString targetId ) = 0;
 
@@ -20,7 +22,7 @@ VQ_INTERFACE ILogDispatcher
 
     virtual bool removeTarget( const QString &trgId ) = 0;
 
-    virtual bool installFilter( ILogFilter *filter,
+    virtual bool installFilter( std::shared_ptr< ILogFilter > filter,
                                 const QString &trgId ) = 0;
 
     virtual bool uninstallFilter( const QString &filterId,

@@ -16,7 +16,7 @@ public:
 
     }
 
-    Result( Result &&other )
+    Result( Result< ReturnType > &&other )
         : m_result( other.result() )
         , m_data( std::move( other.data() ))
         , m_reason( std::move( other.reason() ))
@@ -24,7 +24,7 @@ public:
 
     }
 
-    Result( Result &other )
+    Result( Result< ReturnType > &other )
         : m_result( other.result() )
         , m_data( other.data() )
         , m_reason( other.reason() )
@@ -54,7 +54,7 @@ public:
 
     ~Result() { }
 
-    bool operator==( Result &other )
+    bool operator==( const Result< ReturnType > &other )
     {
         bool same = this == &other
                 || ( other.result() == this->m_result
@@ -63,7 +63,7 @@ public:
         return same;
     }
 
-    Result & operator = ( Result &other )
+    Result & operator = ( const Result< ReturnType > &other )
     {
         if( this != &other ) {
             this->m_data = other.data();
@@ -73,7 +73,7 @@ public:
         return *this;
     }
 
-    Result & operator = ( Result &&other )
+    Result & operator = ( const Result< ReturnType > &&other )
     {
         if( this != &other ) {
             this->m_data = std::move( other.data() );
@@ -106,7 +106,7 @@ public:
 
     const QString & reason() const;
 
-    ReturnType & data() const;
+    ReturnType & data();
 
 private:
     bool m_result;
@@ -141,7 +141,7 @@ bool Result< ReturnType >::result() const
 
 
 template< typename ReturnType >
-ReturnType & Result< ReturnType >::data() const
+ReturnType & Result< ReturnType >::data()
 {
     return m_data;
 }
@@ -160,6 +160,13 @@ template<>
 class Result< bool >
 {
 public:
+    Result()
+        : m_result( false )
+        , m_reason( "" )
+    {
+
+    }
+
     Result( Result &&other )
         : m_result( other.result() )
         , m_reason( std::move( other.reason() ))
@@ -192,7 +199,7 @@ public:
 
     ~Result() { }
 
-    bool operator==( Result &other )
+    bool operator==( const Result< bool > &other )
     {
         bool same = this == &other
                 || ( other.result() == this->m_result
@@ -200,7 +207,7 @@ public:
         return same;
     }
 
-    Result & operator = ( Result &other )
+    Result & operator = ( const Result< bool > &other )
     {
         if( this != &other ) {
             this->m_result = other.result();
@@ -209,7 +216,7 @@ public:
         return *this;
     }
 
-    Result & operator = ( Result &&other )
+    Result & operator = ( Result< bool > &&other )
     {
         if( this != &other ) {
             this->m_result = other.result();
@@ -235,7 +242,7 @@ public:
 
     const QString & reason() const;
 
-    bool & data() const;
+    bool & data();
 
 private:
     bool m_result;
@@ -245,38 +252,36 @@ private:
 };
 
 
-template<>
+
 Result< bool > Result< bool >::success()
 {
     return Result< bool >( true, "" );
 }
 
 
-template<>
 Result< bool > Result< bool >::failure( const QString &reason )
 {
     return Result< bool >( false, reason );
 }
 
 
-template<>
+
 bool Result< bool >::result() const
 {
     return m_result;
 }
 
 
-template<>
-bool & Result< bool >::data() const
+
+bool & Result< bool >::data()
 {
     return m_result;
 }
 
 
-template<>
 const QString & Result< bool >::reason() const
 {
-    return m_reason
+    return m_reason;
 }
 
 

@@ -40,10 +40,10 @@ QString LogUtil::getSeverityString( VQLogLevel level )
     case VQLogLevel::Warn   : return "[ WARNG ]";
     case VQLogLevel::Error  : return "[ ERROR ]";
     case VQLogLevel::Fatal  : return "[ FATAL ]";
-    case VQLogLevel::Special:
-    case VQLogLevel::Method :
-    default                 : return "[ ***** ]";
+    case VQLogLevel::Special: return "[ ***** ]";
+    case VQLogLevel::Method : return "[ ***** ]";
     }
+    return "";
 }
 
 

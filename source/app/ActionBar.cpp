@@ -1,4 +1,4 @@
-d#include <QPushButton>
+#include <QPushButton>
 #include <QHBoxLayout>
 
 #include "ActionBar.h"

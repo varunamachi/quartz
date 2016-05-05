@@ -11,27 +11,27 @@ namespace Vam { namespace Logger {
 
 enum class VQLogLevel : int;
 
-struct LogMessage
+class LogMessage
 {
 public:
-    LogMessage( VQLogLevel &level,
-                const QDateTime &time,
+    LogMessage( const QDateTime &&time,
+                VQLogLevel level,
                 std::uint64_t threadId,
                 const QString &module,
                 const QString &&method,
                 int lineNum,
-                QString &message );
+                const QString &message );
 
-    LogMessage( VQLogLevel &level,
-                const QDateTime &time,
+    LogMessage( const QDateTime &&time,
+                VQLogLevel level,
                 std::uint64_t threadId,
                 const QString &module,
                 const QString &&method,
                 int lineNum,
                 QString &&message );
 
-    LogMessage( VQLogLevel &level,
-                const QDateTime &time,
+    LogMessage( const QDateTime &&time,
+                VQLogLevel level,
                 std::uint64_t threadId,
                 const QString &&module,
                 const QString &&method,
@@ -42,7 +42,7 @@ public:
 
     const QDateTime & time() const;
 
-    const std::uint32_t & threadId() const;
+    const std::uint64_t & threadId() const;
 
     const QString & moduleName() const;
 
@@ -53,6 +53,8 @@ public:
     const QString & message() const;
 
     QString & mutableMessage() const;
+
+    ~LogMessage();
 
 private:
     class Impl;

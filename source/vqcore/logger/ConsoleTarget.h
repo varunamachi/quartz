@@ -31,11 +31,11 @@ class VQ_CORE_EXPORT ConsoleTarget : public AbstractLogTarget
 public:
     ConsoleTarget();
 
-    void flush() { /* Nothing here... */ }
+    void flush() override;
 
-    void write( const LogMessage *message );
+    void write( const LogMessage *message ) override;
 
-    void write( const QString &&message );
+    void write( const QString &&message ) override;
 
     static const QString TARGET_ID;
 
