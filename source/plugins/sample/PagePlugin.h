@@ -11,11 +11,7 @@ class SamplePage : public Quartz::QuartzPage
 {
     Q_OBJECT
 public:
-    SamplePage( const QString &pageId,
-                const QString &category,
-                const QString &categoryName,
-                const QString &displayName,
-                QWidget *parent = nullptr );
+    SamplePage( QWidget *parent = nullptr );
 
     const static QString PAGE_ID;
     const static QString PAGE_CATEGORY;

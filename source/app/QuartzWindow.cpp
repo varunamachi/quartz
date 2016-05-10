@@ -317,7 +317,7 @@ void QzMainWidget::onAboutToQuit()
 }
 
 
-void QzMainWidget::paintEvent( QPaintEvent */*event*/ )
+void QzMainWidget::paintEvent( QPaintEvent * /*event*/ )
 {
     QPainter painter( this );
     auto color = this->palette().color( QPalette::Background );

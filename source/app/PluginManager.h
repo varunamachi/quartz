@@ -16,7 +16,8 @@ class PluginManager : public IQuartzPluginManager
 public:
     PluginManager( QuartzContext *context,
                    QString location )
-        : m_location( location )
+        : m_context( context )
+        , m_location( location )
     {
 
     }

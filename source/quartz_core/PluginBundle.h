@@ -10,7 +10,7 @@
 
 namespace Vam { namespace Quartz {
 
-class PluginBundle
+class QZ_CORE_EXPORT PluginBundle
 {
 public:
     PluginBundle( QString bundleId,
@@ -20,6 +20,10 @@ public:
     {
 
     }
+
+    PluginBundle( PluginBundle &other ) = delete;
+
+    PluginBundle & operator=( PluginBundle &other ) = delete;
 
     const QString & bundleId() const
     {
@@ -60,6 +64,8 @@ public:
         return m_dependencies;
     }
 
+    virtual ~PluginBundle() { }
+
 protected:
     QList< IQuartzPlugin *> & mutablePluginList()
     {
@@ -87,3 +93,7 @@ private:
 } }
 
 
+struct QZ_CORE_EXPORT BundleWrapper {
+    Vam::Quartz::PluginBundle *m_bundle;
+
+};

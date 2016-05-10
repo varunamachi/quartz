@@ -213,6 +213,13 @@ void VQLogger::destroy()
 
 }
 
+
+void VQLogger::log(LogMessage *msg)
+{
+    m_impl->log( msg );
+}
+
+
 VQLogger::VQLogger( std::unique_ptr< ILogDispatcher > dispatcher,
                     VQLogLevel level )
     : m_impl( std::make_unique< Impl >( std::move( dispatcher ), level ))
@@ -221,5 +228,9 @@ VQLogger::VQLogger( std::unique_ptr< ILogDispatcher > dispatcher,
 }
 
 
+VQLogger * VQLogger::get()
+{
+    return s_instance.get();
+}
 
 } } // end of namespaces

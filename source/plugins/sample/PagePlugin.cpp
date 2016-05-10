@@ -33,7 +33,7 @@ const QString SamplePage::PAGE_CATEGORY( "sample" );
 const QString SamplePage::PAGE_CATEGORY_NAME( "Sample" );
 const QString SamplePage::PAGE_DISPLAY_NAME( "Welcome" );
 
-SamplePage::SamplePage()
+SamplePage::SamplePage( QWidget * /*parent*/ )
     : QuartzPage( PAGE_ID,
                   PAGE_CATEGORY,
                   PAGE_CATEGORY_NAME,

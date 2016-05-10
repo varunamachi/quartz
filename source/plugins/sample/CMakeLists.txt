@@ -7,7 +7,7 @@ qz_add_core()
 vq_add_qt()
 
 vq_sources(
-    SampleBundleInterface.c
+    SampleBundleInterface.cpp
 )
 
 vq_classes(

@@ -6,6 +6,8 @@ include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 qz_add_common()
 vq_add_qt()
 
+#TODO this is a hack for now to fix build errors
+add_definitions( -DQUARTZ_CORE )
 
 vq_classes (
     QuartzWindow

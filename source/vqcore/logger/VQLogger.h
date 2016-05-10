@@ -38,27 +38,6 @@ public:
 
     void setEnabled( bool val );
 
-//    void log( const QDateTime &time,
-//              VQLogLevel &level,
-//              const QString &module,
-//              const QString &&method,
-//              int lineNum,
-//              const QString &message );
-
-//    void log( const QDateTime &time,
-//              VQLogLevel &level,
-//              const QString &module,
-//              const QString &&method,
-//              int lineNum,
-//              QString &&message );
-
-//    void log( const QDateTime &time,
-//              VQLogLevel &level,
-//              const QString &&module,
-//              const QString &&method,
-//              int lineNum,
-//              QString &&message );
-
     void log( LogMessage *msg );
 
     VQLogger( std::unique_ptr< ILogDispatcher > dispatcher, VQLogLevel level );
@@ -71,7 +50,6 @@ public:
     static void destroy();
 
 private:
-
     class Impl;
     std::unique_ptr< Impl > m_impl;
 

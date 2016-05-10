@@ -84,6 +84,8 @@ VQ_INTERFACE IQuartzPageManager
 
     virtual void selectPage( QString pageId ) = 0;
 
+    virtual ~IQuartzPageManager() { }
+
 };
 
 

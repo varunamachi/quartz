@@ -5,3 +5,4 @@ output/lib/*
 output/include/*
 output/bin/*
 *.autosave
+source/CMakeLists.txt.user.ace9549

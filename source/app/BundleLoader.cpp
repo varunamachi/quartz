@@ -3,12 +3,15 @@
 #include <QApplication>
 
 #include <vqcore/logger/Logging.h>
+#include <quartz_core/QuartzPluginBundleInterface.h>
 
 #include "BundleLoader.h"
 
 namespace Vam { namespace Quartz {
 
-typedef PluginBundle * ( *PluginFunc )();
+
+const char * INTERFACE_FUNC_NAME = "pluginBundle";
+typedef BundleWrapper ( *PluginFunc )();
 
 QHash< QString, BundleLibrary::Ptr > BundleLoader::loadAll(
         const QString &location )
@@ -51,9 +54,10 @@ BundleLibrary::Ptr BundleLoader::loadFile( const QString &filePath )
     library->load();
     if( library->isLoaded() ) {
         PluginFunc getFunc = reinterpret_cast< PluginFunc >(
-                    library->resolve( "plugins" ));
+                    library->resolve( INTERFACE_FUNC_NAME ));
         if( getFunc != nullptr ) {
-            PluginBundle *bundle = getFunc();
+            BundleWrapper wrapper = getFunc();
+            PluginBundle *bundle = wrapper.m_bundle;
             blib = std::make_shared< BundleLibrary >( library, bundle );
         }
     }
