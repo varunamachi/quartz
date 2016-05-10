@@ -15,8 +15,10 @@ set( VQ_SRC_DIR         ${QUARTZ_ROOT}/source )
 set( VQ_TEST_DIR        ${QUARTZ_ROOT}/tests )
 
 set( CMAKE_INSTALL_PREFIX ${VQ_OUTPUT_DIR} )
+set( SUBPROJECTS "" )
 
 macro( add_project MODULE_NAME )
     add_subdirectory( ${MODULE_NAME} )
+    set_property( GLOBAL APPEND PROPERTY "SUBPROJECTS"  ${MODULE_NAME} )
 endmacro()
 

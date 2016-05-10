@@ -34,7 +34,7 @@ public:
 
     Result< bool > reload( QString bundleId );
 
-    Result< PluginBundle * >pluginBundle( const QString &bundleId ) const;
+    Result< PluginBundle * > pluginBundle( const QString &bundleId ) const;
 
     Result< QList< const PluginBundle * >> allBundles() const;
 

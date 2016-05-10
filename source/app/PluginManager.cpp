@@ -101,6 +101,32 @@ Result< bool > PluginManager::reload( QString bundleId )
     return result;
 }
 
+Result< PluginBundle * > PluginManager::pluginBundle(
+        const QString &bundleId) const
+{
+    auto result = Result< PluginBundle * >::failure(
+                nullptr,
+                QObject::tr( "Could not find bundle with id " ) + bundleId );
+    auto bundleLib = m_libraries.value( bundleId );
+    if( bundleLib != nullptr ) {
+        auto &bundle = bundleLib->bundle();
+        result = Result< PluginBundle *>::success( &bundle );
+    }
+    return result;
+}
+
+
+Result< QList< const PluginBundle * >> PluginManager::allBundles() const
+{
+    QList< const PluginBundle * > bundles;
+    auto it = m_libraries.begin();
+    for( ; it != m_libraries.end(); ++ it ) {
+        auto &bundle = ( *it )->bundle();
+        bundles.append( &bundle );
+    }
+    return Result< QList< const PluginBundle *>>::success( bundles );
+}
+
 
 Result< bool > PluginManager::loadBundle(
         const PluginBundle &bundle,

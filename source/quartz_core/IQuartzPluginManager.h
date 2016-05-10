@@ -9,22 +9,24 @@ namespace Vam { namespace Quartz {
 
 VQ_INTERFACE IQuartzPluginManager
 {
-    virtual Result< PluginBundle * >pluginBundle(
+    virtual Result< PluginBundle * > pluginBundle(
                 const QString &bundleId ) const = 0;
 
     virtual Result< QList< const PluginBundle * >> allBundles() const = 0;
 
-    virtual Result< bool > loadAll();
+    virtual Result< bool > loadAll() = 0;
 
-    virtual Result< bool > unloadAll();
+    virtual Result< bool > unloadAll() = 0;
 
-    virtual Result< bool > reloadAll();
+    virtual Result< bool > reloadAll() = 0;
 
-    virtual Result< bool > unload( QString bundleId );
+    virtual Result< bool > unload( QString bundleId ) = 0;
 
-    virtual Result< bool > load( QString bundleId );
+    virtual Result< bool > load( QString bundleId ) = 0;
 
-    virtual Result< bool > reload( QString bundleId );
+    virtual Result< bool > reload( QString bundleId ) = 0;
+
+    virtual ~IQuartzPluginManager() { }
 };
 
 

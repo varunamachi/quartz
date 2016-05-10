@@ -11,7 +11,7 @@ public:
     Result()
         : m_result( false )
         , m_data()
-        , m_reason( tr( "Unknown error!" ))
+        , m_reason( "Unknown error!" )
     {
 
     }
@@ -24,7 +24,7 @@ public:
 
     }
 
-    Result( Result< ReturnType > &other )
+    Result( const Result< ReturnType > &other )
         : m_result( other.result() )
         , m_data( other.data() )
         , m_reason( other.reason() )
@@ -73,7 +73,7 @@ public:
         return *this;
     }
 
-    Result & operator = ( const Result< ReturnType > &&other )
+    Result & operator = ( Result< ReturnType > &&other )
     {
         if( this != &other ) {
             this->m_data = std::move( other.data() );
@@ -100,7 +100,7 @@ public:
                                          const QString &reason );
 
     static Result< ReturnType > failure( ReturnType data,
-                                         const QString &&reason );
+                                         QString &&reason );
 
     bool result() const;
 
