@@ -4,7 +4,7 @@ cmake_policy( SET CMP0020 NEW )
 include( $ENV{QUARTZ_ROOT}/cmake/container.cmake )
 
 #TODO this is a hack for now to fix build errors
-add_definitions( -DQUARTZ_CORE )
+#add_definitions( -DQUARTZ_CORE )
 
 file( GLOB DIRS RELEATIVE
         RELEATIVE ${CMAKE_CURRENT_SOURCE_DIR}

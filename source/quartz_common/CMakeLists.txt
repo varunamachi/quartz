@@ -10,8 +10,7 @@ qz_add_vqcore()
 add_subdirectory( generic_config )
 add_subdirectory( widgets )
 
-vq_create_staticlib()
-vq_install_lib()
-vq_install_headers()
+vq_create_sharedlib()
+vq_install()
 
 message( STATUS  )

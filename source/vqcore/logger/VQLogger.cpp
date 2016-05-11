@@ -214,7 +214,7 @@ void VQLogger::destroy()
 }
 
 
-void VQLogger::log(LogMessage *msg)
+void VQLogger::log( LogMessage *msg )
 {
     m_impl->log( msg );
 }

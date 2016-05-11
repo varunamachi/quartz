@@ -17,8 +17,7 @@ add_subdirectory( logger )
 add_subdirectory( job_handler )
 add_subdirectory( config_storage )
 
-vq_create_staticlib()
-vq_install_lib()
-vq_install_headers()
+vq_create_sharedlib()
+vq_install()
 
 message( STATUS  )

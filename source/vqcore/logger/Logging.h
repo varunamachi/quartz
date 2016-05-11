@@ -9,7 +9,7 @@
 
 namespace Vam { namespace Logger {
 
-class LogLineHolder
+class VQ_CORE_EXPORT LogLineHolder
 {
 public:
     LogLineHolder( LogMessage *msg )

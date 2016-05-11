@@ -7,7 +7,7 @@ qz_add_common()
 vq_add_qt()
 
 #TODO this is a hack for now to fix build errors
-add_definitions( -DQUARTZ_CORE )
+#add_definitions( -DQUARTZ_CORE )
 
 vq_classes (
     QuartzWindow
@@ -27,7 +27,7 @@ vq_sources(
 
 add_subdirectory( adapted )
 
-vq_create_app()
-vq_install_bin()
+vq_dump_vars()
 
-message( STATUS  )
+vq_create_app()
+vq_install()

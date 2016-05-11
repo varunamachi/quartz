@@ -232,17 +232,53 @@ public:
 
 
 
-    static Result< bool > success();
+//    static Result< bool > success();
 
-    static Result< bool > failure( const QString &reason );
+//    static Result< bool > failure( const QString &reason );
 
-    static Result< bool > failure( const QString &&reason );
+//    static Result< bool > failure( const QString &&reason );
 
-    bool result() const;
+//    bool result() const;
 
-    const QString & reason() const;
+//    const QString & reason() const;
 
-    bool & data();
+//    bool & data();
+
+    static Result< bool > success()
+    {
+        return Result< bool >( true, "" );
+    }
+
+
+    static Result< bool > failure( const QString &reason )
+    {
+        return Result< bool >( false, reason );
+    }
+
+
+    static Result< bool > failure( const QString &&reason )
+    {
+        return Result< bool >( false, std::move( reason ));
+    }
+
+
+    bool result() const
+    {
+        return m_result;
+    }
+
+
+
+    bool & data()
+    {
+        return m_result;
+    }
+
+
+    const QString & reason() const
+    {
+        return m_reason;
+    }
 
 private:
     bool m_result;
