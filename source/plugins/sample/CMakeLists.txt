@@ -16,6 +16,8 @@ vq_classes(
     TitleBarPlugin
 )
 
+vq_dump_vars()
+
 vq_create_sharedlib()
 
 
