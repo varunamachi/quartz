@@ -10,7 +10,7 @@
 
 namespace Vam { namespace Quartz {
 
-class QZ_CORE_EXPORT PluginBundle
+class PluginBundle
 {
 public:
     PluginBundle( QString bundleId,

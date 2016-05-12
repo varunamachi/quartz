@@ -6,6 +6,8 @@ include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 vq_add_qt()
 qz_add_vqcore()
 
+add_definitions( -DQUARTZ_COMMON )
+
 
 add_subdirectory( generic_config )
 add_subdirectory( widgets )
