@@ -26,6 +26,8 @@ public:
 
     const QString & slotDescription() const;
 
+    virtual ~AbstractPluginSlot();
+
     virtual Result< bool > handlePlugin( AbstractPlugin *plugin ) = 0;
 
     virtual Result< bool > finalizePlugin( AbstractPlugin *plugin ) = 0;

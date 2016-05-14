@@ -2,17 +2,18 @@
 
 #include <memory>
 
-#include "PluginBundle.h"
+class QString;
 
 namespace Vam {
 
+class BundleLibrary;
 
 class BundleLoader
 {
 public:
     QHash< QString, BundleLibrary::Ptr > loadAll( const QString & location );
 
-    BundleLibrary::Ptr loadFile( const QString &filePath );
+    std::shared_ptr< BundleLibrary > loadFile( const QString &filePath );
 
 private:
 
