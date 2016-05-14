@@ -14,8 +14,6 @@ vq_classes (
     ActionBar
     TitleBar
     PageManager
-    PluginManager
-    BundleLoader
     ViewManager
     WelcomePage
     HoverMoveFilter

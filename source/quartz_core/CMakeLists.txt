@@ -10,24 +10,16 @@ add_definitions( -DQUARTZ_CORE )
 
 vq_headers(
     QuartzCore.h
-    QuartzPluginBundleInterface.h
 )
 
 vq_interfaces(
-    IQuartzPlugin
-    IMessageClient
     IQuartzPageManager
     IQuartzViewManager
     IQuartzActionBar
     IQuartzTitleBar
-    IQuartzPluginManager
-
 )
 
 vq_classes(
-    PluginBundle
-    MessageCenter
-    Parameters
     QuartzContext
     QuartzItem
 )

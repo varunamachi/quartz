@@ -16,6 +16,8 @@ add_subdirectory( common )
 add_subdirectory( logger )
 add_subdirectory( job_handler )
 add_subdirectory( config_storage )
+add_subdirectory( plugin_manager )
+add_subdirectory( message_center )
 
 vq_create_sharedlib()
 vq_install()
