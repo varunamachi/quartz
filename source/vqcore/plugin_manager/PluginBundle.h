@@ -1,98 +1,60 @@
 #pragma once
 
-#include <vector>
+#include <memory>
 
-#include <QObject>
-#include <QLibrary>
+#include "../VQ.h"
+#include "../VQCommon.h"
 
-#include "IPlugin.h"
+class QString;
+class QStringList;
+template <typename T> class QList;
 
 namespace Vam {
+
+class AbstractPlugin;
 
 class PluginBundle
 {
 public:
-    PluginBundle( QString bundleId,
-                  QString bundleName )
-        : m_bundleId( bundleId )
-        , m_bundleName( bundleName )
-    {
-
-    }
+    PluginBundle( const QString &bundleId,
+                  const QString &bundleName );
 
     PluginBundle( PluginBundle &other ) = delete;
 
     PluginBundle & operator=( PluginBundle &other ) = delete;
 
-    const QString & bundleId() const
-    {
-        return m_bundleId;
-    }
+    const QString & bundleId() const;
 
-    const QString & bundleName() const
-    {
-        return m_bundleName;
-    }
+    const QString & bundleName() const;
 
-    virtual void addPlugin( IQuartzPlugin *plugin )
-    {
-        m_plugins.append( plugin );
-    }
+    virtual void addPlugin( std::shared_ptr< AbstractPlugin > plugin );
 
-    int pluginCount() const
-    {
-        return m_plugins.size();
-    }
+    int pluginCount() const;
 
-    IQuartzPlugin * pluginAt( int index ) const
-    {
-        IQuartzPlugin *plugin = nullptr;
-        if( index < m_plugins.size() ) {
-            plugin = m_plugins.at( index );
-        }
-        return plugin;
-    }
+    AbstractPlugin * pluginAt( const int index ) const;
 
-    virtual void addDependency( QString bundleId )
-    {
-        m_dependencies << bundleId;
-    }
+    virtual void addDependency( const QString &bundleId );
 
-    const QStringList & dependencies() const
-    {
-        return m_dependencies;
-    }
+    const QStringList & dependencies() const;
 
-    virtual ~PluginBundle() { }
+    virtual ~PluginBundle();
 
 protected:
-    QList< IQuartzPlugin *> & mutablePluginList()
-    {
-        return m_plugins;
-    }
+    QList< std::shared_ptr< AbstractPlugin >> & mutablePluginList();
 
-    QStringList & mutalbleDependencyList()
-    {
-        return m_dependencies;
-    }
+    QStringList & mutalbleDependencyList();
 
 private:
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
-
-    QString m_bundleId;
-
-    QString m_bundleName;
-
-    QStringList m_dependencies;
-
-    QList< IQuartzPlugin * > m_plugins;
 };
 
 
 }
 
 
-struct QZ_CORE_EXPORT BundleWrapper {
-    Vam::PluginBundle *m_bundle;
+struct VQ_CORE_EXPORT BundleWrapper {
+    Vam::PluginBundle *theBundle;
 
 };

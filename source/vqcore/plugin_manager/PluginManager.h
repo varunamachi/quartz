@@ -4,13 +4,13 @@
 #include <QHash>
 #include <QMultiHash>
 
-#include "IPlugin.h"
-
 #include "BundleLoader.h"
 
 namespace Vam {
 
 class PluginBundle;
+class AbstractPlugin;
+class AbstractPluginSlot;
 
 class PluginManager
 {
@@ -44,11 +44,9 @@ private:
     Result< bool > unloadBundle( const PluginBundle &bundle,
                                  VQ_IN_OUT QSet< QString > &unloadedBundles );
 
-    QHash< QString, BundleLibrary::Ptr > m_libraries;
+    QHash< QString, std::shared_ptr< BundleLibrary >> m_libraries;
 
     QMultiHash< QString, QString > m_dependents;
-
-    QuartzContext *m_context;
 
     QString m_location;
 

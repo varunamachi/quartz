@@ -2,12 +2,12 @@
 #include <QDir>
 #include <QApplication>
 
-#include <vqcore/logger/Logging.h>
-#include <quartz_core/QuartzPluginBundleInterface.h>
+#include "../logger/Logging.h"
+#include "PluginBundleInterface.h"
 
 #include "BundleLoader.h"
 
-namespace Vam { namespace Quartz {
+namespace Vam {
 
 
 const char * INTERFACE_FUNC_NAME = "pluginBundle";
@@ -65,4 +65,4 @@ BundleLibrary::Ptr BundleLoader::loadFile( const QString &filePath )
 }
 
 
-} }
+}
