@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-class QString;
+class std::string;
 class QDateTime;
 
 
@@ -17,26 +17,26 @@ public:
     LogMessage( const QDateTime &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
-                const QString &module,
-                const QString &&method,
+                const std::string &module,
+                const std::string &&method,
                 int lineNum,
-                const QString &message );
+                const std::string &message );
 
     LogMessage( const QDateTime &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
-                const QString &module,
-                const QString &&method,
+                const std::string &module,
+                const std::string &&method,
                 int lineNum,
-                QString &&message );
+                std::string &&message );
 
     LogMessage( const QDateTime &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
-                const QString &&module,
-                const QString &&method,
+                const std::string &&module,
+                const std::string &&method,
                 int lineNum,
-                QString &&message );
+                std::string &&message );
 
     const VQLogLevel & logLevel() const;
 
@@ -44,15 +44,15 @@ public:
 
     const std::uint64_t & threadId() const;
 
-    const QString & moduleName() const;
+    const std::string & moduleName() const;
 
-    const QString & methodName() const;
+    const std::string & methodName() const;
 
     const int & lineNum() const;
 
-    const QString & message() const;
+    const std::string & message() const;
 
-    QString & mutableMessage() const;
+    std::string & mutableMessage() const;
 
     ~LogMessage();
 

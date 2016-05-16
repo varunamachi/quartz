@@ -34,20 +34,20 @@ namespace Vam { namespace Logger {
 class FileTarget::Impl
 {
 public:
-    Impl( const QString &fileSuffix );
+    Impl( const std::string &fileSuffix );
 
-    void write( const QString &&message );
+    void write( const std::string &&message );
 
     void flush();
 
-    static const QString TARGET_ID;
+    static const std::string TARGET_ID;
 
 private:
     void initFile();
 
     QPointer< QFile > m_logFile;
 
-    QString m_fileSuffix;
+    std::string m_fileSuffix;
 
     QDateTime m_prevDate;
 
@@ -57,7 +57,7 @@ private:
 
 
 
-FileTarget::Impl::Impl( const QString &fileSuffix )
+FileTarget::Impl::Impl( const std::string &fileSuffix )
     : m_fileSuffix( fileSuffix )
     , m_prevDate( QDateTime::currentDateTime() )
 {
@@ -65,7 +65,7 @@ FileTarget::Impl::Impl( const QString &fileSuffix )
 }
 
 
-void FileTarget::Impl::write( const QString &&message )
+void FileTarget::Impl::write( const std::string &&message )
 {
     if( m_prevDate.daysTo( QDateTime::currentDateTime() ) != 0 ) {
         m_stream.flush();
@@ -83,7 +83,7 @@ void FileTarget::Impl::flush()
 
 void FileTarget::Impl::initFile()
 {
-    QString fileName = m_prevDate.toString( "yyyy_MM_dd_" )
+    std::string fileName = m_prevDate.toString( "yyyy_MM_dd_" )
                        + m_fileSuffix
                        + ".log";
     m_stream.reset();
@@ -100,9 +100,9 @@ void FileTarget::Impl::initFile()
 
 
 //---------------- File Target -----------------------------
-const QString FileTarget::TARGET_ID = QString( "FileLogger" );
+const std::string FileTarget::TARGET_ID = std::string( "FileLogger" );
 
-FileTarget::FileTarget( const QString &fileSuffix )
+FileTarget::FileTarget( const std::string &fileSuffix )
     : AbstractLogTarget( TARGET_ID )
     , m_impl( std::make_unique< Impl >( fileSuffix ))
 {
@@ -110,7 +110,7 @@ FileTarget::FileTarget( const QString &fileSuffix )
 }
 
 
-void FileTarget::write( const QString &&message )
+void FileTarget::write( const std::string &&message )
 {
     m_impl->write( std::move( message ));
 }

@@ -23,7 +23,7 @@
 #pragma once
 
 
-class QString;
+class std::string;
 
 #include "../VQ.h"
 
@@ -35,9 +35,9 @@ class LogMessage;
 class VQ_CORE_EXPORT  LogUtil
 {
 public:
-    static QString format( const LogMessage *message );
+    static std::string format( const LogMessage *message );
 
-    static QString getSeverityString( VQLogLevel level );
+    static std::string getSeverityString( VQLogLevel level );
 
 private:
     LogUtil() { }

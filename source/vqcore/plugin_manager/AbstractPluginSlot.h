@@ -7,7 +7,7 @@
 #include "../common/Result.h"
 
 
-class QString;
+class std::string;
 
 namespace Vam {
 
@@ -16,15 +16,15 @@ class AbstractPlugin;
 class AbstractPluginSlot
 {
 public:
-    AbstractPluginSlot( const QString &slotId,
-                        const QString &slotName,
-                        const QString &slotDescription );
+    AbstractPluginSlot( const std::string &slotId,
+                        const std::string &slotName,
+                        const std::string &slotDescription );
 
-    const QString & slotId() const;
+    const std::string & slotId() const;
 
-    const QString & slotName() const;
+    const std::string & slotName() const;
 
-    const QString & slotDescription() const;
+    const std::string & slotDescription() const;
 
     virtual ~AbstractPluginSlot();
 

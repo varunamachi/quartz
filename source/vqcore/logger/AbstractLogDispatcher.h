@@ -38,17 +38,17 @@ public:
 
     bool addTarget( std::unique_ptr< AbstractLogTarget > &&target ) override;
 
-    AbstractLogTarget * target( QString targetId ) override;
+    AbstractLogTarget * target( std::string targetId ) override;
 
-    bool setTargetEnabledState( const QString &trgId, bool value ) override;
+    bool setTargetEnabledState( const std::string &trgId, bool value ) override;
 
-    bool removeTarget( const QString &targetId ) override;
+    bool removeTarget( const std::string &targetId ) override;
 
     bool installFilter( std::shared_ptr< ILogFilter > filter,
-                        const QString &trgtId ) override;
+                        const std::string &trgtId ) override;
 
-    bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId ) override;
+    bool uninstallFilter( const std::string &filterId,
+                          const std::string &trgtId ) override;
 
     void flush() override;
 

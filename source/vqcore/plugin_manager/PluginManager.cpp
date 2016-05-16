@@ -11,7 +11,7 @@ Result< bool > PluginManager::loadAll()
 {
     Result< bool > result;
     m_libraries = m_loader.loadAll( m_location );
-    QSet< QString > loadedBundles;
+    QSet< std::string > loadedBundles;
     for( auto &blib : m_libraries.values() ) {
         auto &bundle = blib->bundle();
         if( ! loadedBundles.contains( bundle.bundleId() )) {
@@ -31,7 +31,7 @@ Result< bool > PluginManager::unloadAll()
 {
     Result< bool > result;
     m_libraries = m_loader.loadAll( m_location );
-    QSet< QString > unloadedBundles;
+    QSet< std::string > unloadedBundles;
     for( auto & blib : m_libraries.values() ) {
         auto &bundle = blib->bundle();
         if( ! unloadedBundles.contains( bundle.bundleId() )) {
@@ -58,12 +58,12 @@ Result< bool > PluginManager::reloadAll()
 }
 
 
-Result< bool > PluginManager::unload( QString bundleId )
+Result< bool > PluginManager::unload( std::string bundleId )
 {
     Result< bool > result;
     BundleLibrary::Ptr blib = m_libraries.value( bundleId );
     if( blib != nullptr ) {
-        QSet< QString > unloadedBundles;
+        QSet< std::string > unloadedBundles;
         result = unloadBundle( blib->bundle(), unloadedBundles );
     }
     else {
@@ -75,12 +75,12 @@ Result< bool > PluginManager::unload( QString bundleId )
 }
 
 
-Result< bool > PluginManager::load( QString bundleId )
+Result< bool > PluginManager::load( std::string bundleId )
 {
     Result< bool > result;
     auto &blib = m_libraries.value( bundleId );
     if( blib != nullptr ) {
-        QSet< QString > loadedBundles;
+        QSet< std::string > loadedBundles;
         result = loadBundle( blib->bundle(), loadedBundles );
     }
     else {
@@ -92,7 +92,7 @@ Result< bool > PluginManager::load( QString bundleId )
 }
 
 
-Result< bool > PluginManager::reload( QString bundleId )
+Result< bool > PluginManager::reload( std::string bundleId )
 {
     Result< bool > result = unload( bundleId );
     if( result.result() ) {
@@ -102,7 +102,7 @@ Result< bool > PluginManager::reload( QString bundleId )
 }
 
 Result< PluginBundle * > PluginManager::pluginBundle(
-        const QString &bundleId) const
+        const std::string &bundleId) const
 {
     auto result = Result< PluginBundle * >::failure(
                 nullptr,
@@ -130,7 +130,7 @@ Result< QList< const PluginBundle * >> PluginManager::allBundles() const
 
 Result< bool > PluginManager::loadBundle(
         const PluginBundle &bundle,
-        VQ_IN_OUT QSet< QString > &loadedBundles )
+        VQ_IN_OUT QSet< std::string > &loadedBundles )
 {
     Result< bool > result;
     const auto &bundleDeps = bundle.dependencies();
@@ -176,12 +176,12 @@ Result< bool > PluginManager::loadBundle(
 
 Result< bool > PluginManager::unloadBundle(
         const PluginBundle &bundle,
-        VQ_IN_OUT QSet< QString > &unloadedBundles )
+        VQ_IN_OUT QSet< std::string > &unloadedBundles )
 {
     Result< bool > result = Result< bool >::success();
-    const QList< QString > dependents = m_dependents.values(
+    const QList< std::string > dependents = m_dependents.values(
                 bundle.bundleId() );
-    for( const QString &dep : dependents ) {
+    for( const std::string &dep : dependents ) {
         if( m_libraries.contains( dep )) {
             BundleLibrary::Ptr blib = m_libraries.value( dep );
             PluginBundle &depBundle = blib->bundle();

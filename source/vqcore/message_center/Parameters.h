@@ -11,16 +11,16 @@ namespace Vam {
 class VQ_CORE_EXPORT Parameters
 {
 public:
-    Parameters( QHash< QString, QVariant > &params );
+    Parameters( QHash< std::string, QVariant > &params );
 
-    void addParam( const QString &key, const QVariant &value );
+    void addParam( const std::string &key, const QVariant &value );
 
-    void removeParam( const QString &key );
+    void removeParam( const std::string &key );
 
-    const QVariant param( const QString &key ) const;
+    const QVariant param( const std::string &key ) const;
 
 private:
-    QHash< QString, QVariant > m_params;
+    QHash< std::string, QVariant > m_params;
 
 };
 

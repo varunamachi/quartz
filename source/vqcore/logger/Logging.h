@@ -59,7 +59,7 @@ private:
                                         mod,                          \
                                         FUNCTION_NAME,                \
                                         __LINE__,                     \
-                                        QString( "" ))).stream()
+                                        std::string( "" ))).stream()
 
 
 

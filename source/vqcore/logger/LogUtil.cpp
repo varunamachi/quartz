@@ -20,7 +20,7 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <QString>
+#include <std::string>
 
 #include "LogUtil.h"
 #include "LogStructures.h"
@@ -31,7 +31,7 @@ namespace Vam { namespace Logger {
 
 
 
-QString LogUtil::getSeverityString( VQLogLevel level )
+std::string LogUtil::getSeverityString( VQLogLevel level )
 {
     switch( level ) {
     case VQLogLevel::Trace  : return "[ TRACE ]";
@@ -47,17 +47,17 @@ QString LogUtil::getSeverityString( VQLogLevel level )
 }
 
 
-QString LogUtil::format( const LogMessage *msg )
+std::string LogUtil::format( const LogMessage *msg )
 {
-    QString strMsg = QString( msg->time().toString( "yyyy-MM-dd hh:mm:ss" ))
+    std::string strMsg = std::string( msg->time().toString( "yyyy-MM-dd hh:mm:ss" ))
             + " "
             + getSeverityString( msg->logLevel() )
             + "  "
             + msg->message()
   /*          + " ["
             + msg->moduleName() + " | "
-            + QString::number( msg->lineNum()  ) + " | "
-            + QString::number( msg->threadId() ) + " | "
+            + std::string::number( msg->lineNum()  ) + " | "
+            + std::string::number( msg->threadId() ) + " | "
             + msg->methodName() + " ] "*/;
     return strMsg;
 }

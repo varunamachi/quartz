@@ -2,7 +2,7 @@
 
 #include "../VQCommon.h"
 
-class QString;
+class std::string;
 
 namespace Vam { namespace Logger {
 
@@ -10,7 +10,7 @@ class LogMessage;
 
 VQ_INTERFACE ILogFormatter
 {
-    virtual QString format( const LogMessage *message ) = 0;
+    virtual std::string format( const LogMessage *message ) = 0;
 
     virtual ~ILogFormatter() { }
 };

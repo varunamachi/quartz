@@ -13,14 +13,14 @@ namespace Vam {
 const char * INTERFACE_FUNC_NAME = "pluginBundle";
 typedef BundleWrapper ( *PluginFunc )();
 
-QHash< QString, BundleLibrary::Ptr > BundleLoader::loadAll(
-        const QString &location )
+QHash< std::string, BundleLibrary::Ptr > BundleLoader::loadAll(
+        const std::string &location )
 {
-    QHash< QString, BundleLibrary::Ptr > bundles;
+    QHash< std::string, BundleLibrary::Ptr > bundles;
     QDir pluginDir( location );
     if( pluginDir.exists() ) {
-        QStringList entries = pluginDir.entryList();;
-        for( const QString entry : entries ) {
+        std::stringList entries = pluginDir.entryList();;
+        for( const std::string entry : entries ) {
             if( QLibrary::isLibrary( entry )) {
                 BundleLibrary::Ptr blib = loadFile( entry );
                 if( blib->isValid() ) {
@@ -47,7 +47,7 @@ QHash< QString, BundleLibrary::Ptr > BundleLoader::loadAll(
 }
 
 
-BundleLibrary::Ptr BundleLoader::loadFile( const QString &filePath )
+BundleLibrary::Ptr BundleLoader::loadFile( const std::string &filePath )
 {
     BundleLibrary::Ptr blib = nullptr;
     QLibrary *library = new QLibrary( filePath, qApp );

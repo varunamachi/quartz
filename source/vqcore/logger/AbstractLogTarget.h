@@ -4,7 +4,7 @@
 
 #include "../VQCommon.h"
 
-class QString;
+class std::string;
 
 namespace Vam { namespace Logger {
 
@@ -14,9 +14,9 @@ class LogMessage;
 class AbstractLogTarget
 {
 public:
-    explicit AbstractLogTarget( const QString &uniqueId );
+    explicit AbstractLogTarget( const std::string &uniqueId );
 
-    const QString & uniqueId() const;
+    const std::string & uniqueId() const;
 
     void setFormatterOwned( ILogFormatter *formatter );
 
@@ -27,7 +27,7 @@ public:
     virtual void flush() = 0;
 
 protected:
-    virtual void write( const QString &&logString ) = 0;
+    virtual void write( const std::string &&logString ) = 0;
 
     ILogFormatter * formatter() const;
 

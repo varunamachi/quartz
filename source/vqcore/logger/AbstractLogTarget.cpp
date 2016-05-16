@@ -1,5 +1,5 @@
 
-#include <QString>
+#include <std::string>
 
 #include "ILogFormatter.h"
 #include "LogUtil.h"
@@ -12,14 +12,14 @@ namespace Vam { namespace Logger {
 class AbstractLogTarget::Impl
 {
 public:
-    inline explicit Impl( const QString &uniqueId )
+    inline explicit Impl( const std::string &uniqueId )
         : m_uniqueId( uniqueId )
         , m_formatter( nullptr )
     {
 
     }
 
-    inline const QString & uniqueId() const
+    inline const std::string & uniqueId() const
     {
         return m_uniqueId;
     }
@@ -37,20 +37,20 @@ public:
     }
 
 private:
-    const QString m_uniqueId;
+    const std::string m_uniqueId;
 
     std::unique_ptr< ILogFormatter > m_formatter;
 
 };
 
 
-AbstractLogTarget::AbstractLogTarget( const QString &uniqueId )
+AbstractLogTarget::AbstractLogTarget( const std::string &uniqueId )
     : m_impl( std::make_unique< AbstractLogTarget::Impl >( uniqueId ))
 {
 
 }
 
-const QString & AbstractLogTarget::uniqueId() const
+const std::string & AbstractLogTarget::uniqueId() const
 {
     return m_impl->uniqueId();
 }

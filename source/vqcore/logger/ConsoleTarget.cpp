@@ -33,7 +33,7 @@
 
 namespace Vam { namespace Logger {
 
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
+const std::string ConsoleTarget::TARGET_ID = "ConsoleLogger";
 
 ConsoleTarget::ConsoleTarget()
     : AbstractLogTarget( TARGET_ID )
@@ -63,7 +63,7 @@ void ConsoleTarget::write( const LogMessage *message )
 }
 
 
-void ConsoleTarget::write( const QString &&/*message*/ )
+void ConsoleTarget::write( const std::string &&/*message*/ )
 {
 }
 

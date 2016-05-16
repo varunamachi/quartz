@@ -2,7 +2,7 @@
 
 #include <memory>
 
-class QString;
+class std::string;
 
 namespace Vam {
 
@@ -11,9 +11,9 @@ class BundleLibrary;
 class BundleLoader
 {
 public:
-    QHash< QString, BundleLibrary::Ptr > loadAll( const QString & location );
+    QHash< std::string, BundleLibrary::Ptr > loadAll( const std::string & location );
 
-    std::shared_ptr< BundleLibrary > loadFile( const QString &filePath );
+    std::shared_ptr< BundleLibrary > loadFile( const std::string &filePath );
 
 private:
 

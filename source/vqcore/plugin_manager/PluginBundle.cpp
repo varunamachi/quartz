@@ -1,7 +1,7 @@
 
 #include <QList>
-#include <QString>
-#include <QStringList>
+#include <std::string>
+#include <std::stringList>
 
 #include "AbstractPlugin.h"
 #include "PluginBundle.h"
@@ -12,20 +12,20 @@ namespace Vam {
 class PluginBundle::Impl
 {
 public:
-    Impl( const QString &bundleId,
-          const QString &bundleName )
+    Impl( const std::string &bundleId,
+          const std::string &bundleName )
         : m_bundleId( bundleId )
         , m_bundleName( bundleName )
     {
 
     }
 
-    const QString & bundleId() const
+    const std::string & bundleId() const
     {
         return m_bundleId;
     }
 
-    const QString & bundleName() const
+    const std::string & bundleName() const
     {
         return m_bundleName;
     }
@@ -49,12 +49,12 @@ public:
         return plugin;
     }
 
-    virtual void addDependency( const QString &bundleId )
+    virtual void addDependency( const std::string &bundleId )
     {
         m_dependencies << bundleId;
     }
 
-    const QStringList & dependencies() const
+    const std::stringList & dependencies() const
     {
         return m_dependencies;
     }
@@ -64,37 +64,37 @@ public:
         return  m_plugins;
     }
 
-    QStringList & mutalbleDependencyList()
+    std::stringList & mutalbleDependencyList()
     {
         return m_dependencies;
     }
 
 private:
-    QString m_bundleId;
+    std::string m_bundleId;
 
-    QString m_bundleName;
+    std::string m_bundleName;
 
-    QStringList m_dependencies;
+    std::stringList m_dependencies;
 
     QList< std::shared_ptr< AbstractPlugin >> m_plugins;
 };
 
 
-PluginBundle::PluginBundle( const QString &bundleId,
-                            const QString &bundleName )
+PluginBundle::PluginBundle( const std::string &bundleId,
+                            const std::string &bundleName )
     : m_impl( std::make_unique< PluginBundle::Impl >( bundleId, bundleName ))
 {
 
 }
 
 
-const QString & PluginBundle::bundleId() const
+const std::string & PluginBundle::bundleId() const
 {
     return m_impl->bundleId();
 }
 
 
-const QString & PluginBundle::bundleName() const
+const std::string & PluginBundle::bundleName() const
 {
     return m_impl->bundleName();
 }
@@ -118,13 +118,13 @@ AbstractPlugin * PluginBundle::pluginAt( const int index ) const
 }
 
 
-void PluginBundle::addDependency( const QString &bundleId )
+void PluginBundle::addDependency( const std::string &bundleId )
 {
     m_impl->addDependency( bundleId );
 }
 
 
-const QStringList & PluginBundle::dependencies() const
+const std::stringList & PluginBundle::dependencies() const
 {
     return m_impl->dependencies();
 }
@@ -142,7 +142,7 @@ QList< std::shared_ptr< AbstractPlugin >> & PluginBundle::mutablePluginList()
 }
 
 
-QStringList & PluginBundle::mutalbleDependencyList()
+std::stringList & PluginBundle::mutalbleDependencyList()
 {
     return m_impl->mutalbleDependencyList();
 }

@@ -5,8 +5,8 @@
 #include "../VQ.h"
 #include "../VQCommon.h"
 
-class QString;
-class QStringList;
+class std::string;
+class std::stringList;
 template <typename T> class QList;
 
 namespace Vam {
@@ -16,16 +16,16 @@ class AbstractPlugin;
 class PluginBundle
 {
 public:
-    PluginBundle( const QString &bundleId,
-                  const QString &bundleName );
+    PluginBundle( const std::string &bundleId,
+                  const std::string &bundleName );
 
     PluginBundle( PluginBundle &other ) = delete;
 
     PluginBundle & operator=( PluginBundle &other ) = delete;
 
-    const QString & bundleId() const;
+    const std::string & bundleId() const;
 
-    const QString & bundleName() const;
+    const std::string & bundleName() const;
 
     virtual void addPlugin( std::shared_ptr< AbstractPlugin > plugin );
 
@@ -33,16 +33,16 @@ public:
 
     AbstractPlugin * pluginAt( const int index ) const;
 
-    virtual void addDependency( const QString &bundleId );
+    virtual void addDependency( const std::string &bundleId );
 
-    const QStringList & dependencies() const;
+    const std::stringList & dependencies() const;
 
     virtual ~PluginBundle();
 
 protected:
     QList< std::shared_ptr< AbstractPlugin >> & mutablePluginList();
 
-    QStringList & mutalbleDependencyList();
+    std::stringList & mutalbleDependencyList();
 
 private:
     class Impl;

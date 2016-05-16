@@ -1,4 +1,4 @@
-#include <QString>
+#include <std::string>
 #include <QDateTime>
 
 #include "LogMessage.h"
@@ -11,10 +11,10 @@ public:
     Impl( const QDateTime &time,
           VQLogLevel &level,
           std::uint64_t threadId,
-          const QString &module,
-          const QString &&method,
+          const std::string &module,
+          const std::string &&method,
           int lineNum,
-          const QString &message )
+          const std::string &message )
         : m_time( time )
         , m_logLevel( level )
         , m_threadId( threadId )
@@ -30,10 +30,10 @@ public:
     Impl( const QDateTime &time,
           VQLogLevel &level,
           std::uint64_t threadId,
-          const QString &module,
-          const QString &&method,
+          const std::string &module,
+          const std::string &&method,
           int lineNum,
-          QString &&message )
+          std::string &&message )
         : m_time( time )
         , m_logLevel( level )
         , m_threadId( threadId )
@@ -48,10 +48,10 @@ public:
     Impl( const QDateTime &time,
           VQLogLevel &level,
           std::uint64_t threadId,
-          const QString &&module,
-          const QString &&method,
+          const std::string &&module,
+          const std::string &&method,
           int lineNum,
-          QString &&message )
+          std::string &&message )
         : m_time( time )
         , m_logLevel( level )
         , m_threadId( threadId )
@@ -79,12 +79,12 @@ public:
         return m_threadId;
     }
 
-    inline const QString & moduleName() const
+    inline const std::string & moduleName() const
     {
         return m_moduleName;
     }
 
-    inline const QString & methodName() const
+    inline const std::string & methodName() const
     {
         return m_methodName;
     }
@@ -94,12 +94,12 @@ public:
         return m_lineNumber;
     }
 
-    inline const QString & message() const
+    inline const std::string & message() const
     {
         return m_logMessage;
     }
 
-    inline QString & mutableMessage()
+    inline std::string & mutableMessage()
     {
         return m_logMessage;
     }
@@ -111,23 +111,23 @@ private:
 
     std::uint64_t m_threadId;
 
-    QString m_moduleName;
+    std::string m_moduleName;
 
-    QString m_methodName;
+    std::string m_methodName;
 
     int m_lineNumber;
 
-    QString m_logMessage;
+    std::string m_logMessage;
 };
 
 
 LogMessage::LogMessage( const QDateTime &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
-                        const QString &module,
-                        const QString &&method,
+                        const std::string &module,
+                        const std::string &&method,
                         int lineNum,
-                        const QString &message )
+                        const std::string &message )
     : m_impl( std::make_unique< LogMessage::Impl >(
                   std::move( time ),
                   level,
@@ -144,10 +144,10 @@ LogMessage::LogMessage( const QDateTime &&time,
 LogMessage::LogMessage( const QDateTime &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
-                        const QString &module,
-                        const QString &&method,
+                        const std::string &module,
+                        const std::string &&method,
                         int lineNum,
-                        QString &&message )
+                        std::string &&message )
     : m_impl( std::make_unique< LogMessage::Impl >(
                   std::move( time ),
                   level,
@@ -165,10 +165,10 @@ LogMessage::LogMessage( const QDateTime &&time,
 LogMessage::LogMessage( const QDateTime &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
-                        const QString &&module,
-                        const QString &&method,
+                        const std::string &&module,
+                        const std::string &&method,
                         int lineNum,
-                        QString &&message )
+                        std::string &&message )
     : m_impl( std::make_unique< LogMessage::Impl >(
                   std::move( time ),
                   level,
@@ -200,13 +200,13 @@ const std::uint64_t & LogMessage::threadId() const
 }
 
 
-const QString & LogMessage::moduleName() const
+const std::string & LogMessage::moduleName() const
 {
     return m_impl->moduleName();
 }
 
 
-const QString & LogMessage::methodName() const
+const std::string & LogMessage::methodName() const
 {
     return m_impl->methodName();
 }
@@ -218,13 +218,13 @@ const int & LogMessage::lineNum() const
 }
 
 
-const QString & LogMessage::message() const
+const std::string & LogMessage::message() const
 {
     return m_impl->message();
 }
 
 
-QString & LogMessage::mutableMessage() const
+std::string & LogMessage::mutableMessage() const
 {
     return m_impl->mutableMessage();
 }

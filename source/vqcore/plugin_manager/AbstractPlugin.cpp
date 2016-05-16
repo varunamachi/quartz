@@ -8,10 +8,10 @@ namespace Vam
 class AbstractPlugin::Impl
 {
 public:
-    inline Impl( const QString &pluginId,
-                 const QString &pluginType,
-                 const QString &pluginName,
-                 const QString &pluginDesc )
+    inline Impl( const std::string &pluginId,
+                 const std::string &pluginType,
+                 const std::string &pluginName,
+                 const std::string &pluginDesc )
         : m_pluginId( pluginId )
         , m_pluginType( pluginType )
         , m_pluginName( pluginName )
@@ -20,34 +20,34 @@ public:
 
     }
 
-    inline const QString & pluginId() const
+    inline const std::string & pluginId() const
     {
         return m_pluginId;
     }
 
-    inline const QString & pluginType() const
+    inline const std::string & pluginType() const
     {
         return m_pluginType;
     }
 
-    inline const QString & pluginName() const
+    inline const std::string & pluginName() const
     {
         return m_pluginName;
     }
 
-    inline const QString & pluginDescription() const
+    inline const std::string & pluginDescription() const
     {
         return m_pluginDesc;
     }
 
 private:
-    QString m_pluginId;
+    std::string m_pluginId;
 
-    QString m_pluginType;
+    std::string m_pluginType;
 
-    QString m_pluginName;
+    std::string m_pluginName;
 
-    QString m_pluginDesc;
+    std::string m_pluginDesc;
 };
 
 
@@ -56,25 +56,25 @@ AbstractPlugin::~AbstractPlugin()
 
 }
 
-const QString & AbstractPlugin::pluginId() const
+const std::string & AbstractPlugin::pluginId() const
 {
     return m_impl->pluginId();
 }
 
 
-const QString & AbstractPlugin::pluginType() const
+const std::string & AbstractPlugin::pluginType() const
 {
     return m_impl->pluginType();
 }
 
 
-const QString & AbstractPlugin::pluginName() const
+const std::string & AbstractPlugin::pluginName() const
 {
     return m_impl->pluginName();
 }
 
 
-const QString & AbstractPlugin::pluginDescription() const
+const std::string & AbstractPlugin::pluginDescription() const
 {
     return m_impl->pluginDescription();
 }

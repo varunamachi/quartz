@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QString>
+#include <string>
 
 namespace Vam {
 
@@ -34,7 +34,7 @@ public:
 
     Result( bool result,
             ReturnType data,
-            QString &&reason )
+            std::string &&reason )
         : m_result( result )
         , m_data( std::move( data ))
         , m_reason( std::move( reason ))
@@ -44,7 +44,7 @@ public:
 
     Result( bool result,
             ReturnType data,
-            const QString &reason )
+            const std::string &reason )
         : m_result( result )
         , m_data( std::move( data ))
         , m_reason( reason )
@@ -97,14 +97,14 @@ public:
     static Result< ReturnType > success( ReturnType data );
 
     static Result< ReturnType > failure( ReturnType data,
-                                         const QString &reason );
+                                         const std::string &reason );
 
     static Result< ReturnType > failure( ReturnType data,
-                                         QString &&reason );
+                                         std::string &&reason );
 
     bool result() const;
 
-    const QString & reason() const;
+    const std::string & reason() const;
 
     ReturnType & data();
 
@@ -113,7 +113,7 @@ private:
 
     ReturnType m_data;
 
-    QString m_reason;
+    std::string m_reason;
 
 };
 
@@ -127,7 +127,7 @@ Result< ReturnType > Result< ReturnType >::success( ReturnType data )
 
 template< typename ReturnType >
 Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
-                                                    const QString &reason)
+                                                    const std::string &reason)
 {
     return Result< ReturnType >( false, data, reason );
 }
@@ -148,7 +148,7 @@ ReturnType & Result< ReturnType >::data()
 
 
 template< typename ReturnType >
-const QString & Result< ReturnType >::reason() const
+const std::string & Result< ReturnType >::reason() const
 {
     return m_reason;
 }
@@ -182,7 +182,7 @@ public:
     }
 
     Result( bool result,
-            QString &&reason )
+            std::string &&reason )
         : m_result( result )
         , m_reason( std::move( reason ))
     {
@@ -190,7 +190,7 @@ public:
     }
 
     Result( bool result,
-            const QString &reason )
+            const std::string &reason )
         : m_result( result )
         , m_reason( reason )
     {
@@ -230,33 +230,19 @@ public:
         return m_result;
     }
 
-
-
-//    static Result< bool > success();
-
-//    static Result< bool > failure( const QString &reason );
-
-//    static Result< bool > failure( const QString &&reason );
-
-//    bool result() const;
-
-//    const QString & reason() const;
-
-//    bool & data();
-
     static Result< bool > success()
     {
         return Result< bool >( true, "" );
     }
 
 
-    static Result< bool > failure( const QString &reason )
+    static Result< bool > failure( const std::string &reason )
     {
         return Result< bool >( false, reason );
     }
 
 
-    static Result< bool > failure( const QString &&reason )
+    static Result< bool > failure( const std::string &&reason )
     {
         return Result< bool >( false, std::move( reason ));
     }
@@ -275,7 +261,7 @@ public:
     }
 
 
-    const QString & reason() const
+    const std::string & reason() const
     {
         return m_reason;
     }
@@ -283,7 +269,7 @@ public:
 private:
     bool m_result;
 
-    QString m_reason;
+    std::string m_reason;
 
 };
 

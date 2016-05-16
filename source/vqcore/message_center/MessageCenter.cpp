@@ -3,7 +3,7 @@
 
 namespace Vam {
 
-void MessageCenter::subscribe( const QString &messageType,
+void MessageCenter::subscribe( const std::string &messageType,
                                IMessageClient *sub )
 {
     if( sub != nullptr ) {
@@ -14,12 +14,12 @@ void MessageCenter::subscribe( const QString &messageType,
 }
 
 
-void MessageCenter::subscribe( const QStringList &messageTypes,
+void MessageCenter::subscribe( const std::stringList &messageTypes,
                                IMessageClient *sub )
 {
     if( sub != nullptr ) {
         m_lock.lockForWrite();
-        for( const QString &msgType : messageTypes ) {
+        for( const std::string &msgType : messageTypes ) {
             m_subscribers.insert( msgType, sub );
             m_clients.insert( sub->messageClientId(), sub );
         }
@@ -31,7 +31,7 @@ void MessageCenter::removeSubscriber( IMessageClient *client )
 {
     if( client != nullptr ) {
         m_lock.lockForWrite();
-        for( QString &mtype : m_subscribers.keys() ) {
+        for( std::string &mtype : m_subscribers.keys() ) {
             m_subscribers.remove( mtype, client );
         }
         m_clients.remove( client->messageClientId() );
@@ -39,7 +39,7 @@ void MessageCenter::removeSubscriber( IMessageClient *client )
 }
 
 
-void MessageCenter::removeSubscriber( const QString &clientId )
+void MessageCenter::removeSubscriber( const std::string &clientId )
 {
     m_lock.lockForWrite();
     IMessageClient *client = m_clients.value( clientId );
@@ -48,7 +48,7 @@ void MessageCenter::removeSubscriber( const QString &clientId )
 
 
 void MessageCenter::notify( const IMessageClient *originator,
-                            const QString &messageType,
+                            const std::string &messageType,
                             const Parameters &params )
 {
     m_lock.lockForRead();

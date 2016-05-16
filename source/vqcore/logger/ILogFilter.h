@@ -2,7 +2,7 @@
 
 #include "../VQCommon.h"
 
-class QString;
+class std::string;
 
 namespace Vam { namespace Logger {
 
@@ -10,7 +10,7 @@ class LogMessage;
 
 VQ_INTERFACE ILogFilter
 {
-    virtual QString filterId() const = 0;
+    virtual std::string filterId() const = 0;
 
     virtual bool filterOut( LogMessage *message ) = 0;
 

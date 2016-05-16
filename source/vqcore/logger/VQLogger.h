@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "../VQ.h"
 #include "../VQCommon.h"
@@ -8,7 +9,6 @@
 
 #define CUR_THREAD_ID quint64( 0 )
 
-class QString;
 class QDateTime;
 
 namespace Vam { namespace Logger {

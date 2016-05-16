@@ -34,13 +34,13 @@ namespace Vam { namespace Logger {
 class VQ_CORE_EXPORT FileTarget : public AbstractLogTarget
 {
 public:
-    explicit FileTarget( const QString &fileSuffix );
+    explicit FileTarget( const std::string &fileSuffix );
 
-    void write( const QString &&message ) override;
+    void write( const std::string &&message ) override;
 
     void flush() override;
 
-    static const QString TARGET_ID;
+    static const std::string TARGET_ID;
 
 private:
     class Impl;

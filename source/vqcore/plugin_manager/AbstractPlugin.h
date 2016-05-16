@@ -1,31 +1,32 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "../VQCommon.h"
 #include "../common/Result.h"
 
-class QString;
+
 
 namespace Vam {
 
 class AbstractPlugin
 {
 public:
-    AbstractPlugin( const QString &pluginId,
-                    const QString &pluginType,
-                    const QString &pluginName,
-                    const QString &pluginDesc );
+    AbstractPlugin( const std::string &pluginId,
+                    const std::string &pluginType,
+                    const std::string &pluginName,
+                    const std::string &pluginDesc );
 
     virtual ~AbstractPlugin();
 
-    const QString & pluginId() const;
+    const std::string & pluginId() const;
 
-    const QString & pluginType() const;
+    const std::string & pluginType() const;
 
-    const QString & pluginName() const;
+    const std::string & pluginName() const;
 
-    const QString & pluginDescription() const;
+    const std::string & pluginDescription() const;
 
     virtual Result< bool > init() = 0;
 

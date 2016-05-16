@@ -8,10 +8,10 @@ namespace Vam {
 
 VQ_INTERFACE IMessageClient
 {
-    virtual QString messageClientId() const = 0;
+    virtual std::string messageClientId() const = 0;
 
     virtual void onMessage( const IMessageClient *originator,
-                            const QString &messageType,
+                            const std::string &messageType,
                             const Parameters &params ) = 0;
 };
 

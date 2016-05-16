@@ -77,24 +77,24 @@ public:
 
 //    void log(const QDateTime &time,
 //              VQLogLevel &level,
-//              const QString &module,
-//              const QString &&method,
+//              const std::string &module,
+//              const std::string &&method,
 //              int lineNum,
-//              const QString &message );
+//              const std::string &message );
 
 //    void log( const QDateTime &time,
 //              VQLogLevel &level,
-//              const QString &module,
-//              const QString &&method,
+//              const std::string &module,
+//              const std::string &&method,
 //              int lineNum,
-//              QString &&message );
+//              std::string &&message );
 
 //    void log( const QDateTime &time,
 //              VQLogLevel &level,
-//              const QString &&module,
-//              const QString &&method,
+//              const std::string &&module,
+//              const std::string &&method,
 //              int lineNum,
-//              QString &&message );
+//              std::string &&message );
 
     void log( LogMessage *msg );
 
@@ -119,10 +119,10 @@ private:
 
 //void VQLogger::Impl::log( const QDateTime &time,
 //          VQLogLevel &level,
-//          const QString &module,
-//          const QString &&method,
+//          const std::string &module,
+//          const std::string &&method,
 //          int lineNum,
-//          const QString &message )
+//          const std::string &message )
 //{
 //    if( m_enabled
 //        && m_dispatcher != nullptr
@@ -140,10 +140,10 @@ private:
 
 //void VQLogger::Impl::log( const QDateTime &time,
 //          VQLogLevel &level,
-//          const QString &module,
-//          const QString &&method,
+//          const std::string &module,
+//          const std::string &&method,
 //          int lineNum,
-//          QString &&message )
+//          std::string &&message )
 //{
 //    if( m_enabled
 //        && m_dispatcher != nullptr
@@ -161,10 +161,10 @@ private:
 
 //void VQLogger::Impl::log( const QDateTime &time,
 //          VQLogLevel &level,
-//          const QString &&module,
-//          const QString &&method,
+//          const std::string &&module,
+//          const std::string &&method,
 //          int lineNum,
-//          QString &&message )
+//          std::string &&message )
 //{
 //    if( m_enabled
 //        && m_dispatcher != nullptr

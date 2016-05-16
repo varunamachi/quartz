@@ -1,7 +1,7 @@
 
 #include <thread>
 
-#include <QString>
+#include <std::string>
 #include <QReadWriteLock>
 #include <QQueue>
 

@@ -15,7 +15,7 @@ class AbstractPluginSlot;
 class PluginManager
 {
 public:
-    PluginManager( QString location )
+    PluginManager( std::string location )
         : m_location( location )
     {
 
@@ -27,28 +27,28 @@ public:
 
     Result< bool > reloadAll();
 
-    Result< bool > unload( QString bundleId );
+    Result< bool > unload( std::string bundleId );
 
-    Result< bool > load( QString bundleId );
+    Result< bool > load( std::string bundleId );
 
-    Result< bool > reload( QString bundleId );
+    Result< bool > reload( std::string bundleId );
 
-    Result< PluginBundle * > pluginBundle( const QString &bundleId ) const;
+    Result< PluginBundle * > pluginBundle( const std::string &bundleId ) const;
 
     Result< QList< const PluginBundle * >> allBundles() const;
 
 private:
     Result< bool > loadBundle( const PluginBundle &bundle,
-                               VQ_IN_OUT QSet< QString > &loadedBundles );
+                               VQ_IN_OUT QSet< std::string > &loadedBundles );
 
     Result< bool > unloadBundle( const PluginBundle &bundle,
-                                 VQ_IN_OUT QSet< QString > &unloadedBundles );
+                                 VQ_IN_OUT QSet< std::string > &unloadedBundles );
 
-    QHash< QString, std::shared_ptr< BundleLibrary >> m_libraries;
+    QHash< std::string, std::shared_ptr< BundleLibrary >> m_libraries;
 
-    QMultiHash< QString, QString > m_dependents;
+    QMultiHash< std::string, std::string > m_dependents;
 
-    QString m_location;
+    std::string m_location;
 
     BundleLoader m_loader;
 

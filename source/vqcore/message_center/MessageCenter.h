@@ -17,29 +17,29 @@ public:
     const std::string & uniqueId();
 
 public slots:
-    void subscribe( const QString &messageType,
+    void subscribe( const std::string &messageType,
                     IMessageClient *sub );
 
-    void subscribe( const QStringList &messageTypes,
+    void subscribe( const std::stringList &messageTypes,
                     IMessageClient *sub );
 
     void removeSubscriber( IMessageClient *client );
 
-    void removeSubscriber( const QString &clientId );
+    void removeSubscriber( const std::string &clientId );
 
     void notify( const IMessageClient *originator,
-                 const QString &messageType,
+                 const std::string &messageType,
                  const Parameters &params );
 
 signals:
     void onNotify( const IMessageClient *originator,
-                   const QString &messageType,
+                   const std::string &messageType,
                    const Parameters &params );
 
 private:
-    QMultiHash< QString, IMessageClient * > m_subscribers;
+    QMultiHash< std::string, IMessageClient * > m_subscribers;
 
-    QHash< QString, IMessageClient *> m_clients;
+    QHash< std::string, IMessageClient *> m_clients;
 
     QReadWriteLock m_lock;
 };

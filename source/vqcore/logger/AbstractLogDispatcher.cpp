@@ -1,5 +1,5 @@
 
-#include <QString>
+#include <std::string>
 #include <QList>
 #include <QQueue>
 #include <QHash>
@@ -60,17 +60,17 @@ public:
 
     bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
 
-    AbstractLogTarget * target( const QString &targetId );
+    AbstractLogTarget * target( const std::string &targetId );
 
-    bool setTargetEnabledState( const QString &trgId, bool value );
+    bool setTargetEnabledState( const std::string &trgId, bool value );
 
-    bool removeTarget( const QString &targetId );
+    bool removeTarget( const std::string &targetId );
 
     bool installFilter( std::shared_ptr< ILogFilter > filter,
-                        const QString &trgtId );
+                        const std::string &trgtId );
 
-    bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId );
+    bool uninstallFilter( const std::string &filterId,
+                          const std::string &trgtId );
 
     void flush();
 
@@ -79,9 +79,9 @@ public:
     ~Impl();
 
 private:
-    QHash< QString, std::shared_ptr< FilterInfo >> m_allFilters;
+    QHash< std::string, std::shared_ptr< FilterInfo >> m_allFilters;
 
-    QHash< QString, std::shared_ptr< TargetInfo >> m_targets;
+    QHash< std::string, std::shared_ptr< TargetInfo >> m_targets;
 
     mutable QReadWriteLock m_lock;
 };
@@ -109,7 +109,7 @@ bool AbstractLogDispatcher::Impl::addTarget(
 
 
 AbstractLogTarget * AbstractLogDispatcher::Impl::target(
-        const QString &targetId )
+        const std::string &targetId )
 {
     auto &info = m_targets.value( targetId );
     return info != nullptr ? info->m_target.get() : nullptr;
@@ -117,7 +117,7 @@ AbstractLogTarget * AbstractLogDispatcher::Impl::target(
 
 
 bool AbstractLogDispatcher::Impl::setTargetEnabledState(
-        const QString &trgId,
+        const std::string &trgId,
         bool value )
 {
     bool result = false;
@@ -131,7 +131,7 @@ bool AbstractLogDispatcher::Impl::setTargetEnabledState(
 }
 
 
-bool AbstractLogDispatcher::Impl::removeTarget( const QString &targetId )
+bool AbstractLogDispatcher::Impl::removeTarget( const std::string &targetId )
 {
     bool result = false;
     auto info = m_targets.value( targetId );
@@ -152,7 +152,7 @@ bool AbstractLogDispatcher::Impl::removeTarget( const QString &targetId )
 
 bool AbstractLogDispatcher::Impl::installFilter(
         std::shared_ptr< ILogFilter > filter,
-        const QString &targetId )
+        const std::string &targetId )
 {
     bool result = false;
     if( filter ) {
@@ -209,8 +209,8 @@ bool AbstractLogDispatcher::Impl::installFilter(
 }
 
 
-bool AbstractLogDispatcher::Impl::uninstallFilter( const QString &filterId,
-                                                   const QString &targetId )
+bool AbstractLogDispatcher::Impl::uninstallFilter( const std::string &filterId,
+                                                   const std::string &targetId )
 {
     bool result = false;
     auto finfo = m_allFilters.value( filterId );
@@ -299,34 +299,34 @@ bool AbstractLogDispatcher::addTarget(
 }
 
 
-AbstractLogTarget * AbstractLogDispatcher::target( QString targetId )
+AbstractLogTarget * AbstractLogDispatcher::target( std::string targetId )
 {
     return m_impl->target( targetId );
 }
 
 
-bool AbstractLogDispatcher::setTargetEnabledState( const QString &trgId,
+bool AbstractLogDispatcher::setTargetEnabledState( const std::string &trgId,
                                                    bool value )
 {
     return m_impl->setTargetEnabledState( trgId, value );
 }
 
 
-bool AbstractLogDispatcher::removeTarget( const QString &targetId )
+bool AbstractLogDispatcher::removeTarget( const std::string &targetId )
 {
     return m_impl->removeTarget( targetId );
 }
 
 
 bool AbstractLogDispatcher::installFilter( std::shared_ptr< ILogFilter > filter,
-                    const QString &trgtId )
+                    const std::string &trgtId )
 {
     return m_impl->installFilter( filter, trgtId );
 }
 
 
-bool AbstractLogDispatcher::uninstallFilter( const QString &filterId,
-                      const QString &trgtId )
+bool AbstractLogDispatcher::uninstallFilter( const std::string &filterId,
+                      const std::string &trgtId )
 {
     return m_impl->uninstallFilter( filterId, trgtId );
 }
