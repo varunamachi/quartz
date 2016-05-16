@@ -7,7 +7,12 @@ class Parameters::Data
 {
 public:
     using ParamMap = std::map< std::string, std::string >;
-    explicit Data( )
+
+    explicit Data( ParamMap paramMap )
+        : m_paramMap( paramMap )
+    {
+
+    }
 
     inline ParamMap & paramMap()
     {
@@ -18,27 +23,28 @@ private:
     ParamMap m_paramMap;
 };
 
-Parameters::Parameters( QHash< std::string, QVariant > &params )
-    : m_data( params )
+Parameters::Parameters( std::map< std::string, std::string > &params )
+    : m_data( std::make_unique< Parameters::Data >( params ))
 {
 }
 
 
-void Parameters::addParam( const std::string &key, const QVariant &value )
+void Parameters::addParam( const std::string &key, const std::string &value )
 {
-    m_params.insert( key, value );
+    m_data->paramMap().insert( key, value );
 }
 
 
 void Parameters::removeParam( const std::string &key )
 {
-    m_params.remove( key );
+    m_data->paramMap().erase( key );
 }
 
 
-const QVariant Parameters::param( const std::string &key ) const
+const std::string & Parameters::param( const std::string &key ) const
 {
-    return m_params.value( key );
+
+    return m_data->paramMap().value( key );
 }
 
 }
