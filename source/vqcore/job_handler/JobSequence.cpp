@@ -1,8 +1,9 @@
 
-#include <QQueue>
-#include <QReadWriteLock>
-#include <QObject>
+#include <deque>
+#include <mutex>
+#include <thread>
 
+#include "../common/Threading.h"
 #include "JobSequence.h"
 
 namespace Vam {
@@ -12,30 +13,32 @@ class JobSequence::Impl
 public:
     void addJob( IJob::JobFunc jobFunc )
     {
-        m_lock.lockForWrite();
+        VQ_LOCK( m_mutex );
         m_sequence.push_front( jobFunc );
     }
 
     IJob::JobFunc takeNext()
     {
         IJob::JobFunc func = nullptr;
-        m_lock.lockForWrite();
-        if( ! m_sequence.isEmpty() ) {
-            func =m_sequence.takeLast();
+        VQ_LOCK( m_mutex );
+        if( ! m_sequence.empty() ) {
+            func = m_sequence.back();
+            m_sequence.pop_back();
         }
         return func;
     }
 
     bool hasJob() const
     {
-        m_lock.lockForRead();
-        return ! m_sequence.isEmpty();
+        VQ_LOCK( m_mutex );
+        bool result = ! m_sequence.empty();
+        return result;
     }
 
 private:
-    QQueue< IJob::JobFunc > m_sequence;
+    std::deque< IJob::JobFunc > m_sequence;
 
-    mutable QReadWriteLock m_lock;
+    mutable std::mutex m_mutex;
 };
 
 
@@ -47,7 +50,7 @@ Result< bool > JobSequence::execute( const JobContext &context )
         result = jobFunc( context );
     }
     else {
-        result = Result< bool >::failure( QObject::tr( "Invalid job found" ));
+        result = Result< bool >::failure( "Invalid job found" );
     }
     return result;
 }

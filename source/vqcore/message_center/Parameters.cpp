@@ -3,8 +3,23 @@
 
 namespace Vam {
 
+class Parameters::Data
+{
+public:
+    using ParamMap = std::map< std::string, std::string >;
+    explicit Data( )
+
+    inline ParamMap & paramMap()
+    {
+        return m_paramMap;
+    }
+
+private:
+    ParamMap m_paramMap;
+};
+
 Parameters::Parameters( QHash< std::string, QVariant > &params )
-    : m_params( params )
+    : m_data( params )
 {
 }
 

@@ -1,8 +1,9 @@
 
 #pragma once
 
-#include <QHash>
-#include <QVariant>
+#include <map>
+#include <string>
+#include <memory>
 
 #include "../VQ.h"
 
@@ -11,16 +12,22 @@ namespace Vam {
 class VQ_CORE_EXPORT Parameters
 {
 public:
-    Parameters( QHash< std::string, QVariant > &params );
+    Parameters();
 
-    void addParam( const std::string &key, const QVariant &value );
+    explicit Parameters( std::map< std::string, std::string > &params );
+
+    void addParam( const std::string &key, const std::string &value );
 
     void removeParam( const std::string &key );
 
-    const QVariant param( const std::string &key ) const;
+    const std::string & param( const std::string &key ) const;
 
 private:
-    QHash< std::string, QVariant > m_params;
+    class Data;
+    std::unique_ptr< Data > m_data;
+
+
+
 
 };
 
