@@ -1,5 +1,11 @@
 #pragma once
 
+#define VQ_INTERFACE struct
+#define VQ_SCOPE( _zed )
+
+#define VQ_OUT
+#define VQ_IN_OUT
+
 #define TOKENPASTE( x, y ) x##y
 #define TOKENPASTE2( x, y ) TOKENPASTE( x, y )
 #define LINE_VAR( n ) TOKENPASTE2( n, __LINE__ )

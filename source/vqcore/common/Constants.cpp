@@ -3,6 +3,6 @@
 
 namespace Vam {
 
-Con
+const std::string Constants::EMPTY_STRING( "" );
 
 }

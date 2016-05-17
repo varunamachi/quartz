@@ -1,4 +1,5 @@
 
+#include "../common/Constants.h"
 #include "Parameters.h"
 
 namespace Vam {
@@ -43,8 +44,11 @@ void Parameters::removeParam( const std::string &key )
 
 const std::string & Parameters::param( const std::string &key ) const
 {
-
-    return m_data->paramMap().value( key );
+    auto it = m_data->paramMap().find( key );
+    if( it != std::end( m_data->paramMap() )) {
+        return it->second;
+    }
+    return Constants::EMPTY_STRING;
 }
 
 }

@@ -1,9 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "IMessageClient.h"
-#include "../VQCommon.h"
+#include "../common/Macros.h"
 
 namespace Vam {
 

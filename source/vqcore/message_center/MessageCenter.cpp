@@ -6,6 +6,7 @@
 #include "../common/Threading.h"
 #include "../common/ContainerOperations.h"
 #include "../common/Constants.h"
+#include "Parameters.h"
 #include "MessageCenter.h"
 
 namespace Vam {

@@ -1,45 +1,97 @@
-#include <QSet>
+#include <unordered_set>
+#include <unordered_map>
 
-#include <vqcore/VQCommon.h>
-#include <vqcore/logger/Logging.h>
-
+#include "../common/Macros.h"
+#include "../common/ContainerOperations.h"
+#include "../logger/Logging.h"
+#include "BundleLibrary.h"
+#include "BundleLoader.h"
 #include "PluginManager.h"
+#include "PluginBundle.h"
 
 namespace Vam {
 
-Result< bool > PluginManager::loadAll()
+class PluginManager::Impl
+{
+    Impl( std::string location )
+        : m_location( location )
+    {
+
+    }
+
+    Result< bool > loadAll();
+
+    Result< bool > unloadAll();
+
+    Result< bool > reloadAll();
+
+    Result< bool > unload( const std::string &bundleId );
+
+    Result< bool > load( const std::string &bundleId );
+
+    Result< bool > reload( const std::string &bundleId );
+
+    Result< PluginBundle * > pluginBundle( const std::string &bundleId ) const;
+
+    Result< bool > allBundles(
+            VQ_OUT std::vector< const PluginBundle * > &bundlesOut ) const;
+
+private:
+    using BundleLibPtr = std::unique_ptr< BundleLibrary >;
+    Result< bool > loadBundle(
+            const PluginBundle &bundle,
+            VQ_IN_OUT std::unordered_set< std::string > &loadedBundles );
+
+    Result< bool > unloadBundle(
+            const PluginBundle &bundle,
+            VQ_IN_OUT std::unordered_set< std::string > &unloadedBundles );
+
+    std::unordered_map< std::string, BundleLibPtr > m_libraries;
+
+    std::unordered_multimap< std::string, std::string > m_dependents;
+
+    std::string m_location;
+
+    BundleLoader m_loader;
+};
+
+
+
+
+Result< bool > PluginManager::Impl::loadAll()
 {
     Result< bool > result;
     m_libraries = m_loader.loadAll( m_location );
-    QSet< std::string > loadedBundles;
-    for( auto &blib : m_libraries.values() ) {
-        auto &bundle = blib->bundle();
-        if( ! loadedBundles.contains( bundle.bundleId() )) {
-            result = loadBundle( bundle, loadedBundles );
-            if( ! result ) {
-                VQ_ERROR( "Quartz:Core" )
-                        << "Could not load bundle with ID "
-                        << bundle.bundleId();
-            }
+    std::unordered_set< std::string > loadedBundles;
+    for( auto &bpair : m_libraries ) {
+        const auto &bundle = bpair.second->bundle();
+        if( loadedBundles.find( bundle->bundleId() )
+                == std::end( loadedBundles )) {
+            result = loadBundle( *bundle, loadedBundles );
+        }
+        if( ! result ) {
+//            VQ_ERROR( "Quartz:Core" )
+//                    << "Could not load bundle with ID "
+//                    << bundle.bundleId();
         }
     }
     return result;
 }
 
 
-Result< bool > PluginManager::unloadAll()
+Result< bool > PluginManager::Impl::unloadAll()
 {
     Result< bool > result;
-    m_libraries = m_loader.loadAll( m_location );
-    QSet< std::string > unloadedBundles;
-    for( auto & blib : m_libraries.values() ) {
-        auto &bundle = blib->bundle();
-        if( ! unloadedBundles.contains( bundle.bundleId() )) {
-            result = unloadBundle( bundle, unloadedBundles );
+//    m_libraries = m_loader.loadAll( m_location );
+    std::unordered_set< std::string > unloadedBundles;
+    for( auto & blib : m_libraries ) {
+        const auto &bundle = blib.second->bundle();
+        if( ! ContainerOps::contains( unloadedBundles, bundle->bundleId() )) {
+            result = unloadBundle( *bundle, unloadedBundles );
             if( ! result ) {
-                VQ_ERROR( "Quartz:Core" )
-                        << "Could not unload bundle with ID "
-                        << bundle.bundleId();
+//                VQ_ERROR( "Quartz:Core" )
+//                        << "Could not unload bundle with ID "
+//                        << bundle.bundleId();
             }
 
         }
@@ -48,7 +100,7 @@ Result< bool > PluginManager::unloadAll()
 }
 
 
-Result< bool > PluginManager::reloadAll()
+Result< bool > PluginManager::Impl::reloadAll()
 {
     auto result = unloadAll();
      if( result.result() ) {
@@ -58,10 +110,10 @@ Result< bool > PluginManager::reloadAll()
 }
 
 
-Result< bool > PluginManager::unload( std::string bundleId )
+Result< bool > PluginManager::Impl::unload( std::string bundleId )
 {
     Result< bool > result;
-    BundleLibrary::Ptr blib = m_libraries.value( bundleId );
+    BundleLibPtr lib = m_libraries.value( bundleId );
     if( blib != nullptr ) {
         QSet< std::string > unloadedBundles;
         result = unloadBundle( blib->bundle(), unloadedBundles );
@@ -75,7 +127,7 @@ Result< bool > PluginManager::unload( std::string bundleId )
 }
 
 
-Result< bool > PluginManager::load( std::string bundleId )
+Result< bool > PluginManager::Impl::load( std::string bundleId )
 {
     Result< bool > result;
     auto &blib = m_libraries.value( bundleId );
@@ -92,7 +144,7 @@ Result< bool > PluginManager::load( std::string bundleId )
 }
 
 
-Result< bool > PluginManager::reload( std::string bundleId )
+Result< bool > PluginManager::Impl::reload( std::string bundleId )
 {
     Result< bool > result = unload( bundleId );
     if( result.result() ) {
@@ -101,7 +153,7 @@ Result< bool > PluginManager::reload( std::string bundleId )
     return result;
 }
 
-Result< PluginBundle * > PluginManager::pluginBundle(
+Result< PluginBundle * > PluginManager::Impl::pluginBundle(
         const std::string &bundleId) const
 {
     auto result = Result< PluginBundle * >::failure(
@@ -116,7 +168,7 @@ Result< PluginBundle * > PluginManager::pluginBundle(
 }
 
 
-Result< QList< const PluginBundle * >> PluginManager::allBundles() const
+Result< QList< const PluginBundle * >> PluginManager::Impl::allBundles() const
 {
     QList< const PluginBundle * > bundles;
     auto it = m_libraries.begin();
@@ -128,7 +180,7 @@ Result< QList< const PluginBundle * >> PluginManager::allBundles() const
 }
 
 
-Result< bool > PluginManager::loadBundle(
+Result< bool > PluginManager::Impl::loadBundle(
         const PluginBundle &bundle,
         VQ_IN_OUT QSet< std::string > &loadedBundles )
 {
@@ -174,7 +226,7 @@ Result< bool > PluginManager::loadBundle(
 }
 
 
-Result< bool > PluginManager::unloadBundle(
+Result< bool > PluginManager::Impl::unloadBundle(
         const PluginBundle &bundle,
         VQ_IN_OUT QSet< std::string > &unloadedBundles )
 {

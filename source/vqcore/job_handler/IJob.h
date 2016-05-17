@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "../VQCommon.h"
+#include "../common/Macros.h"
 #include "../common/Result.h"
 
 namespace Vam {

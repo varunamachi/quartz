@@ -9,7 +9,6 @@ vq_add_qt()
 
 vq_headers(
     VQ.h
-    VQCommon.h
 )
 
 add_subdirectory( common )

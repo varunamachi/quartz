@@ -2,13 +2,13 @@
 
 #include <string>
 
+#include "../common/Macros.h"
+
 namespace Vam {
 
 class Constants {
 public:
-    Constants() = delete;
-    Constants( Constants &other ) = delete;
-    Constants & operator=( Constants &other ) = delete;
+    VQ_MAKE_STATIC( Constants );
 
     static const std::string EMPTY_STRING;
 

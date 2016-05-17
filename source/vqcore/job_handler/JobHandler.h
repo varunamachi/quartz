@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include "../VQCommon.h"
 #include "IJob.h"
 
 namespace Vam {

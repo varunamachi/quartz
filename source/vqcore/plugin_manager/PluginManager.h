@@ -1,10 +1,11 @@
 #pragma once
 
-#include <QSet>
-#include <QHash>
-#include <QMultiHash>
+#include <vector>
+#include <string>
+#include <memory>
 
-#include "BundleLoader.h"
+#include "../common/Result.h"
+#include "../common/Macros.h"
 
 namespace Vam {
 
@@ -15,11 +16,7 @@ class AbstractPluginSlot;
 class PluginManager
 {
 public:
-    PluginManager( std::string location )
-        : m_location( location )
-    {
-
-    }
+    PluginManager( std::string location );
 
     Result< bool > loadAll();
 
@@ -27,30 +24,20 @@ public:
 
     Result< bool > reloadAll();
 
-    Result< bool > unload( std::string bundleId );
+    Result< bool > unload( const std::string &bundleId );
 
-    Result< bool > load( std::string bundleId );
+    Result< bool > load( const std::string &bundleId );
 
-    Result< bool > reload( std::string bundleId );
+    Result< bool > reload( const std::string &bundleId );
 
     Result< PluginBundle * > pluginBundle( const std::string &bundleId ) const;
 
-    Result< QList< const PluginBundle * >> allBundles() const;
+    Result< bool > allBundles(
+            VQ_OUT std::vector< const PluginBundle * > &bundlesOut ) const;
 
 private:
-    Result< bool > loadBundle( const PluginBundle &bundle,
-                               VQ_IN_OUT QSet< std::string > &loadedBundles );
-
-    Result< bool > unloadBundle( const PluginBundle &bundle,
-                                 VQ_IN_OUT QSet< std::string > &unloadedBundles );
-
-    QHash< std::string, std::shared_ptr< BundleLibrary >> m_libraries;
-
-    QMultiHash< std::string, std::string > m_dependents;
-
-    std::string m_location;
-
-    BundleLoader m_loader;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
 };
 
