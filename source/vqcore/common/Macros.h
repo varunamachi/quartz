@@ -9,7 +9,7 @@
     ClassName & operator=( const ClassName &other ) = delete \
 
 #define VQ_NO_MOVE( ClassName ) \
-    ClassName( ClassName && rval ) = delete \
+    ClassName( ClassName && rval ) = delete; \
     ClassName & operator=( const ClassName &&rval ) = delete \
 
 #define VQ_NO_COPY_OR_MOVE( ClassName ) \

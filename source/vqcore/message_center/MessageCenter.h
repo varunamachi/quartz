@@ -1,26 +1,23 @@
 #pragma once
 
-#include <QHash>
-#include <QReadWriteLock>
-#include <QObject>
+#include <vector>
 
 #include "IMessageClient.h"
+#include "../VQCommon.h"
 
 namespace Vam {
 
-class VQ_CORE_EXPORT MessageCenter : public QObject
+class VQ_CORE_EXPORT MessageCenter
 {
-    Q_OBJECT
 public:
     void destroy();
 
     const std::string & uniqueId();
 
-public slots:
     void subscribe( const std::string &messageType,
                     IMessageClient *sub );
 
-    void subscribe( const std::stringList &messageTypes,
+    void subscribe( const std::vector< std::string > &messageTypes,
                     IMessageClient *sub );
 
     void removeSubscriber( IMessageClient *client );
@@ -31,17 +28,11 @@ public slots:
                  const std::string &messageType,
                  const Parameters &params );
 
-signals:
-    void onNotify( const IMessageClient *originator,
-                   const std::string &messageType,
-                   const Parameters &params );
-
 private:
-    QMultiHash< std::string, IMessageClient * > m_subscribers;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
-    QHash< std::string, IMessageClient *> m_clients;
 
-    QReadWriteLock m_lock;
 };
 
 }
