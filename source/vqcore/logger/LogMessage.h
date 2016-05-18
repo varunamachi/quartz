@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <memory>
 
-class std::string;
+
 class QDateTime;
 
 

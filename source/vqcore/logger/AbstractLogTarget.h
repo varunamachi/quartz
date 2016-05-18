@@ -4,7 +4,7 @@
 
 #include "../VQCommon.h"
 
-class std::string;
+
 
 namespace Vam { namespace Logger {
 

@@ -1,8 +1,13 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 
-class std::string;
+#include "../VQ.h"
+#include "../common/Macros.h"
+
+
+
 
 namespace Vam {
 
@@ -11,9 +16,15 @@ class BundleLibrary;
 class VQ_CORE_EXPORT BundleLoader
 {
 public:
-    QHash< std::string, BundleLibrary::Ptr > loadAll( const std::string & location );
+    using BundleMap = std::unordered_map<
+                        std::string,
+                        std::unique_ptr< BundleLibrary >>;
 
-    std::shared_ptr< BundleLibrary > loadFile( const std::string &filePath );
+
+    std::size_t loadAll( const std::string & location,
+                         VQ_OUT BundleMap &bundlesOut );
+
+    std::unique_ptr< BundleLibrary > loadFile( const std::string &filePath );
 
 private:
 

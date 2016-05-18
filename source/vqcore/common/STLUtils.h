@@ -22,9 +22,9 @@ namespace Vam { namespace STLUtils {
     }
 
 
-    template< typename ContainerType,
-              typename KeyType = typename ContainerType::key_type >
-    bool contains( const ContainerType &container, const KeyType &key )
+    template< typename ContainerType >
+    bool contains( const ContainerType &container,
+                   const typename ContainerType::key_type &key )
     {
         auto it = container.find( key );
         return it != std::end( container );
@@ -33,8 +33,8 @@ namespace Vam { namespace STLUtils {
 
     template< typename ContainerType >
     void multiRemove( ContainerType &container,
-                      const ContainerType::key_type &key,
-                      const ContainerType::value_type &value )
+                      const typename ContainerType::key_type &key,
+                      const typename ContainerType::value_type &value )
     {
 //        auto rangeIt = container.equal_range( key );
 

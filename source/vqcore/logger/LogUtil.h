@@ -23,7 +23,7 @@
 #pragma once
 
 
-class std::string;
+
 
 #include "../VQ.h"
 

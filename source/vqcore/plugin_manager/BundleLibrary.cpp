@@ -1,5 +1,5 @@
 
-#include <QLibrary>
+#include "../platform/shared_library/SharedLibrary.h"
 
 #include "BundleLibrary.h"
 #include "PluginBundle.h"
@@ -19,22 +19,23 @@ public:
 
     }
 
-    inline Impl( QLibrary *library, PluginBundle *bundle )
-        : m_library( library )
-        , m_bundle( bundle )
+    inline Impl( std::unique_ptr< SharedLibrary > library,
+                 std::unique_ptr< PluginBundle > bundle )
+        : m_library( std::move( library ))
+        , m_bundle( std::move( bundle ))
         , m_isValid( library != nullptr && bundle != nullptr )
     {
 
     }
 
-    inline QLibrary * library() const
+    inline SharedLibrary * library() const
     {
-        return m_library;
+        return m_library.get();
     }
 
     inline PluginBundle * bundle() const
     {
-        return m_bundle;
+        return m_bundle.get();
     }
 
     inline bool isValid() const
@@ -43,9 +44,9 @@ public:
     }
 
 private:
-    QLibrary *m_library;
+    std::unique_ptr< SharedLibrary > m_library;
 
-    PluginBundle *m_bundle;
+    std::unique_ptr< PluginBundle > m_bundle;
 
     bool m_isValid;
 };
@@ -57,27 +58,31 @@ BundleLibrary::BundleLibrary()
 
 }
 
-BundleLibrary::BundleLibrary( std::unique_ptr< QLibrary > library,
+BundleLibrary::BundleLibrary( std::unique_ptr< SharedLibrary > library,
                               std::unique_ptr< PluginBundle > bundle )
-    : m_impl( std::make_unique< BundleLibrary::Impl >( library, bundle ))
+    : m_impl( std::make_unique< BundleLibrary::Impl >(
+                  std::move( library ),
+                  std::move( bundle )))
 {
 
 }
 
 
-QLibrary * BundleLibrary::library() const
+SharedLibrary * BundleLibrary::library() const
 {
-    m_impl->library();
+    return m_impl->library();
 }
 
 
 PluginBundle * BundleLibrary::bundle() const
 {
-    m_impl->bundle();
+    return m_impl->bundle();
 }
 
 
 bool BundleLibrary::isValid() const
 {
     return m_impl->isValid();
+}
+
 }

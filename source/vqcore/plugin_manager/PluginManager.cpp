@@ -1,6 +1,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
+#include "../platform/shared_library/SharedLibrary.h"
 #include "../common/Macros.h"
 #include "../common/STLUtils.h"
 #include "../logger/Logging.h"
@@ -39,6 +40,7 @@ class PluginManager::Impl
 
 private:
     using BundleLibPtr = std::unique_ptr< BundleLibrary >;
+
     Result< bool > loadBundle(
             const PluginBundle &bundle,
             VQ_IN_OUT std::unordered_set< std::string > &loadedBundles );
@@ -239,12 +241,7 @@ Result< bool > PluginManager::Impl::unloadBundle(
             auto depBundle = libIt->second->bundle();
             if( ! STLUtils::contains( unloadedBundles, depBundle->bundleId() )){
                 result = unloadBundle( *depBundle, unloadedBundles );
-                if( result ) {
-                    STLUtils::multiRemove( m_dependents,
-                                           depBundle->bundleId(),
-                                           bundle.bundleId() );
-                }
-                else {
+                if( ! result ) {
                     result = Result< bool >::failure(
                                 "Could not unload dependent bundle" );
 //                    VQ_ERROR( "Quartz:Core" )
@@ -261,32 +258,39 @@ Result< bool > PluginManager::Impl::unloadBundle(
     }
 
     if( result ) {
-        for( int i = 0; i < bundle.pluginCount(); ++ i ) {
-            IQuartzPlugin *plugin = bundle.pluginAt( i );
-            if( ! plugin->uninit( *m_context )) {
-                VQ_WARN( "Quartz:Core" )
-                        << "Could not finalize plugin with ID "
-                        << plugin->pluginId();
+        //remove the dependents
+        m_dependents.erase( rangeIt.first, rangeIt.second );
+        for( std::size_t i = 0; i < bundle.pluginCount(); ++ i ) {
+            auto plugin = bundle.pluginAt( i );
+            result = plugin->uninit();
+            if( ! result ) {
+//                VQ_WARN( "Quartz:Core" )
+//                        << "Could not finalize plugin with ID "
+//                        << plugin->pluginId();
                 result = Result< bool >::failure( "Failed to finalize plugin" );
             }
             else {
-                VQ_DEBUG( "Quartz:Core")
-                        << "Initialized plugin " << plugin->pluginId();
+//                VQ_DEBUG( "Quartz:Core")
+//                        << "Initialized plugin " << plugin->pluginId();
             }
         }
     }
-    if( result && m_libraries.contains( bundle.bundleId() )) {
-        BundleLibrary::Ptr lib = m_libraries.value( bundle.bundleId() );
-        if( ! lib->library().unload() ) {
-            VQ_ERROR( "Quartz:Core" )
-                    << "Could not unload library for bundle "
-                    << bundle.bundleId();
-            result = Result< bool >::failure( "Library unload failed" );
-        }
-        else {
-            VQ_DEBUG( "Quartz:Core" )
-                    << "Unloaded library for bundle "
-                    << bundle.bundleId();
+    if( result && STLUtils::contains( m_libraries, bundle.bundleId() )) {
+        auto libIt = m_libraries.find( bundle.bundleId() );
+        if( libIt != std::end( m_libraries )) {
+            auto &lib = libIt->second;
+            result = lib->library()->unload();
+            if( ! result  ) {
+//                VQ_ERROR( "Quartz:Core" )
+//                        << "Could not unload library for bundle "
+//                        << bundle.bundleId() << ": "
+//                        << result.reason();
+            }
+            else {
+//                VQ_DEBUG( "Quartz:Core" )
+//                        << "Unloaded library for bundle "
+//                        << bundle.bundleId();
+            }
         }
     }
     return result;

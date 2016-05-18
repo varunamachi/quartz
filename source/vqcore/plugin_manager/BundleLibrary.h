@@ -2,22 +2,22 @@
 
 #include <memory>
 
-class QLibrary;
-
+#include "../VQ.h"
 
 namespace Vam {
 
 class PluginBundle;
+class SharedLibrary;
 
 class VQ_CORE_EXPORT BundleLibrary
 {
 public:
     BundleLibrary();
 
-    BundleLibrary( std::unique_ptr< QLibrary > library,
+    BundleLibrary( std::unique_ptr< SharedLibrary > library,
                    std::unique_ptr< PluginBundle > bundle );
 
-    QLibrary * library() const;
+    SharedLibrary * library() const;
 
     PluginBundle * bundle() const;
 
