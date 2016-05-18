@@ -1,8 +1,4 @@
 
-#include <QList>
-#include <std::string>
-#include <std::stringList>
-
 #include "AbstractPlugin.h"
 #include "PluginBundle.h"
 
@@ -30,17 +26,17 @@ public:
         return m_bundleName;
     }
 
-    virtual void addPlugin( std::shared_ptr< AbstractPlugin > plugin )
+    virtual void addPlugin( std::unique_ptr< AbstractPlugin > plugin )
     {
-        m_plugins.append( plugin );
+        m_plugins.emplace_back( std::move( plugin ));
     }
 
-    int pluginCount() const
+    std::size_t pluginCount() const
     {
         return m_plugins.size();
     }
 
-    AbstractPlugin * pluginAt( const int index ) const
+    AbstractPlugin * pluginAt( const std::size_t index ) const
     {
         AbstractPlugin *plugin = nullptr;
         if( index < m_plugins.size() ) {
@@ -51,20 +47,20 @@ public:
 
     virtual void addDependency( const std::string &bundleId )
     {
-        m_dependencies << bundleId;
+        m_dependencies.emplace_back( bundleId );
     }
 
-    const std::stringList & dependencies() const
+    const std::vector< std::string > & dependencies() const
     {
         return m_dependencies;
     }
 
-    QList< std::shared_ptr< AbstractPlugin >> & mutablePluginList()
+    std::vector< std::unique_ptr< AbstractPlugin >> & mutablePluginList()
     {
         return  m_plugins;
     }
 
-    std::stringList & mutalbleDependencyList()
+    std::vector< std::string > & mutalbleDependencyList()
     {
         return m_dependencies;
     }
@@ -74,9 +70,9 @@ private:
 
     std::string m_bundleName;
 
-    std::stringList m_dependencies;
+    std::vector< std::string > m_dependencies;
 
-    QList< std::shared_ptr< AbstractPlugin >> m_plugins;
+    std::vector< std::unique_ptr< AbstractPlugin >> m_plugins;
 };
 
 
@@ -100,19 +96,19 @@ const std::string & PluginBundle::bundleName() const
 }
 
 
-void PluginBundle::addPlugin( std::shared_ptr< AbstractPlugin > plugin )
+void PluginBundle::addPlugin( std::unique_ptr< AbstractPlugin > plugin )
 {
-    m_impl->addPlugin( plugin );
+    m_impl->addPlugin( std::move( plugin ));
 }
 
 
-int PluginBundle::pluginCount() const
+std::size_t PluginBundle::pluginCount() const
 {
     return m_impl->pluginCount();
 }
 
 
-AbstractPlugin * PluginBundle::pluginAt( const int index ) const
+AbstractPlugin * PluginBundle::pluginAt( const std::size_t index ) const
 {
     return m_impl->pluginAt( index );
 }
@@ -124,25 +120,26 @@ void PluginBundle::addDependency( const std::string &bundleId )
 }
 
 
-const std::stringList & PluginBundle::dependencies() const
+const std::vector< std::string > & PluginBundle::dependencies() const
 {
     return m_impl->dependencies();
 }
 
 
-~PluginBundle::PluginBundle()
+PluginBundle::~PluginBundle()
 {
     //
 }
 
 
-QList< std::shared_ptr< AbstractPlugin >> & PluginBundle::mutablePluginList()
+std::vector< std::unique_ptr< AbstractPlugin >> &
+PluginBundle::mutablePluginList()
 {
     return m_impl->mutablePluginList();
 }
 
 
-std::stringList & PluginBundle::mutalbleDependencyList()
+std::vector< std::string > & PluginBundle::mutalbleDependencyList()
 {
     return m_impl->mutalbleDependencyList();
 }

@@ -9,7 +9,7 @@ namespace Vam {
 
 class PluginBundle;
 
-class BundleLibrary
+class VQ_CORE_EXPORT BundleLibrary
 {
 public:
     BundleLibrary();

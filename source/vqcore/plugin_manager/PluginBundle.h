@@ -1,19 +1,18 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "../VQ.h"
-#include "../VQCommon.h"
+#include "../common/Macros.h"
 
-class std::string;
-class std::stringList;
-template <typename T> class QList;
 
 namespace Vam {
 
 class AbstractPlugin;
 
-class PluginBundle
+class VQ_CORE_EXPORT PluginBundle
 {
 public:
     PluginBundle( const std::string &bundleId,
@@ -27,22 +26,22 @@ public:
 
     const std::string & bundleName() const;
 
-    virtual void addPlugin( std::shared_ptr< AbstractPlugin > plugin );
+    virtual void addPlugin( std::unique_ptr< AbstractPlugin > plugin );
 
-    int pluginCount() const;
+    std::size_t pluginCount() const;
 
-    AbstractPlugin * pluginAt( const int index ) const;
+    AbstractPlugin * pluginAt( const std::size_t index ) const;
 
     virtual void addDependency( const std::string &bundleId );
 
-    const std::stringList & dependencies() const;
+    const std::vector< std::string > & dependencies() const;
 
     virtual ~PluginBundle();
 
 protected:
-    QList< std::shared_ptr< AbstractPlugin >> & mutablePluginList();
+    std::vector< std::unique_ptr< AbstractPlugin >> & mutablePluginList();
 
-    std::stringList & mutalbleDependencyList();
+    std::vector< std::string > & mutalbleDependencyList();
 
 private:
     class Impl;

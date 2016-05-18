@@ -6,7 +6,7 @@ vq_classes(
 )
 
 vq_headers(
-    ContainerOperations.h
+    STLUtils.h
     Threading.h
     Macros.h
 )

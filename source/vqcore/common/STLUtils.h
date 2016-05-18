@@ -6,7 +6,7 @@
 
 #include "Macros.h"
 
-namespace Vam { namespace ContainerOps {
+namespace Vam { namespace STLUtils {
 
 
     template< typename ContainerType >
@@ -30,6 +30,15 @@ namespace Vam { namespace ContainerOps {
         return it != std::end( container );
     }
 
+
+    template< typename ContainerType >
+    void multiRemove( ContainerType &container,
+                      const ContainerType::key_type &key,
+                      const ContainerType::value_type &value )
+    {
+//        auto rangeIt = container.equal_range( key );
+
+    }
 
 
 } }

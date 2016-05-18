@@ -8,7 +8,7 @@ namespace Vam {
 
 class BundleLibrary;
 
-class BundleLoader
+class VQ_CORE_EXPORT BundleLoader
 {
 public:
     QHash< std::string, BundleLibrary::Ptr > loadAll( const std::string & location );

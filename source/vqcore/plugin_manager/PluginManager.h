@@ -6,6 +6,7 @@
 
 #include "../common/Result.h"
 #include "../common/Macros.h"
+#include "../VQ.h"
 
 namespace Vam {
 
@@ -13,7 +14,7 @@ class PluginBundle;
 class AbstractPlugin;
 class AbstractPluginSlot;
 
-class PluginManager
+class VQ_CORE_EXPORT PluginManager
 {
 public:
     PluginManager( std::string location );

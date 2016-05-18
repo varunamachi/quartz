@@ -3,14 +3,12 @@
 #include <memory>
 #include <string>
 
-#include "../VQCommon.h"
 #include "../common/Result.h"
-
-
+#include "../VQ.h"
 
 namespace Vam {
 
-class AbstractPlugin
+class VQ_CORE_EXPORT AbstractPlugin
 {
 public:
     AbstractPlugin( const std::string &pluginId,
@@ -38,5 +36,7 @@ private:
 
 
 };
+
+using AbstractPluginUPtr = std::unique_ptr< AbstractPlugin >;
 
 }

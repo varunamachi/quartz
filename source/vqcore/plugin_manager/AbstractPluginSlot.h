@@ -2,18 +2,16 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
-#include "../VQCommon.h"
+#include "../VQ.h"
 #include "../common/Result.h"
-
-
-class std::string;
 
 namespace Vam {
 
 class AbstractPlugin;
 
-class AbstractPluginSlot
+class VQ_CORE_EXPORT AbstractPluginSlot
 {
 public:
     AbstractPluginSlot( const std::string &slotId,
