@@ -1,6 +1,4 @@
 
-#include <QDir>
-#include <QApplication>
 
 #include "../logger/Logging.h"
 #include "PluginBundleInterface.h"
