@@ -46,6 +46,16 @@ public:
             ReturnType data,
             const std::string &reason )
         : m_result( result )
+        , m_data( data )
+        , m_reason( reason )
+    {
+
+    }
+
+    Result( bool result,
+            ReturnType &&data,
+            const std::string &reason )
+        : m_result( result )
         , m_data( std::move( data ))
         , m_reason( reason )
     {
@@ -96,6 +106,8 @@ public:
 
     static Result< ReturnType > success( ReturnType data );
 
+    static Result< ReturnType > success( ReturnType &&data );
+
     static Result< ReturnType > failure( ReturnType data,
                                          const std::string &reason );
 
@@ -126,10 +138,25 @@ Result< ReturnType > Result< ReturnType >::success( ReturnType data )
 
 
 template< typename ReturnType >
+Result< ReturnType > Result< ReturnType >::success( ReturnType &&data )
+{
+    return Result< ReturnType >( true, std::move( data ), "" );
+}
+
+
+template< typename ReturnType >
 Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
                                                     const std::string &reason)
 {
     return Result< ReturnType >( false, data, reason );
+}
+
+
+template< typename ReturnType >
+Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
+                                                    std::string &&reason)
+{
+    return Result< ReturnType >( false, data, std::move( reason ));
 }
 
 
