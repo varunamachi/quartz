@@ -1,8 +1,7 @@
 
 #include "DateTime.h"
 
-namespace Vam
-{
+namespace Vam {
 
 
 

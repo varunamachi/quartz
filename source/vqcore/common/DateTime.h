@@ -1,8 +1,7 @@
 
 #pragma once
 
-namespace Vam
-{
+namespace Vam {
 
 class DateTime
 {

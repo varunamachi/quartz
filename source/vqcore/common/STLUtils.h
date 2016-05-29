@@ -32,9 +32,9 @@ namespace Vam { namespace STLUtils {
 
 
     template< typename ContainerType >
-    void multiRemove( ContainerType &container,
-                      const typename ContainerType::key_type &key,
-                      const typename ContainerType::value_type &value )
+    void multiRemove( ContainerType &/*container*/,
+                      const typename ContainerType::key_type &/*key*/,
+                      const typename ContainerType::value_type &/*value*/ )
     {
 //        auto rangeIt = container.equal_range( key );
 

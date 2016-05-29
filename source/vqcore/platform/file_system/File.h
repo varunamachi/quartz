@@ -39,6 +39,13 @@ public:
 
     Result< bool > fileSize() const;
 
+    Result< bool > makeWritable();
+
+    Result< bool > makeReadable();
+
+    Result< bool > makeExecutable();
+
+
 
 private:
     class Impl;
