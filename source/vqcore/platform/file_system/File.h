@@ -3,16 +3,42 @@
 #include <memory>
 #include <string>
 
+#include "../../common/Result.h"
+
 namespace Vam {
+
+class Path;
 
 class File
 {
 public:
-    explicit File( const std::string &path );
+    enum class Type
+    {
+        Regular,
+        Dir,
+        Link,
+        Device,
+        Unknown
+    };
 
-    bool isDir() const;
+    explicit File( const Path& path );
 
-    const std::string & path() const;
+    Result< Type > type() const;
+
+    Path & path() const;
+
+    Result< bool >  exists() const;
+
+    Result< bool >  isValid() const;
+
+    Result< bool > isWritable() const;
+
+    Result< bool >  isReadable() const;
+
+    Result< bool >  isExecuteble() const;
+
+    Result< bool > fileSize() const;
+
 
 private:
     class Impl;

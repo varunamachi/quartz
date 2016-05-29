@@ -3,6 +3,8 @@ vq_classes(
     Result
     ScopedOperation
     Constants
+    DateTime
+    StringUtils
 )
 
 vq_headers(

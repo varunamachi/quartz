@@ -9,10 +9,10 @@
 
 namespace Vam {
 
-class FileSystemUtils
+class FSUtils
 {
 public:
-    VQ_MAKE_STATIC( FileSystemUtils );
+    VQ_MAKE_STATIC( FSUtils );
 
     static Result< File > fileAt( const std::string &path );
 
@@ -22,8 +22,7 @@ public:
 
     static Result< bool > deleteFile( const File &file );
 
-    static Result< std::vector< File >> listFiles(
-            const File &file );
+    static Result< std::vector< File >> listFiles( const File &file );
 
     static Result< Path > mergePath( const Path &one, const Path &two );
 
