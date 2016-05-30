@@ -4,6 +4,7 @@
 
 #include "../../common/Macros.h"
 #include "../../common/Result.h"
+
 #include "File.h"
 #include "Path.h"
 
@@ -25,7 +26,6 @@ public:
     static Result< std::vector< File >> listFiles( const File &file );
 
     static Result< Path > mergePath( const Path &one, const Path &two );
-
 
 private:
 };

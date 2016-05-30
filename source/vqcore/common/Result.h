@@ -62,6 +62,16 @@ public:
 
     }
 
+    Result( bool result,
+            ReturnType &&data,
+            const std::string &&reason )
+        : m_result( result )
+        , m_data( std::move( data ))
+        , m_reason( std::move( reason ))
+    {
+
+    }
+
     ~Result() { }
 
     bool operator==( const Result< ReturnType > &other )
@@ -98,11 +108,10 @@ public:
         return m_result;
     }
 
-    bool operator!() const
+    bool operator ! () const
     {
         return ! m_result;
     }
-
 
     static Result< ReturnType > success( ReturnType data );
 
