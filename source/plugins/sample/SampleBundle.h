@@ -5,7 +5,7 @@
 #include <quartz_core/PluginBundle.h>
 
 
-namespace Vam {
+namespace Vq {
 
 class SampleBundle : public Quartz::PluginBundle
 {

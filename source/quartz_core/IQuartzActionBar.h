@@ -7,7 +7,7 @@
 #include "QuartzItem.h"
 #include "QuartzCore.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 VQ_INTERFACE IQuartzActionBar
 {

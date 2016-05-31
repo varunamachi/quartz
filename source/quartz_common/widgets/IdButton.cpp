@@ -3,7 +3,7 @@
 
 #include "IdButton.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 IdButton::IdButton( QString id,
                     QString text,

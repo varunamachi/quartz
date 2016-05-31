@@ -24,9 +24,9 @@
 #include "../VQ.h"
 #include "AbstractLogTarget.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
-class VQ_CORE_EXPORT ConsoleTarget : public AbstractLogTarget
+class VQ_API ConsoleTarget : public AbstractLogTarget
 {
 public:
     ConsoleTarget();

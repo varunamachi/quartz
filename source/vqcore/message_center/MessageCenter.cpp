@@ -9,7 +9,7 @@
 #include "Parameters.h"
 #include "MessageCenter.h"
 
-namespace Vam {
+namespace Vq {
 
 class MessageCenter::Impl
 {

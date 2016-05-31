@@ -3,7 +3,7 @@
 
 #include "StackedContainer.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 StackedContainer::StackedContainer( int selectorDimention,

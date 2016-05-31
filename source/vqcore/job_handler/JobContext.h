@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 
-namespace Vam {
+namespace Vq {
 
 class JobContext
 {

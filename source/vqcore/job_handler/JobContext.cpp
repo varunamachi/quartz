@@ -6,7 +6,7 @@
 
 
 
-namespace Vam {
+namespace Vq {
 
 class JobContext::Impl
 {

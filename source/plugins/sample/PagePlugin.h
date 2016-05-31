@@ -5,7 +5,7 @@
 #include <quartz_core/IQuartzPlugin.h>
 #include <quartz_core/IQuartzPageManager.h>
 
-namespace Vam {
+namespace Vq {
 
 class SamplePage : public Quartz::QuartzPage
 {

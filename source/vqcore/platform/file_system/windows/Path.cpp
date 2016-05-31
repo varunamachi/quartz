@@ -1,7 +1,7 @@
 
 #include "../Path.h"
 
-namespace Vam
+namespace Vq
 {
 
 class Path::Impl

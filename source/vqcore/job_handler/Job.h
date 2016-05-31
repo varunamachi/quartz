@@ -4,7 +4,7 @@
 
 #include "IJob.h"
 
-namespace Vam {
+namespace Vq {
 
 class Job : public IJob
 {

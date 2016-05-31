@@ -4,7 +4,7 @@
 
 #include "Macros.h"
 
-namespace Vam {
+namespace Vq {
 
 class ScopedOperation
 {
@@ -33,8 +33,8 @@ private:
 
 
 #define AT_SCOPE_EXIT( x ) \
-    Vam::ScopedOperation LINE_VAR( tnt_scpop )( nullptr, [ & ]() { x; })
+    Vq::ScopedOperation LINE_VAR( tnt_scpop )( nullptr, [ & ]() { x; })
 
 #define SCOPE_LIMIT( x, y ) \
-    Vam::ScopedOperation LINE_VAR( tnt_scpop )( [ & ]() { x; },  \
+    Vq::ScopedOperation LINE_VAR( tnt_scpop )( [ & ]() { x; },  \
                                                 [ & ]() { y; })

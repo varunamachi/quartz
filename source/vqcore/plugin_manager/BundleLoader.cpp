@@ -5,7 +5,7 @@
 
 #include "BundleLoader.h"
 
-namespace Vam {
+namespace Vq {
 
 
 const char * INTERFACE_FUNC_NAME = "pluginBundle";

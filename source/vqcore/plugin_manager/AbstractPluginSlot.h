@@ -7,11 +7,11 @@
 #include "../VQ.h"
 #include "../common/Result.h"
 
-namespace Vam {
+namespace Vq {
 
 class AbstractPlugin;
 
-class VQ_CORE_EXPORT AbstractPluginSlot
+class VQ_API AbstractPluginSlot
 {
 public:
     AbstractPluginSlot( const std::string &slotId,

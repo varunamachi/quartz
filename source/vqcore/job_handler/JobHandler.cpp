@@ -2,7 +2,7 @@
 #include "JobHandler.h"
 
 
-namespace Vam {
+namespace Vq {
 
 
 class JobHandler::Impl

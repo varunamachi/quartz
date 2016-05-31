@@ -3,7 +3,7 @@
 #include <quartz_core/IQuartzTitleBar.h>
 #include <quartz_common/widgets/QzScroller.h>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class TitleBar : public QWidget
                , public IQuartzTitleBar

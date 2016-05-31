@@ -5,7 +5,7 @@
 
 #include <quartz_core/IQuartzPageManager.h>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class WelcomePage : public QuartzPage
 {

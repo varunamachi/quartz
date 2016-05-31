@@ -1,7 +1,7 @@
 
 #include "AbstractPluginSlot.h"
 
-namespace Vam {
+namespace Vq {
 
 class AbstractPluginSlot::Data
 {

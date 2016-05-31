@@ -1,7 +1,7 @@
 #include "HoverMoveFilter.h"
 #include "QuartzWindow.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 HoverMoveFilter::HoverMoveFilter( QObject *parent )
     : QObject( parent )

@@ -27,11 +27,11 @@
 #include "AbstractLogTarget.h"
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 
 
-class VQ_CORE_EXPORT FileTarget : public AbstractLogTarget
+class VQ_API FileTarget : public AbstractLogTarget
 {
 public:
     explicit FileTarget( const std::string &fileSuffix );

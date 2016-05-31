@@ -1,7 +1,7 @@
 
 #include "Job.h"
 
-namespace Vam {
+namespace Vq {
 
 class Job::Data
 {

@@ -14,7 +14,7 @@
 #define WINDOW_MARGIN 5
 
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 QuartzWindow::QuartzWindow( QWidget *parent )
     : QMainWindow( parent )

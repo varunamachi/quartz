@@ -9,7 +9,7 @@
 #include "QuartzCore.h"
 
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class QuartzView : public QWidget
 {

@@ -6,9 +6,9 @@
 #include "IMessageClient.h"
 #include "../common/Macros.h"
 
-namespace Vam {
+namespace Vq {
 
-class VQ_CORE_EXPORT MessageCenter
+class VQ_API MessageCenter
 {
 public:
     void destroy();

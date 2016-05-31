@@ -10,7 +10,7 @@
 #include "AbstractLogTarget.h"
 #include "ILogFilter.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 struct TargetInfo
 {

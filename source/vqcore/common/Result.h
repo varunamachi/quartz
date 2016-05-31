@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Vam {
+namespace Vq {
 
 template< typename ReturnType >
 class Result

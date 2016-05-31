@@ -6,7 +6,7 @@
 #include "AbstractLogTarget.h"
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 
 class AbstractLogTarget::Impl

@@ -8,7 +8,7 @@ add_definitions( -DVQ_CORE )
 vq_add_qt()
 
 vq_headers(
-    VQ.h
+    Vq.h
 )
 
 add_subdirectory( common )

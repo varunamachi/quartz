@@ -8,13 +8,13 @@
 #include "../common/Macros.h"
 #include "../VQ.h"
 
-namespace Vam {
+namespace Vq {
 
 class PluginBundle;
 class AbstractPlugin;
 class AbstractPluginSlot;
 
-class VQ_CORE_EXPORT PluginManager
+class VQ_API PluginManager
 {
 public:
     PluginManager( std::string location );

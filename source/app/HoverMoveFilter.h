@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class HoverMoveFilter : public QObject
 {

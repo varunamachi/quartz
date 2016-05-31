@@ -9,11 +9,11 @@
 
 
 
-namespace Vam {
+namespace Vq {
 
 class BundleLibrary;
 
-class VQ_CORE_EXPORT BundleLoader
+class VQ_API BundleLoader
 {
 public:
     using BundleMap = std::unordered_map<

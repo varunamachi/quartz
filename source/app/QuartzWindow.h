@@ -10,7 +10,7 @@
 #include "ActionBar.h"
 #include "TitleBar.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class PageManager;
 class ActionBar;

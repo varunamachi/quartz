@@ -10,7 +10,7 @@
 #include "Param.h"
 #include "Config.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class ConfigParser
 {

@@ -3,7 +3,7 @@
 
 #include "ViewManager.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 ViewManager::ViewManager( int height,
                           int btnWidth,

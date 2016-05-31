@@ -7,9 +7,9 @@
 
 #include "../VQ.h"
 
-namespace Vam {
+namespace Vq {
 
-class VQ_CORE_EXPORT Parameters
+class VQ_API Parameters
 {
 public:
     Parameters();

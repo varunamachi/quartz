@@ -2,7 +2,7 @@
 
 #include "AbstractPlugin.h"
 
-namespace Vam
+namespace Vq
 {
 
 class AbstractPlugin::Impl

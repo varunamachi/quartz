@@ -7,7 +7,7 @@ class QScrollArea;
 class QPushButton;
 class QResizeEvent;
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class QzScroller : public QWidget
 {

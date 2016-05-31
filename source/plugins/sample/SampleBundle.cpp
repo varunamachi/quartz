@@ -1,8 +1,8 @@
 #include "SampleBundle.h"
 
-namespace Vam {
+namespace Vq {
 
-const QString SampleBundle::BUNDLE_ID( "Vam::SampleBundle" );
+const QString SampleBundle::BUNDLE_ID( "Vq::SampleBundle" );
 const QString SampleBundle::BUNDLE_NAME( "Sample Bundle" );
 
 SampleBundle::SampleBundle()

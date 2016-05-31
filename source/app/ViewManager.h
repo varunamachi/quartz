@@ -15,7 +15,7 @@
 #include <quartz_common/widgets/StackedContainer.h>
 
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 class ViewManager : public QWidget

@@ -3,7 +3,7 @@
 
 #include "ActionBar.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 ActionBar::ActionBar( int height, QWidget *parent )

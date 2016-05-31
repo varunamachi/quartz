@@ -8,11 +8,11 @@
 #include "../common/Macros.h"
 
 
-namespace Vam {
+namespace Vq {
 
 class AbstractPlugin;
 
-class VQ_CORE_EXPORT PluginBundle
+class VQ_API PluginBundle
 {
 public:
     PluginBundle( const std::string &bundleId,
@@ -53,7 +53,7 @@ private:
 }
 
 
-struct VQ_CORE_EXPORT BundleWrapper {
-    Vam::PluginBundle *theBundle;
+struct VQ_API BundleWrapper {
+    Vq::PluginBundle *theBundle;
 
 };

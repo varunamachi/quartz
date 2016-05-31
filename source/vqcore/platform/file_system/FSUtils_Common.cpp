@@ -2,7 +2,7 @@
 
 #include "FSUtils.h"
 
-namespace Vam {
+namespace Vq {
 
 //common
 

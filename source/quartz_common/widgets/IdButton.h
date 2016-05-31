@@ -2,7 +2,7 @@
 
 #include <QPushButton>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 class IdButton : public QPushButton

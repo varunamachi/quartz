@@ -7,7 +7,7 @@
 class QDateTime;
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 enum class VQLogLevel : int;
 

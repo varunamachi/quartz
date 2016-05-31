@@ -7,9 +7,9 @@
 #include "VQLogger.h"
 #include "LogStructures.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
-class VQ_CORE_EXPORT LogLineHolder
+class VQ_API LogLineHolder
 {
 public:
     LogLineHolder( LogMessage *msg )
@@ -39,7 +39,7 @@ private:
 
 } } // namespace Tanyatu
 
-#define VQ_LOGGER() Vam::Logger::VQLogger::get()
+#define VQ_LOGGER() Vq::Logger::VQLogger::get()
 
 #ifndef __FUNCTION_NAME__
     #ifdef _MSC_VER //VC++
@@ -52,8 +52,8 @@ private:
 
 #ifndef VQ_DISABLE_LOGGING
     #define VQ_LOG_COMMON( level, mod )                               \
-        Vam::Logger::LogLineHolder(                                   \
-           new Vam::Logger::LogMessage( QDateTime::currentDateTime(), \
+        Vq::Logger::LogLineHolder(                                   \
+           new Vq::Logger::LogMessage( QDateTime::currentDateTime(), \
                                         level,                        \
                                         CUR_THREAD_ID,                \
                                         mod,                          \
@@ -64,25 +64,25 @@ private:
 
 
     #define VQ_TRACE( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Trace, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Trace, module )
 
     #define VQ_DEBUG( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Debug, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Debug, module )
 
     #define VQ_INFO( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Info, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Info, module )
 
     #define VQ_WARN( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Warn, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Warn, module )
 
     #define VQ_ERROR( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Error, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Error, module )
 
     #define VQ_FATAL( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Fatal, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Fatal, module )
 
     #define VQ_SPECIAL( module ) \
-        VQ_LOG_COMMON( Vam::Logger::VQLogLevel::Special, module )
+        VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Special, module )
 #else
     #define VQ_LOG_COMMON( level, mod, message )
     #define VQ_TRACE( module, message )

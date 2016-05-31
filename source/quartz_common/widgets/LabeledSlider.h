@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class LabeledSlider : public QWidget
 {

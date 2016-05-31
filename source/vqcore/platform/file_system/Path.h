@@ -6,7 +6,7 @@
 
 #include "../../common/Result.h"
 
-namespace Vam {
+namespace Vq {
 
 class Path
 {

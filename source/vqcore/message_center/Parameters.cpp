@@ -2,7 +2,7 @@
 #include "../common/Constants.h"
 #include "Parameters.h"
 
-namespace Vam {
+namespace Vq {
 
 class Parameters::Data
 {

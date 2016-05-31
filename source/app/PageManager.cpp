@@ -3,7 +3,7 @@
 
     #include "PageManager.h"
 
-    namespace Vam { namespace Quartz {
+    namespace Vq { namespace Quartz {
 
     PageManager::PageManager( int categoryWidth,
                               int pagerHeight,

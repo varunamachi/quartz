@@ -5,6 +5,8 @@ vq_classes(
     Constants
     DateTime
     StringUtils
+    Timestamp
+    ConstrainedValue
 )
 
 vq_headers(

@@ -1,7 +1,7 @@
 
 #include "StringUtils.h"
 
-namespace Vam {
+namespace Vq {
 
 static std::vector< std::string > StringUtils::split( const std::string &orig,
                                                       const std::string &delim,

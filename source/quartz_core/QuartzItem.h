@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class QuartzItem : public QWidget
 {

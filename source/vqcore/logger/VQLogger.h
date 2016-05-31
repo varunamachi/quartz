@@ -11,14 +11,14 @@
 
 class QDateTime;
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 VQ_INTERFACE ILogDispatcher;
 class LogMessage;
 enum class VQLogLevel : int;
 
 
-class VQ_CORE_EXPORT VQLogger final
+class VQ_API VQLogger final
 {
 public:
 

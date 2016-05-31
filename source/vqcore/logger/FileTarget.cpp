@@ -29,7 +29,7 @@
 #include "FileTarget.h"
 #include "LogUtil.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 class FileTarget::Impl
 {

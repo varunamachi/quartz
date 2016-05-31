@@ -1,7 +1,7 @@
 
 #include "Constants.h"
 
-namespace Vam {
+namespace Vq {
 
 const std::string Constants::EMPTY_STRING( "" );
 

@@ -6,7 +6,7 @@
 #include "../common/Threading.h"
 #include "JobSequence.h"
 
-namespace Vam {
+namespace Vq {
 
 class JobSequence::Impl
 {

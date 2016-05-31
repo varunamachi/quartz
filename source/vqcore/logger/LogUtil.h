@@ -27,12 +27,12 @@
 
 #include "../VQ.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 enum class VQLogLevel : int;
 class LogMessage;
 
-class VQ_CORE_EXPORT  LogUtil
+class VQ_API  LogUtil
 {
 public:
     static std::string format( const LogMessage *message );

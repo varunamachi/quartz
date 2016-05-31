@@ -5,7 +5,7 @@
 #include "PluginBundle.h"
 
 
-namespace Vam
+namespace Vq
 {
 
 class BundleLibrary::Impl

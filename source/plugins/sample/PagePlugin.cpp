@@ -3,9 +3,9 @@
 
 #include "PagePlugin.h"
 
-namespace Vam {
+namespace Vq {
 
-const QString PagePlugin::PLUGIN_ID( "Vam::Sample::PagePlugin" );
+const QString PagePlugin::PLUGIN_ID( "Vq::Sample::PagePlugin" );
 
 
 QString PagePlugin::pluginId() const

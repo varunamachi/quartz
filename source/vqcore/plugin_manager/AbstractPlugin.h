@@ -6,9 +6,9 @@
 #include "../common/Result.h"
 #include "../VQ.h"
 
-namespace Vam {
+namespace Vq {
 
-class VQ_CORE_EXPORT AbstractPlugin
+class VQ_API AbstractPlugin
 {
 public:
     AbstractPlugin( const std::string &pluginId,

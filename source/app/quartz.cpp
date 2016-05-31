@@ -5,7 +5,7 @@
 int main( int argc, char **argv )
 {
     QApplication app( argc, argv );
-    Vam::Quartz::QuartzWindow window;
+    Vq::Quartz::QuartzWindow window;
     window.show();
     return app.exec();
 }

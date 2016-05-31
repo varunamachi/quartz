@@ -4,12 +4,12 @@
 
 #include "../VQ.h"
 
-namespace Vam {
+namespace Vq {
 
 class PluginBundle;
 class SharedLibrary;
 
-class VQ_CORE_EXPORT BundleLibrary
+class VQ_API BundleLibrary
 {
 public:
     BundleLibrary();

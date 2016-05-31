@@ -26,12 +26,12 @@
 #include "ILogDispatcher.h"
 #include "../VQ.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 struct FilterInfo;
 struct TargetInfo;
 
-class VQ_CORE_EXPORT AbstractLogDispatcher : public ILogDispatcher
+class VQ_API AbstractLogDispatcher : public ILogDispatcher
 {
 public:
     AbstractLogDispatcher();

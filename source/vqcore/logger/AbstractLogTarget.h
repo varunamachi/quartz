@@ -6,7 +6,7 @@
 
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 VQ_INTERFACE ILogFormatter;
 class LogMessage;

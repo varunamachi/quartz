@@ -26,9 +26,9 @@
 #include "../VQ.h"
 #include "AbstractLogDispatcher.h"
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
-class VQ_CORE_EXPORT SpooledDispatcher: public AbstractLogDispatcher
+class VQ_API SpooledDispatcher: public AbstractLogDispatcher
 {
 public:
         SpooledDispatcher();

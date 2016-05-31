@@ -7,7 +7,7 @@
 #include <quartz_common/widgets/QzScroller.h>
 
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class ActionBar : public QWidget
                 , public IQuartzActionBar

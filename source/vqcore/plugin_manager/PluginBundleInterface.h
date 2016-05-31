@@ -4,6 +4,6 @@
 #include "PluginBundle.h"
 
 
-extern "C"  VQ_CORE_EXPORT BundleWrapper pluginBundle();
+extern "C"  VQ_API BundleWrapper pluginBundle();
 
 

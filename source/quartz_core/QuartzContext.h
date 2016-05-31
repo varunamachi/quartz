@@ -8,7 +8,7 @@
 #include "IQuartzViewManager.h"
 
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 class QuartzContext
 {

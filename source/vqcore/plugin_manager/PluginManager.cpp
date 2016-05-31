@@ -11,7 +11,7 @@
 #include "PluginBundle.h"
 #include "AbstractPlugin.h"
 
-namespace Vam {
+namespace Vq {
 
 class PluginManager::Impl
 {

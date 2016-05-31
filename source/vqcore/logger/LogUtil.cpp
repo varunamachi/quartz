@@ -27,7 +27,7 @@
 #include "LogMessage.h"
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 
 

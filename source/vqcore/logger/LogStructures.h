@@ -27,7 +27,7 @@
 #include <QtGlobal>
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 class VQLogger;
 enum class VQLogLevel : int

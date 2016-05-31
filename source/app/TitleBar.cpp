@@ -4,7 +4,7 @@
 
 #include "TitleBar.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 TitleBar::TitleBar( int height, QWidget *parent )

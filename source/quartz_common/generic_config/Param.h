@@ -7,7 +7,7 @@
 #include <QList>
 #include <QHash>
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 enum class ParamType
 {

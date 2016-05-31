@@ -11,7 +11,7 @@
 #include "QzScroller.h"
 #include "IdButton.h"
 
-namespace Vam { namespace Quartz {
+namespace Vq { namespace Quartz {
 
 
 

@@ -6,7 +6,7 @@
 
 #include "Macros.h"
 
-namespace Vam { namespace STLUtils {
+namespace Vq { namespace STLUtils {
 
 
     template< typename ContainerType >

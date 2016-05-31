@@ -1,7 +1,7 @@
 
 #include "../SharedLibrary.h"
 
-namespace Vam
+namespace Vq
 {
 
 class SharedLibrary::Impl

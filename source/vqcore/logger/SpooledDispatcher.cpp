@@ -11,7 +11,7 @@
 
 
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 struct SpooledDispatcher::Data
 {

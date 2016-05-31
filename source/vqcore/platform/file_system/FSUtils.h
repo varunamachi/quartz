@@ -8,7 +8,7 @@
 #include "File.h"
 #include "Path.h"
 
-namespace Vam {
+namespace Vq {
 
 class FSUtils
 {

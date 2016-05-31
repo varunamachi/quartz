@@ -31,7 +31,7 @@
 #define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
                                              : LogUtil::format( x ))
 
-namespace Vam { namespace Logger {
+namespace Vq { namespace Logger {
 
 const std::string ConsoleTarget::TARGET_ID = "ConsoleLogger";
 
