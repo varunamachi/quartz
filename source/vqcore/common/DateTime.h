@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <memory>
 
+#include "ConstrainedValue.h"
+
 namespace Vq {
 
 //Inspired by Poco::DateTime
@@ -38,6 +40,17 @@ enum class Day : std::uint8_t
     Saturday
 };
 
+using DayOfMonthType = ConstrainedValue< int, 1, 31 >;
+using DayOfYearType  = ConstrainedValue< int, 1, 365 >;
+using WeeksOfYear    = ConstrainedValue< int, 1, 53 >;
+using HourType       = ConstrainedValue< int, 0, 23 >;
+using MinuteType     = ConstrainedValue< int, 1, 59 >;
+using SecondType     = ConstrainedValue< int, 0, 59 >;
+using MilliSecType   = ConstrainedValue< int, 0, 999 >;
+using MicroSecType   = ConstrainedValue< int, 0, 999 >;
+
+
+
 class DateTime
 {
 public:
@@ -57,23 +70,23 @@ public:
 
     Month month() const;
 
-    int week( Day firstDayOfWeek = Day::Monday ) const;
+    WeeksOfYear week( Day firstDayOfWeek = Day::Monday ) const;
 
     Day dayOfWeek() const;
 
-    int dayOfMonth() const;
+    DayOfMonthType dayOfMonth() const;
 
-    int dayOfYear() const;
+    DayOfYearType dayOfYear() const;
 
-    int hour() const;
+    HourType hour() const;
 
-    int minute() const;
+    MinuteType minute() const;
 
-    int second() const;
+    SecondType second() const;
 
-    int millisecond() const;
+    MilliSecType millisecond() const;
 
-    int microsecond() const;
+    MicroSecType microsecond() const;
 
     Timestamp timestamp() const;
 
