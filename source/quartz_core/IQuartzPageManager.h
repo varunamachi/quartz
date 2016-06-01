@@ -3,7 +3,7 @@
 #include <QStringList>
 #include <QWidget>
 
-#include <vqcore/VQCommon.h>
+#include <vqcore/common/Macros.h>
 
 #include "QuartzCore.h"
 

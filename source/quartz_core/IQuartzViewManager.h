@@ -4,7 +4,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <vqcore/VQCommon.h>
+#include <vqcore/common/Macros.h>
 
 #include "QuartzCore.h"
 

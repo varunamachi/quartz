@@ -21,7 +21,7 @@
  ******************************************************************************/
 #pragma once
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "AbstractLogTarget.h"
 
 namespace Vq { namespace Logger {

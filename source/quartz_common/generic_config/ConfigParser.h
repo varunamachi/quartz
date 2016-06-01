@@ -3,7 +3,7 @@
 #include <QString>
 #include <QHash>
 
-#include <vqcore/VQCommon.h>
+#include <vqcore/common/Macros.h>
 #include <quartz_core/QuartzCore.h>
 
 

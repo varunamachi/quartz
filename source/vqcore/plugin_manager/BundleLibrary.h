@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../VQ.h"
+#include "../Vq.h"
 
 namespace Vq {
 

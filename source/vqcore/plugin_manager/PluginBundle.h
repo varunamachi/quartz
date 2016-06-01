@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "../common/Macros.h"
 
 

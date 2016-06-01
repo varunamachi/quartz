@@ -1,5 +1,5 @@
 
-#include <std::string>
+#include <string>
 #include <QList>
 #include <QQueue>
 #include <QHash>

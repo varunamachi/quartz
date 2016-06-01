@@ -23,34 +23,39 @@
 
 #include <memory>
 
-#include "ILogDispatcher.h"
-#include "../VQ.h"
+#include "../Vq.h"
+#include "../common/Macros.h"
 
 namespace Vq { namespace Logger {
 
-struct FilterInfo;
-struct TargetInfo;
+class AbstractLogTarget;
+class LogMessage;
+VQ_INTERFACE ILogFilter;
 
-class VQ_API AbstractLogDispatcher : public ILogDispatcher
+class VQ_API AbstractLogDispatcher
 {
 public:
     AbstractLogDispatcher();
 
-    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target ) override;
+    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
 
-    AbstractLogTarget * target( std::string targetId ) override;
+    AbstractLogTarget * target( std::string targetId );
 
-    bool setTargetEnabledState( const std::string &trgId, bool value ) override;
+    bool setTargetEnabledState( const std::string &trgId, bool value );
 
-    bool removeTarget( const std::string &targetId ) override;
+    bool removeTarget( const std::string &targetId );
 
     bool installFilter( std::shared_ptr< ILogFilter > filter,
-                        const std::string &trgtId ) override;
+                        const std::string &trgtId );
 
     bool uninstallFilter( const std::string &filterId,
-                          const std::string &trgtId ) override;
+                          const std::string &trgtId );
 
-    void flush() override;
+    virtual void flush();
+
+    virtual void write( LogMessage *message ) = 0;
+
+    virtual void stopDispatch() = 0;
 
     ~AbstractLogDispatcher();
 

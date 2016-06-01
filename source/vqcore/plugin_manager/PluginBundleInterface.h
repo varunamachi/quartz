@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "PluginBundle.h"
 
 

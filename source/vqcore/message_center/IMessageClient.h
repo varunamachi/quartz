@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "../common/Macros.h"
 
 

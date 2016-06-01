@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../VQCommon.h"
+#include "../common/Macros.h"
 
 
 

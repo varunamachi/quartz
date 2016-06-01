@@ -3,7 +3,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "../common/Macros.h"
 
 

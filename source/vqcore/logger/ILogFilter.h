@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../VQCommon.h"
+#include "../common/Macros.h"
 
 
 

@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <std::string>
+#include <string>
 #include <QDateTime>
 #include <QtGlobal>
 

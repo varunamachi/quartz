@@ -21,8 +21,8 @@
  ******************************************************************************/
 
 #include "VQLogger.h"
-#include "ILogDispatcher.h"
 #include "LogStructures.h"
+#include "AbstractLogDispatcher.h"
 #include "LogMessage.h"
 
 
@@ -35,12 +35,13 @@ class VQLogger::Impl
 {
 public:
 
-    inline void setDispatcher( std::unique_ptr< ILogDispatcher > &&dispatcher )
+    inline void setDispatcher(
+            std::unique_ptr< AbstractLogDispatcher > &&dispatcher )
     {
         m_dispatcher = std::move( dispatcher );
     }
 
-    inline ILogDispatcher * dispatcher() const
+    inline AbstractLogDispatcher * dispatcher() const
     {
         return m_dispatcher.get();
     }
@@ -75,30 +76,10 @@ public:
         m_enabled = val;
     }
 
-//    void log(const QDateTime &time,
-//              VQLogLevel &level,
-//              const std::string &module,
-//              const std::string &&method,
-//              int lineNum,
-//              const std::string &message );
-
-//    void log( const QDateTime &time,
-//              VQLogLevel &level,
-//              const std::string &module,
-//              const std::string &&method,
-//              int lineNum,
-//              std::string &&message );
-
-//    void log( const QDateTime &time,
-//              VQLogLevel &level,
-//              const std::string &&module,
-//              const std::string &&method,
-//              int lineNum,
-//              std::string &&message );
-
     void log( LogMessage *msg );
 
-    Impl( std::unique_ptr< ILogDispatcher > dispatcher, VQLogLevel level )
+    Impl( std::unique_ptr< AbstractLogDispatcher > dispatcher,
+          VQLogLevel level )
         : m_dispatcher( std::move( dispatcher ))
         , m_globalSevLevel( level )
         , m_logMethods( false )
@@ -107,7 +88,7 @@ public:
 
     }
 private:
-    std::unique_ptr< ILogDispatcher > m_dispatcher;
+    std::unique_ptr< AbstractLogDispatcher > m_dispatcher;
 
     VQLogLevel m_globalSevLevel;
 
@@ -117,68 +98,6 @@ private:
 
 };
 
-//void VQLogger::Impl::log( const QDateTime &time,
-//          VQLogLevel &level,
-//          const std::string &module,
-//          const std::string &&method,
-//          int lineNum,
-//          const std::string &message )
-//{
-//    if( m_enabled
-//        && m_dispatcher != nullptr
-//        && level >= m_globalSevLevel ) {
-//        LogMessage *lgmsg = new LogMessage( time,
-//                                            level,
-//                                            CUR_THREAD_ID,
-//                                            module,
-//                                            std::move( method ),
-//                                            lineNum,
-//                                            message );
-//        m_dispatcher->write( lgmsg );
-//    }
-//}
-
-//void VQLogger::Impl::log( const QDateTime &time,
-//          VQLogLevel &level,
-//          const std::string &module,
-//          const std::string &&method,
-//          int lineNum,
-//          std::string &&message )
-//{
-//    if( m_enabled
-//        && m_dispatcher != nullptr
-//        && level >= m_globalSevLevel ) {
-//        LogMessage *lgmsg = new LogMessage( time,
-//                                            level,
-//                                            CUR_THREAD_ID,
-//                                            module,
-//                                            std::move( method ),
-//                                            lineNum,
-//                                            std::move( message ));
-//        m_dispatcher->write( lgmsg );
-//    }
-//}
-
-//void VQLogger::Impl::log( const QDateTime &time,
-//          VQLogLevel &level,
-//          const std::string &&module,
-//          const std::string &&method,
-//          int lineNum,
-//          std::string &&message )
-//{
-//    if( m_enabled
-//        && m_dispatcher != nullptr
-//        && level >= m_globalSevLevel ) {
-//        LogMessage *lgmsg = new LogMessage( time,
-//                                            level,
-//                                            CUR_THREAD_ID,
-//                                            std::move( module ),
-//                                            std::move( method ),
-//                                            lineNum,
-//                                            std::move( message ));
-//        m_dispatcher->write( lgmsg );
-//    }
-//}
 
 void VQLogger::Impl::log( LogMessage *msg )
 {
@@ -195,7 +114,7 @@ void VQLogger::Impl::log( LogMessage *msg )
 std::unique_ptr< VQLogger > VQLogger::s_instance = nullptr;
 
 
-bool VQLogger::init( std::unique_ptr < ILogDispatcher > &&dispatcher,
+bool VQLogger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
                      VQLogLevel level )
 {
     bool result = false;
@@ -220,7 +139,7 @@ void VQLogger::log( LogMessage *msg )
 }
 
 
-VQLogger::VQLogger( std::unique_ptr< ILogDispatcher > dispatcher,
+VQLogger::VQLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
                     VQLogLevel level )
     : m_impl( std::make_unique< Impl >( std::move( dispatcher ), level ))
 {

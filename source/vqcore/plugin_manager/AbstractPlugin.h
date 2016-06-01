@@ -4,7 +4,7 @@
 #include <string>
 
 #include "../common/Result.h"
-#include "../VQ.h"
+#include "../Vq.h"
 
 namespace Vq {
 

@@ -6,7 +6,7 @@
 
 #include "../common/Result.h"
 #include "../common/Macros.h"
-#include "../VQ.h"
+#include "../Vq.h"
 
 namespace Vq {
 

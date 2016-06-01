@@ -20,7 +20,7 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <std::string>
+#include <string>
 
 #include "LogUtil.h"
 #include "LogStructures.h"

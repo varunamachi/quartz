@@ -1,4 +1,4 @@
-#include <std::string>
+#include <string>
 #include <QDateTime>
 
 #include "LogMessage.h"

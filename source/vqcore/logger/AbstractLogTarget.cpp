@@ -1,5 +1,5 @@
 
-#include <std::string>
+#include <string>
 
 #include "ILogFormatter.h"
 #include "LogUtil.h"
@@ -50,15 +50,18 @@ AbstractLogTarget::AbstractLogTarget( const std::string &uniqueId )
 
 }
 
+
 const std::string & AbstractLogTarget::uniqueId() const
 {
     return m_impl->uniqueId();
 }
 
+
 void AbstractLogTarget::setFormatterOwned( ILogFormatter *formatter )
 {
     m_impl->setFormatterOwned( formatter );
 }
+
 
 void AbstractLogTarget::write( const LogMessage *message )
 {
@@ -67,10 +70,12 @@ void AbstractLogTarget::write( const LogMessage *message )
                                          : LogUtil::format( message ));
 }
 
+
 AbstractLogTarget::~AbstractLogTarget()
 {
 
 }
+
 
 ILogFormatter * AbstractLogTarget::formatter() const
 {

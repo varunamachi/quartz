@@ -23,9 +23,9 @@
 #pragma once
 
 
+#include <string>
 
-
-#include "../VQ.h"
+#include "../Vq.h"
 
 namespace Vq { namespace Logger {
 

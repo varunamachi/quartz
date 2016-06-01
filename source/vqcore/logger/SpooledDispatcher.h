@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "../VQ.h"
+#include "../Vq.h"
 #include "AbstractLogDispatcher.h"
 
 namespace Vq { namespace Logger {

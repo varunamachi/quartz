@@ -2,18 +2,19 @@
 
 #include <memory>
 #include <string>
+#include <cstdint>
 
-#include "../VQ.h"
-#include "../VQCommon.h"
+#include "../Vq.h"
+#include "../common/Macros.h"
 
 
-#define CUR_THREAD_ID quint64( 0 )
+#define CUR_THREAD_ID std::uint64_t( 0 )
 
 class QDateTime;
 
 namespace Vq { namespace Logger {
 
-VQ_INTERFACE ILogDispatcher;
+class AbstractLogDispatcher;
 class LogMessage;
 enum class VQLogLevel : int;
 
@@ -22,9 +23,9 @@ class VQ_API VQLogger final
 {
 public:
 
-    void setDispatcher( std::unique_ptr< ILogDispatcher > &&dispatcher );
+    void setDispatcher( std::unique_ptr< AbstractLogDispatcher > &&dispatcher );
 
-    ILogDispatcher * dispatcher() const;
+    AbstractLogDispatcher * dispatcher() const;
 
     void setFilterLevel( VQLogLevel level );
 
@@ -40,11 +41,12 @@ public:
 
     void log( LogMessage *msg );
 
-    VQLogger( std::unique_ptr< ILogDispatcher > dispatcher, VQLogLevel level );
+    VQLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
+              VQLogLevel level );
 
     static VQLogger * get();
 
-    static bool init( std::unique_ptr< ILogDispatcher > &&dispatcher,
+    static bool init( std::unique_ptr< AbstractLogDispatcher > &&dispatcher,
                       VQLogLevel level );
 
     static void destroy();
