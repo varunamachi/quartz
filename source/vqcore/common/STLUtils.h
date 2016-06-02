@@ -8,15 +8,59 @@
 
 namespace Vq { namespace STLUtils {
 
+template< typename ContainerType >
+struct IsSTDContainer
+{
+    template< typename U > static constexpr
+    decltype( std::declval< U::const_iterator >(), bool() )
+        test( int /*unused*/ )
+    {
+        return true;
+    }
+
+    template< typename U > static constexpr bool test( ... )
+    {
+        return false;
+    }
+
+    static constexpr bool value = test< ContainerType >( int() );
+};
+
+template< typename ContainerType >
 struct IsAssociativeContainer
 {
+    template< typename U > static constexpr
+    decltype( std::declval< U::key_type >(),
+              std::declval< U::value_type >(),
+              bool() )
+        test( int /*unused*/ )
+    {
+        return true;
+    }
 
+    template< typename U > static constexpr bool test( ... )
+    {
+        return false;
+    }
+
+    static constexpr bool value = test< ContainerType >( int() );
 };
 
-struct IsSequentialContainer
+
+template< typename ContainerType,
+          typename = typename std::enable_if
+          <(
+              ! IsAssociativeContainer< ContainerType >::value
+              && IsSTDContainer< ContainerType >::value
+          )>::type
+        >
+struct IsSequentialContainer : public std::true_type
 {
 
 };
+
+
+
 
 
 template< typename ContainerType >
