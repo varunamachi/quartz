@@ -39,7 +39,7 @@ public:
 
         void run();
 
-        ~SpooledDispatcher();
+        virtual ~SpooledDispatcher();
 
 private:
     struct Data;

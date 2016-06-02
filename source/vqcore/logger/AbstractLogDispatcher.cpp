@@ -1,55 +1,161 @@
 
 #include <string>
-#include <QList>
-#include <QQueue>
-#include <QHash>
-#include <QReadWriteLock>
+#include <vector>
+#include <queue>
+#include <unordered_map>
+
+//#include <QList>
+//#include <QQueue>
+//#include <QHash>
+//#include <QReadWriteLock>
 
 #include "../common/ScopedOperation.h"
+#include "../common/Threading.h"
+#include "../common/STLUtils.h"
 #include "AbstractLogDispatcher.h"
 #include "AbstractLogTarget.h"
 #include "ILogFilter.h"
 
 namespace Vq { namespace Logger {
 
-struct TargetInfo
-{
-    using SPtr = std::shared_ptr< TargetInfo >;
 
-    TargetInfo( std::unique_ptr< AbstractLogTarget > &&target, bool enable )
+namespace {
+
+using FilterPtrUq = std::unique_ptr< ILogFilter >;
+using TargetPtrUq = std::unique_ptr< AbstractLogTarget >;
+
+class TargetInfo
+{
+public:
+    VQ_NO_COPY( TargetInfo );
+
+    inline TargetInfo( TargetPtrUq &&target, bool enable )
         : m_target( std::move( target ))
-        , m_enabled( enable ) {}
+        , m_enabled( enable )
+    {
+
+    }
+
+    inline TargetInfo( TargetInfo &&other )
+        : m_target ( std::move( other.m_target )),
+          m_enabled ( other.m_enabled ),
+          m_targetFilters ( std::move( other.m_targetFilters ))
+    {
+
+    }
+
+    inline TargetInfo & operator = ( TargetInfo &&other )
+    {
+        m_target = std::move( other.m_target );
+        m_enabled = other.m_enabled;
+        m_targetFilters = std::move( other.m_targetFilters );
+        return *this;
+    }
 
     ~TargetInfo()
     {
 
     }
 
-    std::unique_ptr< AbstractLogTarget > m_target;
+    inline AbstractLogTarget * target() const
+    {
+        return m_target.get();
+    }
+
+    inline bool enabled() const
+    {
+        return m_enabled;
+    }
+
+    inline void setEnabled( bool value )
+    {
+        m_enabled = value;
+    }
+
+    inline std::vector< ILogFilter * > & filters()
+    {
+        return m_targetFilters;
+    }
+
+private:
+    TargetPtrUq m_target;
 
     bool m_enabled;
 
-    QList< std::shared_ptr< ILogFilter >> m_targetFilters;
+    std::vector< ILogFilter * > m_targetFilters;
 };
 
-struct FilterInfo
+
+
+class FilterInfo
 {
-    FilterInfo( std::shared_ptr< ILogFilter > filter )
-        : m_filter( filter )
+public:
+    VQ_NO_COPY( FilterInfo );
+
+    inline explicit FilterInfo( FilterPtrUq filter )
+        : m_filter( std::move( filter ))
         , m_refs( 0 )
-        , m_enabled( true ) {}
+        , m_enabled( true )
+    {
+
+    }
+
+    inline FilterInfo( FilterInfo &&other )
+        : m_filter( std::move( other.m_filter ))
+        , m_refs( other.refs() )
+        , m_enabled( other.m_enabled )
+    {
+
+    }
+
+    inline FilterInfo & operator = ( FilterInfo &&other )
+    {
+        m_filter = std::move( other.m_filter );
+        m_refs = other.m_refs;
+        m_enabled = other.m_enabled;
+        return *this;
+    }
+
+    inline ILogFilter * filter()
+    {
+        return m_filter.get();
+    }
+
+
+    inline int & refs()
+    {
+        return m_refs;
+    }
+
+    inline int refs() const
+    {
+        return m_refs;
+    }
+
+    inline bool enabled() const
+    {
+        return m_enabled;
+    }
+
+    inline void setEnabled( bool value )
+    {
+        m_enabled = value;
+    }
 
     ~FilterInfo()
     {
     }
 
-    std::shared_ptr< ILogFilter > m_filter;
+
+private:
+    FilterPtrUq m_filter;
 
     int m_refs;
 
     bool m_enabled;
 };
 
+} //End private namespace
 
 
 
@@ -58,7 +164,7 @@ class AbstractLogDispatcher::Impl
 public:
     Impl();
 
-    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
+    bool addTarget( TargetPtrUq &&target );
 
     AbstractLogTarget * target( const std::string &targetId );
 
@@ -66,7 +172,7 @@ public:
 
     bool removeTarget( const std::string &targetId );
 
-    bool installFilter( std::shared_ptr< ILogFilter > filter,
+    bool installFilter( FilterPtrUq filter,
                         const std::string &trgtId );
 
     bool uninstallFilter( const std::string &filterId,
@@ -79,11 +185,12 @@ public:
     ~Impl();
 
 private:
-    QHash< std::string, std::shared_ptr< FilterInfo >> m_allFilters;
+    std::unordered_map< std::string, FilterInfo > m_allFilters;
 
-    QHash< std::string, std::shared_ptr< TargetInfo >> m_targets;
+    std::unordered_map< std::string, TargetInfo > m_targets;
 
-    mutable QReadWriteLock m_lock;
+    mutable std::mutex m_mutex;
+
 };
 
 
@@ -97,11 +204,11 @@ bool AbstractLogDispatcher::Impl::addTarget(
         std::unique_ptr< AbstractLogTarget > &&target )
 {
     bool result = false;
-    if( target != nullptr && ! m_targets.contains( target->uniqueId() )) {
-        SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-        m_targets.insert( target->uniqueId(),
-                          std::make_shared< TargetInfo >( std::move( target ),
-                                                          true ));
+    if( target != nullptr
+            && ! STLUtils::contains( m_targets, target->uniqueId() )) {
+        VQ_LOCK( m_mutex );
+        m_targets.emplace( target->uniqueId(),
+                           TargetInfo( std::move( target ), true ));
         result = true;
     }
     return result;
@@ -111,8 +218,14 @@ bool AbstractLogDispatcher::Impl::addTarget(
 AbstractLogTarget * AbstractLogDispatcher::Impl::target(
         const std::string &targetId )
 {
-    auto &info = m_targets.value( targetId );
-    return info != nullptr ? info->m_target.get() : nullptr;
+    AbstractLogTarget *target = nullptr;
+    auto it = m_targets.find( targetId );
+    if( it != std::end( m_targets )) {
+        auto &targetInfoPtr = it->second;
+        target = targetInfoPtr.target();
+
+    }
+    return target;
 }
 
 
@@ -121,10 +234,11 @@ bool AbstractLogDispatcher::Impl::setTargetEnabledState(
         bool value )
 {
     bool result = false;
-    auto &info = m_targets.value( trgId );
-    if( info != nullptr ) {
-        SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-        info->m_enabled = value;
+    auto it = m_targets.find( trgId );
+    if( it != std::end( m_targets )) {
+        VQ_LOCK( m_mutex );
+        auto & trgInfo = it->second;
+        trgInfo.setEnabled( value );
         result = true;
     }
     return result;
@@ -133,27 +247,71 @@ bool AbstractLogDispatcher::Impl::setTargetEnabledState(
 
 bool AbstractLogDispatcher::Impl::removeTarget( const std::string &targetId )
 {
+
     bool result = false;
-    auto info = m_targets.value( targetId );
-    if( info != nullptr ) {
-        foreach( auto filter, info->m_targetFilters ) {
-            if( m_allFilters.value( filter->filterId() )->m_refs == 1 ) {
-                SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-                m_allFilters.remove( filter->filterId() );
-            }
+    auto it = m_targets.find( targetId );
+    if( it != std::end( m_targets )) {
+        auto &info = it->second;
+        for( auto &filter : info.filters() ) {
+            VQ_LOCK( m_mutex );
+            m_allFilters.erase( filter->filterId() );
         }
-        SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-        m_targets.remove( targetId );
-        result = true;
+        VQ_LOCK( m_mutex );
+        m_targets.erase( targetId );
     }
     return result;
 }
 
 
 bool AbstractLogDispatcher::Impl::installFilter(
-        std::shared_ptr< ILogFilter > filter,
+        std::unique_ptr< ILogFilter > filter,
         const std::string &targetId )
 {
+    if( ! filter ) {
+        return false;
+    }
+    auto getFilterInfo = [ & ]() -> FilterInfo &
+    {
+        auto it = m_allFilters.find( filter->filterId() );
+        if( it == std::end( m_allFilters ))  {
+            m_allFilters.emplace( filter->filterId(),
+                                  FilterInfo( std::move( filter )));
+            return m_allFilters.find( filter->filterId() )->second;
+        }
+        return it->second;
+    };
+
+    bool result = false;
+
+    if( targetId.empty() ) {
+        VQ_LOCK( m_mutex );
+        auto &finfo = getFilterInfo();
+        for( auto &tpair : m_targets ) {
+            auto &tinfo = tpair.second;
+            if( STLUtils::contains( tinfo.filters(), filter )) {
+
+            }
+        }
+
+
+        SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
+        auto finfo = getFilterInfo();
+        if( finfo != nullptr ) {
+            for( auto it = m_targets.begin();
+                 it != m_targets.end();
+                 ++ it ) {
+                auto sinfo = it.value();
+                if( ! sinfo->m_targetFilters.contains( filter )) {
+                    sinfo->m_targetFilters.append( filter );
+                    ++ finfo->m_refs;
+                }
+            }
+            result = true;
+        }
+    }
+
+
+
     bool result = false;
     if( filter ) {
         auto getFilterInfo = [ = ]() -> std::shared_ptr< FilterInfo >
@@ -283,6 +441,8 @@ AbstractLogDispatcher::Impl::~Impl()
 {
     flush();
 }
+
+
 
 //======================= AbstractLogDispatcher ===============================
 AbstractLogDispatcher::AbstractLogDispatcher()

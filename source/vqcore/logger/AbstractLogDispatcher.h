@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "../Vq.h"
 #include "../common/Macros.h"
@@ -45,7 +46,7 @@ public:
 
     bool removeTarget( const std::string &targetId );
 
-    bool installFilter( std::shared_ptr< ILogFilter > filter,
+    bool installFilter( std::unique_ptr< ILogFilter > &&filter,
                         const std::string &trgtId );
 
     bool uninstallFilter( const std::string &filterId,
@@ -57,7 +58,7 @@ public:
 
     virtual void stopDispatch() = 0;
 
-    ~AbstractLogDispatcher();
+    virtual ~AbstractLogDispatcher();
 
 protected:
     void writeToTargets( LogMessage *msg );
