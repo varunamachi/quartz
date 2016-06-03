@@ -264,7 +264,7 @@ bool AbstractLogDispatcher::Impl::removeTarget( const std::string &targetId )
 
 
 bool AbstractLogDispatcher::Impl::installFilter(
-        std::unique_ptr< ILogFilter > filter,
+        std::unique_ptr< ILogFilter > &&filter,
         const std::string &targetId )
 {
     if( ! filter ) {
@@ -288,7 +288,7 @@ bool AbstractLogDispatcher::Impl::installFilter(
         auto &finfo = getFilterInfo();
         for( auto &tpair : m_targets ) {
             auto &tinfo = tpair.second;
-            if( STLUtils::contains( tinfo.filters(), filter )) {
+            if( ! STLUtils::contains( tinfo.filters(), filter.get() )) {
 
             }
         }
