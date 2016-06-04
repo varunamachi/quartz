@@ -19,13 +19,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-#include <QFile>
-#include <QDebug>
-#include <QTextStream>
-#include <QPointer>
-#include <QFile>
-#include <QDateTime>
+//#include <QFile>
+//#include <QDebug>
+//#include <QTextStream>
+//#include <QPointer>
+//#include <QFile>
+//#include <QDateTime>
 
+#include <fstream>
+
+
+#include "../common/DateTime.h"
+#include "../common/DateTimeUtils.h"
+#include "../platform/file_system/File.h"
 #include "FileTarget.h"
 #include "LogUtil.h"
 
@@ -45,13 +51,11 @@ public:
 private:
     void initFile();
 
-    QPointer< QFile > m_logFile;
-
     std::string m_fileSuffix;
 
-    QDateTime m_prevDate;
+    DateTime m_prevDate;
 
-    QTextStream m_stream;
+    std::ofstream m_stream;
 
 };
 
@@ -59,7 +63,7 @@ private:
 
 FileTarget::Impl::Impl( const std::string &fileSuffix )
     : m_fileSuffix( fileSuffix )
-    , m_prevDate( QDateTime::currentDateTime() )
+    , m_prevDate( DateTime::now() )
 {
     initFile();
 }

@@ -4,17 +4,20 @@
 #include <memory>
 
 
-class QDateTime;
 
 
-namespace Vq { namespace Logger {
+namespace Vq {
+
+class Timestamp;
+
+namespace Logger {
 
 enum class VQLogLevel : int;
 
 class LogMessage
 {
 public:
-    LogMessage( const QDateTime &&time,
+    LogMessage( const Timestamp &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
                 const std::string &module,
@@ -22,7 +25,7 @@ public:
                 int lineNum,
                 const std::string &message );
 
-    LogMessage( const QDateTime &&time,
+    LogMessage( const Timestamp &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
                 const std::string &module,
@@ -30,7 +33,7 @@ public:
                 int lineNum,
                 std::string &&message );
 
-    LogMessage( const QDateTime &&time,
+    LogMessage( const Timestamp &&time,
                 VQLogLevel level,
                 std::uint64_t threadId,
                 const std::string &&module,
@@ -40,7 +43,7 @@ public:
 
     const VQLogLevel & logLevel() const;
 
-    const QDateTime & time() const;
+    const Timestamp & time() const;
 
     const std::uint64_t & threadId() const;
 

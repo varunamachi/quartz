@@ -57,6 +57,17 @@ public:
 
     }
 
+    inline bool operator == ( const TargetInfo &other )
+    {
+        auto result = ( this == &other || m_target == other.m_target );
+        return result;
+    }
+
+    inline bool operator != ( const TargetInfo &other )
+    {
+        return ! ( *this  == other );
+    }
+
     inline AbstractLogTarget * target() const
     {
         return m_target.get();
@@ -116,6 +127,17 @@ public:
         return *this;
     }
 
+    inline bool operator == ( const FilterInfo &other )
+    {
+        auto result = this == &other || m_filter == other.m_filter;
+        return result;
+    }
+
+    inline bool operator != ( const FilterInfo &other )
+    {
+        return ! ( *this  == other );
+    }
+
     inline ILogFilter * filter()
     {
         return m_filter.get();
@@ -172,7 +194,7 @@ public:
 
     bool removeTarget( const std::string &targetId );
 
-    bool installFilter( FilterPtrUq filter,
+    bool installFilter( FilterPtrUq &&filter,
                         const std::string &trgtId );
 
     bool uninstallFilter( const std::string &filterId,
@@ -263,9 +285,8 @@ bool AbstractLogDispatcher::Impl::removeTarget( const std::string &targetId )
 }
 
 
-bool AbstractLogDispatcher::Impl::installFilter(
-        std::unique_ptr< ILogFilter > &&filter,
-        const std::string &targetId )
+bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq &&filter,
+                                                 const std::string &targetId )
 {
     if( ! filter ) {
         return false;
@@ -282,85 +303,29 @@ bool AbstractLogDispatcher::Impl::installFilter(
     };
 
     bool result = false;
-
+    auto &finfo = getFilterInfo();
     if( targetId.empty() ) {
         VQ_LOCK( m_mutex );
-        auto &finfo = getFilterInfo();
         for( auto &tpair : m_targets ) {
             auto &tinfo = tpair.second;
             if( ! STLUtils::contains( tinfo.filters(), filter.get() )) {
-
+                tinfo.filters().emplace_back( filter.get() );
+                ++ finfo.refs();
             }
         }
-
-
-        SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-        auto finfo = getFilterInfo();
-        if( finfo != nullptr ) {
-            for( auto it = m_targets.begin();
-                 it != m_targets.end();
-                 ++ it ) {
-                auto sinfo = it.value();
-                if( ! sinfo->m_targetFilters.contains( filter )) {
-                    sinfo->m_targetFilters.append( filter );
-                    ++ finfo->m_refs;
-                }
-            }
-            result = true;
-        }
+        result = true;
     }
-
-
-
-    bool result = false;
-    if( filter ) {
-        auto getFilterInfo = [ = ]() -> std::shared_ptr< FilterInfo >
-        {
-            auto fltInfo = m_allFilters.value( filter->filterId() );
-            if( fltInfo == nullptr ) {
-                fltInfo = std::make_shared< FilterInfo >( filter );
-                m_allFilters.insert( filter->filterId(), fltInfo );
+    else {
+        auto it = m_targets.find( targetId );
+        if( it != std::end( m_targets )) {
+            auto &tinfo = it->second;
+            VQ_LOCK( m_mutex );
+            if( ! STLUtils::contains( tinfo.filters(), filter.get() )) {
+                tinfo.filters().emplace_back( filter.get() );
+                ++ finfo.refs();
             }
-            else if( filter != fltInfo->m_filter ){
-                /** We are registering two different filter instances with same
-                 * filter id. In this case the correct way is to get the filter
-                 * instance for the given id from the dispatcher and install
-                 * the same instance again.
-                 */
-                fltInfo = 0;
-            }
-            return fltInfo;
-        };
-
-        if( targetId.isEmpty() ) {
-            SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-            auto finfo = getFilterInfo();
-            if( finfo != nullptr ) {
-                for( auto it = m_targets.begin();
-                     it != m_targets.end();
-                     ++ it ) {
-                    auto sinfo = it.value();
-                    if( ! sinfo->m_targetFilters.contains( filter )) {
-                        sinfo->m_targetFilters.append( filter );
-                        ++ finfo->m_refs;
-                    }
-                }
-                result = true;
-            }
-        }
-        else if( m_targets.contains( targetId )){
-            auto sinfo = m_targets.value( targetId );
-            if( sinfo != nullptr ) {
-                SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-                auto finfo = getFilterInfo();
-                if( finfo != nullptr ) {
-                    if( ! sinfo->m_targetFilters.contains( filter )) {
-                        sinfo->m_targetFilters.append( filter );
-                        ++ finfo->m_refs;
-                    }
-                    result = true;
-                }
-            }
+            //If the filter is already there, still its a success
+            result = true;
         }
     }
     return result;
@@ -371,31 +336,28 @@ bool AbstractLogDispatcher::Impl::uninstallFilter( const std::string &filterId,
                                                    const std::string &targetId )
 {
     bool result = false;
-    auto finfo = m_allFilters.value( filterId );
-    if( finfo != nullptr ) {
-        if( targetId.isEmpty() ) {
-            int numRemoved = 0;
-            SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-            for( auto sit = m_targets.begin(); sit != m_targets.end(); ++ sit ){
-                auto sinfo = sit.value();
-                if( sinfo->m_targetFilters.removeOne( finfo->m_filter )) {
-                    ++ numRemoved;
-                }
+    auto fit = m_allFilters.find( filterId );
+    if( fit != std::end( m_allFilters )) {
+        auto &finfo = fit->second;
+        if( targetId.empty() ) {
+            VQ_LOCK( m_mutex );
+            for( auto &tpair : m_targets ) {
+                auto &tinfo = tpair.second;
+                STLUtils::remove( tinfo.filters(), finfo.filter() );
+                result = true;
             }
-            result = numRemoved != 0;
         }
         else {
-            auto sinfo = m_targets.value( targetId );
-            if( sinfo != nullptr ) {
-                SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-                result = true;
-                if( sinfo->m_targetFilters.removeOne( finfo->m_filter )) {
-                    -- finfo->m_refs;
-                    if( finfo->m_refs == 0 ) {
-                        m_allFilters.remove( filterId );
-                    }
+            auto it = m_targets.find( targetId );
+            if( it != std::end( m_targets )) {
+                auto &tinfo = it->second;
+                VQ_LOCK( m_mutex );
+                STLUtils::remove( tinfo.filters(), finfo.filter() );
+                -- finfo.refs();
+                if( finfo.refs() == 0 ) {
+                    STLUtils::remove( m_allFilters, filterId );
                 }
-
+                result = true;
             }
         }
     }
@@ -405,33 +367,35 @@ bool AbstractLogDispatcher::Impl::uninstallFilter( const std::string &filterId,
 
 void AbstractLogDispatcher::Impl::flush()
 {
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    for( auto sit = m_targets.begin(); sit != m_targets.end(); ++ sit ) {
-        auto sinfo = sit.value();
-        sinfo->m_target->flush();
+    VQ_LOCK( m_mutex );
+    for( auto &tpair : m_targets ) {
+        auto &tinfo = tpair.second;
+        tinfo.target()->flush();
     }
 }
 
 
 void AbstractLogDispatcher::Impl::writeToTargets( LogMessage *message )
 {
-    SCOPE_LIMIT( m_lock.lockForRead(), m_lock.unlock() );
-    for( auto sit = m_targets.begin(); sit != m_targets.end(); ++ sit ) {
-        auto sinfo = sit.value();
-        if( sinfo->m_enabled ) {
-            bool filteredOut = false;
-            foreach( auto filter, sinfo->m_targetFilters ) {
-                auto finfo = m_allFilters.value( filter->filterId() );
-                if( finfo->m_enabled ) {
-                    filteredOut = filter->filterOut( message );
-                    if( filteredOut ) {
-                        break;
-                    }
-                }
+    auto isFilteredOut = [ this, &message ]( TargetInfo &tinfo ) -> bool
+    {
+        bool filteredOut = false;
+        for( auto &filter : tinfo.filters() ) {
+            //Since filter is there, filter info must be there
+            auto &finfo = m_allFilters.find( filter->filterId() )->second;
+            if( finfo.enabled() && filter->filterOut( message )) {
+                filteredOut = true;
+                break;
             }
-            if( ! filteredOut ) {
-                sinfo->m_target->write( message );
-            }
+        }
+        return filteredOut;
+    };
+
+    VQ_LOCK( m_mutex );
+    for( auto &tpair : m_targets ) {
+        auto &tinfo = tpair.second;
+        if( ! isFilteredOut( tinfo )) {
+            tinfo.target()->write( message );
         }
     }
 }

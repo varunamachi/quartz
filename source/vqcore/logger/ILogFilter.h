@@ -1,8 +1,8 @@
 #pragma once
 
+#include <string>
+
 #include "../common/Macros.h"
-
-
 
 namespace Vq { namespace Logger {
 

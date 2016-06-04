@@ -7,6 +7,7 @@ vq_classes(
     StringUtils
     Timestamp
     ConstrainedValue
+    DateTimeUtils
 )
 
 vq_headers(

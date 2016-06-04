@@ -1,6 +1,6 @@
 #include <string>
-#include <QDateTime>
 
+#include "../common/Timestamp.h"
 #include "LogMessage.h"
 
 namespace Vq { namespace Logger {
@@ -8,7 +8,7 @@ namespace Vq { namespace Logger {
 class LogMessage::Impl
 {
 public:
-    Impl( const QDateTime &time,
+    Impl( const Timestamp &time,
           VQLogLevel &level,
           std::uint64_t threadId,
           const std::string &module,
@@ -27,7 +27,7 @@ public:
     }
 
 
-    Impl( const QDateTime &time,
+    Impl( const Timestamp &time,
           VQLogLevel &level,
           std::uint64_t threadId,
           const std::string &module,
@@ -45,7 +45,7 @@ public:
 
     }
 
-    Impl( const QDateTime &time,
+    Impl( const Timestamp &time,
           VQLogLevel &level,
           std::uint64_t threadId,
           const std::string &&module,
@@ -69,7 +69,7 @@ public:
         return m_logLevel;
     }
 
-    inline const QDateTime & time() const
+    inline const Timestamp & time() const
     {
         return m_time;
     }
@@ -105,7 +105,7 @@ public:
     }
 
 private:
-    QDateTime m_time;
+    Timestamp m_time;
 
     VQLogLevel m_logLevel;
 
@@ -121,7 +121,7 @@ private:
 };
 
 
-LogMessage::LogMessage( const QDateTime &&time,
+LogMessage::LogMessage( const Timestamp &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
                         const std::string &module,
@@ -141,7 +141,7 @@ LogMessage::LogMessage( const QDateTime &&time,
 }
 
 
-LogMessage::LogMessage( const QDateTime &&time,
+LogMessage::LogMessage( const Timestamp &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
                         const std::string &module,
@@ -162,7 +162,7 @@ LogMessage::LogMessage( const QDateTime &&time,
 
 
 
-LogMessage::LogMessage( const QDateTime &&time,
+LogMessage::LogMessage( const Timestamp &&time,
                         VQLogLevel level,
                         std::uint64_t threadId,
                         const std::string &&module,
@@ -188,7 +188,7 @@ const VQLogLevel & LogMessage::logLevel() const
 }
 
 
-const QDateTime & LogMessage::time() const
+const Timestamp & LogMessage::time() const
 {
     return m_impl->time();
 }

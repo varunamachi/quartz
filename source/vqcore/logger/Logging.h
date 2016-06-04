@@ -1,11 +1,12 @@
 #pragma once
 
-#include <QTextStream>
+#include <sstream>
 
 #include "LogMessage.h"
 #include "ILogDispatcher.h"
 #include "VQLogger.h"
 #include "LogStructures.h"
+
 
 namespace Vq { namespace Logger {
 
@@ -14,12 +15,12 @@ class VQ_API LogLineHolder
 public:
     LogLineHolder( LogMessage *msg )
         : m_msg( msg )
-        , m_stream( &m_msg->mutableMessage() )
+        , m_stream()
     {
 
     }
 
-    QTextStream & stream()
+    std::stringstream & stream()
     {
         return m_stream;
     }
@@ -33,7 +34,7 @@ public:
 private:
     LogMessage *m_msg;
 
-    QTextStream m_stream;
+    std::stringstream m_stream;
 };
 
 
@@ -53,7 +54,7 @@ private:
 #ifndef VQ_DISABLE_LOGGING
     #define VQ_LOG_COMMON( level, mod )                               \
         Vq::Logger::LogLineHolder(                                   \
-           new Vq::Logger::LogMessage( QDateTime::currentDateTime(), \
+           new Vq::Logger::LogMessage( TimeStamp::now(), \
                                         level,                        \
                                         CUR_THREAD_ID,                \
                                         mod,                          \
@@ -85,10 +86,11 @@ private:
         VQ_LOG_COMMON( Vq::Logger::VQLogLevel::Special, module )
 #else
     #define VQ_LOG_COMMON( level, mod, message )
-    #define VQ_TRACE( module, message )
-    #define VQ_DEBUG( module, message )
-    #define VQ_INFO( module, message )
-    #define VQ_WARNING( module, message )
-    #define VQ_ERROR( module, message )
-    #define VQ_FATAL( module, message )
+    #define VQ_TRACE( module )
+    #define VQ_DEBUG( module )
+    #define VQ_INFO( module )
+    #define VQ_WARNING( module )
+    #define VQ_ERROR( module )
+    #define VQ_FATAL( module )
+    #define VQ_SPECIAL( module )
 #endif

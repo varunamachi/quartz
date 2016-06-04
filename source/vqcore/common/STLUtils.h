@@ -44,9 +44,7 @@ struct IsAssociativeContainer
     template< typename U,
               typename = typename EvalHelper <
                   typename U::key_type,
-                  typename U::value_type,
-                  decltype( std::declval< U >().find(
-                    std::declval< U::key_type >())) >::type >
+                  typename U::value_type >::type >
     static constexpr bool test( int /*unused*/ )
     {
         return IsStdContainer< U >::value;
@@ -108,17 +106,50 @@ void eraseIf(
 }
 
 
-
+template< typename ContainerType,
+          typename = typename std::enable_if<
+              IsSequentialContainer< ContainerType >::value >::type >
+void remove( ContainerType &container,
+             const typename ContainerType::value_type &item )
+{
+    auto it = std::remove_if( std::begin( container ),
+                              std::end( container ),
+                              item );
+    container.erase( it, std::end( container ));
+}
 
 
 template< typename ContainerType >
-void multiRemove( ContainerType &/*container*/,
-                  const typename ContainerType::key_type &/*key*/,
-                  const typename ContainerType::value_type &/*value*/ )
+void remove( ContainerType &container,
+             const typename ContainerType::mapped_type &item )
 {
-          //        auto rangeIt = container.equal_range( key );
-
+    auto it = std::remove_if(
+                std::begin( container ),
+                std::end( container ),
+                [ &item ]( typename ContainerType::value_type &pair ) {
+        return pair->second == item;
+    });
+    container.erase( it, std::end( container ));
 }
+
+
+template< typename ContainerType >
+void remove( ContainerType &container,
+             const typename ContainerType::key_type &key )
+{
+    container.erase( key );
+}
+
+
+
+//template< typename ContainerType >
+//void multiRemove( ContainerType &/*container*/,
+//                  const typename ContainerType::key_type &/*key*/,
+//                  const typename ContainerType::value_type &/*value*/ )
+//{
+//          //        auto rangeIt = container.equal_range( key );
+
+//}
 
 
 } }

@@ -19,7 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-#include <QDebug>
+
+#include <iostream>
 
 #include "ConsoleTarget.h"
 #include "ILogFormatter.h"
@@ -51,13 +52,10 @@ void ConsoleTarget::write( const LogMessage *message )
 {
     if( message ) {
         if( message->logLevel() <= VQLogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == VQLogLevel::Warn ) {
-            qWarning() << FORMAT( message );
+            std::cout << FORMAT( message );
         }
         else {
-            qCritical() << FORMAT( message );
+            std::cerr << FORMAT( message );
         }
     }
 }
