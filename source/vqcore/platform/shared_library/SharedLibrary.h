@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../../common/Result.h"
+#include "../../common/Macros.h"
 
 namespace Vq
 {
@@ -11,11 +12,19 @@ namespace Vq
 class SharedLibrary
 {
 public:
-    using LibraryFunction = void ( * )();
+    VQ_NO_COPY( SharedLibrary );
+
+    using LibraryFunction = void * ( * )();
 
     explicit SharedLibrary( const std::string & libPath );
 
+    SharedLibrary( SharedLibrary &&other );
+
+    SharedLibrary & operator = ( SharedLibrary &&other );
+
     ~SharedLibrary();
+
+    bool operator == ( const SharedLibrary &other );
 
     Result< bool > load();
 

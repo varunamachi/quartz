@@ -29,7 +29,7 @@
 
 namespace Vq { namespace Logger {
 
-enum class VQLogLevel : int;
+enum class VqLogLevel : int;
 class LogMessage;
 
 class VQ_API  LogUtil
@@ -37,7 +37,7 @@ class VQ_API  LogUtil
 public:
     static std::string format( const LogMessage *message );
 
-    static std::string getSeverityString( VQLogLevel level );
+    static std::string getSeverityString( VqLogLevel level );
 
 private:
     LogUtil() { }

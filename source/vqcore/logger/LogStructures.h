@@ -29,7 +29,7 @@
 
 namespace Vq { namespace Logger {
 
-enum class VQLogLevel : int
+enum class VqLogLevel : int
 {
     Method  = -1,
     Trace   = 0,

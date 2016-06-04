@@ -1,6 +1,11 @@
 
 
 #include "../logger/Logging.h"
+#include "../platform/file_system/FSUtils.h"
+#include "../platform/file_system/File.h"
+#include "../platform/file_system/Path.h"
+#include "../platform/shared_library/SharedLibrary.h"
+#include "BundleLibrary.h"
 #include "PluginBundleInterface.h"
 
 #include "BundleLoader.h"
@@ -11,55 +16,68 @@ namespace Vq {
 const char * INTERFACE_FUNC_NAME = "pluginBundle";
 typedef BundleWrapper ( *PluginFunc )();
 
-QHash< std::string, BundleLibrary::Ptr > BundleLoader::loadAll(
-        const std::string &location )
+
+Result< BundleMap > BundleLoader::loadAll( const std::string &location )
 {
-    QHash< std::string, BundleLibrary::Ptr > bundles;
-    QDir pluginDir( location );
-    if( pluginDir.exists() ) {
-        std::stringList entries = pluginDir.entryList();;
-        for( const std::string entry : entries ) {
-            if( QLibrary::isLibrary( entry )) {
-                BundleLibrary::Ptr blib = loadFile( entry );
-                if( blib->isValid() ) {
-                    bundles.insert( blib->bundle().bundleId(), blib );
-                }
-                else {
-                    VQ_ERROR( "Quartz:Core" )
-                            << "Could not load the library "
-                            << entry;
-                }
-            }
-            else {
-                VQ_DEBUG( "Quartz:Core" )
-                        << "Ignoring file " << entry
-                        << " since its not a library";
+    BundleMap bundleMap;
+    auto result = Result< BundleMap >::failure( bundleMap, "Unknown error" );
+    File pluginDir(( Path( location )));
+    if( pluginDir.type().data() == File::Type::Dir ) {
+        auto files = FSUtils::listFiles( pluginDir,
+                                         []( const File &file ) -> bool {
+            const auto &ext = file.path().extension();
+            auto result = file.type().data() == File::Type::Regular
+                          && ( ext == "so"
+                              || ext == "dll"
+                              || ext == "dylib" );
+            return result;
+        });
+        for( const auto &file : files.data() ) {
+            auto libRes = loadFile( file.path().toString() );
+            if( libRes.result() ) {
+                bundleMap.emplace( libRes.data()->bundle()->bundleId(),
+                                   libRes.data() );
             }
         }
+        result = Result< BundleMap >::success( bundleMap );
     }
     else {
-        VQ_ERROR( "Quartz:Core" )
-                << "The plugin directory " << location << "does not exists";
+        VQ_ERROR( "Vq:Ext" ) << "The plugin load location is not a "
+                                "directory " << location;
+        result = Result< BundleMap >::failure(
+                    bundleMap,
+                    "The plugin load location is not a directory ");
     }
-    return bundles;
+    return result;
 }
 
 
-BundleLibrary::Ptr BundleLoader::loadFile( const std::string &filePath )
+Result< BundleLibraryPtrUq > BundleLoader::loadFile(
+        const std::string &filePath )
 {
-    BundleLibrary::Ptr blib = nullptr;
-    QLibrary *library = new QLibrary( filePath, qApp );
-    library->load();
-    if( library->isLoaded() ) {
-        PluginFunc getFunc = reinterpret_cast< PluginFunc >(
-                    library->resolve( INTERFACE_FUNC_NAME ));
-        if( getFunc != nullptr ) {
-            BundleWrapper wrapper = getFunc();
-            PluginBundle *bundle = wrapper.m_bundle;
-            blib = std::make_shared< BundleLibrary >( library, bundle );
+    auto result = Result< BundleLibraryPtrUq >::failure(
+                nullptr,
+                "Unknown error" );
+    auto lib = std::make_unique< SharedLibrary >( filePath );
+    auto ldRes = lib->load();
+    if( ldRes ) {
+        auto funcRes = lib->resolve( INTERFACE_FUNC_NAME );
+        if( funcRes ) {
+            auto func = funcRes.data();
+            auto bundleWrapper = reinterpret_cast< BundleWrapper *>(
+                        func() );
+            auto bundle = bundleWrapper->theBundle;
+            auto bundleLib = std::make_unique< BundleLibrary >(
+                        std::move( lib ),
+                        std::unique_ptr< PluginBundle >( bundle ));
+            result = Result< BundleLibraryPtrUq >::success(
+                        std::move( bundleLib ));
         }
     }
-    return blib;
+    else {
+        VQ_ERROR( "Vq:Ext" ) << "Failed to load file at " << filePath;
+    }
+    return result;
 }
 
 

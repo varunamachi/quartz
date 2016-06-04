@@ -51,7 +51,7 @@ void ConsoleTarget::flush()
 void ConsoleTarget::write( const LogMessage *message )
 {
     if( message ) {
-        if( message->logLevel() <= VQLogLevel::Info ) {
+        if( message->logLevel() <= VqLogLevel::Info ) {
             std::cout << FORMAT( message );
         }
         else {

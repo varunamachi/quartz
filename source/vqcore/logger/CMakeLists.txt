@@ -6,7 +6,7 @@ vq_interfaces(
 )
 
 vq_classes(
-    VQLogger
+    VqLogger
     SpooledDispatcher
     LogUtil
     AbstractLogTarget

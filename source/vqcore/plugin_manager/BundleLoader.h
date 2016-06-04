@@ -5,6 +5,7 @@
 
 #include "../Vq.h"
 #include "../common/Macros.h"
+#include "../common/Result.h"
 
 
 
@@ -12,21 +13,22 @@
 namespace Vq {
 
 class BundleLibrary;
+using BundleLibraryPtrUq = std::unique_ptr< BundleLibrary >;
+using BundleMap = std::unordered_map<
+                    std::string,
+                    BundleLibraryPtrUq >;
 
 class VQ_API BundleLoader
 {
 public:
-    using BundleMap = std::unordered_map<
-                        std::string,
-                        std::unique_ptr< BundleLibrary >>;
 
 
-    std::size_t loadAll( const std::string & location,
-                         VQ_OUT BundleMap &bundlesOut );
+    Result< BundleMap > loadAll( const std::string & location );
 
-    std::unique_ptr< BundleLibrary > loadFile( const std::string &filePath );
+    Result< BundleLibraryPtrUq > loadFile( const std::string &filePath );
 
 private:
+
 
 };
 

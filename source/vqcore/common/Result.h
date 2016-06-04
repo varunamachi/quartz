@@ -113,7 +113,7 @@ public:
         return ! m_result;
     }
 
-    static Result< ReturnType > success( ReturnType data );
+    static Result< ReturnType > success( const ReturnType &data );
 
     static Result< ReturnType > success( ReturnType &&data );
 
@@ -140,7 +140,7 @@ private:
 
 
 template< typename ReturnType >
-Result< ReturnType > Result< ReturnType >::success( ReturnType data )
+Result< ReturnType > Result< ReturnType >::success( const ReturnType &data )
 {
     return Result< ReturnType >( true, data, "" );
 }

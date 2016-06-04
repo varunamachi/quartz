@@ -16,10 +16,10 @@ namespace Vq { namespace Logger {
 
 class AbstractLogDispatcher;
 class LogMessage;
-enum class VQLogLevel : int;
+enum class VqLogLevel : int;
 
 
-class VQ_API VQLogger final
+class VQ_API VqLogger final
 {
 public:
 
@@ -27,13 +27,13 @@ public:
 
     AbstractLogDispatcher * dispatcher() const;
 
-    void setFilterLevel( VQLogLevel level );
+    void setFilterLevel( VqLogLevel level );
 
     bool isMethodLoggingEnabled() const;
 
     void setMethodLogState( bool value );
 
-    VQLogLevel filterLevel() const;
+    VqLogLevel filterLevel() const;
 
     bool isEnabled() const;
 
@@ -41,13 +41,13 @@ public:
 
     void log( LogMessage *msg );
 
-    VQLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
-              VQLogLevel level );
+    VqLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
+              VqLogLevel level );
 
-    static VQLogger * get();
+    static VqLogger * get();
 
     static bool init( std::unique_ptr< AbstractLogDispatcher > &&dispatcher,
-                      VQLogLevel level );
+                      VqLogLevel level );
 
     static void destroy();
 
@@ -55,8 +55,10 @@ private:
     class Impl;
     std::unique_ptr< Impl > m_impl;
 
-    static std::unique_ptr< VQLogger > s_instance;
+    static std::unique_ptr< VqLogger > s_instance;
 };
+
+
 
 } }
 

@@ -9,7 +9,7 @@ class LogMessage::Impl
 {
 public:
     Impl( const Timestamp &time,
-          VQLogLevel &level,
+          VqLogLevel &level,
           std::uint64_t threadId,
           const std::string &module,
           const std::string &&method,
@@ -28,7 +28,7 @@ public:
 
 
     Impl( const Timestamp &time,
-          VQLogLevel &level,
+          VqLogLevel &level,
           std::uint64_t threadId,
           const std::string &module,
           const std::string &&method,
@@ -46,7 +46,7 @@ public:
     }
 
     Impl( const Timestamp &time,
-          VQLogLevel &level,
+          VqLogLevel &level,
           std::uint64_t threadId,
           const std::string &&module,
           const std::string &&method,
@@ -64,7 +64,7 @@ public:
     }
 
 
-    inline const VQLogLevel & logLevel() const
+    inline const VqLogLevel & logLevel() const
     {
         return m_logLevel;
     }
@@ -99,12 +99,12 @@ public:
         return m_logMessage;
     }
 
-    void setMessage( const std::string &message )
+    inline void setMessage( const std::string &message )
     {
         m_logMessage = message;
     }
 
-    void setMessage( std::string &&message )
+    inline void setMessage( std::string &&message )
     {
         m_logMessage = std::move( message );
     }
@@ -112,7 +112,7 @@ public:
 private:
     Timestamp m_time;
 
-    VQLogLevel m_logLevel;
+    VqLogLevel m_logLevel;
 
     std::uint64_t m_threadId;
 
@@ -127,7 +127,7 @@ private:
 
 
 LogMessage::LogMessage( const Timestamp &&time,
-                        VQLogLevel level,
+                        VqLogLevel level,
                         std::uint64_t threadId,
                         const std::string &module,
                         const std::string &&method,
@@ -147,7 +147,7 @@ LogMessage::LogMessage( const Timestamp &&time,
 
 
 LogMessage::LogMessage( const Timestamp &&time,
-                        VQLogLevel level,
+                        VqLogLevel level,
                         std::uint64_t threadId,
                         const std::string &module,
                         const std::string &&method,
@@ -168,7 +168,7 @@ LogMessage::LogMessage( const Timestamp &&time,
 
 
 LogMessage::LogMessage( const Timestamp &&time,
-                        VQLogLevel level,
+                        VqLogLevel level,
                         std::uint64_t threadId,
                         const std::string &&module,
                         const std::string &&method,
@@ -187,7 +187,7 @@ LogMessage::LogMessage( const Timestamp &&time,
 }
 
 
-const VQLogLevel & LogMessage::logLevel() const
+const VqLogLevel & LogMessage::logLevel() const
 {
     return m_impl->logLevel();
 }

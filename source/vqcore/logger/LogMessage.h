@@ -12,13 +12,13 @@ class Timestamp;
 
 namespace Logger {
 
-enum class VQLogLevel : int;
+enum class VqLogLevel : int;
 
 class LogMessage
 {
 public:
     LogMessage( const Timestamp &&time,
-                VQLogLevel level,
+                VqLogLevel level,
                 std::uint64_t threadId,
                 const std::string &module,
                 const std::string &&method,
@@ -26,7 +26,7 @@ public:
                 const std::string &message );
 
     LogMessage( const Timestamp &&time,
-                VQLogLevel level,
+                VqLogLevel level,
                 std::uint64_t threadId,
                 const std::string &module,
                 const std::string &&method,
@@ -34,14 +34,14 @@ public:
                 std::string &&message );
 
     LogMessage( const Timestamp &&time,
-                VQLogLevel level,
+                VqLogLevel level,
                 std::uint64_t threadId,
                 const std::string &&module,
                 const std::string &&method,
                 int lineNum,
                 std::string &&message );
 
-    const VQLogLevel & logLevel() const;
+    const VqLogLevel & logLevel() const;
 
     const Timestamp & time() const;
 

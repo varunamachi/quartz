@@ -35,17 +35,17 @@ namespace Vq { namespace Logger {
 
 
 
-std::string LogUtil::getSeverityString( VQLogLevel level )
+std::string LogUtil::getSeverityString( VqLogLevel level )
 {
     switch( level ) {
-    case VQLogLevel::Trace  : return "[ TRACE ]";
-    case VQLogLevel::Debug  : return "[ DEBUG ]";
-    case VQLogLevel::Info   : return "[ INFO  ]";
-    case VQLogLevel::Warn   : return "[ WARNG ]";
-    case VQLogLevel::Error  : return "[ ERROR ]";
-    case VQLogLevel::Fatal  : return "[ FATAL ]";
-    case VQLogLevel::Special: return "[ ***** ]";
-    case VQLogLevel::Method : return "[ ***** ]";
+    case VqLogLevel::Trace  : return "[ TRACE ]";
+    case VqLogLevel::Debug  : return "[ DEBUG ]";
+    case VqLogLevel::Info   : return "[ INFO  ]";
+    case VqLogLevel::Warn   : return "[ WARNG ]";
+    case VqLogLevel::Error  : return "[ ERROR ]";
+    case VqLogLevel::Fatal  : return "[ FATAL ]";
+    case VqLogLevel::Special: return "[ ***** ]";
+    case VqLogLevel::Method : return "[ ***** ]";
     }
     return "";
 }

@@ -20,7 +20,7 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include "VQLogger.h"
+#include "VqLogger.h"
 #include "LogStructures.h"
 #include "AbstractLogDispatcher.h"
 #include "LogMessage.h"
@@ -31,7 +31,7 @@ namespace Vq { namespace Logger {
 VQ_INTERFACE ILogDispatcher;
 
 
-class VQLogger::Impl
+class VqLogger::Impl
 {
 public:
 
@@ -46,7 +46,7 @@ public:
         return m_dispatcher.get();
     }
 
-    inline void setFilterLevel( VQLogLevel level )
+    inline void setFilterLevel( VqLogLevel level )
     {
         m_globalSevLevel = level;
     }
@@ -61,7 +61,7 @@ public:
         m_logMethods = value;
     }
 
-    inline VQLogLevel filterLevel() const
+    inline VqLogLevel filterLevel() const
     {
         return m_globalSevLevel;
     }
@@ -79,7 +79,7 @@ public:
     void log( LogMessage *msg );
 
     Impl( std::unique_ptr< AbstractLogDispatcher > dispatcher,
-          VQLogLevel level )
+          VqLogLevel level )
         : m_dispatcher( std::move( dispatcher ))
         , m_globalSevLevel( level )
         , m_logMethods( false )
@@ -90,7 +90,7 @@ public:
 private:
     std::unique_ptr< AbstractLogDispatcher > m_dispatcher;
 
-    VQLogLevel m_globalSevLevel;
+    VqLogLevel m_globalSevLevel;
 
     bool m_logMethods;
 
@@ -99,7 +99,7 @@ private:
 };
 
 
-void VQLogger::Impl::log( LogMessage *msg )
+void VqLogger::Impl::log( LogMessage *msg )
 {
     if( m_enabled
         && m_dispatcher != nullptr
@@ -111,15 +111,15 @@ void VQLogger::Impl::log( LogMessage *msg )
 
 //=================================VQLogger ===================================
 
-std::unique_ptr< VQLogger > VQLogger::s_instance = nullptr;
+std::unique_ptr< VqLogger > VqLogger::s_instance = nullptr;
 
 
-bool VQLogger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
-                     VQLogLevel level )
+bool VqLogger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
+                     VqLogLevel level )
 {
     bool result = false;
     if( s_instance == nullptr ) {
-        s_instance = std::make_unique< VQLogger >( std::move( dispatcher ),
+        s_instance = std::make_unique< VqLogger >( std::move( dispatcher ),
                                                    level );
         result = true;
     }
@@ -127,27 +127,27 @@ bool VQLogger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
 }
 
 
-void VQLogger::destroy()
+void VqLogger::destroy()
 {
 
 }
 
 
-void VQLogger::log( LogMessage *msg )
+void VqLogger::log( LogMessage *msg )
 {
     m_impl->log( msg );
 }
 
 
-VQLogger::VQLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
-                    VQLogLevel level )
+VqLogger::VqLogger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
+                    VqLogLevel level )
     : m_impl( std::make_unique< Impl >( std::move( dispatcher ), level ))
 {
 
 }
 
 
-VQLogger * VQLogger::get()
+VqLogger * VqLogger::get()
 {
     return s_instance.get();
 }

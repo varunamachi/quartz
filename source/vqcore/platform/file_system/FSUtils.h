@@ -15,6 +15,8 @@ class FSUtils
 public:
     VQ_MAKE_STATIC( FSUtils );
 
+    using FilterFunction = std::function< bool( const File & )>;
+
     static Result< File > fileAt( const std::string &path );
 
     static Result< File > fileAt( const Path &path );
@@ -23,7 +25,8 @@ public:
 
     static Result< bool > deleteFile( const File &file );
 
-    static Result< std::vector< File >> listFiles( const File &file );
+    static Result< std::vector< File >> listFiles( const File &dir,
+                                                   FilterFunction filter );
 
     static Result< Path > mergePath( const Path &one, const Path &two );
 
