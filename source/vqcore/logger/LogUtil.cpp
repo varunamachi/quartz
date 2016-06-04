@@ -22,6 +22,10 @@
 
 #include <string>
 
+#include "../common/DateTimeUtils.h"
+#include "../common/DateTime.h"
+#include "../common/Timestamp.h"
+
 #include "LogUtil.h"
 #include "LogStructures.h"
 #include "LogMessage.h"
@@ -49,8 +53,8 @@ std::string LogUtil::getSeverityString( VQLogLevel level )
 
 std::string LogUtil::format( const LogMessage *msg )
 {
-    std::string strMsg = std::string(
-                msg->time().toString( "yyyy-MM-dd hh:mm:ss" ))
+    std::string strMsg = DateTimeUtils::format( msg->time(),
+                                                "yyyy-MM-dd hh:mm:ss" )
             + " "
             + getSeverityString( msg->logLevel() )
             + "  "

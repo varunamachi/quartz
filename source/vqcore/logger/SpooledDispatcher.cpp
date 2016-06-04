@@ -2,10 +2,11 @@
 #include <thread>
 
 #include <string>
-#include <QReadWriteLock>
-#include <QQueue>
+#include <queue>
+
 
 #include "../common/ScopedOperation.h"
+#include "../common/Threading.h"
 #include "SpooledDispatcher.h"
 #include "LogMessage.h"
 
@@ -26,9 +27,9 @@ struct SpooledDispatcher::Data
 
     bool m_stop;
 
-    QQueue< LogMessage *> m_logQueue;
+    std::queue< LogMessage *> m_logQueue;
 
-    QReadWriteLock m_logIoLock;
+    std::mutex m_logIoMutex;
 };
 
 
@@ -57,23 +58,19 @@ void SpooledDispatcher::write(LogMessage *message)
         m_data->m_stop = false;
         m_data->m_thread = std::thread( &SpooledDispatcher::run, this );
     }
-    SCOPE_LIMIT( m_data->m_logIoLock.lockForWrite(),
-                 m_data->m_logIoLock.unlock() );
-    m_data->m_logQueue.append( message );
+    VQ_LOCK( m_data->m_logIoMutex );
+    m_data->m_logQueue.emplace( message );
 }
 
 
 void SpooledDispatcher::run()
 {
     while( ! m_data->m_stop ) {
-        m_data->m_logIoLock.lockForRead();
-        bool hasMsgs = ! m_data->m_logQueue.isEmpty();
-        m_data->m_logIoLock.unlock();
-        if( hasMsgs ) {
-            m_data->m_logIoLock.lockForWrite();
-            auto msg = m_data->m_logQueue.takeLast();
+        VQ_LOCK( m_data->m_logIoMutex );
+        if( ! m_data->m_logQueue.empty() ) {
+            auto msg = m_data->m_logQueue.front();
             AT_SCOPE_EXIT( delete msg );
-            m_data->m_logIoLock.unlock();
+            m_data->m_logQueue.pop();
             writeToTargets( msg );
         }
     }

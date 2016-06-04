@@ -442,10 +442,10 @@ bool AbstractLogDispatcher::removeTarget( const std::string &targetId )
 }
 
 
-bool AbstractLogDispatcher::installFilter( std::shared_ptr< ILogFilter > filter,
+bool AbstractLogDispatcher::installFilter( FilterPtrUq &&filter,
                     const std::string &trgtId )
 {
-    return m_impl->installFilter( filter, trgtId );
+    return m_impl->installFilter( std::move( filter ), trgtId );
 }
 
 
@@ -470,10 +470,5 @@ AbstractLogDispatcher::~AbstractLogDispatcher()
 {
 
 }
-
-
-
-
-
 
 } }

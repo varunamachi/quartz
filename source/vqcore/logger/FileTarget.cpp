@@ -19,17 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-//#include <QFile>
-//#include <QDebug>
-//#include <QTextStream>
-//#include <QPointer>
-//#include <QFile>
-//#include <QDateTime>
-
 #include <fstream>
 
 
-#include "../common/DateTime.h"
+#include "../common/Timestamp.h"
 #include "../common/DateTimeUtils.h"
 #include "../platform/file_system/File.h"
 #include "FileTarget.h"
@@ -63,7 +56,7 @@ private:
 
 FileTarget::Impl::Impl( const std::string &fileSuffix )
     : m_fileSuffix( fileSuffix )
-    , m_prevDate( DateTime::now() )
+    , m_prevDate( Timestamp::now() )
 {
     initFile();
 }
@@ -71,11 +64,12 @@ FileTarget::Impl::Impl( const std::string &fileSuffix )
 
 void FileTarget::Impl::write( const std::string &&message )
 {
-    if( m_prevDate.daysTo( QDateTime::currentDateTime() ) != 0 ) {
+    auto diff = m_prevDate - DateTime::now();
+    if( diff.dayOfYear().value() != 0 ) {
         m_stream.flush();
         initFile();
     }
-    m_stream << message << endl;
+    m_stream << message << "\n";
 }
 
 
@@ -87,18 +81,13 @@ void FileTarget::Impl::flush()
 
 void FileTarget::Impl::initFile()
 {
-    std::string fileName = m_prevDate.toString( "yyyy_MM_dd_" )
-                       + m_fileSuffix
-                       + ".log";
-    m_stream.reset();
-    m_logFile.clear();
-    m_logFile = new QFile( fileName );
-    if( m_logFile->open( QIODevice::Append | QIODevice::Unbuffered )) {
-        m_stream.setDevice( m_logFile.data() );
-    }
-    else {
-        qDebug() << "Could not open the file....";
-    }
+    std::string fileName = DateTimeUtils::formattedNow( "yyyy_MM_dd" )
+            + m_fileSuffix
+            + ".log";
+    m_stream.close();
+    m_stream.clear();
+    m_stream.open( fileName );
+    m_prevDate = DateTime::now();
 }
 
 
