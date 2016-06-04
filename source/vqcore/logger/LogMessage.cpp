@@ -99,9 +99,14 @@ public:
         return m_logMessage;
     }
 
-    inline std::string & mutableMessage()
+    void setMessage( const std::string &message )
     {
-        return m_logMessage;
+        m_logMessage = message;
+    }
+
+    void setMessage( std::string &&message )
+    {
+        m_logMessage = std::move( message );
     }
 
 private:
@@ -224,9 +229,15 @@ const std::string & LogMessage::message() const
 }
 
 
-std::string & LogMessage::mutableMessage() const
+void LogMessage::setMessage( const std::string &message )
 {
-    return m_impl->mutableMessage();
+    m_impl->setMessage( message );
+}
+
+
+void LogMessage::setMessage( std::string &&message )
+{
+    m_impl->setMessage( message );
 }
 
 LogMessage::~LogMessage()

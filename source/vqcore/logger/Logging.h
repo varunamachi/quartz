@@ -28,6 +28,7 @@ public:
     ~LogLineHolder()
     {
         m_stream.flush();
+        m_msg->setMessage( m_stream.str() );
         VQLogger::get()->log( m_msg );
     }
 
@@ -55,12 +56,12 @@ private:
     #define VQ_LOG_COMMON( level, mod )                               \
         Vq::Logger::LogLineHolder(                                   \
            new Vq::Logger::LogMessage( TimeStamp::now(), \
-                                        level,                        \
-                                        CUR_THREAD_ID,                \
-                                        mod,                          \
-                                        FUNCTION_NAME,                \
-                                        __LINE__,                     \
-                                        std::string( "" ))).stream()
+                                       level,                        \
+                                       CUR_THREAD_ID,                \
+                                       mod,                          \
+                                       FUNCTION_NAME,                \
+                                       __LINE__,                     \
+                                       std::string( "" ))).stream()
 
 
 

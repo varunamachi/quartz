@@ -55,7 +55,9 @@ public:
 
     const std::string & message() const;
 
-    std::string & mutableMessage() const;
+    void setMessage( const std::string &message );
+
+    void setMessage( std::string &&message );
 
     ~LogMessage();
 
