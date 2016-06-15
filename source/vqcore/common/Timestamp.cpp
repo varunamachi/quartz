@@ -1,108 +1,157 @@
-
+#include <memory>
 
 #include "Timestamp.h"
 
 namespace Vq {
 
+class Timestamp::Data
+{
 
-Timestamp::Timestamp( const TimeVal &timeVal ) {
+public:
+    explicit Data( const Timestamp::TimeVal &val )
+        : m_val( val )
+    {
 
-}
+    }
 
-
-
-Timestamp::Timestamp( const Timestamp &other ) {
-
-}
-
-
-
-Timestamp::Timestamp( Timestamp &&other ) {
-
-}
+    Timestamp::TimeVal & val()
+    {
+        return m_val;
+    }
 
 
-Timestamp & Timestamp::operator = ( const Timestamp &other ) {
-
-}
-
-
-Timestamp & Timestamp::operator = ( const Timestamp &&other ) {
-
-}
+private:
+    Timestamp::TimeVal m_val;
+};
 
 
-bool Timestamp::operator == ( const Timestamp &other ) {
+Timestamp::Timestamp( const TimeVal &timeVal )
+    : m_data( std::make_unique< Timestamp::Data >( timeVal ))
+{
 
 }
 
 
-bool Timestamp::operator != ( const Timestamp &other ) {
+
+Timestamp::Timestamp( const Timestamp &other )
+    : m_data( std::make_unique< Timestamp::Data >( other.m_data->val() ))
+{
+}
+
+
+
+Timestamp::Timestamp( Timestamp &&other )
+    : m_data( std::make_unique< Timestamp::Data >(
+                  std::move( other.m_data->val() )))
+{
+}
+
+
+Timestamp & Timestamp::operator = ( const Timestamp &other )
+{
+    *m_data = *other.m_data;
+    return *this;
+}
+
+
+Timestamp & Timestamp::operator = ( const Timestamp &&other )
+{
+    *m_data = std::move( *other.m_data );
+    return *this;
+}
+
+
+bool Timestamp::operator == ( const Timestamp &other )
+{
+    return m_data->val() == other.m_data->val();
+}
+
+
+bool Timestamp::operator != ( const Timestamp &other )
+{
+    return ! ( *this == other );
+}
+
+
+bool Timestamp::operator >  ( const Timestamp &other )
+{
+    return m_data->val() > other.m_data->val();
+}
+
+
+bool Timestamp::operator >= ( const Timestamp &other )
+{
+    return m_data->val() >= other.m_data->val();
+}
+
+
+bool Timestamp::operator <  ( const Timestamp &other )
+{
+    return m_data->val() < other.m_data->val();
+}
+
+
+bool Timestamp::operator <= ( const Timestamp &other )
+{
+    return m_data->val() <= other.m_data->val();
+}
+
+
+Timestamp Timestamp::operator + ( const Timestamp &other )
+{
+    auto sum = m_data->val() + other.m_data->val();
+    return Timestamp{ sum };
+}
+
+
+Timestamp Timestamp::operator - ( const Timestamp &other )
+{
+    auto diff = m_data->val() - other.m_data->val();
+    return Timestamp{ diff};
+}
+
+
+Timestamp & Timestamp::operator += ( const Timestamp &other )
+{
+    m_data->val() += other.m_data->val();
+    return *this;
+}
+
+
+Timestamp & Timestamp::operator -= ( const Timestamp &other )
+{
+    m_data->val() -= other.m_data->val();
+    return *this;
 
 }
 
 
-bool Timestamp::operator >  ( const Timestamp &other ) {
+Timestamp::TimeVal Timestamp::toUTCMicroSec() const
+{
 
 }
 
 
-bool Timestamp::operator >= ( const Timestamp &other ) {
+Timestamp::TimeVal Timestamp::toPosixMicroSec() const
+{
 
 }
 
 
-bool Timestamp::operator <  ( const Timestamp &other ) {
+Timestamp Timestamp::now()
+{
 
 }
 
 
-bool Timestamp::operator <= ( const Timestamp &other ) {
+Timestamp Timestamp::fromPosixEpoch( const std::time_t &time )
+{
 
 }
 
 
-Timestamp Timestamp::operator + ( const Timestamp &other ) {
-
-}
-
-
-Timestamp Timestamp::operator - ( const Timestamp &other ) {
-
-}
-
-
-Timestamp & Timestamp::operator += ( const Timestamp &other ) {
-
-}
-
-
-Timestamp & Timestamp::operator -= ( const Timestamp &other ) {
-
-}
-
-
-Timestamp::TimeVal Timestamp::toUTCMicroSec() const  {
-
-}
-
-
-Timestamp::TimeVal Timestamp::toPosixMicroSec() const  {
-
-}
-
-
-Timestamp Timestamp::now() {
-
-}
-
-
-Timestamp Timestamp::fromPosixEpoch( const std::time_t &time ) {
-
-}
-
-
-Timestamp Timestamp::fromUTCTime( const TimeVal &utc ) {
+Timestamp Timestamp::fromUTCTime( const TimeVal &utc )
+{
 
 }
 
