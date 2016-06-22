@@ -1,4 +1,11 @@
 #include <memory>
+#include <chrono>
+
+#include "../platform/Platform.h"
+
+#ifdef VQ_WINDOWS
+    #include <Winbase.h>
+#endif
 
 #include "Timestamp.h"
 
@@ -17,6 +24,11 @@ public:
     Timestamp::TimeVal & val()
     {
         return m_val;
+    }
+
+    void setVal( Timestamp::TimeVal timeVal )
+    {
+        m_val = timeVal;
     }
 
 
@@ -128,31 +140,38 @@ Timestamp & Timestamp::operator -= ( const Timestamp &other )
 
 Timestamp::TimeVal Timestamp::toUTCMicroSec() const
 {
-
+    auto one = static_cast< TimeVal >( 0x01b21dd2 );
+    auto epochVal = m_data->val() + (( one << 32 ) - 0x13814000 );
+    return epochVal * 10;
 }
 
 
 Timestamp::TimeVal Timestamp::toPosixMicroSec() const
 {
-
+    return m_data->val();
 }
 
 
 Timestamp Timestamp::now()
 {
-
+    using namespace std::chrono;
+    auto now = system_clock::now().time_since_epoch();
+    auto micros = duration_cast< microseconds >( now ).count();
+    return Timestamp { micros };
 }
 
 
 Timestamp Timestamp::fromPosixEpoch( const std::time_t &time )
 {
-
+    return Timestamp{ static_cast< TimeVal >( time ) * 1000000 } ;
 }
 
 
 Timestamp Timestamp::fromUTCTime( const TimeVal &utc )
 {
-
+    auto one = static_cast< TimeVal >( 0x01b21dd2 );
+    auto epochVal = utc - (( one << 32 ) + 0x13814000 );
+    return Timestamp{ epochVal / 10 };
 }
 
 }
