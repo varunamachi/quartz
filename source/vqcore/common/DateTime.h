@@ -42,7 +42,7 @@ enum class Day : std::uint8_t
 
 using DayOfMonthType = ConstrainedValue< int, 1, 31 >;
 using DayOfYearType  = ConstrainedValue< int, 1, 365 >;
-using WeeksOfYear    = ConstrainedValue< int, 1, 53 >;
+using WeekOfYearType = ConstrainedValue< int, 1, 53 >;
 using HourType       = ConstrainedValue< int, 0, 23 >;
 using MinuteType     = ConstrainedValue< int, 1, 59 >;
 using SecondType     = ConstrainedValue< int, 0, 59 >;
@@ -70,7 +70,7 @@ public:
 
     Month month() const;
 
-    WeeksOfYear week( Day firstDayOfWeek = Day::Monday ) const;
+    WeekOfYearType week( Day firstDayOfWeek = Day::Monday ) const;
 
     Day dayOfWeek() const;
 

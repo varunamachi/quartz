@@ -152,6 +152,12 @@ Timestamp::TimeVal Timestamp::toPosixMicroSec() const
 }
 
 
+Timestamp::TimeVal Timestamp::value() const
+{
+    return m_data->val();
+}
+
+
 Timestamp Timestamp::now()
 {
     using namespace std::chrono;

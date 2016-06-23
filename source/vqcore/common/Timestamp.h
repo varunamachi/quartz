@@ -54,6 +54,8 @@ public:
 
     TimeVal toPosixMicroSec() const;
 
+    TimeVal value() const;
+
     static Timestamp now();
 
     static Timestamp fromPosixEpoch( const std::time_t &time );
