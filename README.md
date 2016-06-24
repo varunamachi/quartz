@@ -9,12 +9,14 @@ The build system does not allow in-source builds, it is recommended that the bui
 
 #Building 
 Right now Quartz is not in a state to build. But the build procedure is as follows (in Bash):
+```
 export QUARTZ_ROOT=<path_to_quartz_root>
 cd $QUARTZ_ROOT/builds
 mkdir -p quartz_full_build/debug
 cd quartz_full_build/debug
 cmake -G ../../../source
 make -j4
+```
 
 #Modules
 There are three modules at this time
