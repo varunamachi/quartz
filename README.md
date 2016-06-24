@@ -14,12 +14,12 @@ export QUARTZ_ROOT=<path_to_quartz_root>
 cd $QUARTZ_ROOT/builds
 mkdir -p quartz_full_build/debug
 cd quartz_full_build/debug
-cmake -G ../../../source
+cmake -G "Unix Makefile" -DCMKAE_BUILD_TYPE=Debug ../../../source
 make -j4
 ```
 
 #Modules
-There are three modules at this time
+At this time Quartz has following modules:
 - vqcore: A C++14 library which provides basic utility classes. [Current focus]
 - quartz_core: Quartz's default plugin point providers
 - quartz_common: Common UI classes in Qt5
