@@ -52,6 +52,7 @@ const int DAYS_IN_MONTH[ 13 ] = {
 };
 
 
+
 static inline double toJulianDay( Timestamp::TimeVal utcTime ) noexcept
 {
     auto utcDays = static_cast< double >( utcTime ) / 864000000000.0;
@@ -103,7 +104,7 @@ public:
         , m_julianDay( toJulianDay( val ))
 
     {
-
+        compute();
     }
 
     inline Data( Data &other )
@@ -118,7 +119,7 @@ public:
         , m_usec( other.m_usec )
         , m_julianDay( other.m_julianDay )
     {
-
+        compute();
     }
 
     inline Data( Data &&other )
@@ -133,18 +134,36 @@ public:
         , m_usec( std::move( other.m_usec ))
         , m_julianDay( std::move( other.m_julianDay ))
     {
-
+        compute();
     }
 
     inline Data & operator = ( const Data &other )
     {
-        this->m_utcVal = other.m_utcVal;
+        m_utcVal        = other.m_utcVal;
+        m_year          = other.m_year;
+        m_month         = other.m_month;
+        m_day           = other.m_day;
+        m_hour          = other.m_hour;
+        m_minute        = other.m_minute;
+        m_second        = other.m_second;
+        m_msec          = other.m_msec;
+        m_usec          = other.m_usec;
+        m_julianDay     = other.m_julianDay;
         return *this;
     }
 
     inline Data & operator = ( Data &&other )
     {
-        this->m_utcVal = std::move( other.m_utcVal );
+        m_utcVal        = std::move( other.m_utcVal );
+        m_year          = std::move( other.m_year );
+        m_month         = std::move( other.m_month );
+        m_day           = std::move( other.m_day );
+        m_hour          = std::move( other.m_hour );
+        m_minute        = std::move( other.m_minute );
+        m_second        = std::move( other.m_second );
+        m_msec          = std::move( other.m_msec );
+        m_usec          = std::move( other.m_usec );
+        m_julianDay     = std::move( other.m_julianDay );
         other.m_utcVal = 0;
         return *this;
     }
@@ -199,6 +218,13 @@ public:
         return m_usec;
     }
 
+    inline const DayOfYearType dayOfTheWeek() const
+    {
+        auto protoDay = static_cast< int >( std::floor( m_julianDay + 1.5 ));
+        auto day = protoDay % 7;
+        return DayOfYearType( day );
+    }
+
 private:
     void compute();
 
@@ -221,8 +247,6 @@ private:
     MicroSecType m_usec;
 
     double m_julianDay;
-
-
 };
 
 
@@ -268,13 +292,44 @@ void DateTime::Data::compute()
             month -= 12;
         }
     }
+
+    constexpr auto ten = std::int64_t( 10 );
+    auto numHrs  = ( m_utcVal / ( ten * 1000 * 1000 * 60 * 60 )) % 24;
+//    auto numMin  = ( m_utcVal / ( ten * 1000 * 1000 * 60  )) % 60;
+//    auto numSec  = ( m_utcVal / ( ten * 1000 * 1000 )) % 60;
+//    auto numMsec = ( m_utcVal / ( ten * 1000 )) % 1000;
+//    auto numUsec = ( m_utcVal / ( ten )) % 1000;
+
+    //Adjustment for day overflow
+    if( numHrs == 23 && hour == 0 ) {
+        -- day;
+        if( day == 0 ) {
+            -- month;
+            if( month == 0 ) {
+                month = 12;
+                -- m_year;
+            }
+            day = daysInMonth( m_year, month );
+        }
+    }
+    else if( numHrs == 0 && hour == 23 ) {
+        ++ day;
+        if( day > daysInMonth( m_year, month )) {
+            ++ month;
+            if( month > 12 ) {
+                month = 1;
+                ++ m_year;
+            }
+            day = 1;
+        }
+    }
     m_month     = static_cast< Month >( month );
     m_day       = DayOfMonthType( day );
     m_hour      = HourType( hour );
     m_minute    = MinuteType( minute );
-    m_second   = SecondType( second );
-    m_msec     = MilliSecType( msec );
-    m_usec     = MicroSecType( usec );
+    m_second    = SecondType( second );
+    m_msec      = MilliSecType( msec );
+    m_usec      = MicroSecType( usec );
 }
 
 
@@ -335,55 +390,63 @@ Month DateTime::month() const
 
 WeekOfYearType DateTime::week( Day firstDayOfWeek ) const
 {
+    ///TODO later
     return WeekOfYearType( 1 );
 }
 
 
 Day DateTime::dayOfWeek() const
 {
+    ///TODO later
     return Day::Sunday;
 }
 
 
 DayOfMonthType DateTime::dayOfMonth() const
 {
-    return DayOfMonthType( 1 );
+    return m_data->dayOfMonth();
 }
 
 
 DayOfYearType DateTime::dayOfYear() const
 {
-    return DayOfYearType( 1 );
+    int day = 0;
+    int month = static_cast< int >( m_data->month() );
+    for( int i = 1; i < month; ++ i ) {
+        day += daysInMonth( m_data->year(), i );
+    }
+    day = day + m_data->dayOfMonth().value();
+    return day;
 }
 
 
 HourType DateTime::hour() const
 {
-    return HourType( 1 );
+    return m_data->hour();
 }
 
 
 MinuteType DateTime::minute() const
 {
-    return MinuteType( 1 );
+    return m_data->minute();
 }
 
 
 SecondType DateTime::second() const
 {
-    return SecondType( 1 );
+    return m_data->second();
 }
 
 
 MilliSecType DateTime::millisecond() const
 {
-    return MilliSecType( 1 );
+    return m_data->millisecond();
 }
 
 
 MicroSecType DateTime::microsecond() const
 {
-    return MicroSecType( 1 );
+    return m_data->microsecond();
 }
 
 
