@@ -41,9 +41,9 @@ template< typename ContainerType >
 struct IsAssociativeContainer
 {
     template< typename U,
-              typename = typename EvalHelper <
+              typename = EvalHelper <
                   typename U::key_type,
-                  typename U::value_type>
+                  typename U::value_type >>
     static constexpr bool test( int /*unused*/ )
     {
         return IsStdContainer< U >::value;
