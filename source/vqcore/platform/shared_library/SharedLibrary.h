@@ -9,12 +9,38 @@
 namespace Vq
 {
 
+class LibraryFunction
+{
+public:
+    explicit LibraryFunction( void *funcPtr )
+        : m_funcPtr( funcPtr )
+    {
+
+    }
+
+    template< typename FuncSignature >
+    FuncSignature get()
+    {
+        return reinterpret_cast< FuncSignature >( m_funcPtr );
+    }
+
+    template< typename RetType, typename... Ts >
+    RetType call( Ts... args )
+    {
+        if( m_funcPtr != nullptr ) {
+            return get< RetType( Ts... )>()( args... );
+        }
+        return RetType{ };
+    }
+
+private:
+    void *m_funcPtr;
+};
+
 class SharedLibrary
 {
 public:
     VQ_NO_COPY( SharedLibrary );
-
-    using LibraryFunction = void * ( * )();
 
     explicit SharedLibrary( const std::string & libPath );
 
@@ -30,8 +56,7 @@ public:
 
     Result< bool > unload();
 
-    Result< SharedLibrary:: LibraryFunction > resolve(
-            const std::string &symbolName );
+    Result< LibraryFunction > resolve( const std::string &symbolName );
 
 private:
     class Impl;

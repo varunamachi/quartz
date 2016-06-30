@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "../common/Threading.h"
-#include "../common/ContainerOperations.h"
+#include "../common/STLUtils.h"
 #include "../common/Constants.h"
 #include "Parameters.h"
 #include "MessageCenter.h"
@@ -41,7 +41,7 @@ public:
         if( client != nullptr ) {
             using ValType = decltype( m_subscribers )::value_type;
             VQ_LOCK( m_mutex );
-            ContainerOps::eraseIf(
+            STLUtils::eraseIf(
                         m_subscribers,
                         [ &client ]( const ValType &item) -> bool
             {
@@ -58,7 +58,7 @@ public:
     {
         using ValType = decltype( m_subscribers )::value_type;
         VQ_LOCK( m_mutex );
-        ContainerOps::eraseIf(
+        STLUtils::eraseIf(
                     m_subscribers,
                     [ &clientId ]( const ValType &item) -> bool
         {
