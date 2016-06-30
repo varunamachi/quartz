@@ -19,9 +19,8 @@ public:
     constexpr ConstrainedValue( T value )
         : m_value( value >= MIN ? ( value <= MAX ? value : MAX ) : MIN )
     {
-        static_assert( value <= MAX, "Value is more than maximum allowed" );
-        static_assert( value >= MIN, "Value is less than minimum allowed" );
-
+//        assert( value <= MAX, "Value is more than maximum allowed" );
+//        assert( value >= MIN, "Value is less than minimum allowed" );
     }
 
     template< typename OType,

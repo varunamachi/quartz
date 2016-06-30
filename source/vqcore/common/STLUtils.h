@@ -112,9 +112,9 @@ template< typename ContainerType,
 void remove( ContainerType &container,
              const typename ContainerType::value_type &item )
 {
-    auto it = std::remove_if( std::begin( container ),
-                              std::end( container ),
-                              item );
+    auto it = std::remove( std::begin( container ),
+                           std::end( container ),
+                           item );
     container.erase( it, std::end( container ));
 }
 

@@ -107,7 +107,7 @@ public:
         compute();
     }
 
-    inline Data( Data &other )
+    inline Data( const Data &other )
         : m_utcVal( other.m_utcVal )
         , m_year( other.m_year )
         , m_month( other.m_month )
@@ -345,14 +345,14 @@ DateTime::DateTime( const Timestamp &timestamp )
 
 
 DateTime::DateTime( const DateTime &other )
-    : m_data( std::make_unique< DateTime::Data >( other ))
+    : m_data( std::make_unique< DateTime::Data >( *other.m_data ))
 {
 
 }
 
 
 DateTime::DateTime( DateTime &&other )
-    : m_data( std::make_unique< DateTime::Data >( other ))
+    : m_data( std::make_unique< DateTime::Data >( std::move( *other.m_data )))
 {
 
 }
@@ -367,12 +367,14 @@ DateTime::~DateTime()
 DateTime & DateTime::operator = ( const DateTime &other )
 {
      ( *m_data ) = ( *other.m_data );
+    return *this;
 }
 
 
 DateTime & DateTime::operator = ( const DateTime &&other )
 {
      ( *m_data ) = std::move( *other.m_data );
+    return *this;
 }
 
 

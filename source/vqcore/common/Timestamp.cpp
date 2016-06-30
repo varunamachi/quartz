@@ -4,7 +4,7 @@
 #include "../platform/Platform.h"
 
 #ifdef VQ_WINDOWS
-    #include <Winbase.h>
+    #include <Windows.h>
 #endif
 
 #include "Timestamp.h"
@@ -56,6 +56,12 @@ Timestamp::Timestamp( Timestamp &&other )
     : m_data( std::make_unique< Timestamp::Data >(
                   std::move( other.m_data->val() )))
 {
+}
+
+
+Timestamp::~Timestamp()
+{
+
 }
 
 

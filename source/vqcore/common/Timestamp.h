@@ -26,6 +26,8 @@ public:
 
     Timestamp( Timestamp &&other );
 
+    ~Timestamp();
+
     Timestamp & operator = ( const Timestamp &other );
 
     Timestamp & operator = ( const Timestamp &&other );
