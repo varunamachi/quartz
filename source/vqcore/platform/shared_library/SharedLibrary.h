@@ -25,7 +25,7 @@ public:
     }
 
     template< typename RetType, typename... Ts >
-    RetType call( Ts... args )
+    RetType operator()( Ts... args )
     {
         if( m_funcPtr != nullptr ) {
             return get< RetType( Ts... )>()( args... );
