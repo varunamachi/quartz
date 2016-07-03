@@ -101,8 +101,8 @@ Result< File::Type > File::type() const
     auto result =  Result< File::Type >::failure(
                 File::Type::Unknown,
                 "Failed to retrieve file type" );
-    auto errNum = lstat( m_data->path().c_str(), &fileStat );
-    if( errNum == 0 ) {
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code == 0 ) {
         auto type = File::Type::Unknown;
         if( S_ISREG( fileStat.st_mode )) {
             type = File::Type::Regular;
@@ -130,10 +130,9 @@ Result< File::Type > File::type() const
     else {
         VQ_ERROR( "Vq:Core:FS" )
                 << "Failed to retrieve type of file at " << m_data->path()
-                << " - ErrorCode " << errNum;
+                << " - ErrorCode " << errno;
     }
     return result;
-
 }
 
 
@@ -145,66 +144,174 @@ const Path & File::path() const
 
 Result< bool > File::exists() const
 {
+    auto result = Result< bool >::failure( "File does not exist" );
+    auto code = access( m_data->path().c_str(), F_OK );
+    if( code == 0 ) {
+        result = Result< bool >::success();
+    }
+    return result;
 }
 
 
 Result< bool > File::isValid() const
 {
-
+    return exists();
 }
 
 
 Result< bool > File::isWritable() const
 {
-
+    auto result = Result< bool >::failure( "File is not writable" );
+    if( access( m_data->path().c_str(), F_OK ) ) {
+        result = Result< bool >::success();
+    }
+    return result;
 }
 
 
 Result< bool > File::isReadable() const
 {
-
+    auto result = Result< bool >::failure( "File is not readable" );
+    auto code = access( m_data->path().c_str(), R_OK );
+    if( code == 0 ) {
+        result = Result< bool >::success();
+    }
+    return result;
 }
 
 
 Result< bool > File::isExecuteble() const
 {
-
+    auto result = Result< bool >::failure( "File is not executable" );
+    auto code = access( m_data->path().c_str(), X_OK );
+    if( code == 0 ) {
+        result = Result< bool >::success();
+    }
+    return result;
 }
 
 
 Result< std::uint64_t > File::fileSize() const
 {
-
+    auto result = Result< std::uint64_t >::failure(
+                0,
+                "Failed to retrieve file size information" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code == 0 ) {
+        auto size = fileStat.st_size;
+        result = Result< std::uint64_t >::success( size );
+    }
+    else {
+        VQ_ERROR( "Vq:Core:FS" ) << "Failed to get size information for file "
+                                    "at " << m_data->path() << " ErrorCode: "
+                                 << errno;
+    }
+    return result;
 }
 
 
 Result< DateTime > File::creationTime() const
 {
-
+    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
+                                        "Not implemented" );
 }
 
 
 Result< DateTime > File::modifiedTime() const
 {
-
+    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
+                                        "Not implemented" );
 }
 
 
 Result< bool > File::makeWritable()
 {
+    auto result = Result< bool >::failure(
+                "Could not stat file before making file writable" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code == 0 ) {
+        auto mode = fileStat.st_mode;
+        auto newMode = mode | S_IWUSR;
+        code = chmod( m_data->path().c_str(), newMode );
+        if( code == 0 ) {
+            result = Result< bool >::success();
+        }
+        else {
+            result = Result< bool >::failure(
+                            "Could not make file writable" );
+            VQ_ERROR( "Vq:Core:FS" )
+                    << "Failed to make file at " << m_data->path()
+                    << " writable - ErrorCode: " << errno;
 
+        }
+    }
+    else {
+        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
+                                 << " - ErrorCode: " << errno;
+     }
+    return result;
 }
 
 
 Result< bool > File::makeReadable()
 {
+    auto result = Result< bool >::failure(
+                "Could not stat file before making file readable" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code == 0 ) {
+        auto mode = fileStat.st_mode;
+        auto newMode = mode | S_IRUSR;
+        code = chmod( m_data->path().c_str(), newMode );
+        if( code == 0 ) {
+            result = Result< bool >::success();
+        }
+        else {
+            result = Result< bool >::failure(
+                            "Could not make file readable" );
+            VQ_ERROR( "Vq:Core:FS" )
+                    << "Failed to make file at " << m_data->path()
+                    << " readable - ErrorCode: " << errno;
 
+        }
+    }
+    else {
+        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
+                                 << " - ErrorCode: " << errno;
+     }
+    return result;
 }
 
 
 Result< bool > File::makeExecutable()
 {
+    auto result = Result< bool >::failure(
+                "Could not stat file before making file executable" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code == 0 ) {
+        auto mode = fileStat.st_mode;
+        auto newMode = mode | S_IXUSR;
+        code = chmod( m_data->path().c_str(), newMode );
+        if( code == 0 ) {
+            result = Result< bool >::success();
+        }
+        else {
+            result = Result< bool >::failure(
+                            "Could not make file executable" );
+            VQ_ERROR( "Vq:Core:FS" )
+                    << "Failed to make file at " << m_data->path()
+                    << " executable - ErrorCode: " << errno;
 
+        }
+    }
+    else {
+        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
+                                 << " - ErrorCode: " << errno;
+     }
+    return result;
 }
 
 }
