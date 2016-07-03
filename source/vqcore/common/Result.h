@@ -83,6 +83,12 @@ public:
         return same;
     }
 
+    bool operator==( const ReturnType &other )
+    {
+        bool same = this->result == other.result;
+        return same;
+    }
+
     Result & operator = ( const Result< ReturnType > &other )
     {
         if( this != &other ) {
@@ -136,6 +142,7 @@ private:
 
     std::string m_reason;
 
+//    int m_errorCode;
 };
 
 
@@ -155,7 +162,7 @@ Result< ReturnType > Result< ReturnType >::success( ReturnType &&data )
 
 template< typename ReturnType >
 Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
-                                                    const std::string &reason)
+                                                    const std::string &reason )
 {
     return Result< ReturnType >( false, data, reason );
 }
@@ -163,7 +170,7 @@ Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
 
 template< typename ReturnType >
 Result< ReturnType > Result< ReturnType >::failure( ReturnType data,
-                                                    std::string &&reason)
+                                                    std::string &&reason )
 {
     return Result< ReturnType >( false, data, std::move( reason ));
 }

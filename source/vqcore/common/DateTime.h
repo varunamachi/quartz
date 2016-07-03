@@ -90,6 +90,8 @@ public:
 
     Timestamp timestamp() const;
 
+    bool isValid() const;
+
     bool isLeapYear() const;
 
     bool operator == ( const DateTime &other ) const;

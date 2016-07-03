@@ -21,14 +21,16 @@ public:
         Dir,
         Link,
         Device,
+        Fifo,
+        Socket,
         Unknown
     };
 
     VQ_NO_COPY( File );
 
-    explicit File( const Path& path );
+    explicit File( const Path &path );
 
-    explicit File( File &&other );
+    File( File &&other );
 
     ~File();
 
@@ -38,7 +40,7 @@ public:
 
     Result< Type > type() const;
 
-    Path & path() const;
+    const Path & path() const;
 
     Result< bool >  exists() const;
 
@@ -50,7 +52,7 @@ public:
 
     Result< bool >  isExecuteble() const;
 
-    Result< bool > fileSize() const;
+    Result< std::uint64_t > fileSize() const;
 
     Result< DateTime > creationTime() const;
 
@@ -63,8 +65,8 @@ public:
     Result< bool > makeExecutable();
 
 private:
-    class Impl;
-    std::unique_ptr< Impl > m_impl;
+    class Data;
+    std::unique_ptr< Data > m_data;
 };
 
 }

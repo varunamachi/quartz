@@ -19,14 +19,15 @@ typedef BundleWrapper ( *PluginFunc )();
 
 Result< BundleMap > BundleLoader::loadAll( const std::string &location )
 {
-    BundleMap bundleMap;
-    auto result = Result< BundleMap >::failure( bundleMap, "Unknown error" );
+    auto result = Result< BundleMap >::failure( BundleMap{ },
+                                                "Unknown error" );
     File pluginDir(( Path( location )));
     if( pluginDir.type().data() == File::Type::Dir ) {
+        BundleMap bundleMap;
         auto files = FSUtils::listFiles( pluginDir,
                                          []( const File &file ) -> bool {
             const auto &ext = file.path().extension();
-            auto result = file.type().data() == File::Type::Regular
+            auto result = file.type() == File::Type::Regular
                           && ( ext == "so"
                               || ext == "dll"
                               || ext == "dylib" );
@@ -45,7 +46,7 @@ Result< BundleMap > BundleLoader::loadAll( const std::string &location )
         VQ_ERROR( "Vq:Ext" ) << "The plugin load location is not a "
                                 "directory " << location;
         result = Result< BundleMap >::failure(
-                    bundleMap,
+                    BundleMap{ },
                     "The plugin load location is not a directory ");
     }
     return result;

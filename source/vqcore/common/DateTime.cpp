@@ -91,6 +91,23 @@ static inline int daysInMonth( int year, int month ) noexcept
 class DateTime::Data
 {
 public:
+    inline explicit Data()
+        : m_utcVal( 0 )
+        , m_year( 0 )
+        , m_month( Month::January )
+        , m_day( DayOfMonthType( 1 ))
+        , m_hour( HourType( 0 ))
+        , m_minute( MinuteType( 0 ))
+        , m_second( SecondType( 0 ))
+        , m_msec( MilliSecType( 0 ))
+        , m_usec( MicroSecType( 0 ))
+        , m_julianDay( 1.0 )
+        , m_valid( false )
+
+    {
+        compute();
+    }
+
     inline explicit Data( Timestamp::TimeVal val )
         : m_utcVal( val )
         , m_year( 0 )
@@ -102,6 +119,7 @@ public:
         , m_msec( MilliSecType( 0 ))
         , m_usec( MicroSecType( 0 ))
         , m_julianDay( toJulianDay( val ))
+        , m_valid( true )
 
     {
         compute();
@@ -118,6 +136,7 @@ public:
         , m_msec( other.m_msec )
         , m_usec( other.m_usec )
         , m_julianDay( other.m_julianDay )
+        , m_valid( true )
     {
         compute();
     }
@@ -133,6 +152,7 @@ public:
         , m_msec( std::move( other.m_msec ))
         , m_usec( std::move( other.m_usec ))
         , m_julianDay( std::move( other.m_julianDay ))
+        , m_valid( true )
     {
         compute();
     }
@@ -149,6 +169,7 @@ public:
         m_msec          = other.m_msec;
         m_usec          = other.m_usec;
         m_julianDay     = other.m_julianDay;
+        m_valid         = other.m_valid;
         return *this;
     }
 
@@ -164,7 +185,9 @@ public:
         m_msec          = std::move( other.m_msec );
         m_usec          = std::move( other.m_usec );
         m_julianDay     = std::move( other.m_julianDay );
+        m_valid         = m_valid;
         other.m_utcVal = 0;
+        other.m_valid = 0;
         return *this;
     }
 
@@ -176,6 +199,7 @@ public:
     inline void setVal( Timestamp::TimeVal val )
     {
         m_utcVal = val;
+        compute();
     }
 
     inline int year()  const
@@ -218,6 +242,11 @@ public:
         return m_usec;
     }
 
+    inline bool isValid() const
+    {
+        return m_valid;
+    }
+
     inline const DayOfYearType dayOfTheWeek() const
     {
         auto protoDay = static_cast< int >( std::floor( m_julianDay + 1.5 ));
@@ -247,6 +276,8 @@ private:
     MicroSecType m_usec;
 
     double m_julianDay;
+
+    bool m_valid;
 };
 
 
@@ -457,6 +488,11 @@ Timestamp DateTime::timestamp() const
     return Timestamp( m_data->val() );
 }
 
+
+bool DateTime::isValid() const
+{
+    return m_data->isValid();
+}
 
 bool DateTime::isLeapYear() const
 {

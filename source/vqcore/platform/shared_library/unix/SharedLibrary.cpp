@@ -25,8 +25,14 @@ public:
         }
     }
 
+
     Result< bool > load()
     {
+        if( m_handle != nullptr ) {
+            VQ_WARN( "Vq:Core" ) << "Shared library at " << m_libPath
+                                 << " is already loaded";
+            return Result< bool >::success();
+        }
         auto result = Result< bool >::success();
         m_handle = dlopen( m_libPath.c_str(), RTLD_LAZY );
         if( m_handle == nullptr ) {
@@ -41,8 +47,14 @@ public:
         return result;
     }
 
+
     Result< bool > unload()
     {
+        if( m_handle == nullptr ) {
+            VQ_WARN( "Vq:Core" ) << "Shared Library at " << m_libPath
+                                 << " is not loaded";
+            return Result< bool >::success();
+        }
         auto result = Result< bool >::success();
         auto code = dlclose( m_handle );
         if( code != 0 ) {
@@ -62,6 +74,14 @@ public:
     Result< LibraryFunction > resolve(
             const std::string &symbolName )
     {
+        if( m_handle == nullptr ) {
+            VQ_ERROR( "Vq:Core" ) << "Failed to resolve symbol " << symbolName
+                                  << " in Shared Library at " << m_libPath
+                                  << " - invalid library handle";
+            return Result< LibraryFunction >::failure(
+                        LibraryFunction{ nullptr },
+                        "Failed to resolve symbol - invalid library handle" );
+        }
         auto result = Result< LibraryFunction >::failure(
                     LibraryFunction{ nullptr },
                     "Could not find the symbol" );

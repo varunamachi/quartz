@@ -45,7 +45,7 @@ public:
     Result< bool > unload()
     {
         if( m_handle == nullptr ) {
-            VQ_WARN( "Vq:Core" ) << "Library at " << m_libPath
+            VQ_WARN( "Vq:Core" ) << "DLL at " << m_libPath
                                  << " is not loaded";
             return Result< bool >::success();
         }
