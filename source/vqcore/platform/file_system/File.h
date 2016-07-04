@@ -23,6 +23,7 @@ public:
         Device,
         Fifo,
         Socket,
+        Pipe_Or_Socket,
         Unknown
     };
 
