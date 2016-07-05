@@ -3,6 +3,7 @@
 #include <mutex>
 #include <thread>
 
+#include "../common/Result.h"
 #include "../common/Threading.h"
 #include "JobSequence.h"
 
@@ -50,7 +51,7 @@ Result< bool > JobSequence::execute( const JobContext &context )
         result = jobFunc( context );
     }
     else {
-        result = Result< bool >::failure( "Invalid job found" );
+        result = R::failure< bool >( false, "Invalid job found" );
     }
     return result;
 }

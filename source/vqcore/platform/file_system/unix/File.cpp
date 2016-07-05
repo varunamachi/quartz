@@ -96,41 +96,37 @@ bool File::operator == ( const File &other ) const
 Result< File::Type > File::type() const
 {
     Stat fileStat;
-    auto result =  Result< File::Type >::failure(
-                File::Type::Unknown,
-                "Failed to retrieve file type" );
     auto code = lstat( m_data->path().c_str(), &fileStat );
-    if( code == 0 ) {
-        auto type = File::Type::Unknown;
-        if( S_ISREG( fileStat.st_mode )) {
-            type = File::Type::Regular;
-        }
-        else if( S_ISDIR( fileStat.st_mode )) {
-            type = File::Type::Dir;
-        }
-        else if( S_ISCHR( fileStat.st_mode )) {
-            type = File::Type::Device;
-        }
-        else if( S_ISBLK( fileStat.st_mode )) {
-            type = File::Type::Device;
-        }
-        else if( S_ISLNK( fileStat.st_mode )) {
-            type = File::Type::Link;
-        }
-        else if( S_ISFIFO( fileStat.st_mode )) {
-            type = File::Type::Fifo;
-        }
-        else if( S_ISSOCK( fileStat.st_mode )) {
-            type = File::Type::Socket;
-        }
-        result = Result< File::Type >::success( type );
-    }
-    else {
-        VQ_ERROR( "Vq:Core:FS" )
+    if( code != 0 ) {
+        auto result = R::stream( File::Type::Unknown, errno )
                 << "Failed to retrieve type of file at " << m_data->path()
-                << " - ErrorCode " << errno;
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
     }
-    return result;
+    auto type = File::Type::Unknown;
+    if( S_ISREG( fileStat.st_mode )) {
+        type = File::Type::Regular;
+    }
+    else if( S_ISDIR( fileStat.st_mode )) {
+        type = File::Type::Dir;
+    }
+    else if( S_ISCHR( fileStat.st_mode )) {
+        type = File::Type::Device;
+    }
+    else if( S_ISBLK( fileStat.st_mode )) {
+        type = File::Type::Device;
+    }
+    else if( S_ISLNK( fileStat.st_mode )) {
+        type = File::Type::Link;
+    }
+    else if( S_ISFIFO( fileStat.st_mode )) {
+        type = File::Type::Fifo;
+    }
+    else if( S_ISSOCK( fileStat.st_mode )) {
+        type = File::Type::Socket;
+    }
+    return R::success< File::Type >( type );
 }
 
 
@@ -142,10 +138,12 @@ const Path & File::path() const
 
 Result< bool > File::exists() const
 {
-    auto result = Result< bool >::failure( "File does not exist" );
+    auto result = R::success( true );
     auto code = access( m_data->path().c_str(), F_OK );
-    if( code == 0 ) {
-        result = Result< bool >::success();
+    if( code != 0 ) {
+        result = R::stream( false, errno )
+                << "File at " << m_data->path() << " does not exist"
+                << R::fail;
     }
     return result;
 }
@@ -159,9 +157,18 @@ Result< bool > File::isValid() const
 
 Result< bool > File::isWritable() const
 {
-    auto result = Result< bool >::failure( "File is not writable" );
-    if( access( m_data->path().c_str(), F_OK ) ) {
-        result = Result< bool >::success();
+    auto result = R::success( true );
+    if( access( m_data->path().c_str(), F_OK ) == 0 ) {
+        auto errorCode = errno;
+        if( errorCode == EACCES ) {
+            result = R::success( false );
+        }
+        else {
+            result = R::stream( false, errorCode )
+                    << "Could not retrieve the access infromation for file at "
+                    << m_data->path() << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+        }
     }
     return result;
 }
@@ -169,10 +176,18 @@ Result< bool > File::isWritable() const
 
 Result< bool > File::isReadable() const
 {
-    auto result = Result< bool >::failure( "File is not readable" );
-    auto code = access( m_data->path().c_str(), R_OK );
-    if( code == 0 ) {
-        result = Result< bool >::success();
+    auto result = R::success( true );
+    if( access( m_data->path().c_str(), R_OK ) == 0 ) {
+        auto errorCode = errno;
+        if( errorCode == EACCES ) {
+            result = R::success( false );
+        }
+        else {
+            result = R::stream( false, errorCode )
+                    << "Could not retrieve the access infromation for file at "
+                    << m_data->path() << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+        }
     }
     return result;
 }
@@ -180,10 +195,10 @@ Result< bool > File::isReadable() const
 
 Result< bool > File::isExecuteble() const
 {
-    auto result = Result< bool >::failure( "File is not executable" );
+    auto result = R::failure( false, "File is not executable" );
     auto code = access( m_data->path().c_str(), X_OK );
     if( code == 0 ) {
-        result = Result< bool >::success();
+        result = R::success( true );
     }
     return result;
 }
@@ -191,125 +206,73 @@ Result< bool > File::isExecuteble() const
 
 Result< std::uint64_t > File::fileSize() const
 {
-    auto result = Result< std::uint64_t >::failure(
-                0,
-                "Failed to retrieve file size information" );
     Stat fileStat;
     auto code = lstat( m_data->path().c_str(), &fileStat );
-    if( code == 0 ) {
-        auto size = fileStat.st_size;
-        result = Result< std::uint64_t >::success( size );
+    if( code != 0 ) {
+        auto result = R::stream( std::uint64_t( 0 ), errno )
+                << "Failed to get size information for file at "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
     }
-    else {
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to get size information for file "
-                                    "at " << m_data->path() << " ErrorCode: "
-                                 << errno;
-    }
-    return result;
+    auto size = fileStat.st_size;
+    return R::success( static_cast< std::uint64_t >( size ));
 }
 
 
 Result< DateTime > File::creationTime() const
 {
-    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
-                                        "Not implemented" );
+    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
 }
 
 
 Result< DateTime > File::modifiedTime() const
 {
-    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
-                                        "Not implemented" );
+    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
+}
+
+
+static Result< bool > changePermission( const char *path,
+                                        ::mode_t permission )
+{
+    auto result = R::success( true );
+    Stat fileStat;
+    auto code = lstat( path, &fileStat );
+    if( code == 0 ) {
+        auto mode = fileStat.st_mode;
+        auto newMode = mode | permission;
+        code = chmod( path, newMode );
+        if( code != 0 ) {
+            result = R::stream( false, errno )
+                    << "Failed to change permission of file at "
+                    << path << " writable" << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+        }
+    }
+    else {
+        result = R::stream( false, errno )
+                << "Failed to stat file at " << path << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    return result;
 }
 
 
 Result< bool > File::makeWritable()
 {
-    auto result = Result< bool >::failure(
-                "Could not stat file before making file writable" );
-    Stat fileStat;
-    auto code = lstat( m_data->path().c_str(), &fileStat );
-    if( code == 0 ) {
-        auto mode = fileStat.st_mode;
-        auto newMode = mode | S_IWUSR;
-        code = chmod( m_data->path().c_str(), newMode );
-        if( code == 0 ) {
-            result = Result< bool >::success();
-        }
-        else {
-            result = Result< bool >::failure(
-                            "Could not make file writable" );
-            VQ_ERROR( "Vq:Core:FS" )
-                    << "Failed to make file at " << m_data->path()
-                    << " writable - ErrorCode: " << errno;
-
-        }
-    }
-    else {
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
-                                 << " - ErrorCode: " << errno;
-     }
-    return result;
+    return changePermission( m_data->path().c_str(), S_IWUSR );
 }
 
 
 Result< bool > File::makeReadable()
 {
-    auto result = Result< bool >::failure(
-                "Could not stat file before making file readable" );
-    Stat fileStat;
-    auto code = lstat( m_data->path().c_str(), &fileStat );
-    if( code == 0 ) {
-        auto mode = fileStat.st_mode;
-        auto newMode = mode | S_IRUSR;
-        code = chmod( m_data->path().c_str(), newMode );
-        if( code == 0 ) {
-            result = Result< bool >::success();
-        }
-        else {
-            result = Result< bool >::failure(
-                            "Could not make file readable" );
-            VQ_ERROR( "Vq:Core:FS" )
-                    << "Failed to make file at " << m_data->path()
-                    << " readable - ErrorCode: " << errno;
-
-        }
-    }
-    else {
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
-                                 << " - ErrorCode: " << errno;
-     }
-    return result;
+    return changePermission( m_data->path().c_str(), S_IRUSR );
 }
 
 
 Result< bool > File::makeExecutable()
 {
-    auto result = Result< bool >::failure(
-                "Could not stat file before making file executable" );
-    Stat fileStat;
-    auto code = lstat( m_data->path().c_str(), &fileStat );
-    if( code == 0 ) {
-        auto mode = fileStat.st_mode;
-        auto newMode = mode | S_IXUSR;
-        code = chmod( m_data->path().c_str(), newMode );
-        if( code == 0 ) {
-            result = Result< bool >::success();
-        }
-        else {
-            result = Result< bool >::failure(
-                            "Could not make file executable" );
-            VQ_ERROR( "Vq:Core:FS" )
-                    << "Failed to make file at " << m_data->path()
-                    << " executable - ErrorCode: " << errno;
-
-        }
-    }
-    else {
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to stat file at " << m_data->path()
-                                 << " - ErrorCode: " << errno;
-     }
-    return result;
+    return changePermission( m_data->path().c_str(), S_IXUSR );
 }
 
 }

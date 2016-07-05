@@ -22,17 +22,16 @@ public:
         if( m_handle != nullptr ) {
             VQ_WARN( "Vq:Core" ) << "DLL at " << m_libPath << " is already "
                                     "loaded";
-            return Result< bool >::success();
+            return R::success( true );
         }
 
-        auto result = Result< bool >::success();
+        auto result = R::success( true );
         HINSTANCE handle = LoadLibrary( m_libPath.c_str() );
         if( handle == nullptr ) {
-            VQ_ERROR( "Vq:Core" )
-                    << "Failed to load DLL at "
-                    << m_libPath << "- Error Code: "
-                    << GetLastError();
-            result = Result< bool >::failure( "Failed to load DLL" );
+            auto result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
+                    << "Failed to load DLL at " << m_libPath
+                    << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
         }
         else {
             VQ_DEBUG( "Vq::Core" )
@@ -47,14 +46,14 @@ public:
         if( m_handle == nullptr ) {
             VQ_WARN( "Vq:Core" ) << "DLL at " << m_libPath
                                  << " is not loaded";
-            return Result< bool >::success();
+            return R::success( false );
         }
-        auto result = Result< bool >::success();
+        auto result = R::success( false );
         auto retCode = FreeLibrary( m_handle );
         if( retCode == 0 ) {
-            VQ_ERROR( "Vq:Core" ) << "Failed to unload DLL at " << m_libPath
-                                  << " - ErrorCode: " << GetLastError();
-            result = Result< bool >::failure( "Failed to unload DLL" );
+            result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
+                    << "Failed to unload DLL at " << m_libPath << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
         }
         else {
             VQ_DEBUG( "Vq:Core" ) << "DLL at " << m_libPath
@@ -68,30 +67,28 @@ public:
             const std::string &symbolName )
     {
         if( m_handle == nullptr ) {
-            VQ_ERROR( "Vq:Core" ) << "Failed to resolve symbol " << symbolName
-                                  << " in DLL at " << m_libPath
-                                  << " - invalid DLL handle";
-            return Result< LibraryFunction >::failure(
-                        LibraryFunction{ nullptr },
-                        "Failed to resolve symbol - invalid DLL handle" );
+            auto result = R::stream( LibraryFunction{ nullptr } )
+                    << "Failed to resolve symbol " << symbolName
+                    << " in DLL at " << m_libPath << " - invalid DLL handle"
+                    << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
+            return result;
         }
-        auto result = Result< LibraryFunction >::failure(
-                    LibraryFunction{ nullptr },
-                    "Failed to find given symbol in DLL" );
         auto procAddr = GetProcAddress( m_handle, symbolName.c_str() );
-        if( procAddr != nullptr ) {
-            auto address = reinterpret_cast< void * >( procAddr );
-            result = Result< LibraryFunction >::success(
-                        LibraryFunction{ address });
-            VQ_DEBUG( "Vq:Core" ) << "Resolved symbol " << symbolName
-                                  << " in DLL at " << m_libPath;
+
+        if( procAddr == nullptr ) {
+             auto result = R::stream( LibraryFunction{ nullptr },
+                                      VQ_TO_ERR( ::GetLastError() ))
+                     << "Failed to resolve symbol " << symbolName
+                     << " in DLL at " << m_libPath << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
+            return result;
         }
-        else {
-            VQ_ERROR( "Vq:Core" ) << "Failed to resolve symbol " << symbolName
-                                  << " in DLL at " << m_libPath
-                                  << " - ErrorCode: " << GetLastError();
-        }
-        return result;
+
+        auto address = reinterpret_cast< void * >( procAddr );
+        VQ_DEBUG( "Vq:Core" ) << "Resolved symbol " << symbolName
+                              << " in DLL at " << m_libPath;
+        return R::success( LibraryFunction{ address });
     }
 
     ~Impl() {

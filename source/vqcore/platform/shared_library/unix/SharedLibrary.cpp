@@ -31,14 +31,15 @@ public:
         if( m_handle != nullptr ) {
             VQ_WARN( "Vq:Core" ) << "Shared library at " << m_libPath
                                  << " is already loaded";
-            return Result< bool >::success();
+            return R::success( true );
         }
-        auto result = Result< bool >::success();
+        auto result = R::success( true );
         m_handle = dlopen( m_libPath.c_str(), RTLD_LAZY );
         if( m_handle == nullptr ) {
-            VQ_ERROR( "Vq:Core" ) << "Failed to load shared object at "
-                                  << m_libPath << ": " << dlerror();
-            result = Result< bool >::failure( "Failed to load shared object" );
+            result = R::stream( false, errno )
+                    << "Failed to load shared object at "
+                    << m_libPath << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
         }
         else {
             VQ_INFO( "Vq:Core" ) << "Successfully loaded shared object at "
@@ -53,14 +54,15 @@ public:
         if( m_handle == nullptr ) {
             VQ_WARN( "Vq:Core" ) << "Shared Library at " << m_libPath
                                  << " is not loaded";
-            return Result< bool >::success();
+            return R::success( true );
         }
-        auto result = Result< bool >::success();
+        auto result = R::success( true );
         auto code = dlclose( m_handle );
         if( code != 0 ) {
-            VQ_ERROR( "Vq:Core" ) << "Failed to unload shared object at "
-                                  << m_libPath << " : " << dlerror();
-            result = Result< bool >::failure( "Failed to unload shared object");
+            result = R::stream( false, dlerror() )
+                    << "Failed to unload shared object at "<< m_libPath
+                    << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
         }
         else {
             VQ_INFO( "Vq:Core" ) << "Successfully unloaded shared object at "
@@ -75,34 +77,26 @@ public:
             const std::string &symbolName )
     {
         if( m_handle == nullptr ) {
-            VQ_ERROR( "Vq:Core" ) << "Failed to resolve symbol " << symbolName
-                                  << " in Shared Library at " << m_libPath
-                                  << " - invalid library handle";
-            return Result< LibraryFunction >::failure(
-                        LibraryFunction{ nullptr },
-                        "Failed to resolve symbol - invalid library handle" );
+             auto result = R::stream( LibraryFunction{ nullptr } )
+                     << "Failed to resolve symbol " << symbolName
+                     << " in Shared Library at " << m_libPath
+                     << " - invalid library handle" << R::fail;
+            VQ_ERROR( "Vq:Core" ) << result;
+            return result;
         }
-        auto result = Result< LibraryFunction >::failure(
-                    LibraryFunction{ nullptr },
-                    "Could not find the symbol" );
         auto funcPtr = dlsym( m_handle, symbolName.c_str() );
         auto error = dlerror();
-        if( error == nullptr && funcPtr != nullptr ) {
-            result = Result< LibraryFunction >::success(
-                        LibraryFunction{ funcPtr });
-            VQ_DEBUG( "Vq:Core" ) << "Symbol with name '" << symbolName
-                                  << "' resolved in library at " << m_libPath;
-        }
-        else {
-            result = Result< LibraryFunction >::failure(
-                        LibraryFunction{ nullptr },
-                        "Failed to resolve given symbol" );
-            VQ_DEBUG( "Vq:Core" )
+        if( error != nullptr || funcPtr == nullptr ) {
+            auto result = R::stream( LibraryFunction{ nullptr }, error )
                     << "Symbol with name '" << symbolName
                     << "' could not be resolved in library at " << m_libPath
-                    << ": " << error;
+                    << R::fail;
+            VQ_DEBUG( "Vq:Core" ) << result;
+            return result;
         }
-        return result;
+        VQ_DEBUG( "Vq:Core" ) << "Symbol with name '" << symbolName
+                              << "' resolved in library at " << m_libPath;
+        return R::success( LibraryFunction{ funcPtr });
     }
 
 private:

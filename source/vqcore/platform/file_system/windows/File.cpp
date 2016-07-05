@@ -106,67 +106,58 @@ Result< File::Type > File::type() const
     auto handle = m_data->fileHandle();
     if( handle == INVALID_HANDLE_VALUE ) {
         auto ecode = ::GetLastError();
-        VQ_ERROR( "Vq:Core:FS" )
+        auto result = R::stream( File::Type::Unknown, ecode )
                 << "Failed to open file at " << m_data->path()
-                << " - ErrorCode: " << ecode;
-        return Result< File::Type >::failure(
-                       File::Type::Unknown,
-                       "Failed to open file",
-                       ecode );
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
     }
 
     auto fromAttribs = [ this ]() -> Result< File::Type >
     {
         auto attrib = ::GetFileAttributes( m_data->path().c_str() );
-        if( attrib != INVALID_FILE_ATTRIBUTES ) {
-            auto fileType = File::Type::Unknown;
-            if(( attrib & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
-                fileType = File::Type::Dir;
-            }
-            else if(( attrib & FILE_ATTRIBUTE_NORMAL ) != 0 ) {
-                fileType = File::Type::Regular;
-            }
-            else if(( attrib & FILE_ATTRIBUTE_REPARSE_POINT ) != 0 ) {
-                fileType = File::Type::Link;
-            }
-            return Result< File::Type >::success( fileType );
+        if( attrib == INVALID_FILE_ATTRIBUTES ) {
+            auto errorCode = VQ_TO_ERR( ::GetLastError() );
+            auto result = R::stream( File::Type::Unknown, errorCode )
+            << "Failed to retrieve attributes for file at "
+            << m_data->path() << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+            return result;
         }
-        else {
-            VQ_ERROR( "Vq:Core:FS" )
-                    << "Failed to retrieve attributes for file at "
-                    << m_data->path();
-            return Result< File::Type >::failure(
-                File::Type::Unknown,
-                "Failed to get file attributes" ,
-                VQ_TO_ERR( ::GetLastError() ));
+        auto fileType = File::Type::Unknown;
+        if(( attrib & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
+            fileType = File::Type::Dir;
         }
+        else if(( attrib & FILE_ATTRIBUTE_NORMAL ) != 0 ) {
+            fileType = File::Type::Regular;
+        }
+        else if(( attrib & FILE_ATTRIBUTE_REPARSE_POINT ) != 0 ) {
+            fileType = File::Type::Link;
+        }
+        return R::success< File::Type >( fileType );
     };
 
-    auto result =  Result< File::Type >::failure(
-                File::Type::Unknown,
-                "Failed to retrieve file type" );
     auto type = ::GetFileType( handle );
     auto errorCode = ::GetLastError();
     if( errorCode != NO_ERROR ) {
-        if( type == FILE_TYPE_CHAR ) {
-            result = Result< File::Type >::success( File::Type::Device );
-        }
-        else if( type == FILE_TYPE_PIPE ) {
-            result = Result< File::Type >::success(
-                        File::Type::Pipe_Or_Socket );
-        }
-        else if( type == FILE_TYPE_DISK ) {
-            result = fromAttribs();
-        }
-        else if ( type == FILE_TYPE_UNKNOWN ) {
-            result = Result< File::Type >::success( File::Type::Unknown );
-        }
-    }
-    else {
-        VQ_ERROR( "Vq:Core:FS" )
+        auto result = R::stream( File::Type::Unknown, errorCode )
                 << "Failed to retrieve type of file at " << m_data->path()
-                << " - ErrorCode " << errorCode;
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
     }
+
+    auto result = R::success< File::Type >( File::Type::Unknown );
+    if( type == FILE_TYPE_CHAR ) {
+        result = R::success< File::Type >( File::Type::Device );
+    }
+    else if( type == FILE_TYPE_PIPE ) {
+        result = R::success< File::Type >( File::Type::Pipe_Or_Socket );
+    }
+    else if( type == FILE_TYPE_DISK ) {
+        result = fromAttribs();
+    }
+
     return result;
 }
 
@@ -179,7 +170,7 @@ const Path & File::path() const
 
 Result< bool > File::exists() const
 {
-    auto result = Result< bool >::success( true );
+    auto result = R::success( true );
     auto handle = m_data->fileHandle();
     auto error = GetLastError();
     auto doesNotExist = ( handle == INVALID_HANDLE_VALUE
@@ -187,15 +178,13 @@ Result< bool > File::exists() const
                                 || error == ERROR_PATH_NOT_FOUND
                                 || error == ERROR_INVALID_DRIVE ));
     if( doesNotExist ) {
-        result = Result< bool >::success( false );
+        result = R::success( false );
     }
     else if( handle == INVALID_HANDLE_VALUE ) {
-        result = Result< bool >::failure(
-                    false,
-                    "Could not check check file's existance",
-                    VQ_TO_ERR( error ));
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to check existance of file at "
-                                 << m_data->path();
+        result = R::stream( false, VQ_TO_ERR( error ))
+                << "Failed to check existance of file at " << m_data->path()
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     return result;
 }
@@ -209,17 +198,16 @@ Result< bool > File::isValid() const
 
 Result< bool > File::isWritable() const
 {
-    auto result = Result< bool >::success( true );
+    auto result = R::success( true );
     auto attr = ::GetFileAttributes( m_data->path().c_str() );
     if(( attr & FILE_ATTRIBUTE_READONLY ) != 0 ) {
-        result = Result< bool >::success( false );
+        result = R::success( false );
     }
     else if( attr == INVALID_FILE_ATTRIBUTES ) {
-        result = Result< bool >::failure( false,
-                                          "Could not get file attributes",
-                                          VQ_TO_ERR( ::GetLastError() ));
-        VQ_ERROR( "Vq:Core:FS" ) << result.reason() << " for file "
-                                 << m_data->path();
+        result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
+                << "Could not get file attributes for file "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
 
     }
     return result;
@@ -228,19 +216,17 @@ Result< bool > File::isWritable() const
 
 Result< bool > File::isReadable() const
 {
-    auto result = Result< bool >::success( true );
+    auto result = R::success( true );
     auto attr = GetFileAttributes( m_data->path().c_str() );
     auto errorCode = GetLastError();
     if( attr == INVALID_FILE_ATTRIBUTES && errorCode == ERROR_ACCESS_DENIED ) {
-        result = Result< bool >::success( false );
+        result = R::success( false );
     }
     else if( attr == INVALID_FILE_ATTRIBUTES ) {
-        VQ_ERROR( "Vq:Core:FS" ) << "Failed to read attributes of file "
-                                 << m_data->path() << " - ErrorCode: "
-                                 << errorCode;
-        result = Result< bool >::failure( false,
-                                          "Failed to read file attribs",
-                                          errorCode );
+        result = R::stream( false, errorCode )
+                << "Failed to read attributes of file " << m_data->path()
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" )  << result;
     }
     return result;
 }
@@ -248,55 +234,49 @@ Result< bool > File::isReadable() const
 
 Result< bool > File::isExecuteble() const
 {
-    return Result< bool >::success( true );
+    return R::success( true );
 }
 
 
 Result< std::uint64_t > File::fileSize() const
 {
-    auto result = Result< std::uint64_t >::failure(
-                0,
-                "Failed to retrieve file size information" );
+    auto result = R::success( std::uint64_t( 0 ));
+
+
+
     return result;
 }
 
 
 Result< DateTime > File::creationTime() const
 {
-    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
-                                        "Not implemented" );
+    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
 }
 
 
 Result< DateTime > File::modifiedTime() const
 {
-    return Result< DateTime >::failure( DateTime{ Timestamp{ 0 }},
-                                        "Not implemented" );
+    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
 }
 
 
 Result< bool > File::makeWritable()
 {
-    auto result = Result< bool >::failure(
-                false,
-                "Could not stat file before making file writable" );
-
+    auto result = R::success( true );
     return result;
 }
 
 
 Result< bool > File::makeReadable()
 {
-    auto result = Result< bool >::failure(
-                false,
-                "Could not stat file before making file readable" );
+    auto result = R::success( true );
     return result;
 }
 
 
 Result< bool > File::makeExecutable()
 {
-    auto result = Result< bool >::success( true );
+    auto result = R::success( true );
     return result;
 }
 

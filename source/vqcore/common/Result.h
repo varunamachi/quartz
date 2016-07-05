@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <sstream>
+
+#include "Macros.h"
 
 namespace Vq {
 
@@ -155,16 +158,53 @@ public:
         return m_errorCode;
     }
 
+private:
+    bool m_result;
+
+    ReturnType m_data;
+
+    std::string m_reason;
+
+    ErrorCodeType m_errorCode;
+};
+
+
+
+template< typename ReturnType >
+std::ostream & operator << ( std::ostream &stream,
+                             Result< ReturnType > &result )
+{
+    stream << result.reason() << " - ErrorCode: "
+           << result.errorCode();
+    return stream;
+}
+
+
+
+
+
+
+
+
+
+template< typename ReturnType > class RStream;
+
+struct R {
+    VQ_MAKE_STATIC( R );
+
+    template< typename ReturnType >
     static Result< ReturnType > success( const ReturnType &data )
     {
         return Result< ReturnType >( true, data, "", 0 );
     }
 
+    template< typename ReturnType >
     static Result< ReturnType > success( ReturnType &&data )
     {
         return Result< ReturnType >( true, std::move( data ), "",  0 );
     }
 
+    template< typename ReturnType >
     static Result< ReturnType > failure( ReturnType data = ReturnType{ },
                                          const std::string &reason = "",
                                          ErrorCodeType errorCode = 0 )
@@ -175,6 +215,8 @@ public:
                                      errorCode );
     }
 
+
+    template< typename ReturnType >
     static Result< ReturnType > failure( ReturnType data,
                                          std::string &&reason,
                                          ErrorCodeType errorCode = 0 )
@@ -185,6 +227,7 @@ public:
                                      errorCode );
     }
 
+    template< typename ReturnType >
     static Result< ReturnType > failure( ReturnType data,
                                          ErrorCodeType errorCode = 0 )
     {
@@ -194,15 +237,88 @@ public:
                                      errorCode );
     }
 
-private:
-    bool m_result;
+    template< typename ReturnType >
+    static RStream< ReturnType > stream( ReturnType r,
+                                         ErrorCodeType errorCode = 0 )
+    {
+        return RStream< ReturnType >( std::move( r ), errorCode );
+    }
 
+    struct FailureTag { };
+
+    struct SuccessTag { };
+
+    static const FailureTag fail;
+
+    static const SuccessTag succeed;
+};
+
+
+
+
+
+template< typename ReturnType >
+class RStream
+{
+public:
+    VQ_NO_COPY( RStream );
+
+    typedef std::ostream& ( Manip )( std::ostream& );
+
+    RStream( ReturnType data, ErrorCodeType errorCode = 0 )
+        : m_data( std::move( data ))
+        , m_errorCode( errorCode )
+    {
+
+    }
+
+    RStream( RStream &&other )
+        : m_data( std::move( other.m_data ))
+        , m_errorCode( other.m_errorCode )
+        , m_stream( std::move( other.m_stream ))
+    {
+        other.m_errorCode = 0;
+    }
+
+    template< typename T >
+    RStream & operator << ( const T &obj )
+    {
+        m_stream << obj;
+        return  *this;
+    }
+
+    RStream & operator << ( Manip &manip )
+    {
+        m_stream << manip;
+        return *this;
+    }
+
+    Result< ReturnType > operator << ( R::FailureTag )
+    {
+        return Result< ReturnType >( false,
+                                     std::move( m_data ),
+                                     m_stream.str(),
+                                     m_errorCode );
+    }
+
+    Result< ReturnType > operator << ( R::SuccessTag )
+    {
+        return Result< ReturnType >( true,
+                                     std::move( m_data ),
+                                     m_stream.str(),
+                                     m_errorCode );
+    }
+
+
+private:
     ReturnType m_data;
 
-    std::string m_reason;
-
     ErrorCodeType m_errorCode;
+
+    std::stringstream m_stream;
 };
+
+
 
 
 }

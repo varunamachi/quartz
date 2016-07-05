@@ -1,4 +1,6 @@
 
+#include <vqcore/common/Result.h>
+
 #include <quartz_core/QuartzContext.h>
 
 #include "PagePlugin.h"
@@ -17,13 +19,13 @@ QString PagePlugin::pluginId() const
 Result< bool > PagePlugin::init( Quartz::QuartzContext &context )
 {
     context.pageManager().addPage( m_samplePage.get() );
-    return Result< bool >::success();
+    return R::success< bool >( true );
 }
 
 
-Result< bool >PagePlugin::uninit( Quartz::QuartzContext &context ) {
+Result< bool > PagePlugin::uninit( Quartz::QuartzContext &context ) {
     context.pageManager().removePage( m_samplePage.get() );
-    return Result< bool >::success();
+    return R::success< bool >( true );
 }
 
 
