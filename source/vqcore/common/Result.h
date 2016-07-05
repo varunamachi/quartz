@@ -174,17 +174,12 @@ template< typename ReturnType >
 std::ostream & operator << ( std::ostream &stream,
                              Result< ReturnType > &result )
 {
-    stream << result.reason() << " - ErrorCode: "
-           << result.errorCode();
+    stream << result.reason();
+    if( result.errorCode() != 0 ) {
+        stream << " - ErrorCode: " << result.errorCode();
+    }
     return stream;
 }
-
-
-
-
-
-
-
 
 
 template< typename ReturnType > class RStream;
@@ -201,7 +196,7 @@ struct R {
     template< typename ReturnType >
     static Result< ReturnType > success( ReturnType &&data )
     {
-        return Result< ReturnType >( true, std::move( data ), "",  0 );
+        return Result< ReturnType >( true, std::forward( data ), "",  0 );
     }
 
     template< typename ReturnType >
@@ -223,7 +218,7 @@ struct R {
     {
         return Result< ReturnType >( false,
                                      data,
-                                     std::move( reason ),
+                                     std::forward< std::string >( reason ),
                                      errorCode );
     }
 
@@ -267,6 +262,13 @@ public:
 
     RStream( ReturnType data, ErrorCodeType errorCode = 0 )
         : m_data( std::move( data ))
+        , m_errorCode( errorCode )
+    {
+
+    }
+
+    RStream( ReturnType &&data, ErrorCodeType errorCode = 0 )
+        : m_data( data )
         , m_errorCode( errorCode )
     {
 

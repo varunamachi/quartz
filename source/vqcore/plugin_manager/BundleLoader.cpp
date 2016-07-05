@@ -13,70 +13,70 @@
 namespace Vq {
 
 
-const char * INTERFACE_FUNC_NAME = "pluginBundle";
+static const char * INTERFACE_FUNC_NAME = "pluginBundle";
 typedef BundleWrapper ( *PluginFunc )();
 
 
 Result< BundleMap > BundleLoader::loadAll( const std::string &location )
 {
-    auto result = Result< BundleMap >::failure( BundleMap{ },
-                                                "Unknown error" );
-    File pluginDir(( Path( location )));
-    if( pluginDir.type().data() == File::Type::Dir ) {
-        BundleMap bundleMap;
-        auto files = FSUtils::listFiles( pluginDir,
-                                         []( const File &file ) -> bool {
-            const auto &ext = file.path().extension();
-            auto result = file.type() == File::Type::Regular
-                          && ( ext == "so"
-                              || ext == "dll"
-                              || ext == "dylib" );
-            return result;
-        });
-        for( const auto &file : files.data() ) {
-            auto libRes = loadFile( file.path().toString() );
-            if( libRes.result() ) {
-                bundleMap.emplace( libRes.data()->bundle()->bundleId(),
-                                   libRes.data() );
-            }
+    File pluginDir( Path{ location } );
+    if( pluginDir.type() == File::Type::Dir ) {
+        auto result = R::stream( BundleMap{ } )
+                << "The plugin load location is not a "
+                   "directory " << location << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
+        return result;
+    }
+    BundleMap bundleMap;
+    auto files = FSUtils::listFiles( pluginDir,
+                                     []( const File &file ) -> bool {
+        const auto &ext = file.path().extension();
+        auto result = file.type() == File::Type::Regular
+                && ( ext == "so"
+                     || ext == "dll"
+                     || ext == "dylib" );
+        return result;
+    });
+    for( const auto &file : files.data() ) {
+        auto libRes = loadFile( file.path().toString() );
+        if( libRes.result() ) {
+            bundleMap.emplace( libRes.data()->bundle()->bundleId(),
+                               libRes.data() );
         }
-        result = Result< BundleMap >::success( bundleMap );
     }
-    else {
-        VQ_ERROR( "Vq:Ext" ) << "The plugin load location is not a "
-                                "directory " << location;
-        result = Result< BundleMap >::failure(
-                    BundleMap{ },
-                    "The plugin load location is not a directory ");
-    }
-    return result;
+    return R::success( std::move( bundleMap ));
 }
 
 
 Result< BundleLibraryPtrUq > BundleLoader::loadFile(
         const std::string &filePath )
 {
-    auto result = Result< BundleLibraryPtrUq >::failure(
-                nullptr,
-                "Unknown error" );
+    auto result = R::failure( BundleLibraryPtrUq{ nullptr }, "Unknown error" );
     auto lib = std::make_unique< SharedLibrary >( filePath );
     auto ldRes = lib->load();
     if( ldRes ) {
         auto funcRes = lib->resolve( INTERFACE_FUNC_NAME );
         if( funcRes ) {
             auto func = funcRes.data();
-            auto bundleWrapper = reinterpret_cast< BundleWrapper *>(
-                        func() );
-            auto bundle = bundleWrapper->theBundle;
+            auto bundleWrapper = func.call< BundleWrapper >();
+            auto bundle = bundleWrapper.theBundle;
             auto bundleLib = std::make_unique< BundleLibrary >(
                         std::move( lib ),
                         std::unique_ptr< PluginBundle >( bundle ));
-            result = Result< BundleLibraryPtrUq >::success(
-                        std::move( bundleLib ));
+            result = R::success( std::move( bundleLib ));
+        }
+        else {
+            result = R::stream( BundleLibraryPtrUq{ }, funcRes.errorCode() )
+                    << "Could not resolve the plugin initializer function for "
+                       "library at " << filePath << R::fail;
+            VQ_ERROR( "Vq:Ext" ) << result;
         }
     }
     else {
-        VQ_ERROR( "Vq:Ext" ) << "Failed to load file at " << filePath;
+        result = R::stream( BundleLibraryPtrUq{ }, ldRes.errorCode() )
+                << "Failed to load plugin library at " << filePath << " - "
+                << ldRes.reason() << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
     }
     return result;
 }

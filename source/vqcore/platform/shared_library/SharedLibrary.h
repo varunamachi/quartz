@@ -25,12 +25,20 @@ public:
     }
 
     template< typename RetType, typename... Ts >
-    RetType operator()( Ts... args )
+    RetType call( Ts... args )
     {
         if( m_funcPtr != nullptr ) {
             return get< RetType( Ts... )>()( args... );
         }
         return RetType{ };
+    }
+
+    template< typename... Ts >
+    void operator()( Ts... args )
+    {
+        if( m_funcPtr != nullptr ) {
+            get< void( Ts... ) >()( args... );
+        }
     }
 
 private:

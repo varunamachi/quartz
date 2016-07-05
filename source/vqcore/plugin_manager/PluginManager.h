@@ -33,7 +33,7 @@ public:
 
     Result< PluginBundle * > pluginBundle( const std::string &bundleId ) const;
 
-    Result< bool > allBundles(
+    std::size_t allBundles(
             VQ_OUT std::vector< const PluginBundle * > &bundlesOut ) const;
 
 private:

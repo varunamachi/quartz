@@ -35,7 +35,7 @@ class PluginManager::Impl
 
     Result< PluginBundle * > pluginBundle( const std::string &bundleId ) const;
 
-    Result< std::size_t > allBundles(
+    std::size_t allBundles(
             VQ_OUT std::vector< const PluginBundle * > &bundlesOut ) const;
 
 private:
@@ -66,6 +66,7 @@ Result< bool > PluginManager::Impl::loadAll()
     Result< bool > result;
     m_libraries = m_loader.loadAll( m_location ).data();
     std::unordered_set< std::string > loadedBundles;
+    std::size_t processed = 0;
     for( auto &bpair : m_libraries ) {
         const auto &bundle = bpair.second->bundle();
         if( loadedBundles.find( bundle->bundleId() )
@@ -73,33 +74,48 @@ Result< bool > PluginManager::Impl::loadAll()
             result = loadBundle( *bundle, loadedBundles );
         }
         if( ! result ) {
-            VQ_ERROR( "Quartz:Core" )
+            VQ_ERROR( "Vq:Ext" )
                     << "Could not load bundle with ID "
-                    << bundle->bundleId();
+                    << bundle->bundleId() << " - " << result;
         }
+        ++ processed;
     }
-    return result;
+    if( processed != loadedBundles.size() - 1 ) {
+        auto result = R::stream( false )
+                << "Failed to load all bundles, loaded " << loadedBundles.size()
+                << " out of " << processed << " bundles " << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
+        return result;
+    }
+    return R::success( true );
 }
 
 
 Result< bool > PluginManager::Impl::unloadAll()
 {
-    Result< bool > result;
-//    m_libraries = m_loader.loadAll( m_location );
     std::unordered_set< std::string > unloadedBundles;
+    std::size_t processed = 0;
     for( auto & blib : m_libraries ) {
         const auto &bundle = blib.second->bundle();
         if( ! STLUtils::contains( unloadedBundles, bundle->bundleId() )) {
-            result = unloadBundle( *bundle, unloadedBundles );
+            auto result = unloadBundle( *bundle, unloadedBundles );
             if( ! result ) {
-                VQ_ERROR( "Quartz:Core" )
+                VQ_ERROR( "Vq:Ext" )
                         << "Could not unload bundle with ID "
-                        << bundle->bundleId();
+                        << bundle->bundleId() << result;
             }
-
+            ++ processed;
         }
     }
-    return result;
+    if( processed != unloadedBundles.size() - 1 ) {
+        auto result = R::stream( false )
+                << "Failed to unload all bundles, loaded "
+                << unloadedBundles.size() << " out of " << processed
+                << " bundles " << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
+        return result;
+    }
+    return R::success( true );
 }
 
 
@@ -115,32 +131,31 @@ Result< bool > PluginManager::Impl::reloadAll()
 
 Result< bool > PluginManager::Impl::unload( const std::string &bundleId )
 {
-    Result< bool > result;
     auto it = m_libraries.find( bundleId );
-    if( it != std::end( m_libraries )) {
-        std::unordered_set< std::string > unloadedBundles;
-        result = unloadBundle( *it->second->bundle(), unloadedBundles );
+    if( it == std::end( m_libraries )) {
+        auto result = R::stream( false )
+                    << "Could not find library for bundleID " << bundleId
+                    << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
     }
-    else {
-        result = Result< bool >::failure(
-                    "Could not find library for bundleID " + bundleId );
-    }
+    std::unordered_set< std::string > unloadedBundles;
+    auto result = unloadBundle( *it->second->bundle(), unloadedBundles );
     return result;
 }
 
 
 Result< bool > PluginManager::Impl::load( const std::string &bundleId )
 {
-    Result< bool > result;
     auto it = m_libraries.find( bundleId );
-    if( it != std::end( m_libraries )) {
-        std::unordered_set< std::string > loadedBundles;
-        result = loadBundle( *it->second->bundle(), loadedBundles );
+    if( it == std::end( m_libraries )) {
+        auto result = R::stream( false )
+                << "Could not find library for bundleID " << bundleId
+                << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
+
     }
-    else {
-        result = Result< bool >::failure(
-                    "Could not find library for bundleID " + bundleId );
-    }
+    std::unordered_set< std::string > loadedBundles;
+    auto result = loadBundle( *it->second->bundle(), loadedBundles );
     return result;
 }
 
@@ -158,19 +173,21 @@ Result< bool > PluginManager::Impl::reload( const std::string &bundleId )
 Result< PluginBundle * > PluginManager::Impl::pluginBundle(
         const std::string &bundleId) const
 {
-    auto result = Result< PluginBundle * >::failure(
-                nullptr,
-                "Could not find bundle with id " + bundleId );
     auto it = m_libraries.find( bundleId );
-    if( it != std::end( m_libraries )) {
-        auto bundle = it->second->bundle();
-        result = Result< PluginBundle *>::success( bundle );
+    if( it == std::end( m_libraries )) {
+        auto result = R::stream< PluginBundle *>( nullptr )
+                    << "Could not find bundle with id " << bundleId
+                    << R::fail;
+        VQ_ERROR( "Vq:Ext" ) << result;
+        return result;
     }
+    auto bundle = it->second->bundle();
+    auto result = R::success( std::move( bundle ));
     return result;
 }
 
 
-Result< std::size_t > PluginManager::Impl::allBundles(
+std::size_t PluginManager::Impl::allBundles(
         VQ_OUT std::vector< const PluginBundle * > &bundlesOut ) const
 {
     auto numBundles = std::size_t( 0 );
@@ -179,7 +196,7 @@ Result< std::size_t > PluginManager::Impl::allBundles(
         bundlesOut.emplace_back( bundle );
         ++ numBundles;
     }
-    return Result< std::size_t >::success( numBundles );
+    return numBundles;
 }
 
 
@@ -187,7 +204,7 @@ Result< bool > PluginManager::Impl::loadBundle(
         const PluginBundle &bundle,
         VQ_IN_OUT std::unordered_set< std::string > &loadedBundles )
 {
-    auto result = Result< bool >::success();
+    auto result = R::success( true );
     const auto &bundleDeps = bundle.dependencies();
     for( const auto &dep : bundleDeps ) {
         auto it = m_libraries.find( dep );
@@ -196,9 +213,11 @@ Result< bool > PluginManager::Impl::loadBundle(
             if( STLUtils::contains( loadedBundles, depBundle->bundleId() )){
                 result = loadBundle( *depBundle, loadedBundles );
                 if( ! result ) {
-                    VQ_ERROR( "Vq:Ext" )
+                    result = R::stream( false, result.errorCode() )
                             << "Could not load dependency bundle "
-                            << depBundle->bundleId();
+                            << depBundle->bundleId() << " --> "
+                            << result.reason() << R::fail;
+                    VQ_ERROR( "Vq:Ext" ) << result;
                     break;
                 }
                 else {
@@ -209,19 +228,27 @@ Result< bool > PluginManager::Impl::loadBundle(
         }
     }
     if( result ) {
+        auto stream = std::move( R::stream( false ));
+        int failedPlugins = 0;
+        stream << "Failed to initialize plugin(s): ";
         for( std::size_t i = 0; i < bundle.pluginCount(); ++ i ) {
             auto plugin = bundle.pluginAt( i );
             if( ! plugin->init() ) {
-                VQ_WARN( "Vq:Ext" )
-                        << "Could not initialize plugin with ID "
-                        << plugin->pluginId();
-                result = Result< bool >::failure(
-                            "Could not initialize plugin" );
+                ++ failedPlugins;
+                VQ_WARN( "Vq:Ext" ) << "Failed to initialize plugin with ID "
+                                    << plugin->pluginId();
+                stream << plugin->pluginId();
+                if( failedPlugins > 1 ) {
+                    stream << ", ";
+                }
             }
             else {
                 VQ_DEBUG( "Vq:Ext" )
                         << "Initialized plugin " << plugin->pluginId();
             }
+        }
+        if( failedPlugins != 0 ) {
+            result = stream << R::fail;
         }
     }
     return result;
@@ -232,7 +259,7 @@ Result< bool > PluginManager::Impl::unloadBundle(
         const PluginBundle &bundle,
         VQ_IN_OUT std::unordered_set< std::string > &unloadedBundles )
 {
-    Result< bool > result = Result< bool >::success();
+    Result< bool > result = R::success( true );
     auto rangeIt = m_dependents.equal_range( bundle.bundleId() );
     for( auto it = rangeIt.first; it != rangeIt.second; ++ it ) {
         auto dep = it->second;
@@ -242,21 +269,20 @@ Result< bool > PluginManager::Impl::unloadBundle(
             if( ! STLUtils::contains( unloadedBundles, depBundle->bundleId() )){
                 result = unloadBundle( *depBundle, unloadedBundles );
                 if( ! result ) {
-                    result = Result< bool >::failure(
-                                "Could not unload dependent bundle" );
-//                    VQ_ERROR( "Quartz:Core" )
-//                            << "Could not unload bundle "
-//                            << depBundle.bundleId() << " on which bundle "
-//                            << bundle.bundleId() << " depends.";
+                    result = R::stream( false )
+                            << "Could not unload bundle "
+                            << depBundle->bundleId() << " on which bundle "
+                            << bundle.bundleId() << " depends." << R::fail;
+                    VQ_ERROR( "Vq:Ext" ) << result;
                     break;
                 }
             }
         }
         else {
-            //TODO Warn
+            VQ_WARN( "Vq:Ext" ) << "Library entry for bundle "
+                                << bundle.bundleId() << " is not found";
         }
     }
-
     if( result ) {
         //remove the dependents
         m_dependents.erase( rangeIt.first, rangeIt.second );
@@ -264,14 +290,13 @@ Result< bool > PluginManager::Impl::unloadBundle(
             auto plugin = bundle.pluginAt( i );
             result = plugin->uninit();
             if( ! result ) {
-//                VQ_WARN( "Quartz:Core" )
-//                        << "Could not finalize plugin with ID "
-//                        << plugin->pluginId();
-                result = Result< bool >::failure( "Failed to finalize plugin" );
+                VQ_WARN( "Vq:Ext" )
+                        << "Could not finalize plugin with ID "
+                        << plugin->pluginId();
             }
             else {
-//                VQ_DEBUG( "Quartz:Core")
-//                        << "Initialized plugin " << plugin->pluginId();
+                VQ_DEBUG( "Vq:Ext")
+                        << "Initialized plugin " << plugin->pluginId();
             }
         }
     }
@@ -281,15 +306,15 @@ Result< bool > PluginManager::Impl::unloadBundle(
             auto &lib = libIt->second;
             result = lib->library()->unload();
             if( ! result  ) {
-//                VQ_ERROR( "Quartz:Core" )
-//                        << "Could not unload library for bundle "
-//                        << bundle.bundleId() << ": "
-//                        << result.reason();
+                VQ_ERROR( "Vq:Ext" )
+                        << "Could not unload library for bundle "
+                        << bundle.bundleId() << ": "
+                        << result.reason();
             }
             else {
-//                VQ_DEBUG( "Quartz:Core" )
-//                        << "Unloaded library for bundle "
-//                        << bundle.bundleId();
+                VQ_DEBUG( "Vq:Ext" )
+                        << "Unloaded library for bundle "
+                        << bundle.bundleId();
             }
         }
     }
