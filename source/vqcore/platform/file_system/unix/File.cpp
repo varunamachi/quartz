@@ -222,13 +222,49 @@ Result< std::uint64_t > File::fileSize() const
 
 Result< DateTime > File::creationTime() const
 {
-    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code != 0 ) {
+        auto result = R::stream( DateTime{ Timestamp{ 0 }}, errno )
+                << "Failed to get creation time for file at "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
+    auto timeEpoch = fileStat.st_ctime;
+    return R::success( DateTime{ Timestamp{ timeEpoch }} );
+}
+
+
+Result<DateTime> File::lastAccessTime() const
+{
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code != 0 ) {
+        auto result = R::stream( DateTime{ Timestamp{ 0 }}, errno )
+                << "Failed to get creation time for file at "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
+    auto timeEpoch = fileStat.st_atime;
+    return R::success( DateTime{ Timestamp{ timeEpoch }} );
 }
 
 
 Result< DateTime > File::modifiedTime() const
 {
-    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
+    Stat fileStat;
+    auto code = lstat( m_data->path().c_str(), &fileStat );
+    if( code != 0 ) {
+        auto result = R::stream( DateTime{ Timestamp{ 0 }}, errno )
+                << "Failed to get modification for file at "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
+    auto timeEpoch = fileStat.st_mtime;
+    return R::success( DateTime{ Timestamp{ timeEpoch }} );
 }
 
 

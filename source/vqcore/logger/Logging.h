@@ -14,29 +14,48 @@ namespace Vq { namespace Logger {
 class VQ_API LogLineHolder
 {
 public:
+    typedef std::ostream& ( Manip )( std::ostream& );
+
     LogLineHolder( LogMessage *msg )
         : m_msg( msg )
         , m_stream()
+        , m_level( VqLogger::get()->filterLevel() )
     {
 
     }
 
-    std::stringstream & stream()
+    template< typename T >
+    LogLineHolder & operator<<( const T &obj )
     {
-        return m_stream;
+        if( m_msg->logLevel() >= m_level ) {
+            m_stream << obj;
+        }
+        return *this;
+    }
+
+    LogLineHolder& operator << ( Manip &manip )
+    {
+        if( m_msg->logLevel() >= m_level ) {
+            m_stream << manip;
+        }
+        return *this;
     }
 
     ~LogLineHolder()
     {
-        m_stream.flush();
-        m_msg->setMessage( m_stream.str() );
-        VqLogger::get()->log( m_msg );
+        if( m_msg->logLevel() >= m_level ) {
+            m_stream.flush();
+            m_msg->setMessage( m_stream.str() );
+            VqLogger::get()->log( m_msg );
+        }
     }
 
 private:
     LogMessage *m_msg;
 
     std::stringstream m_stream;
+
+    VqLogLevel m_level;
 };
 
 
@@ -62,8 +81,7 @@ private:
                                        mod,                          \
                                        FUNCTION_NAME,                \
                                        __LINE__,                     \
-                                       std::string( "" ))).stream()
-
+                                       std::string( "" )))
 
 
     #define VQ_TRACE( module ) \

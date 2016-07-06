@@ -57,6 +57,8 @@ public:
 
     Result< DateTime > creationTime() const;
 
+    Result< DateTime > lastAccessTime() const;
+
     Result< DateTime > modifiedTime() const;
 
     Result< bool > makeWritable();

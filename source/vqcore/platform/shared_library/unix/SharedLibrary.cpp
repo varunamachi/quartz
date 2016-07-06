@@ -59,9 +59,9 @@ public:
         auto result = R::success( true );
         auto code = dlclose( m_handle );
         if( code != 0 ) {
-            result = R::stream( false, dlerror() )
+            result = R::stream( false )
                     << "Failed to unload shared object at "<< m_libPath
-                    << R::fail;
+                    << " -- " << dlerror() << R::fail;
             VQ_ERROR( "Vq:Core" ) << result;
         }
         else {
@@ -87,10 +87,10 @@ public:
         auto funcPtr = dlsym( m_handle, symbolName.c_str() );
         auto error = dlerror();
         if( error != nullptr || funcPtr == nullptr ) {
-            auto result = R::stream( LibraryFunction{ nullptr }, error )
+            auto result = R::stream( LibraryFunction{ nullptr })
                     << "Symbol with name '" << symbolName
                     << "' could not be resolved in library at " << m_libPath
-                    << R::fail;
+                    << " -- " << error << R::fail;
             VQ_DEBUG( "Vq:Core" ) << result;
             return result;
         }
