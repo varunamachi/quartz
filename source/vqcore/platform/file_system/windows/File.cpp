@@ -240,10 +240,17 @@ Result< bool > File::isExecuteble() const
 
 Result< std::uint64_t > File::fileSize() const
 {
-    auto result = R::success( std::uint64_t( 0 ));
-
-
-
+    DWORD upper = 0;
+    auto lower = ::GetFileSize( m_data->fileHandle(), &upper  );
+    if( lower != INVALID_FILE_SIZE ) {
+        auto shiftVal = sizeof( DWORD ) * 8;
+        auto fullSize = ( upper << shiftVal ) + lower;
+        return R::success< std::uint64_t >( fullSize );
+    }
+    auto result = R::stream( std::uint64_t( 0 ), VQ_TO_ERR( ::GetLastError() ))
+            << "Failed to get size of file at " << m_data->path()
+            << R::fail;
+    VQ_ERROR( "Vq:Core:FS" ) << result;
     return result;
 }
 
@@ -251,6 +258,12 @@ Result< std::uint64_t > File::fileSize() const
 Result< DateTime > File::creationTime() const
 {
     return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
+}
+
+
+Result<DateTime> File::lastAccessTime() const
+{
+
 }
 
 
