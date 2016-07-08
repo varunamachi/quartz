@@ -1,5 +1,7 @@
 
 #include <Windows.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "../../../logger/Logging.h"
 #include "../File.h"
@@ -91,6 +93,7 @@ File::~File()
 File & File::operator = ( File &&other )
 {
     m_data = std::move( other.m_data );
+    return *this;
 }
 
 
@@ -257,39 +260,134 @@ Result< std::uint64_t > File::fileSize() const
 
 Result< DateTime > File::creationTime() const
 {
-    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
+    FILETIME fileTime;
+    auto code = ::GetFileTime( m_data->fileHandle(),
+                               &fileTime,
+                               nullptr,
+                               nullptr );
+    if( code != FALSE ) {
+        auto time = ( static_cast< std::uint64_t >(
+                          fileTime.dwHighDateTime ) << 32 )
+                + ( fileTime.dwLowDateTime & 0xFFFFFFFF);
+        return R::success( DateTime{ Timestamp{ time }});
+    }
+    auto result = R::stream( DateTime{ Timestamp{ 0 }},
+                             VQ_TO_ERR( ::GetLastError() ))
+            << "Failed to retrieve the creation time of file at "
+            << m_data->path() << R::fail;
+    VQ_ERROR( "Vq:Core:FS" ) << result;
+    return result;
 }
 
 
 Result<DateTime> File::lastAccessTime() const
 {
-
+    FILETIME fileTime;
+    auto code = ::GetFileTime( m_data->fileHandle(),
+                               nullptr,
+                               &fileTime,
+                               nullptr );
+    if( code != FALSE ) {
+        auto time = ( static_cast< std::uint64_t >(
+                          fileTime.dwHighDateTime ) << 32 )
+                + ( fileTime.dwLowDateTime & 0xFFFFFFFF);
+        return R::success( DateTime{ Timestamp{ time }});
+    }
+    auto result = R::stream( DateTime{ Timestamp{ 0 }},
+                             VQ_TO_ERR( ::GetLastError() ))
+            << "Failed to retrieve the last access time of file at "
+            << m_data->path() << R::fail;
+    VQ_ERROR( "Vq:Core:FS" ) << result;
+    return result;
 }
 
 
 Result< DateTime > File::modifiedTime() const
 {
-    return R::failure( DateTime{ Timestamp{ 0 }}, "Not implemented" );
-}
-
-
-Result< bool > File::makeWritable()
-{
-    auto result = R::success( true );
+    FILETIME fileTime;
+    auto code = ::GetFileTime( m_data->fileHandle(),
+                               nullptr,
+                               nullptr,
+                               &fileTime );
+    if( code != FALSE ) {
+        auto time = ( static_cast< std::uint64_t >(
+                          fileTime.dwHighDateTime ) << 32 )
+                + ( fileTime.dwLowDateTime & 0xFFFFFFFF);
+        return R::success( DateTime{ Timestamp{ time }});
+    }
+    auto result = R::stream( DateTime{ Timestamp{ 0 }},
+                             VQ_TO_ERR( ::GetLastError() ))
+            << "Failed to retrieve the last mpodification time of file at "
+            << m_data->path() << R::fail;
+    VQ_ERROR( "Vq:Core:FS" ) << result;
     return result;
 }
 
 
-Result< bool > File::makeReadable()
+Result< bool > File::setWritable( bool value )
 {
+    auto attr = ::GetFileAttributes( m_data->path().c_str() );
+    if( attr == INVALID_FILE_ATTRIBUTES ) {
+        auto result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
+                << "Failed to get attributes of the file at " << m_data->path()
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
     auto result = R::success( true );
+    if( value ) {
+        attr = attr & static_cast< unsigned long >( ~ FILE_ATTRIBUTE_READONLY );
+    }
+    else {
+        attr = attr | FILE_ATTRIBUTE_READONLY;
+    }
+    auto code = ::SetFileAttributesA( m_data->path().c_str(), attr );
+    if( code == 0 ) {
+        result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
+                << "Failed to set attributes of the file at " << m_data->path()
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
     return result;
 }
 
 
-Result< bool > File::makeExecutable()
+Result< bool > File::setReadable( bool value )
 {
+    struct _stat stat;
+    auto code = _stat( m_data->path().c_str(), &stat );
+    if( code != 0 ) {
+        auto result = R::stream( false, errno )
+                << "Failed to stat file at " << m_data->path()
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
     auto result = R::success( true );
+    auto mode = stat.st_mode;
+    if( value ) {
+        mode = ( mode | _S_IREAD );
+    }
+    else {
+        mode = ( mode & (~ _S_IREAD ));
+    }
+    code = _chmod( m_data->path().c_str(), mode );
+    if( code != 0 ) {
+        result = R::stream( false, errno )
+                << "Failed to change the read permission for file at "
+                << m_data->path() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    return result;
+}
+
+
+Result< bool > File::setExecutable( bool /*value*/ )
+{
+    auto result = R::stream( true ) << "This operation is not supported on "
+                                       "Windows platform" << R::succeed;
+    VQ_WARN( "Vq:Core:FS" ) << result;
+
     return result;
 }
 

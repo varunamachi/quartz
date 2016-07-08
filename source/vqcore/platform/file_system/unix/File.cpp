@@ -269,14 +269,21 @@ Result< DateTime > File::modifiedTime() const
 
 
 static Result< bool > changePermission( const char *path,
-                                        ::mode_t permission )
+                                        ::mode_t permission,
+                                        bool value )
 {
     auto result = R::success( true );
     Stat fileStat;
     auto code = lstat( path, &fileStat );
     if( code == 0 ) {
         auto mode = fileStat.st_mode;
-        auto newMode = mode | permission;
+        if( value ) {
+            mode = mode | permission;
+        }
+        else {
+            mode = mode & ( ~ permission );
+        }
+        // auto newMode = mode | permission;
         code = chmod( path, newMode );
         if( code != 0 ) {
             result = R::stream( false, errno )
@@ -294,21 +301,21 @@ static Result< bool > changePermission( const char *path,
 }
 
 
-Result< bool > File::makeWritable()
+Result< bool > File::setWritable( bool value )
 {
-    return changePermission( m_data->path().c_str(), S_IWUSR );
+    return changePermission( m_data->path().c_str(), S_IWUSR, value );
 }
 
 
-Result< bool > File::makeReadable()
+Result< bool > File::setReadable( bool value )
 {
-    return changePermission( m_data->path().c_str(), S_IRUSR );
+    return changePermission( m_data->path().c_str(), S_IRUSR, value );
 }
 
 
-Result< bool > File::makeExecutable()
+Result< bool > File::setExecutable( bool value )
 {
-    return changePermission( m_data->path().c_str(), S_IXUSR );
+    return changePermission( m_data->path().c_str(), S_IXUSR, value );
 }
 
 }

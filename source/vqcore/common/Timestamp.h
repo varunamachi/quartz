@@ -12,7 +12,7 @@ namespace Vq {
 class Timestamp
 {
 public:
-    using TimeVal = std::int64_t;
+    using TimeVal = std::uint64_t;
 
     static const TimeVal TIMEVAL_MAX;
 

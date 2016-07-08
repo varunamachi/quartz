@@ -169,7 +169,7 @@ Timestamp Timestamp::now()
     using namespace std::chrono;
     auto now = system_clock::now().time_since_epoch();
     auto micros = duration_cast< microseconds >( now ).count();
-    return Timestamp { micros };
+    return Timestamp { static_cast< TimeVal >( micros )};
 }
 
 
