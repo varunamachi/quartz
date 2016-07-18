@@ -11,7 +11,9 @@ namespace Vq {
 class Path
 {
 public:
-    explicit Path( const std::string path );
+    explicit Path( const std::string &path );
+
+//    explicit Path( const std::vector< std::string > &components );
 
     Path( const Path &other );
 
@@ -38,6 +40,8 @@ public:
     void append( const std::string &relative );
 
     Path parent() const;
+
+    const static std::string SEPERATOR;
 
 private:
     class Impl;
