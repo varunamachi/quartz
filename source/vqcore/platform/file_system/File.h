@@ -61,11 +61,11 @@ public:
 
     Result< DateTime > modifiedTime() const;
 
-    Result< bool > makeWritable();
+    Result< bool > setWritable( bool value );
 
-    Result< bool > makeReadable();
+    Result< bool > setReadable( bool value );
 
-    Result< bool > makeExecutable();
+    Result< bool > setExecutable( bool value );
 
 private:
     class Data;
