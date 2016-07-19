@@ -1,4 +1,6 @@
 
+#include <memory>
+
 #include "../Path.h"
 
 namespace Vq {
@@ -11,10 +13,42 @@ public:
     explicit Impl( std::string &strPath )
         : m_strPath( strPath )
         , m_components()
-        , m_baseName()
-        , m_extensions()
     {
 
+    }
+
+    Impl( Impl &&other )
+        : m_strPath( std::move( other.m_strPath ))
+        , m_components( std::move( other.m_components ))
+    {
+        other.m_strPath.clear();
+        other.m_components.clear();
+    }
+
+    Impl( const Impl &other )
+        : m_strPath( other.m_strPath )
+        , m_components( other.m_components )
+    {
+
+    }
+
+    Impl & operator = ( const Impl & other )
+    {
+        m_strPath = other.m_strPath;
+        m_components = other.m_components;
+        return *this;
+    }
+
+    Impl & operator = ( Impl &&other )
+    {
+        m_strPath = std::move( other.m_strPath );
+        m_components = std::move( other.m_components );
+        return *this;
+    }
+
+    bool isValid() const
+    {
+        return ! ( m_strPath.empty() || m_components.empty() );
     }
 
     const std::string & strPath() const
@@ -27,25 +61,12 @@ public:
         return m_components;
     }
 
-    const std::string & baseName() const
-    {
-        return m_baseName;
-    }
-
-    const std::vector< std::string > & extensions() const
-    {
-        return m_extensions;
-    }
+    bool parse();
 
 private:
     std::string m_strPath;
 
     std::vector< std::string > m_components;
-
-    std::string m_baseName;
-
-    std::vector< std::string > m_extensions;
-
 };
 
 
@@ -53,85 +74,99 @@ private:
 Path::Path( const std::string &path )
     : m_impl( std::make_unique< Path::Impl >( path ))
 {
-
+    m_impl->parse();
 }
 
 
-//Path::Path( const std::vector< std::string > &components )
-//{
-
-//}
-
-
 Path::Path( const Path &other )
+    : m_impl( std::make_unique< Path::Impl >( *other.m_impl ))
 {
 
 }
 
 
 Path::Path( Path &&other )
+    : m_impl( std::make_unique< Path::Impl >( std::move( *other.m_impl )))
 {
 
 }
 
 
-Path::~Path() { }
+Path::~Path()
+{
+
+}
 
 
 Path & Path::operator = ( const Path &other )
 {
-
+    ( * this->m_impl ) = ( *other.m_impl );
+    return *this;
 }
 
 
 Path & Path::operator = ( Path &&other )
 {
-
+    ( *this->m_impl ) = ( *other.m_impl );
+    return *this;
 }
 
 
-bool Path::operator == ( Path &other )
+bool Path::operator == ( const Path &other ) const
 {
+    bool result = this->m_impl->strPath() == other.m_impl->strPath();
+    return result;
+}
 
+
+bool Path::operator ==( const std::string &strPath ) const
+{
+    bool result = this->m_impl->strPath() == strPath;
+    return result;
 }
 
 
 std::string Path::toString() const
 {
-
+    return m_impl->strPath();
 }
 
 
-const std::string & Path::fileName() const
+std::string Path::fileName() const
 {
-
+    std::string name{ "" };
+    if( m_impl->isValid() ) {
+        auto it = m_impl->components().end();
+        name = * ( --it );
+    }
+    return name;
 }
 
 
-const std::string & Path::extension() const
+std::string Path::extension() const
 {
-
+    return "";
 }
 
-const std::string & Path::baseName() const
+std::string Path::baseName() const
 {
-
+    return "";
 }
 
-std::vector< std::string > Path::components()
+const std::vector< std::string > & Path::components() const
 {
-
+    return m_impl->components();
 }
 
 
 void Path::append( const std::string &relative )
 {
-
+//    m_impl->components().emplace_back( relative );
 }
 
 Path Path::parent() const
 {
-
+    return Path{ "" };
 }
 
 

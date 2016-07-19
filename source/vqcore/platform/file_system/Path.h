@@ -13,8 +13,6 @@ class Path
 public:
     explicit Path( const std::string &path );
 
-//    explicit Path( const std::vector< std::string > &components );
-
     Path( const Path &other );
 
     Path( Path &&other );
@@ -25,17 +23,19 @@ public:
 
     Path & operator = ( Path &&other );
 
-    bool operator == ( Path &other );
+    bool operator == ( const Path &other ) const;
+
+    bool operator == ( const std::string &strPath ) const;
 
     std::string toString() const;
 
-    const std::string & fileName() const;
+    std::string fileName() const;
 
-    const std::string & extension() const;
+    std::string extension() const;
 
-    const std::string & baseName() const;
+    std::string baseName() const;
 
-    std::vector< std::string > components();
+    const std::vector< std::string > & components() const;
 
     void append( const std::string &relative );
 
