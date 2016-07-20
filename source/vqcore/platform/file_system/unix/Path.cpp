@@ -1,6 +1,7 @@
 
 #include <memory>
 
+#include "../../../common/StringUtils.h"
 #include "../Path.h"
 
 namespace Vq {
@@ -59,6 +60,16 @@ public:
     const std::vector< std::string > & components() const
     {
         return m_components;
+    }
+
+    std::vector< std::string > & components()
+    {
+        return m_components;
+    }
+
+    std::string & strPath()
+    {
+        return m_strPath;
     }
 
     bool parse();
@@ -145,12 +156,23 @@ std::string Path::fileName() const
 
 std::string Path::extension() const
 {
+    auto pos = m_impl->strPath().find_last_of( "." );
+    if( pos != std::string::npos ) {
+        auto ext = m_impl->strPath().substr( pos,
+                                             m_impl->strPath().size() - pos );
+        return ext;
+    }
     return "";
 }
 
 std::string Path::baseName() const
 {
-    return "";
+    auto pos = m_impl->strPath().find_last_of( "." );
+    if( pos != std::string::npos ) {
+        auto name = m_impl->strPath().substr( 0, pos );
+        return name;
+    }
+    return fileName();
 }
 
 const std::vector< std::string > & Path::components() const
@@ -159,10 +181,22 @@ const std::vector< std::string > & Path::components() const
 }
 
 
-void Path::append( const std::string &relative )
+Path & Path::append( const std::string &relative )
 {
-//    m_impl->components().emplace_back( relative );
+    if( relative.empty() ) {
+        return *this;
+    }
+    auto components = StringUtils::split( relative, Path::SEPERATOR );
+    for( const auto &cmp : components ) {
+        m_impl->components().emplace_back( std::move( cmp ));
+    }
+    if( ! StringUtils::endsWith( m_impl->strPath(), SEPERATOR )) {
+        m_impl->strPath() += SEPERATOR;
+    }
+    m_impl->strPath() += relative;
+    return *this;
 }
+
 
 Path Path::parent() const
 {

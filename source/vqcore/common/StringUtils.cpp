@@ -27,9 +27,10 @@ std::vector< std::string > StringUtils::split( const std::string &orig,
 
 
 
-std::vector< std::string > StringUtils::split( const std::string &orig,
-                                               const std::string &delim,
-                                               const std::size_t &maxSplits )
+std::vector< std::string > StringUtils::splitFromStart(
+        const std::string &orig,
+        const std::string &delim,
+        const std::size_t &maxSplits )
 {
     std::vector< std::string > tokens;
     if( maxSplits == 0 ) {
@@ -40,13 +41,17 @@ std::vector< std::string > StringUtils::split( const std::string &orig,
     std::size_t numSplits = 0;
     do{
         pos = orig.find_first_of( delim, prev );
-        if( pos > prev ) {
-            auto token = orig.substr( prev, pos - prev );
-            tokens.emplace_back( std::move( token ));
-            ++ numSplits;
+        if( pos == std::string::npos ) {
+            prev = 0;
+            break;
         }
-        prev = pos + 1;
-    } while( pos != std::string::npos && numSplits < maxSplits );
+        auto token = orig.substr( prev, pos - prev );
+        tokens.emplace_back( std::move( token ));
+        ++ numSplits;
+        prev = pos + delim.size();
+    } while( pos != std::string::npos
+             && numSplits < maxSplits
+             && prev < orig.size() );
 
     if( numSplits < maxSplits && prev < orig.length() ) {
         auto token = orig.substr( prev, std::string::npos );
@@ -55,5 +60,54 @@ std::vector< std::string > StringUtils::split( const std::string &orig,
     return tokens;
 }
 
+
+std::vector< std::string > StringUtils::splitFromEnd(
+        const std::string &orig,
+        const std::string &delim,
+        const std::size_t &maxSplits )
+{
+    std::vector< std::string > tokens;
+    if( maxSplits == 0 ) {
+        return tokens;
+    }
+    auto pos  = orig.size();
+    auto prev = orig.size();
+    std::size_t numSplits = 0;
+    do {
+        pos = orig.find_last_of( delim, prev );
+        if( pos == std::string::npos ) {
+            prev = 0;
+            break;
+        }
+        auto token = orig.substr( pos, prev - pos );
+        tokens.emplace_back( std::move( token ));
+        ++ numSplits;
+        prev = pos - delim.size();
+    } while( numSplits < maxSplits && prev > 0 );
+
+    if( numSplits < maxSplits && prev > 0 ) {
+        auto token = orig.substr( prev, std::string::npos );
+        tokens.emplace_back( std::move( token ));
+    }
+    return tokens;
+}
+
+
+bool StringUtils::endsWith( const std::string &str, const std::string &test )
+{
+    return false;
+}
+
+
+bool StringUtils::startsWith( const std::string &str, const std::string &test )
+{
+    return false;
+}
+
+
+bool StringUtils::contains( const std::string &str, const std::string &test )
+{
+    return false;
+}
 
 }

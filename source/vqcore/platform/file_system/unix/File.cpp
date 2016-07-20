@@ -284,7 +284,7 @@ static Result< bool > changePermission( const char *path,
             mode = mode & ( ~ permission );
         }
         // auto newMode = mode | permission;
-        code = chmod( path, newMode );
+        code = chmod( path, mode );
         if( code != 0 ) {
             result = R::stream( false, errno )
                     << "Failed to change permission of file at "

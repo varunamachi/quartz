@@ -37,7 +37,7 @@ public:
 
     const std::vector< std::string > & components() const;
 
-    void append( const std::string &relative );
+    Path & append( const std::string &relative );
 
     Path parent() const;
 
