@@ -11,7 +11,9 @@ namespace Vq {
 class Path
 {
 public:
-    explicit Path( const std::string &path );
+    Path( const std::vector< std::string > &components, bool absolute );
+
+    Path( const std::vector< std::string > &&components, bool absolute );
 
     Path( const Path &other );
 
@@ -27,6 +29,10 @@ public:
 
     bool operator == ( const std::string &strPath ) const;
 
+    bool operator != ( const Path &other ) const;
+
+    bool operator != ( const std::string strPath ) const;
+
     std::string toString() const;
 
     std::string fileName() const;
@@ -35,17 +41,26 @@ public:
 
     std::string baseName() const;
 
+    bool isValid() const;
+
+    bool isAbsolute() const;
+
     const std::vector< std::string > & components() const;
 
     Path & append( const std::string &relative );
 
     Path parent() const;
 
+    static Result< Path > create( const std::string &strPath );
+
     const static std::string SEPERATOR;
 
 private:
-    class Impl;
-    std::unique_ptr< Impl > m_impl;
+    static Result< std::vector< std::string >> parse(
+            const std::string &strPath );
+
+    class Data;
+    std::unique_ptr< Data > m_data;
 };
 
 
