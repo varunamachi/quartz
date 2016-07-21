@@ -14,6 +14,13 @@ namespace Vq {
 class Path::Data
 {
 public:
+    Data()
+        : m_components()
+        , m_absolute( false )
+    {
+
+    }
+
     Data( const std::vector< std::string > &components,
           bool absolute )
         : m_components( components )
@@ -74,6 +81,13 @@ private:
 
     bool m_absolute;
 };
+
+
+Path::Path()
+    : m_data( std::make_unique< Data >() )
+{
+
+}
 
 
 Path::Path( const std::vector< std::string > &components, bool absolute )

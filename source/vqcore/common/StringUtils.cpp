@@ -97,7 +97,16 @@ bool StringUtils::endsWith( const std::string &str, const std::string &test )
 {
     bool result = false;
     if( ! test.empty() && str.size() >= test.size() ) {
-
+        result = true;
+        auto srcIt = str.rbegin();
+        auto testIt = test.rbegin();
+        for( ; testIt != test.rend() && srcIt != str.rend();
+             ++ testIt, ++ srcIt ) {
+            if( ( *testIt ) != ( *srcIt )) {
+                result = false;
+                break;
+            }
+        }
     }
     return result;
 }
@@ -105,13 +114,39 @@ bool StringUtils::endsWith( const std::string &str, const std::string &test )
 
 bool StringUtils::startsWith( const std::string &str, const std::string &test )
 {
-    return false;
+    bool result = false;
+    if( ! test.empty() && str.size() >= test.size() ) {
+        result = true;
+        auto srcIt = std::begin( str );
+        auto testIt = std::begin( test );
+        for( ; testIt != std::end( test ) && srcIt != std::end( str );
+             ++ testIt, ++ srcIt ) {
+            if( ( *testIt ) != ( *srcIt )) {
+                result = false;
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 
 bool StringUtils::contains( const std::string &str, const std::string &test )
 {
-    return false;
+    bool result = false;
+    if( ! test.empty() && str.size() >= test.size() ) {
+        auto pos = str.find( test );
+        result = pos != std::string::npos;
+    }
+    return result;
+}
+
+
+bool StringUtils::isAsciiChar(char ch)
+{
+    bool result = ( ch >= 'a' && ch <= 'z')
+            || ( ch >= 'A' && ch < 'Z' );
+    return result;
 }
 
 }

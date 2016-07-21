@@ -11,6 +11,8 @@ namespace Vq {
 class Path
 {
 public:
+    Path();
+
     Path( const std::vector< std::string > &components, bool absolute );
 
     Path( const std::vector< std::string > &&components, bool absolute );
