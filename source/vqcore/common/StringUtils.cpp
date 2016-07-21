@@ -95,7 +95,11 @@ std::vector< std::string > StringUtils::splitFromEnd(
 
 bool StringUtils::endsWith( const std::string &str, const std::string &test )
 {
-    return false;
+    bool result = false;
+    if( ! test.empty() && str.size() >= test.size() ) {
+
+    }
+    return result;
 }
 
 

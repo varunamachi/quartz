@@ -14,7 +14,12 @@ Result< Path > Path::create( const std::string &strPath )
 
 Result< std::vector< std::string >> Path::parse( const std::string &strPath )
 {
-    return R::success( std::vector< std::string > { "" });
+    auto it = std::begin( strPath );
+    std::vector< std::string > comps;
+    char lastChar = 0;
+    for( ; it != std::end( strPath ); ++ it ) {
+
+    }
 }
 
 

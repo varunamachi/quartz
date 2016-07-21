@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../../common/StringUtils.h"
+#include "../../logger/Logging.h"
 #include "../../common/Result.h"
 #include "Path.h"
 
@@ -190,9 +191,15 @@ Path & Path::append( const std::string &relative )
     if( relative.empty() ) {
         return *this;
     }
-    auto components = StringUtils::split( relative, Path::SEPERATOR );
-    for( const auto &cmp : components ) {
-        m_data->components().emplace_back( std::move( cmp ));
+    auto result = parse( relative );
+    if( result ) {
+        for( const auto &cmp : result.data() ) {
+            m_data->components().emplace_back( std::move( cmp ));
+        }
+    }
+    else {
+        VQ_ERROR( "Vq:Core:FS" ) << "Failed to append path " << relative
+                                 << ", could not parse the given path";
     }
     return *this;
 }
