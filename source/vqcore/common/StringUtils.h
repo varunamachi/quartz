@@ -35,6 +35,8 @@ public:
     static bool contains( const std::string &str,
                           const std::string &test );
 
+    bool isAsciiChar( char ch );
+
 private:
 
 };
