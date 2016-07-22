@@ -28,7 +28,6 @@ public:
     static Result< std::vector< File >> listFiles( const File &dir,
                                                    FilterFunction filter );
 
-    static Result< Path > mergePath( const Path &one, const Path &two );
 
 private:
 };

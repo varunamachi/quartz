@@ -200,6 +200,12 @@ const std::vector< std::string > & Path::components() const
 }
 
 
+const std::vector<std::string> &Path::components()
+{
+    return m_data->components();
+}
+
+
 Path & Path::append( const std::string &relative )
 {
     if( relative.empty() ) {
@@ -221,7 +227,15 @@ Path & Path::append( const std::string &relative )
 
 Path Path::parent() const
 {
-    return create( "" ).data();
+    std::vector< std::string > pcomps;
+    auto &comps = m_data->components();
+    if( comps.size() > 2 ) {
+        std::copy( m_data->components().begin(),
+                   m_data->components().end() - 2,
+                   pcomps.begin() );
+
+    }
+    return Path{ pcomps, isAbsolute() };
 }
 
 

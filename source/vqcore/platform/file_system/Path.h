@@ -49,9 +49,15 @@ public:
 
     const std::vector< std::string > & components() const;
 
+    const std::vector< std::string > & components();
+
     Path & append( const std::string &relative );
 
     Path parent() const;
+
+    Path mergeWith( const Path &other );
+
+    Path relativeTo( const Path & other );
 
     static Result< Path > create( const std::string &strPath );
 

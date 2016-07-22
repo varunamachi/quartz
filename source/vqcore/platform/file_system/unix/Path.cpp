@@ -74,4 +74,17 @@ std::string Path::toString() const
     return path;
 }
 
+
+Path Path::mergeWith( const Path &other )
+{
+
+}
+
+
+Path Path::relativeTo( const Path &other )
+{
+
+}
+
+
 }
