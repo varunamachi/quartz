@@ -2,14 +2,13 @@
 
 #include <memory>
 
+#include "../../common/STLUtils.h"
 #include "../../common/StringUtils.h"
 #include "../../logger/Logging.h"
 #include "../../common/Result.h"
 #include "Path.h"
 
 namespace Vq {
-
-
 
 class Path::Data
 {
@@ -254,6 +253,74 @@ std::vector< std::string > Path::mutableComponents()
 void Path::assign( std::vector< std::string > && comp, bool isAbs )
 {
     m_data->assign( std::move( comp ), isAbs );
+}
+
+
+Result< Path & > Path::mergeWith( const Path &other )
+{
+    using CmpVec = std::vector< std::string >;
+    auto matchMove = []( CmpVec main, CmpVec other ) -> CmpVec::iterator
+    {
+        auto matchStarted = false;
+        auto mit = std::begin( main );
+        auto oit = std::begin( other );
+        for( ; mit != std::end( main ); ++ mit ) {
+            if( *mit == *oit ) {
+                ++ oit;
+                matchStarted = true;
+            }
+            else if( matchStarted && *mit != *oit ) {
+                oit = std::begin( other );
+                matchStarted = false;
+            }
+        }
+        return oit;
+    };
+
+    auto result = R::success< Path & >( *this );
+    if( this->isAbsolute() && other.isAbsolute() ) {
+        auto &main = STLUtils::largestOf( components(), other.components() );
+        auto &slv = STLUtils::smallestOf( components(), other.components() );
+        auto mit = std::begin( main );
+        for( auto sit = std::begin( slv ); sit != std::end( slv ); ++ sit ) {
+            if( *sit != *mit ) {
+                result = R::stream< Path & >( *this )
+                        << "Failed to merge path, size given paths are absolute"
+                           "and are different withing the merge range"
+                        << R::fail;
+                VQ_ERROR( "Vq:Core:FS" ) << result;
+                break;
+            }
+            ++ mit;
+        }
+        if( result && ( &main == &( other.components() ))) {
+            for( ; mit != std::end( main ); ++ mit ) {
+                this->mutableComponents().push_back( *mit );
+            }
+        }
+    }
+    else if( other.isAbsolute() ) {
+        auto comps = other.components();
+        auto oit = matchMove( comps, this->components() );
+        for( ; oit != std::end( this->components()); ++ oit ) {
+            comps.push_back( *oit );
+        }
+        this->assign( std::move( comps ), true );
+    }
+    else {
+        //If 'this' is absolute or both are relative 'this''s component is
+        //taken as main
+        auto oit = matchMove( this->components(), other.components() );
+        for( ; oit != std::end( other.components()); ++ oit ) {
+            this->mutableComponents().push_back( *oit );
+        }
+    }
+}
+
+
+Result< Path & > Path::relativeTo( const Path & other )
+{
+
 }
 
 }
