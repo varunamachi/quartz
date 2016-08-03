@@ -57,7 +57,7 @@ public:
 
     Result< Path & > mergeWith( const Path &other );
 
-    Result< Path & > relativeTo( const Path & other );
+    Result< Path > relativeTo( const Path & other );
 
     static Result< Path > create( const std::string &strPath );
 

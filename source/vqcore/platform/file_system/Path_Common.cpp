@@ -315,11 +315,19 @@ Result< Path & > Path::mergeWith( const Path &other )
             this->mutableComponents().push_back( *oit );
         }
     }
+    return result;
 }
 
 
-Result< Path & > Path::relativeTo( const Path & other )
+Result< Path > Path::relativeTo( const Path & other )
 {
+    if( ! ( this->isAbsolute() && other.isAbsolute() )) {
+        auto result = R::stream( Path{ std::vector< std::string >{}, false })
+                << "Both path should be absolute inorder to create relative "
+                   "path" << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+        return result;
+    }
 
 }
 
