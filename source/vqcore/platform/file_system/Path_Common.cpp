@@ -76,6 +76,12 @@ public:
         return m_components;
     }
 
+    void assign( std::vector< std::string > &&comp, bool isAbs )
+    {
+        m_components = comp;
+        m_absolute = isAbs;
+    }
+
 private:
     std::vector< std::string > m_components;
 
@@ -238,5 +244,16 @@ Path Path::parent() const
     return Path{ pcomps, isAbsolute() };
 }
 
+
+std::vector< std::string > Path::mutableComponents()
+{
+    return m_data->components();
+}
+
+
+void Path::assign( std::vector< std::string > && comp, bool isAbs )
+{
+    m_data->assign( std::move( comp ), isAbs );
+}
 
 }

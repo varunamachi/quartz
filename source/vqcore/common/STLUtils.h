@@ -141,6 +141,25 @@ void remove( ContainerType &container,
 }
 
 
+template< typename ContainerType,
+          typename = typename std::enable_if<
+              IsStdContainer< ContainerType >::value >::type>
+ContainerType & largestOf( ContainerType &cntOne, ContainerType &cntTwo )
+{
+    auto &largest = cntOne.size() >= cntTwo.size() ? cntOne : cntTwo;
+    return largest;
+}
+
+
+template< typename ContainerType,
+          typename = typename std::enable_if<
+              IsStdContainer< ContainerType >::value >::type>
+ContainerType & smallestOf( ContainerType &cntOne, ContainerType &cntTwo )
+{
+    auto &largest = cntOne.size() <= cntTwo.size() ? cntOne : cntTwo;
+    return largest;
+}
+
 
 //template< typename ContainerType >
 //void multiRemove( ContainerType &/*container*/,

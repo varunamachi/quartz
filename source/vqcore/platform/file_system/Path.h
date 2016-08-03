@@ -55,15 +55,19 @@ public:
 
     Path parent() const;
 
-    Path mergeWith( const Path &other );
+    Result< Path & > mergeWith( const Path &other );
 
-    Path relativeTo( const Path & other );
+    Result< Path & > relativeTo( const Path & other );
 
     static Result< Path > create( const std::string &strPath );
 
     const static std::string SEPERATOR;
 
 private:
+    std::vector< std::string > mutableComponents();
+
+    void assign( std::vector< std::string > && comp, bool isAbs );
+
     static Result< std::vector< std::string >> parse(
             const std::string &strPath );
 
