@@ -4,6 +4,7 @@
 
 #include "../../common/Macros.h"
 #include "../../common/Result.h"
+#include "../../common/Types.h"
 
 #include "File.h"
 #include "Path.h"
@@ -16,8 +17,9 @@ public:
     VQ_MAKE_STATIC( FSUtils );
 
     using FilterFunction = std::function< bool( const File & )>;
-    using ProgressFunction = std::function< bool( std::uint8_t progress )>;
     using FileList = std::vector< Vq::File >;
+    using BoolResultFunc = std::function< void( Result< bool > )>;
+
 
     static Result< File > fileAt( const std::string &path );
 
@@ -29,13 +31,39 @@ public:
 
     static Result< FileList > listFiles( const File &dir,
                                          FilterFunction filter,
-                                         ProgressFunction progFunc );
+                                         DetailedProgressFunc progFunc );
 
     static Result< bool > copyFile( const std::string &srcPath,
-                                    const std::string &dstPath)
+                                    const std::string &dstPath,
+                                    BoolResultFunc resultCallback = nullptr,
+                                    ProgressFunction progCallback = nullptr );
 
+    static Result< bool > moveFile( const std::string &srcPath,
+                                    const std::string &dstPath,
+                                    BoolResultFunc resultCallback,
+                                    ProgressFunction progCallback );
+
+    static Result< bool > copyDirectory( const std::string &srcPath,
+                                         const std::string &dstPath,
+                                         BoolResultFunc resultCallback,
+                                         DetailedProgressFunc progCallback );
+
+    static Result< bool > moveDirectory( const std::string &srcPath,
+                                         const std::string &dstPath,
+                                         BoolResultFunc resultCallback,
+                                         DetailedProgressFunc progCallback );
+
+    static Result< bool > createDirecties( const std::string &path );
+
+    static Result< bool > createSoftLink( const std::string &targetPath,
+                                          const std::string &linkPath );
+
+    static Result< bool > deleteDir( const std::string &path,
+                                     const bool force,
+                                     const bool recursive );
 
 private:
+
 };
 
 }

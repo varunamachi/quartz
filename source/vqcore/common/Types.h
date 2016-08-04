@@ -2,13 +2,12 @@
 
 #include <functional>
 
+#include "Result.h"
+
 namespace Vq {
 
 using ProgressFunction = std::function< bool( std::uint8_t progress )>;
-//using ResultFunction = std::function< bool
-
-
-
-
+using DetailedProgressFunc
+    = std::function< bool( std::size_t, std::size_t )>;
 
 }
