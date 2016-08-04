@@ -328,7 +328,25 @@ Result< Path > Path::relativeTo( const Path & other )
         VQ_ERROR( "Vq:Core:FS" ) << result;
         return result;
     }
-
+    std::vector< std::string > relComps;
+    auto sit = std::begin( other.components() );
+    auto oit = std::end( this->components() );
+    bool mismatched = false;
+    for( ; sit != std::end( other.components() ); ++ sit ) {
+        if( ! mismatched
+                && ( *sit == *oit )
+                && oit != std::end( components() )) {
+            ++ oit;
+        }
+        else {
+            mismatched = true;
+            relComps.emplace_back( ".." );
+        }
+    }
+    for( ; oit != std::end( components() ); ++ oit ) {
+        relComps.push_back( *oit );
+    }
+    return R::success( Path{ relComps, false });
 }
 
 }

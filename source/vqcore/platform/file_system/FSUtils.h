@@ -16,6 +16,8 @@ public:
     VQ_MAKE_STATIC( FSUtils );
 
     using FilterFunction = std::function< bool( const File & )>;
+    using ProgressFunction = std::function< bool( std::uint8_t progress )>;
+    using FileList = std::vector< Vq::File >;
 
     static Result< File > fileAt( const std::string &path );
 
@@ -25,8 +27,12 @@ public:
 
     static Result< bool > deleteFile( const File &file );
 
-    static Result< std::vector< File >> listFiles( const File &dir,
-                                                   FilterFunction filter );
+    static Result< FileList > listFiles( const File &dir,
+                                         FilterFunction filter,
+                                         ProgressFunction progFunc );
+
+    static Result< bool > copyFile( const std::string &srcPath,
+                                    const std::string &dstPath)
 
 
 private:
