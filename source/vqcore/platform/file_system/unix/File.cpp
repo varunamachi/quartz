@@ -60,6 +60,13 @@ private:
 
 };
 
+File::File()
+    : m_data( std::make_unique< File::Data >( "" ))
+{
+
+}
+
+
 File::File( const Path &path )
     : m_data( std::make_unique< File::Data >( path ))
 {

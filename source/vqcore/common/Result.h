@@ -222,15 +222,15 @@ struct R {
                                      errorCode );
     }
 
-    template< typename ReturnType >
-    static Result< ReturnType > failure( ReturnType data,
-                                         ErrorCodeType errorCode = 0 )
-    {
-        return Result< ReturnType >( false,
-                                     data,
-                                     "",
-                                     errorCode );
-    }
+//    template< typename ReturnType >
+//    static Result< ReturnType > failure( ReturnType data,
+//                                         ErrorCodeType errorCode = 0 )
+//    {
+//        return Result< ReturnType >( false,
+//                                     data,
+//                                     "",
+//                                     errorCode );
+//    }
 
     template< typename ReturnType >
     static RStream< ReturnType > stream( ReturnType r,

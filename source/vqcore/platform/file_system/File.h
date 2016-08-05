@@ -29,6 +29,8 @@ public:
 
     VQ_NO_COPY( File );
 
+    File();
+
     explicit File( const Path &path );
 
     File( File &&other );

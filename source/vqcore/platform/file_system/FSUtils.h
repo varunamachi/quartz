@@ -29,9 +29,11 @@ public:
 
     static Result< bool > deleteFile( const File &file );
 
-    static Result< FileList > listFiles( const File &dir,
-                                         FilterFunction filter,
-                                         DetailedProgressFunc progFunc );
+    static Result< FileList > listFiles(
+            const File &dir,
+            FilterFunction filter,
+            std::function< void( Result< FileList >)> resultCallback = nullptr,
+            DetailedProgressFunc progressCallback = nullptr );
 
     static Result< bool > copyFile( const std::string &srcPath,
                                     const std::string &dstPath,
@@ -40,18 +42,20 @@ public:
 
     static Result< bool > moveFile( const std::string &srcPath,
                                     const std::string &dstPath,
-                                    BoolResultFunc resultCallback,
-                                    ProgressFunction progCallback );
+                                    BoolResultFunc resultCallback = nullptr,
+                                    ProgressFunction progCallback = nullptr );
 
-    static Result< bool > copyDirectory( const std::string &srcPath,
-                                         const std::string &dstPath,
-                                         BoolResultFunc resultCallback,
-                                         DetailedProgressFunc progCallback );
+    static Result< bool > copyDirectory(
+            const std::string &srcPath,
+            const std::string &dstPath,
+            BoolResultFunc resultCallback = nullptr,
+            DetailedProgressFunc progCallback  = nullptr );
 
-    static Result< bool > moveDirectory( const std::string &srcPath,
-                                         const std::string &dstPath,
-                                         BoolResultFunc resultCallback,
-                                         DetailedProgressFunc progCallback );
+    static Result< bool > moveDirectory(
+            const std::string &srcPath,
+            const std::string &dstPath,
+            BoolResultFunc resultCallback = nullptr,
+            DetailedProgressFunc progCallback = nullptr );
 
     static Result< bool > createDirecties( const std::string &path );
 

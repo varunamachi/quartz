@@ -18,7 +18,7 @@ public:
 
     explicit Data( const std::string &path )
         : m_path( path )
-        , m_pathObj( path )
+        , m_pathObj( Path::create( path ).data() )
     {
     }
 
@@ -27,7 +27,7 @@ public:
         , m_pathObj( std::move( other.m_pathObj ))
     {
         other.m_path = "";
-        other.m_pathObj = Path{ "" };
+        other.m_pathObj = Path();
     }
 
     inline const std::string & path() const
@@ -69,6 +69,13 @@ private:
     Path m_pathObj;
 
 };
+
+File::File()
+    : m_data( std::make_unique< File::Data >( "" ))
+{
+
+}
+
 
 File::File( const Path &path )
     : m_data( std::make_unique< File::Data >( path ))
