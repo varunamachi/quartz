@@ -9,18 +9,10 @@ namespace Vq {
 
 namespace Vq {
 
-Result< bool > FSUtils::createRegularFile( const File &file )
-{
-    return R::failure( false );
-}
-
-
-
 Result< bool > FSUtils::deleteFile( const File &file )
 {
     return R::failure( false );
 }
-
 
 
 Result< FSUtils::FileList > FSUtils::listFiles(

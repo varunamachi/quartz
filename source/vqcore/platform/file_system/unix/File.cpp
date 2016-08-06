@@ -21,6 +21,12 @@ public:
 
     explicit Data( const std::string &path )
         : m_path( path )
+        , m_pathObj( Path::create( path ).data() )
+    {
+    }
+
+    explicit Data( const Path &path )
+        : m_path( path.toString() )
         , m_pathObj( path )
     {
     }
@@ -30,7 +36,7 @@ public:
         , m_pathObj( std::move( other.m_pathObj ))
     {
         other.m_path = "";
-        other.m_pathObj = Path{ "" };
+        other.m_pathObj = Path{ std::vector< std::string >{}, false };
     }
 
     inline const std::string & path() const

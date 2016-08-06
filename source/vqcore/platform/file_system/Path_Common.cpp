@@ -230,6 +230,27 @@ Path & Path::append( const std::string &relative )
 }
 
 
+Result< Path > Path::pathOfChild( const std::string &relative ) const
+{
+    auto compRes = parse( relative );
+    auto result = R::success< Path >( Path{} );
+    if( compRes ) {
+        auto newComps = this->components();
+        for( auto &cmp : compRes.data() ) {
+            newComps.emplace_back( std::move( cmp ));
+        }
+        result = R::success< Path >( Path{ newComps, this->isAbsolute() });
+    }
+    else {
+        auto error = R::stream< Path >( Path{} )
+                << "Given relative path " << relative << "is invalid "
+                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << error;
+    }
+    return result;
+}
+
+
 Path Path::parent() const
 {
     std::vector< std::string > pcomps;

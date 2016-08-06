@@ -32,8 +32,7 @@ public:
     static Result< FileList > listFiles(
             const File &dir,
             FilterFunction filter,
-            std::function< void( Result< FileList >)> resultCallback = nullptr,
-            DetailedProgressFunc progressCallback = nullptr );
+            std::function< void( Result< FileList >)> resultCallback = nullptr);
 
     static Result< bool > copyFile( const std::string &srcPath,
                                     const std::string &dstPath,

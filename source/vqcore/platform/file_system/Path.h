@@ -53,6 +53,8 @@ public:
 
     Path & append( const std::string &relative );
 
+    Result< Path > pathOfChild( const std::string &relative ) const;
+
     Path parent() const;
 
     Result< Path & > mergeWith( const Path &other );

@@ -93,7 +93,7 @@ public:
 
     ~Result() { }
 
-    bool operator==( const Result< ReturnType > &other )
+    bool operator==( const Result< ReturnType > &other ) const
     {
         bool same = this == &other
                 || ( other.result() == this->m_result
@@ -102,10 +102,20 @@ public:
         return same;
     }
 
-    bool operator==( const ReturnType &other )
+    bool operator!=( const Result<ReturnType > &other ) const
+    {
+        return ! ( *this == other );
+    }
+
+    bool operator==( const ReturnType &other ) const
     {
         bool same = this->result == other.result;
         return same;
+    }
+
+    bool operator!=( const ReturnType &other ) const
+    {
+        return ! ( *this == other );
     }
 
     Result & operator = ( const Result< ReturnType > &other )

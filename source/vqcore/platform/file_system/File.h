@@ -31,6 +31,8 @@ public:
 
     File();
 
+    explicit File( const std::string &path );
+
     explicit File( const Path &path );
 
     File( File &&other );
