@@ -62,8 +62,7 @@ public:
                                           const std::string &linkPath );
 
     static Result< bool > deleteDir( const std::string &path,
-                                     const bool force,
-                                     const bool recursive );
+                                     const bool force );
 
 private:
 

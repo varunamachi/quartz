@@ -37,31 +37,28 @@ Result< bool > FSUtils::deleteFile( const File &file )
 }
 
 
-
-Result< FSUtils::FileList > FSUtils::listFiles(
-        const File &dir,
-        FSUtils::FilterFunction filter,
-        std::function< void( Result< FileList >)> resultCallback )
+static Result< bool > list( const File &dir,
+                            FSUtils::FilterFunction filter,
+                            VQ_OUT FSUtils::FileList &filesOut )
 {
-    auto result = R::success< FileList >( FileList{} );
+    auto result = R::success( true );
     if( ! dir.exists() ) {
-        result = R::stream< FileList >( FileList{} )
+        result = R::stream( false )
                 << "List files: directory at " << dir.path().toString()
                 << " does not exist" << R::fail;
     }
     else if( dir.type() != File::Type::Dir ) {
-        result = R::stream< FileList >( FileList{} )
+        result = R::stream( false )
                 << "List files: File at " << dir.path().toString()
                 << " is not a directory" << R::fail;
     }
     else if( ! dir.isReadable() ) {
-        result = R::stream< FileList >( FileList{} )
+        result = R::stream( false )
                 << "List files: directory at " << dir.path().toString()
                 << " is not readable" << R::fail;
     }
     if( ! result ) {
         VQ_ERROR( "Vq:Core:FS" ) << result;
-        resultCallback( result );
         return result;
     }
 
@@ -69,31 +66,46 @@ Result< FSUtils::FileList > FSUtils::listFiles(
     auto dirp = ::opendir( dir.path().toString().c_str() );
     struct dirent *dirPtr;
     if( dirp != nullptr ) {
-        FileList files;
         //should it be readdir64?
         while(( dirPtr = ::readdir( dirp )) != nullptr ) {
             auto newPath = path.pathOfChild( dirPtr->d_name ).data();
             File newFile{ newPath };
             if( newFile.type() == File::Type::Dir ) {
-                files.emplace_back( newFile );
-                //TODO do a recursive call, but this needs file list to be taken
-                // as parameter. Better create a function that calls the
-                // recursive function.
-                //
-                //listFiles( newFile, filter, resultCallback );
+                filesOut.emplace_back( newFile );
+                auto res = list( newFile, filter, filesOut );
+                if( ! res ) {
+                    //Or we could return
+                    continue;
+                }
             }
             else {
                 if( filter == nullptr || filter( newFile )) {
-                    files.emplace_back( std::move( newFile ));
+                    filesOut.emplace_back( std::move( newFile ));
                 }
             }
         }
     }
     else {
-        result = R::stream< FileList >( FileList{}, errno )
+        result = R::stream( false, errno )
                 << "Failed to stat the directory at " << dir.path().toString()
                 << R::fail;
     }
+    return result;
+}
+
+
+Result< FSUtils::FileList > FSUtils::listFiles(
+        const File &dir,
+        FSUtils::FilterFunction filter,
+        std::function< void( Result< FileList >)> resultCallback )
+{
+    FileList files;
+    auto rz = list( dir, filter, files );
+    auto result = R::success< FileList >( files );
+    if( ! rz ) {
+        result = R::failure< FileList >( files, std::move( rz ));
+    }
+    resultCallback( result );
     return result;
 }
 
