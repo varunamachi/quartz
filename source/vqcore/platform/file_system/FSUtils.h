@@ -36,6 +36,7 @@ public:
 
     static Result< bool > copyFile( const std::string &srcPath,
                                     const std::string &dstPath,
+                                    const bool force = false,
                                     BoolResultFunc resultCallback = nullptr,
                                     ProgressFunction progCallback = nullptr );
 
