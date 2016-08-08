@@ -145,7 +145,36 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
                                 &offset,
                                 static_cast< std::size_t >( srcStat.st_size ));
         if( retVal == -1 ) {
-//             R::stream( false )
+             result = R::stream( false, errno )
+                     << "Copy File: sendfile failed, src: "
+                     << src.path().toString() << " dst: "
+                     << dst.path().toString() << R::fail;
+        }
+
+    }
+    else {
+        static const std::size_t BUFFER_SIZE = ( 32 * 1024 );
+        static char buffer[ BUFFER_SIZE ];
+        std::size_t totalCopied = 0;
+        while( true ) {
+            auto rdSz = ::read( srcFd, buffer, BUFFER_SIZE );
+            if( rdSz == 0 ) {
+                break;
+            }
+            auto wrSz = ::write( dstFd,
+                                 buffer,
+                                 static_cast< std::size_t>( rdSz ));
+            if( wrSz != rdSz ) {
+                result = R::stream( false, errno )
+                        << "File Copy: Writing to destination file at "
+                        << dst.path().toString() << " failed" << R::fail;
+                VQ_ERROR( "Vq:Core:FS" ) << result;
+                break;
+            }
+            totalCopied += static_cast< std::size_t >( rdSz );
+            auto progress = static_cast< std::uint8_t>(
+                        src.fileSize().data() / totalCopied );
+            progCallback( progress );
         }
 
     }
