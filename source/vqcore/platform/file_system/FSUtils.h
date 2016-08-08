@@ -66,6 +66,10 @@ public:
                                      const bool force );
 
 private:
+    static Result< bool > copyFileImpl( const File &src,
+                                        const File &dst,
+                                        ProgressFunction progCallback );
+
 
 };
 

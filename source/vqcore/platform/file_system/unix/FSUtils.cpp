@@ -1,8 +1,12 @@
 
 #include <unistd.h>
+#include <fcntl.h>
 #include <dirent.h>
 #include <sys/types.h>
+#include <sys/sendfile.h>
+#include <sys/stat.h>
 
+#include "../../../common/ScopedOperation.h"
 #include "../../../logger/Logging.h"
 #include "../FSUtils.h"
 
@@ -109,58 +113,46 @@ Result< FSUtils::FileList > FSUtils::listFiles(
     return result;
 }
 
-
-
-Result< bool > FSUtils::copyFile( const std::string &psrc,
-                                  const std::string &pdst,
-                                  const bool force,
-                                  FSUtils::BoolResultFunc resultCallback,
-                                  ProgressFunction progCallback)
+Result< bool > FSUtils::copyFileImpl( const File &src,
+                                      const File &dst,
+                                      ProgressFunction progCallback )
 {
-    auto srcRes = Path::create( psrc );
-    auto dstRes = Path::create( pdst );
-
-    auto dstParent = dstRes.data().parent();
-    if( ! ( srcRes  && dstRes )) {
+    auto srcFd = ::open( src.path().toString().c_str(), O_RDONLY);
+    struct stat srcStat;
+    ::fstat ( srcFd, &srcStat );
+    auto dstFd = ::open( dst.path().toString().c_str(),
+                         O_WRONLY | O_CREAT,
+                         srcStat.st_mode );
+    if( srcFd == 0 || dstFd == 0 ) {
         auto error = R::stream( false )
-                << "Invalid path given for copy, Source: " << psrc
-                << " Destination: " << pdst << R::fail;
+                << "Failed to open "
+                << ( srcFd == 0 ? "source" : "destination")
+                << ( srcFd == 0 ? src.path().toString()
+                                : dst.path().toString() ) << " file" << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
     }
-
-    File srcFile{ srcRes.data() };
-    File dstFile{ dstRes.data() };
-    File parentFile{ dstParent };
+    AT_SCOPE_EXIT( close( srcFd ));
+    AT_SCOPE_EXIT( close( dstFd ));
     auto result = R::success( true );
-    if( ! srcFile.exists() ) {
-        result = R::stream( false )
-                << "File Copy: Source file at " << psrc << " does not exists"
-                << R::fail;
-    }
-    else if( ! srcFile.isReadable() ) {
-        result = R::stream( false )
-                << "File Copy: Source file at " << psrc << " is not readable"
-                << R::fail;
-    }
-    else if( ! parentFile.exists() ) {
-        result = R::stream( false )
-                << "File Copy: Destination path " << pdst << " does not exist "
-                << R::fail;
-    }
-    else if( ! parentFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Copy: Destination path " << pdst << " is not writable"
-                << R::fail;
-    }
-    else if( force && srcFile.exists() && ! srcFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Copy: Destination file at " << pdst
-                <<  "exist and is not writable" << R::fail;
-    }
+    if( progCallback == nullptr ) {
+        //if progress information is not required we use the kernel mode copy
+        /* Stat the input file to obtain its size. */
+        //Open destination file, with same permission as the source
+        ::off_t offset;
+        auto retVal = sendfile( srcFd,
+                                dstFd,
+                                &offset,
+                                static_cast< std::size_t >( srcStat.st_size ));
+        if( retVal == -1 ) {
+//             R::stream( false )
+        }
 
-
+    }
+    return result;
 }
+
+
 
 
 
