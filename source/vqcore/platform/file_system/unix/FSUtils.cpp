@@ -181,14 +181,72 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
 }
 
 
-
-Result< bool > FSUtils::copyDirectory( const std::string &srcPath,
-                                       const std::string &dstPath,
+Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
+                                       const std::string &dstStrPath,
                                        ConflictStrategy conflictStrategy,
                                        FSUtils::BoolResultFunc resultCallback,
                                        DetailedProgressFunc progCallback )
 {
-    return R::failure( false );
+    auto srcPathRes = Path::create( srcStrPath );
+    auto dstPathRes = Path::create( dstStrPath );
+
+    //First check if paths are properly formed
+    if( ! ( srcPathRes && dstPathRes )) {
+        auto stream = std::move( R::stream( false ) << "Dir Copy: " );
+        if( ! srcPathRes ) {
+            stream << "Invalid source path " << srcStrPath << " given";
+        }
+        else {
+            stream << "Invalid destination path " << srcStrPath << " given";
+        }
+        auto error = stream << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << error;
+        return error;
+    }
+
+
+    File srcDir{ srcPathRes.data() };
+    File dstDir{ dstPathRes.data() };
+    File srcParent{ srcDir.path().parent() };
+    File dstParent{ dstDir.path().parent() };
+
+    auto result = R::success( true );
+    //Perfrom basic validation
+    if( ! ( srcParent.exists() && srcParent.isReadable() )) {
+        //Parent of source is not accessable
+    }
+    else if( ! srcDir.exists() ) {
+        //The source directory does not exist
+    }
+    else if( srcDir.type() != File::Type::Dir ) {
+        //Source is not a directory
+    }
+    else if( ! ( dstParent.exists() && dstParent.isWritable() )) {
+        //destination is parent is not writable
+    }
+    else if( dstDir.exists() ) {
+        if( conflictStrategy == ConflictStrategy::Stop ) {
+            //The destination directory exists and the conflict policy demands
+            //stoping the copy
+        }
+        else if( conflictStrategy != ConflictStrategy::Skip
+                 && ! dstDir.isWritable() ) {
+            //The destinatio directory exist and is not writable, this will
+            //cause error if the conflict policy is not error
+        }
+    }
+
+    //Ready to Copy!!
+    auto flistRes = listFiles( srcDir );
+    if( flistRes ) {
+        //iterate and call file copy
+        //if conflict occurs use the conflict policy
+        //once all are copied, delete the copied file and not the skipped ones
+    }
+    else {
+        //error
+    }
+    return result;
 }
 
 

@@ -41,7 +41,7 @@ public:
 
     static Result< FileList > listFiles(
             const File &dir,
-            FilterFunction filter,
+            FilterFunction filter = nullptr,
             std::function< void( Result< FileList >)> resultCallback = nullptr);
 
     static Result< bool > copyFile( const std::string &srcPath,
