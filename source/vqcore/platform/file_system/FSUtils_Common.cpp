@@ -66,7 +66,7 @@ Result< bool > FSUtils::createRegularFile( const File &file )
 
 Result< bool > FSUtils::copyFile( const std::string &psrc,
                                   const std::string &pdst,
-                                  const bool force,
+                                  const bool forceCopy,
                                   FSUtils::BoolResultFunc resultCallback,
                                   ProgressFunction progCallback)
 {
@@ -106,7 +106,7 @@ Result< bool > FSUtils::copyFile( const std::string &psrc,
                 << "File Copy: Destination path " << pdst << " is not writable"
                 << R::fail;
     }
-    else if( force && srcFile.exists() && ! srcFile.isWritable() ) {
+    else if( forceCopy && srcFile.exists() && ! srcFile.isWritable() ) {
         result = R::stream( false )
                 << "File Copy: Destination file at " << pdst
                 <<  "exist and is not writable" << R::fail;
@@ -117,10 +117,94 @@ Result< bool > FSUtils::copyFile( const std::string &psrc,
                 << R::fail;
     }
     else {
-        result = copyFileImpl( srcFile, dstFile, progCallback );
+        if( dstFile.exists() ) {
+            result = deleteFile( dstFile );
+        }
+        if( result ) {
+            result = copyFileImpl( srcFile, dstFile, progCallback );
+        }
     }
     resultCallback( result );
     return result;
 }
+
+
+Result< bool > FSUtils::moveFile( const std::string &psrc,
+                                  const std::string &pdst,
+                                  bool forceMove,
+                                  FSUtils::BoolResultFunc resultCallback,
+                                  ProgressFunction progCallback )
+{
+    auto srcRes = Path::create( psrc );
+    auto dstRes = Path::create( pdst );
+
+    if( ! ( srcRes  && dstRes )) {
+        auto error = R::stream( false )
+                << "Invalid path given for move, Source: " << psrc
+                << " Destination: " << pdst << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << error;
+        return error;
+    }
+
+    File srcFile{ srcRes.data() };
+    File dstFile{ dstRes.data() };
+    File srcParent{ srcRes.data().parent() };
+    File dstParent{ dstRes.data().parent() };
+    auto result = R::success( true );
+    if( ! srcFile.exists() ) {
+        result = R::stream( false )
+                << "File Move: Source file at " << psrc << " does not exists"
+                << R::fail;
+    }
+    else if( ! srcParent.isReadable() || ! srcFile.isReadable() ) {
+        result = R::stream( false )
+                << "File Move: Source file at " << psrc << " is not readable"
+                << R::fail;
+    }
+    else if( ! srcParent.isWritable() || ! srcFile.isWritable() ) {
+        result = R::stream( false )
+                << "File Move: Source file at " << psrc << " is not writable"
+                << " hence cannot be move" << R::fail;
+    }
+    else if( ! dstParent.exists() ) {
+        result = R::stream( false )
+                << "File Move: Destination path " << pdst << " does not exist "
+                << R::fail;
+    }
+    else if( ! dstParent.isWritable() ) {
+        result = R::stream( false )
+                << "File Move: Destination path " << pdst << " is not writable"
+                << R::fail;
+    }
+    else if( forceMove && srcFile.exists() && ! srcFile.isWritable() ) {
+        result = R::stream( false )
+                << "File Move: Destination file at " << pdst
+                <<  "exist and is not writable" << R::fail;
+    }
+    else if( srcFile.type() != File::Type::Regular ) {
+        result = R::stream( false )
+                << "Invalid source file type, copy only works for regular files"
+                << R::fail;
+    }
+    else {
+        if( dstFile.exists() ) {
+            result = deleteFile( dstFile );
+        }
+        if( result ) {
+            VQ_DEBUG( "Vq:Core:FS" )
+                    << "File Move: copying file "  << psrc << " to " << pdst;
+            result = copyFileImpl( srcFile, dstFile, progCallback );
+            if( result ) {
+                VQ_DEBUG( "Vq:Core:FS" )
+                        << "File Move: deleting file "  << psrc
+                        << " after copying it to " << pdst;
+                result = deleteFile( srcFile );
+            }
+        }
+    }
+    resultCallback( result );
+    return result;
+}
+
 
 }

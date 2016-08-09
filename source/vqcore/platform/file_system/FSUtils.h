@@ -11,9 +11,19 @@
 
 namespace Vq {
 
+
 class FSUtils
 {
 public:
+    enum class ConflictStrategy
+    {
+        Stop,
+        Skip,
+        Overwrite,
+        Merge
+    };
+
+
     VQ_MAKE_STATIC( FSUtils );
 
     using FilterFunction = std::function< bool( const File & )>;
@@ -36,24 +46,27 @@ public:
 
     static Result< bool > copyFile( const std::string &srcPath,
                                     const std::string &dstPath,
-                                    const bool force = false,
+                                    const bool forceCopy = false,
                                     BoolResultFunc resultCallback = nullptr,
                                     ProgressFunction progCallback = nullptr );
 
     static Result< bool > moveFile( const std::string &srcPath,
                                     const std::string &dstPath,
+                                    bool forceMove = false,
                                     BoolResultFunc resultCallback = nullptr,
                                     ProgressFunction progCallback = nullptr );
 
     static Result< bool > copyDirectory(
             const std::string &srcPath,
             const std::string &dstPath,
+            ConflictStrategy conflictStrategy,
             BoolResultFunc resultCallback = nullptr,
             DetailedProgressFunc progCallback  = nullptr );
 
     static Result< bool > moveDirectory(
             const std::string &srcPath,
             const std::string &dstPath,
+            ConflictStrategy conflictStrategy,
             BoolResultFunc resultCallback = nullptr,
             DetailedProgressFunc progCallback = nullptr );
 

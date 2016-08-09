@@ -176,27 +176,15 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
                         src.fileSize().data() / totalCopied );
             progCallback( progress );
         }
-
     }
     return result;
 }
 
 
 
-
-
-Result< bool > FSUtils::moveFile( const std::string &srcPath,
-                                  const std::string &dstPath,
-                                  FSUtils::BoolResultFunc resultCallback,
-                                  ProgressFunction progCallback )
-{
-    return R::failure( false );
-}
-
-
-
 Result< bool > FSUtils::copyDirectory( const std::string &srcPath,
                                        const std::string &dstPath,
+                                       ConflictStrategy conflictStrategy,
                                        FSUtils::BoolResultFunc resultCallback,
                                        DetailedProgressFunc progCallback )
 {
@@ -207,6 +195,7 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcPath,
 
 Result< bool > FSUtils::moveDirectory( const std::string &srcPath,
                                        const std::string &dstPath,
+                                       ConflictStrategy conflictStrategy,
                                        FSUtils::BoolResultFunc resultCallback,
                                        DetailedProgressFunc progCallback )
 {
