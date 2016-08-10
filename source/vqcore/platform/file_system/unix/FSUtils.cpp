@@ -117,6 +117,18 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
                                       const File &dst,
                                       ProgressFunction progCallback )
 {
+    auto destParentPath = dst.path().parent();
+    //Create directories in destination path if they dont exist
+    auto dirCreateRes = createDirecties( destParentPath.toString() );
+    if( ! dirCreateRes ) {
+        auto err = R::stream( false )
+                << "Could not copy " << src.path().toString() << " to "
+                << dst.path().toString() << " due to error while creating "
+                << " directories in destination path, Error: "
+                << dirCreateRes.reason() << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << err;
+        return err;
+    }
     auto srcFd = ::open( src.path().toString().c_str(), O_RDONLY);
     struct stat srcStat;
     ::fstat ( srcFd, &srcStat );
@@ -179,76 +191,6 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
     }
     return result;
 }
-
-
-Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
-                                       const std::string &dstStrPath,
-                                       ConflictStrategy conflictStrategy,
-                                       FSUtils::BoolResultFunc resultCallback,
-                                       DetailedProgressFunc progCallback )
-{
-    auto srcPathRes = Path::create( srcStrPath );
-    auto dstPathRes = Path::create( dstStrPath );
-
-    //First check if paths are properly formed
-    if( ! ( srcPathRes && dstPathRes )) {
-        auto stream = std::move( R::stream( false ) << "Dir Copy: " );
-        if( ! srcPathRes ) {
-            stream << "Invalid source path " << srcStrPath << " given";
-        }
-        else {
-            stream << "Invalid destination path " << srcStrPath << " given";
-        }
-        auto error = stream << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << error;
-        return error;
-    }
-
-
-    File srcDir{ srcPathRes.data() };
-    File dstDir{ dstPathRes.data() };
-    File srcParent{ srcDir.path().parent() };
-    File dstParent{ dstDir.path().parent() };
-
-    auto result = R::success( true );
-    //Perfrom basic validation
-    if( ! ( srcParent.exists() && srcParent.isReadable() )) {
-        //Parent of source is not accessable
-    }
-    else if( ! srcDir.exists() ) {
-        //The source directory does not exist
-    }
-    else if( srcDir.type() != File::Type::Dir ) {
-        //Source is not a directory
-    }
-    else if( ! ( dstParent.exists() && dstParent.isWritable() )) {
-        //destination is parent is not writable
-    }
-    else if( dstDir.exists() ) {
-        if( conflictStrategy == ConflictStrategy::Stop ) {
-            //The destination directory exists and the conflict policy demands
-            //stoping the copy
-        }
-        else if( conflictStrategy != ConflictStrategy::Skip
-                 && ! dstDir.isWritable() ) {
-            //The destinatio directory exist and is not writable, this will
-            //cause error if the conflict policy is not error
-        }
-    }
-
-    //Ready to Copy!!
-    auto flistRes = listFiles( srcDir );
-    if( flistRes ) {
-        //iterate and call file copy
-        //if conflict occurs use the conflict policy
-        //once all are copied, delete the copied file and not the skipped ones
-    }
-    else {
-        //error
-    }
-    return result;
-}
-
 
 
 Result< bool > FSUtils::moveDirectory( const std::string &srcPath,

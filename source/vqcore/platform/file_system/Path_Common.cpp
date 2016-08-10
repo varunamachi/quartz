@@ -218,7 +218,7 @@ Path & Path::append( const std::string &relative )
     }
     auto result = parse( relative );
     if( result ) {
-        for( const auto &cmp : result.data() ) {
+        for( auto &cmp : result.data() ) {
             m_data->components().emplace_back( std::move( cmp ));
         }
     }
@@ -227,6 +227,24 @@ Path & Path::append( const std::string &relative )
                                  << ", could not parse the given path";
     }
     return *this;
+}
+
+Path & Path::append( const Path &relative )
+{
+    for( const auto &cmp : relative.components() ) {
+        m_data->components().push_back( cmp );
+    }
+    return *this;
+}
+
+
+Path Path::appended( const Path &other ) const
+{
+    std::vector< std::string > comps{ this->components() };
+    for( const auto &comp : other.components() ) {
+        comps.push_back( comp );
+    }
+    return Path{ comps, this->isAbsolute() };
 }
 
 
@@ -340,7 +358,7 @@ Result< Path & > Path::mergeWith( const Path &other )
 }
 
 
-Result< Path > Path::relativeTo( const Path & other )
+Result< Path > Path::relativeTo( const Path & other ) const
 {
     if( ! ( this->isAbsolute() && other.isAbsolute() )) {
         auto result = R::stream( Path{ std::vector< std::string >{}, false })
