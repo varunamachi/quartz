@@ -65,6 +65,8 @@ Result< bool > FSUtils::createRegularFile( const File &file )
     return result;
 }
 
+
+
 Result< bool > FSUtils::copyFile( const std::string &psrc,
                                   const std::string &pdst,
                                   const bool forceCopy,
@@ -208,12 +210,10 @@ Result< bool > FSUtils::moveFile( const std::string &psrc,
 }
 
 
-static Result< bool > copyDirImpl()
-
 
 Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
                                        const std::string &dstStrPath,
-                                       ConflictStrategy conflictStrategy,
+                                       ConflictStrategy conflictPolicy ,
                                        FSUtils::BoolResultFunc resultCallback,
                                        DetailedProgressFunc progCallback )
 {
@@ -256,11 +256,11 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
         //destination is parent is not writable
     }
     else if( dstDir.exists() ) {
-        if( conflictStrategy == ConflictStrategy::Stop ) {
+        if( conflictPolicy  == ConflictStrategy::Stop ) {
             //The destination directory exists and the conflict policy demands
             //stoping the copy
         }
-        else if( conflictStrategy != ConflictStrategy::Skip
+        else if( conflictPolicy  != ConflictStrategy::Skip
                  && ! dstDir.isWritable() ) {
             //The destinatio directory exist and is not writable, this will
             //cause error if the conflict policy is not error
@@ -285,6 +285,16 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
             File destFile{ destFilePath };
             if( ! destFile.exists() ) {
                 //Apply conflict resolution policy
+                if( conflictPolicy  == ConflictStrategy::Merge
+                        || conflictPolicy  == ConflictStrategy::Skip ) {
+
+                }
+                else if( conflictPolicy == ConflictStrategy::Overwrite ) {
+                    //Delete
+                }
+                else if( conflictPolicy == ConflictStrategy::Stop ) {
+                    //
+                }
             }
             auto cpFileRes = copyFileImpl( file, destFile, nullptr );
             if( ! cpFileRes ) {
@@ -299,6 +309,7 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
     else {
         //error
     }
+    resultCallback( result );
     return result;
 }
 
