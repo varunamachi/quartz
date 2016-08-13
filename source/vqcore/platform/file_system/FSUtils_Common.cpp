@@ -27,7 +27,7 @@ Result< File > FSUtils::fileAt( const Path &path )
         return R::success< File >( File{ path });
     }
     auto error = R::stream( File{ })
-            << "Cannot create file object, invalid path" << path.toString()
+            << "Cannot create file object, invalid path" << path
             << " given" << R::fail;
     VQ_ERROR( "Vq:Core:FS" ) << error;
     return error;
@@ -59,7 +59,7 @@ Result< bool > FSUtils::createRegularFile( const File &file )
     auto result = R::success( true );
     if( ! fstr.is_open() ) {
         result = R::stream( false )
-                << "Could not create file at " << path.toString() << R::fail;
+                << "Could not create file at " << path << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     return result;
@@ -186,7 +186,7 @@ Result< bool > FSUtils::moveFile( const std::string &psrc,
     }
     else if( srcFile.type() != File::Type::Regular ) {
         result = R::stream( false )
-                << "Invalid source file type, copy only works for regular files"
+                << "Invalid source file type, move only works for regular files"
                 << R::fail;
     }
     else {
@@ -209,13 +209,66 @@ Result< bool > FSUtils::moveFile( const std::string &psrc,
     return result;
 }
 
-
+static Result< bool > validateForCopy( const File &srcDir,
+                                       const File &dstDir,
+                                       FSUtils::ConflictStrategy onConflict )
+{
+    auto result = R::success( true );
+    File srcParent{ srcDir.path().parent() };
+    File dstParent{ dstDir.path().parent() };
+    //Perfrom basic validation
+    if( ! ( srcParent.exists() && srcParent.isReadable() )) {
+        //Parent of source is not accessable
+        result = R::stream( false )
+                << "Parent directory of source directory at "
+                << srcDir << " is not accessible" << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    else if( ! srcDir.exists() ) {
+        result = R::stream( false )
+                << "Source directory at " << srcDir
+                << " does not exist" << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    else if( srcDir.type() != File::Type::Dir ) {
+        result = R::stream( false )
+                << "Source file at "
+                << srcDir << " is not a directory" << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    else if( ! ( dstParent.exists() && dstParent.isWritable() )) {
+        result = R::stream( false )
+                << "Parent directory of source directory at "
+                << srcDir << " is not accessible" << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    else if( dstDir.exists() ) {
+        if( onConflict  == FSUtils::ConflictStrategy::Stop ) {
+            //The destination directory exists and the conflict policy demands
+            //stoping the copy
+            result = R::stream( false )
+                    << "Destination directory at " << dstDir << " already "
+                    << "exits, stopping..." << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+        }
+        else if( onConflict  != FSUtils::ConflictStrategy::Skip
+                 && ! dstDir.isWritable() ) {
+            //The destinatio directory exist and is not writable, this will
+            //cause error if the conflict policy is not error
+            result = R::stream( false )
+                    << "Destination directory at " << dstDir << " already "
+                    << "exits and is not writable..." << R::fail;
+            VQ_ERROR( "Vq:Core:FS" ) << result;
+        }
+    }
+    return result;
+}
 
 Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
                                        const std::string &dstStrPath,
                                        ConflictStrategy conflictPolicy ,
                                        FSUtils::BoolResultFunc resultCallback,
-                                       DetailedProgressFunc progCallback )
+                                       DirCopyProgFunc progCallback )
 {
     auto srcPathRes = Path::create( srcStrPath );
     auto dstPathRes = Path::create( dstStrPath );
@@ -233,38 +286,14 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
     }
-
     const auto &srcPath = srcPathRes.data();
     const auto &destPath = dstPathRes.data();
     File srcDir{ srcPathRes.data() };
     File dstDir{ dstPathRes.data() };
-    File srcParent{ srcDir.path().parent() };
-    File dstParent{ dstDir.path().parent() };
 
-    auto result = R::success( true );
-    //Perfrom basic validation
-    if( ! ( srcParent.exists() && srcParent.isReadable() )) {
-        //Parent of source is not accessable
-    }
-    else if( ! srcDir.exists() ) {
-        //The source directory does not exist
-    }
-    else if( srcDir.type() != File::Type::Dir ) {
-        //Source is not a directory
-    }
-    else if( ! ( dstParent.exists() && dstParent.isWritable() )) {
-        //destination is parent is not writable
-    }
-    else if( dstDir.exists() ) {
-        if( conflictPolicy  == ConflictStrategy::Stop ) {
-            //The destination directory exists and the conflict policy demands
-            //stoping the copy
-        }
-        else if( conflictPolicy  != ConflictStrategy::Skip
-                 && ! dstDir.isWritable() ) {
-            //The destinatio directory exist and is not writable, this will
-            //cause error if the conflict policy is not error
-        }
+    auto result = validateForCopy( srcDir, dstDir, conflictPolicy );
+    if( ! result ) {
+        return result;
     }
 
     //Ready to Copy!!
@@ -276,40 +305,64 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
     });
 
     if( flistRes ) {
-        std::unordered_set< std::string > skipped;
         auto &fileList = flistRes.data();
+        std::size_t numCompleted = 0;
         for( const auto & file : fileList ) {
             auto relative = file.path().relativeTo( srcPath ).data();
             auto destFilePath = destPath.appended( relative );
             //Take the difference between the paths and prepend it
             File destFile{ destFilePath };
-            if( ! destFile.exists() ) {
+            if( destFile.exists() ) {
                 //Apply conflict resolution policy
                 if( conflictPolicy  == ConflictStrategy::Merge
                         || conflictPolicy  == ConflictStrategy::Skip ) {
-
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, skipping.";
+                    continue;
                 }
                 else if( conflictPolicy == ConflictStrategy::Overwrite ) {
-                    //Delete
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, Deleting!!.";
+                    auto delRes = deleteFile( destFile );
+                    if( ! delRes ) {
+                        result = R::failure( false, std::move( delRes ));
+                        break;
+                    }
                 }
                 else if( conflictPolicy == ConflictStrategy::Stop ) {
-                    //
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, stopping copy!!";
+                    //revert?
+                    break;
                 }
             }
             auto cpFileRes = copyFileImpl( file, destFile, nullptr );
             if( ! cpFileRes ) {
                 VQ_WARN( "Vq:Core:FS" )
-                        << "Could not copy file " << file.path().toString()
+                        << "Could not copy file " << file
                         << ": " << cpFileRes << " Skipping...";
-
             }
-
+            if( progCallback != nullptr &&
+                    ! progCallback( fileList.size(),
+                                    numCompleted,
+                                    file,
+                                    destFile )) {
+                //user requested cancel
+            }
+            ++ numCompleted;
         }
+        VQ_INFO( "Vq:Core:FS" )
+                << "Copied " << numCompleted << " files from ";
     }
     else {
         //error
     }
-    resultCallback( result );
+    if( resultCallback != nullptr ) {
+        resultCallback( result );
+    }
     return result;
 }
 

@@ -64,7 +64,7 @@ bool Path::isValid() const
 }
 
 
-std::string Path::toString() const
+std::string Path::collapse() const
 {
     std::stringstream stream;
     for( const auto & cmp : components() ) {

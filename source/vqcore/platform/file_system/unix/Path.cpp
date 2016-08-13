@@ -61,7 +61,7 @@ bool Path::isValid() const
 }
 
 
-std::string Path::toString() const
+std::string Path::collapse() const
 {
     std::stringstream stream;
     if( isAbsolute()  )  {

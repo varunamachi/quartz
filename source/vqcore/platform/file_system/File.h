@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <ostream>
 
 #include "../../common/Result.h"
 #include "../../common/DateTime.h"
@@ -70,6 +71,8 @@ public:
     Result< bool > setReadable( bool value );
 
     Result< bool > setExecutable( bool value );
+
+    friend std::ostream & operator<<( std::ostream &stream, const File &file );
 
 private:
     class Data;

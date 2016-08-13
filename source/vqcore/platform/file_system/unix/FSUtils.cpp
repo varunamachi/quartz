@@ -18,7 +18,7 @@ Result< bool > FSUtils::deleteFile( const File &file )
     File parent{ path.parent() };
     if( ! file.exists() ) {
         auto error = R::stream( false )
-                << "Could not delete file at " << path.toString()
+                << "Could not delete file at " << path
                 << ", file does not exist" << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
@@ -33,7 +33,7 @@ Result< bool > FSUtils::deleteFile( const File &file )
     auto result = R::success( true );
     if( unlink( path.toString().c_str() ) != 0 )  {
         result = R::stream( false, errno )
-                << "Could not delete file at " << path.toString()
+                << "Could not delete file at " << path
                 << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << result;
     }
@@ -48,17 +48,17 @@ static Result< bool > list( const File &dir,
     auto result = R::success( true );
     if( ! dir.exists() ) {
         result = R::stream( false )
-                << "List files: directory at " << dir.path().toString()
+                << "List files: directory at " << dir
                 << " does not exist" << R::fail;
     }
     else if( dir.type() != File::Type::Dir ) {
         result = R::stream( false )
-                << "List files: File at " << dir.path().toString()
+                << "List files: File at " << dir
                 << " is not a directory" << R::fail;
     }
     else if( ! dir.isReadable() ) {
         result = R::stream( false )
-                << "List files: directory at " << dir.path().toString()
+                << "List files: directory at " << dir
                 << " is not readable" << R::fail;
     }
     if( ! result ) {
@@ -91,7 +91,7 @@ static Result< bool > list( const File &dir,
     }
     else {
         result = R::stream( false, errno )
-                << "Failed to stat the directory at " << dir.path().toString()
+                << "Failed to stat the directory at " << dir
                 << R::fail;
     }
     return result;
@@ -122,8 +122,8 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
     auto dirCreateRes = createDirecties( destParentPath.toString() );
     if( ! dirCreateRes ) {
         auto err = R::stream( false )
-                << "Could not copy " << src.path().toString() << " to "
-                << dst.path().toString() << " due to error while creating "
+                << "Could not copy " << src << " to "
+                << dst << " due to error while creating "
                 << " directories in destination path, Error: "
                 << dirCreateRes.reason() << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << err;
@@ -139,8 +139,8 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
         auto error = R::stream( false )
                 << "Failed to open "
                 << ( srcFd == 0 ? "source" : "destination")
-                << ( srcFd == 0 ? src.path().toString()
-                                : dst.path().toString() ) << " file" << R::fail;
+                << ( srcFd == 0 ? src
+                                : dst ) << " file" << R::fail;
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
     }
@@ -159,8 +159,8 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
         if( retVal == -1 ) {
              result = R::stream( false, errno )
                      << "Copy File: sendfile failed, src: "
-                     << src.path().toString() << " dst: "
-                     << dst.path().toString() << R::fail;
+                     << src << " dst: "
+                     << dst << R::fail;
         }
 
     }
@@ -179,7 +179,7 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
             if( wrSz != rdSz ) {
                 result = R::stream( false, errno )
                         << "File Copy: Writing to destination file at "
-                        << dst.path().toString() << " failed" << R::fail;
+                        << dst << " failed" << R::fail;
                 VQ_ERROR( "Vq:Core:FS" ) << result;
                 break;
             }

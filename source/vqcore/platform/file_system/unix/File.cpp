@@ -96,6 +96,7 @@ File::~File()
 File & File::operator = ( File &&other )
 {
     m_data = std::move( other.m_data );
+    return *this;
 }
 
 
@@ -244,7 +245,7 @@ Result< DateTime > File::creationTime() const
         VQ_ERROR( "Vq:Core:FS" ) << result;
         return result;
     }
-    auto timeEpoch = fileStat.st_ctime;
+    auto timeEpoch = static_cast< Timestamp::TimeVal >(fileStat.st_ctime );
     return R::success( DateTime{ Timestamp{ timeEpoch }} );
 }
 
@@ -260,7 +261,7 @@ Result<DateTime> File::lastAccessTime() const
         VQ_ERROR( "Vq:Core:FS" ) << result;
         return result;
     }
-    auto timeEpoch = fileStat.st_atime;
+    auto timeEpoch = static_cast< Timestamp::TimeVal >( fileStat.st_atime );
     return R::success( DateTime{ Timestamp{ timeEpoch }} );
 }
 
@@ -276,7 +277,7 @@ Result< DateTime > File::modifiedTime() const
         VQ_ERROR( "Vq:Core:FS" ) << result;
         return result;
     }
-    auto timeEpoch = fileStat.st_mtime;
+    auto timeEpoch = static_cast< Timestamp::TimeVal >( fileStat.st_mtime );
     return R::success( DateTime{ Timestamp{ timeEpoch }} );
 }
 

@@ -35,7 +35,7 @@ public:
 
     bool operator != ( const std::string strPath ) const;
 
-    std::string toString() const;
+    const std::string & toString() const;
 
     std::string fileName() const;
 
@@ -65,14 +65,18 @@ public:
 
     Result< Path > relativeTo( const Path & other ) const;
 
+    friend std::ostream & operator<<( std::ostream &stream, const Path &path );
+
     static Result< Path > create( const std::string &strPath );
 
     const static std::string SEPERATOR;
 
 private:
-    std::vector< std::string > mutableComponents();
+    std::vector< std::string > & mutableComponents();
 
     void assign( std::vector< std::string > && comp, bool isAbs );
+
+    std::string collapse() const;
 
     static Result< std::vector< std::string >> parse(
             const std::string &strPath );

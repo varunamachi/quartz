@@ -29,6 +29,14 @@ public:
     using FilterFunction = std::function< bool( const File & )>;
     using FileList = std::vector< Vq::File >;
     using BoolResultFunc = std::function< void( Result< bool > )>;
+    using DirCopyProgFunc = std::function< bool( std::size_t,
+                                                  std::size_t,
+                                                  const File &,
+                                                  const File & )>;
+    using DirProgFunc = std::function< bool( std::size_t,
+                                             std::size_t,
+                                             const File & )>;
+
 
 
     static Result< File > fileAt( const std::string &path );
@@ -61,14 +69,14 @@ public:
             const std::string &dstPath,
             ConflictStrategy conflictStrategy,
             BoolResultFunc resultCallback = nullptr,
-            DetailedProgressFunc progCallback  = nullptr );
+            DirCopyProgFunc progCallback  = nullptr );
 
     static Result< bool > moveDirectory(
             const std::string &srcPath,
             const std::string &dstPath,
             ConflictStrategy conflictStrategy,
             BoolResultFunc resultCallback = nullptr,
-            DetailedProgressFunc progCallback = nullptr );
+            DirCopyProgFunc progCallback = nullptr );
 
     static Result< bool > createDirecties( const std::string &path );
 

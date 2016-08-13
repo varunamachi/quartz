@@ -13,9 +13,11 @@ namespace Vq {
 class Path::Data
 {
 public:
-    Data()
+    Data( const Path &container )
         : m_components()
         , m_absolute( false )
+        , m_str( "" )
+        , m_container( container )
     {
 
     }
@@ -24,14 +26,18 @@ public:
           bool absolute )
         : m_components( components )
         , m_absolute( absolute )
+        , m_str( "" )
     {
 
     }
 
-    Data( const std::vector< std::string > &&components,
+    Data( const Path &container,
+          const std::vector< std::string > &&components,
           bool absolute )
         : m_components( components )
         , m_absolute( absolute )
+        , m_str( "" )
+        , m_container( container )
     {
 
     }
@@ -39,13 +45,18 @@ public:
     Data( Data &&other )
         : m_components( std::move( other.m_components ))
         , m_absolute( other.m_absolute )
+        , m_str( std::move( other.m_str ))
+        , m_container( other.m_container )
     {
-        other.m_components.clear();
+//        other.m_components.clear();
+//        other.m_str = "";
     }
 
     Data( const Data &other )
         : m_components( other.m_components )
         , m_absolute( other.m_absolute )
+        , m_str( other.m_str )
+        , m_container( other.m_container )
     {
 
     }
@@ -73,18 +84,34 @@ public:
     std::vector< std::string > & components()
     {
         return m_components;
+        m_str = m_container.collapse();
     }
 
     void assign( std::vector< std::string > &&comp, bool isAbs )
     {
         m_components = comp;
         m_absolute = isAbs;
+        m_str = m_container.collapse();
     }
+
+    const std::string & toString() const
+    {
+        return m_str;
+    }
+
+//    std::string toString()
+//    {
+//        return m_str;
+//    }
 
 private:
     std::vector< std::string > m_components;
 
     bool m_absolute;
+
+    std::string m_str;
+
+    const Path &m_container;
 };
 
 
@@ -283,7 +310,7 @@ Path Path::parent() const
 }
 
 
-std::vector< std::string > Path::mutableComponents()
+std::vector< std::string > & Path::mutableComponents()
 {
     return m_data->components();
 }
@@ -386,6 +413,19 @@ Result< Path > Path::relativeTo( const Path & other ) const
         relComps.push_back( *oit );
     }
     return R::success( Path{ relComps, false });
+}
+
+const std::string & Path::toString() const
+{
+    return m_data->toString();
+}
+
+
+std::ostream & operator<<( std::ostream &stream, const Path &path )
+{
+    stream << path.toString();
+    return stream;
+
 }
 
 }
