@@ -122,7 +122,7 @@ Result< bool > PluginManager::Impl::unloadAll()
 Result< bool > PluginManager::Impl::reloadAll()
 {
     auto result = unloadAll();
-     if( result.result() ) {
+     if( result.value() ) {
          result = loadAll();
      }
     return result;
@@ -163,7 +163,7 @@ Result< bool > PluginManager::Impl::load( const std::string &bundleId )
 Result< bool > PluginManager::Impl::reload( const std::string &bundleId )
 {
     Result< bool > result = unload( bundleId );
-    if( result.result() ) {
+    if( result.value() ) {
         result = load( bundleId );
     }
     return result;

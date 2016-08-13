@@ -150,69 +150,63 @@ const Path & File::path() const
 }
 
 
-Result< bool > File::exists() const
+bool File::exists() const
 {
-    auto result = R::success( true );
+    auto result = true;
     auto code = access( m_data->path().c_str(), F_OK );
     if( code != 0 ) {
-        result = R::stream( false, errno )
-                << "File at " << m_data->path() << " does not exist"
-                << R::fail;
+        VQ_ERROR( "Vq:Core:FS" )
+                << "File at " << m_data->path() << " does not exist";
+        result = false;
     }
     return result;
 }
 
 
-Result< bool > File::isValid() const
+bool File::isValid() const
 {
     return exists();
 }
 
 
-Result< bool > File::isWritable() const
+bool File::isWritable() const
 {
-    auto result = R::success( true );
+    auto result = true;
     if( access( m_data->path().c_str(), F_OK ) == 0 ) {
         auto errorCode = errno;
-        if( errorCode == EACCES ) {
-            result = R::success( false );
-        }
-        else {
-            result = R::stream( false, errorCode )
+        if( errorCode != EACCES ) {
+            VQ_ERROR( "Vq:Core:FS" )
                     << "Could not retrieve the access infromation for file at "
-                    << m_data->path() << R::fail;
-            VQ_ERROR( "Vq:Core:FS" ) << result;
+                    << m_data->path() << ". Error Code: " << errno;
         }
+        result = false;
     }
     return result;
 }
 
 
-Result< bool > File::isReadable() const
+bool File::isReadable() const
 {
-    auto result = R::success( true );
+    auto result = true;
     if( access( m_data->path().c_str(), R_OK ) == 0 ) {
         auto errorCode = errno;
-        if( errorCode == EACCES ) {
-            result = R::success( false );
-        }
-        else {
-            result = R::stream( false, errorCode )
+        if( errorCode != EACCES ) {
+            VQ_ERROR( "Vq:Core:FS" )
                     << "Could not retrieve the access infromation for file at "
-                    << m_data->path() << R::fail;
-            VQ_ERROR( "Vq:Core:FS" ) << result;
+                    << m_data->path() << " Error Code: " << errno;
         }
+        result = false;
     }
     return result;
 }
 
 
-Result< bool > File::isExecuteble() const
+bool File::isExecuteble() const
 {
-    auto result = R::failure( false, "File is not executable" );
+    auto result = false;
     auto code = access( m_data->path().c_str(), X_OK );
     if( code == 0 ) {
-        result = R::success( true );
+        result = true;
     }
     return result;
 }

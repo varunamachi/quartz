@@ -26,7 +26,7 @@ public:
         return m_bundleName;
     }
 
-    virtual void addPlugin( std::unique_ptr< AbstractPlugin > plugin )
+    void addPlugin( std::unique_ptr< AbstractPlugin > plugin )
     {
         m_plugins.emplace_back( std::move( plugin ));
     }

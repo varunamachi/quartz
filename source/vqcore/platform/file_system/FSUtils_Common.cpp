@@ -11,7 +11,7 @@ namespace Vq {
 Result< File > FSUtils::fileAt( const std::string &path )
 {
     auto resPath = Path::create( path );
-    if( ! resPath ) {
+    if( ! resPath.value() ) {
         return R::failure< File >( File{ }, std::move( resPath ));
     }
     File file{ resPath.data() };
@@ -66,6 +66,54 @@ Result< bool > FSUtils::createRegularFile( const File &file )
 }
 
 
+Result< bool > validateForCopyFile( File &srcFile,
+                                    File &dstFile,
+                                    bool isMove,
+                                    bool force )
+{
+    auto result = R::success( true );
+    File srcParent{ srcFile.path().parent() };
+    File destParent{ dstFile.path().parent() };
+    const auto op = isMove ? "File Move: " : "File Copy: ";
+    if( ! srcFile.exists() ) {
+        result = R::stream( false )
+                << op << "Source file at " << srcFile << " does not exists"
+                << R::fail;
+    }
+    else if( ! srcFile.isReadable() ) {
+        result = R::stream( false )
+                << op << "Source file at " << srcFile << " is not readable"
+                << R::fail;
+    }
+    else if( ! destParent.exists() ) {
+        result = R::stream( false )
+                << op << "Destination path " << dstFile
+                << " does not exist" << R::fail;
+    }
+    else if( ! destParent.isWritable() ) {
+        result = R::stream( false )
+                << op << "Destination path "
+                << dstFile << " is not writable"
+                << R::fail;
+    }
+    else if( force && dstFile.exists() && ! dstFile.isWritable() ) {
+        result = R::stream( false )
+                << op << "Destination file at " << dstFile
+                <<  "exist and is not writable" << R::fail;
+    }
+    else if( srcFile.type() != File::Type::Regular ) {
+        result = R::stream( false )
+                << op << "Invalid source file type, operation only works for "
+                         "regular files" << R::fail;
+    }
+    else if( isMove && srcParent.isWritable() ) {
+        result = R::stream( false )
+                << op << "Source file at <<  srcFile << is not writable"
+                << R::fail;
+    }
+    return result;
+}
+
 
 Result< bool > FSUtils::copyFile( const std::string &psrc,
                                   const std::string &pdst,
@@ -76,8 +124,7 @@ Result< bool > FSUtils::copyFile( const std::string &psrc,
     auto srcRes = Path::create( psrc );
     auto dstRes = Path::create( pdst );
 
-    auto dstParent = dstRes.data().parent();
-    if( ! ( srcRes  && dstRes )) {
+    if( ! ( srcRes.value()  && dstRes.value() )) {
         auto error = R::stream( false )
                 << "Invalid path given for copy, Source: " << psrc
                 << " Destination: " << pdst << R::fail;
@@ -87,45 +134,13 @@ Result< bool > FSUtils::copyFile( const std::string &psrc,
 
     File srcFile{ srcRes.data() };
     File dstFile{ dstRes.data() };
-    File parentFile{ dstParent };
-    auto result = R::success( true );
-    if( ! srcFile.exists() ) {
-        result = R::stream( false )
-                << "File Copy: Source file at " << psrc << " does not exists"
-                << R::fail;
+
+    auto result = validateForCopyFile( srcFile, dstFile, false, forceCopy );
+    if( forceCopy && dstFile.exists() ) {
+        result = deleteFile( dstFile );
     }
-    else if( ! srcFile.isReadable() ) {
-        result = R::stream( false )
-                << "File Copy: Source file at " << psrc << " is not readable"
-                << R::fail;
-    }
-    else if( ! parentFile.exists() ) {
-        result = R::stream( false )
-                << "File Copy: Destination path " << pdst << " does not exist "
-                << R::fail;
-    }
-    else if( ! parentFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Copy: Destination path " << pdst << " is not writable"
-                << R::fail;
-    }
-    else if( forceCopy && srcFile.exists() && ! srcFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Copy: Destination file at " << pdst
-                <<  "exist and is not writable" << R::fail;
-    }
-    else if( srcFile.type() != File::Type::Regular ) {
-        result = R::stream( false )
-                << "Invalid source file type, copy only works for regular files"
-                << R::fail;
-    }
-    else {
-        if( dstFile.exists() ) {
-            result = deleteFile( dstFile );
-        }
-        if( result ) {
-            result = copyFileImpl( srcFile, dstFile, progCallback );
-        }
+    if( result ) {
+        result = copyFileImpl( srcFile, dstFile, progCallback );
     }
     resultCallback( result );
     return result;
@@ -141,7 +156,7 @@ Result< bool > FSUtils::moveFile( const std::string &psrc,
     auto srcRes = Path::create( psrc );
     auto dstRes = Path::create( pdst );
 
-    if( ! ( srcRes  && dstRes )) {
+    if( ! ( srcRes.value()  && dstRes.value() )) {
         auto error = R::stream( false )
                 << "Invalid path given for move, Source: " << psrc
                 << " Destination: " << pdst << R::fail;
@@ -151,68 +166,33 @@ Result< bool > FSUtils::moveFile( const std::string &psrc,
 
     File srcFile{ srcRes.data() };
     File dstFile{ dstRes.data() };
-    File srcParent{ srcRes.data().parent() };
-    File dstParent{ dstRes.data().parent() };
-    auto result = R::success( true );
-    if( ! srcFile.exists() ) {
-        result = R::stream( false )
-                << "File Move: Source file at " << psrc << " does not exists"
-                << R::fail;
+    auto result = validateForCopyFile( srcFile, dstFile, true, forceMove );
+    if( dstFile.exists() ) {
+        result = deleteFile( dstFile );
     }
-    else if( ! srcParent.isReadable() || ! srcFile.isReadable() ) {
-        result = R::stream( false )
-                << "File Move: Source file at " << psrc << " is not readable"
-                << R::fail;
-    }
-    else if( ! srcParent.isWritable() || ! srcFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Move: Source file at " << psrc << " is not writable"
-                << " hence cannot be move" << R::fail;
-    }
-    else if( ! dstParent.exists() ) {
-        result = R::stream( false )
-                << "File Move: Destination path " << pdst << " does not exist "
-                << R::fail;
-    }
-    else if( ! dstParent.isWritable() ) {
-        result = R::stream( false )
-                << "File Move: Destination path " << pdst << " is not writable"
-                << R::fail;
-    }
-    else if( forceMove && srcFile.exists() && ! srcFile.isWritable() ) {
-        result = R::stream( false )
-                << "File Move: Destination file at " << pdst
-                <<  "exist and is not writable" << R::fail;
-    }
-    else if( srcFile.type() != File::Type::Regular ) {
-        result = R::stream( false )
-                << "Invalid source file type, move only works for regular files"
-                << R::fail;
-    }
-    else {
-        if( dstFile.exists() ) {
-            result = deleteFile( dstFile );
-        }
+    if( result ) {
+        VQ_DEBUG( "Vq:Core:FS" )
+                << "File Move: copying file "  << psrc << " to " << pdst;
+        result = copyFileImpl( srcFile, dstFile, progCallback );
         if( result ) {
             VQ_DEBUG( "Vq:Core:FS" )
-                    << "File Move: copying file "  << psrc << " to " << pdst;
-            result = copyFileImpl( srcFile, dstFile, progCallback );
-            if( result ) {
-                VQ_DEBUG( "Vq:Core:FS" )
-                        << "File Move: deleting file "  << psrc
-                        << " after copying it to " << pdst;
-                result = deleteFile( srcFile );
-            }
+                    << "File Move: deleting file "  << psrc
+                    << " after copying it to " << pdst;
+            result = deleteFile( srcFile );
         }
     }
     resultCallback( result );
     return result;
 }
 
-static Result< bool > validateForCopy( const File &srcDir,
-                                       const File &dstDir,
-                                       FSUtils::ConflictStrategy onConflict )
+
+static Result< bool > validateForCopyDir(
+        const File &srcDir,
+        const File &dstDir,
+        bool isMove,
+        FSUtils::ConflictStrategy onConflict )
 {
+    auto op = isMove ? "Directory Move: " : "Directory Copy: ";
     auto result = R::success( true );
     File srcParent{ srcDir.path().parent() };
     File dstParent{ dstDir.path().parent() };
@@ -220,46 +200,48 @@ static Result< bool > validateForCopy( const File &srcDir,
     if( ! ( srcParent.exists() && srcParent.isReadable() )) {
         //Parent of source is not accessable
         result = R::stream( false )
-                << "Parent directory of source directory at "
+                << op << "Parent directory of source directory at "
                 << srcDir << " is not accessible" << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     else if( ! srcDir.exists() ) {
         result = R::stream( false )
-                << "Source directory at " << srcDir
+                << op << "Source directory at " << srcDir
                 << " does not exist" << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     else if( srcDir.type() != File::Type::Dir ) {
         result = R::stream( false )
-                << "Source file at "
+                << op << "Source file at "
                 << srcDir << " is not a directory" << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     else if( ! ( dstParent.exists() && dstParent.isWritable() )) {
         result = R::stream( false )
-                << "Parent directory of source directory at "
+                << op << "Parent directory of source directory at "
                 << srcDir << " is not accessible" << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     else if( dstDir.exists() ) {
         if( onConflict  == FSUtils::ConflictStrategy::Stop ) {
             //The destination directory exists and the conflict policy demands
             //stoping the copy
             result = R::stream( false )
-                    << "Destination directory at " << dstDir << " already "
-                    << "exits, stopping..." << R::fail;
-            VQ_ERROR( "Vq:Core:FS" ) << result;
+                    << op << "Destination directory at " << dstDir
+                    << " already exits, stopping..." << R::fail;
         }
         else if( onConflict  != FSUtils::ConflictStrategy::Skip
                  && ! dstDir.isWritable() ) {
             //The destinatio directory exist and is not writable, this will
             //cause error if the conflict policy is not error
             result = R::stream( false )
-                    << "Destination directory at " << dstDir << " already "
+                    << op << "Destination directory at " << dstDir << " already "
                     << "exits and is not writable..." << R::fail;
-            VQ_ERROR( "Vq:Core:FS" ) << result;
         }
+    }
+    else if( isMove && ! ( srcDir.isWritable() && srcParent.isWritable() )) {
+        result = R::stream( false )
+                << op << "The source directory at " << dstDir
+                << "is not writable (hence cannot be deleted)" << R::fail;
+    }
+    if( ! result.value() ) {
+        VQ_ERROR( "Vq:Core:FS" ) << result;
     }
     return result;
 }
@@ -274,9 +256,9 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
     auto dstPathRes = Path::create( dstStrPath );
 
     //First check if paths are properly formed
-    if( ! ( srcPathRes && dstPathRes )) {
+    if( ! ( srcPathRes.value() && dstPathRes.value() )) {
         auto stream = std::move( R::stream( false ) << "Dir Copy: " );
-        if( ! srcPathRes ) {
+        if( ! srcPathRes.value() ) {
             stream << "Invalid source path " << srcStrPath << " given";
         }
         else {
@@ -291,7 +273,7 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
     File srcDir{ srcPathRes.data() };
     File dstDir{ dstPathRes.data() };
 
-    auto result = validateForCopy( srcDir, dstDir, conflictPolicy );
+    auto result = validateForCopyDir( srcDir, dstDir, false, conflictPolicy );
     if( ! result ) {
         return result;
     }
@@ -304,7 +286,7 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
         return result;
     });
 
-    if( flistRes ) {
+    if( flistRes.value() ) {
         auto &fileList = flistRes.data();
         std::size_t numCompleted = 0;
         for( const auto & file : fileList ) {
@@ -366,5 +348,42 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
     return result;
 }
 
+
+Result< bool > FSUtils::moveDirectory( const std::string &srcStrPath,
+                                       const std::string &dstStrPath,
+                                       ConflictStrategy conflictPolicy,
+                                       FSUtils::BoolResultFunc resultCallback,
+                                       DirCopyProgFunc progCallback )
+{
+    auto srcPathRes = Path::create( srcStrPath );
+    auto dstPathRes = Path::create( dstStrPath );
+
+    //First check if paths are properly formed
+    if( ! ( srcPathRes.value() && dstPathRes.value() )) {
+        auto stream = std::move( R::stream( false ) << "Dir Copy: " );
+        if( ! srcPathRes.value() ) {
+            stream << "Invalid source path " << srcStrPath << " given";
+        }
+        else {
+            stream << "Invalid destination path " << srcStrPath << " given";
+        }
+        auto error = stream << R::fail;
+        VQ_ERROR( "Vq:Core:FS" ) << error;
+        return error;
+    }
+    const auto &srcPath = srcPathRes.data();
+    const auto &destPath = dstPathRes.data();
+    File srcDir{ srcPathRes.data() };
+    File dstDir{ dstPathRes.data() };
+
+    auto result = validateForCopyDir( srcDir, dstDir, true, conflictPolicy );
+    if( ! result ) {
+        return result;
+    }
+    if( resultCallback != nullptr ) {
+        resultCallback( result );
+    }
+    return result;
+}
 
 }

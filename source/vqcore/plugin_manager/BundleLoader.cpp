@@ -19,7 +19,7 @@ typedef BundleWrapper ( *PluginFunc )();
 
 Result< BundleMap > BundleLoader::loadAll( const std::string &location )
 {
-    File pluginDir( Path{ location } );
+    File pluginDir( Path::create( location ));
     if( pluginDir.type() == File::Type::Dir ) {
         auto result = R::stream( BundleMap{ } )
                 << "The plugin load location is not a "
@@ -39,7 +39,7 @@ Result< BundleMap > BundleLoader::loadAll( const std::string &location )
     });
     for( const auto &file : files.data() ) {
         auto libRes = loadFile( file.path().toString() );
-        if( libRes.result() ) {
+        if( libRes.value() ) {
             bundleMap.emplace( libRes.data()->bundle()->bundleId(),
                                libRes.data() );
         }
@@ -56,7 +56,7 @@ Result< BundleLibraryPtrUq > BundleLoader::loadFile(
     auto ldRes = lib->load();
     if( ldRes ) {
         auto funcRes = lib->resolve( INTERFACE_FUNC_NAME );
-        if( funcRes ) {
+        if( funcRes.result() ) {
             auto func = funcRes.data();
             auto bundleWrapper = func.call< BundleWrapper >();
             auto bundle = bundleWrapper.theBundle;

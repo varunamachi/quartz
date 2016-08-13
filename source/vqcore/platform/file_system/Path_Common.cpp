@@ -343,23 +343,23 @@ Result< Path & > Path::mergeWith( const Path &other )
         return oit;
     };
 
-    auto result = R::success< Path & >( *this );
+    auto res = R::success< Path & >( *this );
     if( this->isAbsolute() && other.isAbsolute() ) {
         auto &main = STLUtils::largestOf( components(), other.components() );
         auto &slv = STLUtils::smallestOf( components(), other.components() );
         auto mit = std::begin( main );
         for( auto sit = std::begin( slv ); sit != std::end( slv ); ++ sit ) {
             if( *sit != *mit ) {
-                result = R::stream< Path & >( *this )
+                res = R::stream< Path & >( *this )
                         << "Failed to merge path, size given paths are absolute"
                            "and are different withing the merge range"
                         << R::fail;
-                VQ_ERROR( "Vq:Core:FS" ) << result;
+                VQ_ERROR( "Vq:Core:FS" ) << res;
                 break;
             }
             ++ mit;
         }
-        if( result && ( &main == &( other.components() ))) {
+        if( res.value() && ( &main == &( other.components() ))) {
             for( ; mit != std::end( main ); ++ mit ) {
                 this->mutableComponents().push_back( *mit );
             }
@@ -381,7 +381,7 @@ Result< Path & > Path::mergeWith( const Path &other )
             this->mutableComponents().push_back( *oit );
         }
     }
-    return result;
+    return res;
 }
 
 

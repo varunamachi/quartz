@@ -193,16 +193,6 @@ Result< bool > FSUtils::copyFileImpl( const File &src,
 }
 
 
-Result< bool > FSUtils::moveDirectory( const std::string &srcPath,
-                                       const std::string &dstPath,
-                                       ConflictStrategy conflictStrategy,
-                                       FSUtils::BoolResultFunc resultCallback,
-                                       DetailedProgressFunc progCallback )
-{
-    return R::failure( false );
-}
-
-
 
 Result< bool > FSUtils::createDirecties( const std::string &path )
 {

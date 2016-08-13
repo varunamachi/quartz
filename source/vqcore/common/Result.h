@@ -26,7 +26,7 @@ public:
     }
 
     Result( Result< ReturnType > &&other )
-        : m_result( other.result() )
+        : m_result( other.value() )
         , m_data( std::move( other.data() ))
         , m_reason( std::move( other.reason() ))
         , m_errorCode( std::move( other.errorCode() ))
@@ -35,7 +35,7 @@ public:
     }
 
     Result( const Result< ReturnType > &other )
-        : m_result( other.result() )
+        : m_result( other.value() )
         , m_data( other.data() )
         , m_reason( other.reason() )
         , m_errorCode( other.erroCode() )
@@ -96,7 +96,7 @@ public:
     bool operator==( const Result< ReturnType > &other ) const
     {
         bool same = this == &other
-                || ( other.result() == this->m_result
+                || ( other.value() == this->m_result
                      && other.data() == this->m_data
                      && other.reason() == this->m_reason );
         return same;
@@ -109,7 +109,7 @@ public:
 
     bool operator==( const ReturnType &other ) const
     {
-        bool same = this->result == other.result;
+        bool same = this->value == other.result;
         return same;
     }
 
@@ -118,11 +118,18 @@ public:
         return ! ( *this == other );
     }
 
+
+    operator ReturnType() const
+    {
+        return m_data;
+    }
+
+
     Result & operator = ( const Result< ReturnType > &other )
     {
         if( this != &other ) {
             this->m_data = other.data();
-            this->m_result = other.result();
+            this->m_result = other.value();
             this->m_reason = other.reason();
         }
         return *this;
@@ -132,23 +139,23 @@ public:
     {
         if( this != &other ) {
             this->m_data = std::move( other.data() );
-            this->m_result = other.result();
+            this->m_result = other.value();
             this->m_reason = std::move( other.reason() );
         }
         return *this;
     }
 
-    explicit operator bool() const
-    {
-        return m_result;
-    }
+//    explicit operator bool() const
+//    {
+//        return m_result;
+//    }
 
-    bool operator ! () const
-    {
-        return ! m_result;
-    }
+//    bool operator ! () const
+//    {
+//        return ! m_result;
+//    }
 
-    bool result() const
+    bool value() const
     {
         return m_result;
     }

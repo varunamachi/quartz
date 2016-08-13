@@ -178,73 +178,66 @@ const Path & File::path() const
 }
 
 
-Result< bool > File::exists() const
+bool File::exists() const
 {
-    auto result = R::success( true );
     auto handle = m_data->fileHandle();
     auto error = GetLastError();
-    auto doesNotExist = ( handle == INVALID_HANDLE_VALUE
-                          &&  ( error == ERROR_FILE_NOT_FOUND
+    auto result = ( handle == INVALID_HANDLE_VALUE
+                            &&  ( error == ERROR_FILE_NOT_FOUND
                                 || error == ERROR_PATH_NOT_FOUND
                                 || error == ERROR_INVALID_DRIVE ));
-    if( doesNotExist ) {
-        result = R::success( false );
-    }
-    else if( handle == INVALID_HANDLE_VALUE ) {
-        result = R::stream( false, VQ_TO_ERR( error ))
+    if( ! result && handle == INVALID_HANDLE_VALUE ) {
+        VQ_ERROR( "Vq:Core:FS" )
                 << "Failed to check existance of file at " << m_data->path()
-                << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
+                << " Error Code: " << VQ_TO_ERR( error );
     }
     return result;
 }
 
 
-Result< bool > File::isValid() const
+bool File::isValid() const
 {
     return exists();
 }
 
 
-Result< bool > File::isWritable() const
+bool File::isWritable() const
 {
-    auto result = R::success( true );
+    auto result = true;
     auto attr = ::GetFileAttributes( m_data->path().c_str() );
-    if(( attr & FILE_ATTRIBUTE_READONLY ) != 0 ) {
-        result = R::success( false );
+    if( attr == INVALID_FILE_ATTRIBUTES ) {
+        VQ_ERROR( "Vq:Core:FS" ) 
+            << "Could not get file attributes for file "
+            << VQ_TO_ERR( ::GetLastError() );
+        result = false;
     }
-    else if( attr == INVALID_FILE_ATTRIBUTES ) {
-        result = R::stream( false, VQ_TO_ERR( ::GetLastError() ))
-                << "Could not get file attributes for file "
-                << m_data->path() << R::fail;
-        VQ_ERROR( "Vq:Core:FS" ) << result;
-
+    else if(( attr & FILE_ATTRIBUTE_READONLY ) != 0 ) {
+        result = false;
     }
     return result;
 }
 
 
-Result< bool > File::isReadable() const
+bool File::isReadable() const
 {
-    auto result = R::success( true );
+    auto result = true;
     auto attr = GetFileAttributes( m_data->path().c_str() );
     auto errorCode = GetLastError();
-    if( attr == INVALID_FILE_ATTRIBUTES && errorCode == ERROR_ACCESS_DENIED ) {
-        result = R::success( false );
-    }
-    else if( attr == INVALID_FILE_ATTRIBUTES ) {
-        result = R::stream( false, errorCode )
+    if( attr == INVALID_FILE_ATTRIBUTES ) {
+        if( errorCode != ERROR_ACCESS_DENIED ) {
+            VQ_ERROR( "Vq:Core:FS" )
                 << "Failed to read attributes of file " << m_data->path()
-                << R::fail;
-        VQ_ERROR( "Vq:Core:FS" )  << result;
+                << ". Error Code: " << errorCode;
+        }
+        result = false;
     }
     return result;
 }
 
 
-Result< bool > File::isExecuteble() const
+bool File::isExecuteble() const
 {
-    return R::success( true );
+    return true;
 }
 
 

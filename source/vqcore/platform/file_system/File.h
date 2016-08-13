@@ -48,15 +48,15 @@ public:
 
     const Path & path() const;
 
-    Result< bool >  exists() const;
+    bool exists() const;
 
-    Result< bool >  isValid() const;
+    bool isValid() const;
 
-    Result< bool > isWritable() const;
+    bool isWritable() const;
 
-    Result< bool >  isReadable() const;
+    bool isReadable() const;
 
-    Result< bool >  isExecuteble() const;
+    bool isExecuteble() const;
 
     Result< std::uint64_t > fileSize() const;
 
