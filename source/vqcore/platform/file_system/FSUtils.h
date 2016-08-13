@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_set>
 
 #include "../../common/Macros.h"
 #include "../../common/Result.h"
@@ -90,6 +91,14 @@ private:
     static Result< bool > copyFileImpl( const File &src,
                                         const File &dst,
                                         ProgressFunction progCallback );
+
+    static Result< bool > copyDirImpl(
+            const File &srcDir,
+            const File &dstDir,
+            bool deleteSource,
+            ConflictStrategy onConflict,
+            DirCopyProgFunc progCallback,
+            VQ_OUT std::unordered_set< std::string > &skipped );
 
 
 };

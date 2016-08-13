@@ -56,7 +56,7 @@ Result< BundleLibraryPtrUq > BundleLoader::loadFile(
     auto ldRes = lib->load();
     if( ldRes ) {
         auto funcRes = lib->resolve( INTERFACE_FUNC_NAME );
-        if( funcRes.result() ) {
+        if( funcRes.value() ) {
             auto func = funcRes.data();
             auto bundleWrapper = func.call< BundleWrapper >();
             auto bundle = bundleWrapper.theBundle;

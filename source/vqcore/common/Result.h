@@ -102,18 +102,18 @@ public:
         return same;
     }
 
-    bool operator!=( const Result<ReturnType > &other ) const
+    bool operator != ( const Result<ReturnType > &other ) const
     {
         return ! ( *this == other );
     }
 
-    bool operator==( const ReturnType &other ) const
+    bool operator == ( const ReturnType &other ) const
     {
-        bool same = this->value == other.result;
+        bool same = ( m_data == other );
         return same;
     }
 
-    bool operator!=( const ReturnType &other ) const
+    bool operator != ( const ReturnType &other ) const
     {
         return ! ( *this == other );
     }
@@ -213,7 +213,7 @@ struct R {
     template< typename ReturnType >
     static Result< ReturnType > success( ReturnType &&data )
     {
-        return Result< ReturnType >( true, std::forward( data ), "",  0 );
+        return Result< ReturnType >( true, std::move( data ), "",  0 );
     }
 
     template< typename ReturnType >
@@ -277,8 +277,8 @@ public:
 
     typedef std::ostream& ( Manip )( std::ostream& );
 
-    RStream( ReturnType data, ErrorCodeType errorCode = 0 )
-        : m_data( std::move( data ))
+    RStream( const ReturnType &data, ErrorCodeType errorCode = 0 )
+        : m_data( data )
         , m_errorCode( errorCode )
     {
 

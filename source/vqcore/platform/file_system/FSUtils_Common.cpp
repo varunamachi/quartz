@@ -246,6 +246,107 @@ static Result< bool > validateForCopyDir(
     return result;
 }
 
+
+Result< bool > FSUtils::copyDirImpl(
+        const File &srcDir,
+        const File &dstDir,
+        bool deleteSource,
+        ConflictStrategy onConflict,
+        DirCopyProgFunc progCallback )
+{
+    const auto &srcPath = srcDir.path();
+    const auto &dstPath = dstDir.path();
+    //Ready to Copy!!
+    auto flistRes = FSUtils::listFiles( srcDir, [ & ]( const File &file )-> bool
+    {
+        auto result = ( file.type() == File::Type::Regular
+                        || file.type() == File::Type::Link );
+        return result;
+    });
+
+    auto result = flistRes.value() ? R::success( true )
+                                   : R::failure( false, std::move( flistRes ));
+    std::size_t numCompleted = 0;
+    if( flistRes.value() ) {
+        auto &fileList = flistRes.data();
+        auto complete = deleteSource ? fileList.size() * 2 : fileList.size();
+        for( const auto & file : fileList ) {
+            auto relative = file.path().relativeTo( srcPath ).data();
+            auto destFilePath = dstPath.appended( relative );
+            //Take the difference between the paths and prepend it
+            File destFile{ destFilePath };
+            if( destFile.exists() ) {
+                //Apply conflict resolution policy
+                if( onConflict  == ConflictStrategy::Merge
+                        || onConflict  == FSUtils::ConflictStrategy::Skip ) {
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, skipping.";
+                    continue;
+                }
+                else if( onConflict == ConflictStrategy::Overwrite ) {
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, Deleting!!.";
+                    auto delRes = deleteFile( destFile );
+                    if( ! delRes ) {
+                        result = R::failure( false, std::move( delRes ));
+                        break;
+                    }
+                }
+                else if( onConflict == ConflictStrategy::Stop ) {
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "File " << destFile
+                            << " already exists, stopping copy!!";
+                    //revert?
+                    break;
+                }
+            }
+            auto cpFileRes = FSUtils::copyFileImpl( file, destFile, nullptr );
+            if( ! cpFileRes ) {
+                VQ_WARN( "Vq:Core:FS" )
+                        << "Could not copy file " << file
+                        << ": " << cpFileRes << " Skipping...";
+            }
+            if( progCallback != nullptr &&
+                    ! progCallback( complete,
+                                    numCompleted,
+                                    file,
+                                    destFile )) {
+                //user requested cancel
+            }
+            ++ numCompleted;
+        }
+        if( result.value() && deleteSource ) {
+            for( const auto &file : fileList ) {
+                auto delRes = deleteFile( file );
+                if( ! delRes.value() ) {
+                    VQ_WARN( "Vq:Core:FS" )
+                            << "Dir Move: Failed to delete file at " << file;
+                }
+                if( progCallback != nullptr &&
+                        ! progCallback( complete,
+                                        numCompleted,
+                                        file,
+                                        file )) {
+                    //user requested cancel
+                }
+                ++ numCompleted;
+            }
+        }
+    }
+    if( ! result ) {
+        VQ_ERROR( "Vq:Core:FS" ) << result;
+    }
+    else {
+        VQ_INFO( "Vq:Core:FS" )
+                <<  ( deleteSource ? "Moved " : "Copied " ) << numCompleted
+                 << " files from " << srcDir << " to " << dstDir;
+    }
+    return result;
+}
+
+
 Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
                                        const std::string &dstStrPath,
                                        ConflictStrategy conflictPolicy ,
@@ -268,79 +369,16 @@ Result< bool > FSUtils::copyDirectory( const std::string &srcStrPath,
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
     }
-    const auto &srcPath = srcPathRes.data();
-    const auto &destPath = dstPathRes.data();
     File srcDir{ srcPathRes.data() };
     File dstDir{ dstPathRes.data() };
 
     auto result = validateForCopyDir( srcDir, dstDir, false, conflictPolicy );
-    if( ! result ) {
-        return result;
-    }
-
-    //Ready to Copy!!
-    auto flistRes = listFiles( srcDir, [ & ]( const File &file ) -> bool
-    {
-        auto result = ( file.type() == File::Type::Regular
-                        || file.type() == File::Type::Link );
-        return result;
-    });
-
-    if( flistRes.value() ) {
-        auto &fileList = flistRes.data();
-        std::size_t numCompleted = 0;
-        for( const auto & file : fileList ) {
-            auto relative = file.path().relativeTo( srcPath ).data();
-            auto destFilePath = destPath.appended( relative );
-            //Take the difference between the paths and prepend it
-            File destFile{ destFilePath };
-            if( destFile.exists() ) {
-                //Apply conflict resolution policy
-                if( conflictPolicy  == ConflictStrategy::Merge
-                        || conflictPolicy  == ConflictStrategy::Skip ) {
-                    VQ_WARN( "Vq:Core:FS" )
-                            << "File " << destFile
-                            << " already exists, skipping.";
-                    continue;
-                }
-                else if( conflictPolicy == ConflictStrategy::Overwrite ) {
-                    VQ_WARN( "Vq:Core:FS" )
-                            << "File " << destFile
-                            << " already exists, Deleting!!.";
-                    auto delRes = deleteFile( destFile );
-                    if( ! delRes ) {
-                        result = R::failure( false, std::move( delRes ));
-                        break;
-                    }
-                }
-                else if( conflictPolicy == ConflictStrategy::Stop ) {
-                    VQ_WARN( "Vq:Core:FS" )
-                            << "File " << destFile
-                            << " already exists, stopping copy!!";
-                    //revert?
-                    break;
-                }
-            }
-            auto cpFileRes = copyFileImpl( file, destFile, nullptr );
-            if( ! cpFileRes ) {
-                VQ_WARN( "Vq:Core:FS" )
-                        << "Could not copy file " << file
-                        << ": " << cpFileRes << " Skipping...";
-            }
-            if( progCallback != nullptr &&
-                    ! progCallback( fileList.size(),
-                                    numCompleted,
-                                    file,
-                                    destFile )) {
-                //user requested cancel
-            }
-            ++ numCompleted;
-        }
-        VQ_INFO( "Vq:Core:FS" )
-                << "Copied " << numCompleted << " files from ";
-    }
-    else {
-        //error
+    if( result.value() ) {
+        result = copyDirImpl( srcDir,
+                              dstDir,
+                              false,
+                              conflictPolicy,
+                              progCallback );
     }
     if( resultCallback != nullptr ) {
         resultCallback( result );
@@ -371,14 +409,16 @@ Result< bool > FSUtils::moveDirectory( const std::string &srcStrPath,
         VQ_ERROR( "Vq:Core:FS" ) << error;
         return error;
     }
-    const auto &srcPath = srcPathRes.data();
-    const auto &destPath = dstPathRes.data();
     File srcDir{ srcPathRes.data() };
     File dstDir{ dstPathRes.data() };
 
     auto result = validateForCopyDir( srcDir, dstDir, true, conflictPolicy );
-    if( ! result ) {
-        return result;
+    if( result.value() ) {
+        result = copyDirImpl( srcDir,
+                              dstDir,
+                              true,
+                              conflictPolicy,
+                              progCallback );
     }
     if( resultCallback != nullptr ) {
         resultCallback( result );

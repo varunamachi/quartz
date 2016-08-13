@@ -143,3 +143,5 @@ std::vector< std::string > & PluginBundle::mutalbleDependencyList()
 {
     return m_impl->mutalbleDependencyList();
 }
+
+}
