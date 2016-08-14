@@ -7,7 +7,7 @@ set( VQ_OUTPUT_DIR      ${QUARTZ_ROOT}/output )
 set( VQ_SRC_DIR         ${QUARTZ_ROOT}/source )
 set( VQ_TEST_DIR        ${QUARTZ_ROOT}/tests )
 
-include( ${QUARTZ_ROOT}/cmake/vqcore.cmake)
+include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
 
 
 macro( qz_add_vqcore )

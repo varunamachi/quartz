@@ -1,7 +1,7 @@
 project( plugins )
 cmake_minimum_required( VERSION 3.1 )
 cmake_policy( SET CMP0020 NEW )
-include( $ENV{QUARTZ_ROOT}/cmake/container.cmake )
+include( $ENV{QUARTZ_ROOT}/cmake/cmake_lib/container.cmake )
 
 #TODO this is a hack for now to fix build errors
 #add_definitions( -DQUARTZ_CORE )

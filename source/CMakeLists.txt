@@ -1,9 +1,9 @@
 project( quartz )
 cmake_minimum_required(VERSION 3.1)
 cmake_policy( SET CMP0020 NEW )
-include( $ENV{QUARTZ_ROOT}/cmake/container.cmake )
+include( $ENV{QUARTZ_ROOT}/cmake/cmake_lib/container.cmake )
 
-add_project( vqcore )
+
 add_project( quartz_core )
 add_project( quartz_common )
 add_project( app )
