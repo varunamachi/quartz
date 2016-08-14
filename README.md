@@ -5,9 +5,11 @@ Quartz is in its initial stages and very much a work in progress. There is no gu
 
 #Build System
 Quartz uses a CMake based build system. I have written a thin layer of CMake macros to make it easy to build different libraries independently. Before running CMake a environment variable QUARTZ_ROOT should be set to the root of the Quartz directory.
-The build system does not allow in-source builds, it is recommended that the build be done in $QUARTZ_CORE/builds The generated binaries and headers in case of libraries are installed to $QUARTZ_CORE/output directory. Any module can be built independently provided that the dependency modules are already built and their generated output is installed in $QUARTZ_CORE/output.
+The build system does not allow in-source builds, it is recommended that the build be done in $QUARTZ_ROOT/builds The generated binaries and headers in case of libraries are installed to $QUARTZ_ROOT/output directory. Any module can be built independently provided that the dependency modules are already built and their generated output is installed in $QUARTZ_ROOT/output.
 
 #Building 
+Dependency - Qt 5.6+
+
 Right now Quartz is not in a state to build. But the build procedure is as follows (in Bash):
 ```
 export QUARTZ_ROOT=<path_to_quartz_root>
@@ -20,7 +22,6 @@ make -j4
 
 #Modules
 At this time Quartz has following modules:
-- vqcore: A C++14 library which provides basic utility classes. [Current focus]
 - quartz_core: Quartz's default plugin point providers
 - quartz_common: Common UI classes in Qt5
 - plugins: default plugins to be built with Quartz
