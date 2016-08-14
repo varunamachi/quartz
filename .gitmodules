@@ -1,0 +1,3 @@
+[submodule "cmake/cmake_lib"]
+	path = cmake/cmake_lib
+	url = https://github.com/varunamachi/cmake_lib.git
