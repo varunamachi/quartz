@@ -4,7 +4,7 @@ Quartz is a plugin based generic cross-platform application. It intends to be a 
 Quartz is in its initial stages and very much a work in progress. There is no guarantee that the code will build.
 
 #Build System
-Quartz uses a CMake based build system. I have written a thin layer of CMake macros to make it easy to build different libraries independently. Before running CMake a environment variable QUARTZ_ROOT should be set to the root of the Quartz directory.
+Quartz uses a CMake based build system which uses cmake_lib (https://github.com/varunamachi/cmake_lib). Before running CMake a environment variable QUARTZ_ROOT should be set to the root of the Quartz directory.
 The build system does not allow in-source builds, it is recommended that the build be done in $QUARTZ_ROOT/builds The generated binaries and headers in case of libraries are installed to $QUARTZ_ROOT/output directory. Any module can be built independently provided that the dependency modules are already built and their generated output is installed in $QUARTZ_ROOT/output.
 
 #Building 
@@ -17,7 +17,7 @@ cd $QUARTZ_ROOT/builds
 mkdir -p quartz_full_build/debug
 cd quartz_full_build/debug
 cmake -G "Unix Makefile" -DCMKAE_BUILD_TYPE=Debug ../../../source
-make -j4
+make -j$(nproc)
 ```
 
 #Modules
