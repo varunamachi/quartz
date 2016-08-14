@@ -1,5 +1,0 @@
-
-
-vq_classes(
-    SqliteConfigStorageBackend
-)
