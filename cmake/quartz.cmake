@@ -1,12 +1,7 @@
 file( TO_CMAKE_PATH "$ENV{QUARTZ_ROOT}" QUARTZ_ROOT )
 
+set( PROJECT_ROOT ${QUARTZ_ROOT} )
 include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
-
-set( VQ_BUILD_DIR       ${QUARTZ_ROOT}/builds )
-set( VQ_OUTPUT_DIR      ${QUARTZ_ROOT}/output )
-set( VQ_SRC_DIR         ${QUARTZ_ROOT}/source )
-set( VQ_TEST_DIR        ${QUARTZ_ROOT}/tests )
-
 include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
 
 
