@@ -11,7 +11,7 @@ The build system does not allow in-source builds, it is recommended that the bui
 Dependency - Qt 5.6+
 
 Right now Quartz is not in a state to build. But the build procedure is as follows (in Bash):
-```
+```shell
 export QUARTZ_ROOT=<path_to_quartz_root>
 cd $QUARTZ_ROOT/builds
 mkdir -p quartz_full_build/debug
