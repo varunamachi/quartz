@@ -1,8 +1,8 @@
 project( quartz )
 cmake_minimum_required(VERSION 3.1)
 cmake_policy( SET CMP0020 NEW )
+set( PROJECT_ROOT $ENV{QUARTZ_ROOT} )
 include( $ENV{QUARTZ_ROOT}/cmake/cmake_lib/container.cmake )
-
 
 add_project( quartz_core )
 add_project( quartz_common )
