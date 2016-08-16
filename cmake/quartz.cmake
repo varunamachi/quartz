@@ -4,20 +4,18 @@ set( PROJECT_ROOT ${QUARTZ_ROOT} )
 include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
 include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
 
-
-macro( qz_add_vqcore )
-    vq_add_module( "quartz" "vqcore" )
-endmacro( qz_add_vqcore )
-
 macro( qz_add_core )
-    qz_add_vqcore()
-    vq_add_module( "quartz" "quartz_core" )
+    vq_add_module( "quartz" "core" )
 endmacro( qz_add_core )
 
 
 macro( qz_add_common )
-    qz_add_core()
-    vq_add_module( "quartz" "quartz_common" )
+    vq_add_module( "quartz" "common" )
+endmacro( qz_add_common )
+
+
+macro( qz_add_ext )
+    vq_add_module( "quartz" "ext" )
 endmacro( qz_add_common )
 
 
