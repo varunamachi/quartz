@@ -2,7 +2,8 @@
 
 #include <QWidget>
 
-#include <vqcore/common/Macros.h>
+//#include <vqcore/common/Macros.h>
+#include "../core/Macros.h"
 
 #include "QuartzItem.h"
 #include "QuartzCore.h"

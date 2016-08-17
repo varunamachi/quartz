@@ -16,6 +16,7 @@ vq_sources(
     Dummy.cpp
 )
 
+add_subdirectory( interface )
 
 vq_create_sharedlib()
 vq_install()
