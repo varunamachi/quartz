@@ -24,8 +24,7 @@ vq_sources(
 )
 
 add_subdirectory( adapted )
-
-vq_dump_vars()
+add_subdirectory( interface )
 
 vq_create_app()
 vq_install()
