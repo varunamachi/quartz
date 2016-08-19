@@ -9,16 +9,15 @@ add_definitions( -DQUARTZ_CORE )
 
 vq_headers(
     QuartzCore.h
-    Convenience.h
 )
 
 
 vq_classes(
-    JobManager
 )
 
 add_subdirectory( logger )
 add_subdirectory( utils )
+add_subdirectory( job_manager )
 
 vq_create_sharedlib()
 vq_install()

@@ -20,11 +20,12 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include "TntLogger.h"
-
 #include <stdarg.h>
 
-namespace Tanyatu { namespace Logger {
+#include "Logger.h"
+
+
+namespace Quartz {
 
 TntLogger *TntLogger::s_instance = 0;
 
@@ -78,4 +79,4 @@ void TntLogger::log( LogMessage *msg )
     }
 }
 
-} } // end of namespaces
+} // end of namespaces

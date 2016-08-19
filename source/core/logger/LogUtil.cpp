@@ -21,7 +21,7 @@
  ******************************************************************************/
 
 #include "LogUtil.h"
-#include "TntLogger.h"
+#include "Logger.h"
 
 namespace Quartz {
 

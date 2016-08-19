@@ -25,23 +25,16 @@
 #include <QString>
 #include <QDir>
 
-#include "../TanyatuCoreGlobal.h"
+#include "../QuartzCore.h"
+#include "Macros.h"
 
 namespace Tanyatu {
 
-class TANYATU_CORE_EXPORT FileSystemUtil
+class QUARTZ_CORE_API FileSystemUtil
 {
+    QZ_MAKE_STATIC( FileSystemUtil );
 public:
-    static bool initTanyatuFS();
 
-    static QDir getTanyatuDir();
-
-    static QString getPathFromTanyatu(QString relPath );
-
-    static QString getPlaylistPath( QString playlistName );
-
-private:
-    FileSystemUtil();
 };
 
 } // namespace Tanyatu

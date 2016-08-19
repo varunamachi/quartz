@@ -1,5 +1,7 @@
 #pragma once
 
+#include <qcompilerdetection.h>
+
 #if defined( QUARTZ_CORE )
  #define QUARTZ_CORE_API Q_DECL_EXPORT
 #else

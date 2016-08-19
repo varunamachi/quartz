@@ -26,7 +26,7 @@
 #include <QDateTime>
 #include <QtGlobal>
 
-#include "../TanyatuCoreGlobal.h"
+#include "../QuartzCore.h"
 
 
 namespace Quartz {

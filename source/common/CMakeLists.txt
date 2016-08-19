@@ -4,6 +4,7 @@ cmake_policy( SET CMP0020 NEW )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 
 vq_add_qt()
+qz_add_core()
 
 add_definitions( -DQUARTZ_COMMON )
 

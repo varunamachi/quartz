@@ -14,11 +14,6 @@ macro( qz_add_common )
 endmacro( qz_add_common )
 
 
-macro( qz_add_ext )
-    vq_add_module( "quartz" "ext" )
-endmacro( qz_add_common )
-
-
 macro( qz_install_plugin )
 
 endmacro()

@@ -3,8 +3,8 @@
 #include <QString>
 #include <QHash>
 
-#include <vqcore/common/Macros.h>
-#include <quartz_core/QuartzCore.h>
+#include <core/utils/Macros.h>
+#include <core/QuartzCore.h>
 
 
 #include "Param.h"
@@ -16,7 +16,7 @@ class ConfigParser
 {
 public:
     std::size_t parse( const QString &filePath,
-                       VQ_OUT QHash< QString, Config::Ptr > &configsOut);
+                       QZ_OUT QHash< QString, Config::Ptr > &configsOut);
 
 private:
 

@@ -21,38 +21,18 @@
  ******************************************************************************/
 #pragma once
 
-#include <QList>
+#include "../QuartzCore.h"
+#include "Macros.h"
 
-#include "../data/ModelTypes.h"
-#include "../data/AudioTrack.h"
-
-
-namespace Tanyatu
+namespace Quartz
 {
-class TANYATU_CORE_EXPORT Utils
+class QUARTZ_CORE_API Utils
 {
-
+    QZ_MAKE_STATIC( Utils );
 public:
-    static Data::MediaRating getRatingFromInt( int rating );
 
-    static QString getStringTime( int timeInSeconds );
-
-    template< typename T >
-    static void deleteAllFormList( QList< T *> &list )
-    {
-        std::for_each( list.begin(),
-                       list.end(),
-                       []( T *item )
-                       {
-                            delete item;
-                       });
-        list.clear();
-    }
-
-//    static QImage* imageForTrack( Data::AudioTrack *track );
 
 private:
-    Utils() { /* FORBIDDEN */}
 };
 }
 

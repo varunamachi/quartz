@@ -22,7 +22,7 @@
 #include <QDebug>
 
 #include "ConsoleTarget.h"
-#include "TntLogger.h"
+#include "Logger.h"
 #include "LogUtil.h"
 
 #define format( x ) ( formatter() != nullptr ? formatter()->format( x )  \
