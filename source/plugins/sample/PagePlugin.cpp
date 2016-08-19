@@ -1,11 +1,11 @@
 
 #include <vqcore/common/Result.h>
 
-#include <quartz_core/QuartzContext.h>
+#include <core/QuartzContext.h>
 
 #include "PagePlugin.h"
 
-namespace Vq {
+
 
 const QString PagePlugin::PLUGIN_ID( "Vq::Sample::PagePlugin" );
 

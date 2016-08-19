@@ -11,7 +11,7 @@
 #include "QzScroller.h"
 #include "IdButton.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 
@@ -94,5 +94,5 @@ private:
 };
 
 
-} }
+}
 

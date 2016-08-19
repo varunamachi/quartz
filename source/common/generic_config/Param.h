@@ -7,7 +7,7 @@
 #include <QList>
 #include <QHash>
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 enum class ParamType
 {
@@ -311,4 +311,4 @@ private:
     QString m_defaultValue;
 };
 
-} }
+}

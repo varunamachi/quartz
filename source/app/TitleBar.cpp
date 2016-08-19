@@ -4,7 +4,7 @@
 
 #include "TitleBar.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 TitleBar::TitleBar( int height, QWidget *parent )
@@ -120,4 +120,4 @@ void TitleBar::mouseDoubleClickEvent(QMouseEvent *event)
     emit sigMaxRestoreRequested();
 }
 
-} }
+}

@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class QuartzItem : public QWidget
 {
@@ -33,4 +33,4 @@ private:
 
 };
 
-} }
+}

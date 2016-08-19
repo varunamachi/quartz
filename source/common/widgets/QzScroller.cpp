@@ -9,7 +9,7 @@
 
 #include "QzScroller.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 QzScroller::QzScroller( Qt::Orientation orientation,
                         int minimumDim,
@@ -210,4 +210,4 @@ void QzScroller::adjustArrows()
 }
 
 
-} }
+}

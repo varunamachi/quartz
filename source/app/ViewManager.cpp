@@ -1,9 +1,9 @@
 
-#include <vqcore/logger/Logging.h>
+#include <core/logger/Logger.h>
 
 #include "ViewManager.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 ViewManager::ViewManager( int height,
                           int btnWidth,
@@ -30,7 +30,7 @@ void ViewManager::addView( QuartzView *view )
         m_views.insert( view->viewId(), view );
     }
     else {
-        VQ_ERROR( "Qz:ViewManager" ) << "Invalid view given";
+        QZ_ERROR( "Qz:ViewManager" ) << "Invalid view given";
     }
 }
 
@@ -42,7 +42,7 @@ void ViewManager::removeView( const QString &viewId )
         removeView( viewId );
     }
     else {
-        VQ_ERROR( "QzApp:ViewManager" )
+        QZ_ERROR( "QzApp:ViewManager" )
                 << "Could not remove view with id " << viewId << ". No view "
                    " with given ID found";
     }
@@ -54,12 +54,12 @@ void ViewManager::removeView( QuartzView *view )
     if( view != nullptr ) {
             m_viewContainer->removeWidget( view->viewId() );
             m_views.remove( view->viewId() );
-            VQ_INFO( "Qz:ViewManager" )
+            QZ_INFO( "Qz:ViewManager" )
                     << "succesfully removed view with id " << view->viewId()
                     << " of category " << view->viewCategoryId();
     }
     else {
-        VQ_ERROR( "Qz:ViewManager" )
+        QZ_ERROR( "Qz:ViewManager" )
                 << "Could not remove view with id " << ". Invalid view given";
     }
 }
@@ -75,7 +75,7 @@ void ViewManager::removeViewCategory( const QString &categoryId )
         m_categoriesToViews.remove( categoryId );
     }
     else {
-        VQ_ERROR( "Qz:ViewManager" )
+        QZ_ERROR( "Qz:ViewManager" )
                 << "Could not remove category " << categoryId
                 << ". No such category found";
     }
@@ -139,12 +139,12 @@ void ViewManager::selectView( QString viewId )
         m_viewContainer->select( viewId );
     }
     else {
-        VQ_ERROR( "Qz:ViewManager" )
+        QZ_ERROR( "Qz:ViewManager" )
                 << "Could not find a view with id " << viewId;
     }
 }
 
 
-} }
+}
 
 

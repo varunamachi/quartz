@@ -3,7 +3,7 @@
 
 #include "ActionBar.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 ActionBar::ActionBar( int height, QWidget *parent )
@@ -79,7 +79,7 @@ void ActionBar::removeCategory( const QString &category )
     }
 }
 
-} }
+}
 
 
 

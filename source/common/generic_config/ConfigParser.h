@@ -10,7 +10,7 @@
 #include "Param.h"
 #include "Config.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class ConfigParser
 {
@@ -23,4 +23,4 @@ private:
 };
 
 
-} }
+}

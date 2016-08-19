@@ -3,7 +3,7 @@
 
 #include "IdButton.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 IdButton::IdButton( QString id,
                     QString text,
@@ -59,4 +59,4 @@ void IdButton::mouseReleaseEvent( QMouseEvent *evt )
 //    QPushButton::mousePressEvent( evt );
 }
 
-} }
+}

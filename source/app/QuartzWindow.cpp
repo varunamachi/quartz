@@ -14,7 +14,7 @@
 #define WINDOW_MARGIN 5
 
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 QuartzWindow::QuartzWindow( QWidget *parent )
     : QMainWindow( parent )
@@ -335,4 +335,4 @@ void QzMainWidget::paintEvent( QPaintEvent * /*event*/ )
 }
 
 
-} }
+}

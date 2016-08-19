@@ -2,7 +2,7 @@
 
 #include <QPushButton>
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 class IdButton : public QPushButton
@@ -28,4 +28,4 @@ private:
 
     QSize m_dim;
 };
-} }
+}

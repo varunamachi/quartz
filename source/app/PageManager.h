@@ -10,12 +10,12 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <quartz_core/IQuartzPageManager.h>
-#include <quartz_common/widgets/QzScroller.h>
-#include <quartz_common/widgets/StackedContainer.h>
+#include <common/widgets/QzScroller.h>
+#include <common/widgets/StackedContainer.h>
 
+#include "interface/IQuartzPageManager.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 class PageManager : public QWidget
@@ -65,4 +65,4 @@ private:
 
 };
 
-} }
+}

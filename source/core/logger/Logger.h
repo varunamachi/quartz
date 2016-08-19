@@ -245,7 +245,7 @@ private:
 
 }
 
-#define TNT_LOGGER() Quartz::TntLogger::get()
+#define QZ_LOGGER() Quartz::TntLogger::get()
 
 #ifndef __FUNCTION_NAME__
     #ifdef _MSC_VER //VC++
@@ -256,43 +256,43 @@ private:
 #endif
 
 
-#ifndef TNT_DISABLE_LOGGING
-    #define TNTL_COMMON( level, mod )                                       \
-        Quartz::LogLineHolder(                                   \
+#ifndef QZ_DISABLE_LOGGING
+    #define QZL_COMMON( level, mod )                               \
+        Quartz::LogLineHolder(                                     \
            new Quartz::LogMessage(                                 \
-                                            level,                          \
-                                            QDateTime::currentDateTime(),   \
-                                            CUR_THREAD_ID,                  \
-                                            mod,                            \
-                                            __FUNCTION_NAME__,              \
-                                            __LINE__ )).stream()
+                                   level,                          \
+                                   QDateTime::currentDateTime(),   \
+                                   CUR_THREAD_ID,                  \
+                                   mod,                            \
+                                   __FUNCTION_NAME__,              \
+                                   __LINE__ )).stream()
 
 
 
-    #define TNT_TRACE( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Trace, module )
+    #define QZ_TRACE( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Trace, module )
 
-    #define TNT_DEBUG( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Debug, module )
+    #define QZ_DEBUG( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Debug, module )
 
-    #define TNT_INFO( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Info, module )
+    #define QZ_INFO( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Info, module )
 
-    #define TNT_WARN( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Warn, module )
+    #define QZ_WARN( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Warn, module )
 
-    #define TNT_ERROR( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Error, module )
+    #define QZ_ERROR( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Error, module )
 
-    #define TNT_FATAL( module ) \
-        TNTL_COMMON( Quartz::TntLogLevel::Fatal, module )
+    #define QZ_FATAL( module ) \
+        QZL_COMMON( Quartz::TntLogLevel::Fatal, module )
 #else
-    #define TNTL_COMMON( level, mod, message )
-    #define TNT_TRACE( module, message )
-    #define TNT_DEBUG( module, message )
-    #define TNT_INFO( module, message )
-    #define TNT_WARNING( module, message )
-    #define TNT_ERROR( module, message )
-    #define TNT_FATAL( module, message )
+    #define QZL_COMMON( level, mod, message )
+    #define QZ_TRACE( module, message )
+    #define QZ_DEBUG( module, message )
+    #define QZ_INFO( module, message )
+    #define QZ_WARNING( module, message )
+    #define QZ_ERROR( module, message )
+    #define QZ_FATAL( module, message )
 #endif
 

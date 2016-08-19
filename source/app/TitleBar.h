@@ -1,9 +1,10 @@
 #pragma once
 
-#include <quartz_core/IQuartzTitleBar.h>
-#include <quartz_common/widgets/QzScroller.h>
+#include <common/widgets/QzScroller.h>
 
-namespace Vq { namespace Quartz {
+#include "interface/IQuartzTitleBar.h"
+
+namespace Quartz {
 
 class TitleBar : public QWidget
                , public IQuartzTitleBar
@@ -50,4 +51,4 @@ private:
 
 };
 
-} }
+}

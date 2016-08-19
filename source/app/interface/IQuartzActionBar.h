@@ -2,15 +2,14 @@
 
 #include <QWidget>
 
-//#include <vqcore/common/Macros.h>
-#include "../core/Macros.h"
+//#include <core/utils/Macros.h>
+#include <core/utils/Macros.h>
 
 #include "QuartzItem.h"
-#include "QuartzCore.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
-VQ_INTERFACE IQuartzActionBar
+QZ_INTERFACE IQuartzActionBar
 {
     virtual void addItem( QuartzItem *widget ) = 0;
 
@@ -25,4 +24,4 @@ VQ_INTERFACE IQuartzActionBar
     virtual QList< QuartzItem *> items( const QString category ) = 0;
 };
 
-} }
+}

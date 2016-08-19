@@ -1,7 +1,7 @@
 
 #include "ConfigParser.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 size_t ConfigParser::parse( const QString &/*filePath*/,
                             QHash< QString, Config::Ptr > &/*configsOut*/ )
@@ -11,4 +11,4 @@ size_t ConfigParser::parse( const QString &/*filePath*/,
 
 
 
-} }
+}

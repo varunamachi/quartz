@@ -7,7 +7,7 @@
 
 #include "Param.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class Config
 {
@@ -49,4 +49,4 @@ private:
     QList< Param::Ptr > m_params;
 };
 
-} }
+}

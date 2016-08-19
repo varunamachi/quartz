@@ -2,10 +2,10 @@
 
 #include <QString>
 
-#include <quartz_core/PluginBundle.h>
+#include <core/PluginBundle.h>
 
 
-namespace Vq {
+
 
 class SampleBundle : public Quartz::PluginBundle
 {

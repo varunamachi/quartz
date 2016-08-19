@@ -4,12 +4,9 @@
 #include <QString>
 #include <QStringList>
 
-#include <vqcore/common/Macros.h>
+#include <core/utils/Macros.h>
 
-#include "QuartzCore.h"
-
-
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class QuartzView : public QWidget
 {
@@ -57,7 +54,7 @@ private:
 };
 
 
-VQ_INTERFACE IQuartzViewManager
+QZ_INTERFACE IQuartzViewManager
 {
     virtual void addView( QuartzView *view ) = 0;
 
@@ -82,4 +79,4 @@ VQ_INTERFACE IQuartzViewManager
     virtual void selectView( QString viewId ) = 0;
 };
 
-} }
+}

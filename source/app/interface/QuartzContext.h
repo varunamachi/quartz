@@ -8,7 +8,7 @@
 #include "IQuartzViewManager.h"
 
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class QuartzContext
 {
@@ -55,4 +55,4 @@ private:
     IQuartzActionBar & m_actionBar;
 };
 
-} }
+}

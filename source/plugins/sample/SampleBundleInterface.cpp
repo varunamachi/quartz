@@ -1,4 +1,4 @@
-#include <quartz_core/QuartzPluginBundleInterface.h>
+#include <core/QuartzPluginBundleInterface.h>
 
 
 extern "C" {

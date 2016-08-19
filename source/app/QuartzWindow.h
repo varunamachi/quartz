@@ -10,7 +10,7 @@
 #include "ActionBar.h"
 #include "TitleBar.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class PageManager;
 class ActionBar;
@@ -109,4 +109,4 @@ private:
 
 };
 
-} }
+}

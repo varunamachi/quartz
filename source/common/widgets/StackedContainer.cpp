@@ -3,7 +3,7 @@
 
 #include "StackedContainer.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 StackedContainer::StackedContainer( int selectorDimention,
@@ -170,4 +170,4 @@ bool StackedContainer::isEmpty()
     return m_items.isEmpty();
 }
 
-} }
+}

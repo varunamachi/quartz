@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class HoverMoveFilter : public QObject
 {
@@ -15,4 +15,4 @@ protected:
 };
 
 
-} }
+}

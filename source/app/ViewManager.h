@@ -10,12 +10,13 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <quartz_core/IQuartzViewManager.h>
-#include <quartz_common/widgets/QzScroller.h>
-#include <quartz_common/widgets/StackedContainer.h>
+#include <common/widgets/QzScroller.h>
+#include <common/widgets/StackedContainer.h>
+
+#include "interface/IQuartzViewManager.h"
 
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 
 class ViewManager : public QWidget
@@ -61,4 +62,4 @@ private:
     QMultiHash< QString, QuartzView *> m_categoriesToViews;
 };
 
-} }
+}

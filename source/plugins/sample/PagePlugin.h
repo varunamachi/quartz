@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include <quartz_core/IQuartzPlugin.h>
-#include <quartz_core/IQuartzPageManager.h>
+#include <core/IQuartzPlugin.h>
+#include <core/IQuartzPageManager.h>
 
-namespace Vq {
+
 
 class SamplePage : public Quartz::QuartzPage
 {

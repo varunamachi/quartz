@@ -3,11 +3,12 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
-#include <quartz_core/IQuartzActionBar.h>
-#include <quartz_common/widgets/QzScroller.h>
+#include <common/widgets/QzScroller.h>
+
+#include "interface/IQuartzActionBar.h"
 
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class ActionBar : public QWidget
                 , public IQuartzActionBar
@@ -37,4 +38,4 @@ private:
 };
 
 
-} }
+}

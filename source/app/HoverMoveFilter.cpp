@@ -1,7 +1,7 @@
 #include "HoverMoveFilter.h"
 #include "QuartzWindow.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 HoverMoveFilter::HoverMoveFilter( QObject *parent )
     : QObject( parent )
@@ -22,4 +22,4 @@ bool HoverMoveFilter::eventFilter( QObject *obj, QEvent *event )
 }
 
 
-} }
+}

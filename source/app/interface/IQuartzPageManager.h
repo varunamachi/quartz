@@ -3,12 +3,10 @@
 #include <QStringList>
 #include <QWidget>
 
-#include <vqcore/common/Macros.h>
-
-#include "QuartzCore.h"
+#include <core/utils/Macros.h>
 
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class QuartzPage : public QWidget
 {
@@ -58,7 +56,7 @@ private:
 };
 
 
-VQ_INTERFACE IQuartzPageManager
+QZ_INTERFACE IQuartzPageManager
 {
     virtual void addPage( QuartzPage *page ) = 0;
 
@@ -89,4 +87,4 @@ VQ_INTERFACE IQuartzPageManager
 };
 
 
-} }
+}

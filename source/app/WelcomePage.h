@@ -3,9 +3,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <quartz_core/IQuartzPageManager.h>
+#include "interface/IQuartzPageManager.h"
 
-namespace Vq { namespace Quartz {
+namespace Quartz {
 
 class WelcomePage : public QuartzPage
 {
@@ -53,4 +53,4 @@ private:
 
 };
 
-} }
+}
