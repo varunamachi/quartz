@@ -4,7 +4,12 @@ cmake_policy( SET CMP0020 NEW )
 set( PROJECT_ROOT $ENV{QUARTZ_ROOT} )
 include( $ENV{QUARTZ_ROOT}/cmake/cmake_lib/container.cmake )
 
+#set( CMAKE_INSTALL_PREFIX $ENV{QUARTZ_ROOT}/output )
+
 add_project( core )
 add_project( common )
 add_project( app )
 #add_project( plugins )
+
+
+
