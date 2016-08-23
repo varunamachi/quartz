@@ -18,6 +18,7 @@ vq_classes(
 add_subdirectory( logger )
 add_subdirectory( utils )
 add_subdirectory( job_manager )
+add_subdirectory( extension_system )
 
 vq_create_sharedlib()
 vq_install()
