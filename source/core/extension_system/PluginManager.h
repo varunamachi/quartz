@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
-#include <string>
-#include <vector>
+
+#include <QString>
+#include <QList>
+
 
 #include "../utils/Macros.h"
 
@@ -16,7 +18,12 @@ class PluginManager
 public:
     QZ_NO_COPY( PluginManager );
 
-    bool loadFrom( const std::string &location );
+    PluginManager();
+
+    ~PluginManager();
+
+
+    bool loadFrom( const QString &location );
 
     bool destroy();
 
@@ -28,7 +35,7 @@ public:
 
 private:
     class Data;
-    std::unique_ptr< Data > m_impl;
+    std::unique_ptr< Data > m_data;
 
 };
 

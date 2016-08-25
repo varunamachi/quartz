@@ -1,8 +1,7 @@
 #/bin/bash
 
-#exec &> logfile.txt
+exec &> logfile.txt
 
-#QUARTZ_ROOT=/mnt/Store/Kode/github/quartz/
 SCRIPT_DIR=$(dirname $0)
 QUARTZ_ROOT=`readlink -f .`
 echo "Using root $QUARTZ_ROOT"
