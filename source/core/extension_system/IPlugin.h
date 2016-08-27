@@ -1,11 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include <QString>
 #include <QStringList>
 
 #include "../utils/Macros.h"
 
 namespace Quartz {
+
+
 
 QZ_INTERFACE IPlugin
 {
@@ -20,6 +24,14 @@ QZ_INTERFACE IPlugin
     virtual bool init() = 0;
 
     virtual bool destroy() = 0;
+};
+
+}
+
+extern "C" {
+
+struct PluginListWrapper {
+    QList< std::shared_ptr< Quartz::IPlugin >>  pluginList;
 };
 
 }

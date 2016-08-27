@@ -1,22 +1,31 @@
 #pragma once
 
-#include <string>
+#include <QString>
 
 #include "../utils/Macros.h"
 #include "IPlugin.h"
 
 namespace Quartz {
 
+static const char * ADAPTER_PLUGIN_TYPE = "adapter";
+
 QZ_INTERFACE IPluginAdapter
 {
-    virtual std::string & pluginType() const = 0;
+    virtual QString & pluginType() const = 0;
 
-    virtual std::string & pluginHostName() const = 0;
+    virtual QString & pluginAdapterName() const = 0;
 
-    virtual bool handlePlugin() = 0;
+    virtual bool handlePlugin( IPlugin *plugin ) = 0;
 
     virtual bool finalizePlugin() = 0;
 
 };
+
+
+QZ_INTERFACE IAdapterPlugin : public IPlugin
+{
+    virtual std::shared_ptr< IPluginAdapter > adapter() = 0;
+};
+
 
 }

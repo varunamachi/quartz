@@ -2,11 +2,14 @@
 
 #include <memory>
 
-#include <QString>
 #include <QList>
 
-
 #include "../utils/Macros.h"
+
+class QDir;
+class QString;
+
+
 
 namespace Quartz {
 
@@ -27,13 +30,18 @@ public:
 
     bool destroy();
 
-    IPlugin * plugin() const;
+    IPlugin * plugin( const QString &id ) const;
 
-    IPluginAdapter * adapter() const;
+    IPluginAdapter * adapter( const QString &id ) const;
 
-    void registerPluginAdapter( IPluginAdapter *pluginHost );
+    void registerPluginAdapter( std::shared_ptr< IPluginAdapter > pluginHost );
 
 private:
+    std::size_t loadPluginAt( const QDir &dir );
+
+    bool initializePlugin( IPlugin *plugin,
+                           QZ_IN_OUT QSet< QString > &loadedPluginIds );
+
     class Data;
     std::unique_ptr< Data > m_data;
 
