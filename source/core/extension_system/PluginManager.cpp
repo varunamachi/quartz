@@ -71,7 +71,7 @@ PluginManager::PluginManager()
 
 PluginManager::~PluginManager()
 {
-
+    destroy();
 }
 
 
@@ -117,7 +117,17 @@ bool PluginManager::loadFrom( const QString &location )
 
 bool PluginManager::destroy()
 {
-    return false;
+    bool result = true;
+    for( auto it = m_data->adapters().begin();
+         it != m_data->adapters().end();
+         ++ it ) {
+        auto &handler = it.value();
+        result = result && handler->finalizePlugins();
+    }
+    foreach( auto &lib, m_data->libraries() ) {
+        result = result && lib->unload();
+    }
+    return result;
 }
 
 
@@ -146,6 +156,8 @@ void PluginManager::registerPluginAdapter(
 bool PluginManager::initializePlugin( IPlugin *plugin,
                                       QSet< QString > &loadedPluginIds )
 {
+
+    //How to handle cyclic dependency?
     if( plugin == nullptr ) {
         return false;
     }
