@@ -166,7 +166,10 @@ void QuartzWindow::maximize()
     m_layout->setContentsMargins( QMargins() );
     m_containerWidget->setContentsMargins( QMargins() );
     m_chilliWidget->setRoundedRect( false );
-    this->setGeometry( desktop->availableGeometry() );
+
+    QRect rect = desktop->availableGeometry(
+                desktop->screenNumber(QCursor::pos()));
+    this->setGeometry( rect );
 }
 
 
