@@ -2,16 +2,20 @@
 
 #include <memory>
 
-#include "IConfigStorageStrategy.h"
+#include "../utils/Macros.h"
+
+class QVariant;
+class QString;
 
 namespace Quartz {
 
-
+QZ_INTERFACE IConfigStorageStrategy;
 
 class ConfigManager
 {
 public:
-    explicit ConfigManager( IConfigStorageStorage *storageStragy );
+    explicit ConfigManager(
+            std::unique_ptr< IConfigStorageStrategy > storageStragy );
 
     ~ConfigManager();
 

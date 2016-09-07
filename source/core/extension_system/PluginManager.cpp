@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <QHash>
 #include <QDir>
 #include <QLibrary>
@@ -63,7 +65,8 @@ private:
 
 
 PluginManager::PluginManager()
-    : m_data( std::make_unique< PluginManager::Data >() )
+//    : m_data( std::make_unique< PluginManager::Data >() )
+    : m_data( std::unique_ptr< Data >( new Data() ))
 {
 
 }

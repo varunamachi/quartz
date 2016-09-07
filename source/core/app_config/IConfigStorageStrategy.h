@@ -8,7 +8,7 @@ class QVariant;
 
 namespace Quartz {
 
-QZ_INTERFACE IConfigStorageStorage
+QZ_INTERFACE IConfigStorageStrategy
 {
     virtual void store( const QString &key, const QVariant &value ) = 0;
 

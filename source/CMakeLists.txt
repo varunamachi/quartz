@@ -4,7 +4,9 @@ cmake_policy( SET CMP0020 NEW )
 set( PROJECT_ROOT $ENV{QUARTZ_ROOT} )
 include( $ENV{QUARTZ_ROOT}/cmake/cmake_lib/container.cmake )
 
-#set( CMAKE_INSTALL_PREFIX $ENV{QUARTZ_ROOT}/output )
+if(CMAKE_COMPILER_IS_GNUCXX)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+endif()
 
 add_project( core )
 add_project( common )

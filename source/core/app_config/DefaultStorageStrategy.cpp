@@ -4,6 +4,9 @@
 
 namespace Quartz {
 
+
+
+
 void DefaultStorageStrategy::store( const QString &key,
                                     const QVariant &value )
 {
