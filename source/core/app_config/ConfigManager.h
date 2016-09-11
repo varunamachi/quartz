@@ -12,6 +12,7 @@ class QString;
 namespace Quartz {
 
 QZ_INTERFACE IConfigStorageStrategy;
+QZ_INTERFACE IConfigBatchLoader;
 
 class ConfigManager
 {
@@ -36,7 +37,7 @@ public:
     void remove( const QString &key,
                  const QString &domain = QString{} );
 
-    void loadFromFile( const QString &path );
+    void batchLoad( IConfigBatchLoader *loader );
 
 private:
     class Impl;

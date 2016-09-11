@@ -165,9 +165,13 @@ void ConfigManager::remove( const QString &key, const QString &domain )
 }
 
 
-void  ConfigManager::loadFromFile( const QString &path )
+void  ConfigManager::batchLoad( IConfigBatchLoader *loader )
 {
- ////
+    loader->load( [ this ]( const QString &domain,
+                  const QString &key,
+                  const QVariant &value ) {
+        m_impl->store( domain, key, value );
+    });
 }
 
 
