@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <QHash>
 #include <QVariant>
 
@@ -11,7 +13,13 @@ namespace Quartz {
 
 QZ_INTERFACE IConfigBatchLoader
 {
-    virtual QHash< QString, QVariant > load( const QString &path ) = 0;
-}
+    using StoreFunc = std::function< void( const QString &,
+                                           const QString &,
+                                           const QVariant & )>;
+
+    virtual void load( StoreFunc storeFunc ) = 0;
+
+    virtual ~IConfigBatchLoader() { }
+};
 
 }

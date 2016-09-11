@@ -6,20 +6,26 @@
 
 namespace  Quartz {
 
-class DefaultStorageStrategy : public IConfigStorageStorage
+class DefaultStorageStrategy : public IConfigStorageStrategy
 {
 public:
-    void store( const QString &key, const QVariant &value );
+    explicit DefaultStorageStrategy( const QString &dbPath );
 
-    QVariant retrieve( const QString &key ) const;
+    ~DefaultStorageStrategy();
 
-    bool has( const QString &key ) const;
+    bool store( const QString &domain,
+                const QString &key,
+                const QByteArray &value ) override;
 
-    bool load( const QHash<QString, QVariant> &values );
+    QByteArray retrieve( const QString &domain,
+                         const QString &key ) const override;
+
+    bool remove( const QString &domain,
+                 const QString &key ) override;
 
 private:
-    class Data;
-    std::unique_ptr< Data > m_data;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 };
 
 }

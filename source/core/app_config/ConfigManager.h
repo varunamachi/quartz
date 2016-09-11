@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <QString>
+
 #include "../utils/Macros.h"
 
 class QVariant;
@@ -21,17 +23,24 @@ public:
 
     void clearCache();
 
-    void store( const QString &key, const QVariant &variant );
+    void store( const QString &key,
+                const QVariant &variant,
+                const QString &domain = QString{ } );
 
-    const QVariant & retrieve( const QString &key );
+    const QVariant retrieve( const QString &key,
+                             const QString &domain = QString{} ) const;
 
-    bool has( const QString &key );
+    bool has( const QString &key,
+              const QString &domain = QString{} ) const;
+
+    void remove( const QString &key,
+                 const QString &domain = QString{} );
 
     void loadFromFile( const QString &path );
 
 private:
-    class Data;
-    std::unique_ptr< Data > m_data;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 };
 
 
