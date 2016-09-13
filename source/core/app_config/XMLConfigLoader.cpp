@@ -23,7 +23,7 @@ XMLConfigLoader::~XMLConfigLoader()
 
 bool XMLConfigLoader::load( const QString &filePath ) const
 {
-
+    return false;
 }
 
 

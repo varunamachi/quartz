@@ -2,7 +2,7 @@
 #include <QDataStream>
 
 #include "IConfigStorageStrategy.h"
-#include "IConfigBatchLoader.h"
+#include "AbstractConfigLoader.h"
 #include "ConfigManager.h"
 
 namespace Quartz {
@@ -167,11 +167,11 @@ void ConfigManager::remove( const QString &key, const QString &domain )
 
 void  ConfigManager::batchLoad( IConfigBatchLoader *loader )
 {
-    loader->load( [ this ]( const QString &domain,
-                  const QString &key,
-                  const QVariant &value ) {
-        m_impl->store( domain, key, value );
-    });
+//    loader->load( [ this ]( const QString &domain,
+//                  const QString &key,
+//                  const QVariant &value ) {
+//        m_impl->store( domain, key, value );
+//    });
 }
 
 
