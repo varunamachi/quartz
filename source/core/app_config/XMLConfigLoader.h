@@ -2,18 +2,18 @@
 
 #include <memory>
 
-#include "IConfigBatchLoader.h"
+#include "AbstractConfigLoader.h"
 
 namespace Quartz {
 
-class XMLConfigLoader : public IConfigBatchLoader
+class XMLConfigLoader : public AbstractConfigLoader
 {
 public:
-    explicit XMLConfigLoader( const QString &filePath );
+    explicit XMLConfigLoader( StoreFunc storeFunc );
 
     ~XMLConfigLoader();
 
-    void load( StoreFunc storeFunc ) override;
+    bool load( const QString &filePath ) const override;
 
 };
 

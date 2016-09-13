@@ -1,25 +1,31 @@
 
+#include <QString>
+#include <QVariant>
+#include <QtXml/QDomDocument>
+
+
 #include "XMLConfigLoader.h"
 
 namespace Quartz {
 
-
-
-//##### Loader - proper
-XMLConfigLoader::XMLConfigLoader( const QString &filePath )
+XMLConfigLoader::XMLConfigLoader( AbstractConfigLoader::StoreFunc storeFunc )
+    : AbstractConfigLoader( storeFunc )
 {
 
 }
+
 
 XMLConfigLoader::~XMLConfigLoader()
 {
 
 }
 
-void XMLConfigLoader::load( IConfigBatchLoader::StoreFunc storeFunc )
+
+bool XMLConfigLoader::load( const QString &filePath ) const
 {
-    m_impl->load( storeFunc );
+
 }
+
 
 
 
