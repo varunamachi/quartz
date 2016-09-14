@@ -12,13 +12,14 @@ class QString;
 namespace Quartz {
 
 QZ_INTERFACE IConfigStorageStrategy;
-QZ_INTERFACE IConfigBatchLoader;
+QZ_INTERFACE AbstractConfigLoader;
 
 class ConfigManager
 {
 public:
     explicit ConfigManager(
-            std::unique_ptr< IConfigStorageStrategy > storageStragy );
+            std::unique_ptr< IConfigStorageStrategy > storageStragy,
+            std::unique_ptr< AbstractConfigLoader > configLoader = nullptr );
 
     ~ConfigManager();
 
@@ -37,7 +38,7 @@ public:
     void remove( const QString &key,
                  const QString &domain = QString{} );
 
-    void batchLoad( IConfigBatchLoader *loader );
+    void batchLoad(  const QByteArray &content  );
 
 private:
     class Impl;

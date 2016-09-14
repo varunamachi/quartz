@@ -25,6 +25,8 @@ public:
 
     virtual bool load( const QByteArray content ) const = 0;
 
+    virtual ~AbstractConfigLoader() { }
+
 protected:
     explicit AbstractConfigLoader( StoreFunc storeFunc )
         : m_storeFunc( storeFunc )
@@ -32,7 +34,6 @@ protected:
 
     }
 
-    virtual ~AbstractConfigLoader() { }
 
 private:
     StoreFunc m_storeFunc;

@@ -10,10 +10,17 @@ namespace Quartz {
 class ConfigManager::Impl
 {
 public:
-    explicit Impl( std::unique_ptr< IConfigStorageStrategy > storage )
+    explicit Impl( std::unique_ptr< IConfigStorageStrategy > storage,
+                   std::unique_ptr< AbstractConfigLoader > configLoader )
         : m_storage( std::move( storage ))
+        , m_configLoader( std::move( configLoader ))
     {
 
+    }
+
+    AbstractConfigLoader * configLoader()
+    {
+        return m_configLoader.get();
     }
 
     const QVariant retrieve( const QString &domain,
@@ -110,6 +117,8 @@ private:
 
     std::unique_ptr< IConfigStorageStrategy > m_storage;
 
+    std::unique_ptr< AbstractConfigLoader > m_configLoader;
+
     mutable Cache m_cache;
 };
 
@@ -117,13 +126,16 @@ const QVariant dummy;
 
 
 ConfigManager::ConfigManager(
-        std::unique_ptr< IConfigStorageStrategy > storageStragy )
+        std::unique_ptr< IConfigStorageStrategy > storageStragy,
+        std::unique_ptr< AbstractConfigLoader > configLoader )
 //    : m_data( std::make_unique< ConfigManager::Data >(
-//                  std::move( storageStragy )))
-    : m_impl( new ConfigManager::Impl( std::move( storageStragy )))
+//                  std::move( storageStragy ),
+//                  std::move( configLoader ))
+    : m_impl( new ConfigManager::Impl(
+                  std::move( storageStragy ),
+                  std::move( configLoader )))
 
 {
-
 }
 
 
@@ -165,13 +177,11 @@ void ConfigManager::remove( const QString &key, const QString &domain )
 }
 
 
-void  ConfigManager::batchLoad( IConfigBatchLoader *loader )
+void  ConfigManager::batchLoad( const QByteArray &content )
 {
-//    loader->load( [ this ]( const QString &domain,
-//                  const QString &key,
-//                  const QVariant &value ) {
-//        m_impl->store( domain, key, value );
-//    });
+    if( m_impl->configLoader() != nullptr ) {
+        m_impl->configLoader()->load( content );
+    }
 }
 
 
