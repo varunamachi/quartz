@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <QByteArray>
 
 class QVariant;
 class QString;
@@ -17,12 +18,19 @@ public:
 
 
 
-    StoreFunc storeFunc() const;
+    StoreFunc storeFunc() const
+    {
+        return m_storeFunc;
+    }
 
-    virtual bool load( const QString &filePath ) const = 0;
+    virtual bool load( const QByteArray content ) const = 0;
 
 protected:
-    explicit AbstractConfigLoader( StoreFunc storeFunc );
+    explicit AbstractConfigLoader( StoreFunc storeFunc )
+        : m_storeFunc( storeFunc )
+    {
+
+    }
 
     virtual ~AbstractConfigLoader() { }
 

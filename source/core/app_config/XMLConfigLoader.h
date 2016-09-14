@@ -13,7 +13,7 @@ public:
 
     ~XMLConfigLoader();
 
-    bool load( const QString &filePath ) const override;
+    bool load( const QByteArray content ) const override;
 
 };
 

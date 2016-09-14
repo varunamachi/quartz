@@ -24,13 +24,17 @@ macro( qz_add_qt )
     set( CMAKE_INCLUDE_CURRENT_DIR ON )
     find_package( Qt5Widgets )
     find_package( Qt5Sql)
+    find_package( Qt5Xml)
     list( APPEND VQ_INCLUDE_DIRS
             ${Qt5Widgets_INCLUDE_DIRS}
-            ${Qt5Sql_INCLUDE_DIRS})
+            ${Qt5Sql_INCLUDE_DIRS}
+            ${Qt5Xml_INCLUDE_DIRS})
     list( APPEND VQ_LIBS_DEBUG Qt5::Widgets )
     list( APPEND VQ_LIBS_RELEASE Qt5::Widgets )
     list( APPEND VQ_LIBS_DEBUG Qt5::Sql )
     list( APPEND VQ_LIBS_RELEASE Qt5::Sql )
+    list( APPEND VQ_LIBS_DEBUG Qt5::Xml )
+    list( APPEND VQ_LIBS_RELEASE Qt5::Xml )
 endmacro( vq_add_qt )
 
 
