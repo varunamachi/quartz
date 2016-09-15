@@ -27,6 +27,7 @@ vq_sources(
 
 add_subdirectory( adapted )
 add_subdirectory( interface )
+add_subdirectory( theme )
 
 vq_dump_vars()
 
