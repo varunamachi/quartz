@@ -4,10 +4,12 @@
 
 namespace Quartz {
 
+class Theme;
+
 class ThemeManager
 {
 public:
-    ThemeManager();
+    explicit ThemeManager( std::shared_ptr< Theme > defaultTheme );
 
     ~ThemeManager();
 

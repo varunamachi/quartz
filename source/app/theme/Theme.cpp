@@ -7,19 +7,26 @@ namespace Quartz {
 
 struct Theme::Data
 {
-public:
-    QHash< QString, QColor > m_color;
+    explicit Data( const QString &name )
+        : m_name( name )
+    {
 
-    QHash< QString, QImage > m_image;
+    }
 
-    QHash< QString, QBrush > m_brush;
+    QString m_name;
+
+    QHash< QString, QColor > m_colors;
+
+    QHash< QString, QImage > m_images;
+
+    QHash< QString, QBrush > m_brushs;
+
+    QHash< QString, QPen > m_pens;
 };
 
-Theme::Theme( const QString &name,
-              const QColor &defaultColor,
-              const QImage &image,
-              const QBrush &brush,
-              const QPen &pen )
+Theme::Theme( const QString &name )
+//    : m_data( std::make_unique< Theme::Data >( name )),
+    : m_data( new Theme::Data( name ))
 {
 
 }
@@ -46,6 +53,12 @@ void Theme::setPen( const QString &key, const QPen &Pen )
 
 void Theme::setCss( const QString &key, const QString &css )
 {
+}
+
+
+QString Theme::name() const
+{
+    return m_data->m_name;
 }
 
 

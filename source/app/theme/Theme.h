@@ -14,16 +14,11 @@ namespace Quartz {
 class Theme
 {
 public:
-    Theme( const QString &name,
-           const QColor &defaultColor,
-           const QImage &image,
-           const QBrush &brush,
-           const QPen &pen );
+    Theme( const QString &name );
 
     ~Theme();
 
-    void setColor( const QString &key,
-                   const QColor &color );
+    void setColor( const QString &key, const QColor &color );
 
     void setImage( const QString &key, const QImage &image );
 
@@ -33,13 +28,15 @@ public:
 
     void setCss( const QString &key, const QString &css );
 
+    QString name() const;
+
     const QColor color( const QString &key, QColor def = QColor{} ) const;
 
     const QImage image( const QString &key, QImage def = QImage{} ) const;
 
     const QBrush brush( const QString &key, QBrush def = QBrush{} ) const;
 
-    const QPen pen( const QString &key, QPen def = QPen{}) const;
+    const QPen pen( const QString &key, QPen def = QPen{} ) const;
 
     const QString css( const QString &key, QString def = QString{} ) const;
 
