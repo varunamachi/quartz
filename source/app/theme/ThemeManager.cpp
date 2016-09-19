@@ -68,10 +68,36 @@ ThemeManager::ThemeManager( std::shared_ptr< Theme > defaultTheme )
 
 }
 
-
 ThemeManager::~ThemeManager()
 {
 
 }
+
+std::shared_ptr< Theme > ThemeManager::defaultTheme() const
+{
+    return m_impl->defaultTheme();
+}
+
+std::shared_ptr< Theme > ThemeManager::theme( const QString &name ) const
+{
+    return m_impl->theme( name );
+}
+
+void ThemeManager::addTheme( std::shared_ptr< Theme > theme )
+{
+    m_impl->addTheme( theme );
+}
+
+const std::shared_ptr< Theme > ThemeManager::current() const
+{
+    return m_impl->current();
+}
+
+void ThemeManager::selectTheme( const QString &themeName )
+{
+    m_impl->selectTheme( themeName );
+}
+
+
 
 }
