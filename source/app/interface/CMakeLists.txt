@@ -11,6 +11,6 @@ vq_interfaces(
 )
 
 vq_classes(
-    QuartzContext
+    Q
     QuartzItem
 )
