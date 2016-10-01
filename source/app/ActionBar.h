@@ -3,15 +3,13 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
-#include <common/widgets/QzScroller.h>
-
-#include "interface/IQuartzActionBar.h"
-
 
 namespace Quartz {
 
+class QzScroller;
+class QuartzItem;
+
 class ActionBar : public QWidget
-                , public IQuartzActionBar
 {
     Q_OBJECT
 public:

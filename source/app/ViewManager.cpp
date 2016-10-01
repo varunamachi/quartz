@@ -1,6 +1,10 @@
 
 #include <core/logger/Logger.h>
 
+#include <common/widgets/QzScroller.h>
+#include <common/widgets/StackedContainer.h>
+
+#include "QuartzView.h"
 #include "ViewManager.h"
 
 namespace Quartz {
@@ -11,10 +15,10 @@ ViewManager::ViewManager( int height,
     : m_height( height )
     , m_btnWidth( btnWidth )
     , m_viewContainer( new StackedContainer(
-                          m_height,
-                          m_btnWidth,
-                          Qt::Horizontal,
-                          this ))
+                           m_height,
+                           m_btnWidth,
+                           Qt::Horizontal,
+                           this ))
     , QWidget( parent )
 {
 

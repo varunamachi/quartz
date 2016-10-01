@@ -2,6 +2,9 @@
 #include <QHBoxLayout>
 #include <QStyle>
 
+#include <common/widgets/QzScroller.h>
+
+#include "QuartzItem.h"
 #include "TitleBar.h"
 
 namespace Quartz {

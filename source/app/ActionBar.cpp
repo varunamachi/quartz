@@ -1,6 +1,9 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
+#include <common/widgets/QzScroller.h>
+
+#include "QuartzItem.h"
 #include "ActionBar.h"
 
 namespace Quartz {

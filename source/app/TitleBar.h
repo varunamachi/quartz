@@ -1,13 +1,15 @@
 #pragma once
 
-#include <common/widgets/QzScroller.h>
+#include <QWidget>
 
-#include "interface/IQuartzTitleBar.h"
+class QPushButton;
 
 namespace Quartz {
 
+class QuartzItem;
+class QzScroller;
+
 class TitleBar : public QWidget
-               , public IQuartzTitleBar
 {
     Q_OBJECT
 

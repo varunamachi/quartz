@@ -19,6 +19,9 @@ vq_classes (
     ViewManager
     WelcomePage
     HoverMoveFilter
+    QuartzPage
+    QuartzItem
+    QuartzView
 )
 
 vq_sources(
@@ -26,7 +29,6 @@ vq_sources(
 )
 
 add_subdirectory( adapted )
-add_subdirectory( interface )
 add_subdirectory( theme )
 
 vq_dump_vars()

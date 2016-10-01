@@ -10,17 +10,14 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <common/widgets/QzScroller.h>
-#include <common/widgets/StackedContainer.h>
-
-#include "interface/IQuartzViewManager.h"
-
 
 namespace Quartz {
 
+class QuartzView;
+class StackedContainer;
+class QzScroller;
 
 class ViewManager : public QWidget
-                  , public IQuartzViewManager
 {
     Q_OBJECT
 public:
@@ -28,27 +25,27 @@ public:
                           int btnWidth,
                           QWidget *parent = 0 );
 
-    void addView( QuartzView *view ) override;
+    void addView( QuartzView *view );
 
-    void removeView( const QString &viewId ) override;
+    void removeView( const QString &viewId );
 
-    void removeView( QuartzView *view ) override;
+    void removeView( QuartzView *view );
 
-    void removeViewCategory( const QString &categoryId ) override;
+    void removeViewCategory( const QString &categoryId );
 
-    QuartzView * view( const QString &viewId ) const override;
+    QuartzView * view( const QString &viewId ) const;
 
-    QList< QuartzView *> views() const override;
+    QList< QuartzView *> views() const;
 
-    QList< QuartzView *> views( const QString &categoryId ) const override;
+    QList< QuartzView *> views( const QString &categoryId ) const;
 
-    QuartzView * currentView() const override;
+    QuartzView * currentView() const;
 
-    const QString currentCategory() const override;
+    const QString currentCategory() const;
 
-    QList< QString > categories() const override;
+    QList< QString > categories() const;
 
-    void selectView( QString viewId ) override;
+    void selectView( QString viewId );
 
 private:
     int m_height;

@@ -10,16 +10,14 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <common/widgets/QzScroller.h>
-#include <common/widgets/StackedContainer.h>
-
-#include "interface/IQuartzPageManager.h"
-
 namespace Quartz {
+
+class QuartzPage;
+class QzScroller;
+class StackedContainer;
 
 
 class PageManager : public QWidget
-                  , public IQuartzPageManager
 {
     Q_OBJECT
 public:
@@ -27,29 +25,29 @@ public:
                           int pagerHeight,
                           QWidget *parent = 0 );
 
-    void addPage( QuartzPage *page ) override;
+    void addPage( QuartzPage *page );
 
-    void removePage( const QString &pageId ) override;
+    void removePage( const QString &pageId );
 
-    void removePage( QuartzPage *page ) override;
+    void removePage( QuartzPage *page );
 
-    void removePageCategory( const QString &categoryId ) override;
+    void removePageCategory( const QString &categoryId );
 
-    QuartzPage * page( const QString &pageId ) const override;
+    QuartzPage * page( const QString &pageId ) const;
 
     QList< QuartzPage *> pages() const ;
 
-    QList< QuartzPage *> pages( const QString &categoryId ) const override;
+    QList< QuartzPage *> pages( const QString &categoryId ) const;
 
-    QuartzPage * currentPage() const override;
+    QuartzPage * currentPage() const;
 
-    const QString currentCategory() const override;
+    const QString currentCategory() const;
 
-    QStringList categories() const override;
+    QStringList categories() const;
 
-    void selectCategory( QString categoryId ) override;
+    void selectCategory( QString categoryId );
 
-    void selectPage( QString pageId ) override;
+    void selectPage( QString pageId );
 
 private:
     int m_selectorWidth;

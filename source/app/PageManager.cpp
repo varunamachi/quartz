@@ -1,6 +1,10 @@
 
 #include <core/logger/Logger.h>
 
+#include <common/widgets/QzScroller.h>
+#include <common/widgets/StackedContainer.h>
+
+#include "QuartzPage.h"
 #include "PageManager.h"
 
 namespace Quartz {
