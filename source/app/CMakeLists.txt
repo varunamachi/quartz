@@ -13,15 +13,12 @@ qz_add_common()
 
 vq_classes (
     QuartzWindow
-    ActionBar
-    TitleBar
-    PageManager
-    ViewManager
+#    ActionBar
+#    TitleBar
+#    PageManager
+#    ViewManager
     WelcomePage
     HoverMoveFilter
-    QuartzPage
-    QuartzItem
-    QuartzView
 )
 
 vq_sources(
@@ -30,6 +27,10 @@ vq_sources(
 
 add_subdirectory( adapted )
 add_subdirectory( theme )
+add_subdirectory( action_bar )
+add_subdirectory( page_manager )
+add_subdirectory( view_manager )
+add_subdirectory( title_bar )
 
 vq_dump_vars()
 

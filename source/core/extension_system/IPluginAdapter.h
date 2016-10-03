@@ -11,9 +11,9 @@ static const char * ADAPTER_PLUGIN_TYPE = "adapter";
 
 QZ_INTERFACE IPluginAdapter
 {
-    virtual QString & pluginType() const = 0;
+    virtual const QString & pluginType() const = 0;
 
-    virtual QString & pluginAdapterName() const = 0;
+    virtual const QString & pluginAdapterName() const = 0;
 
     virtual bool handlePlugin( IPlugin *plugin ) = 0;
 

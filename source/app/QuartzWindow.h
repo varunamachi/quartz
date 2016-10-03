@@ -5,10 +5,10 @@
 #include <QPushButton>
 #include <QSizeGrip>
 
-#include "PageManager.h"
-#include "ViewManager.h"
-#include "ActionBar.h"
-#include "TitleBar.h"
+#include "page_manager/PageManager.h"
+#include "view_manager/ViewManager.h"
+#include "action_bar/ActionBar.h"
+#include "title_bar/TitleBar.h"
 
 namespace Quartz {
 

@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
+#include <core/extension_system/IPluginAdapter.h>
 
 namespace Quartz {
 
@@ -10,6 +11,7 @@ class QzScroller;
 class QuartzItem;
 
 class ActionBar : public QWidget
+                , public IPluginAdapter
 {
     Q_OBJECT
 public:
@@ -27,12 +29,28 @@ public:
 
     void removeCategory( const QString &category );
 
+public:
+    const QString & pluginType() const override;
+
+    const QString & pluginAdapterName() const override;
+
+    bool handlePlugin(IPlugin *plugin) override;
+
+    bool finalizePlugins() override;
+
+    const static QString PLUGIN_TYPE;
+
+    const static QString ADAPTER_NAME;
+
 private:
     int m_height;
 
     QzScroller *m_scroller;
 
     QHash< QString, QuartzItem *> m_items;
+
+    // IPluginAdapter interface
+
 };
 
 

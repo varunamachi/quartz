@@ -3,10 +3,13 @@
 
 #include <common/widgets/QzScroller.h>
 
-#include "QuartzItem.h"
+#include "../title_bar/QuartzItem.h"
 #include "ActionBar.h"
 
 namespace Quartz {
+
+const QString ActionBar::ADAPTER_NAME { "action_bar" };
+const QString ActionBar::PLUGIN_TYPE { "action_bar_item" };
 
 
 ActionBar::ActionBar( int height, QWidget *parent )
@@ -81,6 +84,27 @@ void ActionBar::removeCategory( const QString &category )
         removeItem( item );
     }
 }
+
+const QString & ActionBar::pluginType() const
+{
+    return PLUGIN_TYPE;
+}
+
+const QString & ActionBar::pluginAdapterName() const
+{
+    return ADAPTER_NAME;
+}
+
+bool ActionBar::handlePlugin( IPlugin *plugin )
+{
+
+}
+
+bool ActionBar::finalizePlugins()
+{
+
+}
+
 
 }
 

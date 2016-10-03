@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include "QuartzPage.h"
+#include "page_manager/QuartzPage.h"
 
 namespace Quartz {
 
