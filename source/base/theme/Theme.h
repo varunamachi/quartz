@@ -7,11 +7,13 @@
 #include <QBrush>
 #include <QPen>
 
+#include "../QuartzBase.h"
+
 class QString;
 
 namespace Quartz {
 
-class Theme
+class QUARTZ_BASE_API Theme
 {
 public:
     Theme( const QString &name );

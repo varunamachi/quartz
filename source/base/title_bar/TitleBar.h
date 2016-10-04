@@ -2,6 +2,8 @@
 
 #include <QWidget>
 
+#include "../QuartzBase.h"
+
 class QPushButton;
 
 namespace Quartz {
@@ -9,7 +11,7 @@ namespace Quartz {
 class QuartzItem;
 class QzScroller;
 
-class TitleBar : public QWidget
+class QUARTZ_BASE_API TitleBar : public QWidget
 {
     Q_OBJECT
 

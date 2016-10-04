@@ -4,9 +4,11 @@
 
 #include <QWidget>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
-class QuartzView : public QWidget
+class QUARTZ_BASE_API QuartzView : public QWidget
 {
     Q_OBJECT
 

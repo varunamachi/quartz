@@ -10,6 +10,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
+#include "../QuartzBase.h"
 
 namespace Quartz {
 
@@ -17,7 +18,7 @@ class QuartzView;
 class StackedContainer;
 class QzScroller;
 
-class ViewManager : public QWidget
+class QUARTZ_BASE_API ViewManager : public QWidget
 {
     Q_OBJECT
 public:

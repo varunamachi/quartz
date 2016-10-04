@@ -8,15 +8,12 @@ vq_add_qt()
 
 qz_add_core()
 qz_add_common()
+qz_add_base()
 
 
 
 vq_classes (
     QuartzWindow
-#    ActionBar
-#    TitleBar
-#    PageManager
-#    ViewManager
     WelcomePage
     HoverMoveFilter
 )
@@ -26,11 +23,6 @@ vq_sources(
 )
 
 add_subdirectory( adapted )
-add_subdirectory( theme )
-add_subdirectory( action_bar )
-add_subdirectory( page_manager )
-add_subdirectory( view_manager )
-add_subdirectory( title_bar )
 
 vq_dump_vars()
 

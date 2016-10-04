@@ -5,13 +5,15 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class QzScroller;
 class QuartzItem;
 
-class ActionBar : public QWidget
-                , public IPluginAdapter
+class QUARTZ_BASE_API ActionBar : public QWidget
+                                , public IPluginAdapter
 {
     Q_OBJECT
 public:

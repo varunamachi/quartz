@@ -2,13 +2,15 @@
 
 #include <memory>
 
+#include "../QuartzBase.h"
+
 class QString;
 
 namespace Quartz {
 
 class Theme;
 
-class ThemeManager
+class QUARTZ_BASE_API ThemeManager
 {
 public:
     explicit ThemeManager( std::shared_ptr< Theme > defaultTheme );
