@@ -1,9 +1,7 @@
 vq_classes(
     ViewManager
     QuartzView
+    AbstractViewProvider
 )
 
-vq_interfaces(
-    IViewProvider
-)
 

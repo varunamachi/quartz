@@ -13,13 +13,13 @@ namespace Quartz {
 
 QZ_INTERFACE IPlugin
 {
-    virtual QString & pluginId() const = 0;
+    virtual const QString & pluginId() const = 0;
 
-    virtual QString & pluginName() const = 0;
+    virtual const QString & pluginName() const = 0;
 
-    virtual QString & pluginType() const = 0;
+    virtual const QString & pluginType() const = 0;
 
-    virtual QStringList & dependencies() const = 0;
+    virtual const QStringList & dependencies() const = 0;
 
     virtual bool init() = 0;
 

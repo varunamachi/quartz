@@ -4,12 +4,13 @@
 #include <common/widgets/QzScroller.h>
 
 #include "../title_bar/QuartzItem.h"
+#include "AbstractActionItemProvider.h"
 #include "ActionBar.h"
+
 
 namespace Quartz {
 
 const QString ActionBar::ADAPTER_NAME { "action_bar" };
-const QString ActionBar::PLUGIN_TYPE { "action_bar_item" };
 
 
 ActionBar::ActionBar( int height, QWidget *parent )
@@ -87,7 +88,7 @@ void ActionBar::removeCategory( const QString &category )
 
 const QString & ActionBar::pluginType() const
 {
-    return PLUGIN_TYPE;
+    return  AbstractActionItemProvider::PLUGIN_TYPE;
 }
 
 const QString & ActionBar::pluginAdapterName() const
@@ -97,12 +98,23 @@ const QString & ActionBar::pluginAdapterName() const
 
 bool ActionBar::handlePlugin( IPlugin *plugin )
 {
-
+    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( plugin );
+    if( itemProvider != nullptr ) {
+        auto item = itemProvider->actionItem();
+        addItem( item );
+        m_pluginItems.push_back( item );
+        return true;
+    }
+    return false;
 }
 
 bool ActionBar::finalizePlugins()
 {
-
+    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
+        auto item = m_pluginItems.at( i );
+        removeItem( item );
+    }
+    return  true;
 }
 
 

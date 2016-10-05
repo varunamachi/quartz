@@ -11,6 +11,7 @@ namespace Quartz {
 
 class QzScroller;
 class QuartzItem;
+class AbstractActionItemProvider;
 
 class QUARTZ_BASE_API ActionBar : public QWidget
                                 , public IPluginAdapter
@@ -40,8 +41,6 @@ public:
 
     bool finalizePlugins() override;
 
-    const static QString PLUGIN_TYPE;
-
     const static QString ADAPTER_NAME;
 
 private:
@@ -50,6 +49,10 @@ private:
     QzScroller *m_scroller;
 
     QHash< QString, QuartzItem *> m_items;
+
+    QVector< QuartzItem *> m_pluginItems;
+
+//    QVector< AbstractActionItemProvider *> m_itemProviders;
 
     // IPluginAdapter interface
 

@@ -1,8 +1,6 @@
 vq_classes(
     TitleBar
     QuartzItem
+    AbstractTitleItemProvider
 )
 
-vq_interfaces(
-    ITitleItemProvider
-)
