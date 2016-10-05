@@ -10,6 +10,8 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
+#include <core/extension_system/IPluginAdapter.h>
+
 #include "../QuartzBase.h"
 
 namespace Quartz {
@@ -20,6 +22,7 @@ class StackedContainer;
 
 
 class QUARTZ_BASE_API PageManager : public QWidget
+                                  , public IPluginAdapter
 {
     Q_OBJECT
 public:
@@ -51,6 +54,18 @@ public:
 
     void selectPage( QString pageId );
 
+    // IPluginAdapter interface
+public:
+    const QString &pluginType() const;
+
+    const QString &pluginAdapterName() const;
+
+    bool handlePlugin(IPlugin *plugin);
+
+    bool finalizePlugins();
+
+    static const QString ADAPTER_NAME;
+
 private:
     int m_selectorWidth;
 
@@ -61,6 +76,9 @@ private:
     QHash< QString, StackedContainer *> m_pageContainers;
 
     QHash< QString, QuartzPage *> m_pages;
+
+    QVector< QuartzPage *> m_pluginPages;
+
 
 
 };

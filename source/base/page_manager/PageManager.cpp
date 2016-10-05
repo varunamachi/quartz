@@ -5,9 +5,12 @@
 #include <common/widgets/StackedContainer.h>
 
 #include "QuartzPage.h"
+#include "AbstractPageProvider.h"
 #include "PageManager.h"
 
 namespace Quartz {
+
+const QString PageManager::ADAPTER_NAME{ "page_manager" };
 
 PageManager::PageManager( int categoryWidth,
                           int pagerHeight,
@@ -225,6 +228,39 @@ void PageManager::selectPage( QString pageId )
     }
 }
 
+const QString & PageManager::pluginType() const
+{
+    return AbstractPageProvider::PLUGIN_TYPE;
+}
+
+const QString & PageManager::pluginAdapterName() const
+{
+    return ADAPTER_NAME;
+}
+
+bool PageManager::handlePlugin( IPlugin *plugin )
+{
+    auto result = false;
+    auto provider = dynamic_cast< AbstractPageProvider *>( plugin );
+    if( provider != nullptr ) {
+        auto page = provider->page();
+        if( page != nullptr ) {
+            addPage( page );
+            m_pluginPages.push_back( page );
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool PageManager::finalizePlugins()
+{
+    for( std::size_t i = 0; i < m_pluginPages.size(); ++ i ) {
+        auto page = m_pluginPages.at( i );
+        removePage( page );
+    }
+    return true;
+}
 
 }
 
