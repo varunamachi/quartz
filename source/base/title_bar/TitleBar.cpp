@@ -5,9 +5,12 @@
 #include <common/widgets/QzScroller.h>
 
 #include "QuartzItem.h"
+#include "AbstractTitleItemProvider.h"
 #include "TitleBar.h"
 
 namespace Quartz {
+
+const QString TitleBar::ADAPTER_NAME{ "quartz.title_bar" };
 
 
 TitleBar::TitleBar( int height, QWidget *parent )
@@ -122,5 +125,38 @@ void TitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 {
     emit sigMaxRestoreRequested();
 }
+
+const QString & TitleBar::pluginType() const
+{
+    return  AbstractTitleItemProvider::PLUGIN_TYPE;
+}
+
+const QString & TitleBar::pluginAdapterName() const
+{
+    return ADAPTER_NAME;
+}
+
+bool TitleBar::handlePlugin( IPlugin *plugin )
+{
+    auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>( plugin );
+    if( itemProvider != nullptr ) {
+        auto item = itemProvider->titleItem();
+        addItem( item );
+        m_pluginItems.push_back( item );
+        return true;
+    }
+    return false;
+}
+
+bool TitleBar::finalizePlugins()
+{
+    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
+        auto item = m_pluginItems.at( i );
+        removeItem( item );
+    }
+    return  true;
+}
+
+
 
 }

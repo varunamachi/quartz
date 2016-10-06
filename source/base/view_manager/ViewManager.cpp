@@ -5,9 +5,12 @@
 #include <common/widgets/StackedContainer.h>
 
 #include "QuartzView.h"
+#include "AbstractViewProvider.h"
 #include "ViewManager.h"
 
 namespace Quartz {
+
+const QString ViewManager::ADAPTER_NAME{ "quartz.title_bar" };
 
 ViewManager::ViewManager( int height,
                           int btnWidth,
@@ -148,6 +151,39 @@ void ViewManager::selectView( QString viewId )
     }
 }
 
+const QString & ViewManager::pluginType() const
+{
+    return AbstractViewProvider::PLUGIN_TYPE;
+}
+
+const QString & ViewManager::pluginAdapterName() const
+{
+    return ADAPTER_NAME;
+}
+
+bool ViewManager::handlePlugin( IPlugin *plugin )
+{
+    auto result = false;
+    auto provider = dynamic_cast< AbstractViewProvider *>( plugin );
+    if( provider != nullptr ) {
+        auto view = provider->view();
+        if( view != nullptr ) {
+            addView( view );
+            m_pluginViews.push_back( view );
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool ViewManager::finalizePlugins()
+{
+    for( int i = 0; i < m_pluginViews.size(); ++ i ) {
+        auto view = m_pluginViews.at( i );
+        removeView( view);
+    }
+    return true;
+}
 
 }
 

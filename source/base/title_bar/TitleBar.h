@@ -4,6 +4,8 @@
 
 #include "../QuartzBase.h"
 
+#include <core/extension_system/IPluginAdapter.h>
+
 class QPushButton;
 
 namespace Quartz {
@@ -12,6 +14,7 @@ class QuartzItem;
 class QzScroller;
 
 class QUARTZ_BASE_API TitleBar : public QWidget
+                               , public IPluginAdapter
 {
     Q_OBJECT
 
@@ -30,6 +33,17 @@ public:
 
     void removeCategory( const QString &category );
 
+public:
+    const QString &pluginType() const;
+
+    const QString &pluginAdapterName() const;
+
+    bool handlePlugin(IPlugin *plugin);
+
+    bool finalizePlugins();
+
+    static const QString ADAPTER_NAME;
+
 signals:
     void sigMinimizeRequested();
 
@@ -45,6 +59,8 @@ private:
 
     QHash< QString, QuartzItem *> m_items;
 
+    QVector< QuartzItem *> m_pluginItems;
+
     QzScroller *m_scroller;
 
     QPushButton *m_closeBtn;
@@ -52,6 +68,7 @@ private:
     QPushButton *m_maxRestoreBtn;
 
     QPushButton *m_minimizeBtn;
+
 
 };
 

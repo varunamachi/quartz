@@ -66,8 +66,8 @@ void PageManager::removePage( const QString &pageId )
     }
     else {
         QZ_ERROR( "QzApp:PageMan" )
-                << "Could not remove page with id " << pageId << ". No page "
-                                                                 " with given ID found";
+                << "Could not remove page with id "
+                << pageId << ". No page with given ID found";
     }
 }
 
@@ -255,7 +255,7 @@ bool PageManager::handlePlugin( IPlugin *plugin )
 
 bool PageManager::finalizePlugins()
 {
-    for( std::size_t i = 0; i < m_pluginPages.size(); ++ i ) {
+    for( int i = 0; i < m_pluginPages.size(); ++ i ) {
         auto page = m_pluginPages.at( i );
         removePage( page );
     }

@@ -10,6 +10,8 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
+#include <core/extension_system/IPluginAdapter.h>
+
 #include "../QuartzBase.h"
 
 namespace Quartz {
@@ -19,6 +21,7 @@ class StackedContainer;
 class QzScroller;
 
 class QUARTZ_BASE_API ViewManager : public QWidget
+                                  , public IPluginAdapter
 {
     Q_OBJECT
 public:
@@ -48,6 +51,17 @@ public:
 
     void selectView( QString viewId );
 
+public:
+    const QString & pluginType() const;
+
+    const QString & pluginAdapterName() const;
+
+    bool handlePlugin( IPlugin *plugin );
+
+    bool finalizePlugins();
+
+    static const QString ADAPTER_NAME;
+
 private:
     int m_height;
 
@@ -58,6 +72,9 @@ private:
     QHash< QString, QuartzView *> m_views;
 
     QMultiHash< QString, QuartzView *> m_categoriesToViews;
+
+    QVector< QuartzView *> m_pluginViews;
+
 };
 
 }
