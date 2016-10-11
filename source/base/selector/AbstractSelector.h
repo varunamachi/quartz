@@ -4,6 +4,8 @@
 
 #include <QWidget>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class AbstractSelector : public QWidget

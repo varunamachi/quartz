@@ -10,6 +10,7 @@
 
 #include <common/widgets/StackedContainer.h>
 
+#include "AbstractSelectorProvider.h"
 #include "AbstractSelector.h"
 #include "SelectorManager.h"
 
@@ -152,7 +153,7 @@ bool SelectorManager::handlePlugin( IPlugin *plugin )
         auto selector = provider->selector();
         if( selector != nullptr ) {
             addSelector( selector );
-            m_pluginSelectors.push_back( selector );
+            m_data->m_pluginSelectors.push_back( selector );
             result = true;
         }
     }
@@ -161,8 +162,8 @@ bool SelectorManager::handlePlugin( IPlugin *plugin )
 
 bool SelectorManager::finalizePlugins()
 {
-    for( int i = 0; i < m_pluginSelectors.size(); ++ i ) {
-        auto selector = m_pluginSelectors.at( i );
+    for( int i = 0; i < m_data->m_pluginSelectors.size(); ++ i ) {
+        auto selector = m_data->m_pluginSelectors.at( i );
         removeSelector( selector);
     }
     return true;

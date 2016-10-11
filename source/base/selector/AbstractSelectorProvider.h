@@ -3,11 +3,13 @@
 
 #include <core/extension_system/IPlugin.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class AbstractSelector;
 
-class AbstractSelectorProvider : public IPlugin
+class QUARTZ_BASE_API AbstractSelectorProvider : public IPlugin
 {
 public:
     virtual AbstractSelector selector() const = 0;
@@ -17,7 +19,7 @@ public:
         return PLUGIN_TYPE;
     }
 
-    static const PLUGIN_TYPE;
+    static const QString PLUGIN_TYPE;
 
 private:
 };
