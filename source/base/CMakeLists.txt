@@ -23,6 +23,8 @@ add_subdirectory( title_bar )
 add_subdirectory( page_manager)
 add_subdirectory( view_manager )
 add_subdirectory( action_bar )
+add_subdirectory( content_manager )
+add_subdirectory( selector )
 
 vq_create_sharedlib()
 vq_install()
