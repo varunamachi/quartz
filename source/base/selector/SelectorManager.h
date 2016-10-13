@@ -21,6 +21,8 @@ public:
                               int btnWidth,
                               QWidget *parent = 0 );
 
+    ~SelectorManager();
+
     void addSelector( AbstractSelector *selector );
 
     void removeSelector( const QString &selectorId );

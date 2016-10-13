@@ -59,6 +59,11 @@ SelectorManager::SelectorManager( int height,
 
 }
 
+SelectorManager::~SelectorManager()
+{
+
+}
+
 void SelectorManager::addSelector( AbstractSelector *selector )
 {
     if( selector != nullptr ) {
