@@ -3,4 +3,5 @@ vq_classes(
     NodeSelector
     AbstractSelector
     AbstractSelectorProvider
+    Node
 )

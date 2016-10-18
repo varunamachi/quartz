@@ -1,4 +1,5 @@
 
+#include <QVBoxLayout>
 #include "NodeSelector.h"
 
 namespace Quartz {
@@ -46,4 +47,37 @@ bool NodeSelector::finalizePlugins()
 {
     return false;
 }
+
+void NodeSelector::setupLayout()
+{
+
+}
+
+QModelIndex NodeSelector::index( int row,
+                                 int column,
+                                 const QModelIndex &parent ) const
+{
+    return QModelIndex{ };
+}
+
+QModelIndex NodeSelector::parent( const QModelIndex &child ) const
+{
+    return QModelIndex{ };
+}
+
+int NodeSelector::rowCount( const QModelIndex &parent ) const
+{
+    return 0;
+}
+
+int NodeSelector::columnCount( const QModelIndex &parent ) const
+{
+    return 0;
+}
+
+QVariant NodeSelector::data( const QModelIndex &index, int role ) const
+{
+    return QVariant{ };
+}
+
 }
