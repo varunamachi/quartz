@@ -58,6 +58,14 @@ const Node * Node::nodeAt( NodeCountType index ) const
     return nullptr;
 }
 
+Node *Node::nodeAt(NodeCountType index)
+{
+    if( m_data->m_children.size() > index ) {
+        return m_data->m_children.at( index ).get();
+    }
+    return nullptr;
+}
+
 void Node::addChild( NodePtr node )
 {
     if( node ) {

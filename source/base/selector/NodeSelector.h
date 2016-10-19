@@ -10,14 +10,30 @@
 
 namespace Quartz {
 
+class Node;
+using NodePtr = std::shared_ptr< Node >;
+
 class NodeSelector : public AbstractSelector
                    , public IPluginAdapter
                    , public QAbstractItemModel
 {
+    Q_OBJECT
+
 public:
     NodeSelector( QWidget *parent = nullptr );
 
     ~NodeSelector();
+
+    void addNode( const QStringList &parentPath, const NodePtr node );
+
+    void removeNode( const QStringList &parentPath,
+                     const QString &nodeId );
+
+    void selectNode( const QStringList &parentPath,
+                     const QString &nodeId ) const;
+
+    const Node * node( const QStringList &path,
+                       const QString &nodeId );
 
     static const QString SELECTOR_ID;
 
@@ -56,13 +72,12 @@ private:
         return m_data.get();
     }
 
+    Node * traverse( Node *node,
+                     const QStringList &parentPath,
+                     const QString &nodeId,
+                     int depth );
+
     void setupLayout();
-
-
-
-    // IPluginAdapter interface
-
-    // QAbstractItemModel interface
 };
 
 

@@ -12,10 +12,8 @@ using NodeCountType = QVector< Node >::size_type;
 
 class Node
 {
-
 public:
-
-    const Node( const QString &nodeId );
+    explicit Node( const QString &nodeId );
 
     ~Node();
 
@@ -28,6 +26,8 @@ public:
     NodeCountType numChildren() const;
 
     const Node * nodeAt( NodeCountType index ) const;
+
+    Node * nodeAt( NodeCountType index );
 
     void addChild( NodePtr node );
 

@@ -1,13 +1,17 @@
 
 #include <QVBoxLayout>
+
 #include "NodeSelector.h"
+#include "Node.h"
 
 namespace Quartz {
 
 
 struct NodeSelector::Data
 {
+    NodePtr m_root;
 
+    QVector< QPair< QStringList, NodePtr >> m_path;
 };
 
 const QString NodeSelector::SELECTOR_ID{ "quartz.node_selector" };
@@ -24,6 +28,56 @@ NodeSelector::NodeSelector( QWidget *parent )
 }
 
 NodeSelector::~NodeSelector()
+{
+
+}
+
+Node *NodeSelector::traverse( Node *node,
+                              const QStringList &path,
+                              int depth )
+{
+    Node *result = nullptr;
+    if( node != nullptr ) {
+        if( path.size() == depth ) {
+            result = node;
+        }
+        else if( path[ depth ] != node->nodeId() ) {
+            result = nullptr;
+        }
+        else {
+            ++ depth;
+            for( int i = 0; i < node->numChildren(); ++ i ) {
+                Node * child = node->nodeAt( i );
+                result = traverse( child, path, depth );
+                if( result != nullptr ) {
+                    break;
+                }
+            }
+        }
+    }
+    return node;
+}
+
+void NodeSelector::addNode( const QStringList &parentPath,
+                            const NodePtr node )
+{
+    Node *node = m_data->m_root;
+}
+
+void NodeSelector::removeNode( const QStringList &parentPath,
+                               const QString &nodeId )
+{
+
+}
+
+void NodeSelector::selectNode( const QStringList &path,
+                               const QString &nodeId ) const
+{
+
+}
+
+const Node *NodeSelector::node( const QStringList &path,
+                                const QString &nodeId )
 {
 
 }
@@ -79,5 +133,6 @@ QVariant NodeSelector::data( const QModelIndex &index, int role ) const
 {
     return QVariant{ };
 }
+
 
 }
