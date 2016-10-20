@@ -24,16 +24,13 @@ public:
 
     ~NodeSelector();
 
-    void addNode( const QStringList &parentPath, const NodePtr node );
+    bool addNode( const QStringList &parentPath, const NodePtr node );
 
-    void removeNode( const QStringList &parentPath,
-                     const QString &nodeId );
+    bool removeNode( const QStringList &path );
 
-    void selectNode( const QStringList &parentPath,
-                     const QString &nodeId ) const;
+    bool selectNode( const QStringList &path ) const;
 
-    const Node * node( const QStringList &path,
-                       const QString &nodeId );
+    const Node * node( const QStringList &path ) const;
 
     static const QString SELECTOR_ID;
 
@@ -73,9 +70,9 @@ private:
     }
 
     Node * traverse( Node *node,
-                     const QStringList &parentPath,
-                     const QString &nodeId,
-                     int depth );
+                     const QStringList &path,
+                     bool tillParent,
+                     int depth ) const;
 
     void setupLayout();
 };

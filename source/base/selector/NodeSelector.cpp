@@ -34,52 +34,65 @@ NodeSelector::~NodeSelector()
 
 Node *NodeSelector::traverse( Node *node,
                               const QStringList &path,
-                              int depth )
+                              bool tillParent,
+                              int depth ) const
 {
     Node *result = nullptr;
-    if( node != nullptr ) {
-        if( path.size() == depth ) {
-            result = node;
+    auto child = node->child( path[ depth ]);
+    if( child != nullptr ) {
+        ++ depth;
+        if( tillParent && depth == path.size() - 1 ) {
+            result = child;
         }
-        else if( path[ depth ] != node->nodeId() ) {
-            result = nullptr;
+        else if( depth == path.size() ) {
+            result = child;
         }
         else {
-            ++ depth;
-            for( int i = 0; i < node->numChildren(); ++ i ) {
-                Node * child = node->nodeAt( i );
-                result = traverse( child, path, depth );
-                if( result != nullptr ) {
-                    break;
-                }
-            }
+            result = traverse( child, path, tillParent, depth );
         }
     }
-    return node;
+    return result;
 }
 
-void NodeSelector::addNode( const QStringList &parentPath,
+bool NodeSelector::addNode( const QStringList &parentPath,
                             const NodePtr node )
 {
-    Node *node = m_data->m_root;
+    auto result = false;
+    auto *parent = traverse( m_data->m_root.get(), parentPath, false, 0 );
+    if( parent != nullptr ) {
+        parent->addChild( node );
+        result = true;
+    }
+    return result;
 }
 
-void NodeSelector::removeNode( const QStringList &parentPath,
-                               const QString &nodeId )
+bool NodeSelector::removeNode( const QStringList &path )
 {
-
+    auto result = false;
+    auto *parent = traverse( m_data->m_root.get(), path, true, 0 );
+    if( parent != nullptr ) {
+        parent->removeChild( path.last() );
+        result = true;
+    }
+    return result;
 }
 
-void NodeSelector::selectNode( const QStringList &path,
-                               const QString &nodeId ) const
+bool NodeSelector::selectNode( const QStringList &path ) const
 {
-
+    bool result = false;
+    auto sel = this->node( path );
+    if( sel != nullptr ) {
+//        contentManager()->select( sel->nodeId() );
+        sel->nodeId();
+        result = true;
+    }
+    return result;
 }
 
-const Node *NodeSelector::node( const QStringList &path,
-                                const QString &nodeId )
+const Node *NodeSelector::node( const QStringList &path ) const
 {
-
+    Node *theNode = traverse( m_data->m_root.get(), path, false, 0 );
+    return theNode;
 }
 
 const QString &NodeSelector::pluginType() const

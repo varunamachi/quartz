@@ -4,6 +4,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QIcon>
 
 namespace Quartz {
 class Node;
@@ -13,7 +14,8 @@ using NodeCountType = QVector< Node >::size_type;
 class Node
 {
 public:
-    explicit Node( const QString &nodeId );
+    explicit Node( const QString &nodeId,
+                   QIcon icon = QIcon{ } );
 
     ~Node();
 
@@ -25,13 +27,19 @@ public:
 
     NodeCountType numChildren() const;
 
-    const Node * nodeAt( NodeCountType index ) const;
+    const Node * childAt( NodeCountType index ) const;
 
-    Node * nodeAt( NodeCountType index );
+    Node * childAt( NodeCountType index );
 
     void addChild( NodePtr node );
 
     bool removeChild( const QString &nodeId );
+
+    bool hasChild( const QString &nodeId ) const;
+
+    const Node * child( const QString &nodeId ) const;
+
+    Node * child( const QString &nodeId );
 
 private:
     struct Data;

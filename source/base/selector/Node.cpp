@@ -1,3 +1,6 @@
+#include <QHash>
+
+#include <core/logger/Logger.h>
 
 #include "Node.h"
 
@@ -6,21 +9,28 @@ namespace Quartz {
 
 struct Node::Data
 {
-    Data( const QString id )
+    Data( const QString id,
+          QIcon &&icon )
         : m_id( id )
+        , m_icon( std::move( icon ))
     {
 
     }
 
     QString m_id;
 
+    QIcon m_icon;
+
     QVector< NodePtr > m_children;
+
+    QHash< QString, Node *> m_idToChild;
 
 };
 
-Node::Node( const QString &nodeId )
-//    : m_data( std::make_unique< Data >( nodeId ))
-    : m_data( new Data{ nodeId })
+Node::Node( const QString &nodeId,
+            QIcon icon )
+//    : m_data( std::make_unique< Data >( nodeId, std::move( icon ))
+    : m_data( new Data{ nodeId, std::move( icon ) })
 {
 
 }
@@ -50,7 +60,7 @@ NodeCountType Node::numChildren() const
     return m_data->m_children.size();
 }
 
-const Node * Node::nodeAt( NodeCountType index ) const
+const Node * Node::childAt( NodeCountType index ) const
 {
     if( m_data->m_children.size() > index ) {
         return m_data->m_children.at( index ).get();
@@ -58,7 +68,7 @@ const Node * Node::nodeAt( NodeCountType index ) const
     return nullptr;
 }
 
-Node *Node::nodeAt(NodeCountType index)
+Node *Node::childAt(NodeCountType index)
 {
     if( m_data->m_children.size() > index ) {
         return m_data->m_children.at( index ).get();
@@ -68,14 +78,20 @@ Node *Node::nodeAt(NodeCountType index)
 
 void Node::addChild( NodePtr node )
 {
-    if( node ) {
+    if( node && ! hasChild( node->nodeId() )) {
         m_data->m_children.push_back( node );
+        m_data->m_idToChild.insert( node->nodeId(), node.get() );
+    }
+    else if( node ) {
+        QZ_ERROR( "Base:NodeSelector" )
+                << "Attempt to add child with duplicate id " << node->nodeId()
+                << " to node " << m_data->m_id;
     }
 }
 
 bool Node::removeChild( const QString &nodeId )
 {
-    bool result = false;
+    auto result = false;
     int index = 0;
     for( ; m_data->m_children.size(); ++ index ) {
         if( m_data->m_children.at( index )->nodeId() == nodeId ) {
@@ -84,12 +100,33 @@ bool Node::removeChild( const QString &nodeId )
     }
     if( index < m_data->m_children.size() ) {
         m_data->m_children.remove( index );
+        m_data->m_idToChild.remove( nodeId );
         result = true;
     }
     return result;
 }
 
+bool Node::hasChild( const QString &nodeId ) const
+{
+    return m_data->m_idToChild.contains( nodeId );
+}
 
+const Node * Node::child( const QString &nodeId ) const
+{
+    const auto *node = m_data->m_idToChild.value( nodeId );
+    return node;
+}
+
+Node * Node::child( const QString &nodeId )
+{
+    auto *node = m_data->m_idToChild.value( nodeId );
+    return node;
+}
+
+const QIcon &Node::icon() const
+{
+    return m_data->m_icon;
+}
 
 
 }
