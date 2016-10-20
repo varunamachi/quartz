@@ -41,6 +41,8 @@ public:
 
     Node * child( const QString &nodeId );
 
+    const QIcon & icon() const;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
