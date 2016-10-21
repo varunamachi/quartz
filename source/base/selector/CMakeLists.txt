@@ -4,4 +4,6 @@ vq_classes(
     AbstractSelector
     AbstractSelectorProvider
     Node
+    SelectionTree
+    AbstractNodeProvider
 )
