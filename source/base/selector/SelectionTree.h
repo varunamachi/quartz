@@ -27,24 +27,28 @@ public:
     static const QString ADAPTER_NAME;
 
 public:
-    const QString &pluginType() const;
+    const QString &pluginType() const override;
 
-    const QString &pluginAdapterName() const;
+    const QString &pluginAdapterName() const override;
 
-    bool handlePlugin( IPlugin *plugin );
+    bool handlePlugin( IPlugin *plugin ) override;
 
-    bool finalizePlugins();
+    bool finalizePlugins() override;
 
 public:
-    QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QModelIndex index( int row,
+                       int column,
+                       const QModelIndex &parent ) const override;
 
-    QModelIndex parent( const QModelIndex &child ) const;
+    QModelIndex parent( const QModelIndex &child ) const override;
 
-    int rowCount( const QModelIndex &parent ) const;
+    int rowCount( const QModelIndex &parent ) const override;
 
-    int columnCount( const QModelIndex &parent ) const;
+    int columnCount( const QModelIndex &parent ) const override;
 
-    QVariant data( const QModelIndex &index, int role ) const;
+    QVariant data( const QModelIndex &index, int role ) const override;
+
+    bool hasChildren( const QModelIndex &parent ) const override;
 
 private:
     struct Data;

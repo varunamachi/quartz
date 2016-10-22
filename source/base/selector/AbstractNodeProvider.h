@@ -13,7 +13,7 @@ using NodePtr = std::shared_ptr< Node >;
 class QUARTZ_BASE_API AbstractNodeProvider : public IPlugin
 {
 public:
-    virtual QPair< QString, NodePtr > node() const = 0;
+    virtual QPair< QStringList, NodePtr > node() const = 0;
 
     const QString & pluginType() const override
     {
