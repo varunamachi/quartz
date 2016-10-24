@@ -14,7 +14,8 @@ using NodeCountType = QVector< Node >::size_type;
 class Node
 {
 public:
-    explicit Node( const QString &nodeId,
+    explicit Node( Node *parent,
+                   const QString &nodeId,
                    QIcon icon = QIcon{ } );
 
     ~Node();
@@ -42,6 +43,8 @@ public:
     Node * child( const QString &nodeId );
 
     const QIcon & icon() const;
+
+    Node *parent() const;
 
 private:
     struct Data;

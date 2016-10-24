@@ -60,7 +60,7 @@ Node * SelectionTree::createPath( Node *node,
     Node *result = nullptr;
     auto child = node->child( path[ depth ]);
     if( child != nullptr ) {
-        auto newChild = std::make_shared< Node >( path[ depth ]);
+        auto newChild = std::make_shared< Node >( node, path[ depth ]);
         child = newChild.get();
         node->addChild( newChild );
     }
@@ -168,6 +168,7 @@ int SelectionTree::columnCount( const QModelIndex &parent ) const
 
 QVariant SelectionTree::data( const QModelIndex &index, int role ) const
 {
+
     return QVariant{ };
 }
 

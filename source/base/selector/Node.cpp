@@ -9,13 +9,17 @@ namespace Quartz {
 
 struct Node::Data
 {
-    Data( const QString id,
+    Data( Node *parent,
+          const QString id,
           QIcon &&icon )
-        : m_id( id )
+        : m_parent( parent )
+        , m_id( id )
         , m_icon( std::move( icon ))
     {
 
     }
+
+    Node *m_parent;
 
     QString m_id;
 
@@ -27,10 +31,11 @@ struct Node::Data
 
 };
 
-Node::Node( const QString &nodeId,
+Node::Node( Node *parent,
+            const QString &nodeId,
             QIcon icon )
-//    : m_data( std::make_unique< Data >( nodeId, std::move( icon ))
-    : m_data( new Data{ nodeId, std::move( icon ) })
+//    : m_data( std::make_unique< Data >( parent, nodeId, std::move( icon ))
+    : m_data( new Data{ parent, nodeId, std::move( icon ) })
 {
 
 }
@@ -126,6 +131,11 @@ Node * Node::child( const QString &nodeId )
 const QIcon &Node::icon() const
 {
     return m_data->m_icon;
+}
+
+Node *Node::parent() const
+{
+    return m_data->m_parent;
 }
 
 
