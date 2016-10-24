@@ -39,6 +39,18 @@ Node *SelectionTree::traverse( Node *node,
     return result;
 }
 
+SelectionTree::SelectionTree()
+//    : m_data( std::make_unique< Data >() )
+    : m_data( new Data{} )
+{
+
+}
+
+SelectionTree::~SelectionTree()
+{
+
+}
+
 bool SelectionTree::addNode( const QStringList &parentPath,
                              const NodePtr node )
 {
@@ -148,28 +160,78 @@ QModelIndex SelectionTree::index( int row,
                                   int column,
                                   const QModelIndex &parent ) const
 {
-    return QModelIndex{ };
+    if( ! hasIndex( row, column, parent )) {
+        return QModelIndex();
+    }
+    QModelIndex index{ };
+    auto node = m_data->m_root.get();
+    if( parent.isValid() ) {
+        node = static_cast< Node * >( parent.internalPointer() );
+    }
+    auto child = node->childAt( row );
+    if( child != nullptr ) {
+        index = createIndex( row, column, child );
+    }
+    return index;
 }
 
-QModelIndex SelectionTree::parent( const QModelIndex &child ) const
+QModelIndex SelectionTree::parent( const QModelIndex &childIndex ) const
 {
-    return QModelIndex{ };
+    if( ! childIndex.isValid() ) {
+        return QModelIndex();
+    }
+    auto child = static_cast< Node * >( childIndex.internalPointer() );
+    auto parent = child->parent();
+    QModelIndex parentIndex{ };
+    if( parent != m_data->m_root.get() ) {
+        auto gprnt = parent->parent();
+        parentIndex = createIndex( gprnt->indexOfChild( parent ),
+                                   0,
+                                   parent );
+    }
+    return parentIndex;
 }
 
 int SelectionTree::rowCount( const QModelIndex &parent ) const
 {
-    return 0;
+    if( parent.column() > 0 ) {
+        return 0;
+    }
+    int rows = 0;
+    auto node = m_data->m_root.get();
+    if( parent.isValid() ) {
+        node = static_cast< Node *>( parent.internalPointer() );
+    }
+    rows = static_cast< int >( node->numChildren() );
+    return rows;
 }
 
-int SelectionTree::columnCount( const QModelIndex &parent ) const
+int SelectionTree::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 0;
+    return 1;
 }
 
 QVariant SelectionTree::data( const QModelIndex &index, int role ) const
 {
+    QVariant data { };
+    if( index.isValid() ) {
+        if( role == Qt::DisplayRole ) {
+            auto node = static_cast< Node *>( index.internalPointer() );
+            data = node->nodeId();
+        }
+    }
+    return data;
+}
 
-    return QVariant{ };
+bool SelectionTree::hasChildren( const QModelIndex &parent ) const
+{
+    bool result = false;
+    auto node = m_data->m_root.get();
+    if( parent.isValid() ) {
+        node = static_cast< Node *>( parent.internalPointer() );
+    }
+    result = node->numChildren() != 0;
+    return result;
 }
 
 

@@ -128,6 +128,19 @@ Node * Node::child( const QString &nodeId )
     return node;
 }
 
+int Node::indexOfChild( const Node *node )
+{
+    int index = -1;
+    for( int i = 0; i < m_data->m_children.size(); ++ i ) {
+        auto child = m_data->m_children.at( i );
+        if( child.get() == node ) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 const QIcon &Node::icon() const
 {
     return m_data->m_icon;

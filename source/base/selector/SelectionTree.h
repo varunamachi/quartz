@@ -9,11 +9,15 @@ namespace Quartz {
 class Node;
 using NodePtr = std::shared_ptr< Node >;
 
-class SelectionTree : public IPluginAdapter
-                      , public QAbstractItemModel
+class SelectionTree : public QAbstractItemModel
+                    , public IPluginAdapter
+
 {
     Q_OBJECT
 public:
+    SelectionTree();
+
+    ~SelectionTree();
 
     bool addNode( const QStringList &parentPath, const NodePtr node );
 

@@ -42,6 +42,8 @@ public:
 
     Node * child( const QString &nodeId );
 
+    int indexOfChild( const Node *node );
+
     const QIcon & icon() const;
 
     Node *parent() const;
