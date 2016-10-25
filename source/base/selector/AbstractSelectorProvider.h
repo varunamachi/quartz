@@ -22,6 +22,7 @@ public:
     static const QString PLUGIN_TYPE;
 
 private:
+
 };
 
 }

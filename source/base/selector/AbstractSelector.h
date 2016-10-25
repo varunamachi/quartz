@@ -16,7 +16,7 @@ public:
                       const QString &selectorName,
                       QWidget *parent = nullptr );
 
-    ~AbstractSelector();
+    virtual ~AbstractSelector();
 
     const QString & selectorId() const;
 

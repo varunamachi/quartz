@@ -39,9 +39,10 @@ Node *SelectionTree::traverse( Node *node,
     return result;
 }
 
-SelectionTree::SelectionTree()
+SelectionTree::SelectionTree( QObject *parent )
 //    : m_data( std::make_unique< Data >() )
-    : m_data( new Data{} )
+    : QAbstractItemModel( parent )
+    , m_data( new Data{} )
 {
 
 }
@@ -54,8 +55,6 @@ SelectionTree::~SelectionTree()
 bool SelectionTree::addNode( const QStringList &parentPath,
                              const NodePtr node )
 {
-    //TODO here we have to create nodes in path if they dont exist, instead of
-    //giving error
     auto result = false;
     auto *parent = createPath( m_data->m_root.get(), parentPath, 0 );
     if( parent != nullptr ) {

@@ -14,8 +14,9 @@ class SelectionTree : public QAbstractItemModel
 
 {
     Q_OBJECT
+
 public:
-    SelectionTree();
+    SelectionTree( QObject *parent = 0 );
 
     ~SelectionTree();
 
