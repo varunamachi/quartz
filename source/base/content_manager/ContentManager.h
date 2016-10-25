@@ -8,14 +8,27 @@
 
 namespace Quartz {
 
+class ContentWidget;
+
 class ContentManager : public QWidget
                      , public IPluginAdapter
 {
     Q_OBJECT
+
 public:
     explicit ContentManager( QWidget *parent = nullptr );
 
     ~ContentManager();
+
+    bool addContent( ContentWidget *content );
+
+    bool removeContent( const QString &contentId );
+
+    ContentWidget * content( const QString &contentId );
+
+    QVector< ContentWidget *> contentsOfKind( const QString &kind );
+
+    int removeKind( const QString &kind );
 
 public:
     const QString &pluginType() const override;

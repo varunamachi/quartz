@@ -12,12 +12,11 @@ class AbstractSelector;
 class QUARTZ_BASE_API AbstractSelectorProvider : public IPlugin
 {
 public:
+    virtual ~AbstractSelectorProvider();
+
     virtual AbstractSelector * selector() const = 0;
 
-    const QString & pluginType() const override
-    {
-        return PLUGIN_TYPE;
-    }
+    const QString & pluginType() const override;
 
     static const QString PLUGIN_TYPE;
 
