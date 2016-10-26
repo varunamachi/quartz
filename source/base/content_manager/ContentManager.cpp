@@ -1,5 +1,7 @@
 #include <QHash>
+#include <QStackedLayout>
 
+#include <core/logger/Logger.h>
 
 #include "ContentWidget.h"
 #include "AbstractContentProvider.h"
@@ -12,6 +14,8 @@ struct ContentManager::Data
     QHash< QString, ContentWidget *> m_widgets;
 
     QVector< ContentWidget *> m_fromPlugins;
+
+    QStackedLayout *m_layout;
 };
 
 const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
@@ -33,6 +37,8 @@ bool ContentManager::addContent( ContentWidget *content )
     bool result = false;
     if( content != nullptr ) {
         m_data->m_widgets.insert( content->id(), content );
+        auto index = m_data->m_layout->addWidget( content );
+        m_data->m_layout->setCurrentIndex( index );
         result = true;
     }
     return result;
@@ -41,8 +47,14 @@ bool ContentManager::addContent( ContentWidget *content )
 bool ContentManager::removeContent( const QString &contentId )
 {
     bool result = false;
-    if( m_data->m_widgets.contains( contentId )) {
+    auto content = m_data->m_widgets.value( contentId );
+    if( content != nullptr ) {
+        if( m_data->m_layout->currentWidget() == content
+                && m_data->m_layout->count() > 0 ) {
+                m_data->m_layout->setCurrentIndex( 0 );
+        }
         m_data->m_widgets.remove( contentId );
+        m_data->m_layout->removeWidget( content );
         result = true;
     }
     return result;
@@ -79,6 +91,13 @@ int ContentManager::removeKind( const QString &kind )
     return removed;
 }
 
+void ContentManager::selectContent(const QString &contentId)
+{
+    auto widget = m_data->m_widgets.value( contentId );
+    if( widget != nullptr ) {
+        m_data->m_layout->setCurrentWidget( widget );
+    }
+}
 
 const QString & ContentManager::pluginType() const
 {
@@ -112,6 +131,12 @@ bool ContentManager::finalizePlugins()
         result = removeContent( content->id() ) && result;
     }
     return result;
+}
+
+void ContentManager::setupLayout()
+{
+    m_data->m_layout = new QStackedLayout{};
+    this->setLayout( m_data->m_layout );
 }
 
 

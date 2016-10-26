@@ -30,6 +30,8 @@ public:
 
     int removeKind( const QString &kind );
 
+    void selectContent( const QString &contentId );
+
 public:
     const QString &pluginType() const override;
 
@@ -41,12 +43,12 @@ public:
 
     static const QString ADAPTER_NAME;
 
-public:
-
-
 private:
+    void setupLayout();
+
     struct Data;
     std::unique_ptr< Data > m_data;
+
 
 
 };
