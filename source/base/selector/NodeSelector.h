@@ -6,7 +6,7 @@
 
 namespace Quartz {
 
-
+class Node;
 
 class NodeSelector : public AbstractSelector
 {
@@ -21,11 +21,16 @@ public:
 
     static const QString SELECTOR_NAME;
 
-private:
-//    struct Data;
-//    std::unique_ptr< Data > m_data;
+signals:
+    void sigNodeSelected( const Node *node );
 
-    void setupLayout();
+private slots:
+    void onSelected( const QModelIndex &index );
+
+private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
+
 };
 
 

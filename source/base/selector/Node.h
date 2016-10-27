@@ -51,11 +51,6 @@ public:
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
-    inline Data * d()
-    {
-        return m_data.get();
-    }
-
 };
 
 
