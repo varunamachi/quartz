@@ -6,6 +6,11 @@
 #include <QPainter>
 #include <QStyle>
 
+#include <base/action_bar/ActionBar.h>
+#include <base/title_bar/TitleBar.h>
+#include <base/selector/SelectorManager.h>
+#include <base/content_manager/ContentManager.h>
+
 #include "QuartzWindow.h"
 #include "WelcomePage.h"
 #include "HoverMoveFilter.h"
@@ -19,8 +24,8 @@ namespace Quartz {
 QuartzWindow::QuartzWindow( QWidget *parent )
     : QMainWindow( parent )
     , m_chilliWidget( new QzMainWidget( this ))
-    , m_maximised( false )
     , m_moving( false )
+    , m_maximised( false )
 {
     this->setWindowFlags( Qt::FramelessWindowHint
                           | Qt::WindowMinimizeButtonHint );
@@ -277,32 +282,33 @@ void QuartzWindow::mouseMove( QPoint newPos, QPoint oldPos )
 QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget( parent )
     , m_roundedRect( true )
+    , m_titleBar( new TitleBar( 60, this ) )
+    , m_selector( new SelectorManager( 60, 60, this ))
+    , m_content( new ContentManager( this ))
+    , m_actionBar( new ActionBar( 60, this ))
 {
-
     this->setObjectName( "chillimain" );
-
-
-    m_titleBar = new TitleBar( 20, this );
-    m_pageManager = new PageManager( 60, 20, this );
-    m_viewManager = new ViewManager( 20, 60, this );
-    m_actionBar = new ActionBar( 20, this );
-    auto page = new WelcomePage( this );
-    auto apage = new AnotherPage( this );
-    m_pageManager->addPage( page );
-    m_pageManager->addPage( apage );
+//    m_titleBar = new TitleBar( 20, this );
+//    m_actionBar = new ActionBar( 20, this );
+//    m_pageManager = new PageManager( 60, 20, this );
+//    m_viewManager = new ViewManager( 20, 60, this );
+//    auto page = new WelcomePage( this );
+//    auto apage = new AnotherPage( this );
+//    m_pageManager->addPage( page );
+//    m_pageManager->addPage( apage );
+//    m_sizeGrip = new QSizeGrip( this );
+//    m_sizeGrip->setContentsMargins( QMargins() );
+//    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( m_pageManager );
-    mainLayout->addWidget( m_viewManager );
-    mainLayout->setAlignment( m_viewManager, Qt::AlignBottom );
+    mainLayout->addWidget( m_content );
+    mainLayout->addWidget( m_selector );
+    mainLayout->setAlignment( m_selector, Qt::AlignBottom );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins( 0, 0, 3, 3 ));
-//    m_sizeGrip = new QSizeGrip( this );
-//    m_sizeGrip->setContentsMargins( QMargins() );
-//    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
     this->setLayout( mainLayout );
     this->setStyleSheet( "border-color: red;");
 }

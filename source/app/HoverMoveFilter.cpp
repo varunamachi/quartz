@@ -1,3 +1,6 @@
+#include <QEvent>
+#include <QHoverEvent>
+
 #include "HoverMoveFilter.h"
 #include "QuartzWindow.h"
 

@@ -56,7 +56,7 @@ SelectorManager::SelectorManager( int height,
     : m_data( new Data( height, btnWidth, parent ))
     , QWidget( parent )
 {
-
+    this->setStyleSheet( "QWidget{ background: red; }" );
 }
 
 SelectorManager::~SelectorManager()

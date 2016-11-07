@@ -5,15 +5,18 @@
 #include <QPushButton>
 #include <QSizeGrip>
 
-#include <base/page_manager/PageManager.h>
-#include <base/view_manager/ViewManager.h>
-#include <base/action_bar/ActionBar.h>
-#include <base/title_bar/TitleBar.h>
+//#include <base/page_manager/PageManager.h>
+//#include <base/view_manager/ViewManager.h>
+//#include <base/action_bar/ActionBar.h>
+//#include <base/title_bar/TitleBar.h>
 
 namespace Quartz {
 
-class PageManager;
 class ActionBar;
+class TitleBar;
+class SelectorManager;
+class ContentManager;
+
 
 class QzMainWidget : public QWidget
 {
@@ -41,14 +44,16 @@ private:
 
     TitleBar *m_titleBar;
 
-    PageManager *m_pageManager;
+    SelectorManager *m_selector;
 
-    ViewManager *m_viewManager;
+    ContentManager *m_content;
 
     ActionBar *m_actionBar;
 
     friend class ChilliWindow;
 
+    //    PageManager *m_pageManager;
+    //    ViewManager *m_viewManager;
 };
 
 
