@@ -54,7 +54,7 @@ QuartzWindow::QuartzWindow( QWidget *parent )
     this->setCentralWidget( m_containerWidget );
 
     //    QString color = style()->s
-    //    m_chilliWidget->setStyleSheet( "QWidget{background-color:white;}");
+//    m_chilliWidget->setStyleSheet( "QWidget{background-color:white;}");
     connect( m_chilliWidget->titleBar(),
              SIGNAL( sigCloseRequested() ),
              this,

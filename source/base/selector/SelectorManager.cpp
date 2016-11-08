@@ -26,7 +26,7 @@ struct SelectorManager::Data
         : m_selectorContainer( new StackedContainer(
                                    height,
                                    btnWidth,
-                                   Qt::Horizontal,
+                                   Qt::Vertical,
                                    parent ))
     {
 
@@ -51,7 +51,7 @@ SelectorManager::SelectorManager( int height,
     , m_data( new Data( height, btnWidth, parent ))
 
 {
-    QBoxLayout *layout = new QVBoxLayout{ this };
+    QHBoxLayout *layout = new QHBoxLayout{ this };
     layout->addWidget( m_data->m_selectorContainer );
     this->setLayout( layout );
     this->setStyleSheet( "QWidget{ background: red; }" );
