@@ -6,12 +6,14 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class ContentWidget;
 
-class ContentManager : public QWidget
-                     , public IPluginAdapter
+class QUARTZ_BASE_API ContentManager : public QWidget
+                                     , public IPluginAdapter
 {
     Q_OBJECT
 

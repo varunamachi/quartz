@@ -2,13 +2,14 @@
 
 #include <memory>
 
+#include "../QuartzBase.h"
 #include "AbstractSelector.h"
 
 namespace Quartz {
 
 class Node;
 
-class NodeSelector : public AbstractSelector
+class QUARTZ_BASE_API NodeSelector : public AbstractSelector
 {
     Q_OBJECT
 

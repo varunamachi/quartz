@@ -4,9 +4,11 @@
 
 #include <QWidget>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
-class ContentWidget : public QWidget
+class QUARTZ_BASE_API ContentWidget : public QWidget
 {
     Q_OBJECT
 public:

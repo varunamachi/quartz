@@ -1,12 +1,13 @@
 
 #include <core/extension_system/IPlugin.h>
 
+#include "../QuartzBase.h"
 
 namespace Quartz {
 
 class ContentWidget;
 
-class AbstractContentProvider : public IPlugin
+class QUARTZ_BASE_API AbstractContentProvider : public IPlugin
 {
 public:
     virtual ContentWidget * widget() = 0;

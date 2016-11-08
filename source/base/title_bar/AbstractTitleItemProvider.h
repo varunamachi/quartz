@@ -2,11 +2,13 @@
 
 #include <core/extension_system/IPlugin.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class QuartzItem;
 
-class AbstractTitleItemProvider : public IPlugin
+class QUARTZ_BASE_API AbstractTitleItemProvider : public IPlugin
 {
 public:
     virtual QuartzItem * titleItem() const = 0;

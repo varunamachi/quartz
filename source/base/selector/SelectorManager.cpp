@@ -20,23 +20,17 @@ namespace Quartz {
 
 struct SelectorManager::Data
 {
-    Data( int heigth,
+    Data( int height,
           int btnWidth,
           QWidget *parent )
-        : m_height( heigth )
-        , m_btnWidth( btnWidth )
-        , m_selectorContainer( new StackedContainer(
-                                   m_height,
-                                   m_btnWidth,
+        : m_selectorContainer( new StackedContainer(
+                                   height,
+                                   btnWidth,
                                    Qt::Horizontal,
                                    parent ))
     {
 
     }
-
-    int m_height;
-
-    int m_btnWidth;
 
     StackedContainer *m_selectorContainer;
 
@@ -52,10 +46,14 @@ const QString SelectorManager::ADAPTER_NAME{ "quartz.title_bar" };
 SelectorManager::SelectorManager( int height,
                                   int btnWidth,
                                   QWidget *parent )
-//    : m_data( std::make_unique< Data >( height, btnWidth, parent ))
-    : m_data( new Data( height, btnWidth, parent ))
-    , QWidget( parent )
+    : QWidget( parent )
+//    , m_data( std::make_unique< Data >( height, btnWidth, parent ))
+    , m_data( new Data( height, btnWidth, parent ))
+
 {
+    QBoxLayout *layout = new QVBoxLayout{ this };
+    layout->addWidget( m_data->m_selectorContainer );
+    this->setLayout( layout );
     this->setStyleSheet( "QWidget{ background: red; }" );
 }
 

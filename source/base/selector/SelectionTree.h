@@ -4,13 +4,15 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class Node;
 using NodePtr = std::shared_ptr< Node >;
 
-class SelectionTree : public QAbstractItemModel
-                    , public IPluginAdapter
+class QUARTZ_BASE_API SelectionTree : public QAbstractItemModel
+                                    , public IPluginAdapter
 
 {
     Q_OBJECT

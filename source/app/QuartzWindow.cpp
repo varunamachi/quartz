@@ -301,16 +301,24 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 //    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
+
+    QWidget *middle = new QWidget{ this };
+    QHBoxLayout *middleLayout = new QHBoxLayout{ };
+    middleLayout->addWidget( m_selector );
+    middleLayout->addWidget( m_content );
+    middle->setLayout( middleLayout );
+
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( m_content );
-    mainLayout->addWidget( m_selector );
-    mainLayout->setAlignment( m_selector, Qt::AlignBottom );
+    mainLayout->addWidget( middle );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins( 0, 0, 3, 3 ));
     this->setLayout( mainLayout );
     this->setStyleSheet( "border-color: red;");
+
+//    auto page = new WelcomePage( this );
+//    auto apage = new AnotherPage( this );
 }
 
 

@@ -8,7 +8,7 @@
 
 namespace Quartz {
 
-class AbstractSelector : public QWidget
+class QUARTZ_BASE_API AbstractSelector : public QWidget
 {
     Q_OBJECT
 public:

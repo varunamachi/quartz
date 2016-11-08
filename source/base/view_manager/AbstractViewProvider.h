@@ -2,11 +2,13 @@
 
 #include <core/extension_system/IPlugin.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class QuartzView;
 
-class AbstractViewProvider : public IPlugin
+class QUARTZ_BASE_API AbstractViewProvider : public IPlugin
 {
 public:
     virtual QuartzView * view() const = 0;

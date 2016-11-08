@@ -21,8 +21,9 @@ struct ContentManager::Data
 const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
 
 ContentManager::ContentManager( QWidget *parent )
-//    : m_data( std::make_unique< Data >() )
-    : m_data( new Data{} )
+    : QWidget( parent )
+//    , m_data( std::make_unique< Data >() )
+    , m_data( new Data{} )
 {
 
 }

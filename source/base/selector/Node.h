@@ -6,12 +6,14 @@
 #include <QVector>
 #include <QIcon>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 class Node;
 using NodePtr = std::shared_ptr< Node >;
 using NodeCountType = QVector< Node >::size_type;
 
-class Node
+class QUARTZ_BASE_API Node
 {
 public:
     explicit Node( Node *parent,
