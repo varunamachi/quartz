@@ -1,3 +1,4 @@
+#include <memory>
 
 #include <QVBoxLayout>
 #include <QMouseEvent>
@@ -11,6 +12,9 @@
 #include <base/title_bar/TitleBar.h>
 #include <base/selector/SelectorManager.h>
 #include <base/content_manager/ContentManager.h>
+#include <base/selector/NodeSelector.h>
+#include <base/selector/SelectionTree.h>
+#include <base/selector/Node.h>
 
 #include "QuartzWindow.h"
 #include "WelcomePage.h"
@@ -339,11 +343,18 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     this->setLayout( mainLayout );
 
     m_titleBar->setStyleSheet( "background: green;" );
-    m_selector->setStyleSheet( "background: red;" );
+//    m_selector->setStyleSheet( "background: red;" );
     m_content->setStyleSheet( "background: blue;" );
     m_actionBar->setStyleSheet( "background: yellow;" );
-    splitter->setStyleSheet( "background-color: gray;" );
+//    splitter->setStyleSheet( "background-color: gray;" );
     this->setMinimumSize({ 600, 400 });
+
+    auto nodeSelector = new NodeSelector{ this };
+    m_selector->addSelector( nodeSelector );
+    QStringList path;
+    path << "sub" << "cat";
+    NodePtr nodePtr{ std::make_shared< Node >( "node" )};
+    nodeSelector->model()->addNode( path, nodePtr );
 }
 
 

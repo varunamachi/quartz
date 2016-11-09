@@ -40,6 +40,14 @@ Node::Node( Node *parent,
 
 }
 
+Node::Node( const QString &nodeId,
+            QIcon icon )
+//    : m_data( std::make_unique< Data >( parent, nodeId, std::move( icon ))
+    : m_data( new Data{ nullptr, nodeId, std::move( icon ) })
+{
+
+}
+
 Node::~Node()
 {
 
@@ -151,5 +159,9 @@ Node *Node::parent() const
     return m_data->m_parent;
 }
 
+void Node::setParent( Node *parent )
+{
+    m_data->m_parent = parent;
+}
 
 }

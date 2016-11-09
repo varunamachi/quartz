@@ -8,6 +8,7 @@
 namespace Quartz {
 
 class Node;
+class SelectionTree;
 
 class QUARTZ_BASE_API NodeSelector : public AbstractSelector
 {
@@ -17,6 +18,8 @@ public:
     NodeSelector( QWidget *parent = nullptr );
 
     ~NodeSelector();
+
+    SelectionTree * model();
 
     static const QString SELECTOR_ID;
 

@@ -10,6 +10,12 @@ namespace Quartz {
 
 struct SelectionTree::Data
 {
+    Data()
+        : m_root{ new Node{ nullptr, "root" }}
+    {
+
+    }
+
     NodePtr m_root;
 
     QVector< QPair< QStringList, NodePtr >> m_pluginNodes;
@@ -59,6 +65,7 @@ bool SelectionTree::addNode( const QStringList &parentPath,
     auto *parent = createPath( m_data->m_root.get(), parentPath, 0 );
     if( parent != nullptr ) {
         parent->addChild( node );
+        node->setParent( parent );
         result = true;
     }
     return result;
@@ -70,7 +77,7 @@ Node * SelectionTree::createPath( Node *node,
 {
     Node *result = nullptr;
     auto child = node->child( path[ depth ]);
-    if( child != nullptr ) {
+    if( child == nullptr ) {
         auto newChild = std::make_shared< Node >( node, path[ depth ]);
         child = newChild.get();
         node->addChild( newChild );

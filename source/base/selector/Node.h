@@ -20,6 +20,9 @@ public:
                    const QString &nodeId,
                    QIcon icon = QIcon{ } );
 
+    explicit Node( const QString &nodeId,
+                   QIcon icon = QIcon{ } );
+
     ~Node();
 
     const QString & nodeId() const;
@@ -49,6 +52,8 @@ public:
     const QIcon & icon() const;
 
     Node *parent() const;
+
+    void setParent( Node *parent );
 
 private:
     struct Data;

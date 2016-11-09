@@ -1,6 +1,7 @@
 
 #include <QVBoxLayout>
 #include <QTreeView>
+#include <QHeaderView>
 
 #include "Node.h"
 #include "SelectionTree.h"
@@ -14,13 +15,17 @@ const QString NodeSelector::SELECTOR_NAME{ "Pages" };
 
 struct NodeSelector::Data
 {
-    explicit Data( QTreeView *treeView )
+    explicit Data( QTreeView *treeView,
+                   SelectionTree *model )
         : m_view( treeView )
+        , m_model( model )
     {
 
     }
 
     QTreeView *m_view;
+
+    SelectionTree *m_model;
 };
 
 NodeSelector::NodeSelector( QWidget *parent )
@@ -28,12 +33,15 @@ NodeSelector::NodeSelector( QWidget *parent )
                         SELECTOR_NAME,
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
-    , m_data( new NodeSelector::Data( new QTreeView( this )))
+    , m_data( new NodeSelector::Data( new QTreeView( this ),
+                                      new SelectionTree( this )))
 {
     auto layout = new QVBoxLayout();
-    auto tree = new SelectionTree( this );
     //deligate
-    m_data->m_view->setModel( tree );
+    m_data->m_view->setModel( m_data->m_model );
+    m_data->m_view->header()->setVisible( false );
+    m_data->m_view->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_data->m_view->setSelectionBehavior( QAbstractItemView::SelectRows );
     layout->addWidget( m_data->m_view );
     this->setLayout( layout );
     connect( m_data->m_view,
@@ -45,6 +53,11 @@ NodeSelector::NodeSelector( QWidget *parent )
 NodeSelector::~NodeSelector()
 {
 
+}
+
+SelectionTree *NodeSelector::model()
+{
+    return m_data->m_model;
 }
 
 void NodeSelector::onSelected( const QModelIndex &index )
