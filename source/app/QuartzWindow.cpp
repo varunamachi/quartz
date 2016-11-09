@@ -301,43 +301,49 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 //    m_sizeGrip->setContentsMargins( QMargins() );
 //    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
 
-    m_titleBar->setStyleSheet( "background: green;" );
-    m_selector->setStyleSheet( "background: red;" );
-    m_content->setStyleSheet( "background: blue;" );
-    m_actionBar->setStyleSheet( "background: yellow;" );
-
-    this->setMinimumSize({ 600, 400 });
 
 
-    auto mainLayout = new QVBoxLayout();
 
-//    auto middle = new QWidget{ this };
-//    middle->setContentsMargins( QMargins{ });
-//    auto middleLayout = new QHBoxLayout{ };
-//    middleLayout->addWidget( m_selector );
-//    middleLayout->addWidget( m_content );
-//    middleLayout->setContentsMargins( QMargins{ });
-//    middle->setLayout( middleLayout );
+    QSizePolicy policy;
+    policy.setHorizontalPolicy( QSizePolicy::Expanding );
+    policy.setVerticalPolicy( QSizePolicy::Expanding );
+
     auto splitter = new QSplitter{ Qt::Horizontal, this };
     splitter->addWidget( m_selector );
     splitter->addWidget( m_content );
     QList< int > sizes;
     sizes << 100 << 300;
     splitter->setSizes( sizes );
-    splitter->setStyleSheet( "background-color: green;" );
     splitter->setContentsMargins( QMargins{ });
 
+    auto middle = new QWidget{ this };
+    middle->setContentsMargins( QMargins{ });
+    auto middleLayout = new QHBoxLayout{ };
+    middleLayout->addWidget( splitter );
+    middleLayout->setContentsMargins( QMargins{ });
+    middle->setLayout( middleLayout );
+
+    m_content->setSizePolicy( policy );
+//    m_selector->setSizePolicy( policy );
+    splitter->setSizePolicy( policy );
+    middle->setSizePolicy( policy );
+
+    auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( splitter );
+    mainLayout->addWidget( middle );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins( QMargins( 0, 0, 3, 3 ));
+    mainLayout->setContentsMargins( QMargins{ });
+    mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
-    this->setStyleSheet( "border-color: red;");
 
-//    auto page = new WelcomePage( this );
-//    auto apage = new AnotherPage( this );
+    m_titleBar->setStyleSheet( "background: green;" );
+    m_selector->setStyleSheet( "background: red;" );
+    m_content->setStyleSheet( "background: blue;" );
+    m_actionBar->setStyleSheet( "background: yellow;" );
+    splitter->setStyleSheet( "background-color: gray;" );
+    this->setMinimumSize({ 600, 400 });
 }
 
 
