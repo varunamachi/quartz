@@ -51,10 +51,10 @@ SelectorManager::SelectorManager( int height,
     , m_data( new Data( height, btnWidth, parent ))
 
 {
-    QHBoxLayout *layout = new QHBoxLayout{ this };
+    auto layout = new QHBoxLayout{ this };
     layout->addWidget( m_data->m_selectorContainer );
+    layout->setContentsMargins( QMargins{ });
     this->setLayout( layout );
-    this->setStyleSheet( "QWidget{ background: red; }" );
 }
 
 SelectorManager::~SelectorManager()

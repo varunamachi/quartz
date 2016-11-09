@@ -11,6 +11,12 @@ namespace Quartz {
 
 struct ContentManager::Data
 {
+    explicit Data( QWidget *parent )
+        : m_layout( new QStackedLayout{ parent })
+    {
+
+    }
+
     QHash< QString, ContentWidget *> m_widgets;
 
     QVector< ContentWidget *> m_fromPlugins;
@@ -23,7 +29,7 @@ const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
 ContentManager::ContentManager( QWidget *parent )
     : QWidget( parent )
 //    , m_data( std::make_unique< Data >() )
-    , m_data( new Data{} )
+    , m_data( new Data{ this } )
 {
 
 }
@@ -136,8 +142,11 @@ bool ContentManager::finalizePlugins()
 
 void ContentManager::setupLayout()
 {
-    m_data->m_layout = new QStackedLayout{};
-    this->setLayout( m_data->m_layout );
+    auto layout = new QVBoxLayout();
+    layout->addLayout( m_data->m_layout );
+    layout->setContentsMargins( QMargins{ });
+    m_data->m_layout->setContentsMargins( QMargins{ });
+    this->setLayout( layout );
 }
 
 

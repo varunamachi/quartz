@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QStyle>
+#include <QSplitter>
 
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
@@ -282,10 +283,10 @@ void QuartzWindow::mouseMove( QPoint newPos, QPoint oldPos )
 QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget( parent )
     , m_roundedRect( true )
-    , m_titleBar( new TitleBar( 60, this ) )
-    , m_selector( new SelectorManager( 60, 60, this ))
+    , m_titleBar( new TitleBar( 20, this ) )
+    , m_selector( new SelectorManager( 40, 20, this ))
     , m_content( new ContentManager( this ))
-    , m_actionBar( new ActionBar( 60, this ))
+    , m_actionBar( new ActionBar( 20, this ))
 {
     this->setObjectName( "chillimain" );
 //    m_titleBar = new TitleBar( 20, this );
@@ -300,17 +301,35 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 //    m_sizeGrip->setContentsMargins( QMargins() );
 //    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
+    m_titleBar->setStyleSheet( "background: green;" );
+    m_selector->setStyleSheet( "background: red;" );
+    m_content->setStyleSheet( "background: blue;" );
+    m_actionBar->setStyleSheet( "background: yellow;" );
 
-    QWidget *middle = new QWidget{ this };
-    QHBoxLayout *middleLayout = new QHBoxLayout{ };
-    middleLayout->addWidget( m_selector );
-    middleLayout->addWidget( m_content );
-    middle->setLayout( middleLayout );
+    this->setMinimumSize({ 600, 400 });
+
+
+    auto mainLayout = new QVBoxLayout();
+
+//    auto middle = new QWidget{ this };
+//    middle->setContentsMargins( QMargins{ });
+//    auto middleLayout = new QHBoxLayout{ };
+//    middleLayout->addWidget( m_selector );
+//    middleLayout->addWidget( m_content );
+//    middleLayout->setContentsMargins( QMargins{ });
+//    middle->setLayout( middleLayout );
+    auto splitter = new QSplitter{ Qt::Horizontal, this };
+    splitter->addWidget( m_selector );
+    splitter->addWidget( m_content );
+    QList< int > sizes;
+    sizes << 100 << 300;
+    splitter->setSizes( sizes );
+    splitter->setStyleSheet( "background-color: green;" );
+    splitter->setContentsMargins( QMargins{ });
 
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( middle );
+    mainLayout->addWidget( splitter );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins( 0, 0, 3, 3 ));
