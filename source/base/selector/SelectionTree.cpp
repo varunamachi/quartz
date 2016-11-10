@@ -11,7 +11,7 @@ namespace Quartz {
 struct SelectionTree::Data
 {
     Data()
-        : m_root{ new Node{ nullptr, "root" }}
+        : m_root{ new Node{ nullptr, "root", "Root" }}
     {
 
     }
@@ -22,6 +22,19 @@ struct SelectionTree::Data
 };
 
 const QString SelectionTree::ADAPTER_NAME{ "Node Tree" };
+
+static QString makeNodeId( const QStringList &path,
+                           const QString name = QString{ "" },
+                           int depth = -1 )
+{
+    depth = depth == -1 ? path.size() : depth;
+    QString nodeId{ "#page." };
+    for( int i = 0; i < depth; ++ i ) {
+        nodeId.append( path[ i ]).append( "." );
+    }
+    nodeId.append( name );
+    return nodeId;
+}
 
 Node *SelectionTree::traverse( Node *node,
                                const QStringList &path,
@@ -58,6 +71,21 @@ SelectionTree::~SelectionTree()
 
 }
 
+Node * SelectionTree::addNode( const QStringList &parentPath,
+                             const QString &nodeName,
+                             QIcon icon )
+{
+    QString id = makeNodeId( parentPath, nodeName );
+    auto node = std::make_shared< Node >( m_data->m_root.get(),
+                                          id,
+                                          nodeName,
+                                          icon );
+    if( addNode( parentPath, node )) {
+        return node.get();
+    }
+    return nullptr;
+}
+
 bool SelectionTree::addNode( const QStringList &parentPath,
                              const NodePtr node )
 {
@@ -78,7 +106,8 @@ Node * SelectionTree::createPath( Node *node,
     Node *result = nullptr;
     auto child = node->child( path[ depth ]);
     if( child == nullptr ) {
-        auto newChild = std::make_shared< Node >( node, path[ depth ]);
+        auto childId = makeNodeId( path, path[ depth ], depth );
+        auto newChild = std::make_shared< Node >( node, childId, path[ depth ]);
         child = newChild.get();
         node->addChild( newChild );
     }
@@ -120,7 +149,6 @@ const Node *SelectionTree::node( const QStringList &path ) const
     Node *theNode = traverse( m_data->m_root.get(), path, false, 0 );
     return theNode;
 }
-
 
 const QString &SelectionTree::pluginType() const
 {
@@ -223,7 +251,7 @@ QVariant SelectionTree::data( const QModelIndex &index, int role ) const
     if( index.isValid() ) {
         if( role == Qt::DisplayRole ) {
             auto node = static_cast< Node *>( index.internalPointer() );
-            data = node->nodeId();
+            data = node->nodeName();
         }
     }
     return data;

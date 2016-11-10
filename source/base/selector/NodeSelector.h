@@ -9,13 +9,15 @@ namespace Quartz {
 
 class Node;
 class SelectionTree;
+class Context;
 
 class QUARTZ_BASE_API NodeSelector : public AbstractSelector
 {
     Q_OBJECT
 
 public:
-    NodeSelector( QWidget *parent = nullptr );
+    NodeSelector( const Context *context,
+                  QWidget *parent = nullptr );
 
     ~NodeSelector();
 

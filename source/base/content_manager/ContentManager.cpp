@@ -98,7 +98,7 @@ int ContentManager::removeKind( const QString &kind )
     return removed;
 }
 
-void ContentManager::selectContent(const QString &contentId)
+void ContentManager::selectContent( const QString &contentId )
 {
     auto widget = m_data->m_widgets.value( contentId );
     if( widget != nullptr ) {

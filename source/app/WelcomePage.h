@@ -3,20 +3,21 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <base/page_manager/QuartzPage.h>
+#include <base/content_manager/ContentWidget.h>
 
 namespace Quartz {
 
-class WelcomePage : public QuartzPage
+class WelcomePage : public ContentWidget
 {
     Q_OBJECT
 public:
-    explicit WelcomePage( QWidget *parent = nullptr )
-        : QuartzPage( "qz_welcome",
-                      tr( "Quartz" ),
-                      tr( "Quartz" ),
-                      tr( "Welcome" ),
-                      parent )
+    explicit WelcomePage(
+            const QString &id,
+            QWidget *parent = nullptr )
+        : ContentWidget( id,
+                         tr( "Quartz" ),
+                         "page",
+                         parent )
     {
         QVBoxLayout *layout = new QVBoxLayout();
         QLabel *label = new QLabel( tr( "Welcome to Qurtz" ));
@@ -30,16 +31,17 @@ private:
 
 };
 
-class AnotherPage : public QuartzPage
+class AnotherPage : public ContentWidget
 {
     Q_OBJECT
 public:
-    explicit AnotherPage( QWidget *parent = nullptr )
-        : QuartzPage( "qz_another",
-                      tr( "Quartz" ),
-                      tr( "Quartz" ),
-                      tr( "AnotherPage" ),
-                      parent )
+    explicit AnotherPage(
+            const QString &id,
+            QWidget *parent = nullptr )
+        : ContentWidget( id,
+                         tr( "Sample" ),
+                         "page",
+                         parent )
     {
         QVBoxLayout *layout = new QVBoxLayout();
         QLabel *label = new QLabel( tr( "This is Q U A R T Z" ));

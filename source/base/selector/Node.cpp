@@ -10,10 +10,12 @@ namespace Quartz {
 struct Node::Data
 {
     Data( Node *parent,
-          const QString id,
+          const QString &id,
+          const QString &nodeName,
           QIcon &&icon )
         : m_parent( parent )
         , m_id( id )
+        , m_nodeName( nodeName )
         , m_icon( std::move( icon ))
     {
 
@@ -22,6 +24,8 @@ struct Node::Data
     Node *m_parent;
 
     QString m_id;
+
+    QString m_nodeName;
 
     QIcon m_icon;
 
@@ -33,20 +37,22 @@ struct Node::Data
 
 Node::Node( Node *parent,
             const QString &nodeId,
+            const QString &nodeName,
             QIcon icon )
 //    : m_data( std::make_unique< Data >( parent, nodeId, std::move( icon ))
-    : m_data( new Data{ parent, nodeId, std::move( icon ) })
+    : m_data( new Data{ parent, nodeId, nodeName, std::move( icon ) })
 {
 
 }
 
-Node::Node( const QString &nodeId,
-            QIcon icon )
-//    : m_data( std::make_unique< Data >( parent, nodeId, std::move( icon ))
-    : m_data( new Data{ nullptr, nodeId, std::move( icon ) })
-{
+//Node::Node( const QString &nodeId,
+//            const QString &nodeName,
+//            QIcon icon )
+////    : m_data( std::make_unique< Data >( parent, nodeId, std::move( icon ))
+//    : m_data( new Data{ nullptr, nodeId, nodeName, std::move( icon ) })
+//{
 
-}
+//}
 
 Node::~Node()
 {
@@ -56,6 +62,11 @@ Node::~Node()
 const QString & Node::nodeId() const
 {
     return m_data->m_id;
+}
+
+const QString &Node::nodeName() const
+{
+    return m_data->m_nodeName;
 }
 
 const QVector< NodePtr > & Node::children() const

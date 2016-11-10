@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QIcon>
 
 #include <core/extension_system/IPluginAdapter.h>
 
@@ -22,14 +23,16 @@ public:
 
     ~SelectionTree();
 
-    bool addNode( const QStringList &parentPath, const NodePtr node );
+    Node * addNode( const QStringList &parentPath,
+                    const QString &nodeName,
+                    QIcon icon = QIcon{ } );
+
 
     bool removeNode( const QStringList &path );
 
     bool selectNode( const QStringList &path ) const;
 
     const Node * node( const QStringList &path ) const;
-
 
     static const QString ADAPTER_NAME;
 
@@ -60,6 +63,8 @@ public:
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
+    bool addNode( const QStringList &parentPath, const NodePtr node );
 
     Node * traverse( Node *node,
                      const QStringList &path,

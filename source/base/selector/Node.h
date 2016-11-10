@@ -18,14 +18,18 @@ class QUARTZ_BASE_API Node
 public:
     explicit Node( Node *parent,
                    const QString &nodeId,
+                   const QString &nodeName,
                    QIcon icon = QIcon{ } );
 
-    explicit Node( const QString &nodeId,
-                   QIcon icon = QIcon{ } );
+//    explicit Node( const QString &nodeId,
+//                   const QString &nodeName,
+//                   QIcon icon = QIcon{ } );
 
     ~Node();
 
     const QString & nodeId() const;
+
+    const QString & nodeName() const;
 
     const QVector< NodePtr > & children() const;
 

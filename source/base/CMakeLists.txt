@@ -16,6 +16,7 @@ vq_headers(
 
 
 vq_classes(
+    Context
 )
 
 add_subdirectory( theme )

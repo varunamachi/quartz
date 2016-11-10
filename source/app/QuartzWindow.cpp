@@ -8,6 +8,7 @@
 #include <QStyle>
 #include <QSplitter>
 
+#include <core/logger/Logger.h>
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
 #include <base/selector/SelectorManager.h>
@@ -15,6 +16,7 @@
 #include <base/selector/NodeSelector.h>
 #include <base/selector/SelectionTree.h>
 #include <base/selector/Node.h>
+#include <base/Context.h>
 
 #include "QuartzWindow.h"
 #include "WelcomePage.h"
@@ -338,23 +340,37 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     mainLayout->addWidget( middle );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins( QMargins{ });
+    mainLayout->setContentsMargins( QMargins{ 0, 0, 5, 5 });
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
 
     m_titleBar->setStyleSheet( "background: green;" );
 //    m_selector->setStyleSheet( "background: red;" );
-    m_content->setStyleSheet( "background: blue;" );
+//    m_content->setStyleSheet( "background: blue;" );
     m_actionBar->setStyleSheet( "background: yellow;" );
 //    splitter->setStyleSheet( "background-color: gray;" );
     this->setMinimumSize({ 600, 400 });
 
-    auto nodeSelector = new NodeSelector{ this };
+
+    auto context = new Context{};
+    context->setContentManager( m_content );
+    context->setSelectorManager( m_selector );
+    context->setTntLogger( TntLogger::get() );
+    auto nodeSelector = new NodeSelector{ context, this };
+
+
+
     m_selector->addSelector( nodeSelector );
     QStringList path;
-    path << "sub" << "cat";
-    NodePtr nodePtr{ std::make_shared< Node >( "node" )};
-    nodeSelector->model()->addNode( path, nodePtr );
+    path << "Root" << "Sub";
+//    NodePtr nodePtr{ std::make_shared< Node >( "node" )};
+//    nodeSelector->model()->addNode( path, nodePtr );
+    auto welcomeNode = nodeSelector->model()->addNode( path, "Welcome" );
+    path.pop_front();
+    path << "SecSub";
+    auto otherNode = nodeSelector->model()->addNode( path, "Another" );
+    m_content->addContent( new WelcomePage{ welcomeNode->nodeId(), m_content });
+    m_content->addContent( new AnotherPage{ otherNode->nodeId(), m_content });
 }
 
 

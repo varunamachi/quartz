@@ -3,6 +3,8 @@
 #include <QTreeView>
 #include <QHeaderView>
 
+#include "../Context.h"
+#include "../content_manager/ContentManager.h"
 #include "Node.h"
 #include "SelectionTree.h"
 #include "NodeSelector.h"
@@ -28,8 +30,10 @@ struct NodeSelector::Data
     SelectionTree *m_model;
 };
 
-NodeSelector::NodeSelector( QWidget *parent )
-    : AbstractSelector( SELECTOR_ID,
+NodeSelector::NodeSelector( const Context *context,
+                            QWidget *parent )
+    : AbstractSelector( context,
+                        SELECTOR_ID,
                         SELECTOR_NAME,
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
@@ -66,6 +70,9 @@ void NodeSelector::onSelected( const QModelIndex &index )
         return;
     }
     auto node = static_cast< Node *>( index.internalPointer() );
+    if( this->context()->hasContentManager() ) {
+        this->context()->contentManager()->selectContent( node->nodeId() );
+    }
     emit sigNodeSelected( node );
 }
 
