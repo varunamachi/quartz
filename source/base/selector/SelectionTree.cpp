@@ -90,7 +90,10 @@ bool SelectionTree::addNode( const QStringList &parentPath,
                              const NodePtr node )
 {
     auto result = false;
-    auto *parent = createPath( m_data->m_root.get(), parentPath, 0 );
+    auto *parent = m_data->m_root.get();
+    if( ! parentPath.empty() ) {
+        parent = createPath( m_data->m_root.get(), parentPath, 0 );
+    }
     if( parent != nullptr ) {
         parent->addChild( node );
         node->setParent( parent );
@@ -104,7 +107,7 @@ Node * SelectionTree::createPath( Node *node,
                                   int depth )
 {
     Node *result = nullptr;
-    auto child = node->child( path[ depth ]);
+    auto child = node->child( path[ depth ]); //pathID
     if( child == nullptr ) {
         auto childId = makeNodeId( path, path[ depth ], depth );
         auto newChild = std::make_shared< Node >( node, childId, path[ depth ]);

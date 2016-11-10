@@ -49,7 +49,7 @@ NodeSelector::NodeSelector( const Context *context,
     layout->addWidget( m_data->m_view );
     this->setLayout( layout );
     connect( m_data->m_view,
-             &QTreeView::activated,
+             &QTreeView::clicked,
              this,
              &NodeSelector::onSelected );
 }

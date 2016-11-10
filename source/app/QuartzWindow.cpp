@@ -11,6 +11,7 @@
 #include <core/logger/Logger.h>
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
+#include <base/view_manager/ViewManager.h>
 #include <base/selector/SelectorManager.h>
 #include <base/content_manager/ContentManager.h>
 #include <base/selector/NodeSelector.h>
@@ -292,6 +293,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     , m_titleBar( new TitleBar( 20, this ) )
     , m_selector( new SelectorManager( 40, 20, this ))
     , m_content( new ContentManager( this ))
+    , m_viewManager( new ViewManager( 10, 40, this ))
     , m_actionBar( new ActionBar( 20, this ))
 {
     this->setObjectName( "chillimain" );
@@ -344,7 +346,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
 
-    m_titleBar->setStyleSheet( "background: green;" );
+//    m_titleBar->setStyleSheet( "background: green;" );
 //    m_selector->setStyleSheet( "background: red;" );
 //    m_content->setStyleSheet( "background: blue;" );
     m_actionBar->setStyleSheet( "background: yellow;" );
@@ -362,13 +364,12 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 
     m_selector->addSelector( nodeSelector );
     QStringList path;
-    path << "Root" << "Sub";
+
 //    NodePtr nodePtr{ std::make_shared< Node >( "node" )};
 //    nodeSelector->model()->addNode( path, nodePtr );
     auto welcomeNode = nodeSelector->model()->addNode( path, "Welcome" );
-    path.pop_front();
-    path << "SecSub";
-    auto otherNode = nodeSelector->model()->addNode( path, "Another" );
+    path << "Welcome";
+    auto otherNode = nodeSelector->model()->addNode( path, "Details" );
     m_content->addContent( new WelcomePage{ welcomeNode->nodeId(), m_content });
     m_content->addContent( new AnotherPage{ otherNode->nodeId(), m_content });
 }

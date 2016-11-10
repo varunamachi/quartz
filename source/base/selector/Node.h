@@ -43,13 +43,13 @@ public:
 
     void addChild( NodePtr node );
 
-    bool removeChild( const QString &nodeId );
+    bool removeChild( const QString &nodeName );
 
-    bool hasChild( const QString &nodeId ) const;
+    bool hasChild( const QString &nodeName ) const;
 
-    const Node * child( const QString &nodeId ) const;
+    const Node * child( const QString &nodeName ) const;
 
-    Node * child( const QString &nodeId );
+    Node * child( const QString &nodeName );
 
     int indexOfChild( const Node *node );
 

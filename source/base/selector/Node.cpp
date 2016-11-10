@@ -102,9 +102,9 @@ Node *Node::childAt(NodeCountType index)
 
 void Node::addChild( NodePtr node )
 {
-    if( node && ! hasChild( node->nodeId() )) {
+    if( node && ! hasChild( node->nodeName() )) {
         m_data->m_children.push_back( node );
-        m_data->m_idToChild.insert( node->nodeId(), node.get() );
+        m_data->m_idToChild.insert( node->nodeName(), node.get() );
     }
     else if( node ) {
         QZ_ERROR( "Base:NodeSelector" )
@@ -113,37 +113,37 @@ void Node::addChild( NodePtr node )
     }
 }
 
-bool Node::removeChild( const QString &nodeId )
+bool Node::removeChild( const QString &nodeName )
 {
     auto result = false;
     int index = 0;
     for( ; m_data->m_children.size(); ++ index ) {
-        if( m_data->m_children.at( index )->nodeId() == nodeId ) {
+        if( m_data->m_children.at( index )->nodeId() == nodeName ) {
             break;
         }
     }
     if( index < m_data->m_children.size() ) {
         m_data->m_children.remove( index );
-        m_data->m_idToChild.remove( nodeId );
+        m_data->m_idToChild.remove( nodeName );
         result = true;
     }
     return result;
 }
 
-bool Node::hasChild( const QString &nodeId ) const
+bool Node::hasChild( const QString &nodeName ) const
 {
-    return m_data->m_idToChild.contains( nodeId );
+    return m_data->m_idToChild.contains( nodeName );
 }
 
-const Node * Node::child( const QString &nodeId ) const
+const Node * Node::child( const QString &nodeName ) const
 {
-    const auto *node = m_data->m_idToChild.value( nodeId );
+    const auto *node = m_data->m_idToChild.value( nodeName );
     return node;
 }
 
-Node * Node::child( const QString &nodeId )
+Node * Node::child( const QString &nodeName )
 {
-    auto *node = m_data->m_idToChild.value( nodeId );
+    auto *node = m_data->m_idToChild.value( nodeName );
     return node;
 }
 

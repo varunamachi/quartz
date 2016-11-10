@@ -24,7 +24,7 @@ ViewManager::ViewManager( int height,
                            this ))
     , QWidget( parent )
 {
-
+    this->setVisible( false );
 }
 
 
@@ -35,6 +35,7 @@ void ViewManager::addView( QuartzView *view )
                                     view->viewDisplayName(),
                                     view );
         m_views.insert( view->viewId(), view );
+        this->setVisible( true );
     }
     else {
         QZ_ERROR( "Qz:ViewManager" ) << "Invalid view given";
@@ -64,6 +65,9 @@ void ViewManager::removeView( QuartzView *view )
             QZ_INFO( "Qz:ViewManager" )
                     << "succesfully removed view with id " << view->viewId()
                     << " of category " << view->viewCategoryId();
+            if( m_views.empty() ) {
+                this->setVisible( false );
+            }
     }
     else {
         QZ_ERROR( "Qz:ViewManager" )
@@ -80,6 +84,9 @@ void ViewManager::removeViewCategory( const QString &categoryId )
             m_views.remove( view->viewId() );
         }
         m_categoriesToViews.remove( categoryId );
+        if( m_views.empty() ) {
+            this->setVisible( false );
+        }
     }
     else {
         QZ_ERROR( "Qz:ViewManager" )

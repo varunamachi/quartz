@@ -16,6 +16,7 @@ class ActionBar;
 class TitleBar;
 class SelectorManager;
 class ContentManager;
+class ViewManager;
 
 
 class QzMainWidget : public QWidget
@@ -48,12 +49,13 @@ private:
 
     ContentManager *m_content;
 
+    ViewManager *m_viewManager;
+
     ActionBar *m_actionBar;
 
     friend class ChilliWindow;
 
     //    PageManager *m_pageManager;
-    //    ViewManager *m_viewManager;
 };
 
 

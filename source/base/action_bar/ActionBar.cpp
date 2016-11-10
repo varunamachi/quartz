@@ -27,6 +27,7 @@ ActionBar::ActionBar( int height, QWidget *parent )
     this->setContentsMargins( QMargins() );
     this->setLayout( layout );
 //    this->setStyleSheet("QWidget{background-color:red;}");
+    this->setVisible( false );
 }
 
 
@@ -35,6 +36,7 @@ void ActionBar::addItem( QuartzItem *item )
     if( item != nullptr ) {
         m_items.insert( item->itemId(), item );
         m_scroller->addWidget( item );
+        this->setVisible( true );
     }
 }
 
@@ -45,6 +47,9 @@ void ActionBar::removeItem( QuartzItem *item )
         m_items.remove( item->itemId() );
         m_scroller->removeWidget( item );
         delete item;
+        if( m_items.empty() ) {
+            this->setVisible( false );
+        }
     }
 }
 
@@ -56,6 +61,9 @@ void ActionBar::removeItem( const QString &itemId )
         m_items.remove( itemId );
         m_scroller->removeWidget( item );
         delete item;
+        if( m_items.empty() ) {
+            this->setVisible( false );
+        }
     }
 }
 
