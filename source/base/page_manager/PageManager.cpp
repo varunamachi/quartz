@@ -21,6 +21,7 @@ PageManager::PageManager( int categoryWidth,
                           categoryWidth,
                           40,
                           Qt::Vertical,
+                          Qt::Horizontal,
                           this ))
     , QWidget( parent )
 {
@@ -40,6 +41,7 @@ void PageManager::addPage( QuartzPage *page )
         if( container == nullptr ) {
             container = new StackedContainer( m_holderHeight,
                                               150,
+                                              Qt::Horizontal,
                                               Qt::Horizontal,
                                               this );
             m_catContainer->addWidget( page->pageCategoryId(),

@@ -52,6 +52,9 @@ NodeSelector::NodeSelector( const Context *context,
              &QTreeView::clicked,
              this,
              &NodeSelector::onSelected );
+    this->setContentsMargins( QMargins{ });
+    m_data->m_view->setContentsMargins( QMargins{ });
+    layout->setContentsMargins( QMargins{ });
 }
 
 NodeSelector::~NodeSelector()

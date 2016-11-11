@@ -3,4 +3,5 @@ vq_classes(
     QzScroller
     StackedContainer
     IdButton
+    OrientationButton
 )

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QPushButton>
+#include "OrientationButton.h"
 
 namespace Quartz {
 
 
-class IdButton : public QPushButton
+class IdButton : public OrientationButton
 {
     Q_OBJECT
 public:
@@ -13,12 +13,14 @@ public:
               QString text,
               int height,
               int width,
-              QWidget *parent = 0 );
+              QWidget *parent = 0,
+              Qt::Orientation orientation = Qt::Horizontal );
 
-    QSize sizeHint() const override;
 
 protected:
-    void mouseReleaseEvent( QMouseEvent *evt );
+    void mouseReleaseEvent( QMouseEvent *evt ) override;
+
+    QSize originalSizeHint() const override;
 
 signals:
     void activated( QString id );

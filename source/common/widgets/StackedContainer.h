@@ -22,6 +22,7 @@ public:
     explicit StackedContainer( int selectorDimention,
                                int buttonDimention,
                                Qt::Orientation orientation,
+                               Qt::Orientation btnOriantation,
                                QWidget *parent = nullptr );
 
 public:
@@ -83,6 +84,8 @@ private:
     int m_btnHeight;
 
     int m_btnWidth;
+
+    Qt::Orientation m_btnOrientation;
 
     QzScroller *m_selector;
 

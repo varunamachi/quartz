@@ -27,6 +27,7 @@ struct SelectorManager::Data
                                    height,
                                    btnWidth,
                                    Qt::Vertical,
+                                   Qt::Vertical,
                                    parent ))
     {
 

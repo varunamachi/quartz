@@ -62,7 +62,7 @@ QuartzWindow::QuartzWindow( QWidget *parent )
     this->setCentralWidget( m_containerWidget );
 
     //    QString color = style()->s
-//    m_chilliWidget->setStyleSheet( "QWidget{background-color:white;}");
+//    m_chilliWidget->setStyleSheet( "QWidget{background-color:black;}");
     connect( m_chilliWidget->titleBar(),
              SIGNAL( sigCloseRequested() ),
              this,
@@ -291,7 +291,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget( parent )
     , m_roundedRect( true )
     , m_titleBar( new TitleBar( 20, this ) )
-    , m_selector( new SelectorManager( 40, 20, this ))
+    , m_selector( new SelectorManager( 20, 40, this ))
     , m_content( new ContentManager( this ))
     , m_viewManager( new ViewManager( 10, 40, this ))
     , m_actionBar( new ActionBar( 20, this ))

@@ -21,6 +21,7 @@ ViewManager::ViewManager( int height,
                            m_height,
                            m_btnWidth,
                            Qt::Horizontal,
+                           Qt::Horizontal,
                            this ))
     , QWidget( parent )
 {

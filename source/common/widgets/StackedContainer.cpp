@@ -9,8 +9,10 @@ namespace Quartz {
 StackedContainer::StackedContainer( int selectorDimention,
                                     int buttonDimention,
                                     Qt::Orientation orientation,
+                                    Qt::Orientation btnOrientation,
                                     QWidget *parent )
     : QWidget( parent )
+    , m_btnOrientation( btnOrientation )
     , m_selector( new QzScroller( orientation,
                                   selectorDimention,
                                   selectorDimention,
@@ -21,16 +23,18 @@ StackedContainer::StackedContainer( int selectorDimention,
     if( orientation == Qt::Vertical ) {
         layout = new QHBoxLayout();
         m_selector->setMaximumWidth( selectorDimention );
-        m_selector->setMinimumWidth( selectorDimention );
-        m_btnWidth = selectorDimention;
-        m_btnHeight = buttonDimention;
     }
     else {
         layout = new QVBoxLayout();
         m_selector->setMaximumHeight( selectorDimention );
-        m_selector->setMinimumHeight( selectorDimention );
-        m_btnWidth = buttonDimention;
+    }
+    if( btnOrientation != orientation ) {
+        m_btnWidth  = buttonDimention;
         m_btnHeight = selectorDimention;
+    }
+    else {
+        m_btnWidth = selectorDimention;
+        m_btnHeight = buttonDimention;
     }
     layout->addWidget( m_selector );
     layout->addWidget( m_stackWidget );
@@ -40,6 +44,9 @@ StackedContainer::StackedContainer( int selectorDimention,
 //    m_selector->setStyleSheet("background-color: blue;");
 //    m_stackWidget->setStyleSheet("background-color: red;");
     this->setLayout( layout );
+
+    layout->setContentsMargins( QMargins{ });
+    this->setContentsMargins( QMargins{ });
 }
 
 
@@ -77,7 +84,9 @@ void StackedContainer::addWidget( const QString &id,
                                       displayName,
                                       m_btnHeight,
                                       m_btnWidth,
-                                      this );
+                                      this,
+                                      m_btnOrientation );
+        btn->setContentsMargins( QMargins{ });
         int index = m_stackWidget->addWidget( widget );
         Item::Ptr item = Item::create( index, btn, widget );
         m_items.insert( id, item );

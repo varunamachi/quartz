@@ -9,8 +9,9 @@ IdButton::IdButton( QString id,
                     QString text,
                     int height,
                     int width,
-                    QWidget *parent )
-    : QPushButton( parent )
+                    QWidget *parent,
+                    Qt::Orientation orientation )
+    : OrientationButton( text, parent )
     , m_id( id )
     , m_dim( width, height )
 {
@@ -40,9 +41,10 @@ IdButton::IdButton( QString id,
     qssStream.flush();
     setStyleSheet( qss );
     setText( text );
+    this->setOrientation( orientation );
 }
 
-QSize IdButton::sizeHint() const
+QSize IdButton::originalSizeHint() const
 {
     return m_dim;
 }
@@ -56,7 +58,8 @@ void IdButton::mouseReleaseEvent( QMouseEvent *evt )
         emit activated( m_id );
     }
     evt->ignore();
-//    QPushButton::mousePressEvent( evt );
+    //    QPushButton::mousePressEvent( evt );
 }
+
 
 }
