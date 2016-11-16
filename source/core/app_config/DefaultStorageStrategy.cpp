@@ -4,7 +4,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
-#include "../logger/Logger.h"
+#include "../logger/Logging.h"
 #include "DefaultStorageStrategy.h"
 
 namespace Quartz {

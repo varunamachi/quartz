@@ -20,52 +20,25 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <QDebug>
+#pragma once
 
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
+#include <QString>
+
 #include "LogStructures.h"
-#include "LogMessage.h"
-#include "LogUtil.h"
-#include "AbstractLogTarget.h"
+#include "../QuartzCore.h"
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+namespace Quartz {
 
-namespace Quartz { namespace Logger {
-
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
-
-ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget( TARGET_ID )
+class QUARTZ_CORE_API LogUtil
 {
-}
+public:
+    static QString format( const LogMessage *message );
+
+    static QString getSeverityString( TntLogLevel level );
+
+private:
+    LogUtil() { }
+};
 
 
-void ConsoleTarget::flush()
-{
-    //nothing here...
-}
-
-
-void ConsoleTarget::write( const LogMessage *message )
-{
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
-    }
-}
-
-
-void ConsoleTarget::write( const QString &&/*message*/ )
-{
-}
-
-} }//end of namespace
+} //end of ns tanyatu

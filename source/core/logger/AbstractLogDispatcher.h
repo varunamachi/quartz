@@ -19,53 +19,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+#pragma once
 
-#include <QDebug>
+#include <memory>
 
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
-#include "LogStructures.h"
-#include "LogMessage.h"
-#include "LogUtil.h"
-#include "AbstractLogTarget.h"
+#include <QString>
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+#include "../QuartzCore.h"
+#include "../utils/Macros.h"
 
 namespace Quartz { namespace Logger {
 
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
+class AbstractLogTarget;
+class LogMessage;
+QZ_INTERFACE ILogFilter;
 
-ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget( TARGET_ID )
+class QUARTZ_CORE_API AbstractLogDispatcher
 {
-}
+public:
+    AbstractLogDispatcher();
+
+    virtual ~AbstractLogDispatcher();
+
+    bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
+
+    AbstractLogTarget * target( QString targetId );
+
+    bool setTargetEnabledState( const QString &trgId, bool value );
+
+    bool removeTarget( const QString &targetId );
+
+    bool installFilter( std::unique_ptr< ILogFilter > &&filter,
+                        const QString &trgtId );
+
+    bool uninstallFilter( const QString &filterId,
+                          const QString &trgtId );
+
+    virtual void flush();
+
+    virtual void write( LogMessage *message ) = 0;
+
+    virtual void stopDispatch() = 0;
 
 
-void ConsoleTarget::flush()
-{
-    //nothing here...
-}
+protected:
+    void writeToTargets( LogMessage *msg );
 
+private:
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
-void ConsoleTarget::write( const LogMessage *message )
-{
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
-    }
-}
+};
 
+} } // end of namespaces
 
-void ConsoleTarget::write( const QString &&/*message*/ )
-{
-}
-
-} }//end of namespace

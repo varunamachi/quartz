@@ -21,41 +21,32 @@
  ******************************************************************************/
 #pragma once
 
-
-#include <QTextStream>
-#include <QPointer>
-#include <QFile>
+#include <memory>
 
 #include "../QuartzCore.h"
-#include "Logger.h"
+#include "AbstractLogTarget.h"
 
-namespace Quartz {
+
+namespace Quartz { namespace Logger {
+
+
 
 class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
 {
 public:
-    FileTarget( const QString &fileSuffix );
+    explicit FileTarget( const QString &fileSuffix );
 
-//    ~FileTarget() {
+    void write( const QString &&message ) override;
 
-    void write( const QString message );
-
-    void flush();
+    void flush() override;
 
     static const QString TARGET_ID;
 
 private:
-    void initFile();
-
-    QPointer< QFile > m_logFile;
-
-    QString m_fileSuffix;
-
-    QDateTime m_prevDate;
-
-    QTextStream m_stream;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
 };
 
-} // end of namespaces
+} } // end of namespaces
 

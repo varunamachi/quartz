@@ -19,53 +19,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-
+#include <QFile>
 #include <QDebug>
 
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
-#include "LogStructures.h"
-#include "LogMessage.h"
+#include "FileTarget.h"
 #include "LogUtil.h"
-#include "AbstractLogTarget.h"
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+namespace Quartz {
 
-namespace Quartz { namespace Logger {
 
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
+const QString FileTarget::TARGET_ID = QString( "FileLogger" );
 
-ConsoleTarget::ConsoleTarget()
+FileTarget::FileTarget( const QString &fileSuffix )
     : AbstractLogTarget( TARGET_ID )
+    , m_fileSuffix( fileSuffix )
+    , m_prevDate( QDateTime::currentDateTime() )
 {
+    initFile();
 }
 
 
-void ConsoleTarget::flush()
+void FileTarget::write( const QString message )
 {
-    //nothing here...
+    if( m_prevDate.daysTo( QDateTime::currentDateTime() ) != 0 ) {
+        m_stream.flush();
+        initFile();
+    }
+    m_stream << message << endl;
+}
+
+void FileTarget::flush()
+{
+    m_stream.flush();
 }
 
 
-void ConsoleTarget::write( const LogMessage *message )
+void FileTarget::initFile()
 {
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
+    QString fileName = m_prevDate.toString( "yyyy_MM_dd_" )
+                       + m_fileSuffix
+                       + ".log";
+    m_stream.reset();
+    m_logFile.clear();
+    m_logFile = new QFile( fileName );
+    if( m_logFile->open( QIODevice::Append | QIODevice::Unbuffered )) {
+        m_stream.setDevice( m_logFile.data() );
+    }
+    else {
+        qDebug() << "Could not open the file....";
     }
 }
 
-
-void ConsoleTarget::write( const QString &&/*message*/ )
-{
-}
-
-} }//end of namespace
+} //end of namespaces

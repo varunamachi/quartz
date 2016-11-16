@@ -1,5 +1,5 @@
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 
 #include "Node.h"
 #include "AbstractNodeProvider.h"

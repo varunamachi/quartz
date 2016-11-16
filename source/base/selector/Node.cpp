@@ -1,6 +1,6 @@
 #include <QHash>
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 
 #include "Node.h"
 

@@ -1,8 +1,9 @@
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 
 #include <common/widgets/QzScroller.h>
 #include <common/widgets/StackedContainer.h>
+
 
 #include "QuartzPage.h"
 #include "AbstractPageProvider.h"
@@ -15,7 +16,8 @@ const QString PageManager::ADAPTER_NAME{ "page_manager" };
 PageManager::PageManager( int categoryWidth,
                           int pagerHeight,
                           QWidget *parent )
-    : m_selectorWidth( categoryWidth )
+    : QWidget( parent )
+    , m_selectorWidth( categoryWidth )
     , m_holderHeight( pagerHeight )
     , m_catContainer( new StackedContainer(
                           categoryWidth,
@@ -23,7 +25,6 @@ PageManager::PageManager( int categoryWidth,
                           Qt::Vertical,
                           Qt::Horizontal,
                           this ))
-    , QWidget( parent )
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget( m_catContainer );

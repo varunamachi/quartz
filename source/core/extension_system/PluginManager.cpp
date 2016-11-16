@@ -6,7 +6,7 @@
 #include <QSet>
 
 
-#include "../logger/Logger.h"
+#include "../logger/Logging.h"
 #include "IPlugin.h"
 #include "IPluginAdapter.h"
 #include "PluginManager.h"

@@ -21,104 +21,30 @@
  ******************************************************************************/
 #pragma once
 
-#include <QThread>
-#include <QQueue>
-#include <QHash>
 #include <memory>
-#include <QReadWriteLock>
 
-#include "Logger.h"
 #include "../QuartzCore.h"
+#include "AbstractLogDispatcher.h"
 
-namespace Quartz {
+namespace Quartz { namespace Logger {
 
-class QUARTZ_CORE_API SpooledDispatcher : public QThread,
-                                          public ILogDispatcher
+class QUARTZ_CORE_API SpooledDispatcher: public AbstractLogDispatcher
 {
-    Q_OBJECT
 public:
-    SpooledDispatcher( QObject *parent );
+        SpooledDispatcher();
 
-    bool addTarget( AbstractLogTarget *target );
+        void write( LogMessage *message ) override;
 
-    AbstractLogTarget * target( QString targetId );
+        void stopDispatch() override;
 
-    bool setTargetEnabledState( const QString &trgId, bool value );
+        void run();
 
-    bool removeTarget( const QString &targetId );
-
-    bool installFilter( ILogFilter *filter,
-                        const QString &trgtId = "" );
-
-    bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId = "" );
-
-    void write( LogMessage *message );
-
-    void flush();
-
-    void stopDispatch();
-
-    ~SpooledDispatcher();
-
-protected:
-    void run();
+        virtual ~SpooledDispatcher();
 
 private:
-    struct TargetInfo
-    {
-        TargetInfo( AbstractLogTarget *target, bool enable )
-            : m_target( target )
-            , m_enabled( enable ) {}
-
-        ~TargetInfo()
-        {
-            delete m_target;
-        }
-
-        AbstractLogTarget *m_target;
-
-        bool m_enabled;
-
-        QList< ILogFilter *> m_targetFilters;
-    };
-
-    struct FilterInfo
-    {
-        FilterInfo( ILogFilter *filter )
-            : m_filter( filter )
-            , m_refs( 0 )
-            , m_enabled( true ) {}
-
-        ~FilterInfo()
-        {
-            delete m_filter;
-        }
-
-        ILogFilter *m_filter;
-
-        int m_refs;
-
-        bool m_enabled;
-    };
-
-    void writeToTargets( LogMessage *msg );
-
-    bool m_stop;
-
-    QQueue< LogMessage *> m_logQueue;
-
-    QHash< QString, FilterInfo *> m_allFilters;
-
-    QHash< QString, TargetInfo *> m_targets;
-
-    QReadWriteLock m_lock;
-
-    QReadWriteLock m_logIoLock;
-
-    bool m_shouldStop;
-
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
-} // end of namespaces
+} } // end of namespaces
 

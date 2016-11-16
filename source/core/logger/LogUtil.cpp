@@ -20,32 +20,37 @@
  * SOFTWARE.
  ******************************************************************************/
 
+#include <QString>
+#include <QDateTime>
+
 #include "LogUtil.h"
-#include "Logger.h"
-
-namespace Quartz {
-
+#include "LogStructures.h"
+#include "LogMessage.h"
 
 
-QString LogUtil::getSeverityString( TntLogLevel level )
+namespace Quartz { namespace Logger {
+
+
+
+QString LogUtil::getSeverityString( LogLevel level )
 {
     switch( level ) {
-    case TntLogLevel::Trace : return "[ TRACE ]";
-    case TntLogLevel::Debug : return "[ DEBUG ]";
-    case TntLogLevel::Info  : return "[ INFO  ]";
-    case TntLogLevel::Warn  : return "[ WARNG ]";
-    case TntLogLevel::Error : return "[ ERROR ]";
-    case TntLogLevel::Fatal : return "[ FATAL ]";
-    case TntLogLevel::Method:
-    case TntLogLevel::Special: return "[ ***** ]";
+    case LogLevel::Trace  : return "[ TRACE ]";
+    case LogLevel::Debug  : return "[ DEBUG ]";
+    case LogLevel::Info   : return "[ INFO  ]";
+    case LogLevel::Warn   : return "[ WARNG ]";
+    case LogLevel::Error  : return "[ ERROR ]";
+    case LogLevel::Fatal  : return "[ FATAL ]";
+    case LogLevel::Special: return "[ ***** ]";
+    case LogLevel::Method : return "[ ***** ]";
     }
-    return "[ ***** ]";
+    return "";
 }
 
 
 QString LogUtil::format( const LogMessage *msg )
 {
-    QString strMsg = QString( msg->time().toString( "yyyy-MM-dd hh:mm:ss" ))
+    QString strMsg{ msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
             + " "
             + getSeverityString( msg->logLevel() )
             + "  "
@@ -54,8 +59,9 @@ QString LogUtil::format( const LogMessage *msg )
             + msg->moduleName() + " | "
             + QString::number( msg->lineNum()  ) + " | "
             + QString::number( msg->threadId() ) + " | "
-            + msg->methodName() + " ] "*/;
+            + msg->methodName() + " ] "*/
+    };
     return strMsg;
 }
 
-} //end of namespces
+} } //end of namespces

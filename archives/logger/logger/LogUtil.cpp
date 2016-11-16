@@ -20,52 +20,42 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#include <QDebug>
-
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
-#include "LogStructures.h"
-#include "LogMessage.h"
 #include "LogUtil.h"
-#include "AbstractLogTarget.h"
+#include "Logger.h"
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+namespace Quartz {
 
-namespace Quartz { namespace Logger {
 
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
 
-ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget( TARGET_ID )
+QString LogUtil::getSeverityString( TntLogLevel level )
 {
-}
-
-
-void ConsoleTarget::flush()
-{
-    //nothing here...
-}
-
-
-void ConsoleTarget::write( const LogMessage *message )
-{
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
+    switch( level ) {
+    case TntLogLevel::Trace : return "[ TRACE ]";
+    case TntLogLevel::Debug : return "[ DEBUG ]";
+    case TntLogLevel::Info  : return "[ INFO  ]";
+    case TntLogLevel::Warn  : return "[ WARNG ]";
+    case TntLogLevel::Error : return "[ ERROR ]";
+    case TntLogLevel::Fatal : return "[ FATAL ]";
+    case TntLogLevel::Method:
+    case TntLogLevel::Special: return "[ ***** ]";
     }
+    return "[ ***** ]";
 }
 
 
-void ConsoleTarget::write( const QString &&/*message*/ )
+QString LogUtil::format( const LogMessage *msg )
 {
+    QString strMsg = QString( msg->time().toString( "yyyy-MM-dd hh:mm:ss" ))
+            + " "
+            + getSeverityString( msg->logLevel() )
+            + "  "
+            + msg->message()
+  /*          + " ["
+            + msg->moduleName() + " | "
+            + QString::number( msg->lineNum()  ) + " | "
+            + QString::number( msg->threadId() ) + " | "
+            + msg->methodName() + " ] "*/;
+    return strMsg;
 }
 
-} }//end of namespace
+} //end of namespces

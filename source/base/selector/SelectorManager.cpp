@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 
 #include <common/widgets/StackedContainer.h>
 

@@ -7,7 +7,7 @@
 #include <QImage>
 #include <QtXml/QDomDocument>
 
-#include "../logger/Logger.h"
+#include "../logger/Logging.h"
 #include "XMLConfigLoader.h"
 
 namespace Quartz {

@@ -19,53 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+#pragma once
 
-#include <QDebug>
-
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
+#include "Logger.h"
 #include "LogStructures.h"
-#include "LogMessage.h"
-#include "LogUtil.h"
-#include "AbstractLogTarget.h"
+#include "../QuartzCore.h"
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+namespace Quartz {
 
-namespace Quartz { namespace Logger {
-
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
-
-ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget( TARGET_ID )
+class QUARTZ_CORE_API ConsoleTarget : public AbstractLogTarget
 {
-}
+public:
+    ConsoleTarget();
 
+    void flush() { /* Nothing here... */ }
 
-void ConsoleTarget::flush()
-{
-    //nothing here...
-}
+    void write( const LogMessage *message );
 
+    void write( const QString message );
 
-void ConsoleTarget::write( const LogMessage *message )
-{
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
-    }
-}
+    static const QString TARGET_ID;
 
+private:
 
-void ConsoleTarget::write( const QString &&/*message*/ )
-{
-}
+};
 
-} }//end of namespace
+}//end of namespace

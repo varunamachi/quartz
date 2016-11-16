@@ -19,53 +19,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
+#pragma once
 
-#include <QDebug>
 
-#include "ConsoleTarget.h"
-#include "ILogFormatter.h"
-#include "LogStructures.h"
-#include "LogMessage.h"
-#include "LogUtil.h"
-#include "AbstractLogTarget.h"
+#include <QTextStream>
+#include <QPointer>
+#include <QFile>
 
-#define FORMAT( x ) ( formatter() != nullptr ? formatter()->format( x )  \
-                                             : LogUtil::format( x ))
+#include "../QuartzCore.h"
+#include "Logger.h"
 
-namespace Quartz { namespace Logger {
+namespace Quartz {
 
-const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
-
-ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget( TARGET_ID )
+class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
 {
-}
+public:
+    FileTarget( const QString &fileSuffix );
 
+//    ~FileTarget() {
 
-void ConsoleTarget::flush()
-{
-    //nothing here...
-}
+    void write( const QString message );
 
+    void flush();
 
-void ConsoleTarget::write( const LogMessage *message )
-{
-    if( message ) {
-        if( message->logLevel() <= LogLevel::Info ) {
-            qDebug() << FORMAT( message );
-        }
-        else if( message->logLevel() == LogLevel::Warn ) {
-            qWarning() << FORMAT( message );
-        }
-        else {
-            qCritical() << FORMAT( message );
-        }
-    }
-}
+    static const QString TARGET_ID;
 
+private:
+    void initFile();
 
-void ConsoleTarget::write( const QString &&/*message*/ )
-{
-}
+    QPointer< QFile > m_logFile;
 
-} }//end of namespace
+    QString m_fileSuffix;
+
+    QDateTime m_prevDate;
+
+    QTextStream m_stream;
+
+};
+
+} // end of namespaces
+

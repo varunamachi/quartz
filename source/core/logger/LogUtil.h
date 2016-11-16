@@ -22,23 +22,26 @@
 
 #pragma once
 
+
 #include <QString>
 
-#include "LogStructures.h"
 #include "../QuartzCore.h"
 
-namespace Quartz {
+namespace Quartz { namespace Logger {
 
-class QUARTZ_CORE_API LogUtil
+enum class LogLevel : int;
+class LogMessage;
+
+class QUARTZ_CORE_API  LogUtil
 {
 public:
     static QString format( const LogMessage *message );
 
-    static QString getSeverityString( TntLogLevel level );
+    static QString getSeverityString( LogLevel level );
 
 private:
     LogUtil() { }
 };
 
 
-} //end of ns tanyatu
+} } //end of ns tanyatu
