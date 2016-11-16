@@ -7,6 +7,17 @@
 
 #include "Context.h"
 
+#define QZCONTEXT_FUNC_DEFINE_NS( NameSpace, ClassName, VarName ) \
+    void Context::set##ClassName( NameSpace::ClassName *VarName ) { \
+        m_data->m_##VarName = VarName; \
+    } \
+    NameSpace::ClassName * Context::VarName() const { \
+        return m_data->m_##VarName; \
+    } \
+    bool Context::has##ClassName() const { \
+        return m_data->m_##VarName != nullptr; \
+    }
+
 #define QZCONTEXT_FUNC_DEFINE( ClassName, VarName ) \
     void Context::set##ClassName( ClassName *VarName ) { \
         m_data->m_##VarName = VarName; \
@@ -22,7 +33,7 @@ namespace Quartz {
 
 struct Context::Data
 {
-    TntLogger *m_logger;
+    Logger::Logger *m_logger;
 
     ContentManager *m_contentManager;
 
@@ -43,7 +54,7 @@ Context::~Context()
 
 }
 
-QZCONTEXT_FUNC_DEFINE( TntLogger, logger );
+QZCONTEXT_FUNC_DEFINE_NS( Logger, Logger, logger );
 QZCONTEXT_FUNC_DEFINE( ContentManager, contentManager );
 QZCONTEXT_FUNC_DEFINE( SelectorManager, selectorManager );
 QZCONTEXT_FUNC_DEFINE( NodeSelector, nodeSelector );

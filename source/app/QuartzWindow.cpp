@@ -8,7 +8,7 @@
 #include <QStyle>
 #include <QSplitter>
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
 #include <base/view_manager/ViewManager.h>
@@ -357,7 +357,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     auto context = new Context{};
     context->setContentManager( m_content );
     context->setSelectorManager( m_selector );
-    context->setTntLogger( TntLogger::get() );
+//    context->setTntLogger( QZ_LOGGER() );
     auto nodeSelector = new NodeSelector{ context, this };
 
 
