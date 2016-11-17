@@ -346,27 +346,17 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
 
-//    m_titleBar->setStyleSheet( "background: green;" );
-//    m_selector->setStyleSheet( "background: red;" );
-//    m_content->setStyleSheet( "background: blue;" );
     m_actionBar->setStyleSheet( "background: yellow;" );
-//    splitter->setStyleSheet( "background-color: gray;" );
     this->setMinimumSize({ 600, 400 });
-
 
     auto context = new Context{};
     context->setContentManager( m_content );
     context->setSelectorManager( m_selector );
-//    context->setTntLogger( QZ_LOGGER() );
     auto nodeSelector = new NodeSelector{ context, this };
-
-
 
     m_selector->addSelector( nodeSelector );
     QStringList path;
 
-//    NodePtr nodePtr{ std::make_shared< Node >( "node" )};
-//    nodeSelector->model()->addNode( path, nodePtr );
     auto welcomeNode = nodeSelector->model()->addNode( path, "Welcome" );
     path << "Welcome";
     auto otherNode = nodeSelector->model()->addNode( path, "Details" );
