@@ -109,7 +109,7 @@ FileTarget::FileTarget( const QString &fileSuffix )
 }
 
 
-void FileTarget::write( const QString &&message )
+void FileTarget::write( QString &&message )
 {
     m_impl->write( std::move( message ));
 }

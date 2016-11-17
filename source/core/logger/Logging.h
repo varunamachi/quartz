@@ -3,10 +3,10 @@
 #include <QDateTime>
 #include <QTextStream>
 
+#include "LogStructures.h"
 #include "LogMessage.h"
 #include "ILogDispatcher.h"
 #include "Logger.h"
-#include "LogStructures.h"
 
 
 namespace Quartz { namespace Logger {

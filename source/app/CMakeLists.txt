@@ -23,6 +23,7 @@ vq_sources(
 )
 
 add_subdirectory( adapted )
+add_subdirectory( inbuilt )
 
 vq_dump_vars()
 

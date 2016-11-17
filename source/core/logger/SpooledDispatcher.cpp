@@ -18,7 +18,7 @@ struct SpooledDispatcher::Data
 {
     Data()
         : m_thread()
-        , m_stop( true )
+        , m_stop( false )
     {
 
     }
@@ -41,16 +41,16 @@ void SpooledDispatcher::stopDispatch()
 
 SpooledDispatcher::SpooledDispatcher()
 //    : m_data( std::make_unique< Data >() )
-    : m_data( new Data() )
+    : m_data( new Data( ))
 {
-
+    m_data->m_thread = std::thread( &SpooledDispatcher::run, this );
 }
 
 
 SpooledDispatcher::~SpooledDispatcher()
 {
     m_data->m_stop = true;
-    while( ! m_data->m_thread.joinable() );
+    m_data->m_thread.join();
 }
 
 void SpooledDispatcher::write(LogMessage *message)

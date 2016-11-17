@@ -35,7 +35,7 @@ public:
 
     void write( const LogMessage *message ) override;
 
-    void write( const QString &&message ) override;
+    void write( QString &&message ) override;
 
     static const QString TARGET_ID;
 

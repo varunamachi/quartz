@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <memory>
 
+#include "../QuartzCore.h"
+
 
 class QString;
 class QDateTime;
@@ -11,7 +13,7 @@ namespace Quartz { namespace Logger {
 
 enum class LogLevel : int;
 
-class LogMessage
+class QUARTZ_CORE_API LogMessage final
 {
 public:
     LogMessage( QDateTime &&time,

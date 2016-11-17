@@ -230,7 +230,8 @@ bool AbstractLogDispatcher::Impl::addTarget(
     bool result = false;
     if( target != nullptr && ! m_targets.contains( target->uniqueId() )) {
         VQ_LOCK( m_mutex );
-        m_targets.insert( target->uniqueId(),
+        const auto &targetId = target->uniqueId();
+        m_targets.insert( targetId,
                           std::make_shared< TargetInfo >(
                               std::move( target ), true ));
         result = true;
@@ -292,7 +293,7 @@ bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq &&filter,
     auto getFilterInfo = [ & ]() -> FilterInfo &
     {
         if( m_allFilters.contains( filter->filterId() ))  {
-            QString filterId = filter->filterId();
+            const auto &filterId = filter->filterId();
             m_allFilters.insert( filterId,
                                  std::make_shared< FilterInfo >(
                                      std::move( filter )));

@@ -19,7 +19,8 @@ bool init()
     if( result ) {
         std::unique_ptr< Logger::ConsoleTarget > consoleTarget{
             new Logger::ConsoleTarget{} };
-        dispatcher->addTarget( std::move( consoleTarget ));
+        Logger::Logger::get()->dispatcher()->addTarget(
+                    std::move( consoleTarget ));
     }
     return result;
 }

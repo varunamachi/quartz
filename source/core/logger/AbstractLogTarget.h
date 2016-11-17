@@ -27,7 +27,7 @@ public:
     virtual void flush() = 0;
 
 protected:
-    virtual void write( const QString &&logString ) = 0;
+    virtual void write( QString &&logString ) = 0;
 
     ILogFormatter * formatter() const;
 

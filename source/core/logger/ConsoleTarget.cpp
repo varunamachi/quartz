@@ -64,7 +64,7 @@ void ConsoleTarget::write( const LogMessage *message )
 }
 
 
-void ConsoleTarget::write( const QString &&/*message*/ )
+void ConsoleTarget::write( QString &&/*message*/ )
 {
 }
 

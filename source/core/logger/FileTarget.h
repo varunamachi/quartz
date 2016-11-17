@@ -36,11 +36,12 @@ class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
 public:
     explicit FileTarget( const QString &fileSuffix );
 
-    void write( const QString &&message ) override;
-
     void flush() override;
 
     static const QString TARGET_ID;
+
+private:
+    void write( QString &&message ) override;
 
 private:
     class Impl;
