@@ -169,13 +169,13 @@ void StackedContainer::select( const QString &id )
 {
     Item::Ptr item = m_items.value( id );
     if( item ) {
-        if( m_stackWidget->count() != 0
-                && item->m_index == m_stackWidget->currentIndex() ) {
-            m_stackWidget->setVisible( false );
-            item->m_btn->setChecked( false );
-            m_selectedId = "";
-        }
-        else {
+//        if( m_stackWidget->count() != 0
+//                && item->m_index == m_stackWidget->currentIndex() ) {
+//            m_stackWidget->setVisible( false );
+//            item->m_btn->setChecked( false );
+//            m_selectedId = "";
+//        }
+//        else {
             Item::Ptr prev = m_items.value( m_selectedId );
             if( prev != nullptr ) {
                 prev->m_btn->setChecked( false );
@@ -184,7 +184,7 @@ void StackedContainer::select( const QString &id )
             m_stackWidget->setCurrentIndex( item->m_index );
             m_stackWidget->setVisible( true );
             m_selectedId = id;
-        }
+//        }
     }
 }
 

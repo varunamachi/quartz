@@ -67,12 +67,17 @@ void SpooledDispatcher::write(LogMessage *message)
 void SpooledDispatcher::run()
 {
     while( ! m_data->m_stop ) {
-        VQ_LOCK( m_data->m_logIoMutex );
-        if( ! m_data->m_logQueue.empty() ) {
-            auto msg = m_data->m_logQueue.front();
-            AT_SCOPE_EXIT( delete msg );
-            m_data->m_logQueue.pop();
-            writeToTargets( msg );
+        if( !  m_data->m_logQueue.empty() ) {
+            VQ_LOCK( m_data->m_logIoMutex );
+            if( ! !  m_data->m_logQueue.empty() ) {
+                auto msg = m_data->m_logQueue.front();
+                AT_SCOPE_EXIT( delete msg );
+                m_data->m_logQueue.pop();
+                writeToTargets( msg );
+            }
+        }
+        else {
+            std::this_thread::sleep_for( std::chrono::milliseconds{ 100 });
         }
     }
 }

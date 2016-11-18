@@ -12,7 +12,7 @@ add_project( core )
 add_project( common )
 add_project( base )
 add_project( app )
-#add_project( plugins )
+add_project( plugins )
 
 
 
