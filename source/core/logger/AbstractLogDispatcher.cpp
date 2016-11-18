@@ -31,8 +31,8 @@ class TargetInfo
 public:
     QZ_NO_COPY( TargetInfo );
 
-    inline TargetInfo( TargetPtrUq &&target, bool enable )
-        : m_target( std::move( target ))
+    inline TargetInfo( AbstractLogTarget *target, bool enable )
+        : m_target( target )
         , m_enabled( enable )
     {
 
@@ -72,7 +72,7 @@ public:
 
     inline AbstractLogTarget * target() const
     {
-        return m_target.get();
+        return m_target;
     }
 
     inline bool enabled() const
@@ -91,7 +91,7 @@ public:
     }
 
 private:
-    TargetPtrUq m_target;
+    AbstractLogTarget *m_target;
 
     bool m_enabled;
 
@@ -105,8 +105,8 @@ class FilterInfo
 public:
     QZ_NO_COPY( FilterInfo );
 
-    inline explicit FilterInfo( FilterPtrUq filter )
-        : m_filter( std::move( filter ))
+    inline explicit FilterInfo( ILogFilter *filter )
+        : m_filter( filter )
         , m_refs( 0 )
         , m_enabled( true )
     {
@@ -142,7 +142,7 @@ public:
 
     inline ILogFilter * filter()
     {
-        return m_filter.get();
+        return m_filter;
     }
 
 
@@ -172,7 +172,7 @@ public:
 
 
 private:
-    FilterPtrUq m_filter;
+    ILogFilter *m_filter;
 
     int m_refs;
 
@@ -190,7 +190,9 @@ public:
 
     ~Impl() noexcept;
 
-    bool addTarget( TargetPtrUq &&target );
+    bool addTarget( AbstractLogTarget *target );
+
+    bool addTarget( TargetPtrUq target );
 
     AbstractLogTarget * target( const QString &targetId );
 
@@ -198,20 +200,25 @@ public:
 
     bool removeTarget( const QString &targetId );
 
-    bool installFilter( FilterPtrUq &&filter,
-                        const QString &trgtId );
+    bool installFilter( ILogFilter *filter, const QString &trgtId );
 
-    bool uninstallFilter( const QString &filterId,
-                          const QString &trgtId );
+    bool installFilter( FilterPtrUq filter, const QString &trgtId );
+
+    bool uninstallFilter( const QString &filterId, const QString &trgtId );
 
     void flush();
 
     void writeToTargets( LogMessage *message );
 
-private:
     QHash< QString, std::shared_ptr< FilterInfo >> m_allFilters;
 
     QHash< QString, std::shared_ptr< TargetInfo >> m_targets;
+
+    std::unordered_map< std::string,
+                        std::unique_ptr< AbstractLogTarget >> m_ownedTargets;
+
+    std::unordered_map< std::string,
+                        std::unique_ptr< ILogFilter >> m_ownedFilters;
 
     mutable std::mutex m_mutex;
 
@@ -224,17 +231,25 @@ AbstractLogDispatcher::Impl::Impl()
 }
 
 
-bool AbstractLogDispatcher::Impl::addTarget(
-        std::unique_ptr< AbstractLogTarget > &&target )
+bool AbstractLogDispatcher::Impl::addTarget( AbstractLogTarget *target )
 {
     bool result = false;
     if( target != nullptr && ! m_targets.contains( target->uniqueId() )) {
         VQ_LOCK( m_mutex );
         const auto &targetId = target->uniqueId();
         m_targets.insert( targetId,
-                          std::make_shared< TargetInfo >(
-                              std::move( target ), true ));
+                          std::make_shared< TargetInfo >( target, true ));
         result = true;
+    }
+    return result;
+}
+
+bool AbstractLogDispatcher::Impl::addTarget( TargetPtrUq target )
+{
+    bool result = addTarget( target.get() );
+    if( result ) {
+        auto id = target->uniqueId().toStdString();
+        m_ownedTargets.insert( std::make_pair( id, std::move( target )));
     }
     return result;
 }
@@ -278,13 +293,14 @@ bool AbstractLogDispatcher::Impl::removeTarget( const QString &targetId )
             m_allFilters.remove( filter->filterId() );
         }
         m_targets.remove( targetId );
+        STLUtils::remove( m_ownedTargets, targetId.toStdString() );
         result = true;
     }
     return result;
 }
 
 
-bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq &&filter,
+bool AbstractLogDispatcher::Impl::installFilter( ILogFilter *filter,
                                                  const QString &targetId )
 {
     if( ! filter ) {
@@ -308,8 +324,8 @@ bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq &&filter,
         VQ_LOCK( m_mutex );
         for( auto it = m_targets.begin(); it != m_targets.end(); ++it ) {
             auto &tinfo = it.value();
-            if( ! STLUtils::contains( tinfo->filters(), filter.get() )) {
-                tinfo->filters().emplace_back( filter.get() );
+            if( ! STLUtils::contains( tinfo->filters(), filter )) {
+                tinfo->filters().emplace_back( filter );
                 ++ finfo.refs();
             }
         }
@@ -319,13 +335,24 @@ bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq &&filter,
         if( m_targets.contains( targetId )) {
             auto &tinfo = m_targets[ targetId ];
             VQ_LOCK( m_mutex );
-            if( ! STLUtils::contains( tinfo->filters(), filter.get() )) {
-                tinfo->filters().emplace_back( filter.get() );
+            if( ! STLUtils::contains( tinfo->filters(), filter )) {
+                tinfo->filters().emplace_back( filter );
                 ++ finfo.refs();
             }
             //If the filter is already there, still its a success
             result = true;
         }
+    }
+                   return result;
+                 }
+
+bool AbstractLogDispatcher::Impl::installFilter( FilterPtrUq filter,
+                                                 const QString &trgtId )
+{
+    bool result = installFilter( filter.get(), trgtId );
+    if( result ) {
+        auto id = filter->filterId().toStdString();
+        m_ownedFilters.insert( std::make_pair( id, std::move( filter )));
     }
     return result;
 }
@@ -335,7 +362,6 @@ bool AbstractLogDispatcher::Impl::uninstallFilter( const QString &filterId,
                                                    const QString &targetId )
 {
     bool result = false;
-    auto fit = m_allFilters.find( filterId );
     if( m_allFilters.contains( filterId )) {
         auto &finfo = m_allFilters[ filterId ];
         if( targetId.isEmpty() ) {
@@ -343,6 +369,7 @@ bool AbstractLogDispatcher::Impl::uninstallFilter( const QString &filterId,
             for( auto it = m_targets.begin(); it != m_targets.end(); ++ it ) {
                 auto &tinfo = it.value();
                 STLUtils::remove( tinfo->filters(), finfo->filter() );
+                STLUtils::remove( m_ownedFilters, filterId.toStdString() );
                 result = true;
             }
         }
@@ -354,6 +381,7 @@ bool AbstractLogDispatcher::Impl::uninstallFilter( const QString &filterId,
                 -- finfo->refs();
                 if( finfo->refs() == 0 ) {
                     m_allFilters.remove( filterId );
+                    STLUtils::remove( m_ownedFilters, filterId.toStdString() );
                 }
                 result = true;
             }
@@ -389,8 +417,6 @@ void AbstractLogDispatcher::Impl::writeToTargets( LogMessage *message )
     };
 
     VQ_LOCK( m_mutex );
-//    for( auto &tpair : m_targets ) {
-//        auto &tinfo = tpair.second;
     for( auto it = m_targets.begin(); it != m_targets.end(); ++ it ) {
         auto &tinfo = it.value();
         if( ! isFilteredOut( *tinfo )) {
@@ -426,6 +452,11 @@ bool AbstractLogDispatcher::addTarget(
     return m_impl->addTarget( std::move( target ));
 }
 
+bool AbstractLogDispatcher::addTarget( AbstractLogTarget *target )
+{
+    return m_impl->addTarget( target );
+}
+
 
 AbstractLogTarget * AbstractLogDispatcher::target( QString targetId )
 {
@@ -442,12 +473,18 @@ bool AbstractLogDispatcher::setTargetEnabledState( const QString &trgId,
 
 bool AbstractLogDispatcher::removeTarget( const QString &targetId )
 {
-    return m_impl->removeTarget( targetId );
+     return m_impl->removeTarget( targetId );
+}
+
+bool AbstractLogDispatcher::installFilter( ILogFilter *filter,
+                                           const QString &targetId )
+{
+    return m_impl->installFilter( filter, targetId );
 }
 
 
 bool AbstractLogDispatcher::installFilter( FilterPtrUq &&filter,
-                    const QString &trgtId )
+                                           const QString &trgtId )
 {
     return m_impl->installFilter( std::move( filter ), trgtId );
 }

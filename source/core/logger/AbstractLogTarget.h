@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "../QuartzCore.h"
+
 #include "../utils/Macros.h"
 
 class QString;
@@ -11,7 +13,7 @@ namespace Quartz { namespace Logger {
 QZ_INTERFACE ILogFormatter;
 class LogMessage;
 
-class AbstractLogTarget
+class QUARTZ_CORE_API AbstractLogTarget
 {
 public:
     explicit AbstractLogTarget( const QString &uniqueId );

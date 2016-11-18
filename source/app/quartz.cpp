@@ -3,7 +3,8 @@
 #include <core/logger/Logging.h>
 #include <core/logger/SpooledDispatcher.h>
 #include <core/logger/ConsoleTarget.h>
-//#include <core/logger/FileTarget.h>
+
+#include "inbuilt/LogView.h"
 
 #include "QuartzWindow.h"
 
@@ -27,6 +28,7 @@ bool init()
 
 bool uninit()
 {
+    QZ_LOGGER()->dispatcher()->removeTarget( Quartz::LogView::LOG_TARGET_ID );
     QZ_LOGGER()->dispatcher()->stopDispatch();
     QZ_LOGGER()->destroy();
     return true;

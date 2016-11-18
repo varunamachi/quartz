@@ -19,8 +19,15 @@ class StackedContainer : public QWidget
 {
     Q_OBJECT
 public:
+    enum class SelectorPosition
+    {
+        Before,
+        After
+    };
+
     explicit StackedContainer( int selectorDimention,
                                int buttonDimention,
+                               SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
                                Qt::Orientation btnOriantation,
                                QWidget *parent = nullptr );

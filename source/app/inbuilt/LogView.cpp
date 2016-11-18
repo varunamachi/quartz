@@ -3,6 +3,8 @@
 #include <QAbstractItemModel>
 #include <QDateTime>
 #include <QTreeView>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <core/logger/LogUtil.h>
 #include <core/logger/ILogFormatter.h>
@@ -11,8 +13,27 @@
 
 #include "LogView.h"
 
+Q_DECLARE_METATYPE( std::shared_ptr< Quartz::LogData > );
+
 namespace Quartz {
 
+namespace {
+    QString sevString( Logger::LogLevel level )
+    {
+        switch( level ) {
+        case Logger::LogLevel::Trace  : return "TRACE";
+        case Logger::LogLevel::Debug  : return "DEBUG";
+        case Logger::LogLevel::Info   : return "INFO ";
+        case Logger::LogLevel::Warn   : return "WARNG";
+        case Logger::LogLevel::Error  : return "ERROR";
+        case Logger::LogLevel::Fatal  : return "FATAL";
+        case Logger::LogLevel::Special: return "*****";
+        case Logger::LogLevel::Method : return "*****";
+        }
+        return "";
+    }
+
+}
 
 struct LogData
 {
@@ -37,7 +58,6 @@ struct LogData
 LogModel::LogModel( QObject *parent )
     : QAbstractItemModel( parent )
 {
-
 }
 
 LogModel::~LogModel()
@@ -83,24 +103,54 @@ QVariant LogModel::data( const QModelIndex &index, int role ) const
         auto msg = m_msgs.at( index.row() );
         switch ( index.column() ) {
         case 0: return msg->m_time.toString( "yyyy-MM-dd hh:mm:ss" );
-        case 1: return Logger::LogUtil::getSeverityString(
-                        msg->m_logLevel );
+        case 1: return sevString( msg->m_logLevel );
         case 2: return msg->m_moduleName;
         case 3: return msg->m_logMessage;
         }
     }
     else if( role == Qt::SizeHintRole ) {
-        if( index.column() != 3 ) {
-            return QSize( 0, 18 );
+        switch ( index.column() ) {
+        case 0: return 35;
+        case 1: return 5;
+        case 2: return 40;
         }
     }
     return QVariant();
 }
 
-void LogModel::add( const Logger::LogMessage *msg )
+bool LogModel::hasChildren(const QModelIndex &parent) const
+{
+    if(! parent.isValid()) {
+        return true;
+    }
+    return false;
+}
+
+QVariant LogModel::headerData( int section,
+                               Qt::Orientation orientation,
+                               int role ) const
+{
+    Q_UNUSED( orientation );
+    if ( role == Qt::TextAlignmentRole ) {
+        return int( Qt::AlignLeft | Qt::AlignVCenter );
+    }
+    else if ( role == Qt::DisplayRole ) {
+        switch( section ) {
+        case 0: return tr( "Time" );
+        case 1: return tr( "Severity" );
+        case 2: return tr( "Modue" );
+        case 3: return tr( "Message" );
+        }
+    }
+    return QVariant();
+}
+
+void LogModel::add( std::shared_ptr< LogData > msg )
 {
     beginInsertRows( QModelIndex{}, m_msgs.size(), m_msgs.size() + 1 );
-    m_msgs.append( std::make_shared< LogData >( msg ));
+//    beginResetModel();
+    m_msgs.append( msg );
+//    endResetModel();
     endInsertRows();
 }
 
@@ -129,10 +179,23 @@ LogView::LogView( QWidget *parent )
     , Logger::AbstractLogTarget( LOG_TARGET_ID )
     , m_data( new Data{} )
 {
+    qRegisterMetaType< std::shared_ptr< Quartz::LogData >>();
+
     m_data->m_model = new LogModel{ this };
     m_data->m_view  = new QTreeView{ this };
     m_data->m_view->setModel( m_data->m_model );
     connect( this, &LogView::sigLogMessage, m_data->m_model, &LogModel::add );
+
+    auto layout = new QVBoxLayout{ this };
+    layout->addWidget( m_data->m_view );
+    this->setLayout( layout );
+    layout->setContentsMargins( QMargins{} );
+    m_data->m_view->setContentsMargins( QMargins{} );
+    m_data->m_view->setSortingEnabled( true );
+    m_data->m_view->setWordWrap( false );
+    m_data->m_view->setAutoScroll( true );
+    m_data->m_view->setAlternatingRowColors( true );
+    m_data->m_view->setRootIsDecorated( false );
 }
 
 LogView::~LogView()
@@ -147,8 +210,8 @@ void LogView::flush()
 
 void LogView::write( const Logger::LogMessage *message )
 {
-    using namespace Logger;
-
+    auto logData = std::make_shared< LogData >( message );
+    emit sigLogMessage( logData );
 }
 
 void LogView::clear()

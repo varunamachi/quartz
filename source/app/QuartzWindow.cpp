@@ -9,6 +9,7 @@
 #include <QSplitter>
 
 #include <core/logger/Logging.h>
+#include <core/logger/AbstractLogDispatcher.h>
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
 #include <base/view_manager/ViewManager.h>
@@ -23,6 +24,7 @@
 #include "WelcomePage.h"
 #include "HoverMoveFilter.h"
 #include "adapted/CustomShadowEffect.h"
+#include "inbuilt/LogView.h"
 
 #define WINDOW_MARGIN 5
 
@@ -293,53 +295,44 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     , m_titleBar( new TitleBar( 20, this ) )
     , m_selector( new SelectorManager( 20, 40, this ))
     , m_content( new ContentManager( this ))
-    , m_viewManager( new ViewManager( 10, 40, this ))
+    , m_viewManager( new ViewManager( 20, 40, this ))
     , m_actionBar( new ActionBar( 20, this ))
 {
     this->setObjectName( "chillimain" );
-//    m_titleBar = new TitleBar( 20, this );
-//    m_actionBar = new ActionBar( 20, this );
-//    m_pageManager = new PageManager( 60, 20, this );
-//    m_viewManager = new ViewManager( 20, 60, this );
-//    auto page = new WelcomePage( this );
-//    auto apage = new AnotherPage( this );
-//    m_pageManager->addPage( page );
-//    m_pageManager->addPage( apage );
-//    m_sizeGrip = new QSizeGrip( this );
-//    m_sizeGrip->setContentsMargins( QMargins() );
-//    mainLayout->addWidget( m_sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight );
-
-
-
 
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
     policy.setVerticalPolicy( QSizePolicy::Expanding );
 
-    auto splitter = new QSplitter{ Qt::Horizontal, this };
-    splitter->addWidget( m_selector );
-    splitter->addWidget( m_content );
-    QList< int > sizes;
-    sizes << 100 << 300;
-    splitter->setSizes( sizes );
-    splitter->setContentsMargins( QMargins{ });
-
-    auto middle = new QWidget{ this };
-    middle->setContentsMargins( QMargins{ });
-    auto middleLayout = new QHBoxLayout{ };
-    middleLayout->addWidget( splitter );
-    middleLayout->setContentsMargins( QMargins{ });
-    middle->setLayout( middleLayout );
-
     m_content->setSizePolicy( policy );
-//    m_selector->setSizePolicy( policy );
-    splitter->setSizePolicy( policy );
-    middle->setSizePolicy( policy );
+    auto middleSplitter = new QSplitter{ Qt::Vertical, this };
+    middleSplitter->addWidget( m_content );
+    middleSplitter->addWidget( m_viewManager );
+    QList< int > sizes;
+    sizes << 300 << 100;
+    middleSplitter->setSizes( sizes );
+    middleSplitter->setContentsMargins( QMargins{} );
+    middleSplitter->setSizePolicy( policy );
+
+    auto mainSplitter = new QSplitter{ Qt::Horizontal, this };
+    mainSplitter->addWidget( m_selector );
+    mainSplitter->addWidget( middleSplitter );
+    sizes.clear();
+    sizes << 200 << 400;
+    mainSplitter->setSizes( sizes );
+    mainSplitter->setContentsMargins( QMargins{ });
+    mainSplitter->setSizePolicy( policy );
+
+    middleSplitter->setStyleSheet(
+                "QSplitter::handle{ height: 1px; background: gray; }" );
+    mainSplitter->setStyleSheet(
+                "QSplitter::handle{ height: 1px; background: gray; }" );
+
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( middle );
+    mainLayout->addWidget( mainSplitter );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins{ 0, 0, 5, 5 });
@@ -347,6 +340,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     this->setLayout( mainLayout );
 
     m_actionBar->setStyleSheet( "background: yellow;" );
+//    m_viewManager->setStyleSheet( "background: blue;" );
     this->setMinimumSize({ 600, 400 });
 
     auto context = new Context{};
@@ -362,6 +356,11 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     auto otherNode = nodeSelector->model()->addNode( path, "Details" );
     m_content->addContent( new WelcomePage{ welcomeNode->nodeId(), m_content });
     m_content->addContent( new AnotherPage{ otherNode->nodeId(), m_content });
+
+    auto logView = new LogView{ this };
+    m_viewManager->addView( logView );
+    QZ_LOGGER()->dispatcher()->addTarget( logView );
+    QZ_INFO( "App" ) << "Hello!!";
 }
 
 

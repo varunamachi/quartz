@@ -43,6 +43,8 @@ public:
 
     bool addTarget( std::unique_ptr< AbstractLogTarget > &&target );
 
+    bool addTarget( AbstractLogTarget *target );
+
     AbstractLogTarget * target( QString targetId );
 
     bool setTargetEnabledState( const QString &trgId, bool value );
@@ -51,6 +53,8 @@ public:
 
     bool installFilter( std::unique_ptr< ILogFilter > &&filter,
                         const QString &trgtId );
+
+    bool installFilter( ILogFilter *filter, const QString &targetId );
 
     bool uninstallFilter( const QString &filterId,
                           const QString &trgtId );

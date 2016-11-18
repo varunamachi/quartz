@@ -7,30 +7,43 @@
 #include <base/view_manager/QuartzView.h>
 
 
+
 namespace Quartz {
 
+
 struct LogData;
+
 class LogModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit LogModel( QObject *parent );
+    explicit LogModel( QObject *parent = nullptr );
 
     ~LogModel();
 
-    QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QModelIndex index( int row,
+                       int column,
+                       const QModelIndex &parent ) const override;
 
-    QModelIndex parent( const QModelIndex &child ) const;
+    QModelIndex parent( const QModelIndex &child ) const override;
 
-    int rowCount( const QModelIndex &parent ) const;
+    int rowCount( const QModelIndex &parent ) const override;
 
-    int columnCount( const QModelIndex &parent ) const;
+    int columnCount( const QModelIndex &parent ) const override;
 
-    QVariant data( const QModelIndex &index, int role ) const;
+    QVariant data( const QModelIndex &index, int role ) const override;
+
+    bool hasChildren( const QModelIndex &parent ) const override;
+
+    QVariant headerData( int section,
+                         Qt::Orientation orientation,
+                         int role ) const override;
+
+
 
 public slots:
-    void add( const Logger::LogMessage *msg );
+    void add( std::shared_ptr< Quartz::LogData > msg );
 
     void clear();
 
@@ -65,7 +78,7 @@ public slots:
     void clear();
 
 signals:
-    void sigLogMessage( const Logger::LogMessage *message );
+    void sigLogMessage( std::shared_ptr< Quartz::LogData > message );
 
 protected:
     void write( QString &&logString ) override;
@@ -76,3 +89,5 @@ private:
 };
 
 }
+
+

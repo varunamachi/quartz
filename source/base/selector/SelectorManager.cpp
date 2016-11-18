@@ -26,6 +26,7 @@ struct SelectorManager::Data
         : m_selectorContainer( new StackedContainer(
                                    height,
                                    btnWidth,
+                                   StackedContainer::SelectorPosition::Before,
                                    Qt::Vertical,
                                    Qt::Vertical,
                                    parent ))

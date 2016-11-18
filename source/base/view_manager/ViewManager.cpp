@@ -20,12 +20,19 @@ ViewManager::ViewManager( int height,
     , m_viewContainer( new StackedContainer(
                            m_height,
                            m_btnWidth,
+                           StackedContainer::SelectorPosition::After,
                            Qt::Horizontal,
                            Qt::Horizontal,
                            this ))
     , QWidget( parent )
 {
     this->setVisible( false );
+    auto layout = new QVBoxLayout{ this };
+    layout->addWidget( m_viewContainer );
+    layout->setContentsMargins( QMargins{} );
+    m_viewContainer->setContentsMargins( QMargins{} );
+    this->setContentsMargins( QMargins{ 2, 2, 2, 2 }) ;
+    this->setLayout( layout );
 }
 
 

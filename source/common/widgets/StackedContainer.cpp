@@ -8,6 +8,7 @@ namespace Quartz {
 
 StackedContainer::StackedContainer( int selectorDimention,
                                     int buttonDimention,
+                                    SelectorPosition selectorPosition,
                                     Qt::Orientation orientation,
                                     Qt::Orientation btnOrientation,
                                     QWidget *parent )
@@ -18,6 +19,7 @@ StackedContainer::StackedContainer( int selectorDimention,
                                   selectorDimention,
                                   this ))
     , m_stackWidget( new QStackedWidget( this ))
+    , m_selectedId( "" )
 {
     QBoxLayout *layout = nullptr;
     if( orientation == Qt::Vertical ) {
@@ -28,21 +30,45 @@ StackedContainer::StackedContainer( int selectorDimention,
         layout = new QVBoxLayout();
         m_selector->setMaximumHeight( selectorDimention );
     }
-    if( btnOrientation != orientation ) {
-        m_btnWidth  = buttonDimention;
-        m_btnHeight = selectorDimention;
+    if( selectorPosition == SelectorPosition::Before ) {
+        layout->addWidget( m_selector );
+        layout->addWidget( m_stackWidget );
+        layout->setAlignment( m_selector, orientation == Qt::Horizontal
+                                                ? Qt::AlignTop
+                                                : Qt::AlignLeft );
     }
     else {
-        m_btnWidth = selectorDimention;
-        m_btnHeight = buttonDimention;
+        layout->addWidget( m_stackWidget );
+        layout->addWidget( m_selector );
+        layout->setAlignment( m_selector, orientation == Qt::Horizontal
+                                                ? Qt::AlignBottom
+                                                : Qt::AlignRight );
     }
-    layout->addWidget( m_selector );
-    layout->addWidget( m_stackWidget );
+    if( btnOrientation == orientation ) {
+        if( btnOrientation == Qt::Horizontal ) {
+            m_btnWidth  = buttonDimention;
+            m_btnHeight = selectorDimention;
+        }
+        else {
+            m_btnWidth = selectorDimention;
+            m_btnHeight = buttonDimention;
+        }
+    }
+    else {
+        if( btnOrientation == Qt::Horizontal ) {
+            m_btnWidth = selectorDimention;
+            m_btnHeight = buttonDimention;
+
+        }
+        else {
+            m_btnWidth  = buttonDimention;
+            m_btnHeight = selectorDimention;
+        }
+    }
+
     layout->setContentsMargins( QMargins() );
     m_selector->setContentsMargins( QMargins() );
     m_stackWidget->setContentsMargins( QMargins() );
-//    m_selector->setStyleSheet("background-color: blue;");
-//    m_stackWidget->setStyleSheet("background-color: red;");
     this->setLayout( layout );
 
     layout->setContentsMargins( QMargins{ });
@@ -143,13 +169,22 @@ void StackedContainer::select( const QString &id )
 {
     Item::Ptr item = m_items.value( id );
     if( item ) {
-        Item::Ptr prev = m_items.value( m_selectedId );
-        if( prev != nullptr ) {
-            prev->m_btn->setChecked( false );
+        if( m_stackWidget->count() != 0
+                && item->m_index == m_stackWidget->currentIndex() ) {
+            m_stackWidget->setVisible( false );
+            item->m_btn->setChecked( false );
+            m_selectedId = "";
         }
-        item->m_btn->setChecked( true );
-        m_stackWidget->setCurrentIndex( item->m_index );
-        m_selectedId = id;
+        else {
+            Item::Ptr prev = m_items.value( m_selectedId );
+            if( prev != nullptr ) {
+                prev->m_btn->setChecked( false );
+            }
+            item->m_btn->setChecked( true );
+            m_stackWidget->setCurrentIndex( item->m_index );
+            m_stackWidget->setVisible( true );
+            m_selectedId = id;
+        }
     }
 }
 
