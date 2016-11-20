@@ -52,11 +52,10 @@ QSize IdButton::originalSizeHint() const
 
 void IdButton::mouseReleaseEvent( QMouseEvent *evt )
 {
-    if( ! isChecked() ) {
+//    if( ! isChecked() ) {
         QPushButton::mousePressEvent( evt );
-//        setChecked( true );
         emit activated( m_id );
-    }
+//    }
     evt->ignore();
     //    QPushButton::mousePressEvent( evt );
 }

@@ -4,4 +4,5 @@ vq_classes(
     StackedContainer
     IdButton
     OrientationButton
+    StackedSplitContainer
 )

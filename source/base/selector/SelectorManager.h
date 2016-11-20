@@ -8,7 +8,7 @@
 
 namespace Quartz {
 
-class StackedContainer;
+class AbstractContainer;
 class QzScroller;
 class AbstractSelector;
 
@@ -17,8 +17,7 @@ class QUARTZ_BASE_API SelectorManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SelectorManager( int height,
-                              int btnWidth,
+    explicit SelectorManager( AbstractContainer *container,
                               QWidget *parent = 0 );
 
     ~SelectorManager();

@@ -17,7 +17,7 @@
 namespace Quartz {
 
 class QuartzView;
-class StackedContainer;
+class AbstractContainer;
 class QzScroller;
 
 class QUARTZ_BASE_API ViewManager : public QWidget
@@ -25,8 +25,7 @@ class QUARTZ_BASE_API ViewManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewManager( int height,
-                          int btnWidth,
+    explicit ViewManager( AbstractContainer *container,
                           QWidget *parent = 0 );
 
     void addView( QuartzView *view );
@@ -67,7 +66,7 @@ private:
 
     int m_btnWidth;
 
-    StackedContainer *m_viewContainer;
+    AbstractContainer *m_viewContainer;
 
     QHash< QString, QuartzView *> m_views;
 

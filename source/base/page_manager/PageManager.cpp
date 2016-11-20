@@ -22,7 +22,7 @@ PageManager::PageManager( int categoryWidth,
     , m_catContainer( new StackedContainer(
                           categoryWidth,
                           40,
-                          StackedContainer::SelectorPosition::Before,
+                          AbstractContainer::SelectorPosition::Before,
                           Qt::Vertical,
                           Qt::Horizontal,
                           this ))
@@ -38,13 +38,13 @@ PageManager::PageManager( int categoryWidth,
 void PageManager::addPage( QuartzPage *page )
 {
     if( page != nullptr ) {
-        StackedContainer *container = m_pageContainers.value(
+        AbstractContainer *container = m_pageContainers.value(
                     page->pageCategoryId() );
         if( container == nullptr ) {
             container = new StackedContainer(
                         m_holderHeight,
                         150,
-                        StackedContainer::SelectorPosition::Before,
+                        AbstractContainer::SelectorPosition::Before,
                         Qt::Horizontal,
                         Qt::Horizontal,
                         this );
@@ -81,7 +81,7 @@ void PageManager::removePage( const QString &pageId )
 void PageManager::removePage( QuartzPage *page )
 {
     if( page != nullptr ) {
-        StackedContainer *container =
+        AbstractContainer *container =
                 m_pageContainers.value( page->pageCategoryId() );
         if( container ) {
             container->removeWidget( page->pageId() );
@@ -116,7 +116,7 @@ void PageManager::removePage( QuartzPage *page )
 
 void PageManager::removePageCategory( const QString &categoryId )
 {
-    StackedContainer *container = m_pageContainers.value( categoryId );
+    AbstractContainer *container = m_pageContainers.value( categoryId );
     if( container != nullptr ) {
         QList< QString > allIds = container->allIds();
         for( const QString &id : allIds ) {
@@ -169,7 +169,7 @@ QuartzPage * PageManager::currentPage() const
     QuartzPage *page = nullptr;
     QString curCategory = m_catContainer->currentId();
     if( ! curCategory.isEmpty() ) {
-        StackedContainer *pageContnr = m_pageContainers.value( curCategory );
+        AbstractContainer *pageContnr = m_pageContainers.value( curCategory );
         if( pageContnr != nullptr ) {
             QString curPageId = pageContnr->currentId();
             QWidget *widget = pageContnr->widget( curPageId );
@@ -221,7 +221,7 @@ void PageManager::selectPage( QString pageId )
     QuartzPage *page = m_pages.value( pageId );
     if( page != nullptr ) {
         selectCategory( page->pageCategoryId() );
-        StackedContainer *pageCont = m_pageContainers.value(
+        AbstractContainer *pageCont = m_pageContainers.value(
                     page->pageCategoryId() );
         if( pageCont ) {
             pageCont->select( pageId );

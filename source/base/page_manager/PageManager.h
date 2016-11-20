@@ -18,7 +18,7 @@ namespace Quartz {
 
 class QuartzPage;
 class QzScroller;
-class StackedContainer;
+class AbstractContainer;
 
 
 class QUARTZ_BASE_API PageManager : public QWidget
@@ -71,9 +71,9 @@ private:
 
     int m_holderHeight;
 
-    StackedContainer *m_catContainer;
+    AbstractContainer *m_catContainer;
 
-    QHash< QString, StackedContainer *> m_pageContainers;
+    QHash< QString, AbstractContainer *> m_pageContainers;
 
     QHash< QString, QuartzPage *> m_pages;
 

@@ -69,7 +69,7 @@ void SpooledDispatcher::run()
     while( ! m_data->m_stop ) {
         if( !  m_data->m_logQueue.empty() ) {
             VQ_LOCK( m_data->m_logIoMutex );
-            if( ! !  m_data->m_logQueue.empty() ) {
+            if( ! m_data->m_logQueue.empty() ) {
                 auto msg = m_data->m_logQueue.front();
                 AT_SCOPE_EXIT( delete msg );
                 m_data->m_logQueue.pop();

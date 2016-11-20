@@ -12,19 +12,10 @@ namespace Quartz {
 
 const QString ViewManager::ADAPTER_NAME{ "quartz.title_bar" };
 
-ViewManager::ViewManager( int height,
-                          int btnWidth,
+ViewManager::ViewManager( AbstractContainer *container,
                           QWidget *parent )
-    : m_height( height )
-    , m_btnWidth( btnWidth )
-    , m_viewContainer( new StackedContainer(
-                           m_height,
-                           m_btnWidth,
-                           StackedContainer::SelectorPosition::After,
-                           Qt::Horizontal,
-                           Qt::Horizontal,
-                           this ))
-    , QWidget( parent )
+    : QWidget( parent )
+    , m_viewContainer( container )
 {
     this->setVisible( false );
     auto layout = new QVBoxLayout{ this };

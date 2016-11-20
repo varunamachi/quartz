@@ -20,21 +20,13 @@ namespace Quartz {
 
 struct SelectorManager::Data
 {
-    Data( int height,
-          int btnWidth,
-          QWidget *parent )
-        : m_selectorContainer( new StackedContainer(
-                                   height,
-                                   btnWidth,
-                                   StackedContainer::SelectorPosition::Before,
-                                   Qt::Vertical,
-                                   Qt::Vertical,
-                                   parent ))
+    Data( AbstractContainer *container )
+        : m_selectorContainer( container )
     {
 
     }
 
-    StackedContainer *m_selectorContainer;
+    AbstractContainer *m_selectorContainer;
 
     QHash< QString, AbstractSelector *> m_selectors;
 
@@ -45,12 +37,10 @@ struct SelectorManager::Data
 const QString SelectorManager::ADAPTER_NAME{ "quartz.title_bar" };
 
 
-SelectorManager::SelectorManager( int height,
-                                  int btnWidth,
+SelectorManager::SelectorManager( AbstractContainer *container,
                                   QWidget *parent )
     : QWidget( parent )
-//    , m_data( std::make_unique< Data >( height, btnWidth, parent ))
-    , m_data( new Data( height, btnWidth, parent ))
+    , m_data( new Data( container ))
 
 {
     auto layout = new QHBoxLayout{ this };

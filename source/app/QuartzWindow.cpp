@@ -10,6 +10,9 @@
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
+
+#include <common/widgets/StackedSplitContainer.h>
+
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
 #include <base/view_manager/ViewManager.h>
@@ -293,9 +296,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget( parent )
     , m_roundedRect( true )
     , m_titleBar( new TitleBar( 20, this ) )
-    , m_selector( new SelectorManager( 20, 40, this ))
     , m_content( new ContentManager( this ))
-    , m_viewManager( new ViewManager( 20, 40, this ))
     , m_actionBar( new ActionBar( 20, this ))
 {
     this->setObjectName( "chillimain" );
@@ -305,34 +306,32 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     policy.setVerticalPolicy( QSizePolicy::Expanding );
 
     m_content->setSizePolicy( policy );
-    auto middleSplitter = new QSplitter{ Qt::Vertical, this };
-    middleSplitter->addWidget( m_content );
-    middleSplitter->addWidget( m_viewManager );
-    QList< int > sizes;
-    sizes << 300 << 100;
-    middleSplitter->setSizes( sizes );
-    middleSplitter->setContentsMargins( QMargins{} );
-    middleSplitter->setSizePolicy( policy );
+    auto viewContainer = new StackedSplitContainer{
+                20,
+                40,
+                AbstractContainer::SelectorPosition::After,
+                Qt::Horizontal,
+                Qt::Horizontal };
+    m_viewManager = new ViewManager( viewContainer, this );
+    viewContainer->setContentWidget(
+                m_content,
+                AbstractContainer::SelectorPosition::Before );
+    viewContainer->setSizes( 400, 100, 20 );
 
-    auto mainSplitter = new QSplitter{ Qt::Horizontal, this };
-    mainSplitter->addWidget( m_selector );
-    mainSplitter->addWidget( middleSplitter );
-    sizes.clear();
-    sizes << 200 << 400;
-    mainSplitter->setSizes( sizes );
-    mainSplitter->setContentsMargins( QMargins{ });
-    mainSplitter->setSizePolicy( policy );
-
-    middleSplitter->setStyleSheet(
-                "QSplitter::handle{ height: 1px; background: gray; }" );
-    mainSplitter->setStyleSheet(
-                "QSplitter::handle{ height: 1px; background: gray; }" );
-
+    auto selectorContainer = new StackedSplitContainer{
+                20,
+                40,
+                AbstractContainer::SelectorPosition::Before,
+                Qt::Vertical,
+                Qt::Vertical };
+    m_selector = new SelectorManager{  selectorContainer, this };
+    selectorContainer->setContentWidget( m_viewManager );
+    selectorContainer->setSizes( 20, 100, 600 );
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
     mainLayout->setAlignment( m_titleBar, Qt::AlignTop );
-    mainLayout->addWidget( mainSplitter );
+    mainLayout->addWidget( m_selector );
     mainLayout->addWidget( m_actionBar);
     mainLayout->setAlignment( m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins( QMargins{ 0, 0, 5, 5 });
@@ -361,6 +360,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_viewManager->addView( logView );
     QZ_LOGGER()->dispatcher()->addTarget( logView );
     QZ_INFO( "App" ) << "Hello!!";
+
 }
 
 
