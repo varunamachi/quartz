@@ -167,7 +167,7 @@ const QString & ViewManager::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool ViewManager::handlePlugin( IPlugin *plugin )
+bool ViewManager::handlePlugin( AbstractPlugin *plugin )
 {
     auto result = false;
     auto provider = dynamic_cast< AbstractViewProvider *>( plugin );

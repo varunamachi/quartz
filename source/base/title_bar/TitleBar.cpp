@@ -136,7 +136,7 @@ const QString & TitleBar::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool TitleBar::handlePlugin( IPlugin *plugin )
+bool TitleBar::handlePlugin( AbstractPlugin *plugin )
 {
     auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>( plugin );
     if( itemProvider != nullptr ) {

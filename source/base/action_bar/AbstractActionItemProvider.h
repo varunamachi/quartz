@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/extension_system/IPlugin.h>
+#include <core/extension_system/AbstractPlugin.h>
 
 #include "../QuartzBase.h"
 
@@ -8,15 +8,14 @@ namespace Quartz {
 
 class QuartzItem;
 
-class QUARTZ_BASE_API AbstractActionItemProvider : public IPlugin
+class QUARTZ_BASE_API AbstractActionItemProvider : public AbstractPlugin
 {
 public:
-    virtual QuartzItem * actionItem() const = 0;
+    AbstractActionItemProvider( const QString &pluginId,
+                                const QString &pluginName,
+                                const QStringList &dependencies );
 
-    const QString & pluginType() const override
-    {
-        return PLUGIN_TYPE;
-    }
+    virtual QuartzItem * actionItem() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

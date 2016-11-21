@@ -116,7 +116,7 @@ const QString & ContentManager::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool ContentManager::handlePlugin( IPlugin *plugin )
+bool ContentManager::handlePlugin( AbstractPlugin *plugin )
 {
     bool result = false;
     auto provider = dynamic_cast< AbstractContentProvider *>( plugin );

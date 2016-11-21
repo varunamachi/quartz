@@ -1,11 +1,11 @@
 
-#include "AbstractTitleItemProvider.h"
+#include "AbstractAdapterProvider.h"
 
 namespace Quartz {
 
-const QString AbstractTitleItemProvider::PLUGIN_TYPE{ "quartz.title_item" };
+const QString AbstractAdapterProvider::PLUGIN_TYPE{ "quartz.adapter" };
 
-AbstractTitleItemProvider::AbstractTitleItemProvider(
+AbstractAdapterProvider::AbstractAdapterProvider(
         const QString &pluginId,
         const QString &pluginName,
         const QStringList &dependencies )

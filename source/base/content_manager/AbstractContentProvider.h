@@ -1,5 +1,5 @@
 
-#include <core/extension_system/IPlugin.h>
+#include <core/extension_system/AbstractPlugin.h>
 
 #include "../QuartzBase.h"
 
@@ -7,14 +7,16 @@ namespace Quartz {
 
 class ContentWidget;
 
-class QUARTZ_BASE_API AbstractContentProvider : public IPlugin
+class QUARTZ_BASE_API AbstractContentProvider : public AbstractPlugin
 {
 public:
-    virtual ContentWidget * widget() = 0;
+    AbstractContentProvider( const QString &pluginId,
+                             const QString &pluginName,
+                             const QStringList &dependencies );
 
     virtual ~AbstractContentProvider();
 
-    const QString & pluginType() const;
+    virtual ContentWidget * widget() = 0;
 
     static const QString PLUGIN_TYPE;
 

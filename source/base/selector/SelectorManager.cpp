@@ -140,7 +140,7 @@ const QString & SelectorManager::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool SelectorManager::handlePlugin( IPlugin *plugin )
+bool SelectorManager::handlePlugin( AbstractPlugin *plugin )
 {
     auto result = false;
     auto provider = dynamic_cast< AbstractSelectorProvider *>( plugin );

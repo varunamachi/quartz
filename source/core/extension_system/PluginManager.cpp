@@ -7,13 +7,14 @@
 
 
 #include "../logger/Logging.h"
-#include "IPlugin.h"
+#include "AbstractPlugin.h"
 #include "IPluginAdapter.h"
 #include "PluginManager.h"
+#include "AbstractAdapterProvider.h"
 
 namespace Quartz {
 
-using PluginMap = QHash< QString, std::shared_ptr< IPlugin >>;
+using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
 using AdapterMap = QHash< QString, std::shared_ptr< IPluginAdapter >>;
 using LibraryList = QList< std::shared_ptr< QLibrary >>;
 
@@ -134,7 +135,7 @@ bool PluginManager::destroy()
 }
 
 
-IPlugin * PluginManager::plugin( const QString &id ) const
+AbstractPlugin * PluginManager::plugin( const QString &id ) const
 {
     auto &plugin = m_data->plugins().value( id );
     return plugin.get();
@@ -156,7 +157,7 @@ void PluginManager::registerPluginAdapter(
     }
 }
 
-bool PluginManager::initializePlugin( IPlugin *plugin,
+bool PluginManager::initializePlugin( AbstractPlugin *plugin,
                                       QSet< QString > &loadedPluginIds )
 {
 
@@ -185,8 +186,9 @@ bool PluginManager::initializePlugin( IPlugin *plugin,
     }
     if( result ) {
         auto &pluginType = plugin->pluginType();
-        if( pluginType == ADAPTER_PLUGIN_TYPE ) {
-            auto adapterPgn = dynamic_cast< IAdapterPlugin *>( plugin );
+        if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {
+            auto adapterPgn = dynamic_cast< AbstractAdapterProvider *>(
+                        plugin );
             auto adapter = adapterPgn->adapter();
             if( adapter != nullptr ) {
                 registerPluginAdapter( adapter );

@@ -41,7 +41,7 @@ public:
 
     const QString &pluginAdapterName() const override;
 
-    bool handlePlugin( IPlugin *plugin ) override;
+    bool handlePlugin( AbstractPlugin *plugin ) override;
 
     bool finalizePlugins() override;
 

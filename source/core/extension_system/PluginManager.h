@@ -13,7 +13,7 @@ class QString;
 
 namespace Quartz {
 
-QZ_INTERFACE IPlugin;
+QZ_INTERFACE AbstractPlugin;
 QZ_INTERFACE IPluginAdapter;
 
 class PluginManager
@@ -30,7 +30,7 @@ public:
 
     bool destroy();
 
-    IPlugin * plugin( const QString &id ) const;
+    AbstractPlugin * plugin( const QString &id ) const;
 
     IPluginAdapter * adapter( const QString &id ) const;
 
@@ -39,7 +39,7 @@ public:
 private:
     std::size_t loadPluginAt( const QDir &dir );
 
-    bool initializePlugin( IPlugin *plugin,
+    bool initializePlugin( AbstractPlugin *plugin,
                            QZ_IN_OUT QSet< QString > &loadedPluginIds );
 
     class Data;

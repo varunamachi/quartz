@@ -31,8 +31,8 @@ StackedSplitContainer::StackedSplitContainer(
     auto spor = orientation == Qt::Vertical ? Qt::Horizontal
                                             : Qt::Vertical;
     m_data->m_splitter = new QSplitter{ spor, this };
-    m_data->m_splitter->setStyleSheet(
-                "QSplitter::handle{ height: 1px; background: gray; }" );
+//    m_data->m_splitter->setStyleSheet(
+//                "QSplitter::handle{ height: 1px; background: gray; }" );
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
     policy.setVerticalPolicy( QSizePolicy::Expanding );

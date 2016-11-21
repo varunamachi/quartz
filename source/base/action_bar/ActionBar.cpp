@@ -104,7 +104,7 @@ const QString & ActionBar::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool ActionBar::handlePlugin( IPlugin *plugin )
+bool ActionBar::handlePlugin( AbstractPlugin *plugin )
 {
     auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( plugin );
     if( itemProvider != nullptr ) {

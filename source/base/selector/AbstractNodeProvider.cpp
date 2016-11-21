@@ -5,14 +5,18 @@ namespace Quartz {
 
 const QString AbstractNodeProvider::PLUGIN_TYPE{ "quartz.node" };
 
-AbstractNodeProvider::~AbstractNodeProvider()
+AbstractNodeProvider::AbstractNodeProvider(
+        const QString &pluginId,
+        const QString &pluginName,
+        const QStringList &dependencies )
+    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE, dependencies }
 {
 
 }
 
-const QString &AbstractNodeProvider::pluginType() const
+AbstractNodeProvider::~AbstractNodeProvider()
 {
-    return PLUGIN_TYPE;
+
 }
 
 }

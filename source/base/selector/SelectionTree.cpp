@@ -18,7 +18,7 @@ struct SelectionTree::Data
 
     NodePtr m_root;
 
-    QVector< QPair< QStringList, NodePtr >> m_pluginNodes;
+    QVector< std::shared_ptr< NodeInfo >> m_pluginNodes;
 };
 
 const QString SelectionTree::ADAPTER_NAME{ "Node Tree" };
@@ -163,13 +163,15 @@ const QString &SelectionTree::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool SelectionTree::handlePlugin( IPlugin *plugin )
+bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
 {
     bool result = false;
     auto nodeProvider = dynamic_cast< AbstractNodeProvider *>( plugin );
     if( nodeProvider != nullptr ) {
-       auto nodeInfo = nodeProvider->node();
-       result = addNode( nodeInfo.first, nodeInfo.second );
+       auto nodeInfo = nodeProvider->nodeInfo();
+       result = addNode( nodeInfo->m_nodePath,
+                         nodeInfo->m_nodeName,
+                         nodeInfo->m_nodeIcon );
        if( result ) {
            m_data->m_pluginNodes.push_back( nodeInfo );
        }
@@ -185,9 +187,9 @@ bool SelectionTree::finalizePlugins()
 {
     bool result = false;
     for( int i = 0; i < m_data->m_pluginNodes.size(); ++ i ) {
-        auto pair = m_data->m_pluginNodes.at( i );
-        auto &path = pair.first;
-        path << pair.second->nodeId();
+        auto nodeInfo = m_data->m_pluginNodes.at( i );
+        auto &path = nodeInfo->m_nodePath;
+        path << nodeInfo->m_nodeName;
         result = removeNode( path );
     }
     return result;

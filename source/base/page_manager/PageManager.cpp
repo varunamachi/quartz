@@ -244,7 +244,7 @@ const QString & PageManager::pluginAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool PageManager::handlePlugin( IPlugin *plugin )
+bool PageManager::handlePlugin( AbstractPlugin *plugin )
 {
     auto result = false;
     auto provider = dynamic_cast< AbstractPageProvider *>( plugin );

@@ -1,20 +1,19 @@
 #pragma once
 
-#include <core/extension_system/IPlugin.h>
+#include <core/extension_system/AbstractPlugin.h>
 
 namespace Quartz {
 
 class QuartzPage;
 
-class AbstractPageProvider : public IPlugin
+class AbstractPageProvider : public AbstractPlugin
 {
 public:
-    virtual QuartzPage * page() const = 0;
+    AbstractPageProvider( const QString &pluginId,
+                          const QString &pluginName,
+                          const QStringList &dependencies );
 
-    const QString & pluginType() const override
-    {
-        return PLUGIN_TYPE;
-    }
+    virtual QuartzPage * page() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

@@ -1,8 +1,12 @@
 #pragma once
 
-#include <core/extension_system/IPlugin.h>
+#include <QIcon>
+
+#include <core/extension_system/AbstractPlugin.h>
 
 #include "../QuartzBase.h"
+
+
 
 namespace Quartz {
 
@@ -10,14 +14,35 @@ class AbstractSelector;
 class Node;
 using NodePtr = std::shared_ptr< Node >;
 
-class QUARTZ_BASE_API AbstractNodeProvider : public IPlugin
+struct NodeInfo
+{
+    NodeInfo( const QString &nodeName,
+              const QStringList &nodePath,
+              const QIcon &icon )
+        : m_nodeName( nodeName )
+        , m_nodePath( nodePath )
+        , m_nodeIcon( icon )
+    {
+
+    }
+
+    QString m_nodeName;
+
+    QStringList m_nodePath;
+
+    QIcon m_nodeIcon;
+};
+
+class QUARTZ_BASE_API AbstractNodeProvider : public AbstractPlugin
 {
 public:
+    AbstractNodeProvider( const QString &pluginId,
+                          const QString &pluginName,
+                          const QStringList &dependencies );
+
     ~AbstractNodeProvider();
 
-    virtual QPair< QStringList, NodePtr > node() const = 0;
-
-    const QString & pluginType() const override;
+    virtual std::shared_ptr< NodeInfo > nodeInfo() const = 0;
 
     static const QString PLUGIN_TYPE;
 
