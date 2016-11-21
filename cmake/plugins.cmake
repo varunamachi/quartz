@@ -1,4 +1,5 @@
 
 macro( create_plugin )
-    set( PLUGIN_NAME "plugin_${PROJECT_NAME}" )
+    vq_create_sharedlib()
+    set_property( GLOBAL APPEND PROPERTY "PLUGINS"  ${PROJECT_NAME} )
 endmacro()

@@ -1,4 +1,4 @@
-project( sample )
+project( plugin_sample )
 cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
