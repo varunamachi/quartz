@@ -17,7 +17,6 @@ class QUARTZ_BASE_API SelectionTree : public QAbstractItemModel
 
 {
     Q_OBJECT
-
 public:
     SelectionTree( QObject *parent = 0 );
 
@@ -25,6 +24,7 @@ public:
 
     Node * addNode( const QStringList &parentPath,
                     const QString &nodeName,
+                    const QString &nodeId = QString{ },
                     QIcon icon = QIcon{ } );
 
 

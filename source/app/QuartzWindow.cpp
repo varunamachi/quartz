@@ -309,7 +309,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_content->setSizePolicy( policy );
     auto viewContainer = new StackedSplitContainer{
                 20,
-                40,
+                60,
                 AbstractContainer::SelectorPosition::After,
                 Qt::Horizontal,
                 Qt::Horizontal };
@@ -317,17 +317,17 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     viewContainer->setContentWidget(
                 m_content,
                 AbstractContainer::SelectorPosition::Before );
-    viewContainer->setSizes( 400, 100, 20 );
+    viewContainer->setSizes( 370, 210, 20 );
 
     auto selectorContainer = new StackedSplitContainer{
                 20,
-                40,
+                60,
                 AbstractContainer::SelectorPosition::Before,
                 Qt::Vertical,
                 Qt::Vertical };
     m_selector = new SelectorManager{  selectorContainer, this };
     selectorContainer->setContentWidget( m_viewManager );
-    selectorContainer->setSizes( 20, 100, 600 );
+    selectorContainer->setSizes( 20, 180, 600 );
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget( m_titleBar );
@@ -341,7 +341,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 
     m_actionBar->setStyleSheet( "background: yellow;" );
 //    m_viewManager->setStyleSheet( "background: blue;" );
-    this->setMinimumSize({ 600, 400 });
+    this->setMinimumSize({ 800, 600 });
 
     auto context = new Context{};
     context->setContentManager( m_content );
@@ -356,6 +356,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     auto otherNode = nodeSelector->model()->addNode( path, "Details" );
     m_content->addContent( new WelcomePage{ welcomeNode->nodeId(), m_content });
     m_content->addContent( new AnotherPage{ otherNode->nodeId(), m_content });
+    QZ_DEBUG( "App" ) << otherNode->nodeId();
 
     auto logView = new LogView{ this };
     m_viewManager->addView( logView );

@@ -16,15 +16,19 @@ using NodePtr = std::shared_ptr< Node >;
 
 struct NodeInfo
 {
-    NodeInfo( const QString &nodeName,
+    NodeInfo( const QString &nodeId,
+              const QString &nodeName,
               const QStringList &nodePath,
               const QIcon &icon )
-        : m_nodeName( nodeName )
+        : m_nodeId( nodeId )
+        , m_nodeName( nodeName )
         , m_nodePath( nodePath )
         , m_nodeIcon( icon )
     {
 
     }
+
+    QString m_nodeId;
 
     QString m_nodeName;
 

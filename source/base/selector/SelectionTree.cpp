@@ -72,10 +72,12 @@ SelectionTree::~SelectionTree()
 }
 
 Node * SelectionTree::addNode( const QStringList &parentPath,
-                             const QString &nodeName,
-                             QIcon icon )
+                               const QString &nodeName,
+                               const QString &nodeId,
+                               QIcon icon )
 {
-    QString id = makeNodeId( parentPath, nodeName );
+    QString id = nodeId.isEmpty() ? makeNodeId( parentPath, nodeName )
+                                  : nodeId;
     auto node = std::make_shared< Node >( m_data->m_root.get(),
                                           id,
                                           nodeName,
@@ -171,6 +173,7 @@ bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
        auto nodeInfo = nodeProvider->nodeInfo();
        result = addNode( nodeInfo->m_nodePath,
                          nodeInfo->m_nodeName,
+                         nodeInfo->m_nodeId,
                          nodeInfo->m_nodeIcon );
        if( result ) {
            m_data->m_pluginNodes.push_back( nodeInfo );

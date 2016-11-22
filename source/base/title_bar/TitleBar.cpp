@@ -31,21 +31,30 @@ TitleBar::TitleBar( int height, QWidget *parent )
     m_minimizeBtn->setIcon( minpx );
     m_maxRestoreBtn->setIcon( maxpx );
 
-    m_scroller->setContentsMargins( QMargins{} );
-    auto *layout = new QHBoxLayout();
-    layout->setContentsMargins( QMargins() );
-    layout->addWidget( m_scroller );
-    layout->addStretch();
-    layout->addWidget( m_minimizeBtn );
-    layout->addWidget( m_maxRestoreBtn );
-    layout->addWidget( m_closeBtn );
     m_minimizeBtn->setMaximumSize( 20, 20 );
     m_maxRestoreBtn->setMaximumSize( 20, 20 );
     m_closeBtn->setMaximumSize( 20, 20 );
     m_minimizeBtn->setMinimumSize( 20, 20 );
     m_maxRestoreBtn->setMinimumSize( 20, 20 );
+    auto btnWidget = new QWidget{ this };
+    auto btnLayout = new QHBoxLayout{ btnWidget };
+    btnLayout->addWidget( m_minimizeBtn );
+    btnLayout->addWidget( m_maxRestoreBtn );
+    btnLayout->addWidget( m_closeBtn );
+    btnWidget->setLayout( btnLayout );
+    btnWidget->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    btnWidget->setContentsMargins( QMargins{} );
+    btnLayout->setContentsMargins( QMargins{} );
+
+
+    m_scroller->setContentsMargins( QMargins{} );
+    auto *layout = new QHBoxLayout();
+    layout->setContentsMargins( QMargins() );
+    layout->addWidget( m_scroller, 1 );
+    layout->addStretch();
+    layout->addWidget( btnWidget, 0 );
     m_closeBtn->setMinimumSize( 20, 20 );
-    this->setContentsMargins( QMargins( 0, 0, 3, 0 ));
+    this->setContentsMargins( QMargins{ 0, 0, 3, 3 });
     this->setLayout( layout );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 
@@ -69,6 +78,8 @@ TitleBar::TitleBar( int height, QWidget *parent )
 void TitleBar::addItem( QuartzItem *item )
 {
     if( item != nullptr ) {
+        item->setMaximumHeight( m_height );
+        item->setContentsMargins( QMargins{} );
         m_items.insert( item->itemId(), item );
         m_scroller->addWidget( item );
     }

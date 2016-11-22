@@ -59,6 +59,11 @@ public:
 
     void setParent( Node *parent );
 
+    inline static QStringList toPath( const QString &pathStr )
+    {
+        return pathStr.split( ">" );
+    }
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
