@@ -39,6 +39,6 @@ macro( qz_add_qt )
     list( APPEND VQ_LIBS_RELEASE Qt5::Sql )
     list( APPEND VQ_LIBS_DEBUG Qt5::Xml )
     list( APPEND VQ_LIBS_RELEASE Qt5::Xml )
-endmacro( vq_add_qt )
+endmacro( qz_add_qt )
 
 

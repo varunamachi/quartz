@@ -10,6 +10,7 @@
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
+#include <core/extension_system/PluginManager.h>
 
 #include <common/widgets/StackedSplitContainer.h>
 
@@ -361,6 +362,23 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     QZ_LOGGER()->dispatcher()->addTarget( logView );
     QZ_INFO( "App" ) << "Hello!!";
 
+    m_pluginManager = std::unique_ptr< PluginManager >{ new PluginManager{} };
+    m_pluginManager->registerPluginAdapter( m_titleBar );
+    m_pluginManager->registerPluginAdapter( m_actionBar );
+    m_pluginManager->registerPluginAdapter( m_selector );
+    m_pluginManager->registerPluginAdapter( nodeSelector->model() );
+    m_pluginManager->registerPluginAdapter( m_content );
+    m_pluginManager->registerPluginAdapter( m_viewManager );
+
+    auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
+    if( ! m_pluginManager->loadFrom( execDir )) {
+        QZ_ERROR( "App" ) << "Failed to load all available plugins";
+    }
+}
+
+QzMainWidget::~QzMainWidget()
+{
+    m_pluginManager->destroy();
 }
 
 

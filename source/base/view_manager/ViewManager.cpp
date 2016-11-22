@@ -184,10 +184,11 @@ bool ViewManager::handlePlugin( AbstractPlugin *plugin )
 
 bool ViewManager::finalizePlugins()
 {
-    for( int i = 0; i < m_pluginViews.size(); ++ i ) {
-        auto view = m_pluginViews.at( i );
-        removeView( view);
-    }
+//    for( int i = 0; i < m_pluginViews.size(); ++ i ) {
+//        auto view = m_pluginViews.at( i );
+//        removeView( view );
+//    }
+    m_pluginViews.clear();
     return true;
 }
 

@@ -4,6 +4,7 @@
 
 #include <QString>
 #include <QStringList>
+#include <QVector>
 
 #include "../QuartzCore.h"
 #include "../utils/Macros.h"
@@ -45,7 +46,7 @@ private:
 extern "C" {
 
 struct PluginListWrapper {
-    QList< std::shared_ptr< Quartz::AbstractPlugin >>  pluginList;
+    QVector< std::shared_ptr< Quartz::AbstractPlugin >>  pluginList;
 };
 
 }

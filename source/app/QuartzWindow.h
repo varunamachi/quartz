@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -18,12 +20,16 @@ class SelectorManager;
 class ContentManager;
 class ViewManager;
 
+class PluginManager;
+
 
 class QzMainWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit QzMainWidget( QMainWindow *parent = 0 );
+
+    ~QzMainWidget();
 
     TitleBar * titleBar();
 
@@ -53,7 +59,9 @@ private:
 
     ActionBar *m_actionBar;
 
-    friend class ChilliWindow;
+    std::unique_ptr< PluginManager > m_pluginManager;
+
+//    friend class ChilliWindow;
 
     //    PageManager *m_pageManager;
 };

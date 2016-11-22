@@ -1,16 +1,21 @@
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include "ContentProvider.h"
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
-const QString SampleContent::CONTENT_ID{ "Quartz.Quartz.Content" };
+const QString SampleContent::CONTENT_ID{ "node#Quartz.Quartz.Content" };
 const QString SampleContent::CONTENT_NAME{ "Sample" };
 const QString SampleContent::CONTENT_KIND{ "sample" };
 
 SampleContent::SampleContent( QWidget *parent )
     : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND }
 {
-
+    auto layout = new QVBoxLayout{ this };
+    auto label = new QLabel{ "This is sample content", this };
+    layout->addWidget( label );
+    this->setLayout( layout );
 }
 
 

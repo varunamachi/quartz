@@ -118,10 +118,11 @@ bool ActionBar::handlePlugin( AbstractPlugin *plugin )
 
 bool ActionBar::finalizePlugins()
 {
-    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
-        auto item = m_pluginItems.at( i );
-        removeItem( item );
-    }
+//    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
+//        auto item = m_pluginItems.at( i );
+//        removeItem( item );
+//    }
+    m_pluginItems.clear();
     return  true;
 }
 

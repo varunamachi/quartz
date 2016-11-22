@@ -261,10 +261,11 @@ bool PageManager::handlePlugin( AbstractPlugin *plugin )
 
 bool PageManager::finalizePlugins()
 {
-    for( int i = 0; i < m_pluginPages.size(); ++ i ) {
-        auto page = m_pluginPages.at( i );
-        removePage( page );
-    }
+//    for( int i = 0; i < m_pluginPages.size(); ++ i ) {
+//        auto page = m_pluginPages.at( i );
+//        removePage( page );
+//    }
+    m_pluginPages.clear();
     return true;
 }
 

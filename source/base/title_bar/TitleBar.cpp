@@ -31,9 +31,10 @@ TitleBar::TitleBar( int height, QWidget *parent )
     m_minimizeBtn->setIcon( minpx );
     m_maxRestoreBtn->setIcon( maxpx );
 
-    m_scroller->setContentsMargins( QMargins() );
-    QHBoxLayout *layout = new QHBoxLayout();
+    m_scroller->setContentsMargins( QMargins{} );
+    auto *layout = new QHBoxLayout();
     layout->setContentsMargins( QMargins() );
+    layout->addWidget( m_scroller );
     layout->addStretch();
     layout->addWidget( m_minimizeBtn );
     layout->addWidget( m_maxRestoreBtn );
@@ -47,6 +48,7 @@ TitleBar::TitleBar( int height, QWidget *parent )
     this->setContentsMargins( QMargins( 0, 0, 3, 0 ));
     this->setLayout( layout );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+
 
     connect( m_closeBtn,
              SIGNAL( clicked( bool )),
@@ -150,10 +152,11 @@ bool TitleBar::handlePlugin( AbstractPlugin *plugin )
 
 bool TitleBar::finalizePlugins()
 {
-    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
-        auto item = m_pluginItems.at( i );
-        removeItem( item );
-    }
+//    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
+//        auto item = m_pluginItems.at( i );
+//        removeItem( item );
+//    }
+    m_pluginItems.clear();
     return  true;
 }
 

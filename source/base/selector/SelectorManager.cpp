@@ -157,10 +157,11 @@ bool SelectorManager::handlePlugin( AbstractPlugin *plugin )
 
 bool SelectorManager::finalizePlugins()
 {
-    for( int i = 0; i < m_data->m_pluginSelectors.size(); ++ i ) {
-        auto selector = m_data->m_pluginSelectors.at( i );
-        removeSelector( selector);
-    }
+//    for( int i = 0; i < m_data->m_pluginSelectors.size(); ++ i ) {
+//        auto selector = m_data->m_pluginSelectors.at( i );
+//        removeSelector( selector);
+//    }
+    m_data->m_pluginSelectors.clear();
     return true;
 }
 

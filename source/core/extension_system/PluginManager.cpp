@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QLibrary>
 #include <QSet>
-
+#include <QDebug>
 
 #include "../logger/Logging.h"
 #include "AbstractPlugin.h"
@@ -15,7 +15,7 @@
 namespace Quartz {
 
 using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
-using AdapterMap = QHash< QString, std::shared_ptr< IPluginAdapter >>;
+using AdapterMap = QHash< QString, IPluginAdapter *>;
 using LibraryList = QList< std::shared_ptr< QLibrary >>;
 
 
@@ -26,6 +26,12 @@ class PluginManager::Data
 {
 
 public:
+    Data()
+        : m_active( true )
+    {
+
+    }
+
     PluginMap & plugins()
     {
         return m_plugins;
@@ -56,12 +62,24 @@ public:
         return m_libraries;
     }
 
+    void setActive( bool value )
+    {
+        m_active = value;
+    }
+
+    bool isActive() const
+    {
+        return m_active;
+    }
+
 private:
     PluginMap m_plugins;
 
     AdapterMap m_adapters;
 
     LibraryList m_libraries;
+
+    bool m_active;
 };
 
 
@@ -88,7 +106,7 @@ bool PluginManager::loadFrom( const QString &location )
 
     foreach(const QFileInfo &info, dirList) {
         if( info.isReadable() ) {
-            QDir pluginDir{ info.path() };
+            QDir pluginDir{ info.absoluteFilePath() };
             auto numLoaded = loadPluginAt( pluginDir );
             QZ_DEBUG( "Qz:Core:Ext" )
                     << "Loaded " << numLoaded << " plugins from "
@@ -121,6 +139,9 @@ bool PluginManager::loadFrom( const QString &location )
 
 bool PluginManager::destroy()
 {
+    if( ! m_data->isActive() ) {
+        return false;
+    }
     bool result = true;
     for( auto it = m_data->adapters().begin();
          it != m_data->adapters().end();
@@ -131,6 +152,7 @@ bool PluginManager::destroy()
     foreach( auto &lib, m_data->libraries() ) {
         result = result && lib->unload();
     }
+    m_data->setActive( false );
     return result;
 }
 
@@ -144,15 +166,14 @@ AbstractPlugin * PluginManager::plugin( const QString &id ) const
 
 IPluginAdapter * PluginManager::adapter( const QString &id ) const
 {
-    auto &adapter = m_data->adapters().value( id );
-    return adapter.get();
+    return m_data->adapters().value( id );
 }
 
 
 void PluginManager::registerPluginAdapter(
-        std::shared_ptr< IPluginAdapter > pluginAdapter )
+        IPluginAdapter *pluginAdapter )
 {
-    if( m_data->adapters().contains( pluginAdapter->pluginType() )) {
+    if( ! m_data->adapters().contains( pluginAdapter->pluginType() )) {
         m_data->adapters().insert( pluginAdapter->pluginType(), pluginAdapter );
     }
 }
@@ -202,7 +223,7 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
             else {
                 QZ_ERROR( "Qz:Core:Ext" )
                         << "Could not find adapter for plugin type "
-                        << plugin->pluginType() << ", required by plugin"
+                        << plugin->pluginType() << ", required by plugin "
                         << plugin->pluginId() << ". Ignoring...";
             }
         }
@@ -212,46 +233,66 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
 }
 
 
-std::size_t PluginManager::loadPluginAt( const QDir &dir )
+std::size_t PluginManager::loadPluginAt( const QDir &pluginRoot )
 {
     QStringList extensions;
-#if defined Q_OS_LINUX
+#ifdef Q_OS_LINUX
     extensions << "*.so";
-#elif defined Q_OS_WINDOWS
+#elif defined Q_OS_WIN
     extensions << "*.dll";
 #else
     extensions << "*.dylib" << "*.so";
 #endif
+
+#ifdef QT_DEBUG
+    QDir pluginDir{ pluginRoot.absoluteFilePath( "debug" )};
+#else
+    QDir pluginDir{ dirInfo.absoluteFilePath() };
+#endif
+
     std::size_t numLoaded = 0;
-    auto flist = dir.entryInfoList( extensions, QDir::Files, QDir::NoSort );
-    foreach( const auto &info, flist ) {
-        if( info.fileName().startsWith( QStringLiteral( "plugin_" ))) {
-            auto lib = std::make_shared< QLibrary >( info.absoluteFilePath() );
-            if( lib->isLoaded() ) {
-                auto func = reinterpret_cast< PluginFunc >(
-                            lib->resolve( PLUGIN_FUNC_NAME ));
-                if( func != nullptr ) {
-                    auto wrapper = func();
-                    foreach( auto &plugin, wrapper->pluginList ) {
-                        m_data->plugins().insert( plugin->pluginId(), plugin );
-                    }
-                    m_data->libraries().append( lib );
-                    ++ numLoaded;
-                }
-                else {
-                    lib->unload();
-                    QZ_ERROR( "Qz:Core:Ext" )
-                            << "Plugin library at " << info.path() << " does "
-                            << "not export entry point";
-                }
-            }
-            else {
-                QZ_ERROR( "Qz:Core:Ext" )
-                        << "Failed to load plugin library at " << info.path();
-            }
+    QZ_DEBUG( "Qz:Core:Ext" )
+            << "Searching for plugins at " << pluginDir.absolutePath();
+    auto fileList = pluginDir.entryInfoList( extensions,
+                                             QDir::Files,
+                                             QDir::NoSort );
+    foreach( const auto &info, fileList ) {
+        QZ_DEBUG( "Qz:Core:Ext" ) << info.absoluteFilePath();
+        if( info.fileName().startsWith( "plugin_" )
+                || info.fileName().startsWith( "libplugin_" )) {
+            numLoaded = numLoaded + load( info.absoluteFilePath() );
         }
     }
     return numLoaded;
+}
+
+std::size_t PluginManager::load( const QString &pluginFilePath )
+{
+    std::size_t numLoaded = 0;
+    auto lib = std::make_shared< QLibrary >( pluginFilePath );
+    lib->load();
+    if( lib->isLoaded() ) {
+        auto func = reinterpret_cast< PluginFunc >(
+                    lib->resolve( PLUGIN_FUNC_NAME ));
+        if( func != nullptr ) {
+            auto wrapper = func();
+            foreach( auto &plugin, wrapper->pluginList ) {
+                m_data->plugins().insert( plugin->pluginId(), plugin );
+            }
+            m_data->libraries().append( lib );
+            ++ numLoaded;
+        }
+        else {
+            lib->unload();
+            QZ_ERROR( "Qz:Core:Ext" )
+                    << "Plugin library at " << pluginFilePath  << " does "
+                    << "not export entry point";
+        }
+    }
+    else {
+        QZ_ERROR( "Qz:Core:Ext" )
+                << "Failed to load plugin library at " << pluginFilePath;
+    }
 }
 
 }

@@ -1,4 +1,7 @@
 
+#include <QVBoxLayout>
+#include <QLabel>
+
 #include "ViewProvider.h"
 
 namespace Quartz { namespace Plugin { namespace Sample {
@@ -14,7 +17,10 @@ SampleView::SampleView( QWidget *parent )
           SampleView::VIEW_NAME,
           parent )
 {
-
+    auto layout = new QVBoxLayout{ this };
+    auto label = new QLabel{ "This is sample view", this };
+    layout->addWidget( label );
+    this->setLayout( layout );
 }
 
 SampleView::~SampleView()

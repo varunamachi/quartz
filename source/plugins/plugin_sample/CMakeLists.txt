@@ -3,6 +3,7 @@ cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
+add_definitions( -DSAMPLE_PLUGIN )
 
 qz_add_core()
 qz_add_base()
@@ -26,7 +27,8 @@ vq_classes(
 
 vq_dump_vars()
 
-vq_create_sharedlib()
+qz_create_plugin()
+qz_install_plugin()
 
 
 

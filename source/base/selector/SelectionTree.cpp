@@ -186,12 +186,13 @@ bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
 bool SelectionTree::finalizePlugins()
 {
     bool result = false;
-    for( int i = 0; i < m_data->m_pluginNodes.size(); ++ i ) {
-        auto nodeInfo = m_data->m_pluginNodes.at( i );
-        auto &path = nodeInfo->m_nodePath;
-        path << nodeInfo->m_nodeName;
-        result = removeNode( path );
-    }
+//    for( int i = 0; i < m_data->m_pluginNodes.size(); ++ i ) {
+//        auto nodeInfo = m_data->m_pluginNodes.at( i );
+//        auto &path = nodeInfo->m_nodePath;
+//        path << nodeInfo->m_nodeName;
+//        result = removeNode( path );
+//    }
+    m_data->m_pluginNodes.clear();
     return result;
 }
 

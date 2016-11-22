@@ -133,10 +133,11 @@ bool ContentManager::handlePlugin( AbstractPlugin *plugin )
 bool ContentManager::finalizePlugins()
 {
     auto result = true;
-    for( int i = 0; i < m_data->m_fromPlugins.size(); ++ i ) {
-        auto content = m_data->m_fromPlugins.at( i );
-        result = removeContent( content->id() ) && result;
-    }
+//    for( int i = 0; i < m_data->m_fromPlugins.size(); ++ i ) {
+//        auto content = m_data->m_fromPlugins.at( i );
+//        result = removeContent( content->id() ) && result;
+//    }
+    m_data->m_fromPlugins.clear();
     return result;
 }
 
