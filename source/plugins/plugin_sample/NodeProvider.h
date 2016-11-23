@@ -15,7 +15,7 @@ public:
 
     bool destroy() override;
 
-    std::shared_ptr< NodeInfo > nodeInfo() const override;
+    QVector< std::shared_ptr< NodeInfo >> nodes() const override;
 
     static const QString PLUGIN_ID;
 

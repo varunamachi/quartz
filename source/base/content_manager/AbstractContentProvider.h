@@ -16,7 +16,7 @@ public:
 
     virtual ~AbstractContentProvider();
 
-    virtual ContentWidget * widget() = 0;
+    virtual QVector< ContentWidget *> widgets() = 0;
 
     static const QString PLUGIN_TYPE;
 

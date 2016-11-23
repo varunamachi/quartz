@@ -46,7 +46,7 @@ public:
 
     ~AbstractNodeProvider();
 
-    virtual std::shared_ptr< NodeInfo > nodeInfo() const = 0;
+    virtual QVector< std::shared_ptr< NodeInfo >> nodes() const = 0;
 
     static const QString PLUGIN_TYPE;
 

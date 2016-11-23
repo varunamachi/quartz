@@ -34,7 +34,7 @@ public:
 
     bool destroy() override;
 
-    QuartzView *view() const override;
+    QVector< QuartzView *> views() const override;
 
     static const QString     PLUGIN_ID;
 

@@ -167,21 +167,26 @@ const QString &SelectionTree::pluginAdapterName() const
 
 bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
 {
-    bool result = false;
+    bool result = true;
     auto nodeProvider = dynamic_cast< AbstractNodeProvider *>( plugin );
     if( nodeProvider != nullptr ) {
-       auto nodeInfo = nodeProvider->nodeInfo();
-       result = addNode( nodeInfo->m_nodePath,
-                         nodeInfo->m_nodeName,
-                         nodeInfo->m_nodeId,
-                         nodeInfo->m_nodeIcon );
-       if( result ) {
-           m_data->m_pluginNodes.push_back( nodeInfo );
+       auto nodes = nodeProvider->nodes();
+       foreach( auto nodeInfo, nodes ) {
+           auto res = addNode( nodeInfo->m_nodePath,
+                               nodeInfo->m_nodeName,
+                               nodeInfo->m_nodeId,
+                               nodeInfo->m_nodeIcon );
+           if( res ) {
+               m_data->m_pluginNodes.push_back( nodeInfo );
+           }
+           result = res && result;
        }
     }
     else {
-        QZ_ERROR( "NodeSelector" )
-                << "Invalid plugin is given to selector tree ";
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:NodeSelector" )
+                << "Invalid node plugin provided: " << pluginName;
     }
     return result;
 }
@@ -189,12 +194,6 @@ bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
 bool SelectionTree::finalizePlugins()
 {
     bool result = false;
-//    for( int i = 0; i < m_data->m_pluginNodes.size(); ++ i ) {
-//        auto nodeInfo = m_data->m_pluginNodes.at( i );
-//        auto &path = nodeInfo->m_nodePath;
-//        path << nodeInfo->m_nodeName;
-//        result = removeNode( path );
-//    }
     m_data->m_pluginNodes.clear();
     return result;
 }

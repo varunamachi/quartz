@@ -29,7 +29,7 @@ public:
 
     bool destroy() override;
 
-    ContentWidget * widget() override;
+    QVector< ContentWidget *> widgets() override;
 
     static const QString     PLUGIN_ID;
 

@@ -38,7 +38,7 @@ public:
 
     const QString &pluginAdapterName() const;
 
-    bool handlePlugin(AbstractPlugin *plugin);
+    bool handlePlugin( AbstractPlugin *plugin );
 
     bool finalizePlugins();
 

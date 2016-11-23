@@ -145,12 +145,18 @@ bool SelectorManager::handlePlugin( AbstractPlugin *plugin )
     auto result = false;
     auto provider = dynamic_cast< AbstractSelectorProvider *>( plugin );
     if( provider != nullptr ) {
-        auto selector = provider->selector();
-        if( selector != nullptr ) {
+        auto selectors = provider->selectors();
+        foreach( auto selector, selectors ) {
             addSelector( selector );
             m_data->m_pluginSelectors.push_back( selector );
-            result = true;
         }
+        result = true;
+    }
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:SelectorManager" )
+                << "Invalid selector plugin provided: " << pluginName;
     }
     return result;
 }

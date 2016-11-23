@@ -15,7 +15,7 @@ public:
                                 const QString &pluginName,
                                 const QStringList &dependencies );
 
-    virtual QuartzItem * actionItem() const = 0;
+    virtual QVector< QuartzItem * > actionItems() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

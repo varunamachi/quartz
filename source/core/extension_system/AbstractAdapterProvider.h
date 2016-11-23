@@ -12,7 +12,7 @@ public:
                              const QString &pluginName,
                              const QStringList &dependencies );
 
-    virtual IPluginAdapter * adapter() const = 0;
+    virtual QVector< IPluginAdapter *> adapters() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

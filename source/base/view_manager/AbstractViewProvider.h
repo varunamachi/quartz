@@ -15,7 +15,7 @@ public:
                           const QString &pluginName,
                           const QStringList &dependencies );
 
-    virtual QuartzView * view() const = 0;
+    virtual QVector< QuartzView *> views() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

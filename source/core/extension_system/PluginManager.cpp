@@ -210,9 +210,17 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
         if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {
             auto adapterPgn = dynamic_cast< AbstractAdapterProvider *>(
                         plugin );
-            auto adapter = adapterPgn->adapter();
-            if( adapter != nullptr ) {
-                registerPluginAdapter( adapter );
+            if( adapterPgn != nullptr ) {
+                auto adapters = adapterPgn->adapters();
+                foreach( auto adapter, adapters ) {
+                    registerPluginAdapter( adapter );
+                }
+            }
+            else {
+                QZ_ERROR( "Qz:Core:Ext" )
+                        << "Invalid adapter plugin provided "
+                        << ( plugin != nullptr ? plugin->pluginId()
+                                               : "<null>" );
             }
         }
         else {

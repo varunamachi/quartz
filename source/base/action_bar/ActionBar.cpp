@@ -1,6 +1,8 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
+#include <core/logger/Logging.h>
+
 #include <common/widgets/QzScroller.h>
 
 #include "../title_bar/QuartzItem.h"
@@ -108,20 +110,25 @@ bool ActionBar::handlePlugin( AbstractPlugin *plugin )
 {
     auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( plugin );
     if( itemProvider != nullptr ) {
-        auto item = itemProvider->actionItem();
-        addItem( item );
-        m_pluginItems.push_back( item );
+        auto items = itemProvider->actionItems();
+        foreach( auto item, items ) {
+            addItem( item );
+            m_pluginItems.push_back( item );
+        }
         return true;
+    }
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:ActionBar" )
+                << "Invalid actionbar plugin provided: "
+                << pluginName;
     }
     return false;
 }
 
 bool ActionBar::finalizePlugins()
 {
-//    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
-//        auto item = m_pluginItems.at( i );
-//        removeItem( item );
-//    }
     m_pluginItems.clear();
     return  true;
 }

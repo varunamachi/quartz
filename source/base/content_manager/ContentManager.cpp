@@ -1,7 +1,7 @@
 #include <QHash>
 #include <QStackedLayout>
 
-#include <core/logger/Logger.h>
+#include <core/logger/Logging.h>
 
 #include "ContentWidget.h"
 #include "AbstractContentProvider.h"
@@ -118,14 +118,25 @@ const QString & ContentManager::pluginAdapterName() const
 
 bool ContentManager::handlePlugin( AbstractPlugin *plugin )
 {
-    bool result = false;
+    bool result = true;
     auto provider = dynamic_cast< AbstractContentProvider *>( plugin );
     if( provider != nullptr ) {
-        auto content = provider->widget();
-        if( addContent( content )) {
-            m_data->m_fromPlugins.push_back( content );
-            result = true;
+        auto contents = provider->widgets();
+        foreach( auto content, contents ) {
+            if( addContent( content )) {
+                m_data->m_fromPlugins.push_back( content );
+            }
+            else {
+                result = false;
+            }
         }
+    }
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:ContentManager" )
+                << "Invalid content plugin provided: "
+                << pluginName;
     }
     return result;
 }

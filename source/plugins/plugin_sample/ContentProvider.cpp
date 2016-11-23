@@ -47,9 +47,11 @@ bool ContentProvider::destroy()
     return true;
 }
 
-ContentWidget * ContentProvider::widget()
+QVector< ContentWidget *> ContentProvider::widgets()
 {
-    return new SampleContent{ };
+    QVector< ContentWidget *> widgets;
+    widgets.push_back( new SampleContent{} );
+    return widgets;
 }
 
 

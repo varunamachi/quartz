@@ -2,6 +2,8 @@
 #include <QHBoxLayout>
 #include <QStyle>
 
+#include <core/logger/Logging.h>
+
 #include <common/widgets/QzScroller.h>
 
 #include "QuartzItem.h"
@@ -151,14 +153,23 @@ const QString & TitleBar::pluginAdapterName() const
 
 bool TitleBar::handlePlugin( AbstractPlugin *plugin )
 {
+    bool result = false;
     auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>( plugin );
     if( itemProvider != nullptr ) {
-        auto item = itemProvider->titleItem();
-        addItem( item );
-        m_pluginItems.push_back( item );
+        auto items = itemProvider->titleItems();
+        foreach( auto item, items ) {
+            addItem( item );
+            m_pluginItems.push_back( item );
+        }
         return true;
     }
-    return false;
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:TitleBar" )
+                << "Invalid titlebar plugin provided: " << pluginName;
+    }
+    return result;
 }
 
 bool TitleBar::finalizePlugins()

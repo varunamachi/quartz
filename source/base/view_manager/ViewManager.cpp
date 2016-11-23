@@ -172,12 +172,18 @@ bool ViewManager::handlePlugin( AbstractPlugin *plugin )
     auto result = false;
     auto provider = dynamic_cast< AbstractViewProvider *>( plugin );
     if( provider != nullptr ) {
-        auto view = provider->view();
-        if( view != nullptr ) {
+        auto views = provider->views();
+        foreach( auto view, views ) {
             addView( view );
             m_pluginViews.push_back( view );
-            result = true;
         }
+        result = true;
+    }
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:ViewManager" )
+                << "Invalid view plugin provided: " << pluginName;
     }
     return result;
 }

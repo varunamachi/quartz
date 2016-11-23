@@ -56,13 +56,13 @@ public:
 
     // IPluginAdapter interface
 public:
-    const QString &pluginType() const;
+    const QString &pluginType() const override;
 
-    const QString &pluginAdapterName() const;
+    const QString &pluginAdapterName() const override;
 
-    bool handlePlugin(AbstractPlugin *plugin);
+    bool handlePlugin(AbstractPlugin *plugin) override;
 
-    bool finalizePlugins();
+    bool finalizePlugins() override;
 
     static const QString ADAPTER_NAME;
 

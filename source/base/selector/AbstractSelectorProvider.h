@@ -18,7 +18,7 @@ public:
 
     virtual ~AbstractSelectorProvider();
 
-    virtual AbstractSelector * selector() const = 0;
+    virtual QList< AbstractSelector *> selectors() const = 0;
 
     static const QString PLUGIN_TYPE;
 

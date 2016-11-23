@@ -65,9 +65,11 @@ bool TitleItemProvider::destroy()
     return true;
 }
 
-QuartzItem * TitleItemProvider::titleItem() const
+QVector< QuartzItem *> TitleItemProvider::titleItems() const
 {
-    return new TitleBarButton{ };
+    QVector< QuartzItem *> items;
+    items.push_back( new TitleBarButton{} );
+    return items;
 }
 
 

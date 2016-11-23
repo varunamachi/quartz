@@ -54,9 +54,11 @@ bool ViewProvider::destroy()
     return true;
 }
 
-QuartzView * ViewProvider::view() const
+QVector< QuartzView *> ViewProvider::views() const
 {
-    return new SampleView{ };
+    QVector< QuartzView *> views;
+    views.push_back( new SampleView{} );
+    return views;
 }
 
 

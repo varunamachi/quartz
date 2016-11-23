@@ -32,7 +32,7 @@ public:
 
     bool destroy() override;
 
-    QuartzItem *titleItem() const override;
+    QVector< QuartzItem *> titleItems() const override;
 
     static const QString     PLUGIN_ID;
 

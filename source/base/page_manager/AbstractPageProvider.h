@@ -13,7 +13,7 @@ public:
                           const QString &pluginName,
                           const QStringList &dependencies );
 
-    virtual QuartzPage * page() const = 0;
+    virtual QVector< QuartzPage *> pages() const = 0;
 
     const static QString PLUGIN_TYPE;
 };

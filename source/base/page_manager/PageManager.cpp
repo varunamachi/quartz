@@ -249,12 +249,18 @@ bool PageManager::handlePlugin( AbstractPlugin *plugin )
     auto result = false;
     auto provider = dynamic_cast< AbstractPageProvider *>( plugin );
     if( provider != nullptr ) {
-        auto page = provider->page();
-        if( page != nullptr ) {
+        auto pages = provider->pages();
+        foreach( auto page, pages ) {
             addPage( page );
             m_pluginPages.push_back( page );
-            result = true;
         }
+        result = true;
+    }
+    else {
+        auto pluginName = plugin != nullptr ? plugin->pluginId()
+                                            : "<null>";
+        QZ_ERROR( "Qz:PageManager" )
+                << "Invalid page plugin provided: " << pluginName;
     }
     return result;
 }
