@@ -16,7 +16,7 @@ class QUARTZ_BASE_API NodeSelector : public AbstractSelector
     Q_OBJECT
 
 public:
-    NodeSelector( const Context *context,
+    NodeSelector( const QzAppContext *context,
                   QWidget *parent = nullptr );
 
     ~NodeSelector();

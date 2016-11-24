@@ -8,13 +8,13 @@
 
 namespace Quartz {
 
-class Context;
+class QzAppContext;
 
 class QUARTZ_BASE_API AbstractSelector : public QWidget
 {
     Q_OBJECT
 public:
-    AbstractSelector( const Context *context,
+    AbstractSelector( const QzAppContext *context,
                       const QString &selectorId,
                       const QString &selectorName,
                       QWidget *parent = nullptr );
@@ -26,7 +26,7 @@ public:
     const QString & selectorName() const;
 
 protected:
-    const Context * context() const;
+    const QzAppContext * context() const;
 
 private:
     struct Data;

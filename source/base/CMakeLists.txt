@@ -16,7 +16,7 @@ vq_headers(
 
 
 vq_classes(
-    Context
+    QzAppContext
 )
 
 add_subdirectory( theme )

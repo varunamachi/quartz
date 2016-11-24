@@ -22,7 +22,7 @@
 #include <base/selector/NodeSelector.h>
 #include <base/selector/SelectionTree.h>
 #include <base/selector/Node.h>
-#include <base/Context.h>
+#include <base/QzAppContext.h>
 
 #include "QuartzWindow.h"
 #include "WelcomePage.h"
@@ -343,7 +343,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 //    m_viewManager->setStyleSheet( "background: blue;" );
     this->setMinimumSize({ 800, 600 });
 
-    auto context = new Context{};
+    auto context = new QzAppContext{};
     context->setContentManager( m_content );
     context->setSelectorManager( m_selector );
     auto nodeSelector = new NodeSelector{ context, this };

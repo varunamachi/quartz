@@ -4,7 +4,7 @@ namespace Quartz {
 
 struct AbstractSelector::Data
 {
-    Data( const Context *context,
+    Data( const QzAppContext *context,
           const QString &id,
           const QString &name )
         : m_context( context )
@@ -14,7 +14,7 @@ struct AbstractSelector::Data
 
     }
 
-    const Context *m_context;
+    const QzAppContext *m_context;
 
     QString m_id;
 
@@ -23,7 +23,7 @@ struct AbstractSelector::Data
 };
 
 
-AbstractSelector::AbstractSelector( const Context *context,
+AbstractSelector::AbstractSelector( const QzAppContext *context,
                                     const QString &id,
                                     const QString &name,
                                     QWidget *parent )
@@ -49,7 +49,7 @@ const QString & AbstractSelector::selectorName() const
     return m_data->m_name;
 }
 
-const Context *AbstractSelector::context() const
+const QzAppContext *AbstractSelector::context() const
 {
     return m_data->m_context;
 }

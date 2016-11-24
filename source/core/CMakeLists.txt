@@ -13,6 +13,7 @@ vq_headers(
 
 
 vq_classes(
+    QzCoreContext
 )
 
 add_subdirectory( logger )

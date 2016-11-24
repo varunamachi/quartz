@@ -3,7 +3,7 @@
 #include <QTreeView>
 #include <QHeaderView>
 
-#include "../Context.h"
+#include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
 #include "Node.h"
 #include "SelectionTree.h"
@@ -30,7 +30,7 @@ struct NodeSelector::Data
     SelectionTree *m_model;
 };
 
-NodeSelector::NodeSelector( const Context *context,
+NodeSelector::NodeSelector( const QzAppContext *context,
                             QWidget *parent )
     : AbstractSelector( context,
                         SELECTOR_ID,
