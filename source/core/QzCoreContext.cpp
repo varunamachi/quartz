@@ -4,6 +4,8 @@
 
 namespace Quartz {
 
+std::unique_ptr< QzCoreContext > QzCoreContext::s_instance{ nullptr };
+
 struct QzCoreContext::Data
 {
 

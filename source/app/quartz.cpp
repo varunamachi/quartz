@@ -4,6 +4,8 @@
 #include <core/logger/SpooledDispatcher.h>
 #include <core/logger/ConsoleTarget.h>
 
+#include <base/QzAppContext.h>
+
 #include "inbuilt/LogView.h"
 
 #include "QuartzWindow.h"
@@ -22,6 +24,10 @@ bool init()
             new Logger::ConsoleTarget{} };
         Logger::Logger::get()->dispatcher()->addTarget(
                     std::move( consoleTarget ));
+
+        std::unique_ptr< QzAppContext > context{ new QzAppContext{} };
+        context->setLogger( Logger::Logger::get() );
+        QzCoreContext::setInstance( std::move( context ));
     }
     return result;
 }

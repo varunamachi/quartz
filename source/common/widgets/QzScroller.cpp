@@ -187,11 +187,14 @@ void QzScroller::adjustArrows()
     for( int i = 0; i < m_layout->count(); ++ i ) {
         QLayoutItem *item = m_layout->itemAt( i );
         QRect rect = item->geometry();
-        if( m_orientation == Qt::Horizontal ) {
-            occupied += rect.width();
-        }
-        else {
-            occupied += rect.height();
+        //Consider only if its not a spacer
+        if( item->spacerItem() == nullptr )  {
+            if( m_orientation == Qt::Horizontal ) {
+                occupied += rect.width();
+            }
+            else {
+                occupied += rect.height();
+            }
         }
     }
     if( m_orientation == Qt::Horizontal && occupied > this->width() ) {

@@ -47,16 +47,32 @@ class QUARTZ_CORE_API QzCoreContext
 public:
     QzCoreContext();
 
-    ~QzCoreContext();
+    virtual ~QzCoreContext();
 
     QZCONTEXT_FUNC_DECL_NS( Logger, Logger, logger );
 
+    static QzCoreContext * get()
+    {
+        return s_instance.get();
+    }
+
+    static void setInstance( std::unique_ptr< QzCoreContext > instance )
+    {
+        s_instance = std::move( instance );
+    }
+
 private:
+    static std::unique_ptr< QzCoreContext > s_instance;
+
     struct Data;
     std::unique_ptr< Data > m_data;
-
 };
 
 
+template< typename T >
+static T * context()
+{
+    dynamic_cast< T *>( QzCoreContext::get() );
+}
 
 }
