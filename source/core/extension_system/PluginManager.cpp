@@ -7,16 +7,18 @@
 #include <QDebug>
 
 #include "../logger/Logging.h"
+#include "../QzCoreContext.h"
 #include "AbstractPlugin.h"
 #include "IPluginAdapter.h"
 #include "PluginManager.h"
 #include "AbstractAdapterProvider.h"
+#include "AbstractPluginBundle.h"
 
 namespace Quartz {
 
 using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
 using AdapterMap = QHash< QString, IPluginAdapter *>;
-using LibraryList = QList< std::shared_ptr< QLibrary >>;
+using BundleList = QList< std::shared_ptr< AbstractPluginBundle >>;
 
 
 typedef PluginListWrapper * ( *PluginFunc )();
@@ -52,14 +54,14 @@ public:
         return m_adapters;
     }
 
-    LibraryList & libraries()
+    BundleList & bundles()
     {
-        return m_libraries;
+        return m_bundles;
     }
 
-    const LibraryList & libraries() const
+    const BundleList & bundles() const
     {
-        return m_libraries;
+        return m_bundles;
     }
 
     void setActive( bool value )
@@ -77,7 +79,7 @@ private:
 
     AdapterMap m_adapters;
 
-    LibraryList m_libraries;
+    BundleList m_bundles;
 
     bool m_active;
 };
@@ -149,8 +151,11 @@ bool PluginManager::destroy()
         auto &handler = it.value();
         result = result && handler->finalizePlugins();
     }
-    foreach( auto &lib, m_data->libraries() ) {
-        result = result && lib->unload();
+    foreach( auto &bundle, m_data->bundles() ) {
+        auto lib = bundle->library();
+        if( lib != nullptr ) {
+            result = result && lib->unload();
+        }
     }
     m_data->setActive( false );
     return result;
@@ -283,12 +288,20 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
         auto func = reinterpret_cast< PluginFunc >(
                     lib->resolve( PLUGIN_FUNC_NAME ));
         if( func != nullptr ) {
-            auto wrapper = func();
-            foreach( auto &plugin, wrapper->pluginList ) {
-                m_data->plugins().insert( plugin->pluginId(), plugin );
+            auto bundle = func()->bundle;
+            if( bundle != nullptr ) {
+                foreach( auto &plugin, bundle->plugins() ) {
+                    m_data->plugins().insert( plugin->pluginId(), plugin );
+                }
+                bundle->setContext( QzCoreContext::get() );
+                bundle->setLibrary( lib );
+                m_data->bundles().append( bundle );
+                ++ numLoaded;
             }
-            m_data->libraries().append( lib );
-            ++ numLoaded;
+            else {
+                //print warning...
+                lib->unload();
+            }
         }
         else {
             lib->unload();

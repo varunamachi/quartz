@@ -1,4 +1,5 @@
 #include <core/extension_system/AbstractPlugin.h>
+#include <core/extension_system/AbstractPluginBundle.h>
 
 #include "Sample.h"
 #include "ViewProvider.h"
@@ -18,7 +19,11 @@ Q_DECL_EXPORT PluginListWrapper * getPlugins()
     plugins.push_back( std::make_shared< Sample::ContentProvider >() );
     plugins.push_back( std::make_shared< Sample::NodeProvider >() );
     plugins.push_back( std::make_shared< Sample::TitleItemProvider >() );
-    return new PluginListWrapper{ plugins };
+//    return new PluginListWrapper{ plugins };
+
+    //below code is temporary and the plugins wont be loaded
+    return nullptr;
+
 }
 
 }

@@ -2,16 +2,15 @@
 
 #include <memory>
 
-#include <QString>
-#include <QStringList>
 #include <QVector>
 
 #include "../QuartzCore.h"
 #include "../utils/Macros.h"
 
+class QString;
+class QStringList;
+
 namespace Quartz {
-
-
 
 class QUARTZ_CORE_API AbstractPlugin
 {
@@ -43,10 +42,3 @@ private:
 
 }
 
-extern "C" {
-
-struct PluginListWrapper {
-    QVector< std::shared_ptr< Quartz::AbstractPlugin >>  pluginList;
-};
-
-}
