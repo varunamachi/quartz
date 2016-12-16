@@ -16,12 +16,19 @@
 
 namespace Quartz {
 
+struct BundleInfo
+{
+    AbstractPluginBundle *m_bundle;
+
+    std::shared_ptr< QLibrary > m_library;
+};
+
 using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
 using AdapterMap = QHash< QString, IPluginAdapter *>;
-using BundleList = QList< std::shared_ptr< AbstractPluginBundle >>;
+//using BundleList = QList< std::shared_ptr< AbstractPluginBundle >>;
+using BundleInfoMap = QHash< QString, BundleInfo >;
 
-
-typedef PluginListWrapper * ( *PluginFunc )();
+typedef PluginBundleWrapper * ( *PluginFunc )();
 static const char * PLUGIN_FUNC_NAME = "getPlugins";
 
 class PluginManager::Data
@@ -54,12 +61,12 @@ public:
         return m_adapters;
     }
 
-    BundleList & bundles()
+    BundleInfoMap & bundles()
     {
         return m_bundles;
     }
 
-    const BundleList & bundles() const
+    const BundleInfoMap & bundles() const
     {
         return m_bundles;
     }
@@ -79,7 +86,7 @@ private:
 
     AdapterMap m_adapters;
 
-    BundleList m_bundles;
+    BundleInfoMap m_bundles;
 
     bool m_active;
 };
@@ -290,11 +297,11 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
         if( func != nullptr ) {
             auto bundle = func()->bundle;
             if( bundle != nullptr ) {
+                bundle->setContext( QzCoreContext::get() );
+                bundle->setLibrary( lib );
                 foreach( auto &plugin, bundle->plugins() ) {
                     m_data->plugins().insert( plugin->pluginId(), plugin );
                 }
-                bundle->setContext( QzCoreContext::get() );
-                bundle->setLibrary( lib );
                 m_data->bundles().append( bundle );
                 ++ numLoaded;
             }

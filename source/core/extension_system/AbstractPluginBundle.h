@@ -57,9 +57,8 @@ private:
 
 extern "C" {
 
-struct PluginListWrapper {
-//    QVector< std::shared_ptr< Quartz::AbstractPlugin >>  pluginList;
-    std::shared_ptr< Quartz::AbstractPluginBundle > bundle;
+struct PluginBundleWrapper {
+    Quartz::AbstractPluginBundle *bundle;
 };
 
 }

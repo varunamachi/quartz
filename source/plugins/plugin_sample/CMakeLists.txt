@@ -23,6 +23,7 @@ vq_classes(
     ViewProvider
     NodeProvider
     ContentProvider
+    PluginBundle
 )
 
 vq_dump_vars()
