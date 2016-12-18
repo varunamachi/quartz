@@ -159,7 +159,7 @@ bool PluginManager::destroy()
         result = result && handler->finalizePlugins();
     }
     foreach( auto &bundle, m_data->bundles() ) {
-        auto lib = bundle->library();
+        auto lib = bundle.m_library;
         if( lib != nullptr ) {
             result = result && lib->unload();
         }
@@ -298,11 +298,12 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
             auto bundle = func()->bundle;
             if( bundle != nullptr ) {
                 bundle->setContext( QzCoreContext::get() );
-                bundle->setLibrary( lib );
-                foreach( auto &plugin, bundle->plugins() ) {
+                auto info = BundleInfo{ bundle, lib };
+//                bundle-->setLibrary( lib );
+                foreach( auto plugin, bundle->plugins() ) {
                     m_data->plugins().insert( plugin->pluginId(), plugin );
                 }
-                m_data->bundles().append( bundle );
+                m_data->bundles().insert( bundle->bundleId(), info );
                 ++ numLoaded;
             }
             else {
@@ -321,6 +322,7 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
         QZ_ERROR( "Qz:Core:Ext" )
                 << "Failed to load plugin library at " << pluginFilePath;
     }
+    return numLoaded;
 }
 
 }

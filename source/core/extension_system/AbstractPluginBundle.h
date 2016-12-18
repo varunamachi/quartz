@@ -34,10 +34,6 @@ public:
 
     QzCoreContext * coreContext() const;
 
-    void setLibrary( std::shared_ptr< QLibrary > library );
-
-    QLibrary * library() const;
-
     virtual PluginList plugins() const = 0;
 
     template< typename Context >
