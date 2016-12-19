@@ -86,7 +86,6 @@ private:
 
 
 #ifndef QZ_DISABLE_LOGGING
-    #ifndef QUARTZ_PLUGIN
         #define QZ_COMMON( level, mod )                                       \
             Quartz::Logger::LogLineHolder(                                    \
                 Quartz::Logger::Logger::get(),                                \
@@ -97,8 +96,6 @@ private:
                                                 FUNCTION_NAME,                \
                                                 __LINE__,                     \
                                                 QString{ "" }))
-
-
         #define QZ_TRACE( module ) \
             QZ_COMMON( Quartz::Logger::LogLevel::Trace, module )
 
@@ -119,7 +116,6 @@ private:
 
         #define QZ_SPECIAL( module ) \
             QZ_COMMON( Quartz::Logger::LogLevel::Special, module )
-    #else
         #define QZP_COMMON( logger, level, mod )                              \
             Quartz::Logger::LogLineHolder(                                    \
                 logger,                                                       \
@@ -147,12 +143,11 @@ private:
         #define QZP_ERROR( logger, module ) \
             QZ_COMMON( logger, Quartz::Logger::LogLevel::Error, module )
 
-        #define QZP_FATAL( module ) \
+        #define QZP_FATAL( logger, module ) \
             QZ_COMMON( logger, Quartz::Logger::LogLevel::Fatal, module )
 
-        #define QZP_SPECIAL( module ) \
+        #define QZP_SPECIAL( logger, module ) \
             QZ_COMMON( logger, Quartz::Logger::LogLevel::Special, module )
-    #endif
 #else
     #define QZ_COMMON( level, mod, message )
     #define QZ_TRACE( module )
