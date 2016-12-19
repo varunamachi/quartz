@@ -16,8 +16,9 @@ class QUARTZ_CORE_API LogLineHolder
 public:
     typedef QTextStream & ( Manip )( QTextStream & );
 
-    LogLineHolder( LogMessage *msg )
+    LogLineHolder( Logger *logger, LogMessage *msg )
         : m_msg( msg )
+        , m_logger( logger )
         , m_stream( &msg->message() )
         , m_level( Logger::get()->filterLevel() )
     {
@@ -54,12 +55,16 @@ public:
     {
         if( m_msg->logLevel() >= m_level ) {
             m_stream.flush();
-            Logger::get()->log( m_msg );
+            if( m_logger != nullptr ) {
+                m_logger->log( m_msg );
+            }
         }
     }
 
 private:
     LogMessage *m_msg;
+
+    Logger *m_logger;
 
     QTextStream m_stream;
 
@@ -81,37 +86,73 @@ private:
 
 
 #ifndef QZ_DISABLE_LOGGING
-    #define QZ_COMMON( level, mod )                                      \
-        Quartz::Logger::LogLineHolder(                                   \
-           new Quartz::Logger::LogMessage( QDateTime::currentDateTime(), \
-                                           level,                        \
-                                           CUR_THREAD_ID,                \
-                                           mod,                          \
-                                           FUNCTION_NAME,                \
-                                           __LINE__,                     \
-                                           QString{ "" }))
+    #ifndef QUARTZ_PLUGIN
+        #define QZ_COMMON( level, mod )                                       \
+            Quartz::Logger::LogLineHolder(                                    \
+                Quartz::Logger::Logger::get(),                                \
+                new Quartz::Logger::LogMessage( QDateTime::currentDateTime(), \
+                                                level,                        \
+                                                CUR_THREAD_ID,                \
+                                                mod,                          \
+                                                FUNCTION_NAME,                \
+                                                __LINE__,                     \
+                                                QString{ "" }))
 
 
-    #define QZ_TRACE( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Trace, module )
+        #define QZ_TRACE( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Trace, module )
 
-    #define QZ_DEBUG( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Debug, module )
+        #define QZ_DEBUG( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Debug, module )
 
-    #define QZ_INFO( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Info, module )
+        #define QZ_INFO( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Info, module )
 
-    #define QZ_WARN( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Warn, module )
+        #define QZ_WARN( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Warn, module )
 
-    #define QZ_ERROR( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Error, module )
+        #define QZ_ERROR( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Error, module )
 
-    #define QZ_FATAL( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Fatal, module )
+        #define QZ_FATAL( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Fatal, module )
 
-    #define QZ_SPECIAL( module ) \
-        QZ_COMMON( Quartz::Logger::LogLevel::Special, module )
+        #define QZ_SPECIAL( module ) \
+            QZ_COMMON( Quartz::Logger::LogLevel::Special, module )
+    #else
+        #define QZP_COMMON( logger, level, mod )                              \
+            Quartz::Logger::LogLineHolder(                                    \
+                logger,                                                       \
+                new Quartz::Logger::LogMessage( QDateTime::currentDateTime(), \
+                                                level,                        \
+                                                CUR_THREAD_ID,                \
+                                                mod,                          \
+                                                FUNCTION_NAME,                \
+                                                __LINE__,                     \
+                                                QString{ "" }))
+
+
+        #define QZP_TRACE( logger, module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Trace, module )
+
+        #define QZP_DEBUG( logger, module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Debug, module )
+
+        #define QZP_INFO( logger, module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Info, module )
+
+        #define QZP_WARN( logger, module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Warn, module )
+
+        #define QZP_ERROR( logger, module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Error, module )
+
+        #define QZP_FATAL( module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Fatal, module )
+
+        #define QZP_SPECIAL( module ) \
+            QZ_COMMON( logger, Quartz::Logger::LogLevel::Special, module )
+    #endif
 #else
     #define QZ_COMMON( level, mod, message )
     #define QZ_TRACE( module )

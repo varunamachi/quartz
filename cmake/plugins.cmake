@@ -8,6 +8,7 @@ macro( qz_copy SOURCE DESTINATION )
 endmacro( qz_copy SOURCE DESTINATION )
 
 macro( qz_create_plugin )
+    add_definitions( -DQUARTZ_PLUGIN )
     vq_create_sharedlib()
     set_property( GLOBAL APPEND PROPERTY "PLUGIN_PATH"  ${PROJECT_NAME} )
 endmacro( qz_create_plugin )

@@ -22,6 +22,10 @@ public:
 
     ~PluginBundle();
 
+    static const QString BUNDLE_ID;
+
+    static const QString BUNDLE_NAME;
+
 private:
     PluginBundle();
 

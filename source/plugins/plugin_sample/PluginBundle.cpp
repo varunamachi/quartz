@@ -9,6 +9,9 @@
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
+const QString PluginBundle::BUNDLE_ID{ "qzplugin.sample" };
+const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
+
 std::unique_ptr< PluginBundle > PluginBundle::s_instance = nullptr;
 
 PluginList PluginBundle::plugins() const
@@ -37,6 +40,17 @@ QzAppContext *PluginBundle::appContext()
 void PluginBundle::destroy()
 {
     s_instance.reset();
+}
+
+PluginBundle::~PluginBundle()
+{
+
+}
+
+PluginBundle::PluginBundle()
+    : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
+{
+
 }
 
 } } }

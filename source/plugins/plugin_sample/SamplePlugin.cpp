@@ -3,7 +3,7 @@
 
 extern "C" {
 
-Q_DECL_EXPORT PluginBundleWrapper * bundleWrapper()
+Q_DECL_EXPORT PluginBundleWrapper * getBundleWrapper()
 {
     return new PluginBundleWrapper{
         Quartz::Plugin::Sample::PluginBundle::get() };

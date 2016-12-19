@@ -29,7 +29,11 @@ using AdapterMap = QHash< QString, IPluginAdapter *>;
 using BundleInfoMap = QHash< QString, BundleInfo >;
 
 typedef PluginBundleWrapper * ( *PluginFunc )();
-static const char * PLUGIN_FUNC_NAME = "getPlugins";
+typedef void ( *BundleDestroyerFunc )();
+
+static const char * PLUGIN_GET_FUNC_NAME = "getBundleWrapper";
+static const char * BUNDLE_DESTROY_FUNC_NAME = "destroy";
+
 
 class PluginManager::Data
 {
@@ -161,6 +165,16 @@ bool PluginManager::destroy()
     foreach( auto &bundle, m_data->bundles() ) {
         auto lib = bundle.m_library;
         if( lib != nullptr ) {
+            auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
+                        lib->resolve( BUNDLE_DESTROY_FUNC_NAME ));
+            if( destroyFunc != nullptr ) {
+                destroyFunc();
+            }
+            else {
+                QZ_DEBUG( "Qz:Core:Ext" )
+                        << "Could not find symbol for destroy function in "
+                           " library: " << lib->fileName();
+            }
             result = result && lib->unload();
         }
     }
@@ -293,7 +307,7 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
     lib->load();
     if( lib->isLoaded() ) {
         auto func = reinterpret_cast< PluginFunc >(
-                    lib->resolve( PLUGIN_FUNC_NAME ));
+                    lib->resolve( PLUGIN_GET_FUNC_NAME ));
         if( func != nullptr ) {
             auto bundle = func()->bundle;
             if( bundle != nullptr ) {

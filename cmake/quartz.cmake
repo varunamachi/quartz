@@ -18,10 +18,6 @@ macro( qz_add_base )
 endmacro()
 
 
-macro( qz_install_plugin )
-
-endmacro()
-
 macro( qz_add_qt )
     set( CMAKE_AUTOMOC ON )
     set( CMAKE_AUTOUIC ON )
