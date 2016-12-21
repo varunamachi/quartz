@@ -5,9 +5,10 @@ include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
 add_definitions( -DSAMPLE_PLUGIN )
 
-qz_add_core()
-qz_add_base()
+qz_add_plugin_base()
 qz_add_common()
+qz_add_base()
+qz_add_core()
 vq_add_qt()
 
 vq_sources(

@@ -1,4 +1,8 @@
 
+macro( qz_add_plugin_base )
+    vq_add_module( "quartz" "plugin_base" )
+endmacro()
+
 macro( qz_copy SOURCE DESTINATION )
     add_custom_command(
         TARGET ${PROJECT_NAME}

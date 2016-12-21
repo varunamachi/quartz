@@ -10,8 +10,3 @@ vq_classes(
 vq_interfaces(
     IPluginAdapter
 )
-
-
-vq_headers(
-    PluginLogging.h
-)
