@@ -14,11 +14,7 @@ class PluginBundle : public AbstractPluginBundle
 public:
     PluginList plugins() const override;
 
-    static PluginBundle * get();
-
-    static QzAppContext * appContext();
-
-    static void destroy();
+    PluginBundle();
 
     ~PluginBundle();
 
@@ -26,10 +22,6 @@ public:
 
     static const QString BUNDLE_NAME;
 
-private:
-    PluginBundle();
-
-    static std::unique_ptr< PluginBundle > s_instance;
 };
 
 } } }

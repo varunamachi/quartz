@@ -15,7 +15,7 @@
 
 #define QZ_COMMON( level, mod )                                             \
     Quartz::Logger::LogLineHolder(                                          \
-        Quartz::Plugin::BundleContext::instance()->appContext()->logger(),  \
+        appContext()->logger(),                                             \
         new Quartz::Logger::LogMessage( QDateTime::currentDateTime(),       \
                                         level,                              \
                                         CUR_THREAD_ID,                      \

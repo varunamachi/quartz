@@ -1,33 +1,42 @@
 
 #include "BundleContext.h"
 
+#include <core/extension_system/AbstractPluginBundle.h>
+#include <core/extension_system/BundleEnv.h>
 #include <base/QzAppContext.h>
 
 namespace Quartz { namespace Plugin {
 
 struct BundleContext::Data {
-    Data()
-        : m_context{ nullptr }
+    Data( std::unique_ptr< AbstractPluginBundle > bundle,
+          std::unique_ptr< BundleEnv > env,
+          QzAppContext *appContext )
+        : m_bundle( std::move( bundle ))
+        , m_bundleEnv{ std::move( env )}
+        , m_appContext{  appContext }
     {
 
     }
 
-    QzAppContext *m_context;
+    std::unique_ptr< AbstractPluginBundle > m_bundle;
+
+    std::unique_ptr< BundleEnv > m_bundleEnv;
+
+    QzAppContext *m_appContext;
+
 };
 
 BundleContext::~BundleContext()
 {
-    m_data->m_context = nullptr;
+    m_data->m_bundle = nullptr;
+    m_data->m_bundleEnv.reset();
+    m_data->m_appContext = nullptr;
 }
 
-void BundleContext::setAppContext( QzAppContext *context )
-{
-    m_data->m_context = context;
-}
 
-QzAppContext *BundleContext::context()
+QzAppContext *BundleContext::appContext() const
 {
-    return m_data->m_context;
+    return m_data->m_appContext;
 }
 
 void BundleContext::destroy()
@@ -35,13 +44,27 @@ void BundleContext::destroy()
     s_instance.release();
 }
 
+void BundleContext::init( std::unique_ptr< AbstractPluginBundle > bundle,
+                          std::unique_ptr< BundleEnv > env,
+                          QzAppContext *appContext )
+{
+    s_instance = std::unique_ptr< BundleContext >{
+            new BundleContext{ std::move( bundle ),
+                               std::move( env ),
+                               appContext }};
+}
+
 BundleContext *BundleContext::instance()
 {
     return s_instance.get();
 }
 
-BundleContext::BundleContext()
-    : m_data{ new Data{ }}
+BundleContext::BundleContext( std::unique_ptr< AbstractPluginBundle > bundle,
+                              std::unique_ptr< BundleEnv > env,
+                              QzAppContext *appContext )
+    : m_data{ new Data{ std::move( bundle ),
+                        std::move( env ),
+                        appContext }}
 {
 
 }
