@@ -85,7 +85,7 @@ private:
 #endif
 
 
-#ifndef QZ_DISABLE_LOGGING
+#ifndef QZ_DISABLE_DEFAULT_LOGGING
         #define QZ_COMMON( level, mod )                                       \
             Quartz::Logger::LogLineHolder(                                    \
                 Quartz::Logger::Logger::get(),                                \
@@ -116,38 +116,6 @@ private:
 
         #define QZ_SPECIAL( module ) \
             QZ_COMMON( Quartz::Logger::LogLevel::Special, module )
-        #define QZP_COMMON( logger, level, mod )                              \
-            Quartz::Logger::LogLineHolder(                                    \
-                logger,                                                       \
-                new Quartz::Logger::LogMessage( QDateTime::currentDateTime(), \
-                                                level,                        \
-                                                CUR_THREAD_ID,                \
-                                                mod,                          \
-                                                FUNCTION_NAME,                \
-                                                __LINE__,                     \
-                                                QString{ "" }))
-
-
-        #define QZP_TRACE( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Trace, module )
-
-        #define QZP_DEBUG( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Debug, module )
-
-        #define QZP_INFO( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Info, module )
-
-        #define QZP_WARN( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Warn, module )
-
-        #define QZP_ERROR( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Error, module )
-
-        #define QZP_FATAL( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Fatal, module )
-
-        #define QZP_SPECIAL( logger, module ) \
-            QZ_COMMON( logger, Quartz::Logger::LogLevel::Special, module )
 #else
     #define QZ_COMMON( level, mod, message )
     #define QZ_TRACE( module )

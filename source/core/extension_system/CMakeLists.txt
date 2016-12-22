@@ -5,6 +5,7 @@ vq_classes(
     AbstractPlugin
     AbstractAdapterProvider
     AbstractPluginBundle
+    BundleEnv
 )
 
 vq_interfaces(
