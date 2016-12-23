@@ -13,6 +13,7 @@ namespace Quartz {
 
 class QzCoreContext;
 class AbstractPlugin;
+class BundleEnv;
 
 using PluginList = QVector< std::shared_ptr< AbstractPlugin >>;
 
@@ -55,6 +56,12 @@ extern "C" {
 
 struct PluginBundleWrapper {
     Quartz::AbstractPluginBundle *bundle;
+};
+
+struct BundleInputWrapper {
+    std::unique_ptr< Quartz::BundleEnv > env;
+    Quartz::QzCoreContext *appContext;
+
 };
 
 }

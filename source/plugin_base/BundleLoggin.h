@@ -1,6 +1,8 @@
 #pragma once
 
 #include <core/logger/Logging.h>
+#include <core/extension_system/AbstractPluginBundle.h>
+#include <base/QzAppContext.h>
 
 #include "BundleContext.h"
 
@@ -28,20 +30,29 @@
 #define QZ_TRACE( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Trace, module )
 
-#define QZP_DEBUG( module ) \
+#define QZ_DEBUG( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Debug, module )
 
-#define QZP_INFO( module ) \
+#define QZ_INFO( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Info, module )
 
-#define QZP_WARN( module ) \
+#define QZ_WARN( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Warn, module )
 
-#define QZP_ERROR( module ) \
+#define QZ_ERROR( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Error, module )
 
-#define QZP_FATAL( module ) \
+#define QZ_FATAL( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Fatal, module )
 
-#define QZP_SPECIAL( module ) \
+#define QZ_SPECIAL( module ) \
     QZ_COMMON( Quartz::Logger::LogLevel::Special, module )
+
+
+#define QZP_TRACE   QZ_TRACE(   pluginBundle()->bundleId() )
+#define QZP_DEBUG   QZ_DEBUG(   pluginBundle()->bundleId() )
+#define QZP_INFO    QZ_INFO(    pluginBundle()->bundleId() )
+#define QZP_WARN    QZ_WARN(    pluginBundle()->bundleId() )
+#define QZP_ERROR   QZ_ERROR(   pluginBundle()->bundleId() )
+#define QZP_FATAL   QZ_FATAL(   pluginBundle()->bundleId() )
+#define QZP_SPECIAL QZ_SPECIAL( pluginBundle()->bundleId() )

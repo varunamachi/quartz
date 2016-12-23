@@ -7,6 +7,7 @@
 
 namespace Quartz { namespace Plugin {
 
+
 struct BundleContext::Data {
     Data( std::unique_ptr< AbstractPluginBundle > bundle,
           std::unique_ptr< BundleEnv > env,
@@ -26,6 +27,8 @@ struct BundleContext::Data {
 
 };
 
+std::unique_ptr< BundleContext > BundleContext::s_instance{ nullptr };
+
 BundleContext::~BundleContext()
 {
     m_data->m_bundle = nullptr;
@@ -37,6 +40,11 @@ BundleContext::~BundleContext()
 QzAppContext *BundleContext::appContext() const
 {
     return m_data->m_appContext;
+}
+
+AbstractPluginBundle *BundleContext::pluginBundle() const
+{
+    return m_data->m_bundle.get();
 }
 
 void BundleContext::destroy()

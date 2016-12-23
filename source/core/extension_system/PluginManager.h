@@ -39,7 +39,9 @@ public:
 private:
     std::size_t loadPluginAt( const QDir &pluginRoot );
 
-    std::size_t load( const QString &pluginFilePath );
+    std::size_t load(
+            const QString &pluginRoot,
+            const QString &pluginFilePath );
 
     bool initializePlugin( AbstractPlugin *plugin,
                            QZ_IN_OUT QSet< QString > &loadedPluginIds );

@@ -13,6 +13,7 @@
 #include "PluginManager.h"
 #include "AbstractAdapterProvider.h"
 #include "AbstractPluginBundle.h"
+#include "BundleEnv.h"
 
 namespace Quartz {
 
@@ -25,10 +26,9 @@ struct BundleInfo
 
 using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
 using AdapterMap = QHash< QString, IPluginAdapter *>;
-//using BundleList = QList< std::shared_ptr< AbstractPluginBundle >>;
 using BundleInfoMap = QHash< QString, BundleInfo >;
 
-typedef PluginBundleWrapper * ( *PluginFunc )();
+typedef PluginBundleWrapper ( *PluginFunc )( BundleInputWrapper * );
 typedef void ( *BundleDestroyerFunc )();
 
 static const char * PLUGIN_GET_FUNC_NAME = "getBundleWrapper";
@@ -37,7 +37,6 @@ static const char * BUNDLE_DESTROY_FUNC_NAME = "destroy";
 
 class PluginManager::Data
 {
-
 public:
     Data()
         : m_active( true )
@@ -281,7 +280,8 @@ std::size_t PluginManager::loadPluginAt( const QDir &pluginRoot )
 #ifdef QT_DEBUG
     QDir pluginDir{ pluginRoot.absoluteFilePath( "debug" )};
 #else
-    QDir pluginDir{ dirInfo.absoluteFilePath() };
+//    QDir pluginDir{ dirInfo.absoluteFilePath() };
+        QDir pluginDir = pluginRoot;
 #endif
 
     std::size_t numLoaded = 0;
@@ -294,13 +294,16 @@ std::size_t PluginManager::loadPluginAt( const QDir &pluginRoot )
         QZ_DEBUG( "Qz:Core:Ext" ) << info.absoluteFilePath();
         if( info.fileName().startsWith( "plugin_" )
                 || info.fileName().startsWith( "libplugin_" )) {
-            numLoaded = numLoaded + load( info.absoluteFilePath() );
+            numLoaded = numLoaded + load( pluginRoot.absolutePath(),
+                                          info.absoluteFilePath() );
         }
     }
     return numLoaded;
 }
 
-std::size_t PluginManager::load( const QString &pluginFilePath )
+std::size_t PluginManager::load(
+        const QString &pluginRoot,
+        const QString &pluginFilePath )
 {
     std::size_t numLoaded = 0;
     auto lib = std::make_shared< QLibrary >( pluginFilePath );
@@ -309,11 +312,13 @@ std::size_t PluginManager::load( const QString &pluginFilePath )
         auto func = reinterpret_cast< PluginFunc >(
                     lib->resolve( PLUGIN_GET_FUNC_NAME ));
         if( func != nullptr ) {
-            auto bundle = func()->bundle;
+            auto bundleEnv = std::unique_ptr< BundleEnv >{
+                new BundleEnv{ pluginRoot, lib->fileName(), "0.1.0000" }};
+            BundleInputWrapper input{ std::move( bundleEnv ),
+                        QzCoreContext::get() };
+            auto bundle = func( &input ).bundle;
             if( bundle != nullptr ) {
-                bundle->setContext( QzCoreContext::get() );
                 auto info = BundleInfo{ bundle, lib };
-//                bundle-->setLibrary( lib );
                 foreach( auto plugin, bundle->plugins() ) {
                     m_data->plugins().insert( plugin->pluginId(), plugin );
                 }

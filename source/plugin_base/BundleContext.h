@@ -2,6 +2,8 @@
 
 #include <memory>
 
+class QString;
+
 namespace Quartz {
 
 class QzAppContext;
@@ -61,4 +63,9 @@ inline Quartz::QzAppContext * appContext()
 inline Quartz::BundleEnv * bundleEnv()
 {
     return Quartz::Plugin::BundleContext::instance()->bundleEnv();
+}
+
+inline Quartz::AbstractPluginBundle * pluginBundle()
+{
+    return bundleContext()->pluginBundle();
 }

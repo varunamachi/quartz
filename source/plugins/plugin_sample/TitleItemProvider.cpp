@@ -2,6 +2,7 @@
 #include <QPushButton>
 #include <QDebug>
 
+#include <plugin_base/BundleLoggin.h>
 
 #include "TitleItemProvider.h"
 
@@ -27,7 +28,8 @@ TitleBarButton::TitleBarButton( QWidget *parent )
     connect( pushButton,
              &QPushButton::clicked,
              []() {
-       qDebug() << "Hello!!";
+//       qDebug() << "Hello!!";
+        QZP_INFO << "Hello!!";
     });
 }
 
