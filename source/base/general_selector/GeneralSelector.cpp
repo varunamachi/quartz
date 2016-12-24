@@ -5,17 +5,17 @@
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
-#include "Node.h"
+#include "../selector/Node.h"
 #include "SelectionTree.h"
-#include "NodeSelector.h"
+#include "GeneralSelector.h"
 
 namespace Quartz {
 
-const QString NodeSelector::SELECTOR_ID{ "quartz.node_selector" };
-const QString NodeSelector::SELECTOR_NAME{ "Pages" };
+const QString GeneralSelector::SELECTOR_ID{ "quartz.node_selector" };
+const QString GeneralSelector::SELECTOR_NAME{ "Pages" };
 
 
-struct NodeSelector::Data
+struct GeneralSelector::Data
 {
     explicit Data( QTreeView *treeView,
                    SelectionTree *model )
@@ -30,14 +30,14 @@ struct NodeSelector::Data
     SelectionTree *m_model;
 };
 
-NodeSelector::NodeSelector( const QzAppContext *context,
+GeneralSelector::GeneralSelector( const QzAppContext *context,
                             QWidget *parent )
     : AbstractSelector( context,
                         SELECTOR_ID,
                         SELECTOR_NAME,
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
-    , m_data( new NodeSelector::Data( new QTreeView( this ),
+    , m_data( new GeneralSelector::Data( new QTreeView( this ),
                                       new SelectionTree( this )))
 {
     auto layout = new QVBoxLayout();
@@ -51,23 +51,23 @@ NodeSelector::NodeSelector( const QzAppContext *context,
     connect( m_data->m_view,
              &QTreeView::clicked,
              this,
-             &NodeSelector::onSelected );
+             &GeneralSelector::onSelected );
     this->setContentsMargins( QMargins{ });
     m_data->m_view->setContentsMargins( QMargins{ });
     layout->setContentsMargins( QMargins{ });
 }
 
-NodeSelector::~NodeSelector()
+GeneralSelector::~GeneralSelector()
 {
 
 }
 
-SelectionTree *NodeSelector::model()
+SelectionTree *GeneralSelector::model()
 {
     return m_data->m_model;
 }
 
-void NodeSelector::onSelected( const QModelIndex &index )
+void GeneralSelector::onSelected( const QModelIndex &index )
 {
     if( ! ( index.isValid() && index.internalPointer() != 0 )) {
         return;

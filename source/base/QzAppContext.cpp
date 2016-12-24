@@ -3,7 +3,7 @@
 #include <core/logger/Logger.h>
 #include <base/content_manager/ContentManager.h>
 #include <base/selector/SelectorManager.h>
-#include <base/selector/NodeSelector.h>
+#include <base/general_selector/GeneralSelector.h>
 
 #include "QzAppContext.h"
 
@@ -18,7 +18,7 @@ struct QzAppContext::Data
 
     SelectorManager *m_selectorManager;
 
-    NodeSelector *m_nodeSelector;
+    GeneralSelector *m_nodeSelector;
 };
 
 QzAppContext::QzAppContext()
@@ -35,7 +35,7 @@ QzAppContext::~QzAppContext()
 
 QZCONTEXT_FUNC_DEFINE( QzAppContext, ContentManager, contentManager );
 QZCONTEXT_FUNC_DEFINE( QzAppContext, SelectorManager, selectorManager );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, NodeSelector, nodeSelector );
+QZCONTEXT_FUNC_DEFINE( QzAppContext, GeneralSelector, nodeSelector );
 
 
 

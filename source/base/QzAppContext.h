@@ -12,7 +12,7 @@ namespace Quartz {
 
 class ContentManager;
 class SelectorManager;
-class NodeSelector;
+class GeneralSelector;
 class PlugginManager;
 
 
@@ -29,7 +29,7 @@ public:
 
     QZCONTEXT_FUNC_DECL( ContentManager, contentManager );
     QZCONTEXT_FUNC_DECL( SelectorManager, selectorManager );
-    QZCONTEXT_FUNC_DECL( NodeSelector, nodeSelector );
+    QZCONTEXT_FUNC_DECL( GeneralSelector, nodeSelector );
 
 private:
     struct Data;

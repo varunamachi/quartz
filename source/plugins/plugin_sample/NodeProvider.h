@@ -1,10 +1,10 @@
 #pragma once
 
-#include <base/selector/AbstractNodeProvider.h>
+#include <base/general_selector/AbstractGeneralNodeProvider.h>
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
-class NodeProvider : public AbstractNodeProvider
+class NodeProvider : public AbstractGeneralNodeProvider
 {
 public:
     NodeProvider();

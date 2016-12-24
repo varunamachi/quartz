@@ -37,14 +37,14 @@ struct NodeInfo
     QIcon m_nodeIcon;
 };
 
-class QUARTZ_BASE_API AbstractNodeProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractGeneralNodeProvider : public AbstractPlugin
 {
 public:
-    AbstractNodeProvider( const QString &pluginId,
+    AbstractGeneralNodeProvider( const QString &pluginId,
                           const QString &pluginName,
                           const QStringList &dependencies );
 
-    ~AbstractNodeProvider();
+    ~AbstractGeneralNodeProvider();
 
     virtual QVector< std::shared_ptr< NodeInfo >> nodes() const = 0;
 

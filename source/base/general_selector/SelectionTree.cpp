@@ -1,8 +1,8 @@
 
 #include <core/logger/Logging.h>
 
-#include "Node.h"
-#include "AbstractNodeProvider.h"
+#include "../selector/Node.h"
+#include "AbstractGeneralNodeProvider.h"
 #include "SelectionTree.h"
 
 
@@ -157,7 +157,7 @@ const Node *SelectionTree::node( const QStringList &path ) const
 
 const QString &SelectionTree::pluginType() const
 {
-    return  AbstractNodeProvider::PLUGIN_TYPE;
+    return  AbstractGeneralNodeProvider::PLUGIN_TYPE;
 }
 
 const QString &SelectionTree::pluginAdapterName() const
@@ -168,7 +168,7 @@ const QString &SelectionTree::pluginAdapterName() const
 bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
 {
     bool result = true;
-    auto nodeProvider = dynamic_cast< AbstractNodeProvider *>( plugin );
+    auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>( plugin );
     if( nodeProvider != nullptr ) {
        auto nodes = nodeProvider->nodes();
        foreach( auto nodeInfo, nodes ) {

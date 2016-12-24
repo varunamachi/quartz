@@ -19,8 +19,8 @@
 #include <base/view_manager/ViewManager.h>
 #include <base/selector/SelectorManager.h>
 #include <base/content_manager/ContentManager.h>
-#include <base/selector/NodeSelector.h>
-#include <base/selector/SelectionTree.h>
+#include <base/general_selector/GeneralSelector.h>
+#include <base/general_selector/SelectionTree.h>
 #include <base/selector/Node.h>
 #include <base/QzAppContext.h>
 
@@ -346,7 +346,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     auto context = new QzAppContext{};
     context->setContentManager( m_content );
     context->setSelectorManager( m_selector );
-    auto nodeSelector = new NodeSelector{ context, this };
+    auto nodeSelector = new GeneralSelector{ context, this };
 
     m_selector->addSelector( nodeSelector );
     QStringList path;

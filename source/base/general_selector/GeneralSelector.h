@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "../QuartzBase.h"
-#include "AbstractSelector.h"
+#include "../selector/AbstractSelector.h"
 
 namespace Quartz {
 
@@ -11,15 +11,15 @@ class Node;
 class SelectionTree;
 class Context;
 
-class QUARTZ_BASE_API NodeSelector : public AbstractSelector
+class QUARTZ_BASE_API GeneralSelector : public AbstractSelector
 {
     Q_OBJECT
 
 public:
-    NodeSelector( const QzAppContext *context,
+    GeneralSelector( const QzAppContext *context,
                   QWidget *parent = nullptr );
 
-    ~NodeSelector();
+    ~GeneralSelector();
 
     SelectionTree * model();
 

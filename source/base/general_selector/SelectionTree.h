@@ -17,6 +17,7 @@ class QUARTZ_BASE_API SelectionTree : public QAbstractItemModel
 
 {
     Q_OBJECT
+
 public:
     SelectionTree( QObject *parent = 0 );
 

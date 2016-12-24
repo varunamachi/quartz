@@ -12,7 +12,7 @@ const QString NodeProvider::PLUGIN_NAME{
 const QStringList NodeProvider::DEPENDENCIES{ };
 
 NodeProvider::NodeProvider()
-    : AbstractNodeProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
+    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
 {
 
 }

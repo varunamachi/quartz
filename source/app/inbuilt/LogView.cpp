@@ -32,7 +32,6 @@ namespace {
         }
         return "";
     }
-
 }
 
 struct LogData
