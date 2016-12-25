@@ -36,4 +36,9 @@ private:
     std::unique_ptr< Data > m_data;
 };
 
+inline QzAppContext * appContext()
+{
+    return context< QzAppContext >();
+}
+
 }

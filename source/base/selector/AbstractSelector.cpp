@@ -4,17 +4,13 @@ namespace Quartz {
 
 struct AbstractSelector::Data
 {
-    Data( const QzAppContext *context,
-          const QString &id,
+    Data( const QString &id,
           const QString &name )
-        : m_context( context )
-        , m_id( id )
+        : m_id( id )
         , m_name( name )
     {
 
     }
-
-    const QzAppContext *m_context;
 
     QString m_id;
 
@@ -23,13 +19,12 @@ struct AbstractSelector::Data
 };
 
 
-AbstractSelector::AbstractSelector( const QzAppContext *context,
-                                    const QString &id,
+AbstractSelector::AbstractSelector( const QString &id,
                                     const QString &name,
                                     QWidget *parent )
     : QWidget( parent )
 //    , m_data( std::make_unique< AbstractSelector::Data >( context, id, name ))
-    , m_data( new AbstractSelector::Data( context, id, name ))
+    , m_data( new AbstractSelector::Data( id, name ))
 {
 
 }
@@ -48,11 +43,5 @@ const QString & AbstractSelector::selectorName() const
 {
     return m_data->m_name;
 }
-
-const QzAppContext *AbstractSelector::context() const
-{
-    return m_data->m_context;
-}
-
 
 }

@@ -92,7 +92,7 @@ const Node * Node::childAt( NodeCountType index ) const
     return nullptr;
 }
 
-Node *Node::childAt(NodeCountType index)
+Node *Node::childAt( NodeCountType index )
 {
     if( m_data->m_children.size() > index ) {
         return m_data->m_children.at( index ).get();

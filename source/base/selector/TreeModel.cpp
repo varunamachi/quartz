@@ -1,14 +1,14 @@
 
 #include <core/logger/Logging.h>
 
-#include "../selector/Node.h"
-#include "AbstractGeneralNodeProvider.h"
-#include "SelectionTree.h"
+#include "Node.h"
+
+#include "TreeModel.h"
 
 
 namespace Quartz {
 
-struct SelectionTree::Data
+struct TreeModel::Data
 {
     Data()
         : m_root{ new Node{ nullptr, "root", "Root" }}
@@ -17,11 +17,9 @@ struct SelectionTree::Data
     }
 
     NodePtr m_root;
-
-    QVector< std::shared_ptr< NodeInfo >> m_pluginNodes;
 };
 
-const QString SelectionTree::ADAPTER_NAME{ "Node Tree" };
+const QString TreeModel::ADAPTER_NAME{ "Node Tree" };
 
 static QString makeNodeId( const QStringList &path,
                            const QString name = QString{ "" },
@@ -36,7 +34,7 @@ static QString makeNodeId( const QStringList &path,
     return nodeId;
 }
 
-Node *SelectionTree::traverse( Node *node,
+Node *TreeModel::traverse( Node *node,
                                const QStringList &path,
                                bool tillParent,
                                int depth ) const
@@ -58,7 +56,7 @@ Node *SelectionTree::traverse( Node *node,
     return result;
 }
 
-SelectionTree::SelectionTree( QObject *parent )
+TreeModel::TreeModel( QObject *parent )
 //    : m_data( std::make_unique< Data >() )
     : QAbstractItemModel( parent )
     , m_data( new Data{} )
@@ -66,12 +64,12 @@ SelectionTree::SelectionTree( QObject *parent )
 
 }
 
-SelectionTree::~SelectionTree()
+TreeModel::~TreeModel()
 {
 
 }
 
-Node * SelectionTree::addNode( const QStringList &parentPath,
+Node * TreeModel::addNode( const QStringList &parentPath,
                                const QString &nodeName,
                                const QString &nodeId,
                                QIcon icon )
@@ -88,7 +86,7 @@ Node * SelectionTree::addNode( const QStringList &parentPath,
     return nullptr;
 }
 
-bool SelectionTree::addNode( const QStringList &parentPath,
+bool TreeModel::addNode( const QStringList &parentPath,
                              const NodePtr node )
 {
     auto result = false;
@@ -104,7 +102,7 @@ bool SelectionTree::addNode( const QStringList &parentPath,
     return result;
 }
 
-Node * SelectionTree::createPath( Node *node,
+Node * TreeModel::createPath( Node *node,
                                   const QStringList &path,
                                   int depth )
 {
@@ -126,7 +124,7 @@ Node * SelectionTree::createPath( Node *node,
     return result;
 }
 
-bool SelectionTree::removeNode( const QStringList &path )
+bool TreeModel::removeNode( const QStringList &path )
 {
     auto result = false;
     auto *parent = traverse( m_data->m_root.get(), path, true, 0 );
@@ -137,7 +135,7 @@ bool SelectionTree::removeNode( const QStringList &path )
     return result;
 }
 
-bool SelectionTree::selectNode( const QStringList &path ) const
+bool TreeModel::selectNode( const QStringList &path ) const
 {
     bool result = false;
     auto sel = this->node( path );
@@ -149,56 +147,13 @@ bool SelectionTree::selectNode( const QStringList &path ) const
     return result;
 }
 
-const Node *SelectionTree::node( const QStringList &path ) const
+const Node *TreeModel::node( const QStringList &path ) const
 {
     Node *theNode = traverse( m_data->m_root.get(), path, false, 0 );
     return theNode;
 }
 
-const QString &SelectionTree::pluginType() const
-{
-    return  AbstractGeneralNodeProvider::PLUGIN_TYPE;
-}
-
-const QString &SelectionTree::pluginAdapterName() const
-{
-    return ADAPTER_NAME;
-}
-
-bool SelectionTree::handlePlugin( AbstractPlugin *plugin )
-{
-    bool result = true;
-    auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>( plugin );
-    if( nodeProvider != nullptr ) {
-       auto nodes = nodeProvider->nodes();
-       foreach( auto nodeInfo, nodes ) {
-           auto res = addNode( nodeInfo->m_nodePath,
-                               nodeInfo->m_nodeName,
-                               nodeInfo->m_nodeId,
-                               nodeInfo->m_nodeIcon );
-           if( res ) {
-               m_data->m_pluginNodes.push_back( nodeInfo );
-           }
-           result = res && result;
-       }
-    }
-    else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
-                                            : "<null>";
-        QZ_ERROR( "Qz:NodeSelector" )
-                << "Invalid node plugin provided: " << pluginName;
-    }
-    return result;
-}
-
-bool SelectionTree::finalizePlugins()
-{
-    bool result = false;
-    m_data->m_pluginNodes.clear();
-    return result;
-}
-
-QModelIndex SelectionTree::index( int row,
+QModelIndex TreeModel::index( int row,
                                   int column,
                                   const QModelIndex &parent ) const
 {
@@ -217,7 +172,7 @@ QModelIndex SelectionTree::index( int row,
     return index;
 }
 
-QModelIndex SelectionTree::parent( const QModelIndex &childIndex ) const
+QModelIndex TreeModel::parent( const QModelIndex &childIndex ) const
 {
     if( ! childIndex.isValid() ) {
         return QModelIndex();
@@ -234,7 +189,7 @@ QModelIndex SelectionTree::parent( const QModelIndex &childIndex ) const
     return parentIndex;
 }
 
-int SelectionTree::rowCount( const QModelIndex &parent ) const
+int TreeModel::rowCount( const QModelIndex &parent ) const
 {
     if( parent.column() > 0 ) {
         return 0;
@@ -248,12 +203,12 @@ int SelectionTree::rowCount( const QModelIndex &parent ) const
     return rows;
 }
 
-int SelectionTree::columnCount( const QModelIndex &/*parent*/ ) const
+int TreeModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
     return 1;
 }
 
-QVariant SelectionTree::data( const QModelIndex &index, int role ) const
+QVariant TreeModel::data( const QModelIndex &index, int role ) const
 {
     QVariant data { };
     if( index.isValid() ) {
@@ -265,7 +220,7 @@ QVariant SelectionTree::data( const QModelIndex &index, int role ) const
     return data;
 }
 
-bool SelectionTree::hasChildren( const QModelIndex &parent ) const
+bool TreeModel::hasChildren( const QModelIndex &parent ) const
 {
     bool result = false;
     auto node = m_data->m_root.get();

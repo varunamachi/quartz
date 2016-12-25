@@ -12,16 +12,15 @@ namespace Quartz {
 class Node;
 using NodePtr = std::shared_ptr< Node >;
 
-class QUARTZ_BASE_API SelectionTree : public QAbstractItemModel
-                                    , public IPluginAdapter
+class QUARTZ_BASE_API TreeModel : public QAbstractItemModel
 
 {
     Q_OBJECT
 
 public:
-    SelectionTree( QObject *parent = 0 );
+    TreeModel( QObject *parent = 0 );
 
-    ~SelectionTree();
+    ~TreeModel();
 
     Node * addNode( const QStringList &parentPath,
                     const QString &nodeName,
@@ -36,15 +35,6 @@ public:
     const Node * node( const QStringList &path ) const;
 
     static const QString ADAPTER_NAME;
-
-public:
-    const QString &pluginType() const override;
-
-    const QString &pluginAdapterName() const override;
-
-    bool handlePlugin( AbstractPlugin *plugin ) override;
-
-    bool finalizePlugins() override;
 
 public:
     QModelIndex index( int row,

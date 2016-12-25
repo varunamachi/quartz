@@ -14,15 +14,16 @@
 
 #include <common/widgets/StackedSplitContainer.h>
 
+#include <base/selector/Node.h>
+#include <base/QzAppContext.h>
 #include <base/action_bar/ActionBar.h>
 #include <base/title_bar/TitleBar.h>
 #include <base/view_manager/ViewManager.h>
 #include <base/selector/SelectorManager.h>
 #include <base/content_manager/ContentManager.h>
 #include <base/general_selector/GeneralSelector.h>
-#include <base/general_selector/SelectionTree.h>
-#include <base/selector/Node.h>
-#include <base/QzAppContext.h>
+#include <base/general_selector/GeneralNodeTree.h>
+#include <base/settings/ConfigPageSelector.h>
 
 #include "QuartzWindow.h"
 #include "WelcomePage.h"
@@ -343,14 +344,15 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 //    m_viewManager->setStyleSheet( "background: blue;" );
     this->setMinimumSize({ 800, 600 });
 
-    auto context = new QzAppContext{};
-    context->setContentManager( m_content );
-    context->setSelectorManager( m_selector );
-    auto nodeSelector = new GeneralSelector{ context, this };
+    appContext()->setContentManager( m_content );
+    appContext()->setSelectorManager( m_selector );
 
+    auto nodeSelector = new GeneralSelector{ this };
     m_selector->addSelector( nodeSelector );
-    QStringList path;
+    auto configTree = new ConfigPageSelector{ this };
+    m_selector->addSelector( configTree );
 
+    QStringList path;
     auto welcomeNode = nodeSelector->model()->addNode( path, "Welcome" );
     path << "Welcome";
     auto otherNode = nodeSelector->model()->addNode( path, "Details" );

@@ -14,8 +14,7 @@ class QUARTZ_BASE_API AbstractSelector : public QWidget
 {
     Q_OBJECT
 public:
-    AbstractSelector( const QzAppContext *context,
-                      const QString &selectorId,
+    AbstractSelector( const QString &selectorId,
                       const QString &selectorName,
                       QWidget *parent = nullptr );
 
@@ -24,9 +23,6 @@ public:
     const QString & selectorId() const;
 
     const QString & selectorName() const;
-
-protected:
-    const QzAppContext * context() const;
 
 private:
     struct Data;

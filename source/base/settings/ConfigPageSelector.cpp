@@ -1,24 +1,29 @@
-
-#include <QVBoxLayout>
 #include <QTreeView>
+#include <QHBoxLayout>
 #include <QHeaderView>
+#include <QModelIndex>
 
-#include "../QzAppContext.h"
-#include "../content_manager/ContentManager.h"
+#include <base/QzAppContext.h>
+#include <base/content_manager/ContentManager.h>
+
 #include "../selector/Node.h"
-#include "GeneralNodeTree.h"
-#include "GeneralSelector.h"
+#include "AbstractConfigNodeProvider.h"
+#include "ConfigNodeTree.h"
+#include "ConfigPageSelector.h"
+
 
 namespace Quartz {
 
-const QString GeneralSelector::SELECTOR_ID{ "quartz.node_selector" };
-const QString GeneralSelector::SELECTOR_NAME{ "Pages" };
 
 
-struct GeneralSelector::Data
+const QString ConfigPageSelector::SELECTOR_ID{ "quartz.config_selector" };
+const QString ConfigPageSelector::SELECTOR_NAME{ "Settings" };
+
+
+struct ConfigPageSelector::Data
 {
     explicit Data( QTreeView *treeView,
-                   GeneralNodeTree *model )
+                   ConfigNodeTree *model )
         : m_view( treeView )
         , m_model( model )
     {
@@ -27,16 +32,16 @@ struct GeneralSelector::Data
 
     QTreeView *m_view;
 
-    GeneralNodeTree *m_model;
+    ConfigNodeTree *m_model;
 };
 
-GeneralSelector::GeneralSelector( QWidget *parent )
+ConfigPageSelector::ConfigPageSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
-    , m_data( new GeneralSelector::Data( new QTreeView( this ),
-                                         new GeneralNodeTree( this )))
+    , m_data( new ConfigPageSelector::Data( new QTreeView( this ),
+                                         new ConfigNodeTree( this )))
 {
     auto layout = new QVBoxLayout();
     //deligate
@@ -49,23 +54,23 @@ GeneralSelector::GeneralSelector( QWidget *parent )
     connect( m_data->m_view,
              &QTreeView::clicked,
              this,
-             &GeneralSelector::onSelected );
+             &ConfigPageSelector::onSelected );
     this->setContentsMargins( QMargins{ });
     m_data->m_view->setContentsMargins( QMargins{ });
     layout->setContentsMargins( QMargins{ });
 }
 
-GeneralSelector::~GeneralSelector()
+ConfigPageSelector::~ConfigPageSelector()
 {
 
 }
 
-GeneralNodeTree *GeneralSelector::model()
+ConfigNodeTree *ConfigPageSelector::model()
 {
     return m_data->m_model;
 }
 
-void GeneralSelector::onSelected( const QModelIndex &index )
+void ConfigPageSelector::onSelected( const QModelIndex &index )
 {
     if( ! ( index.isValid() && index.internalPointer() != 0 )) {
         return;
@@ -74,7 +79,10 @@ void GeneralSelector::onSelected( const QModelIndex &index )
     if( appContext()->hasContentManager() ) {
         appContext()->contentManager()->selectContent( node->nodeId() );
     }
-    emit sigNodeSelected( node );
+    emit sigConfigNodeSelected( node );
 }
+
+
+
 
 }
