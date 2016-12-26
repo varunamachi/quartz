@@ -2,23 +2,32 @@
 
 #include <memory>
 
-#include "../content_manager/ContentWidget.h"
+#include "AbstractConfigPage.h"
+
+class QString;
+class QWidget;
 
 namespace Quartz {
 
-class BasicConfigPage : public ContentWidget
+class BasicConfigPage : public AbstractConfigPage
 {
+    Q_OBJECT
+
 public:
     BasicConfigPage( const QString &id,
                      const QString &name,
-                     const QString &kind,
                      QWidget *parent = nullptr );
 
     ~BasicConfigPage();
 
+    bool apply() override;
+
+    bool setDefaults() override;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
 };
 
 
