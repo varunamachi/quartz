@@ -6,8 +6,8 @@
 
 namespace Quartz {
 
-class ConfigNodeTree : public TreeModel
-                     , public IPluginAdapter
+class QUARTZ_BASE_API ConfigNodeTree : public TreeModel
+                                     , public IPluginAdapter
 {
     Q_OBJECT
 

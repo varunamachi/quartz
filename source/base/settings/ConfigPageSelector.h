@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "../QuartzBase.h"
 #include "../selector/AbstractSelector.h"
 
 namespace Quartz {
@@ -8,7 +9,7 @@ namespace Quartz {
 class Node;
 class ConfigNodeTree;
 
-class ConfigPageSelector : public AbstractSelector
+class QUARTZ_BASE_API ConfigPageSelector : public AbstractSelector
 {
     Q_OBJECT
 

@@ -1,10 +1,11 @@
 #pragma once
 
+#include "../QuartzBase.h"
 #include "../general_selector/AbstractGeneralNodeProvider.h"
 
 namespace Quartz {
 
-class AbstractConfigNodeProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractConfigNodeProvider : public AbstractPlugin
 {
 public:
     AbstractConfigNodeProvider( const QString &pluginId,
