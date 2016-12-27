@@ -9,10 +9,14 @@
 
 namespace Quartz {
 
+const QString ConfigPageManager::CONTENT_ID{ "qz.config.content" };
+const QString ConfigPageManager::CONTENT_NAME{ "Settings" };
+const QString ConfigPageManager::CONTENT_KIND{ "qz.config" };
+
 struct ConfigPageManager::Data
 {
-    explicit Data( QWidget *parent )
-        : m_layout{ new QStackedLayout{ parent }}
+    explicit Data( QWidget */*parent*/ )
+        : m_layout{ new QStackedLayout{ }}
     {
 
     }
@@ -22,11 +26,9 @@ struct ConfigPageManager::Data
     QStackedLayout *m_layout;
 };
 
-ConfigPageManager::ConfigPageManager( const QString &id,
-                                      const QString &name,
-                                      const QString &kind,
-                                      QWidget *parent )
-    : ContentWidget{ id, name, kind, parent }
+ConfigPageManager::ConfigPageManager( QWidget *parent )
+    : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent }
+    , m_data{ new Data{ this }}
 {
     auto layout = new QVBoxLayout();
     layout->addLayout( m_data->m_layout );

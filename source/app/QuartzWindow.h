@@ -3,69 +3,10 @@
 #include <memory>
 
 #include <QMainWindow>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QSizeGrip>
-
-//#include <base/page_manager/PageManager.h>
-//#include <base/view_manager/ViewManager.h>
-//#include <base/action_bar/ActionBar.h>
-//#include <base/title_bar/TitleBar.h>
 
 namespace Quartz {
 
-class ActionBar;
-class TitleBar;
-class SelectorManager;
-class ContentManager;
-class ViewManager;
-
-class PluginManager;
-
-
-class QzMainWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit QzMainWidget( QMainWindow *parent = 0 );
-
-    ~QzMainWidget();
-
-    TitleBar * titleBar();
-
-public slots:
-    void onAboutToQuit();
-
-    void setRoundedRect( bool useRoundedRect )
-    {
-        m_roundedRect = useRoundedRect;
-    }
-
-protected:
-    void paintEvent( QPaintEvent *event );
-
-private:
-    QString createStyleSheet();
-
-    bool m_roundedRect;
-
-    TitleBar *m_titleBar;
-
-    SelectorManager *m_selector;
-
-    ContentManager *m_content;
-
-    ViewManager *m_viewManager;
-
-    ActionBar *m_actionBar;
-
-    std::unique_ptr< PluginManager > m_pluginManager;
-
-//    friend class ChilliWindow;
-
-    //    PageManager *m_pageManager;
-};
-
+class QzMainWidget;
 
 class QuartzWindow : public QMainWindow
 {
@@ -73,6 +14,8 @@ class QuartzWindow : public QMainWindow
 
 public:
     explicit QuartzWindow( QWidget *parent = 0 );
+
+    ~QuartzWindow();
 
     void mouseMove( QPoint newPos, QPoint oldPos );
 
@@ -93,35 +36,14 @@ protected:
     void resizeEvent( QResizeEvent *evt );
 
 private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
+
     void maximize();
 
     void restore();
 
     void minimize();
-
-//    ChilliMainWidget *m_chilliWidget;
-    QzMainWidget *m_chilliWidget;
-
-    bool m_moving;
-
-    bool m_maximised;
-
-    QPoint m_lastMousePosition;
-
-    QByteArray m_geometry;
-
-    QHBoxLayout *m_layout;
-
-    QWidget *m_containerWidget;
-
-    bool m_cursorAtLeft;
-
-    bool m_cursorAtRight;
-
-    bool m_cursorAtBottom;
-
-    bool m_resizing;
-
 };
 
 }

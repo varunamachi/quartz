@@ -16,6 +16,7 @@ vq_classes (
     QuartzWindow
     WelcomePage
     HoverMoveFilter
+    QzMainWidget
 )
 
 vq_sources(

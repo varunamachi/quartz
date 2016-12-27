@@ -54,15 +54,15 @@ ConfigPageSelector::ConfigPageSelector( QWidget *parent )
     m_data->m_view->header()->setVisible( false );
     m_data->m_view->setSelectionMode( QAbstractItemView::SingleSelection );
     m_data->m_view->setSelectionBehavior( QAbstractItemView::SelectRows );
-    layout->addWidget( m_data->m_view );
-    this->setLayout( layout );
     connect( m_data->m_view,
              &QTreeView::clicked,
              this,
              &ConfigPageSelector::onSelected );
     this->setContentsMargins( QMargins{ });
     m_data->m_view->setContentsMargins( QMargins{ });
+    layout->addWidget( m_data->m_view );
     layout->setContentsMargins( QMargins{ });
+    this->setLayout( layout );
 }
 
 ConfigPageSelector::~ConfigPageSelector()

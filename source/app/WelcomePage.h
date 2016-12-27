@@ -31,28 +31,4 @@ private:
 
 };
 
-class AnotherPage : public ContentWidget
-{
-    Q_OBJECT
-public:
-    explicit AnotherPage(
-            const QString &id,
-            QWidget *parent = nullptr )
-        : ContentWidget( id,
-                         tr( "Sample" ),
-                         "page",
-                         parent )
-    {
-        QVBoxLayout *layout = new QVBoxLayout();
-        QLabel *label = new QLabel( tr( "This is Q U A R T Z" ));
-        layout->addWidget( label );
-        this->setLayout( layout );
-    }
-
-    virtual ~AnotherPage() { }
-
-private:
-
-};
-
 }

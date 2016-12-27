@@ -37,6 +37,8 @@ public:
 
     bool finalizePlugins() override;
 
+    bool addPage( AbstractConfigPage *page );
+
     static const QString ADAPTER_NAME;
 
 signals:
@@ -49,7 +51,6 @@ private:
     struct Data;
     std::unique_ptr< Data > m_data;
 
-    bool addPage( AbstractConfigPage *page );
 
 
 };
