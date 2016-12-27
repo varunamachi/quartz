@@ -11,7 +11,7 @@
 
 namespace Quartz {
 
-const QString GeneralSelector::SELECTOR_ID{ "quartz.node_selector" };
+const QString GeneralSelector::SELECTOR_ID{ "qz.node_selector" };
 const QString GeneralSelector::SELECTOR_NAME{ "Pages" };
 
 

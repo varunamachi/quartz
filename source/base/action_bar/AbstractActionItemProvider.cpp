@@ -3,7 +3,7 @@
 
 namespace Quartz {
 
-const QString AbstractActionItemProvider::PLUGIN_TYPE{ "quartz.action_item" };
+const QString AbstractActionItemProvider::PLUGIN_TYPE{ "qz.action_item" };
 
 AbstractActionItemProvider::AbstractActionItemProvider(
         const QString &pluginId,

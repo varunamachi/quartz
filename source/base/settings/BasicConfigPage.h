@@ -14,15 +14,17 @@ class BasicConfigPage : public AbstractConfigPage
     Q_OBJECT
 
 public:
-    BasicConfigPage( const QString &id,
-                     const QString &name,
-                     QWidget *parent = nullptr );
+    BasicConfigPage( QWidget *parent = nullptr );
 
     ~BasicConfigPage();
 
     bool apply() override;
 
     bool setDefaults() override;
+
+    static const QString CONFIG_PAGE_ID;
+
+    static const QString CONFIG_PAGE_NAME;
 
 private:
     struct Data;

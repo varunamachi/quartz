@@ -1,7 +1,6 @@
 vq_classes(
     ConfigPageSelector
-    AbstractConfigNodeProvider
-    ConfigNodeTree
+    AbstractConfigPageProvider
     BasicConfigPage
     ConfigPageManager
     AbstractConfigPage

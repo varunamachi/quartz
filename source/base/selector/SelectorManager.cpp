@@ -34,7 +34,7 @@ struct SelectorManager::Data
 };
 
 
-const QString SelectorManager::ADAPTER_NAME{ "quartz.title_bar" };
+const QString SelectorManager::ADAPTER_NAME{ "qz.title_bar" };
 
 
 SelectorManager::SelectorManager( AbstractContainer *container,

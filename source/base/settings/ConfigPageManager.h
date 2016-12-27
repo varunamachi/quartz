@@ -21,6 +21,14 @@ public:
 
     ~ConfigPageManager();
 
+    bool addPage( AbstractConfigPage *page );
+
+    bool removePage( const QString &pageId );
+
+    AbstractConfigPage * page( const QString &pageId );
+
+    void selectPage( const QString &pageId );
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

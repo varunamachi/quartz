@@ -3,7 +3,7 @@
 
 namespace Quartz {
 
-const QString AbstractPageProvider::PLUGIN_TYPE{ "quartz.page" };
+const QString AbstractPageProvider::PLUGIN_TYPE{ "qz.page" };
 
 AbstractPageProvider::AbstractPageProvider(
         const QString &pluginId,

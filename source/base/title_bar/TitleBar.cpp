@@ -12,7 +12,7 @@
 
 namespace Quartz {
 
-const QString TitleBar::ADAPTER_NAME{ "quartz.title_bar" };
+const QString TitleBar::ADAPTER_NAME{ "qz.title_bar" };
 
 
 TitleBar::TitleBar( int height, QWidget *parent )

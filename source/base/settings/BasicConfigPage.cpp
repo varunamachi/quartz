@@ -1,17 +1,24 @@
 
+#include <QIcon>
+
 #include "BasicConfigPage.h"
 
 namespace Quartz {
+
+const QString BasicConfigPage::CONFIG_PAGE_ID{ "qz.configpage.basic" };
+const QString BasicConfigPage::CONFIG_PAGE_NAME{ "Basic Settings" };
 
 struct BasicConfigPage::Data
 {
 
 };
 
-BasicConfigPage::BasicConfigPage( const QString &id,
-                                  const QString &name,
-                                  QWidget *parent )
-    : AbstractConfigPage{ id, name, parent }
+BasicConfigPage::BasicConfigPage( QWidget *parent )
+    : AbstractConfigPage{ CONFIG_PAGE_ID,
+                          CONFIG_PAGE_NAME,
+                          QStringList{ },
+                          QIcon{ },
+                          parent }
     , m_data{ new Data{} }
 {
 

@@ -10,7 +10,7 @@
 
 namespace Quartz {
 
-const QString ViewManager::ADAPTER_NAME{ "quartz.title_bar" };
+const QString ViewManager::ADAPTER_NAME{ "qz.title_bar" };
 
 ViewManager::ViewManager( AbstractContainer *container,
                           QWidget *parent )

@@ -3,18 +3,20 @@
 #include "../QuartzBase.h"
 #include "../general_selector/AbstractGeneralNodeProvider.h"
 
+class AbstractConfigPage;
+
 namespace Quartz {
 
-class QUARTZ_BASE_API AbstractConfigNodeProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractConfigPageProvider : public AbstractPlugin
 {
 public:
-    AbstractConfigNodeProvider( const QString &pluginId,
+    AbstractConfigPageProvider( const QString &pluginId,
                                 const QString &pluginName,
                                 const QStringList &dependencies );
 
-    ~AbstractConfigNodeProvider();
+    ~AbstractConfigPageProvider();
 
-    virtual QVector< std::shared_ptr< NodeInfo >> nodes() const = 0;
+    virtual QVector< AbstractConfigPage *> configPages() const = 0;
 
     static const QString PLUGIN_TYPE;
 

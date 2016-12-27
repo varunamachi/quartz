@@ -3,7 +3,7 @@
 
 namespace Quartz {
 
-const QString AbstractContentProvider::PLUGIN_TYPE{ "quartz.content" };
+const QString AbstractContentProvider::PLUGIN_TYPE{ "qz.content" };
 
 
 AbstractContentProvider::AbstractContentProvider(

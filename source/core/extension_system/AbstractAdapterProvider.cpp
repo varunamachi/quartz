@@ -3,7 +3,7 @@
 
 namespace Quartz {
 
-const QString AbstractAdapterProvider::PLUGIN_TYPE{ "quartz.adapter" };
+const QString AbstractAdapterProvider::PLUGIN_TYPE{ "qz.adapter" };
 
 AbstractAdapterProvider::AbstractAdapterProvider(
         const QString &pluginId,
