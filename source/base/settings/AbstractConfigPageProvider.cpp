@@ -7,9 +7,8 @@ const QString AbstractConfigPageProvider::PLUGIN_TYPE{ "qz.configNode" };
 
 AbstractConfigPageProvider::AbstractConfigPageProvider(
         const QString &pluginId,
-        const QString &pluginName,
-        const QStringList &dependencies )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE, dependencies }
+        const QString &pluginName )
+    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
 {
 
 }

@@ -126,14 +126,22 @@ AbstractContainer::~AbstractContainer()
 
 QWidget * AbstractContainer::widget( const QString &id ) const
 {
-//    QWidget *widget = m_data->m_widgets.value( id );
-//    return widget;
     QWidget *widget = nullptr;
-    Item::Ptr item = m_data->m_items.value( id );
+    auto item = m_data->m_items.value( id );
     if( item ) {
         widget = item->m_widget;
     }
     return widget;
+}
+
+QWidget *AbstractContainer::selectedWidget() const
+{
+    QWidget *selected = nullptr;
+    auto item = m_data->m_items.value( m_data->m_selectedId );
+    if( item != nullptr ) {
+        selected = item->m_widget;
+    }
+    return selected;
 }
 
 
@@ -154,15 +162,15 @@ void AbstractContainer::addWidget( const QString &id,
                                   QWidget *widget )
 {
     if( widget != nullptr ) {
-        IdButton *btn = new IdButton( id,
-                                      displayName,
-                                      m_data->m_btnHeight,
-                                      m_data->m_btnWidth,
-                                      this,
-                                      m_data->m_btnOrientation );
+        auto *btn = new IdButton( id,
+                                  displayName,
+                                  m_data->m_btnHeight,
+                                  m_data->m_btnWidth,
+                                  this,
+                                  m_data->m_btnOrientation );
         btn->setContentsMargins( QMargins{ });
-        int index = m_data->m_stackWidget->addWidget( widget );
-        Item::Ptr item = Item::create( index, btn, widget );
+        auto index = m_data->m_stackWidget->addWidget( widget );
+        auto item = Item::create( index, btn, widget );
         m_data->m_items.insert( id, item );
         m_data->m_selector->addWidget( btn );
         m_data->m_stackWidget->addWidget( widget );
@@ -170,20 +178,20 @@ void AbstractContainer::addWidget( const QString &id,
                  SIGNAL( activated( QString )),
                  this,
                  SLOT( select( QString )));
-//        m_data->m_selectedId = id;
-//        m_data->m_stackWidget->setCurrentIndex( index - 1 );
-//        btn->setChecked( false );
         widget->setProperty( "item_id", id );
-        select( id );
+        if( m_data->m_selectedId.isEmpty() ) {
+            select( id );
+        }
+        emit sigAdded( id, widget );
     }
 }
 
 
 void AbstractContainer::removeWidget( const QString &id )
 {
-    Item::Ptr item = m_data->m_items.value( id );
+    auto item = m_data->m_items.value( id );
     if( item ) {
-        QWidget *theWidget = widget( id );
+        auto theWidget = widget( id );
         m_data->m_selector->removeWidget( item->m_btn );
         m_data->m_stackWidget->removeWidget( item->m_widget );
         m_data->m_items.remove( id );
@@ -191,9 +199,12 @@ void AbstractContainer::removeWidget( const QString &id )
             m_data->m_selectedId = m_data->m_items.isEmpty()
                     ? ""
                     : m_data->m_items.begin().key();
+            emit sigSelected( m_data->m_selectedId,
+                              selectedWidget() );
         }
         updateIndeces();
         theWidget->setProperty( "item_id", QVariant() );
+        emit sigRemoved( id );
     }
 }
 
@@ -203,7 +214,7 @@ void AbstractContainer::removeWidget( QWidget *widget )
     for( auto it = m_data->m_items.begin();
          it != m_data->m_items.end();
          ++ it ) {
-        Item::Ptr item = it.value();
+        auto item = it.value();
         if( item->m_widget == widget ) {
             removeWidget( it.key() );
             /* I am not breaking here because same widget might have been added
@@ -217,7 +228,7 @@ void AbstractContainer::removeWidget( QWidget *widget )
 
 void AbstractContainer::select( const QString &id )
 {
-    Item::Ptr item = m_data->m_items.value( id );
+    auto item = m_data->m_items.value( id );
     if( item ) {
         if( m_data->m_selectedId != ""
                 && item->m_index == m_data->m_stackWidget->currentIndex() ) {
@@ -226,8 +237,7 @@ void AbstractContainer::select( const QString &id )
             m_data->m_selectedId = "";
         }
         else {
-            Item::Ptr prev = m_data->m_items.value( m_data->m_selectedId );
-
+            auto prev = m_data->m_items.value( m_data->m_selectedId );
             item->m_btn->setChecked( true );
             m_data->m_stackWidget->setCurrentIndex( item->m_index );
             m_data->m_selectedId = id;
@@ -282,11 +292,11 @@ void AbstractContainer::updateIndeces()
     for( int i = 0;
          i < m_data->m_stackWidget->count() && i < m_data->m_items.size()
          ; ++ i ) {
-        QWidget *widget = m_data->m_stackWidget->widget( i );
-        QVariant itemId = widget->property( "item_id" );
+        auto widget = m_data->m_stackWidget->widget( i );
+        auto itemId = widget->property( "item_id" );
         if( itemId.isValid() ) {
-            QString id = itemId.toString();
-            Item::Ptr item = m_data->m_items.value( id );
+            auto id = itemId.toString();
+            auto item = m_data->m_items.value( id );
             item->m_index = i;
         }
     }

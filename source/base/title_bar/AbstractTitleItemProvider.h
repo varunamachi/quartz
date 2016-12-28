@@ -12,8 +12,7 @@ class QUARTZ_BASE_API AbstractTitleItemProvider : public AbstractPlugin
 {
 public:
     AbstractTitleItemProvider( const QString &pluginId,
-                               const QString &pluginName,
-                               const QStringList &dependencies );
+                               const QString &pluginName );
 
     virtual QVector< QuartzItem *> titleItems() const = 0;
 

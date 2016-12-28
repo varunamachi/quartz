@@ -31,10 +31,9 @@ SampleView::~SampleView()
 /***************** Provider **************************************************/
 const QString ViewProvider::PLUGIN_ID{ "qzplugin.sample.provider.view" };
 const QString ViewProvider::PLUGIN_NAME{ "Quartz Sample View" };
-const QStringList ViewProvider::DEPENDENCIES{ };
 
 ViewProvider::ViewProvider()
-    : AbstractViewProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
+    : AbstractViewProvider{ PLUGIN_ID, PLUGIN_NAME }
 {
 
 }

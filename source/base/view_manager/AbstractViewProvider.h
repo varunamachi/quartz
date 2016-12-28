@@ -12,8 +12,7 @@ class QUARTZ_BASE_API AbstractViewProvider : public AbstractPlugin
 {
 public:
     AbstractViewProvider( const QString &pluginId,
-                          const QString &pluginName,
-                          const QStringList &dependencies );
+                          const QString &pluginName );
 
     virtual QVector< QuartzView *> views() const = 0;
 

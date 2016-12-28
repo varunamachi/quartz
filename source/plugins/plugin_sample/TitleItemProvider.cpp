@@ -43,11 +43,10 @@ const QString TitleItemProvider::PLUGIN_ID{
     "qzplugin.sample.provider.titlebutton" };
 const QString TitleItemProvider::PLUGIN_NAME{
     "Quartz Sample TitleBar Button" };
-const QStringList TitleItemProvider::DEPENDENCIES{ };
 
 
 TitleItemProvider::TitleItemProvider()
-    : AbstractTitleItemProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
+    : AbstractTitleItemProvider{ PLUGIN_ID, PLUGIN_NAME }
 {
 
 }

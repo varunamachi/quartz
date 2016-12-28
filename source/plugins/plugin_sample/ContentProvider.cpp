@@ -24,10 +24,9 @@ const QString ContentProvider::PLUGIN_ID{
     "qzplugin.sample.provider.content" };
 const QString ContentProvider::PLUGIN_NAME{
     "Quartz Sample Content" };
-const QStringList ContentProvider::DEPENDENCIES{ };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
+    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
 {
 
 }

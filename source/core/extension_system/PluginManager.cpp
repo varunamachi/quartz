@@ -212,24 +212,6 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
         return false;
     }
     bool result = true;
-    auto &dependencies = plugin->dependencies();
-    foreach( auto &dpId, dependencies ) {
-        if( loadedPluginIds.contains( dpId )) {
-            //debug log, may be
-            continue;
-        }
-        if( m_data->plugins().contains( dpId )) {
-            auto dep = m_data->plugins().value( dpId ).get();
-            result = initializePlugin( dep, loadedPluginIds );
-        }
-        else {
-            QZ_ERROR( "Qz:Core:Ext" )
-                    << "Could not find plugin with ID " << dpId << " which is "
-                       "required by plugin " << plugin->pluginId();
-            result = false;
-            break;
-        }
-    }
     if( result ) {
         auto &pluginType = plugin->pluginType();
         if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {

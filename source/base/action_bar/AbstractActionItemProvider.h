@@ -12,8 +12,7 @@ class QUARTZ_BASE_API AbstractActionItemProvider : public AbstractPlugin
 {
 public:
     AbstractActionItemProvider( const QString &pluginId,
-                                const QString &pluginName,
-                                const QStringList &dependencies );
+                                const QString &pluginName );
 
     virtual QVector< QuartzItem * > actionItems() const = 0;
 

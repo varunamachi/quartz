@@ -37,6 +37,8 @@ public:
 public:
     QWidget * widget( const QString &id ) const;
 
+    QWidget * selectedWidget() const;
+
     QString currentId() const;
 
     QList< QString > allIds() const;
@@ -73,9 +75,11 @@ public slots:
     void select( const QString &id );
 
 signals:
-    void sigSelected( const QString &id );
+    void sigSelected( const QString &id, QWidget *widget );
 
     void sigAdded( const QString &id, QWidget *widget );
+
+    void sigRemoved( const QString &id );
 
 
 private slots:

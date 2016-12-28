@@ -7,12 +7,10 @@ struct AbstractPlugin::Data
 {
     Data( const QString &pluginId,
           const QString &pluginName,
-          const QString &pluginType,
-          const QStringList &dependencies )
+          const QString &pluginType )
         : m_pluginId( pluginId )
         , m_pluginName( pluginName )
         , m_pluginType( pluginType )
-        , m_dependencies( dependencies )
     {
 
     }
@@ -23,15 +21,13 @@ struct AbstractPlugin::Data
 
     const QString &m_pluginType;
 
-    const QStringList &m_dependencies;
 };
 
 
 AbstractPlugin::AbstractPlugin( const QString &pluginId,
                                 const QString &pluginName,
-                                const QString &pluginType,
-                                const QStringList &dependencies )
-    : m_data( new Data{ pluginId, pluginName, pluginType, dependencies })
+                                const QString &pluginType )
+    : m_data( new Data{ pluginId, pluginName, pluginType })
 {
 
 }
@@ -55,11 +51,5 @@ const QString &AbstractPlugin::pluginType() const
 {
     return m_data->m_pluginType;
 }
-
-const QStringList &AbstractPlugin::dependencies() const
-{
-    return m_data->m_dependencies;
-}
-
 
 }

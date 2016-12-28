@@ -11,8 +11,7 @@ class QUARTZ_BASE_API AbstractContentProvider : public AbstractPlugin
 {
 public:
     AbstractContentProvider( const QString &pluginId,
-                             const QString &pluginName,
-                             const QStringList &dependencies );
+                             const QString &pluginName );
 
     virtual ~AbstractContentProvider();
 

@@ -11,8 +11,7 @@ class QUARTZ_BASE_API AbstractConfigPageProvider : public AbstractPlugin
 {
 public:
     AbstractConfigPageProvider( const QString &pluginId,
-                                const QString &pluginName,
-                                const QStringList &dependencies );
+                                const QString &pluginName );
 
     ~AbstractConfigPageProvider();
 

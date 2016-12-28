@@ -41,8 +41,7 @@ class QUARTZ_BASE_API AbstractGeneralNodeProvider : public AbstractPlugin
 {
 public:
     AbstractGeneralNodeProvider( const QString &pluginId,
-                          const QString &pluginName,
-                          const QStringList &dependencies );
+                                 const QString &pluginName );
 
     ~AbstractGeneralNodeProvider();
 

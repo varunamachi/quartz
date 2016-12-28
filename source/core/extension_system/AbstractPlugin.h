@@ -18,8 +18,7 @@ class QUARTZ_CORE_API AbstractPlugin
 public:
     AbstractPlugin( const QString &pluginId,
                     const QString &pluginName,
-                    const QString &pluginType,
-                    const QStringList &dependencies );
+                    const QString &pluginType );
 
     virtual ~AbstractPlugin();
 
@@ -28,8 +27,6 @@ public:
     const QString & pluginName() const;
 
     const QString & pluginType() const;
-
-    const QStringList & dependencies() const;
 
     virtual bool init() = 0;
 

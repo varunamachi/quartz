@@ -38,8 +38,6 @@ public:
 
     static const QString     PLUGIN_NAME;
 
-    static const QStringList DEPENDENCIES;
-
 private:
 
 };

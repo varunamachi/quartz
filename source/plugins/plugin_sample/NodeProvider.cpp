@@ -9,10 +9,9 @@ const QString NodeProvider::PLUGIN_ID{
     "qzp.sample.provider.node" };
 const QString NodeProvider::PLUGIN_NAME{
     "Quartz Sample Node" };
-const QStringList NodeProvider::DEPENDENCIES{ };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME, DEPENDENCIES }
+    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME }
 {
 
 }

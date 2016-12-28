@@ -10,8 +10,7 @@ class AbstractPageProvider : public AbstractPlugin
 {
 public:
     AbstractPageProvider( const QString &pluginId,
-                          const QString &pluginName,
-                          const QStringList &dependencies );
+                          const QString &pluginName );
 
     virtual QVector< QuartzPage *> pages() const = 0;
 
