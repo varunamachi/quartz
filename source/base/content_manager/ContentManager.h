@@ -45,6 +45,13 @@ public:
 
     static const QString ADAPTER_NAME;
 
+signals:
+    void sigContentSelected( ContentWidget *widget );
+
+    void sigContentAdded( ContentWidget *widget );
+
+    void sigContentRemoved( const QString &contentId );
+
 private:
     void setupLayout();
 

@@ -14,9 +14,9 @@ struct BasicConfigPage::Data
 };
 
 BasicConfigPage::BasicConfigPage( QWidget *parent )
-    : AbstractConfigPage{ CONFIG_PAGE_ID,
+    : AbstractConfigPage{ QStringList{ },
                           CONFIG_PAGE_NAME,
-                          QStringList{ },
+                          CONFIG_PAGE_ID,
                           QIcon{ },
                           parent }
     , m_data{ new Data{} }

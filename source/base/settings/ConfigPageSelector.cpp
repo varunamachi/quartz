@@ -81,7 +81,10 @@ void ConfigPageSelector::onSelected( const QModelIndex &index )
         return;
     }
     auto node = static_cast< Node *>( index.internalPointer() );
-    if( appContext()->hasConfigPageManager() ) {
+    if( appContext()->hasContentManager()
+            && appContext()->hasConfigPageManager() ) {
+        appContext()->contentManager()->selectContent(
+                    ConfigPageManager::CONTENT_ID );
         appContext()->configPageManager()->selectPage( node->nodeId() );
     }
     emit sigConfigNodeSelected( node );

@@ -13,9 +13,9 @@ class QUARTZ_BASE_API AbstractConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    AbstractConfigPage( const QString &id,
+    AbstractConfigPage( const QStringList &parentPath,
                         const QString &name,
-                        const QStringList &parentPath,
+                        const QString &id,
                         const QIcon &icon,
                         QWidget *parent = nullptr );
 

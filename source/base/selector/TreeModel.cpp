@@ -35,9 +35,9 @@ static QString makeNodeId( const QStringList &path,
 }
 
 Node *TreeModel::traverse( Node *node,
-                               const QStringList &path,
-                               bool tillParent,
-                               int depth ) const
+                           const QStringList &path,
+                           bool tillParent,
+                           int depth ) const
 {
     Node *result = nullptr;
     auto child = node->child( path[ depth ]);
@@ -70,15 +70,15 @@ TreeModel::~TreeModel()
 }
 
 Node * TreeModel::addNode( const QStringList &parentPath,
-                               const QString &nodeName,
-                               const QString &nodeId,
-                               QIcon icon )
+                           const QString &nodeName,
+                           const QString &nodeId,
+                           QIcon icon )
 {
     QString id = nodeId.isEmpty() ? makeNodeId( parentPath, nodeName )
                                   : nodeId;
     auto node = std::make_shared< Node >( m_data->m_root.get(),
-                                          id,
                                           nodeName,
+                                          id,
                                           icon );
     if( addNode( parentPath, node )) {
         return node.get();
@@ -87,7 +87,7 @@ Node * TreeModel::addNode( const QStringList &parentPath,
 }
 
 bool TreeModel::addNode( const QStringList &parentPath,
-                             const NodePtr node )
+                         const NodePtr node )
 {
     auto result = false;
     auto *parent = m_data->m_root.get();
@@ -103,14 +103,14 @@ bool TreeModel::addNode( const QStringList &parentPath,
 }
 
 Node * TreeModel::createPath( Node *node,
-                                  const QStringList &path,
-                                  int depth )
+                              const QStringList &path,
+                              int depth )
 {
     Node *result = nullptr;
     auto child = node->child( path[ depth ]); //pathID
     if( child == nullptr ) {
         auto childId = makeNodeId( path, path[ depth ], depth );
-        auto newChild = std::make_shared< Node >( node, childId, path[ depth ]);
+        auto newChild = std::make_shared< Node >( node, path[ depth ], childId);
         child = newChild.get();
         node->addChild( newChild );
     }
@@ -140,7 +140,6 @@ bool TreeModel::selectNode( const QStringList &path ) const
     bool result = false;
     auto sel = this->node( path );
     if( sel != nullptr ) {
-        //        contentManager()->select( sel->nodeId() );
         sel->nodeId();
         result = true;
     }
@@ -154,8 +153,8 @@ const Node *TreeModel::node( const QStringList &path ) const
 }
 
 QModelIndex TreeModel::index( int row,
-                                  int column,
-                                  const QModelIndex &parent ) const
+                              int column,
+                              const QModelIndex &parent ) const
 {
     if( ! hasIndex( row, column, parent )) {
         return QModelIndex();

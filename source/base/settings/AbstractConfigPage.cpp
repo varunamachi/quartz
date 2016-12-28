@@ -7,9 +7,9 @@ namespace Quartz {
 
 struct AbstractConfigPage::Data
 {
-    Data( const QString &id,
+    Data( const QStringList &parentPath ,
           const QString &name,
-          const QStringList &parentPath ,
+          const QString &id,
           const QIcon &icon )
         : m_id( id )
         , m_name( name )
@@ -29,13 +29,13 @@ struct AbstractConfigPage::Data
 
 };
 
-AbstractConfigPage::AbstractConfigPage( const QString &id,
+AbstractConfigPage::AbstractConfigPage( const QStringList &parentPath,
                                         const QString &name,
-                                        const QStringList &parentPath,
+                                        const QString &id,
                                         const QIcon &icon,
                                         QWidget *parent )
     : QWidget{ parent }
-    , m_data{ new Data{ id, name, parentPath, icon }}
+    , m_data{ new Data{ parentPath, name, id, icon }}
 {
 
 }
@@ -47,7 +47,7 @@ AbstractConfigPage::~AbstractConfigPage()
 
 const QString & AbstractConfigPage::configPageName() const
 {
-    return m_data->m_id;
+    return m_data->m_name;
 }
 
 const QStringList &AbstractConfigPage::parentPath() const
@@ -55,14 +55,15 @@ const QStringList &AbstractConfigPage::parentPath() const
     return m_data->m_parentPath;
 }
 
+const QString & AbstractConfigPage::configPageId() const
+{
+    return m_data->m_id;
+}
+
 const QIcon &AbstractConfigPage::icon() const
 {
     return m_data->m_icon;
 }
 
-const QString & AbstractConfigPage::configPageId() const
-{
-    return m_data->m_name;
-}
 
 }

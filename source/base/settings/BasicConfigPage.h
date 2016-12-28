@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "../QuartzBase.h"
 #include "AbstractConfigPage.h"
 
 class QString;
@@ -9,7 +10,7 @@ class QWidget;
 
 namespace Quartz {
 
-class BasicConfigPage : public AbstractConfigPage
+class QUARTZ_BASE_API BasicConfigPage : public AbstractConfigPage
 {
     Q_OBJECT
 

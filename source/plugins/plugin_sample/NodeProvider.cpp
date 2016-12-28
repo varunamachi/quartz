@@ -35,9 +35,9 @@ bool NodeProvider::destroy()
 QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
 {
     auto path = Node::toPath( "Plugin>Sample" );
-    auto nodeInfo = std::make_shared< NodeInfo >( "qzp.sample.content.one",
+    auto nodeInfo = std::make_shared< NodeInfo >( path,
                                                   "Sample Node",
-                                                  path,
+                                                  "qzp.sample.content.one",
                                                   QIcon{} );
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
