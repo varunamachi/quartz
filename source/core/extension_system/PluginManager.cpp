@@ -19,6 +19,26 @@ namespace Quartz {
 
 struct BundleInfo
 {
+    BundleInfo()
+        : m_bundle{ nullptr }
+        , m_library{}
+    {
+
+    }
+
+    BundleInfo( AbstractPluginBundle *bundle,
+                std::shared_ptr< QLibrary > library )
+        : m_bundle{ bundle }
+        , m_library{ library }
+    {
+
+    }
+
+    bool isValid() const
+    {
+        return m_bundle == nullptr || m_library == nullptr;
+    }
+
     AbstractPluginBundle *m_bundle;
 
     std::shared_ptr< QLibrary > m_library;
@@ -35,56 +55,27 @@ static const char * PLUGIN_GET_FUNC_NAME = "getBundleWrapper";
 static const char * BUNDLE_DESTROY_FUNC_NAME = "destroy";
 
 
-class PluginManager::Data
+class PluginManager::Impl
 {
 public:
-    Data()
-        : m_active( true )
-    {
+    std::size_t loadPluginAt( const QDir &pluginRoot );
 
-    }
+    std::size_t load( const QString &pluginRoot,
+                      const QString &pluginFilePath );
 
-    PluginMap & plugins()
-    {
-        return m_plugins;
-    }
+    bool initializePlugin( AbstractPlugin *plugin,
+                           QZ_IN_OUT QSet< QString > &loadedPluginIds );
 
-    const PluginMap & plugins() const
-    {
-        return m_plugins;
-    }
+    void registerAdapter( IPluginAdapter *pluginAdapter );
 
-    AdapterMap & adapters()
-    {
-        return m_adapters;
-    }
+    bool processBundles();
 
-    const AdapterMap & adapters() const
-    {
-        return m_adapters;
-    }
+    bool processBundles( const BundleInfo &bundleInfo,
+                         DependencyType depType,
+                         QZ_OUT QSet< QString > &processedBundles );
 
-    BundleInfoMap & bundles()
-    {
-        return m_bundles;
-    }
+    bool initBundle( AbstractPluginBundle *bundle );
 
-    const BundleInfoMap & bundles() const
-    {
-        return m_bundles;
-    }
-
-    void setActive( bool value )
-    {
-        m_active = value;
-    }
-
-    bool isActive() const
-    {
-        return m_active;
-    }
-
-private:
     PluginMap m_plugins;
 
     AdapterMap m_adapters;
@@ -97,7 +88,7 @@ private:
 
 PluginManager::PluginManager()
 //    : m_data( std::make_unique< PluginManager::Data >() )
-    : m_data( std::unique_ptr< Data >( new Data() ))
+    : m_impl( std::unique_ptr< Impl >( new Impl() ))
 {
 
 }
@@ -119,7 +110,7 @@ bool PluginManager::loadFrom( const QString &location )
     foreach(const QFileInfo &info, dirList) {
         if( info.isReadable() ) {
             QDir pluginDir{ info.absoluteFilePath() };
-            auto numLoaded = loadPluginAt( pluginDir );
+            auto numLoaded = m_impl->loadPluginAt( pluginDir );
             QZ_DEBUG( "Qz:Core:Ext" )
                     << "Loaded " << numLoaded << " plugins from "
                     << info.absoluteFilePath();
@@ -129,16 +120,16 @@ bool PluginManager::loadFrom( const QString &location )
                                      << info.absoluteFilePath();
         }
     }
-    QZ_INFO( "Qz:Core:Ext" ) << "Initilizing " << m_data->plugins().size()
+    QZ_INFO( "Qz:Core:Ext" ) << "Initilizing " << m_impl->m_plugins.size()
                              << "plugins from " << location;
-    if( ! m_data->plugins().isEmpty() ) {
+    if( ! m_impl->m_plugins.isEmpty() ) {
         QSet< QString > loaded;
-        for( auto pit = m_data->plugins().begin();
-             pit != m_data->plugins().end();
+        for( auto pit = m_impl->m_plugins.begin();
+             pit != m_impl->m_plugins.end();
              ++ pit ) {
             auto &plugin = pit.value();
             if( ! loaded.contains( plugin->pluginId() )) {
-                initializePlugin( plugin.get(), loaded );
+                m_impl->initializePlugin( plugin.get(), loaded );
             }
         }
     }
@@ -151,17 +142,17 @@ bool PluginManager::loadFrom( const QString &location )
 
 bool PluginManager::destroy()
 {
-    if( ! m_data->isActive() ) {
+    if( ! m_impl->m_active ) {
         return false;
     }
     bool result = true;
-    for( auto it = m_data->adapters().begin();
-         it != m_data->adapters().end();
+    for( auto it = m_impl->m_adapters.begin();
+         it != m_impl->m_adapters.end();
          ++ it ) {
         auto &handler = it.value();
         result = result && handler->finalizePlugins();
     }
-    foreach( auto &bundle, m_data->bundles() ) {
+    foreach( auto &bundle, m_impl->m_bundles ) {
         auto lib = bundle.m_library;
         if( lib != nullptr ) {
             auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
@@ -177,35 +168,79 @@ bool PluginManager::destroy()
             result = result && lib->unload();
         }
     }
-    m_data->setActive( false );
+    m_impl->m_active = false;
     return result;
 }
 
 
 AbstractPlugin * PluginManager::plugin( const QString &id ) const
 {
-    auto &plugin = m_data->plugins().value( id );
+    auto &plugin = m_impl->m_plugins.value( id );
     return plugin.get();
 }
 
 
 IPluginAdapter * PluginManager::adapter( const QString &id ) const
 {
-    return m_data->adapters().value( id );
+    return m_impl->m_adapters.value( id );
 }
 
 
-void PluginManager::registerPluginAdapter(
-        IPluginAdapter *pluginAdapter )
+void PluginManager::registerPluginAdapter( IPluginAdapter *pluginAdapter )
 {
-    if( ! m_data->adapters().contains( pluginAdapter->pluginType() )) {
-        m_data->adapters().insert( pluginAdapter->pluginType(), pluginAdapter );
+    m_impl->registerAdapter( pluginAdapter );
+}
+
+void PluginManager::Impl::registerAdapter( IPluginAdapter *pluginAdapter )
+{
+    if( ! m_adapters.contains( pluginAdapter->pluginType() )) {
+        m_adapters.insert( pluginAdapter->pluginType(), pluginAdapter );
     }
 }
 
-bool PluginManager::initializePlugin( AbstractPlugin *plugin,
-                                      QSet< QString > &loadedPluginIds )
+bool PluginManager::Impl::processBundles()
 {
+    return false;
+}
+
+bool PluginManager::Impl::processBundles(
+        const BundleInfo &bundleInfo,
+        DependencyType depType,
+        QZ_OUT QSet< QString > &processedBundles )
+{
+    if( ! initBundle( bundleInfo.m_bundle )) {
+        ///TODO log error
+        return false;
+    }
+    bool result = true;
+    const auto &hardDeps = bundleInfo.m_bundle->dependencies( depType );
+    for( int i = 0; i < hardDeps.size(); ++ i ) {
+        const auto & depId = hardDeps.at( i );
+        auto depInfo = m_bundles.value( depId );
+        if( ! bundleInfo.isValid() ) {
+            ///TODO log error
+            result = false;
+            break;
+        }
+        if( ! processBundles( depInfo, depType, processedBundles )) {
+            ///TODO log warning
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
+bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
+{
+    return true;
+}
+
+
+bool PluginManager::Impl::initializePlugin( AbstractPlugin *plugin,
+                                            QSet< QString > &loadedPluginIds )
+{
+
 
     //How to handle cyclic dependency?
     if( plugin == nullptr ) {
@@ -220,7 +255,7 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
             if( adapterPgn != nullptr ) {
                 auto adapters = adapterPgn->adapters();
                 foreach( auto adapter, adapters ) {
-                    registerPluginAdapter( adapter );
+                    registerAdapter( adapter );
                 }
             }
             else {
@@ -231,7 +266,7 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
             }
         }
         else {
-            auto adapter = m_data->adapters().value( plugin->pluginType() );
+            auto adapter = m_adapters.value( plugin->pluginType() );
             if( adapter != nullptr ) {
                 result = adapter->handlePlugin( plugin );
             }
@@ -248,7 +283,7 @@ bool PluginManager::initializePlugin( AbstractPlugin *plugin,
 }
 
 
-std::size_t PluginManager::loadPluginAt( const QDir &pluginRoot )
+std::size_t PluginManager::Impl::loadPluginAt( const QDir &pluginRoot )
 {
     QStringList extensions;
 #ifdef Q_OS_LINUX
@@ -283,7 +318,7 @@ std::size_t PluginManager::loadPluginAt( const QDir &pluginRoot )
     return numLoaded;
 }
 
-std::size_t PluginManager::load(
+std::size_t PluginManager::Impl::load(
         const QString &pluginRoot,
         const QString &pluginFilePath )
 {
@@ -302,9 +337,9 @@ std::size_t PluginManager::load(
             if( bundle != nullptr ) {
                 auto info = BundleInfo{ bundle, lib };
                 foreach( auto plugin, bundle->plugins() ) {
-                    m_data->plugins().insert( plugin->pluginId(), plugin );
+                    m_plugins.insert( plugin->pluginId(), plugin );
                 }
-                m_data->bundles().insert( bundle->bundleId(), info );
+                m_bundles.insert( bundle->bundleId(), info );
                 ++ numLoaded;
             }
             else {

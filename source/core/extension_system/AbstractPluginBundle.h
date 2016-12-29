@@ -7,7 +7,6 @@
 
 
 class QString;
-class QLibrary;
 
 namespace Quartz {
 
@@ -16,6 +15,12 @@ class AbstractPlugin;
 class BundleEnv;
 
 using PluginList = QVector< std::shared_ptr< AbstractPlugin >>;
+
+enum class DependencyType
+{
+    Required,
+    Optional
+};
 
 
 class QUARTZ_CORE_API AbstractPluginBundle
@@ -36,6 +41,9 @@ public:
     QzCoreContext * coreContext() const;
 
     virtual PluginList plugins() const = 0;
+
+    virtual const QVector< QString > & dependencies(
+            DependencyType depType ) const = 0;
 
     template< typename Context >
     Context * context() const

@@ -37,17 +37,8 @@ public:
     void registerPluginAdapter( IPluginAdapter *pluginHost );
 
 private:
-    std::size_t loadPluginAt( const QDir &pluginRoot );
-
-    std::size_t load(
-            const QString &pluginRoot,
-            const QString &pluginFilePath );
-
-    bool initializePlugin( AbstractPlugin *plugin,
-                           QZ_IN_OUT QSet< QString > &loadedPluginIds );
-
-    class Data;
-    std::unique_ptr< Data > m_data;
+    class Impl;
+    std::unique_ptr< Impl > m_impl;
 
 };
 
