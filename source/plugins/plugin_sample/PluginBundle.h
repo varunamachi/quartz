@@ -14,6 +14,8 @@ class PluginBundle : public AbstractPluginBundle
 public:
     PluginList plugins() const override;
 
+    const QVector< QString > & dependencies( DependencyType depType ) const;
+
     PluginBundle();
 
     ~PluginBundle();
@@ -22,6 +24,9 @@ public:
 
     static const QString BUNDLE_NAME;
 
+private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
 } } }

@@ -217,16 +217,23 @@ bool PluginManager::Impl::processBundles(
     for( int i = 0; i < hardDeps.size(); ++ i ) {
         const auto & depId = hardDeps.at( i );
         auto depInfo = m_bundles.value( depId );
-        if( ! bundleInfo.isValid() ) {
+        if( depInfo.isValid() ) {
+            result = processBundles( depInfo, depType, processedBundles )
+                     && initBundle( depInfo.m_bundle );
+        }
+        else {
+            result = false;
+        }
+
+        if( ! result && depType == DependencyType::Optional ) {
+            ///TODO log debug
+            continue;
+        }
+        else if( ! result ) {
             ///TODO log error
-            result = false;
             break;
         }
-        if( ! processBundles( depInfo, depType, processedBundles )) {
-            ///TODO log warning
-            result = false;
-            break;
-        }
+
     }
     return result;
 }
@@ -240,8 +247,6 @@ bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
 bool PluginManager::Impl::initializePlugin( AbstractPlugin *plugin,
                                             QSet< QString > &loadedPluginIds )
 {
-
-
     //How to handle cyclic dependency?
     if( plugin == nullptr ) {
         return false;

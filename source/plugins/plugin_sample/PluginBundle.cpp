@@ -12,6 +12,12 @@ namespace Quartz { namespace Plugin { namespace Sample {
 const QString PluginBundle::BUNDLE_ID{ "qzplugin.sample" };
 const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
 
+struct PluginBundle::Data
+{
+//    PluginList m_pluginList;
+    QVector< QString > m_dependencies;
+};
+
 PluginList PluginBundle::plugins() const
 {
     QVector< std::shared_ptr< AbstractPlugin >> plugins;
@@ -27,8 +33,15 @@ PluginBundle::~PluginBundle()
 
 }
 
+const QVector< QString > & PluginBundle::dependencies(
+        DependencyType /*depType*/ ) const
+{
+    return m_data->m_dependencies;
+}
+
 PluginBundle::PluginBundle()
     : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
+    , m_data{ new Data{ }}
 {
 
 }
