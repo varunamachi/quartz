@@ -58,17 +58,18 @@ static const char * BUNDLE_DESTROY_FUNC_NAME = "destroy";
 class PluginManager::Impl
 {
 public:
-    std::size_t loadBundleAt( const QDir &pluginRoot );
+    std::size_t loadBundles( const QDir &pluginRoot,
+                             QZ_OUT BundleInfoMap &bundleInfoOut );
 
-    std::size_t load( const QString &pluginRoot,
-                      const QString &pluginFilePath );
+    BundleInfo getBundle( const QString &pluginRoot,
+                            const QString &pluginFilePath );
 
     void registerAdapter( IPluginAdapter *pluginAdapter );
 
-    bool processBundles();
 
     bool processBundles( const BundleInfo &bundleInfo,
                          DependencyType depType,
+                         const BundleInfoMap &loadedBundles,
                          QZ_OUT QSet< QString > &processedBundles );
 
     bool initBundle( AbstractPluginBundle *bundle );
@@ -96,6 +97,23 @@ PluginManager::~PluginManager()
     destroy();
 }
 
+AbstractPlugin * PluginManager::plugin( const QString &id ) const
+{
+    auto &plugin = m_impl->m_plugins.value( id );
+    return plugin.get();
+}
+
+
+IPluginAdapter * PluginManager::adapter( const QString &id ) const
+{
+    return m_impl->m_adapters.value( id );
+}
+
+
+void PluginManager::registerPluginAdapter( IPluginAdapter *pluginAdapter )
+{
+    m_impl->registerAdapter( pluginAdapter );
+}
 
 bool PluginManager::loadFrom( const QString &location )
 {
@@ -103,11 +121,11 @@ bool PluginManager::loadFrom( const QString &location )
     QDir dir{ location };
     auto dirList = dir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot,
                                       QDir::SortFlag::NoSort );
-
+    BundleInfoMap loadedBundles;
     foreach(const QFileInfo &info, dirList) {
         if( info.isReadable() ) {
             QDir pluginDir{ info.absoluteFilePath() };
-            auto numLoaded = m_impl->loadBundleAt( pluginDir );
+            auto numLoaded = m_impl->loadBundles( pluginDir, loadedBundles );
             QZ_DEBUG( "Qz:Core:Ext" )
                     << "Loaded " << numLoaded << " plugins from "
                     << info.absoluteFilePath();
@@ -115,28 +133,23 @@ bool PluginManager::loadFrom( const QString &location )
         else {
             QZ_WARN( "Qz:Core:Ext" ) << "Could not read plugin directory at "
                                      << info.absoluteFilePath();
+            result = false;
         }
     }
-    if( ! m_impl->processBundles() ) {
-        QZ_ERROR( "Qz:Core:Ext" )
-                << "Bundle initialization finished with errors.";
+    QSet< QString > processed;
+    for( auto it = loadedBundles.begin(); it != loadedBundles.end(); ++ it ) {
+        const auto &binfo = it.value();
+        if( ! processed.contains( binfo.m_bundle->bundleId() )) {
+            result = m_impl->processBundles( binfo,
+                                             DependencyType::Required,
+                                             loadedBundles,
+                                             processed ) && result;
+            result = m_impl->processBundles( binfo,
+                                             DependencyType::Optional,
+                                             loadedBundles,
+                                             processed ) && result;
+        }
     }
-//    QZ_INFO( "Qz:Core:Ext" ) << "Initilizing " << m_impl->m_plugins.size()
-//                             << "plugins from " << location;
-//    if( ! m_impl->m_plugins.isEmpty() ) {
-//        QSet< QString > loaded;
-//        for( auto pit = m_impl->m_plugins.begin();
-//             pit != m_impl->m_plugins.end();
-//             ++ pit ) {
-//            auto &plugin = pit.value();
-//            if( ! loaded.contains( plugin->pluginId() )) {
-//                m_impl->initializePlugin( plugin.get(), loaded );
-//            }
-//        }
-//    }
-//    else {
-//        QZ_WARN( "Qz:Core:Ext" ) << "No plugins loaded from " << location;
-//    }
     return result;
 }
 
@@ -173,25 +186,6 @@ bool PluginManager::destroy()
     return result;
 }
 
-
-AbstractPlugin * PluginManager::plugin( const QString &id ) const
-{
-    auto &plugin = m_impl->m_plugins.value( id );
-    return plugin.get();
-}
-
-
-IPluginAdapter * PluginManager::adapter( const QString &id ) const
-{
-    return m_impl->m_adapters.value( id );
-}
-
-
-void PluginManager::registerPluginAdapter( IPluginAdapter *pluginAdapter )
-{
-    m_impl->registerAdapter( pluginAdapter );
-}
-
 void PluginManager::Impl::registerAdapter( IPluginAdapter *pluginAdapter )
 {
     if( ! m_adapters.contains( pluginAdapter->pluginType() )) {
@@ -199,14 +193,90 @@ void PluginManager::Impl::registerAdapter( IPluginAdapter *pluginAdapter )
     }
 }
 
-bool PluginManager::Impl::processBundles()
+std::size_t PluginManager::Impl::loadBundles(
+        const QDir &bundleRoot,
+        QZ_OUT BundleInfoMap &bundleInfoOut )
 {
-    return false;
+    QStringList extensions;
+#ifdef Q_OS_LINUX
+    extensions << "*.so";
+#elif defined Q_OS_WIN
+    extensions << "*.dll";
+#else
+    extensions << "*.dylib" << "*.so";
+#endif
+
+#ifdef QT_DEBUG
+    QDir bundleDir{ bundleRoot.absoluteFilePath( "debug" )};
+#else
+//    QDir pluginDir{ dirInfo.absoluteFilePath() };
+        QDir pluginDir = pluginRoot;
+#endif
+
+    std::size_t numLoaded = 0;
+    QZ_DEBUG( "Qz:Core:Ext" )
+            << "Searching for plugins at " << bundleDir.absolutePath();
+    auto fileList = bundleDir.entryInfoList( extensions,
+                                             QDir::Files,
+                                             QDir::NoSort );
+    foreach( const auto &info, fileList ) {
+        QZ_DEBUG( "Qz:Core:Ext" ) << info.absoluteFilePath();
+        if( info.fileName().startsWith( "plugin_" )
+                || info.fileName().startsWith( "libplugin_" )) {
+
+            auto binfo = getBundle( bundleRoot.absolutePath(),
+                                     info.absoluteFilePath() );
+            if( binfo.isValid() ) {
+                bundleInfoOut.insert( binfo.m_bundle->bundleId(), binfo );
+                ++ numLoaded;
+            }
+        }
+    }
+    return numLoaded;
+}
+
+BundleInfo PluginManager::Impl::getBundle( const QString &bundleRoot,
+                                           const QString &bundleFilePath )
+{
+    auto lib = std::make_shared< QLibrary >( bundleFilePath );
+    lib->load();
+    BundleInfo binfo{};
+    if( lib->isLoaded() ) {
+        auto func = reinterpret_cast< PluginFunc >(
+                    lib->resolve( PLUGIN_GET_FUNC_NAME ));
+        if( func != nullptr ) {
+            auto bundleEnv = std::unique_ptr< BundleEnv >{
+                new BundleEnv{ bundleRoot, lib->fileName(), "0.1.0000" }};
+            BundleInputWrapper input{ std::move( bundleEnv ),
+                                      QzCoreContext::get() };
+            auto bundle = func( &input ).bundle;
+            if( bundle != nullptr ) {
+                binfo = BundleInfo{ bundle, lib };
+            }
+            else {
+                QZ_WARN( "Qz:Core:Ext" )
+                        << "Library at " << bundleFilePath << " does not "
+                           "contain any bundle, unloading...";
+                lib->unload();
+            }
+        }
+        else {
+            lib->unload();
+            QZ_ERROR( "Qz:Core:Ext" )
+                    << "Plugin library at " << bundleFilePath  << " does "
+                    << "not export entry point";
+        }
+    }
+    else {
+        QZ_ERROR( "Qz:Core:Ext" )
+                << "Failed to load plugin library at " << bundleFilePath;
+    }
 }
 
 bool PluginManager::Impl::processBundles(
         const BundleInfo &bundleInfo,
         DependencyType depType,
+        const BundleInfoMap &loadedBundles,
         QZ_OUT QSet< QString > &processedBundles )
 {
     if( processedBundles.contains( bundleInfo.m_bundle->bundleId() )) {
@@ -221,13 +291,21 @@ bool PluginManager::Impl::processBundles(
         const auto & depId = hardDeps.at( i );
         auto depInfo = m_bundles.value( depId );
         if( depInfo.isValid() ) {
-            result = processBundles( depInfo, depType, processedBundles )
+            result = processBundles( depInfo,
+                                     depType,
+                                     loadedBundles,
+                                     processedBundles )
                      && initBundle( depInfo.m_bundle );
+            if( result ) {
+                m_bundles.insert( bundleInfo.m_bundle->bundleId(), bundleInfo );
+                QZ_DEBUG( "Qz:Core:Ext" )
+                        << "Successfuly processed bundle with id "
+                        << bundleInfo.m_bundle->bundleId();
+            }
         }
         else {
             result = false;
         }
-
         if( ! result && depType == DependencyType::Optional ) {
             QZ_DEBUG( "Qz:Core:Ext" )
                     << "Optional dependency " << depId << " for "
@@ -287,85 +365,6 @@ bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
         }
     }
     return result;
-}
-
-
-std::size_t PluginManager::Impl::loadBundleAt( const QDir &bundleRoot )
-{
-    QStringList extensions;
-#ifdef Q_OS_LINUX
-    extensions << "*.so";
-#elif defined Q_OS_WIN
-    extensions << "*.dll";
-#else
-    extensions << "*.dylib" << "*.so";
-#endif
-
-#ifdef QT_DEBUG
-    QDir bundleDir{ bundleRoot.absoluteFilePath( "debug" )};
-#else
-//    QDir pluginDir{ dirInfo.absoluteFilePath() };
-        QDir pluginDir = pluginRoot;
-#endif
-
-    std::size_t numLoaded = 0;
-    QZ_DEBUG( "Qz:Core:Ext" )
-            << "Searching for plugins at " << bundleDir.absolutePath();
-    auto fileList = bundleDir.entryInfoList( extensions,
-                                             QDir::Files,
-                                             QDir::NoSort );
-    foreach( const auto &info, fileList ) {
-        QZ_DEBUG( "Qz:Core:Ext" ) << info.absoluteFilePath();
-        if( info.fileName().startsWith( "plugin_" )
-                || info.fileName().startsWith( "libplugin_" )) {
-            numLoaded = numLoaded + load( bundleRoot.absolutePath(),
-                                          info.absoluteFilePath() );
-        }
-    }
-    return numLoaded;
-}
-
-std::size_t PluginManager::Impl::load(
-        const QString &bundleRoot,
-        const QString &bundleFilePath )
-{
-    std::size_t numLoaded = 0;
-    auto lib = std::make_shared< QLibrary >( bundleFilePath );
-    lib->load();
-    if( lib->isLoaded() ) {
-        auto func = reinterpret_cast< PluginFunc >(
-                    lib->resolve( PLUGIN_GET_FUNC_NAME ));
-        if( func != nullptr ) {
-            auto bundleEnv = std::unique_ptr< BundleEnv >{
-                new BundleEnv{ bundleRoot, lib->fileName(), "0.1.0000" }};
-            BundleInputWrapper input{ std::move( bundleEnv ),
-                        QzCoreContext::get() };
-            auto bundle = func( &input ).bundle;
-            if( bundle != nullptr ) {
-                auto info = BundleInfo{ bundle, lib };
-//                foreach( auto plugin, bundle->plugins() ) {
-//                    m_plugins.insert( plugin->pluginId(), plugin );
-//                }
-                m_bundles.insert( bundle->bundleId(), info );
-                ++ numLoaded;
-            }
-            else {
-                //print warning...
-                lib->unload();
-            }
-        }
-        else {
-            lib->unload();
-            QZ_ERROR( "Qz:Core:Ext" )
-                    << "Plugin library at " << bundleFilePath  << " does "
-                    << "not export entry point";
-        }
-    }
-    else {
-        QZ_ERROR( "Qz:Core:Ext" )
-                << "Failed to load plugin library at " << bundleFilePath;
-    }
-    return numLoaded;
 }
 
 }
