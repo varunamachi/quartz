@@ -36,7 +36,7 @@ struct BundleInfo
 
     bool isValid() const
     {
-        return m_bundle == nullptr || m_library == nullptr;
+        return ! ( m_bundle == nullptr || m_library == nullptr );
     }
 
     AbstractPluginBundle *m_bundle;
@@ -144,12 +144,45 @@ bool PluginManager::loadFrom( const QString &location )
                                              DependencyType::Required,
                                              loadedBundles,
                                              processed ) && result;
+        }
+    }
+    for( auto it = loadedBundles.begin(); it != loadedBundles.end(); ++ it ) {
+        const auto &binfo = it.value();
+        if( ! processed.contains( binfo.m_bundle->bundleId() )) {
             result = m_impl->processBundles( binfo,
                                              DependencyType::Optional,
                                              loadedBundles,
                                              processed ) && result;
         }
     }
+
+    //unload failed bundles
+    for( auto it = loadedBundles.begin();
+         it != loadedBundles.end();
+         ++ it ) {
+        auto &binfo = it.value();
+        if( ! m_impl->m_bundles.contains( binfo.m_bundle->bundleId() )) {
+            auto lib = binfo.m_library;
+            if( lib != nullptr ) {
+                auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
+                            lib->resolve( BUNDLE_DESTROY_FUNC_NAME ));
+                if( destroyFunc != nullptr ) {
+                    destroyFunc();
+                }
+                else {
+                    QZ_DEBUG( "Qz:Core:Ext" )
+                            << "Could not find symbol for destroy function in "
+                               " library: " << lib->fileName();
+                }
+                result = result && lib->unload();
+            }
+            QZ_DEBUG( "Qz:Core:Ext" )
+                    << "Unloaded library for bundle with id " <<
+                       binfo.m_bundle->bundleId()
+                    << " which failed to initialize";
+        }
+    }
+
     return result;
 }
 
@@ -220,7 +253,6 @@ std::size_t PluginManager::Impl::loadBundles(
                                              QDir::Files,
                                              QDir::NoSort );
     foreach( const auto &info, fileList ) {
-        QZ_DEBUG( "Qz:Core:Ext" ) << info.absoluteFilePath();
         if( info.fileName().startsWith( "plugin_" )
                 || info.fileName().startsWith( "libplugin_" )) {
 
@@ -271,6 +303,7 @@ BundleInfo PluginManager::Impl::getBundle( const QString &bundleRoot,
         QZ_ERROR( "Qz:Core:Ext" )
                 << "Failed to load plugin library at " << bundleFilePath;
     }
+    return binfo;
 }
 
 bool PluginManager::Impl::processBundles(
@@ -294,14 +327,14 @@ bool PluginManager::Impl::processBundles(
             result = processBundles( depInfo,
                                      depType,
                                      loadedBundles,
-                                     processedBundles )
-                     && initBundle( depInfo.m_bundle );
+                                     processedBundles );
             if( result ) {
                 m_bundles.insert( bundleInfo.m_bundle->bundleId(), bundleInfo );
                 QZ_DEBUG( "Qz:Core:Ext" )
                         << "Successfuly processed bundle with id "
                         << bundleInfo.m_bundle->bundleId();
             }
+            processedBundles.insert( bundleInfo.m_bundle->bundleId() );
         }
         else {
             result = false;
