@@ -14,18 +14,18 @@ const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
 
 struct PluginBundle::Data
 {
-//    PluginList m_pluginList;
-    QVector< QString > m_dependencies;
+    PluginList m_plugins;
+    DependencyList m_dependencies;
 };
 
-PluginList PluginBundle::plugins() const
+PluginBundle::PluginBundle()
+    : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
+    , m_data{ new Data{ }}
 {
-    QVector< std::shared_ptr< AbstractPlugin >> plugins;
-    plugins.push_back( std::make_shared< ViewProvider >() );
-    plugins.push_back( std::make_shared< ContentProvider >() );
-    plugins.push_back( std::make_shared< NodeProvider >() );
-    plugins.push_back( std::make_shared< TitleItemProvider >() );
-    return plugins;
+    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
 }
 
 PluginBundle::~PluginBundle()
@@ -33,17 +33,16 @@ PluginBundle::~PluginBundle()
 
 }
 
-const QVector< QString > & PluginBundle::dependencies(
-        DependencyType /*depType*/ ) const
+const PluginList & PluginBundle::plugins() const
+{
+    return m_data->m_plugins;
+}
+
+
+const DependencyList & PluginBundle::dependencies() const
 {
     return m_data->m_dependencies;
 }
 
-PluginBundle::PluginBundle()
-    : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
-    , m_data{ new Data{ }}
-{
-
-}
 
 } } }

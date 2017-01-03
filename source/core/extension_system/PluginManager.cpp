@@ -68,7 +68,6 @@ public:
 
 
     bool processBundles( const BundleInfo &bundleInfo,
-                         DependencyType depType,
                          const BundleInfoMap &loadedBundles,
                          QZ_OUT QSet< QString > &processedBundles );
 
@@ -141,21 +140,10 @@ bool PluginManager::loadFrom( const QString &location )
         const auto &binfo = it.value();
         if( ! processed.contains( binfo.m_bundle->bundleId() )) {
             result = m_impl->processBundles( binfo,
-                                             DependencyType::Required,
                                              loadedBundles,
                                              processed ) && result;
         }
     }
-    for( auto it = loadedBundles.begin(); it != loadedBundles.end(); ++ it ) {
-        const auto &binfo = it.value();
-        if( ! processed.contains( binfo.m_bundle->bundleId() )) {
-            result = m_impl->processBundles( binfo,
-                                             DependencyType::Optional,
-                                             loadedBundles,
-                                             processed ) && result;
-        }
-    }
-
     //unload failed bundles
     for( auto it = loadedBundles.begin();
          it != loadedBundles.end();
@@ -245,7 +233,6 @@ std::size_t PluginManager::Impl::loadBundles(
 //    QDir pluginDir{ dirInfo.absoluteFilePath() };
         QDir pluginDir = pluginRoot;
 #endif
-
     std::size_t numLoaded = 0;
     QZ_DEBUG( "Qz:Core:Ext" )
             << "Searching for plugins at " << bundleDir.absolutePath();
@@ -257,7 +244,7 @@ std::size_t PluginManager::Impl::loadBundles(
                 || info.fileName().startsWith( "libplugin_" )) {
 
             auto binfo = getBundle( bundleRoot.absolutePath(),
-                                     info.absoluteFilePath() );
+                                    info.absoluteFilePath() );
             if( binfo.isValid() ) {
                 bundleInfoOut.insert( binfo.m_bundle->bundleId(), binfo );
                 ++ numLoaded;
@@ -308,7 +295,6 @@ BundleInfo PluginManager::Impl::getBundle( const QString &bundleRoot,
 
 bool PluginManager::Impl::processBundles(
         const BundleInfo &bundleInfo,
-        DependencyType depType,
         const BundleInfoMap &loadedBundles,
         QZ_OUT QSet< QString > &processedBundles )
 {
@@ -319,13 +305,12 @@ bool PluginManager::Impl::processBundles(
         return false;
     }
     bool result = true;
-    const auto &hardDeps = bundleInfo.m_bundle->dependencies( depType );
+    const auto &hardDeps = bundleInfo.m_bundle->dependencies();
     for( int i = 0; i < hardDeps.size(); ++ i ) {
-        const auto & depId = hardDeps.at( i );
-        auto depInfo = m_bundles.value( depId );
+        const auto & depEntry = hardDeps.at( i );
+        auto depInfo = m_bundles.value( depEntry.first );
         if( depInfo.isValid() ) {
             result = processBundles( depInfo,
-                                     depType,
                                      loadedBundles,
                                      processedBundles );
             if( result ) {
@@ -339,9 +324,9 @@ bool PluginManager::Impl::processBundles(
         else {
             result = false;
         }
-        if( ! result && depType == DependencyType::Optional ) {
+        if( ! result && depEntry.second == DependencyType::Optional ) {
             QZ_DEBUG( "Qz:Core:Ext" )
-                    << "Optional dependency " << depId << " for "
+                    << "Optional dependency " << depEntry.first << " for "
                     << bundleInfo.m_bundle->bundleId() << " not present, "
                        "hence ignored.";
             continue;
@@ -351,7 +336,7 @@ bool PluginManager::Impl::processBundles(
                     << "Could not initialize bundle with id "
                     << bundleInfo.m_bundle->bundleId()
                     << "; could not find required dependncy with id "
-                    << depId;
+                    << depEntry.first;
             break;
         }
 

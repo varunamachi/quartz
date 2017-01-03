@@ -12,9 +12,9 @@ class PluginBundle : public AbstractPluginBundle
 {
 
 public:
-    PluginList plugins() const override;
+    const PluginList & plugins() const override;
 
-    const QVector< QString > & dependencies( DependencyType depType ) const;
+    const DependencyList & dependencies() const override;
 
     PluginBundle();
 

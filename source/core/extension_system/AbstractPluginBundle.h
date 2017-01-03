@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <QPair>
 
 #include "../QuartzCore.h"
 
@@ -14,7 +15,6 @@ class QzCoreContext;
 class AbstractPlugin;
 class BundleEnv;
 
-using PluginList = QVector< std::shared_ptr< AbstractPlugin >>;
 
 enum class DependencyType
 {
@@ -22,10 +22,13 @@ enum class DependencyType
     Optional
 };
 
+using PluginList = QVector< std::shared_ptr< AbstractPlugin >>;
+using DependencyList = QVector< QPair< QString, DependencyType >>;
 
 class QUARTZ_CORE_API AbstractPluginBundle
 {
 public:
+
     AbstractPluginBundle( const QString &bundleId,
                           const QString &bundleName );
 
@@ -40,10 +43,9 @@ public:
 
     QzCoreContext * coreContext() const;
 
-    virtual PluginList plugins() const = 0;
+    virtual const PluginList & plugins() const = 0;
 
-    virtual const QVector< QString > & dependencies(
-            DependencyType depType ) const = 0;
+    virtual const DependencyList & dependencies() const = 0;
 
     template< typename Context >
     Context * context() const
