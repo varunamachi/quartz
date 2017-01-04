@@ -306,7 +306,7 @@ void PluginManager::Impl::registerPluginAdapter(
         std::shared_ptr< IPluginAdapter > adapter )
 {
     if( adapter ) {
-        m_adapters[ adapter->pluginAdapterName() ] = adapter;
+        m_adapters[ adapter->pluginType() ] = adapter;
     }
 }
 
