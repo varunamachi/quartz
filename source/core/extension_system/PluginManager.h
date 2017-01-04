@@ -34,7 +34,9 @@ public:
 
     IPluginAdapter * adapter( const QString &id ) const;
 
-    void registerPluginAdapter( IPluginAdapter *pluginHost );
+    void registerPluginAdapter( std::shared_ptr< IPluginAdapter > adapter );
+
+    void registerPluginAdapter( IPluginAdapter *adapter );
 
 private:
     class Impl;

@@ -44,7 +44,7 @@ struct BundleInfo
 };
 
 using PluginMap = QHash< QString, std::shared_ptr< AbstractPlugin >>;
-using AdapterMap = QHash< QString, IPluginAdapter *>;
+using AdapterMap = QHash< QString, std::shared_ptr< IPluginAdapter >>;
 using BundleInfoMap = QHash< QString, BundleInfo >;
 
 typedef PluginBundleWrapper ( *PluginFunc )( BundleInputWrapper * );
@@ -57,19 +57,22 @@ static const char * BUNDLE_DESTROY_FUNC_NAME = "destroy";
 class PluginManager::Impl
 {
 public:
+    bool load( const QDir &dir );
+
+    bool destroy();
+
     std::size_t loadBundles( const QDir &pluginRoot,
                              QZ_OUT BundleInfoMap &bundleInfoOut );
 
     BundleInfo getBundle( const QString &pluginRoot,
                           const QString &pluginFilePath );
-
-    void registerAdapter( IPluginAdapter *pluginAdapter );
-
     bool processBundles( const BundleInfo &bundleInfo,
                          const BundleInfoMap &loadedBundles,
                          QZ_OUT QSet< QString > &processedBundles );
 
     bool initBundle( AbstractPluginBundle *bundle );
+
+    void registerPluginAdapter( std::shared_ptr< IPluginAdapter > adapter );
 
     PluginMap m_plugins;
 
@@ -80,49 +83,16 @@ public:
     bool m_active;
 };
 
-
-PluginManager::PluginManager()
-//    : m_data( std::make_unique< PluginManager::Data >() )
-    : m_impl( std::unique_ptr< Impl >( new Impl() ))
-{
-
-}
-
-
-PluginManager::~PluginManager()
-{
-    destroy();
-}
-
-AbstractPlugin * PluginManager::plugin( const QString &id ) const
-{
-    auto &plugin = m_impl->m_plugins.value( id );
-    return plugin.get();
-}
-
-
-IPluginAdapter * PluginManager::adapter( const QString &id ) const
-{
-    return m_impl->m_adapters.value( id );
-}
-
-
-void PluginManager::registerPluginAdapter( IPluginAdapter *pluginAdapter )
-{
-    m_impl->registerAdapter( pluginAdapter );
-}
-
-bool PluginManager::loadFrom( const QString &location )
+bool PluginManager::Impl::load( const QDir &dir )
 {
     bool result = true;
-    QDir dir{ location };
     auto dirList = dir.entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot,
                                       QDir::SortFlag::NoSort );
     BundleInfoMap loadedBundles;
     foreach(const QFileInfo &info, dirList) {
         if( info.isReadable() ) {
             QDir pluginDir{ info.absoluteFilePath() };
-            auto numLoaded = m_impl->loadBundles( pluginDir, loadedBundles );
+            auto numLoaded = loadBundles( pluginDir, loadedBundles );
             QZ_DEBUG( "Qz:Core:Ext" )
                     << "Loaded " << numLoaded << " plugins from "
                     << info.absoluteFilePath();
@@ -137,9 +107,9 @@ bool PluginManager::loadFrom( const QString &location )
     for( auto it = loadedBundles.begin(); it != loadedBundles.end(); ++ it ) {
         const auto &binfo = it.value();
         if( ! processed.contains( binfo.m_bundle->bundleId() )) {
-            result = m_impl->processBundles( binfo,
-                                             loadedBundles,
-                                             processed ) && result;
+            result = processBundles( binfo,
+                                     loadedBundles,
+                                     processed ) && result;
         }
     }
     //unload failed bundles
@@ -147,7 +117,7 @@ bool PluginManager::loadFrom( const QString &location )
          it != loadedBundles.end();
          ++ it ) {
         auto &binfo = it.value();
-        if( ! m_impl->m_bundles.contains( binfo.m_bundle->bundleId() )) {
+        if( ! m_bundles.contains( binfo.m_bundle->bundleId() )) {
             auto lib = binfo.m_library;
             if( lib != nullptr ) {
                 auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
@@ -167,48 +137,11 @@ bool PluginManager::loadFrom( const QString &location )
                        binfo.m_bundle->bundleId()
                     << " which failed to initialize";
         }
-    }
-    return result;
-}
-
-
-bool PluginManager::destroy()
-{
-    if( ! m_impl->m_active ) {
-        return false;
-    }
-    bool result = true;
-    for( auto it = m_impl->m_adapters.begin();
-         it != m_impl->m_adapters.end();
-         ++ it ) {
-        auto &handler = it.value();
-        result = result && handler->finalizePlugins();
-    }
-    foreach( auto &bundle, m_impl->m_bundles ) {
-        auto lib = bundle.m_library;
-        if( lib != nullptr ) {
-            auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
-                        lib->resolve( BUNDLE_DESTROY_FUNC_NAME ));
-            if( destroyFunc != nullptr ) {
-                destroyFunc();
-            }
-            else {
-                QZ_DEBUG( "Qz:Core:Ext" )
-                        << "Could not find symbol for destroy function in "
-                           " library: " << lib->fileName();
-            }
-            result = result && lib->unload();
+        else {
+            initBundle( binfo.m_bundle );
         }
     }
-    m_impl->m_active = false;
     return result;
-}
-
-void PluginManager::Impl::registerAdapter( IPluginAdapter *pluginAdapter )
-{
-    if( ! m_adapters.contains( pluginAdapter->pluginType() )) {
-        m_adapters.insert( pluginAdapter->pluginType(), pluginAdapter );
-    }
 }
 
 std::size_t PluginManager::Impl::loadBundles(
@@ -298,9 +231,6 @@ bool PluginManager::Impl::processBundles(
     if( processedBundles.contains( bundleInfo.m_bundle->bundleId() )) {
         return true;
     }
-    if( ! initBundle( bundleInfo.m_bundle )) {
-        return false;
-    }
     bool result = true;
     const auto &hardDeps = bundleInfo.m_bundle->dependencies();
     for( int i = 0; i < hardDeps.size(); ++ i ) {
@@ -345,6 +275,13 @@ bool PluginManager::Impl::processBundles(
 
 bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
 {
+    const auto &adapters = bundle->adapters();
+    for( int i = 0; i < adapters.size(); ++ i ) {
+        const auto adapter = adapters.at( i );
+        if( ! m_adapters.contains( adapter->pluginType() )) {
+            m_adapters.insert( adapter->pluginType(), adapter );
+        }
+    }
     auto result = true;
     const auto plugins = bundle->plugins();
     for( int i = 0; i < plugins.size(); ++ i ) {
@@ -365,24 +302,102 @@ bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
     return result;
 }
 
-//auto &pluginType = plugin->pluginType();
-//if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {
-//    auto adapterPgn = dynamic_cast< AbstractAdapterProvider *>(
-//                plugin.get() );
-//    if( adapterPgn != nullptr ) {
-//        auto adapters = adapterPgn->adapters();
-//        foreach( auto adapter, adapters ) {
-//            registerAdapter( adapter );
-//        }
-//    }
-//    else {
-//        QZ_ERROR( "Qz:Core:Ext" )
-//                << "Invalid adapter plugin provided "
-//                << ( plugin != nullptr ? plugin->pluginId()
-//                                       : "<null>" );
-//        result = false;
-//    }
-//}
-//else {
+void PluginManager::Impl::registerPluginAdapter(
+        std::shared_ptr< IPluginAdapter > adapter )
+{
+    if( adapter ) {
+        m_adapters[ adapter->pluginAdapterName() ] = adapter;
+    }
+}
+
+bool PluginManager::Impl::destroy()
+{
+    if( ! m_active ) {
+        return false;
+    }
+    bool result = true;
+    for( auto it = m_adapters.begin();
+         it != m_adapters.end();
+         ++ it ) {
+        auto &handler = it.value();
+        result = result && handler->finalizePlugins();
+    }
+    foreach( auto &bundle, m_bundles ) {
+        auto lib = bundle.m_library;
+        if( lib != nullptr ) {
+            auto destroyFunc = reinterpret_cast< BundleDestroyerFunc >(
+                        lib->resolve( BUNDLE_DESTROY_FUNC_NAME ));
+            if( destroyFunc != nullptr ) {
+                destroyFunc();
+            }
+            else {
+                QZ_DEBUG( "Qz:Core:Ext" )
+                        << "Could not find symbol for destroy function in "
+                           " library: " << lib->fileName();
+            }
+            result = result && lib->unload();
+        }
+    }
+    m_active = false;
+    return result;
+}
+
+//========================== PluginManager ====================================
+PluginManager::PluginManager()
+//    : m_data( std::make_unique< PluginManager::Data >() )
+    : m_impl( std::unique_ptr< Impl >( new Impl() ))
+{
+
+}
+
+
+PluginManager::~PluginManager()
+{
+    destroy();
+}
+
+AbstractPlugin * PluginManager::plugin( const QString &id ) const
+{
+    auto &plugin = m_impl->m_plugins.value( id );
+    return plugin.get();
+}
+
+IPluginAdapter * PluginManager::adapter( const QString &id ) const
+{
+    return m_impl->m_adapters.value(
+                id, std::shared_ptr< IPluginAdapter >{} ).get();
+}
+
+void PluginManager::registerPluginAdapter(
+        std::shared_ptr< IPluginAdapter > adapter )
+{
+    m_impl->registerPluginAdapter( adapter );
+}
+
+void PluginManager::registerPluginAdapter( IPluginAdapter *adapter )
+{
+    std::shared_ptr< IPluginAdapter > adptr{ adapter,
+                                             []( IPluginAdapter *){ }};
+    m_impl->registerPluginAdapter(  adptr );
+}
+
+bool PluginManager::loadFrom( const QString &location )
+{
+    bool result = false;
+    QFileInfo info{ location };
+    if( info.isDir() && info.isReadable() ) {
+        result = m_impl->load( QDir{ location });
+    }
+    else {
+        QZ_ERROR( "Qz:Core:Ext" )
+                << "Invalid plugin root directory " << location << " given";
+    }
+    return result;
+}
+
+bool PluginManager::destroy()
+{
+    return m_impl->destroy();
+}
 
 }
