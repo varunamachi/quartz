@@ -1,5 +1,7 @@
 #include <base/QzAppContext.h>
 
+#include <core/extension_system/IPluginAdapter.h>
+
 #include "Sample.h"
 #include "ViewProvider.h"
 #include "ContentProvider.h"
@@ -14,8 +16,10 @@ const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
 
 struct PluginBundle::Data
 {
+    AdapterList m_adapters;
     PluginList m_plugins;
     DependencyList m_dependencies;
+
 };
 
 PluginBundle::PluginBundle()
@@ -42,6 +46,11 @@ const PluginList & PluginBundle::plugins() const
 const DependencyList & PluginBundle::dependencies() const
 {
     return m_data->m_dependencies;
+}
+
+const AdapterList &PluginBundle::adapters() const
+{
+    return m_data->m_adapters;
 }
 
 

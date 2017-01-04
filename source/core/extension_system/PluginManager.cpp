@@ -11,7 +11,6 @@
 #include "AbstractPlugin.h"
 #include "IPluginAdapter.h"
 #include "PluginManager.h"
-#include "AbstractAdapterProvider.h"
 #include "AbstractPluginBundle.h"
 #include "BundleEnv.h"
 
@@ -62,10 +61,9 @@ public:
                              QZ_OUT BundleInfoMap &bundleInfoOut );
 
     BundleInfo getBundle( const QString &pluginRoot,
-                            const QString &pluginFilePath );
+                          const QString &pluginFilePath );
 
     void registerAdapter( IPluginAdapter *pluginAdapter );
-
 
     bool processBundles( const BundleInfo &bundleInfo,
                          const BundleInfoMap &loadedBundles,
@@ -170,7 +168,6 @@ bool PluginManager::loadFrom( const QString &location )
                     << " which failed to initialize";
         }
     }
-
     return result;
 }
 
@@ -313,13 +310,6 @@ bool PluginManager::Impl::processBundles(
             result = processBundles( depInfo,
                                      loadedBundles,
                                      processedBundles );
-            if( result ) {
-                m_bundles.insert( bundleInfo.m_bundle->bundleId(), bundleInfo );
-                QZ_DEBUG( "Qz:Core:Ext" )
-                        << "Successfuly processed bundle with id "
-                        << bundleInfo.m_bundle->bundleId();
-            }
-            processedBundles.insert( bundleInfo.m_bundle->bundleId() );
         }
         else {
             result = false;
@@ -341,6 +331,15 @@ bool PluginManager::Impl::processBundles(
         }
 
     }
+
+    if( result ) {
+        m_bundles.insert( bundleInfo.m_bundle->bundleId(), bundleInfo );
+        QZ_DEBUG( "Qz:Core:Ext" )
+                << "Successfuly processed bundle with id "
+                << bundleInfo.m_bundle->bundleId();
+    }
+    processedBundles.insert( bundleInfo.m_bundle->bundleId() );
+
     return result;
 }
 
@@ -350,25 +349,7 @@ bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
     const auto plugins = bundle->plugins();
     for( int i = 0; i < plugins.size(); ++ i ) {
         auto plugin = plugins.at( i );
-        auto &pluginType = plugin->pluginType();
-        if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {
-            auto adapterPgn = dynamic_cast< AbstractAdapterProvider *>(
-                        plugin.get() );
-            if( adapterPgn != nullptr ) {
-                auto adapters = adapterPgn->adapters();
-                foreach( auto adapter, adapters ) {
-                    registerAdapter( adapter );
-                }
-            }
-            else {
-                QZ_ERROR( "Qz:Core:Ext" )
-                        << "Invalid adapter plugin provided "
-                        << ( plugin != nullptr ? plugin->pluginId()
-                                               : "<null>" );
-                result = false;
-            }
-        }
-        else {
+
             auto adapter = m_adapters.value( plugin->pluginType() );
             if( adapter != nullptr ) {
                 result = adapter->handlePlugin( plugin.get() );
@@ -380,9 +361,28 @@ bool PluginManager::Impl::initBundle( AbstractPluginBundle *bundle )
                         << plugin->pluginId() << ". Ignoring...";
                 result = false;
             }
-        }
     }
     return result;
 }
+
+//auto &pluginType = plugin->pluginType();
+//if( pluginType == AbstractAdapterProvider::PLUGIN_TYPE ) {
+//    auto adapterPgn = dynamic_cast< AbstractAdapterProvider *>(
+//                plugin.get() );
+//    if( adapterPgn != nullptr ) {
+//        auto adapters = adapterPgn->adapters();
+//        foreach( auto adapter, adapters ) {
+//            registerAdapter( adapter );
+//        }
+//    }
+//    else {
+//        QZ_ERROR( "Qz:Core:Ext" )
+//                << "Invalid adapter plugin provided "
+//                << ( plugin != nullptr ? plugin->pluginId()
+//                                       : "<null>" );
+//        result = false;
+//    }
+//}
+//else {
 
 }

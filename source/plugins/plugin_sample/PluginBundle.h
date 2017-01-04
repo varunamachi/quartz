@@ -12,13 +12,15 @@ class PluginBundle : public AbstractPluginBundle
 {
 
 public:
+    PluginBundle();
+
+    ~PluginBundle();
+
     const PluginList & plugins() const override;
 
     const DependencyList & dependencies() const override;
 
-    PluginBundle();
-
-    ~PluginBundle();
+    const AdapterList &adapters() const override;
 
     static const QString BUNDLE_ID;
 
@@ -27,6 +29,7 @@ public:
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
 };
 
 } } }

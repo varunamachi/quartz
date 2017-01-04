@@ -3,7 +3,6 @@
 vq_classes(
     PluginManager
     AbstractPlugin
-    AbstractAdapterProvider
     AbstractPluginBundle
     BundleEnv
 )

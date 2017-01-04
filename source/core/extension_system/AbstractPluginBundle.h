@@ -5,6 +5,7 @@
 #include <QPair>
 
 #include "../QuartzCore.h"
+#include "../utils/Macros.h"
 
 
 class QString;
@@ -14,6 +15,7 @@ namespace Quartz {
 class QzCoreContext;
 class AbstractPlugin;
 class BundleEnv;
+QZ_INTERFACE IPluginAdapter;
 
 
 enum class DependencyType
@@ -24,6 +26,7 @@ enum class DependencyType
 
 using PluginList = QVector< std::shared_ptr< AbstractPlugin >>;
 using DependencyList = QVector< QPair< QString, DependencyType >>;
+using AdapterList = QVector< std::shared_ptr< IPluginAdapter >>;
 
 class QUARTZ_CORE_API AbstractPluginBundle
 {
@@ -38,12 +41,13 @@ public:
 
     const QString & bundleName() const;
 
-
     void setContext( QzCoreContext *context );
 
     QzCoreContext * coreContext() const;
 
     virtual const PluginList & plugins() const = 0;
+
+    virtual const AdapterList & adapters() const = 0;
 
     virtual const DependencyList & dependencies() const = 0;
 
