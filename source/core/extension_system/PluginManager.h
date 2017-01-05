@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <QList>
+#include <QVector>
 
 #include "../QuartzCore.h"
 #include "../utils/Macros.h"
@@ -13,7 +13,8 @@ class QFileInfo;
 
 namespace Quartz {
 
-QZ_INTERFACE AbstractPlugin;
+class AbstractPlugin;
+class AbstractPluginBundle;
 QZ_INTERFACE IPluginAdapter;
 
 class QUARTZ_CORE_API PluginManager
@@ -25,18 +26,15 @@ public:
 
     ~PluginManager();
 
-
     bool loadFrom( const QString &location );
 
     bool destroy();
 
-    AbstractPlugin * plugin( const QString &id ) const;
-
-    IPluginAdapter * adapter( const QString &id ) const;
-
     void registerPluginAdapter( std::shared_ptr< IPluginAdapter > adapter );
 
     void registerPluginAdapter( IPluginAdapter *adapter );
+
+    const QVector< AbstractPluginBundle *> bundles() const;
 
 private:
     class Impl;

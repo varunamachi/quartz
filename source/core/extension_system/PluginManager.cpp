@@ -74,8 +74,6 @@ public:
 
     void registerPluginAdapter( std::shared_ptr< IPluginAdapter > adapter );
 
-    PluginMap m_plugins;
-
     AdapterMap m_adapters;
 
     BundleInfoMap m_bundles;
@@ -356,18 +354,6 @@ PluginManager::~PluginManager()
     destroy();
 }
 
-AbstractPlugin * PluginManager::plugin( const QString &id ) const
-{
-    auto &plugin = m_impl->m_plugins.value( id );
-    return plugin.get();
-}
-
-IPluginAdapter * PluginManager::adapter( const QString &id ) const
-{
-    return m_impl->m_adapters.value(
-                id, std::shared_ptr< IPluginAdapter >{} ).get();
-}
-
 void PluginManager::registerPluginAdapter(
         std::shared_ptr< IPluginAdapter > adapter )
 {
@@ -379,6 +365,11 @@ void PluginManager::registerPluginAdapter( IPluginAdapter *adapter )
     std::shared_ptr< IPluginAdapter > adptr{ adapter,
                                              []( IPluginAdapter *){ }};
     m_impl->registerPluginAdapter(  adptr );
+}
+
+const QVector< AbstractPluginBundle * > PluginManager::bundles() const
+{
+
 }
 
 bool PluginManager::loadFrom( const QString &location )
