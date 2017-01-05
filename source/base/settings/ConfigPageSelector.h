@@ -18,7 +18,7 @@ class QUARTZ_BASE_API ConfigPageSelector : public AbstractSelector
     Q_OBJECT
 
 public:
-    ConfigPageSelector( QWidget *parent = nullptr );
+    explicit ConfigPageSelector( QWidget *parent = nullptr );
 
     ~ConfigPageSelector();
 

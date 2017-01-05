@@ -28,6 +28,7 @@ add_subdirectory( content_manager )
 add_subdirectory( selector )
 add_subdirectory( general_selector )
 add_subdirectory( settings )
+add_subdirectory( extension_details )
 
 vq_create_sharedlib()
 vq_install()

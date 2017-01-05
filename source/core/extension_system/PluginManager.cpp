@@ -369,7 +369,14 @@ void PluginManager::registerPluginAdapter( IPluginAdapter *adapter )
 
 const QVector< AbstractPluginBundle * > PluginManager::bundles() const
 {
-
+    QVector< AbstractPluginBundle *> bundles;
+    for( auto it = m_impl->m_bundles.begin();
+         it != m_impl->m_bundles.end();
+         ++ it )
+    {
+        bundles.push_back( it->m_bundle );
+    }
+    return bundles;
 }
 
 bool PluginManager::loadFrom( const QString &location )
