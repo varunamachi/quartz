@@ -2,6 +2,6 @@
 vq_classes(
     BundleSelector
     BundleInfoPage
-    BundleListModel
-    PluginTableModel
+    BundleItemModel
+    PluginItemModel
 )

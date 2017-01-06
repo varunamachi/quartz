@@ -4,6 +4,8 @@
 
 namespace Quartz {
 
+class AbstractPluginBundle;
+
 class BundleInfoPage : public ContentWidget
 {
     Q_OBJECT
@@ -12,6 +14,8 @@ public:
     explicit BundleInfoPage( QWidget *parent = nullptr );
 
     ~BundleInfoPage();
+
+    void setBundle( const AbstractPluginBundle *bundle );
 
     static const QString CONTENT_ID;
 
