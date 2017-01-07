@@ -34,6 +34,8 @@ public:
     void setPluginList(
             const QVector< std::shared_ptr< AbstractPlugin >> *plugins );
 
+    void clear();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

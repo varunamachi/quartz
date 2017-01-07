@@ -21,6 +21,7 @@
 #include <base/settings/ConfigPageSelector.h>
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
+#include <base/extension_details/BundleSelector.h>
 
 
 #include "inbuilt/LogView.h"
@@ -136,11 +137,15 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_content );
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_viewManager );
     m_data->m_pluginManager->registerPluginAdapter( configTree );
+    appContext()->setPluginManager( m_data->m_pluginManager.get() );
 
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
     if( ! m_data->m_pluginManager->loadFrom( execDir )) {
         QZ_ERROR( "App" ) << "Failed to load all available plugins";
     }
+
+    auto bundleSelector = new BundleSelector{ this };
+    m_data->m_selector->addSelector( bundleSelector );
 }
 
 QzMainWidget::~QzMainWidget()

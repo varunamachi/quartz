@@ -34,10 +34,17 @@ PluginItemModel::~PluginItemModel()
 }
 
 QModelIndex PluginItemModel::index( int row,
-                                     int column,
-                                     const QModelIndex &/*parent*/ ) const
+                                    int column,
+                                    const QModelIndex &parent ) const
 {
-    return createIndex( row, column );
+    auto index = QModelIndex();
+    if( hasIndex( row, column, parent )) {
+        const auto &bundle = m_data->m_pluginList->at( row );
+        if( bundle != nullptr ) {
+            index = createIndex( row, column, bundle.get() );
+        }
+    }
+    return index;
 }
 
 QModelIndex PluginItemModel::parent( const QModelIndex &/*child*/ ) const
@@ -83,9 +90,18 @@ bool PluginItemModel::hasChildren( const QModelIndex &/*parent*/ ) const
     return false;
 }
 
+void PluginItemModel::clear()
+{
+    beginResetModel();
+    m_data->m_pluginList = nullptr;
+    endResetModel();
+}
+
 void PluginItemModel::setPluginList( const PluginList *plugins )
 {
+    beginResetModel();
     m_data->m_pluginList = plugins;
+    endResetModel();
 }
 
 

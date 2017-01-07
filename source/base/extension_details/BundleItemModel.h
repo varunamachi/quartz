@@ -20,7 +20,7 @@ public:
         THREE
     };
 
-    explicit BundleItemModel( QObject *parent = nullptr );
+    explicit BundleItemModel( NumCols numCols, QObject *parent = nullptr );
 
     ~BundleItemModel();
 
@@ -38,7 +38,9 @@ public:
 
     bool hasChildren( const QModelIndex &parent ) const override;
 
-    void setBundleList( const QVector< AbstractPluginBundle *> *bundles );
+    void setBundleList( const QVector< const AbstractPluginBundle *> *bundles );
+
+    void clear();
 
 private:
     struct Data;

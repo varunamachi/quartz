@@ -1,28 +1,34 @@
 
+#include <QLibrary>
+
+#include <core/extension_system/PluginManager.h>
 #include <core/extension_system/AbstractPluginBundle.h>
 
+#include "../QzAppContext.h"
 #include "BundleItemModel.h"
 
 namespace Quartz {
 
-const int NUM_COLS = 1;
 
 struct BundleItemModel::Data
 {
-    Data()
-        : m_bundleList{ nullptr }
+    Data( BundleItemModel::NumCols numCols )
+        : m_numCols{ numCols }
+        , m_bundleList{ nullptr }
     {
 
     }
 
-    const QVector< AbstractPluginBundle *> *m_bundleList;
+    BundleItemModel::NumCols m_numCols;
 
+    const QVector< const AbstractPluginBundle *> *m_bundleList;
 };
 
 
-BundleItemModel::BundleItemModel( QObject *parent )
+BundleItemModel::BundleItemModel( BundleItemModel::NumCols numCols,
+                                  QObject *parent )
     : QAbstractItemModel{ parent }
-    , m_data{ new Data{ }}
+    , m_data{ new Data{ numCols }}
 {
 
 }
@@ -33,10 +39,21 @@ BundleItemModel::~BundleItemModel()
 }
 
 QModelIndex BundleItemModel::index( int row,
-                                     int column,
-                                     const QModelIndex &/*parent*/ ) const
+                                    int column,
+                                    const QModelIndex &parent ) const
 {
-    return createIndex( row, column );
+    auto index = QModelIndex();
+    if( hasIndex( row, column, parent )) {
+        const auto &bundle = m_data->m_bundleList->at( row );
+        if( bundle != nullptr ) {
+            index = createIndex( row,
+                                 column,
+                                 reinterpret_cast< void *>(
+                                     const_cast< AbstractPluginBundle *>(
+                                         bundle )));
+        }
+    }
+    return index;
 }
 
 QModelIndex BundleItemModel::parent( const QModelIndex &/*child*/ ) const
@@ -53,7 +70,7 @@ int BundleItemModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int BundleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return NUM_COLS;
+    return static_cast< int >( m_data->m_numCols );
 }
 
 QVariant BundleItemModel::data( const QModelIndex &index, int role ) const
@@ -68,10 +85,16 @@ QVariant BundleItemModel::data( const QModelIndex &index, int role ) const
     }
     else if ( role == Qt::DisplayRole ) {
         const auto &bundle = m_data->m_bundleList->at( index.row() );
+        auto lib = appContext()->pluginManager()->libraryForBundle(
+                    bundle->bundleId() );
         switch( index.column() ) {
         case 0: return bundle->bundleId();
         case 1: return bundle->bundleName();
-//        case 2: return library
+        case 2:
+            if( lib != nullptr ) {
+                return lib->fileName();
+            }
+            break;
         }
     }
     return QVariant();
@@ -83,12 +106,18 @@ bool BundleItemModel::hasChildren( const QModelIndex &/*parent*/ ) const
 }
 
 void BundleItemModel::setBundleList(
-        const QVector< AbstractPluginBundle *> *bundle )
+        const QVector< const AbstractPluginBundle *> *bundle )
 {
+    beginResetModel();
     m_data->m_bundleList = bundle;
+    endResetModel();
 }
 
-
-
+void BundleItemModel::clear()
+{
+    beginResetModel();
+    m_data->m_bundleList = nullptr;
+    endResetModel();
+}
 
 }

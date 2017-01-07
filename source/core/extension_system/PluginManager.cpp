@@ -367,9 +367,9 @@ void PluginManager::registerPluginAdapter( IPluginAdapter *adapter )
     m_impl->registerPluginAdapter(  adptr );
 }
 
-const QVector< AbstractPluginBundle * > PluginManager::bundles() const
+const QVector< const AbstractPluginBundle * > PluginManager::bundles() const
 {
-    QVector< AbstractPluginBundle *> bundles;
+    QVector< const AbstractPluginBundle *> bundles;
     for( auto it = m_impl->m_bundles.begin();
          it != m_impl->m_bundles.end();
          ++ it )
@@ -377,6 +377,28 @@ const QVector< AbstractPluginBundle * > PluginManager::bundles() const
         bundles.push_back( it->m_bundle );
     }
     return bundles;
+}
+
+const AbstractPluginBundle * PluginManager::bundle(
+        const QString &bundleId ) const
+{
+    AbstractPluginBundle *bundle = nullptr;
+    if( m_impl->m_bundles.contains( bundleId )) {
+        const auto &binfo = m_impl->m_bundles.value( bundleId );
+        bundle = binfo.m_bundle;
+    }
+    return bundle;
+}
+
+const QLibrary * PluginManager::libraryForBundle(
+        const QString &bundleId ) const
+{
+    QLibrary *library = nullptr;
+    if( m_impl->m_bundles.contains( bundleId )) {
+        const auto &binfo = m_impl->m_bundles.value( bundleId );
+        library = binfo.m_library.get();
+    }
+    return library ;
 }
 
 bool PluginManager::loadFrom( const QString &location )

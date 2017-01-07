@@ -10,6 +10,7 @@
 class QDir;
 class QString;
 class QFileInfo;
+class QLibrary;
 
 namespace Quartz {
 
@@ -34,7 +35,11 @@ public:
 
     void registerPluginAdapter( IPluginAdapter *adapter );
 
-    const QVector< AbstractPluginBundle *> bundles() const;
+    const QVector< const AbstractPluginBundle *> bundles() const;
+
+    const AbstractPluginBundle * bundle( const QString &bundleId ) const;
+
+    const QLibrary * libraryForBundle( const QString &bundleId ) const;
 
 private:
     class Impl;
