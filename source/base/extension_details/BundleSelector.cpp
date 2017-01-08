@@ -1,6 +1,7 @@
 
 #include <QVBoxLayout>
 #include <QTreeView>
+#include <QItemSelectionModel>
 
 #include <core/extension_system/AbstractPluginBundle.h>
 #include <core/extension_system/PluginManager.h>
@@ -17,7 +18,7 @@ namespace Quartz {
 struct BundleSelector::Data
 {
     explicit Data( QWidget *parent )
-        : m_bundleModel{ new BundleItemModel{ BundleItemModel::NumCols::ONE,
+        : m_bundleModel{ new BundleItemModel{ BundleItemModel::NumCols::One,
                                               parent }}
         , m_bundleView{ new QTreeView{ parent }}
         , m_content{ new BundleInfoPage{ parent }}
@@ -54,6 +55,10 @@ BundleSelector::BundleSelector( QWidget *parent )
     m_data->m_bundles = appContext()->pluginManager()->bundles();
     m_data->m_bundleModel->setBundleList( &m_data->m_bundles );
     m_data->m_bundleView->setModel( m_data->m_bundleModel );
+    connect( m_data->m_bundleView->selectionModel(),
+             &QItemSelectionModel::currentChanged,
+             this,
+             &BundleSelector::onSelected );
 }
 
 BundleSelector::~BundleSelector()
@@ -61,7 +66,30 @@ BundleSelector::~BundleSelector()
     m_data->m_bundleModel->clear();
 }
 
-void BundleSelector::onSelected( const QModelIndex &index )
+void BundleSelector::selected()
+{
+    const auto &selectionModel = m_data->m_bundleView->selectionModel();
+    if( selectionModel->hasSelection() ) {
+        auto index = selectionModel->currentIndex();
+        onSelected( index, QModelIndex{} );
+    }
+    else {
+        if( m_data->m_bundleModel->rowCount( QModelIndex{} ) != 0 ) {
+            auto index = m_data->m_bundleModel->index( 0, 0, QModelIndex{} );
+            selectionModel->setCurrentIndex(
+                        index,
+                        QItemSelectionModel::SelectCurrent );
+        }
+    }
+}
+
+void BundleSelector::unselected()
+{
+
+}
+
+void BundleSelector::onSelected( const QModelIndex &index,
+                                 const QModelIndex &/*previous*/ )
 {
     appContext()->contentManager()->selectContent( BundleInfoPage::CONTENT_ID );
     auto bundle = static_cast< AbstractPluginBundle *>(

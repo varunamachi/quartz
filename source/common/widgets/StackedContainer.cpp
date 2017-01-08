@@ -140,6 +140,7 @@ QWidget *AbstractContainer::selectedWidget() const
     auto item = m_data->m_items.value( m_data->m_selectedId );
     if( item != nullptr ) {
         selected = item->m_widget;
+//        Q_EMIT
     }
     return selected;
 }
@@ -248,6 +249,7 @@ void AbstractContainer::select( const QString &id )
                 m_data->m_stackWidget->setVisible( true );
             }
         }
+        emit sigSelected( id, item->m_widget );
     }
 }
 

@@ -47,6 +47,10 @@ SelectorManager::SelectorManager( AbstractContainer *container,
     layout->addWidget( m_data->m_selectorContainer );
     layout->setContentsMargins( QMargins{ });
     this->setLayout( layout );
+    connect( m_data->m_selectorContainer,
+             &AbstractContainer::sigSelected,
+             this,
+             &SelectorManager::onSelectorSelected );
 }
 
 SelectorManager::~SelectorManager()
@@ -122,6 +126,7 @@ AbstractSelector * SelectorManager::currentSelector() const
 void SelectorManager::selectSelector( QString selectorId )
 {
     if( m_data->m_selectors.contains( selectorId ) ) {
+//        auto selector = m_data->m_selectors.value( selectorId );
         m_data->m_selectorContainer->select( selectorId );
     }
     else {
@@ -163,15 +168,18 @@ bool SelectorManager::handlePlugin( AbstractPlugin *plugin )
 
 bool SelectorManager::finalizePlugins()
 {
-//    for( int i = 0; i < m_data->m_pluginSelectors.size(); ++ i ) {
-//        auto selector = m_data->m_pluginSelectors.at( i );
-//        removeSelector( selector);
-//    }
     m_data->m_pluginSelectors.clear();
     return true;
 }
 
-
-
+void SelectorManager::onSelectorSelected( const QString &selectorId,
+                                          QWidget */*widget*/ )
+{
+    auto selector = m_data->m_selectors.value( selectorId,
+                                               nullptr );
+    if( selector != nullptr ) {
+        selector->selected();
+    }
+}
 
 }

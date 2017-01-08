@@ -17,7 +17,7 @@ struct BundleInfoPage::Data
 {
     Data( QWidget *parent )
         : m_bundle{ nullptr }
-        , m_bundleModel{ new BundleItemModel{ BundleItemModel::NumCols::TWO,
+        , m_bundleModel{ new BundleItemModel{ BundleItemModel::NumCols::Two,
                                               parent }}
         , m_pluginModel{ new PluginItemModel{ parent }}
         , m_pluginView{ new QTreeView{ parent }}

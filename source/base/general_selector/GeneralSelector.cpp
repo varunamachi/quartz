@@ -46,8 +46,8 @@ GeneralSelector::GeneralSelector( QWidget *parent )
     m_data->m_view->setSelectionBehavior( QAbstractItemView::SelectRows );
     layout->addWidget( m_data->m_view );
     this->setLayout( layout );
-    connect( m_data->m_view,
-             &QTreeView::clicked,
+    connect( m_data->m_view->selectionModel(),
+             &QItemSelectionModel::currentChanged,
              this,
              &GeneralSelector::onSelected );
     this->setContentsMargins( QMargins{ });
@@ -65,12 +65,35 @@ GeneralNodeTree *GeneralSelector::model()
     return m_data->m_model;
 }
 
-void GeneralSelector::onSelected( const QModelIndex &index )
+void GeneralSelector::selected()
 {
-    if( ! ( index.isValid() && index.internalPointer() != 0 )) {
+    const auto &selectionModel = m_data->m_view->selectionModel();
+    if( selectionModel->hasSelection() ) {
+        auto index = selectionModel->currentIndex();
+        onSelected( index, QModelIndex{} );
+    }
+    else {
+        if( m_data->m_model->rowCount( QModelIndex{} ) != 0 ) {
+            auto index = m_data->m_model->index( 0, 0, QModelIndex{} );
+            selectionModel->setCurrentIndex(
+                        index,
+                        QItemSelectionModel::SelectCurrent );
+        }
+    }
+}
+
+void GeneralSelector::unselected()
+{
+
+}
+
+void GeneralSelector::onSelected( const QModelIndex &current,
+                                  const QModelIndex &/*previous*/ )
+{
+    if( ! ( current.isValid() && current.internalPointer() != 0 )) {
         return;
     }
-    auto node = static_cast< Node *>( index.internalPointer() );
+    auto node = static_cast< Node *>( current.internalPointer() );
     if( appContext()->hasContentManager() ) {
         appContext()->contentManager()->selectContent( node->nodeId() );
     }

@@ -63,7 +63,7 @@ public:
 
     virtual QString containerType() const = 0;
 
-public slots:
+public Q_SLOTS:
     void addWidget( const QString &id,
                     const QString &displayName,
                     QWidget *widget );
@@ -74,7 +74,7 @@ public slots:
 
     void select( const QString &id );
 
-signals:
+Q_SIGNALS:
     void sigSelected( const QString &id, QWidget *widget );
 
     void sigAdded( const QString &id, QWidget *widget );

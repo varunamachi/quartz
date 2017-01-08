@@ -137,7 +137,7 @@ QVariant LogModel::headerData( int section,
         switch( section ) {
         case 0: return tr( "Time" );
         case 1: return tr( "Severity" );
-        case 2: return tr( "Modue" );
+        case 2: return tr( "Module" );
         case 3: return tr( "Message" );
         }
     }

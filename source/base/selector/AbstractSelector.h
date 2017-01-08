@@ -24,6 +24,10 @@ public:
 
     const QString & selectorName() const;
 
+    virtual void selected() = 0;
+
+    virtual void unselected() = 0;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

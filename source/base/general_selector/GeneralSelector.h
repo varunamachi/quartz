@@ -22,6 +22,10 @@ public:
 
     GeneralNodeTree * model();
 
+    void selected() override;
+
+    void unselected() override;
+
     static const QString SELECTOR_ID;
 
     static const QString SELECTOR_NAME;
@@ -30,7 +34,8 @@ signals:
     void sigNodeSelected( const Node *node );
 
 private slots:
-    void onSelected( const QModelIndex &index );
+    void onSelected( const QModelIndex &current,
+                     const QModelIndex &previous );
 
 private:
     struct Data;

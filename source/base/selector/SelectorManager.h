@@ -47,6 +47,10 @@ public:
 
     static const QString ADAPTER_NAME;
 
+private Q_SLOTS:
+    void onSelectorSelected( const QString &selectorId,
+                             QWidget *widget );
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

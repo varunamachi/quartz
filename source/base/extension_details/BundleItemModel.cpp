@@ -70,7 +70,8 @@ int BundleItemModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int BundleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return static_cast< int >( m_data->m_numCols );
+    auto cnt = static_cast< int >( m_data->m_numCols );
+    return cnt;
 }
 
 QVariant BundleItemModel::data( const QModelIndex &index, int role ) const
@@ -88,8 +89,8 @@ QVariant BundleItemModel::data( const QModelIndex &index, int role ) const
         auto lib = appContext()->pluginManager()->libraryForBundle(
                     bundle->bundleId() );
         switch( index.column() ) {
-        case 0: return bundle->bundleId();
-        case 1: return bundle->bundleName();
+        case 0: return bundle->bundleName();
+        case 1: return bundle->bundleId();
         case 2:
             if( lib != nullptr ) {
                 return lib->fileName();
@@ -100,9 +101,30 @@ QVariant BundleItemModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-bool BundleItemModel::hasChildren( const QModelIndex &/*parent*/ ) const
+QVariant BundleItemModel::headerData(
+        int section,
+        Qt::Orientation /*orientation*/,
+        int role ) const
 {
-    return false;
+    if ( role == Qt::TextAlignmentRole ) {
+        return int( Qt::AlignLeft | Qt::AlignVCenter );
+    }
+    else if ( role == Qt::DisplayRole ) {
+        switch( section ) {
+        case 0: return tr( "Name" );
+        case 1: return tr( "Id" );
+        case 2: return tr( "Library" );
+        }
+    }
+    return QVariant();
+}
+
+bool BundleItemModel::hasChildren( const QModelIndex &parent ) const
+{
+    if( parent.isValid() ) {
+        return false;
+    }
+    return  true;
 }
 
 void BundleItemModel::setBundleList(

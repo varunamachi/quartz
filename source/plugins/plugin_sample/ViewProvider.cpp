@@ -6,7 +6,7 @@
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
-const QString SampleView::VIEW_ID{ "qzplugin.sample.view" };
+const QString SampleView::VIEW_ID{ "qzp.sample.view" };
 const QString SampleView::VIEW_NAME{ "Sample" };
 const QString SampleView::VIEW_CATERGORY{ "sample" };
 
@@ -29,7 +29,7 @@ SampleView::~SampleView()
 }
 
 /***************** Provider **************************************************/
-const QString ViewProvider::PLUGIN_ID{ "qzplugin.sample.provider.view" };
+const QString ViewProvider::PLUGIN_ID{ "qzp.sample.provider.view" };
 const QString ViewProvider::PLUGIN_NAME{ "Quartz Sample View" };
 
 ViewProvider::ViewProvider()

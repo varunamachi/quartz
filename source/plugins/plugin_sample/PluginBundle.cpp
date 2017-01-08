@@ -11,7 +11,7 @@
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
-const QString PluginBundle::BUNDLE_ID{ "qzplugin.sample" };
+const QString PluginBundle::BUNDLE_ID{ "qzbundle.sample" };
 const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
 
 struct PluginBundle::Data
@@ -24,7 +24,7 @@ struct PluginBundle::Data
 
 PluginBundle::PluginBundle()
     : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
-    , m_data{ new Data{ }}
+    , m_data{ new Data{} }
 {
     m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
     m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );

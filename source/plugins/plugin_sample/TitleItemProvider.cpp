@@ -9,7 +9,7 @@
 
 namespace Quartz { namespace Plugin { namespace Sample {
 
-const QString TitleBarButton::ITEM_ID{ "qzplugin.sample.titlebutton" };
+const QString TitleBarButton::ITEM_ID{ "qzp.sample.titlebutton" };
 const QString TitleBarButton::ITEM_CATERGORY{ "sample" };
 
 TitleBarButton::TitleBarButton( QWidget *parent )
@@ -40,7 +40,7 @@ TitleBarButton::~TitleBarButton()
 
 /***************** Provider **************************************************/
 const QString TitleItemProvider::PLUGIN_ID{
-    "qzplugin.sample.provider.titlebutton" };
+    "qzp.sample.provider.titlebutton" };
 const QString TitleItemProvider::PLUGIN_NAME{
     "Quartz Sample TitleBar Button" };
 

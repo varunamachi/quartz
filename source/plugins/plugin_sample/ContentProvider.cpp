@@ -21,7 +21,7 @@ SampleContent::SampleContent( QWidget *parent )
 
 /********************** Provider ************************************/
 const QString ContentProvider::PLUGIN_ID{
-    "qzplugin.sample.provider.content" };
+    "qzp.sample.provider.content" };
 const QString ContentProvider::PLUGIN_NAME{
     "Quartz Sample Content" };
 

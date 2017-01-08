@@ -15,9 +15,9 @@ class BundleItemModel : public QAbstractItemModel
 public:
     enum class NumCols
     {
-        ONE,
-        TWO,
-        THREE
+        One     = 1,
+        Two     = 2,
+        Three   = 3
     };
 
     explicit BundleItemModel( NumCols numCols, QObject *parent = nullptr );
@@ -37,6 +37,10 @@ public:
     QVariant data( const QModelIndex &index, int role ) const override;
 
     bool hasChildren( const QModelIndex &parent ) const override;
+
+    QVariant headerData( int section,
+                         Qt::Orientation orientation,
+                         int role ) const override;
 
     void setBundleList( const QVector< const AbstractPluginBundle *> *bundles );
 

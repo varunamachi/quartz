@@ -77,17 +77,38 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
     else if ( role == Qt::DisplayRole ) {
         const auto &plugin = m_data->m_pluginList->at( index.row() );
         switch( index.column() ) {
-        case 0: return plugin->pluginId();
-        case 1: return plugin->pluginName();
-        case 2: return plugin->pluginType();
+        case 0: return plugin->pluginType();
+        case 1: return plugin->pluginId();
+        case 2: return plugin->pluginName();
         }
     }
     return QVariant();
 }
 
-bool PluginItemModel::hasChildren( const QModelIndex &/*parent*/ ) const
+bool PluginItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    return false;
+    if( parent.isValid() ) {
+        return false;
+    }
+    return true;
+}
+
+QVariant PluginItemModel::headerData(
+        int section,
+        Qt::Orientation /*orientation*/,
+        int role ) const
+{
+    if ( role == Qt::TextAlignmentRole ) {
+        return int( Qt::AlignLeft | Qt::AlignVCenter );
+    }
+    else if ( role == Qt::DisplayRole ) {
+        switch( section ) {
+        case 0: return tr( "Type" );
+        case 1: return tr( "Id" );
+        case 2: return tr( "Name" );
+        }
+    }
+    return QVariant();
 }
 
 void PluginItemModel::clear()

@@ -40,8 +40,6 @@ public:
                          Qt::Orientation orientation,
                          int role ) const override;
 
-
-
 public slots:
     void add( std::shared_ptr< Quartz::LogData > msg );
 

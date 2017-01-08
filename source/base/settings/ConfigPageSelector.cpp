@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QModelIndex>
+#include <QItemSelectionModel>
 
 #include <core/logger/Logging.h>
 
@@ -54,8 +55,8 @@ ConfigPageSelector::ConfigPageSelector( QWidget *parent )
     m_data->m_view->header()->setVisible( false );
     m_data->m_view->setSelectionMode( QAbstractItemView::SingleSelection );
     m_data->m_view->setSelectionBehavior( QAbstractItemView::SelectRows );
-    connect( m_data->m_view,
-             &QTreeView::clicked,
+    connect( m_data->m_view->selectionModel(),
+             &QItemSelectionModel::currentChanged,
              this,
              &ConfigPageSelector::onSelected );
     this->setContentsMargins( QMargins{ });
@@ -75,12 +76,35 @@ TreeModel * ConfigPageSelector::model()
     return m_data->m_model;
 }
 
-void ConfigPageSelector::onSelected( const QModelIndex &index )
+void ConfigPageSelector::selected()
 {
-    if( ! ( index.isValid() && index.internalPointer() != 0 )) {
+    const auto &selectionModel = m_data->m_view->selectionModel();
+    if( selectionModel->hasSelection() ) {
+        auto index = selectionModel->currentIndex();
+        onSelected( index, QModelIndex{} );
+    }
+    else {
+        if( m_data->m_model->rowCount( QModelIndex{} ) != 0 ) {
+            auto index = m_data->m_model->index( 0, 0, QModelIndex{} );
+            selectionModel->setCurrentIndex(
+                        index,
+                        QItemSelectionModel::SelectCurrent );
+        }
+    }
+}
+
+void ConfigPageSelector::unselected()
+{
+
+}
+
+void ConfigPageSelector::onSelected( const QModelIndex &current,
+                                     const QModelIndex &/*previous*/ )
+{
+    if( ! ( current.isValid() && current.internalPointer() != 0 )) {
         return;
     }
-    auto node = static_cast< Node *>( index.internalPointer() );
+    auto node = static_cast< Node *>( current.internalPointer() );
     if( appContext()->hasContentManager()
             && appContext()->hasConfigPageManager() ) {
         appContext()->contentManager()->selectContent(

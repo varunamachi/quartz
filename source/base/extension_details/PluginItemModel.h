@@ -31,6 +31,10 @@ public:
 
     bool hasChildren( const QModelIndex &parent ) const override;
 
+    QVariant headerData( int section,
+                         Qt::Orientation orientation,
+                         int role ) const;
+
     void setPluginList(
             const QVector< std::shared_ptr< AbstractPlugin >> *plugins );
 
@@ -40,6 +44,5 @@ private:
     struct Data;
     std::unique_ptr< Data > m_data;
 };
-
 
 }
