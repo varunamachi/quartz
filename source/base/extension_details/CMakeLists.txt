@@ -4,4 +4,5 @@ vq_classes(
     BundleInfoPage
     BundleItemModel
     PluginItemModel
+    AdapterItemModel
 )

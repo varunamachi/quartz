@@ -4,18 +4,20 @@
 
 #include <QAbstractItemModel>
 
+#include <core/utils/Macros.h>
+
 namespace Quartz {
 
-class AbstractPlugin;
+QZ_INTERFACE IPluginAdapter;
 
-class PluginItemModel : public QAbstractItemModel
+class AdapterItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    explicit PluginItemModel( QObject *parent );
+    explicit AdapterItemModel( QObject *parent );
 
-    ~PluginItemModel();
+    ~AdapterItemModel();
 
     QModelIndex index( int row,
                        int column,
@@ -35,8 +37,8 @@ public:
                          Qt::Orientation orientation,
                          int role ) const override;
 
-    void setPluginList(
-            const QVector< std::shared_ptr< AbstractPlugin >> *plugins );
+    void setAdapterList(
+            const QVector< std::shared_ptr< IPluginAdapter >> *plugins );
 
     void clear();
 

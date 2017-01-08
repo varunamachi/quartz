@@ -2,6 +2,7 @@
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QItemSelectionModel>
+#include <QHeaderView>
 
 #include <core/extension_system/AbstractPluginBundle.h>
 #include <core/extension_system/PluginManager.h>
@@ -23,6 +24,12 @@ struct BundleSelector::Data
         , m_bundleView{ new QTreeView{ parent }}
         , m_content{ new BundleInfoPage{ parent }}
     {
+        m_bundleView->setRootIsDecorated( false );
+        m_bundleView->header()->setVisible( false );
+        m_bundleView->setSelectionBehavior(
+                    QAbstractItemView::SelectRows );
+        m_bundleView->setSelectionMode(
+                    QAbstractItemView::SingleSelection );
 
     }
 
