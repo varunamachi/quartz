@@ -14,4 +14,3 @@ add_project( base )
 add_project( app )
 add_project( plugin_base )
 
-
