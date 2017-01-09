@@ -90,15 +90,18 @@ BundleInfoPage::BundleInfoPage( QWidget *parent )
     infoLayout->addWidget( m_data->m_bundleId, 1, 1 );
     infoLayout->addWidget( new QLabel{ tr( "Bundle Library"), this }, 2, 0);
     infoLayout->addWidget( m_data->m_libName, 2, 1 );
-    infoLayout->setContentsMargins( QMargins{} );
+    infoLayout->setContentsMargins( QMargins{ 0, 0, 0, 10 });
 
-    auto hlyt = new QHBoxLayout{};
-    hlyt->addWidget( m_data->m_adapterView );
-    hlyt->addWidget( m_data->m_dependencyView );
-    hlyt->setContentsMargins( QMargins{} );
+    auto hlyt = new QGridLayout{};
+    hlyt->addWidget( new QLabel{ tr( "Exported Adapters: " )}, 0, 0 );
+    hlyt->addWidget( m_data->m_adapterView, 1, 0 );
+    hlyt->addWidget( new QLabel{ tr( "Bundle Dependencies: " )}, 0, 1 );
+    hlyt->addWidget( m_data->m_dependencyView, 1, 1 );
+    hlyt->setContentsMargins( QMargins{ 0, 10, 0, 0 });
 
     auto layout = new QVBoxLayout{};
     layout->addLayout( infoLayout );
+    layout->addWidget( new QLabel{ tr( "Exported Plugins" )});
     layout->addWidget( m_data->m_pluginView );
     layout->addLayout( hlyt );
     layout->setContentsMargins( QMargins{} );

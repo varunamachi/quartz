@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../QuartzBase.h"
 #include "../selector/AbstractSelector.h"
 
 namespace Quartz {
 
 class AbstractPluginBundle;
 
-class BundleSelector : public AbstractSelector
+class QUARTZ_BASE_API BundleSelector : public AbstractSelector
 {
     Q_OBJECT
 

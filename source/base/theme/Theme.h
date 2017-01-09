@@ -2,14 +2,14 @@
 
 #include <memory>
 
-#include <QColor>
-#include <QImage>
-#include <QBrush>
-#include <QPen>
+#include <core/utils/Macros.h>
 
 #include "../QuartzBase.h"
 
 class QString;
+class QColor;
+class QPalette;
+class QImage;
 
 namespace Quartz {
 
@@ -20,27 +20,29 @@ public:
 
     ~Theme();
 
-    void setColor( const QString &key, const QColor &color );
+    QString name() const;
+
+    void setApplicationCSS( const QString &appCss );
+
+    const QString & applicationCSS() const;
+
+    void setColorPalette( const QPalette &palette );
+
+    const QPalette & colorPalette() const;
 
     void setImage( const QString &key, const QImage &image );
 
-    void setBrush( const QString &key, const QBrush &brush );
+    const QImage & image( const QString &key ) const;
 
-    void setPen( const QString &key, const QPen &Pen );
+    const QImage & image( const QString &key,
+                          QZ_IN_OUT const QImage &defaultImage ) const;
 
     void setCss( const QString &key, const QString &css );
 
-    QString name() const;
+    const QString  & css( const QString &key ) const;
 
-    const QColor color( const QString &key, QColor def = QColor{} ) const;
-
-    const QImage image( const QString &key, QImage def = QImage{} ) const;
-
-    const QBrush brush( const QString &key, QBrush def = QBrush{} ) const;
-
-    const QPen pen( const QString &key, QPen def = QPen{} ) const;
-
-    const QString css( const QString &key, QString def = QString{} ) const;
+    const QString  & css( const QString &key,
+                          QZ_IN_OUT const QString &defaultImage ) const;
 
 private:
     struct Data;

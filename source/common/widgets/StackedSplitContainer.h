@@ -7,6 +7,7 @@ namespace Quartz {
 class StackedSplitContainer : public AbstractContainer
 {
     Q_OBJECT
+
 public:
     explicit StackedSplitContainer( int selectorDimention,
                                int buttonDimention,

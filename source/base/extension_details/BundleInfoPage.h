@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../QuartzBase.h"
 #include "../content_manager/ContentWidget.h"
 
 namespace Quartz {
 
 class AbstractPluginBundle;
 
-class BundleInfoPage : public ContentWidget
+class QUARTZ_BASE_API BundleInfoPage : public ContentWidget
 {
     Q_OBJECT
 

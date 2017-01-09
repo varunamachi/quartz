@@ -1,5 +1,7 @@
-
 #include <QHash>
+#include <QString>
+#include <QPalette>
+#include <QImage>
 
 #include "Theme.h"
 
@@ -15,16 +17,22 @@ struct Theme::Data
 
     QString m_name;
 
-    QHash< QString, QColor > m_colors;
+    QString m_appCss;
+
+    QPalette m_palette;
 
     QHash< QString, QImage > m_images;
 
-    QHash< QString, QBrush > m_brushs;
+    QHash< QString, QString > m_css;
 
-    QHash< QString, QPen > m_pens;
+    static const QImage EMPTY_IMAGE;
 
-    QHash< QString, QString > m_styles;
+    static const QString EMPTY_CSS;
+
 };
+
+const QImage Theme::Data::EMPTY_IMAGE{};
+const QString Theme::Data::EMPTY_CSS{};
 
 Theme::Theme( const QString &name )
 //    : m_data( std::make_unique< Theme::Data >( name )),
@@ -38,79 +46,67 @@ Theme::~Theme()
 
 }
 
-void Theme::setColor( const QString &key, const QColor &color )
-{
-    m_data->m_colors.insert( key, color );
-}
-
-
-void Theme::setImage( const QString &key, const QImage &image )
-{
-    m_data->m_images.insert( key, image );
-}
-
-
-void Theme::setPen( const QString &key, const QPen &pen )
-{
-    m_data->m_pens.insert( key, pen );
-}
-
-
-void Theme::setCss( const QString &key, const QString &css )
-{
-    m_data->m_styles.insert( key, css );
-}
-
-
 QString Theme::name() const
 {
     return m_data->m_name;
 }
 
-
-const QColor Theme::color( const QString &key, QColor def ) const
+void Theme::setApplicationCSS( const QString &appCss )
 {
-    if( m_data->m_colors.contains( key )) {
-        return m_data->m_colors.value( key );
-    }
-    return def;
+    m_data->m_appCss = appCss;
 }
 
+const QString & Theme::applicationCSS() const
+{
+    return m_data->m_appCss;
+}
 
-const QImage Theme::image( const QString &key, QImage def ) const
+void Theme::setColorPalette( const QPalette &palette )
+{
+    m_data->m_palette = palette;
+}
+
+const QPalette & Theme::colorPalette() const
+{
+    return m_data->m_palette;
+}
+
+void Theme::setImage( const QString &key, const QImage &image )
+{
+    m_data->m_images[ key ] = image;
+}
+
+const QImage & Theme::image( const QString &key ) const
+{
+    return image( key, Data::EMPTY_IMAGE );
+}
+
+const QImage & Theme::image( const QString &key,
+                             QZ_IN_OUT const QImage &defaultImage ) const
 {
     if( m_data->m_images.contains( key )) {
-        return m_data->m_images.value( key );
+        return m_data->m_images[ key ];
     }
-    return def;
+    return defaultImage;
 }
 
-
-const QBrush Theme::brush( const QString &key, QBrush def ) const
+void Theme::setCss( const QString &key, const QString &css )
 {
-    if( m_data->m_brushs.contains( key )) {
-        return m_data->m_brushs.value( key );
-    }
-    return def;
+    m_data->m_css[ key ] = css;
 }
 
-
-const QPen Theme::pen( const QString &key, QPen def ) const
+const QString  & Theme::css( const QString &key ) const
 {
-    if( m_data->m_pens.contains( key )) {
-        return m_data->m_pens.value( key );
-    }
-    return def;
+    return css( key, Data::EMPTY_CSS );
 }
 
-
-const QString Theme::css( const QString &key, QString def ) const
+const QString  & Theme::css( const QString &key,
+                             QZ_IN_OUT const QString &defaultCSS ) const
 {
-    if( m_data->m_styles.contains( key )) {
-        return m_data->m_styles.value( key );
+    if( m_data->m_css.contains( key )) {
+        return m_data->m_css[ key ];
     }
-    return def;
+    return defaultCSS;
 }
-
 
 }

@@ -15,7 +15,7 @@ class SelectorManager;
 class GeneralSelector;
 class PlugginManager;
 class ConfigPageManager;
-
+class ThemeManager;
 
 
 
@@ -27,11 +27,11 @@ public:
 
     ~QzAppContext();
 
-
     QZCONTEXT_FUNC_DECL( ContentManager, contentManager );
     QZCONTEXT_FUNC_DECL( SelectorManager, selectorManager );
     QZCONTEXT_FUNC_DECL( GeneralSelector, nodeSelector );
     QZCONTEXT_FUNC_DECL( ConfigPageManager, configPageManager );
+    QZCONTEXT_FUNC_DECL( ThemeManager, themeManager );
 
 private:
     struct Data;

@@ -82,7 +82,7 @@ Q_SIGNALS:
     void sigRemoved( const QString &id );
 
 
-private slots:
+private Q_SLOTS:
     void updateIndeces();
 
 private:
@@ -93,8 +93,9 @@ private:
 
 class StackedContainer : public AbstractContainer
 {
-public:
+    Q_OBJECT
 
+public:
     explicit StackedContainer( int selectorDimention,
                                int buttonDimention,
                                SelectorPosition selectorPosition,

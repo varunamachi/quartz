@@ -6,11 +6,13 @@
 
 #include <core/utils/Macros.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 QZ_INTERFACE IPluginAdapter;
 
-class AdapterItemModel : public QAbstractItemModel
+class QUARTZ_BASE_API AdapterItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 

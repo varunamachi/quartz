@@ -13,6 +13,7 @@ vq_add_qt()
 
 vq_sources(
     SamplePlugin.cpp
+    sample.qrc
 )
 
 vq_headers(

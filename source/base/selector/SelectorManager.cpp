@@ -47,10 +47,17 @@ SelectorManager::SelectorManager( AbstractContainer *container,
     layout->addWidget( m_data->m_selectorContainer );
     layout->setContentsMargins( QMargins{ });
     this->setLayout( layout );
+    //Only string style connect works on Windows
     connect( m_data->m_selectorContainer,
-             &AbstractContainer::sigSelected,
+             SIGNAL( sigSelected( const QString &, QWidget *) ),
              this,
-             &SelectorManager::onSelectorSelected );
+             SLOT( onSelectorSelected( const QString &, QWidget * )));
+//    using SigFunc = void ( AbstractContainer::*)( const QString &, QWidget *);
+//    auto sig = static_cast< SigFunc >( &AbstractContainer::sigSelected );
+//    connect( m_data->m_selectorContainer,
+//             sig,
+//             this,
+//             &SelectorManager::onSelectorSelected );
 }
 
 SelectorManager::~SelectorManager()

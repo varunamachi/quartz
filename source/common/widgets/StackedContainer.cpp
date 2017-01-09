@@ -355,7 +355,7 @@ StackedContainer::StackedContainer(
                     orientation == Qt::Horizontal ? Qt::AlignBottom
                                                   : Qt::AlignRight );
     }
-    layout->setContentsMargins( QMargins() );
+    layout->setContentsMargins( QMargins{} );
     this->setLayout( layout );
 }
 

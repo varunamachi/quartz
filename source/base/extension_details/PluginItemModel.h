@@ -4,11 +4,13 @@
 
 #include <QAbstractItemModel>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class AbstractPlugin;
 
-class PluginItemModel : public QAbstractItemModel
+class QUARTZ_BASE_API PluginItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
