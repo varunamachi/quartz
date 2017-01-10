@@ -12,7 +12,7 @@ extern "C" {
 Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
         BundleInputWrapper *input )
 {
-//    Q_INIT_RESOURCE( sample );
+    Q_INIT_RESOURCE( sample );
     auto bundle = std::unique_ptr< Quartz::Plugin::Sample::PluginBundle >{
             new Quartz::Plugin::Sample::PluginBundle{} };
     auto bundlePtr = bundle.get();

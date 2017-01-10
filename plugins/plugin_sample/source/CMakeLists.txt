@@ -5,11 +5,14 @@ include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
 add_definitions( -DSAMPLE_PLUGIN )
 
+set( CMAKE_AUTORCC ON )
+set( CMAKE_INCLUDE_CURRENT_DIR ON )
+
+vq_add_qt()
 qz_add_plugin_base()
 qz_add_common()
 qz_add_base()
 qz_add_core()
-vq_add_qt()
 
 vq_sources(
     SamplePlugin.cpp

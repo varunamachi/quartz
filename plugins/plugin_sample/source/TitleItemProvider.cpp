@@ -20,6 +20,7 @@ TitleBarButton::TitleBarButton( QWidget *parent )
 {
     auto layout = new QVBoxLayout{ this };
     auto pushButton = new QPushButton{ tr( "sample" ), this };
+//    pushButton->setIcon( QIcon{ ":/yes.svg" });
     layout->addWidget( pushButton );
     layout->setContentsMargins( QMargins{} );
     this->setLayout( layout );

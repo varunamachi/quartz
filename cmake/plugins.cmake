@@ -8,7 +8,7 @@ macro( qz_copy SOURCE DESTINATION )
         TARGET ${PROJECT_NAME}
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy ${SOURCE} ${DESTINATION}
-        COMMENT "Copying shared object ${SRC_PATH} to ${DST_PATH}" )
+        COMMENT "Copying shared object ${SOURCE} to ${DESTINATION}" )
 endmacro( qz_copy SOURCE DESTINATION )
 
 macro( qz_create_plugin )
@@ -31,7 +31,7 @@ macro( qz_install_plugin )
     install( TARGETS ${PROJECT_NAME} DESTINATION ${DIST_OUTPUT_DIR} )
     vq_get_prop( BUILT_WITH_APP "quartz_SUBPROJECT" )
     if( BUILT_WITH_APP )
-        set( PLUGIN_DIR "${CMAKE_BINARY_DIR}/app/${BUILD_REL_DIR}" )
+        set( PLUGIN_DIR "${CMAKE_BINARY_DIR}/source/app/${BUILD_REL_DIR}" )
         set( SOURCE "${CMAKE_CURRENT_BINARY_DIR}/${PLUGIN_BIN_NAME}" )
         qz_copy( ${SOURCE} "${PLUGIN_DIR}/${PLUGIN_BIN_NAME}" )
     endif()
