@@ -1,6 +1,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QDebug>
+#include <QFile>
 
 #include <plugin_base/BundleLoggin.h>
 
@@ -20,7 +21,9 @@ TitleBarButton::TitleBarButton( QWidget *parent )
 {
     auto layout = new QVBoxLayout{ this };
     auto pushButton = new QPushButton{ tr( "sample" ), this };
-//    pushButton->setIcon( QIcon{ ":/yes.svg" });
+//    pushButton->setIcon( QIcon{ ":/resources/chilli.png" });
+//    QFile file{ ":/chilli" };
+//    QZP_INFO << ( file.exists() ? "Exists" : "Does not exist" );
     layout->addWidget( pushButton );
     layout->setContentsMargins( QMargins{} );
     this->setLayout( layout );

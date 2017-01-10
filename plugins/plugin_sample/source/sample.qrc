@@ -1,3 +1,5 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file alias="chilli">resources/chilli.png</file>
+    </qresource>
 </RCC>

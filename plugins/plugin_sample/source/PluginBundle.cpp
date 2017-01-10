@@ -2,7 +2,6 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
-#include "Sample.h"
 #include "ViewProvider.h"
 #include "ContentProvider.h"
 #include "NodeProvider.h"
