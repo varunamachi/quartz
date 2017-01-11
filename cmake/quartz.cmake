@@ -17,6 +17,11 @@ macro( qz_add_base )
     vq_add_module( "quartz" "base" )
 endmacro()
 
+macro( qz_add_resource QRC_FILE )
+    qt5_add_resources( RES_FILE ${CMAKE_CURRENT_SOURCE_DIR}/${QRC_FILE} )
+    vq_add_prop( ${PROJECT_NAME}_SRC "${RES_FILE}" )
+endmacro()
+
 
 macro( qz_add_qt )
     set( CMAKE_AUTOMOC ON )

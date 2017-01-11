@@ -7,11 +7,16 @@
 
 #include "PluginBundle.h"
 
+void initResource() {
+    Q_INIT_RESOURCE( sample );
+}
+
 extern "C" {
 
 Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
         BundleInputWrapper *input )
 {
+    initResource();
     auto bundle = std::unique_ptr< Quartz::Plugin::Sample::PluginBundle >{
             new Quartz::Plugin::Sample::PluginBundle{} };
     auto bundlePtr = bundle.get();
@@ -21,11 +26,11 @@ Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
                 dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
 //    return new PluginBundleWrapper{ };
     return PluginBundleWrapper{ bundlePtr };
-    Q_INIT_RESOURCE( sample );
 }
 
 Q_DECL_EXPORT void destroy()
 {
+//    Q_CLEANUP_RESOURCE( sample );
     Quartz::Plugin::BundleContext::destroy();
 }
 

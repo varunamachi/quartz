@@ -20,8 +20,9 @@ TitleBarButton::TitleBarButton( QWidget *parent )
           parent )
 {
     auto layout = new QVBoxLayout{ this };
-    auto pushButton = new QPushButton{ tr( "sample" ), this };
-//    pushButton->setIcon( QIcon{ ":/resources/chilli.png" });
+    auto pushButton = new QPushButton{ /*tr( "sample" ),*/ this };
+    pushButton->setIcon( QIcon{ ":chilli" });
+    pushButton->setFlat( true );
 //    QFile file{ ":/chilli" };
 //    QZP_INFO << ( file.exists() ? "Exists" : "Does not exist" );
     layout->addWidget( pushButton );
