@@ -31,16 +31,20 @@ macro( qz_add_qt )
     find_package( Qt5Widgets )
     find_package( Qt5Sql)
     find_package( Qt5Xml)
+    find_package( Qt5Network )
     list( APPEND VQ_INCLUDE_DIRS
             ${Qt5Widgets_INCLUDE_DIRS}
             ${Qt5Sql_INCLUDE_DIRS}
-            ${Qt5Xml_INCLUDE_DIRS})
+            ${Qt5Xml_INCLUDE_DIRS}
+            ${Qt5Network_INCLUDE_DIRS} )
     list( APPEND VQ_LIBS_DEBUG Qt5::Widgets )
     list( APPEND VQ_LIBS_RELEASE Qt5::Widgets )
     list( APPEND VQ_LIBS_DEBUG Qt5::Sql )
     list( APPEND VQ_LIBS_RELEASE Qt5::Sql )
     list( APPEND VQ_LIBS_DEBUG Qt5::Xml )
     list( APPEND VQ_LIBS_RELEASE Qt5::Xml )
+    list( APPEND VQ_LIBS_DEBUG Qt5::Network )
+    list( APPEND VQ_LIBS_RELEASE Qt5::Network )
 endmacro( qz_add_qt )
 
 
