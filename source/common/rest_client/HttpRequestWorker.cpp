@@ -122,9 +122,7 @@ void HttpRequestWorker::execute(HttpRequestInput *input)
 
 
     // prepare request content
-
     QString boundary = "";
-
     if (input->m_varLayout == ADDRESS || input->m_varLayout == URL_ENCODED) {
         // variable layout is ADDRESS or URL_ENCODED
 

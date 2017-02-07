@@ -36,9 +36,9 @@ struct HttpRequestInput
 
     void initialize();
 
-    void add_var(QString key, QString value);
+    void addVar(QString key, QString value);
 
-    void add_file(QString variable_name,
+    void addFile(QString variable_name,
                   QString local_filename,
                   QString request_filename,
                   QString mime_type);
