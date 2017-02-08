@@ -1,0 +1,1 @@
+This directory shall contain the resource used by this plugin

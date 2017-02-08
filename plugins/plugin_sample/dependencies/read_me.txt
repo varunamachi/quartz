@@ -1,0 +1,1 @@
+This directory shall contain libraries that the plugins depend on - if any

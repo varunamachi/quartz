@@ -22,25 +22,21 @@ macro( qz_add_resource QRC_FILE )
     vq_add_prop( ${PROJECT_NAME}_SRC "${RES_FILE}" )
 endmacro()
 
+macro( qz_add_qt_modules )
+    foreach( MODULE_NAME ${ARGV} )
+        find_package( "Qt5${MODULE_NAME}" )
+        list( APPEND VQ_INCLUDE_DIRS ${Qt5${MODULE_NAME}_INCLUDE_DIRS} )
+        list( APPEND VQ_LIBS_DEBUG Qt5::${MODULE_NAME} )
+        list( APPEND VQ_LIBS_RELEASE Qt5::${MODULE_NAME} )
+    endforeach()
+endmacro()
 
 macro( qz_add_qt )
     set( CMAKE_AUTOMOC ON )
     set( CMAKE_AUTOUIC ON )
     set( CMAKE_AUTORCC ON )
     set( CMAKE_INCLUDE_CURRENT_DIR ON )
-    find_package( Qt5Widgets )
-    find_package( Qt5Sql)
-    find_package( Qt5Xml)
-    list( APPEND VQ_INCLUDE_DIRS
-            ${Qt5Widgets_INCLUDE_DIRS}
-            ${Qt5Sql_INCLUDE_DIRS}
-            ${Qt5Xml_INCLUDE_DIRS})
-    list( APPEND VQ_LIBS_DEBUG Qt5::Widgets )
-    list( APPEND VQ_LIBS_RELEASE Qt5::Widgets )
-    list( APPEND VQ_LIBS_DEBUG Qt5::Sql )
-    list( APPEND VQ_LIBS_RELEASE Qt5::Sql )
-    list( APPEND VQ_LIBS_DEBUG Qt5::Xml )
-    list( APPEND VQ_LIBS_RELEASE Qt5::Xml )
+    qz_add_qt_modules( Widgets Sql Xml Network Quick )
 endmacro( qz_add_qt )
 
 

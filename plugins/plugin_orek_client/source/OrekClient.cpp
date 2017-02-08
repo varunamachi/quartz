@@ -8,7 +8,7 @@
 #include "PluginBundle.h"
 
 void initResource() {
-    Q_INIT_RESOURCE( sample );
+    Q_INIT_RESOURCE( orek_client );
 }
 
 extern "C" {
@@ -16,7 +16,7 @@ extern "C" {
 Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
         BundleInputWrapper *input )
 {
-//    initResource();
+    initResource();
     auto bundle = std::unique_ptr< Quartz::OrekClient::PluginBundle >{
             new Quartz::OrekClient::PluginBundle{} };
     auto bundlePtr = bundle.get();

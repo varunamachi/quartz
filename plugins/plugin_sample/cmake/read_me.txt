@@ -1,0 +1,1 @@
+This directory shall contain any cmake file that is specific to the plugin
