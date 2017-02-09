@@ -15,13 +15,14 @@ qz_add_resource( orek_client.qrc )
 
 vq_sources(
     OrekClient.cpp
-    qml/main.qml
 )
 
 vq_classes(
     ContentProvider
     PluginBundle
 )
+
+add_subdirectory( qml )
 
 #vq_dump_vars()
 
