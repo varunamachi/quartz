@@ -12,7 +12,7 @@ class RestClient : public QObject
 public:
     explicit RestClient( QObject *parent );
 
-
+    ~RestClient();
 
 private:
     struct Data;
