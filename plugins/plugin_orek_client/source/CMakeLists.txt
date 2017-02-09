@@ -20,6 +20,7 @@ vq_sources(
 vq_classes(
     ContentProvider
     PluginBundle
+    NodeProvider
 )
 
 add_subdirectory( qml )
