@@ -3,6 +3,7 @@
 #include <core/extension_system/IPluginAdapter.h>
 
 #include "ContentProvider.h"
+#include "NodeProvider.h"
 #include "PluginBundle.h"
 
 namespace Quartz { namespace OrekClient {
@@ -23,6 +24,8 @@ PluginBundle::PluginBundle()
     , m_data{ new Data{} }
 {
     m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
+
 }
 
 PluginBundle::~PluginBundle()

@@ -78,13 +78,15 @@ QuartzWindow::QuartzWindow( QWidget *parent )
     m_data->m_layout->setContentsMargins( 5, 5, 0, 0 );
     m_data->m_containerWidget->setLayout( m_data->m_layout );
 
+#ifndef Q_OS_WIN
+    this->setAttribute( Qt::WA_TranslucentBackground, true );
+#endif
     CustomShadowEffect *effect = new CustomShadowEffect( this );
     effect->setBlurRadius( 10.0 );
     effect->setDistance( 3.0 );
     effect->setColor( QColor( 0xA0, 0x52, 0x2D, 0x80 ));
     m_data->m_chilliWidget->setGraphicsEffect( effect );
 
-    this->setAttribute( Qt::WA_TranslucentBackground, true );
     this->setContentsMargins( QMargins() );
     this->setCentralWidget( m_data->m_containerWidget );
 

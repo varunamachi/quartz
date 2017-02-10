@@ -5,10 +5,10 @@
 
 namespace Quartz { namespace OrekClient {
 
-class SampleContent : public ContentWidget
+class OrekContent : public ContentWidget
 {
 public:
-    explicit SampleContent( QWidget *parent = nullptr );
+    explicit OrekContent( QWidget *parent = nullptr );
 
     static const QString CONTENT_ID;
 
@@ -34,6 +34,10 @@ public:
     static const QString     PLUGIN_ID;
 
     static const QString     PLUGIN_NAME;
+
+private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
 } }

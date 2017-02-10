@@ -36,7 +36,13 @@ macro( qz_add_qt )
     set( CMAKE_AUTOUIC ON )
     set( CMAKE_AUTORCC ON )
     set( CMAKE_INCLUDE_CURRENT_DIR ON )
-    qz_add_qt_modules( Widgets Sql Xml Quick Network )
+    qz_add_qt_modules(
+        Widgets
+        Sql
+        Xml
+        Quick
+        QuickWidgets
+        Network )
 endmacro( qz_add_qt )
 
 

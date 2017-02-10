@@ -1,22 +1,36 @@
 #include <QVBoxLayout>
 #include <QLabel>
-
+#include <QQuickWidget>
 #include "ContentProvider.h"
 
 namespace Quartz { namespace OrekClient {
 
-const QString SampleContent::CONTENT_ID{ "qzp.orekclient.content" };
-const QString SampleContent::CONTENT_NAME{ "Orek" };
-const QString SampleContent::CONTENT_KIND{ "orek" };
+const QString OrekContent::CONTENT_ID{ "qzp.orekclient.content" };
+const QString OrekContent::CONTENT_NAME{ "Orek" };
+const QString OrekContent::CONTENT_KIND{ "orek" };
 
-SampleContent::SampleContent( QWidget *parent )
+OrekContent::OrekContent( QWidget *parent )
     : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent }
 {
-    auto layout = new QVBoxLayout{ this };
-    auto label = new QLabel{ "O.R.E.K", this };
-    layout->addWidget( label );
+    auto layout = new QVBoxLayout{ };
+    auto quickWidget = new QQuickWidget{ QUrl{ "qrc:/qml/main.qml" }, this };
+    layout->addWidget( quickWidget );
     this->setLayout( layout );
+
+    this->setContentsMargins( QMargins{} );
+    quickWidget->setContentsMargins( QMargins{} );
 }
+
+
+struct ContentProvider::Data
+{
+    Data()
+    {
+        m_contents.push_back( new OrekContent{} );
+    }
+
+    QVector< ContentWidget *> m_contents;
+};
 
 
 /********************** Provider ************************************/
@@ -27,6 +41,7 @@ const QString ContentProvider::PLUGIN_NAME{
 
 ContentProvider::ContentProvider()
     : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    , m_data( new Data{} )
 {
 
 }
@@ -48,9 +63,7 @@ bool ContentProvider::destroy()
 
 QVector< ContentWidget *> ContentProvider::widgets()
 {
-    QVector< ContentWidget *> widgets;
-    widgets.push_back( new SampleContent{} );
-    return widgets;
+    return m_data->m_contents;
 }
 
 
