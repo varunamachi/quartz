@@ -1,6 +1,6 @@
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QQuickWidget>
+#include <QQuickView>
 #include "ContentProvider.h"
 
 namespace Quartz { namespace OrekClient {
@@ -13,12 +13,15 @@ OrekContent::OrekContent( QWidget *parent )
     : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent }
 {
     auto layout = new QVBoxLayout{ };
-    auto quickWidget = new QQuickWidget{ QUrl{ "qrc:/qml/main.qml" }, this };
-    layout->addWidget( quickWidget );
-    this->setLayout( layout );
+    QQuickView *view = new QQuickView();
+    view->setSource( QUrl{ "qrc:/qml/main.qml" });
+    QWidget *container = QWidget::createWindowContainer( view, this );
+    container->setFocusPolicy( Qt::TabFocus );
+    layout->addWidget( container );
 
+    this->setLayout( layout );
     this->setContentsMargins( QMargins{} );
-    quickWidget->setContentsMargins( QMargins{} );
+    container->setContentsMargins( QMargins{} );
 }
 
 

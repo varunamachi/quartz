@@ -13,8 +13,8 @@ struct NodeProvider::Data
 {
     Data()
     {
-        auto path = Quartz::Node::toPath( "Orek" );
-        auto nodeInfo = std::make_shared< NodeInfo >( path,
+//        auto path = Quartz::Node::toPath( "Orek" );
+        auto nodeInfo = std::make_shared< NodeInfo >( QStringList{},
                                                       "Orek",
                                                       "qzp.orekclient.content",
                                                       QIcon{} );

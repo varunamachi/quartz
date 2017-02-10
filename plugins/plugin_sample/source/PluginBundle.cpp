@@ -25,10 +25,10 @@ PluginBundle::PluginBundle()
     : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
     , m_data{ new Data{} }
 {
-    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
+//    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
+//    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
+//    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
+//    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
 }
 
 PluginBundle::~PluginBundle()

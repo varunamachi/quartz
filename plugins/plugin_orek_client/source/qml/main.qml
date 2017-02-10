@@ -1,49 +1,49 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
+import QtQuick 2.0
+
 
 Rectangle {
-    visible: true
-    width: 640
-    height: 480
-    SwipeView {
-        id: mainSwipe
-        anchors.fill: parent
-        width: 640
-        height: 480
-        GridLayout {
-            id: mainGrid
-            rows: 2
-            columns: 2
-            property string color: "red"
+    width: 180; height: 200
 
-            Button {
-                text: "One"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                onClicked: rec.color = "blue"
-            }
-            Button {
-                text: "two"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                onClicked: rec.color = "green"
-            }
-            Button {
-                text: "three"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                onClicked: rec.color = "yellow"
-            }
-            Button {
-                text: "four"
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                onClicked: rec.color = "white"
-            }
-        }
+    Component {
+        id: contactsDelegate
         Rectangle {
-            id: rec
+            id: wrapper
+            width: 180
+            height: contactInfo.height
+            color: ListView.isCurrentItem ? "black" : "red"
+            Text {
+                id: contactInfo
+                text: name + ": " + number
+                color: wrapper.ListView.isCurrentItem ? "red" : "black"
+            }
+            MouseArea {
+                 anchors.fill: parent
+                 onClicked: view.currentIndex = index
+             }
         }
     }
+
+    ListView {
+        id: view
+        anchors.fill: parent
+        model: ListModel {
+            id: list
+            ListElement {
+                name: "Bill Smith"
+                number: "555 3264"
+            }
+            ListElement {
+                name: "John Brown"
+                number: "555 8426"
+            }
+            ListElement {
+                name: "Sam Wise"
+                number: "555 0473"
+            }
+        }
+        delegate: contactsDelegate
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        focus: true
+    }
 }
+
