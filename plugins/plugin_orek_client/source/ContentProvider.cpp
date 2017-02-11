@@ -14,7 +14,7 @@ OrekContent::OrekContent( QWidget *parent )
 {
     auto layout = new QVBoxLayout{ };
     QQuickView *view = new QQuickView();
-    view->setSource( QUrl{ "qrc:/qml/main.qml" });
+    view->setSource( QUrl{ "qrc:/qml/OrekMainPage.qml" });
     QWidget *container = QWidget::createWindowContainer( view, this );
     container->setFocusPolicy( Qt::TabFocus );
     layout->addWidget( container );
