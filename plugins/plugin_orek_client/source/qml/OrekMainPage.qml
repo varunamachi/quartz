@@ -3,8 +3,10 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 
-Item {
+Rectangle {
+    id: main
     anchors.fill: parent
+    color: "black"
     ListModel {
         id: menuModel
         ListElement {
@@ -34,12 +36,12 @@ Item {
             id: wrapper
             width: parent.width
             height: menuItem.height
-            color: ListView.isCurrentItem ? "#FFA858" : "transparent"
+            color: ListView.isCurrentItem ? "#FFA858" : "black"
             Text {
                 id: menuItem
                 text: name
                 font.pointSize: 14
-                //                color: ListView.isCurrentItem ? "black" : "white"
+                color: "white"
             }
             MouseArea {
                 anchors.fill: parent
@@ -50,60 +52,77 @@ Item {
             }
         }
     }
-    RowLayout {
-        id: layout
+    StackLayout {
+        id: stack
         anchors.fill: parent
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 50
-            Layout.preferredWidth: 80
-            Layout.maximumWidth: 120
-            Layout.preferredHeight: parent.height
-            ListView {
-                id: menuView
-                width: parent.width
-                height: parent.height
-                model: menuModel
-                delegate:  menuDelegate
+        LoginPage {
+            id: loginPage
+            visible: true
+            anchors.fill: parent
+            onLoggedIn: {
+                stack.currentIndex = 1
+            }
+            onLogInError: {
+                console.log("Login Error: " + error)
             }
         }
-        Rectangle {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 100
-            Layout.preferredWidth: 200
-            Layout.preferredHeight: parent.height
-            StackLayout {
-                id: stackView
-                currentIndex: 0
-                width: parent.width
-                height: parent.height
-                UserPage {
-                    id: userPage
+        RowLayout {
+            id: mainLayout
+            visible: false
+            spacing: 2
+            anchors.fill: parent
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 50
+                Layout.preferredWidth: 80
+                Layout.maximumWidth: 120
+                Layout.preferredHeight: parent.height
+                color: "black"
+                ListView {
+                    id: menuView
                     width: parent.width
                     height: parent.height
+                    model: menuModel
+                    delegate:  menuDelegate
                 }
-                GroupPage {
-                    id: groupPage
+            }
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.minimumWidth: 100
+                Layout.preferredWidth: 200
+                Layout.preferredHeight: parent.height
+                StackLayout {
+                    id: stackView
+                    currentIndex: 0
                     width: parent.width
                     height: parent.height
-                }
-                EndpointPage {
-                    id: endpointPage
-                    width: parent.width
-                    height: parent.height
-                }
-                VariablePage {
-                    id: variablePage
-                    width: parent.width
-                    height: parent.height
-                }
-                ParameterPage {
-                    id: parameterPage
-                    width: parent.width
-                    height: parent.height
+                    UserPage {
+                        id: userPage
+                        width: parent.width
+                        height: parent.height
+                    }
+                    GroupPage {
+                        id: groupPage
+                        width: parent.width
+                        height: parent.height
+                    }
+                    EndpointPage {
+                        id: endpointPage
+                        width: parent.width
+                        height: parent.height
+                    }
+                    VariablePage {
+                        id: variablePage
+                        width: parent.width
+                        height: parent.height
+                    }
+                    ParameterPage {
+                        id: parameterPage
+                        width: parent.width
+                        height: parent.height
+                    }
                 }
             }
         }
     }
-
 }

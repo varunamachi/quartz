@@ -1,26 +1,29 @@
-
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbiI6dHJ1ZSwiZXhwIjoxNDg3MTQ5NzI2LCJuYW1lIjoidHdvIn0.zuUVA88fym8u3vwQ-0ZvgIs7CrxneTC9Qdi-EEm_Yo8";
-var serverAddress = "http://localhost:8000/v0/in"
+.pragma library
+var token = "";
+var address = ""
+//var serverAddress = "xhr://localhost:8000/v0/in"
 
 function request(verb, endpoint, obj, callback, errCallback) {
+    if( token === "") {
+        return
+    }
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if(xhr.readyState === XMLHttpRequest.DONE) {
             if(xhr.status === 200) {
-                if(callback) callback(xhr.responseText.toString());
+                if(callback) callback(xhr.responseText);
             } else if (xhr.status === 401 ) {
-//                token = "";
-                if(errCallback) errCallback(xhr.responseText.toString())
-            }else {
-                if(errCallback) errCallback(xhr.responseText.toString())
+                token = "";
+                if(errCallback) errCallback(xhr.responseText)
+            } else {
+                if(errCallback) errCallback(xhr.responseText)
             }
         }
     }
-    var url = serverAddress + (endpoint ? ('/' + endpoint) :'' )
+    var url = address + "/v0/in" + (endpoint ? ('/' + endpoint) :'' )
     xhr.open(verb, url);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Accept', 'application/json');
-    console.log(token)
     var header = "Bearer " + token;
     xhr.setRequestHeader("Authorization", header);
     var data = obj ? JSON.stringify(obj) : '';
@@ -28,23 +31,25 @@ function request(verb, endpoint, obj, callback, errCallback) {
 }
 
 function login(userName, password, callback, errCallback) {
-    var http = new XMLHttpRequest();
-    var url = serverAddress + "/login";
+    var xhr = new XMLHttpRequest();
+    var url = address + "/v0/login";
     var params = "username=" + userName + "&password=" + password;
-    http.open("POST", url);
-
-    //Send the proper header information along with the request
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.setRequestHeader("Content-length", params.length);
-    http.setRequestHeader("Connection", "close");
-    http.onreadystatechange = function() {
-        if(xhr.readyState === XMLHttpRequest.DONE && http.status === 200) {
-            if(callback) callback()
-        } else {
-            if(errCallback) errCallback(http.responseText.toString())
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-length", params.length);
+    xhr.setRequestHeader("Connection", "close");
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState === XMLHttpRequest.DONE) {
+            if(xhr.status === 200) {
+                var obj = JSON.parse(xhr.responseText)
+                token = obj["token"]
+                if(callback) callback()
+            } else {
+                if(errCallback) errCallback(xhr.responseText)
+            }
         }
     }
-    http.send(params);
+    xhr.send(params);
 }
 
 

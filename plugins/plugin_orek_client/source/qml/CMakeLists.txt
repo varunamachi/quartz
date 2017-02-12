@@ -7,6 +7,7 @@ vq_sources(
     ParameterPage.qml
     JSONListModel.qml
     OrekMainPage.qml
+    LoginPage.qml
     orek.js
     jsonpath.js
 )

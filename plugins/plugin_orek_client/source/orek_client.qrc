@@ -10,5 +10,6 @@
         <file>qml/VariablePage.qml</file>
         <file>qml/jsonpath.js</file>
         <file>qml/JSONListModel.qml</file>
+        <file>qml/LoginPage.qml</file>
     </qresource>
 </RCC>
