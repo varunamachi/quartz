@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
 
 import "orek.js" as Orek
 
@@ -46,6 +47,25 @@ Rectangle {
                     anchors.left: parent != null ? parent.left : checkedCol.left
                     anchors.leftMargin: parent != null ? parent.width/2 - 6
                                                        : checkedCol.width
+                    style: CheckBoxStyle {
+                        indicator: Rectangle {
+                                implicitWidth: 16
+                                implicitHeight: 16
+                                radius: 3
+                                border.color: control.activeFocus
+                                              ? "darkblue"
+                                              : "gray"
+                                border.width: 1
+                                Rectangle {
+                                    visible: control.checked
+                                    color: "#555"
+                                    border.color: "#333"
+                                    radius: 1
+                                    anchors.margins: 4
+                                    anchors.fill: parent
+                                }
+                        }
+                    }
                 }
             }
             TableViewColumn {

@@ -6,7 +6,13 @@ import QtQuick.Layouts 1.3
 Rectangle {
     id: main
     anchors.fill: parent
-//    color: "white"
+    color: orekActive.alternateBase
+    SystemPalette {
+        id: orekActive
+        colorGroup: SystemPalette.Active
+    }
+
+
     ListModel {
         id: menuModel
         ListElement {
@@ -37,12 +43,12 @@ Rectangle {
             width: parent.width
             height: menuItem.height
 //            color: ListView.isCurrentItem ? "#FFA858" : "red"
-            color: "white"
+            color: orekActive.alternateBase
             Text {
                 id: menuItem
                 text: name
                 font.pointSize: 14
-                color: "black"
+                color: orekActive.windowText
             }
             states: State {
                 name: "Current"
@@ -86,7 +92,7 @@ Rectangle {
                 Layout.preferredWidth: 80
                 Layout.maximumWidth: 120
                 Layout.preferredHeight: parent.height
-//                color: "white"
+                color: orekActive.alternateBase
                 ListView {
                     anchors.leftMargin: 2
                     anchors.rightMargin: 2
