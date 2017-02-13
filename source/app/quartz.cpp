@@ -8,7 +8,8 @@
 
 #include "inbuilt/LogView.h"
 
-#include "QuartzWindow.h"
+#include "QuartzFramelessWindow.h"
+//#include "QuartzFramedWindow.h"
 
 
 
@@ -44,7 +45,7 @@ int main( int argc, char **argv )
 {
     init();
     QApplication app( argc, argv );
-    Quartz::QuartzWindow window;
+    Quartz::QuartzFramelessWindow window;
     window.show();
     auto returnCode = app.exec();
     uninit();

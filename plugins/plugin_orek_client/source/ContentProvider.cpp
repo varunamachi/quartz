@@ -18,7 +18,8 @@ OrekContent::OrekContent( QWidget *parent )
     QWidget *container = QWidget::createWindowContainer( view, this );
     container->setFocusPolicy( Qt::TabFocus );
     layout->addWidget( container );
-
+    container->setAttribute( Qt::WA_TranslucentBackground,
+                             false );
     this->setLayout( layout );
     this->setContentsMargins( QMargins{} );
     container->setContentsMargins( QMargins{} );

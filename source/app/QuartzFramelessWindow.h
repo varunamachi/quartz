@@ -8,14 +8,14 @@ namespace Quartz {
 
 class QzMainWidget;
 
-class QuartzWindow : public QMainWindow
+class QuartzFramelessWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit QuartzWindow( QWidget *parent = 0 );
+    explicit QuartzFramelessWindow( QWidget *parent = 0 );
 
-    ~QuartzWindow();
+    ~QuartzFramelessWindow();
 
     void mouseMove( QPoint newPos, QPoint oldPos );
 

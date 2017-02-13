@@ -2,7 +2,7 @@
 #include <QHoverEvent>
 
 #include "HoverMoveFilter.h"
-#include "QuartzWindow.h"
+#include "QuartzFramelessWindow.h"
 
 namespace Quartz {
 
@@ -16,7 +16,7 @@ bool HoverMoveFilter::eventFilter( QObject *obj, QEvent *event )
 {
     if( event->type() == QEvent::HoverMove ) {
         QHoverEvent *mouseHoverEvent = static_cast<QHoverEvent *>( event );
-        QuartzWindow *qzwindow = static_cast< QuartzWindow * >( obj );
+        QuartzFramelessWindow *qzwindow = static_cast< QuartzFramelessWindow * >( obj );
         qzwindow->mouseMove( mouseHoverEvent->pos(),
                              mouseHoverEvent->oldPos() );
     }

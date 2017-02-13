@@ -12,7 +12,8 @@ qz_add_base()
 
 
 vq_classes (
-    QuartzWindow
+    QuartzFramelessWindow
+    QuartzFramedWindow
     WelcomePage
     HoverMoveFilter
     QzMainWidget

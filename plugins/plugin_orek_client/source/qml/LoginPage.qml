@@ -18,9 +18,11 @@ Rectangle {
         id: loginGrid
         columns: 2
         rowSpacing: 5
+        columnSpacing: 2
         Label {
             id: addrLabel
             text: "Server Address"
+            width: 100
         }
         TextField {
             id: orekServer
@@ -30,26 +32,31 @@ Rectangle {
 
         Label {
             id: nameLabel
+            Layout.fillWidth: true
             text: "User Name"
+            width: 100
         }
         TextField {
             id: userName
             Layout.fillWidth: true
-            text: "two"
+            placeholderText: "Enter the user name"
         }
 
         Label {
             text: "Password"
+            Layout.fillWidth: true
+            width: 100
         }
         TextField {
             id: password
             echoMode: "Password"
             Layout.fillWidth: true
-            text: "two"
+            placeholderText: "Enter your password"
         }
         Label {
             text: ""
             Layout.fillWidth: true
+            width: 100
         }
         Button {
             text: "Login"

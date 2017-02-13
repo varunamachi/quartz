@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.3
 Rectangle {
     id: main
     anchors.fill: parent
-    color: "black"
+//    color: "white"
     ListModel {
         id: menuModel
         ListElement {
@@ -36,12 +36,21 @@ Rectangle {
             id: wrapper
             width: parent.width
             height: menuItem.height
-            color: ListView.isCurrentItem ? "#FFA858" : "black"
+//            color: ListView.isCurrentItem ? "#FFA858" : "red"
+            color: "white"
             Text {
                 id: menuItem
                 text: name
                 font.pointSize: 14
-                color: "white"
+                color: "black"
+            }
+            states: State {
+                name: "Current"
+                when: wrapper.ListView.isCurrentItem
+                PropertyChanges { target: wrapper; color: "#FFA858" }
+            }
+            transitions: Transition {
+                ColorAnimation { properties: "color"; duration: 150 }
             }
             MouseArea {
                 anchors.fill: parent
@@ -77,8 +86,10 @@ Rectangle {
                 Layout.preferredWidth: 80
                 Layout.maximumWidth: 120
                 Layout.preferredHeight: parent.height
-                color: "black"
+//                color: "white"
                 ListView {
+                    anchors.leftMargin: 2
+                    anchors.rightMargin: 2
                     id: menuView
                     width: parent.width
                     height: parent.height

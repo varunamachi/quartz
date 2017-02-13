@@ -16,14 +16,14 @@
 #include "adapted/CustomShadowEffect.h"
 #include "HoverMoveFilter.h"
 #include "QzMainWidget.h"
-#include "QuartzWindow.h"
+#include "QuartzFramelessWindow.h"
 
 #define WINDOW_MARGIN 5
 
 
 namespace Quartz {
 
-struct QuartzWindow::Data
+struct QuartzFramelessWindow::Data
 {
     Data( QMainWindow *parent )
         : m_chilliWidget{ new QzMainWidget{ parent }}
@@ -57,35 +57,42 @@ struct QuartzWindow::Data
 
 };
 
-QuartzWindow::QuartzWindow( QWidget *parent )
+QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
     : QMainWindow( parent )
     , m_data{ new Data{ this }}
 {
-    this->setWindowFlags( Qt::FramelessWindowHint
-                          | Qt::WindowMinimizeButtonHint );
     m_data->m_containerWidget = new QWidget( this );
-    m_data->m_containerWidget->setContentsMargins( 5, 5, 5, 5 );
+
     setMouseTracking( true );
     setAttribute( Qt::WA_Hover );
     installEventFilter( new HoverMoveFilter( this ));
 
-    m_data->m_chilliWidget->setContentsMargins( 5, 5, 0, 0 );
     m_data->m_layout = new QHBoxLayout( /*m_data->m_containerWidget*/ );
     m_data->m_layout->addWidget( m_data->m_chilliWidget );
-    m_data->m_containerWidget->setAttribute( Qt::WA_TranslucentBackground,
-                                             true );
     m_data->m_layout->setSpacing( 0 );
-    m_data->m_layout->setContentsMargins( 5, 5, 0, 0 );
     m_data->m_containerWidget->setLayout( m_data->m_layout );
 
+    this->setWindowFlags( Qt::FramelessWindowHint
+                          | Qt::WindowMinimizeButtonHint );
 #ifndef Q_OS_WIN
+    m_data->m_containerWidget->setAttribute( Qt::WA_TranslucentBackground,
+                                             true );
     this->setAttribute( Qt::WA_TranslucentBackground, true );
-#endif
     CustomShadowEffect *effect = new CustomShadowEffect( this );
     effect->setBlurRadius( 10.0 );
     effect->setDistance( 3.0 );
     effect->setColor( QColor( 0xA0, 0x52, 0x2D, 0x80 ));
     m_data->m_chilliWidget->setGraphicsEffect( effect );
+    m_data->m_containerWidget->setContentsMargins( 5, 5, 5, 5 );
+    m_data->m_chilliWidget->setContentsMargins( 5, 5, 0, 0 );
+    m_data->m_layout->setContentsMargins( 5, 5, 0, 0 );
+#else
+    m_data->m_containerWidget->setContentsMargins( 2, 2, 2, 2 );
+    m_data->m_chilliWidget->setContentsMargins( 2, 2, 2, 2 );
+    m_data->m_layout->setContentsMargins( 0, 0, 0, 0 );
+    this->setStyleSheet( "QMainWindow{ border: 2px solid #FFA858; }");
+
+#endif
 
     this->setContentsMargins( QMargins() );
     this->setCentralWidget( m_data->m_containerWidget );
@@ -104,19 +111,19 @@ QuartzWindow::QuartzWindow( QWidget *parent )
              SLOT( onMinimize() ));
 }
 
-QuartzWindow::~QuartzWindow()
+QuartzFramelessWindow::~QuartzFramelessWindow()
 {
 
 }
 
 
-void QuartzWindow::onMinimize()
+void QuartzFramelessWindow::onMinimize()
 {
     minimize();
 }
 
 
-void QuartzWindow::onMaximizeRestore()
+void QuartzFramelessWindow::onMaximizeRestore()
 {
     if( m_data->m_maximised ) {
         m_data->m_maximised = false;
@@ -130,7 +137,7 @@ void QuartzWindow::onMaximizeRestore()
 }
 
 
-void QuartzWindow::mousePressEvent( QMouseEvent* event )
+void QuartzFramelessWindow::mousePressEvent( QMouseEvent* event )
 {
     if( event->button() == Qt::LeftButton ) {
         m_data->m_moving = true;
@@ -151,7 +158,7 @@ void QuartzWindow::mousePressEvent( QMouseEvent* event )
 }
 
 
-void QuartzWindow::mouseMoveEvent( QMouseEvent* event )
+void QuartzFramelessWindow::mouseMoveEvent( QMouseEvent* event )
 {
     if( event->buttons().testFlag( Qt::LeftButton )
             && m_data->m_moving
@@ -176,7 +183,7 @@ void QuartzWindow::mouseMoveEvent( QMouseEvent* event )
 }
 
 
-void QuartzWindow::mouseReleaseEvent( QMouseEvent* event )
+void QuartzFramelessWindow::mouseReleaseEvent( QMouseEvent* event )
 {
     if( event->button() == Qt::LeftButton ) {
         m_data->m_moving = false;
@@ -186,7 +193,7 @@ void QuartzWindow::mouseReleaseEvent( QMouseEvent* event )
 }
 
 
-void QuartzWindow::showEvent( QShowEvent *evt )
+void QuartzFramelessWindow::showEvent( QShowEvent *evt )
 {
     if( m_data->m_geometry.isEmpty() ) {
         m_data->m_geometry = this->saveGeometry();
@@ -195,14 +202,14 @@ void QuartzWindow::showEvent( QShowEvent *evt )
 }
 
 
-void QuartzWindow::resizeEvent( QResizeEvent *evt )
+void QuartzFramelessWindow::resizeEvent( QResizeEvent *evt )
 {
     QWidget::resizeEvent( evt );
 }
 
 
 
-void QuartzWindow::maximize()
+void QuartzFramelessWindow::maximize()
 {
     QDesktopWidget *desktop = QApplication::desktop();
     // Because reserved space can be on all sides of the scren
@@ -218,7 +225,7 @@ void QuartzWindow::maximize()
 }
 
 
-void QuartzWindow::restore()
+void QuartzFramelessWindow::restore()
 {
     if( ! m_data->m_geometry.isEmpty() ) {
         m_data->m_layout->setSpacing( 0 );
@@ -230,7 +237,7 @@ void QuartzWindow::restore()
 }
 
 
-void QuartzWindow::minimize()
+void QuartzFramelessWindow::minimize()
 {
     if( ! this->isMinimized() ) {
         this->showMinimized();
@@ -238,7 +245,7 @@ void QuartzWindow::minimize()
 }
 
 
-void QuartzWindow::mouseMove( QPoint newPos, QPoint oldPos )
+void QuartzFramelessWindow::mouseMove( QPoint newPos, QPoint oldPos )
 {
     if( m_data->m_moving ) {
         int dx = newPos.x() - oldPos.x();
