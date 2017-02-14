@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
-import QtQuick.Controls.Styles 1.4
+
 
 import "orek.js" as Orek
 
@@ -22,13 +22,16 @@ Rectangle {
     }
     JSONListModel {
         id: userModel
-
     }
-
     ColumnLayout {
         anchors.fill: parent
         RowLayout {
             id: userOperations
+            Button {
+                id: createUserBtn
+                text: qsTr("Create User")
+                onClicked: console.log("Create user...")
+            }
         }
         TableView {
             id: userTable
@@ -36,36 +39,14 @@ Rectangle {
             anchors.fill: parent
             Component.onCompleted: load()
             onVisibleChanged: load()
+            selectionMode: SelectionMode.NoSelection
             TableViewColumn {
                 id: checkedCol
                 role:  "checked"
                 title: ""
                 width: 20
-                delegate: CheckBox {
-                    checked: styleData.value
-                    enabled: true
-                    anchors.left: parent != null ? parent.left : checkedCol.left
-                    anchors.leftMargin: parent != null ? parent.width/2 - 6
-                                                       : checkedCol.width
-                    style: CheckBoxStyle {
-                        indicator: Rectangle {
-                                implicitWidth: 16
-                                implicitHeight: 16
-                                radius: 3
-                                border.color: control.activeFocus
-                                              ? "darkblue"
-                                              : "gray"
-                                border.width: 1
-                                Rectangle {
-                                    visible: control.checked
-                                    color: "#555"
-                                    border.color: "#333"
-                                    radius: 1
-                                    anchors.margins: 4
-                                    anchors.fill: parent
-                                }
-                        }
-                    }
+                delegate: CheckboxDelegate {
+                    table: userTable
                 }
             }
             TableViewColumn {

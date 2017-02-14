@@ -26,6 +26,16 @@ Rectangle {
         anchors.fill: parent
         Component.onCompleted: loadParameters()
         onVisibleChanged: loadParameters()
+        selectionMode: SelectionMode.NoSelection
+        TableViewColumn {
+            id: checkedCol
+            role:  "checked"
+            title: ""
+            width: 20
+            delegate: CheckboxDelegate {
+                table: parameterTable
+            }
+        }
         TableViewColumn {
             role: "parameterID"
             title: "Parameter ID"

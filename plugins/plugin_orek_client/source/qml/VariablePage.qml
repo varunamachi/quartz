@@ -26,6 +26,17 @@ Rectangle {
         anchors.fill: parent
         Component.onCompleted: loadVariables()
         onVisibleChanged: loadVariables()
+        selectionMode: SelectionMode.NoSelection
+        TableViewColumn {
+            id: checkedCol
+            role:  "checked"
+            title: ""
+            width: 20
+            delegate: CheckboxDelegate {
+                table: variableTable
+            }
+
+        }
         TableViewColumn {
             role: "variableID"
             title: "Variable ID"

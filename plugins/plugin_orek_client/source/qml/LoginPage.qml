@@ -66,8 +66,6 @@ Rectangle {
         }
         Button {
             text: "Login"
-            background: orekActive.alternateBase
-//            : orekActive.windowText
             onReleased: {
                 Orek.address = orekServer.text
                 Orek.login(

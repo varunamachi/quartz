@@ -27,6 +27,16 @@ Rectangle {
         anchors.fill: parent
         Component.onCompleted: loadGroups()
         onVisibleChanged: loadGroups()
+        selectionMode: SelectionMode.NoSelection
+        TableViewColumn {
+            id: checkedCol
+            role:  "checked"
+            title: ""
+            width: 20
+            delegate: CheckboxDelegate {
+                table: groupTable
+            }
+        }
         TableViewColumn {
             role: "userGroupID"
             title: "Group ID"

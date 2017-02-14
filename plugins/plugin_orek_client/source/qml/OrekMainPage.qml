@@ -47,7 +47,7 @@ Rectangle {
             Text {
                 id: menuItem
                 text: name
-                font.pointSize: 14
+//                font.pointSize:
                 color: orekActive.windowText
             }
             states: State {
@@ -84,7 +84,7 @@ Rectangle {
         RowLayout {
             id: mainLayout
             visible: false
-            spacing: 2
+            spacing: 10
             anchors.fill: parent
             Rectangle {
                 Layout.fillWidth: true

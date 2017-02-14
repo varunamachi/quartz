@@ -26,6 +26,16 @@ Rectangle {
         anchors.fill: parent
         Component.onCompleted: loadEndpoints()
         onVisibleChanged: loadEndpoints()
+        selectionMode: SelectionMode.NoSelection
+        TableViewColumn {
+            id: checkedCol
+            role:  "checked"
+            title: ""
+            width: 20
+            delegate: CheckboxDelegate {
+                table: endpointTable
+            }
+        }
         TableViewColumn {
             role: "endpointID"
             title: "Endpoint ID"

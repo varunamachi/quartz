@@ -8,6 +8,7 @@ vq_sources(
     JSONListModel.qml
     OrekMainPage.qml
     LoginPage.qml
+    CheckboxDelegate.qml
     orek.js
     jsonpath.js
 )
