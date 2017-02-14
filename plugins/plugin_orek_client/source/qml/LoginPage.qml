@@ -65,6 +65,7 @@ Rectangle {
             color: orekActive.windowText
         }
         Button {
+            id: loginBtn
             text: "Login"
             onReleased: {
                 Orek.address = orekServer.text

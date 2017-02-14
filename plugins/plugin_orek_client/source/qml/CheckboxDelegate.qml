@@ -6,7 +6,7 @@ import QtQuick.Controls.Styles 1.4
 
 CheckBox {
     property TableView table
-    checked: styleData.value
+    checked: styleData.selected
     enabled: true
     anchors.left: parent != null ? parent.left : checkedCol.left
     anchors.leftMargin: parent != null ? parent.width/2 - 6
