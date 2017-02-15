@@ -69,16 +69,18 @@ Rectangle {
             Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
 
-            itemDelegate: Rectangle {
-                color: userTable.model.get(styleData.row)?
-                           userTable.model.get(styleData.row).selected
-                           ? "red" : orekActive.window : orekActive.window
-                Text {
-                    text: styleData.value
+            itemDelegate: Text {
+                text: styleData.value
+                color: {
+                    var rowObj = userTable.model.get(styleData.row)
+                    if(rowObj && rowObj["selected"] === true) {
+                        "red"
+                    }
+                    return orekActive.text
                 }
             }
             onClicked: {
-                console.log(userTable.model.get(row).marked)
+                console.log(userTable.model.get(row).selected)
             }
 
             TableViewColumn {
