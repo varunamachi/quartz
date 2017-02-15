@@ -3,7 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
-
+import QtQuick.Controls.Styles 1.4
 
 import "orek.js" as Orek
 
@@ -40,22 +40,6 @@ Rectangle {
             width: colmn.width
             Button {
                 height: Layout.height
-                id: selectAll
-                text: qsTr("Select All")
-                onClicked: {
-                    userTable.selection.selectAll()
-                }
-            }
-            Button {
-                height: Layout.height
-                id: deselectAll
-                text: qsTr("DeslectAll")
-                onClicked: {
-                    userTable.selection.deselect(0, userTable.rowCount - 1)
-                }
-            }
-            Button {
-                height: Layout.height
                 id: createUserBtn
                 text: qsTr("Create User")
                 onClicked: console.log("Create user...")
@@ -79,18 +63,27 @@ Rectangle {
             height: parent.height - userOperations.height
             Component.onCompleted: load()
             onVisibleChanged: load()
-            selectionMode: SelectionMode.NoSelection
+            selectionMode: SelectionMode.SingleSelection
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
-            onSelectionChanged: {
 
+            itemDelegate: Rectangle {
+                color: userTable.model.get(styleData.row)?
+                           userTable.model.get(styleData.row).selected
+                           ? "red" : orekActive.window : orekActive.window
+                Text {
+                    text: styleData.value
+                }
+            }
+            onClicked: {
+                console.log(userTable.model.get(row).marked)
             }
 
             TableViewColumn {
                 id: checkedCol
-                role:  "checked"
+                role:  "selected"
                 title: ""
                 width: 20
                 delegate: CheckboxDelegate {

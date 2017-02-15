@@ -43,6 +43,7 @@ Rectangle {
             Layout.fillWidth: true
             placeholderText: "Enter the user name"
             color: orekActive.windowText
+            text: "one"
         }
 
         Label {
@@ -57,6 +58,7 @@ Rectangle {
             Layout.fillWidth: true
             placeholderText: "Enter your password"
             color: orekActive.windowText
+            text: "password"
         }
         Label {
             text: ""
