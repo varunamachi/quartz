@@ -7,7 +7,7 @@ import QtQuick.Controls.Styles 1.4
 CheckBox {
     property TableView table
 //    property alias marked: checked
-//    checked: styleData.selected
+    checked: styleData.value
     enabled: true
     anchors.left: parent != null ? parent.left : checkedCol.left
     anchors.leftMargin: parent != null ? parent.width/2 - 6
@@ -34,7 +34,11 @@ CheckBox {
     onCheckedChanged: {
         table.focus = true
         table.selection.clear()
-        table.selection.select(styleData.row, styleData.row)
+        if(checked) {
+            table.selection.select(styleData.row, styleData.row)
+        } else {
+            table.selection.deselect(styleData.row, styleData.row)
+        }
         table.model.setProperty(styleData.row, "selected", checked )
     }
 }

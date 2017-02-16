@@ -11,9 +11,9 @@ Rectangle {
     color: orekActive.alternateBase
     anchors.fill: parent
 
-    function loadGroups() {
+    function load() {
         Orek.getAllGroups( function(jsonContent) {
-            groupModel.json = jsonContent.toString()
+            model.json = jsonContent.toString()
         }, function(errorContent) {
             console.log(errorContent)
         });
@@ -21,75 +21,66 @@ Rectangle {
 
 
     JSONListModel {
-        id: groupModel
+        id: model
     }
     ColumnLayout {
-        id: groupMainLayout
+        id: colmn
         anchors.fill: parent
         spacing: 0
         anchors.margins: 0
 
         RowLayout {
-            id: groupOperations
+            id: operations
             anchors.margins: 0
             Layout.minimumHeight: 30
             Layout.preferredHeight: 30
             Layout.maximumHeight: 30
             Layout.fillHeight: true
             Layout.fillWidth: true
-            width: groupMainLayout.width
+            width: colmn.width
             Button {
                 height: Layout.height
-                id: selectAllGroups
-                text: qsTr("Select All")
-                onClicked: {
-                    groupTable.selection.selectAll()
-                }
+                id: create
+                text: qsTr("Create")
+                onClicked: console.log("Create...")
             }
             Button {
                 height: Layout.height
-                id: deselectAllGroups
-                text: qsTr("Deslect All")
-                onClicked: {
-                    groupTable.selection.deselect(0, groupTable.rowCount - 1)
-                }
+                id: editSelected
+                text: qsTr("Edit")
+                onClicked: console.log("Edit...")
             }
             Button {
+                id: deleteSelected
                 height: Layout.height
-                id: createGroupBtn
-                text: qsTr("Create Group")
-                onClicked: console.log("Create group...")
-            }
-            Button {
-                height: Layout.height
-                id: editGroupBtn
-                text: qsTr("Edit Group")
-                onClicked: console.log("Edit group...")
-            }
-            Button {
-                height: Layout.height
-                id: deleteGroupBtn
-                text: qsTr("Delete Group")
-                onClicked: console.log("Delete Group...")
+                text: qsTr("Delete")
+                onClicked: console.log("Delete...")
             }
         }
         TableView {
-            id: groupTable
-            model: groupModel.model
-            Component.onCompleted: loadGroups()
-            onVisibleChanged: loadGroups()
-            selectionMode: SelectionMode.NoSelection
+            id: theTable
+            model: model.model
+            height: parent.height - operations.height
+            Component.onCompleted: load()
+            onVisibleChanged: load()
+            selectionMode: SelectionMode.SingleSelection
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
+
+            itemDelegate: Text {
+                text: styleData.value
+                color: model.selected ? "#e67e00"
+                                      : orekActive.text
+            }
             TableViewColumn {
                 id: checkedCol
-                role:  "checked"
+                role:  "selected"
                 title: ""
                 width: 20
                 delegate: CheckboxDelegate {
-                    table: groupTable
+                    table: theTable
                 }
             }
             TableViewColumn {

@@ -15,13 +15,13 @@ Rectangle {
 
     function load() {
         Orek.getAllUsers( function(jsonContent) {
-            userModel.json = jsonContent.toString()
+            model.json = jsonContent.toString()
         }, function(errorContent) {
             console.log(errorContent)
         });
     }
     JSONListModel {
-        id: userModel
+        id: model
     }
     ColumnLayout {
         id: colmn
@@ -30,7 +30,7 @@ Rectangle {
         anchors.margins: 0
 
         RowLayout {
-            id: userOperations
+            id: operations
             anchors.margins: 0
             Layout.minimumHeight: 30
             Layout.preferredHeight: 30
@@ -40,27 +40,27 @@ Rectangle {
             width: colmn.width
             Button {
                 height: Layout.height
-                id: createUserBtn
-                text: qsTr("Create User")
-                onClicked: console.log("Create user...")
+                id: create
+                text: qsTr("Create")
+                onClicked: console.log("Create...")
             }
             Button {
                 height: Layout.height
-                id: editUser
-                text: qsTr("Edit User")
-                onClicked: console.log("Edit user...")
+                id: editSelected
+                text: qsTr("Edit")
+                onClicked: console.log("Edit...")
             }
             Button {
+                id: deleteSelected
                 height: Layout.height
-                id: deleteUser
-                text: qsTr("Delete User")
-                onClicked: console.log("Delete user...")
+                text: qsTr("Delete")
+                onClicked: console.log("Delete...")
             }
         }
         TableView {
-            id: userTable
-            model: userModel.model
-            height: parent.height - userOperations.height
+            id: theTable
+            model: model.model
+            height: parent.height - operations.height
             Component.onCompleted: load()
             onVisibleChanged: load()
             selectionMode: SelectionMode.SingleSelection
@@ -71,25 +71,16 @@ Rectangle {
 
             itemDelegate: Text {
                 text: styleData.value
-                color: {
-                    var rowObj = userTable.model.get(styleData.row)
-                    if(rowObj && rowObj["selected"] === true) {
-                        "red"
-                    }
-                    return orekActive.text
-                }
+                color: model.selected ? "#e67e00"
+                                      : orekActive.text
             }
-            onClicked: {
-                console.log(userTable.model.get(row).selected)
-            }
-
             TableViewColumn {
                 id: checkedCol
                 role:  "selected"
                 title: ""
                 width: 20
                 delegate: CheckboxDelegate {
-                    table: userTable
+                    table: theTable
                 }
             }
             TableViewColumn {
@@ -113,5 +104,6 @@ Rectangle {
             }
         }
     }
+
 }
 
