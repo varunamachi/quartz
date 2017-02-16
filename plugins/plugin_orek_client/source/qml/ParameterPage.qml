@@ -8,7 +8,7 @@ import QtQuick.Layouts 1.3
 import "orek.js" as Orek
 
 Rectangle {
-    color: "transparent"
+    color: orekActive.alternateBase
     anchors.fill: parent
 
     function load() {

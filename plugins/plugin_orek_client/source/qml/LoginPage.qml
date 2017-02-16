@@ -11,17 +11,16 @@ Rectangle {
     signal loggedIn
     color: orekActive.base
     anchors.fill: parent
-
     GridLayout {
         anchors.fill: parent
         id: loginGrid
         columns: 2
         rowSpacing: 5
-        columnSpacing: 2
+        columnSpacing: 5
+        anchors.margins: 10
         Label {
             id: addrLabel
             text: "Server Address"
-            width: 100
             color: orekActive.windowText
         }
         TextField {
@@ -33,9 +32,7 @@ Rectangle {
 
         Label {
             id: nameLabel
-            Layout.fillWidth: true
             text: "User Name"
-            width: 100
             color: orekActive.windowText
         }
         TextField {
@@ -48,8 +45,6 @@ Rectangle {
 
         Label {
             text: "Password"
-            Layout.fillWidth: true
-            width: 100
             color: orekActive.windowText
         }
         TextField {
@@ -62,8 +57,6 @@ Rectangle {
         }
         Label {
             text: ""
-            Layout.fillWidth: true
-            width: 100
             color: orekActive.windowText
         }
         Button {

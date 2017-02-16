@@ -4,12 +4,59 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.2
 
 import "orek.js" as Orek
 
 
 
 Rectangle {
+    Dialog {
+        property bool isEdit: false
+        id: createDialog
+        width: 600
+        GridLayout {
+            columns: 2
+            anchors.fill: parent
+            Label {
+                text: qsTr("User Name")
+            }
+            TextField {
+                id: userName
+                placeholderText: qsTr("Enter user name")
+                Layout.fillWidth:  true
+                enabled: !createDialog.isEdit
+            }
+
+            Label {
+                text: qsTr("Email")
+            }
+            TextField {
+                id: userEmail
+                placeholderText: qsTr("Enter the user email")
+                Layout.fillWidth:  true
+            }
+
+            Label {
+                text: qsTr("First Name")
+            }
+            TextField {
+                id: userFirstName
+                placeholderText: qsTr("First name of the user")
+                Layout.fillWidth:  true
+            }
+
+            Label {
+                text: qsTr("Second Name")
+            }
+            TextField {
+                id: userSecondName
+                placeholderText: qsTr("Second name of the user")
+                Layout.fillWidth:  true
+            }
+        }
+    }
+
     color: orekActive.alternateBase
     anchors.fill: parent
 
@@ -42,13 +89,19 @@ Rectangle {
                 height: Layout.height
                 id: create
                 text: qsTr("Create")
-                onClicked: console.log("Create...")
+                onClicked: {
+                    createDialog.isEdit = false
+                    createDialog.open()
+                }
             }
             Button {
                 height: Layout.height
                 id: editSelected
                 text: qsTr("Edit")
-                onClicked: console.log("Edit...")
+                onClicked: {
+                    createDialog.isEdit = true
+                    createDialog.open()
+                }
             }
             Button {
                 id: deleteSelected
