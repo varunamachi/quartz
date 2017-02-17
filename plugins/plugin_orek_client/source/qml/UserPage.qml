@@ -1,20 +1,45 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4
+import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
 import "orek.js" as Orek
-
-
+import "common.js" as Utils
 
 Rectangle {
+    function getUserProperty(propName) {
+        if(createDialog.isEdit && createDialog.user) {
+            return createDialog.user[propName]
+        }
+        return ""
+    }
+    MessageDialog {
+        id: resultDialog
+    }
+
     Dialog {
         property bool isEdit: false
+        property var user
         id: createDialog
-        width: 600
+        width: 400
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        onAccepted: {
+            var user = {}
+            user["name"] = userName.text
+            user["email"] = userEmail.text
+            user["firstName"] = userFirstName.text
+            user["secondName"] = userSecondName.text
+            var func = isEdit ? Orek.updateUser : Orek.createUser
+            func(user,
+                 function(msg) { Utils.showResult(resultDialog, msg) },
+                 function(msg) { Utils.showResult(resultDialog, msg) }
+            );
+        }
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -24,6 +49,7 @@ Rectangle {
             TextField {
                 id: userName
                 placeholderText: qsTr("Enter user name")
+                text: getUserProperty("name")
                 Layout.fillWidth:  true
                 enabled: !createDialog.isEdit
             }
@@ -34,6 +60,7 @@ Rectangle {
             TextField {
                 id: userEmail
                 placeholderText: qsTr("Enter the user email")
+                text: getUserProperty("email")
                 Layout.fillWidth:  true
             }
 
@@ -43,6 +70,7 @@ Rectangle {
             TextField {
                 id: userFirstName
                 placeholderText: qsTr("First name of the user")
+                text: getUserProperty("firstName")
                 Layout.fillWidth:  true
             }
 
@@ -52,6 +80,7 @@ Rectangle {
             TextField {
                 id: userSecondName
                 placeholderText: qsTr("Second name of the user")
+                text: getUserProperty("secondName")
                 Layout.fillWidth:  true
             }
         }
@@ -100,7 +129,14 @@ Rectangle {
                 text: qsTr("Edit")
                 onClicked: {
                     createDialog.isEdit = true
-                    createDialog.open()
+                    for(var i = 0; i < model.count; i++) {
+                        var user = model.model.get(i)
+                        if(user.selected === true) {
+                            createDialog.user = user
+                            createDialog.open()
+                            break
+                        }
+                    }
                 }
             }
             Button {
@@ -124,8 +160,8 @@ Rectangle {
 
             itemDelegate: Text {
                 text: styleData.value
-                color: model.selected ? "#e67e00"
-                                      : orekActive.text
+                color: model && model.selected ? "#e67e00"
+                                               : orekActive.text
             }
             TableViewColumn {
                 id: checkedCol

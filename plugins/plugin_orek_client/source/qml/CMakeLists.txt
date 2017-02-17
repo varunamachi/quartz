@@ -9,6 +9,7 @@ vq_sources(
     OrekMainPage.qml
     LoginPage.qml
     CheckboxDelegate.qml
+    ResultDialog.qml
     orek.js
     jsonpath.js
 )
