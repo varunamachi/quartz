@@ -35,8 +35,14 @@ Rectangle {
             user["secondName"] = userSecondName.text
             var func = isEdit ? Orek.updateUser : Orek.createUser
             func(user,
-                 function(msg) { Utils.showResult(resultDialog, msg) },
-                 function(msg) { Utils.showResult(resultDialog, msg) }
+                 function(msg) {
+                     Utils.showResult(resultDialog, msg)
+                     load()
+                 },
+                 function(msg) {
+                     Utils.showResult(resultDialog, msg)
+                     load()
+                 }
             );
         }
 
@@ -84,6 +90,11 @@ Rectangle {
                 Layout.fillWidth:  true
             }
         }
+    }
+    MessageDialog {
+        id: confirmDialog
+        title: qsTr("Delete User")
+        text: qsTr("Do really want to delete the user(s)")
     }
 
     color: orekActive.alternateBase
@@ -143,7 +154,25 @@ Rectangle {
                 id: deleteSelected
                 height: Layout.height
                 text: qsTr("Delete")
-                onClicked: console.log("Delete...")
+                onClicked: {
+                    for(var i = 0; i < model.count; i++) {
+                        var user = model.model.get(i)
+                        if(user.selected === true) {
+                            Orek.deleteUser(user.name,
+                                 function(msg) {
+                                     Utils.showResult(resultDialog, msg)
+                                     load()
+                                 },
+                                 function(msg) {
+                                     Utils.showResult(resultDialog, msg)
+                                     load()
+                                 }
+                            );
+                            break
+                        }
+                    }
+
+                }
             }
         }
         TableView {
