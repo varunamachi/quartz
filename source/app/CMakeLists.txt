@@ -25,6 +25,7 @@ vq_sources(
 
 add_subdirectory( adapted )
 add_subdirectory( inbuilt )
+add_subdirectory( bindings )
 
 #vq_dump_vars()
 
