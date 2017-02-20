@@ -8,19 +8,15 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
 import "orek.js" as Orek
-import "common.js" as Utils
 
 Rectangle {
+
     function getUserProperty(propName) {
         if(createDialog.isEdit && createDialog.user) {
             return createDialog.user[propName]
         }
         return ""
     }
-    MessageDialog {
-        id: resultDialog
-    }
-
     Dialog {
         property bool isEdit: false
         property var user
@@ -36,11 +32,11 @@ Rectangle {
             var func = isEdit ? Orek.updateUser : Orek.createUser
             func(user,
                  function(msg) {
-                     Utils.showResult(resultDialog, msg)
+                     //log
                      load()
                  },
                  function(msg) {
-                     Utils.showResult(resultDialog, msg)
+                     //log
                      load()
                  }
             );
@@ -160,11 +156,9 @@ Rectangle {
                         if(user.selected === true) {
                             Orek.deleteUser(user.name,
                                  function(msg) {
-                                     Utils.showResult(resultDialog, msg)
                                      load()
                                  },
                                  function(msg) {
-                                     Utils.showResult(resultDialog, msg)
                                      load()
                                  }
                             );

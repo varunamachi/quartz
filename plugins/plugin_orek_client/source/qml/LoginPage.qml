@@ -20,25 +20,25 @@ Rectangle {
         anchors.margins: 10
         Label {
             id: addrLabel
-            text: "Server Address"
+            text: qsTr("Server Address")
             color: orekActive.windowText
         }
         TextField {
             id: orekServer
-            text: "http://localhost:8000"
+            text: qsTr("http://localhost:8000")
             Layout.fillWidth: true
             color: orekActive.windowText
         }
 
         Label {
             id: nameLabel
-            text: "User Name"
+            text: qsTr("User Name")
             color: orekActive.windowText
         }
         TextField {
             id: userName
             Layout.fillWidth: true
-            placeholderText: "Enter the user name"
+            placeholderText: qsTr("Enter the user name")
             color: orekActive.windowText
             text: "one"
         }
@@ -51,7 +51,7 @@ Rectangle {
             id: password
             echoMode: "Password"
             Layout.fillWidth: true
-            placeholderText: "Enter your password"
+            placeholderText: qsTr("Enter your password")
             color: orekActive.windowText
             text: "password"
         }
