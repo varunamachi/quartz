@@ -7,6 +7,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
+import qz.app 1.0 as App
+
 import "orek.js" as Orek
 
 Rectangle {
@@ -33,10 +35,15 @@ Rectangle {
             func(user,
                  function(msg) {
                      //log
+                     App.Qz.info( "Orek",
+                                 qsTr( "User %1 create/edit successfull",
+                                      userName.text ))
                      load()
                  },
                  function(msg) {
-                     //log
+                     App.Qz.info( "Orek",
+                                 qsTr( "User %1 create/edit failed",
+                                      userName.text ))
                      load()
                  }
             );

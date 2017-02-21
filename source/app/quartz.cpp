@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QQmlEngine>
 
 #include <core/logger/Logging.h>
 #include <core/logger/SpooledDispatcher.h>
@@ -7,11 +8,10 @@
 #include <base/QzAppContext.h>
 
 #include "inbuilt/LogView.h"
+#include "bindings/QzBinding.h"
 
 #include "QuartzFramelessWindow.h"
 //#include "QuartzFramedWindow.h"
-
-
 
 bool init()
 {
@@ -29,6 +29,13 @@ bool init()
         std::unique_ptr< QzAppContext > context{ new QzAppContext{} };
         context->setLogger( Logger::Logger::get() );
         QzCoreContext::setInstance( std::move( context ));
+
+        qmlRegisterSingletonType< Qz >( "qz.app",
+                                        1,
+                                        0,
+                                        "Qz",
+                                        &Qz::qmlInstance);
+
     }
     return result;
 }
