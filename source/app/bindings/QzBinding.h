@@ -8,6 +8,8 @@ class Qz : public QObject
 public:
     Q_INVOKABLE void info( QString msg );
 
+    Q_INVOKABLE void error( QString msg );
+
     Q_INVOKABLE void statusSuccess( QString msg );
 
     Q_INVOKABLE void statusFailure( QString msg );
