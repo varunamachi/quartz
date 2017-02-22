@@ -1,6 +1,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QQuickView>
+#include <QQuickWidget>
+
 #include "ContentProvider.h"
 
 namespace Quartz { namespace OrekClient {
@@ -12,17 +14,28 @@ const QString OrekContent::CONTENT_KIND{ "orek" };
 OrekContent::OrekContent( QWidget *parent )
     : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent }
 {
+//    QQuickView *view = new QQuickView();
+//    view->setSource( QUrl{ "qrc:/qml/OrekMainPage.qml" });
+//    QWidget *container = QWidget::createWindowContainer( view, this );
+//    container->setFocusPolicy( Qt::TabFocus );
+//    container->setAttribute( Qt::WA_TranslucentBackground,
+//                             false );
+
+    auto container = new QQuickWidget{ this };
+    container->setSource( QUrl{ "qrc:/qml/OrekMainPage.qml" });
+    container->setResizeMode(QQuickWidget::SizeRootObjectToView);
+//    container->setAttribute(Qt::WA_AlwaysStackOnTop);
+//    container->setClearColor(Qt::transparent);
+//    container->setStyleSheet( "background-color: red;" );
+
     auto layout = new QVBoxLayout{ };
-    QQuickView *view = new QQuickView();
-    view->setSource( QUrl{ "qrc:/qml/OrekMainPage.qml" });
-    QWidget *container = QWidget::createWindowContainer( view, this );
-    container->setFocusPolicy( Qt::TabFocus );
     layout->addWidget( container );
-    container->setAttribute( Qt::WA_TranslucentBackground,
-                             false );
     this->setLayout( layout );
     this->setContentsMargins( QMargins{} );
     container->setContentsMargins( QMargins{} );
+
+    //    container->raise();
+    container->resize(400, 222);
 }
 
 

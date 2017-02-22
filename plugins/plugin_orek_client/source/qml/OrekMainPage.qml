@@ -7,7 +7,7 @@ import "orek.js" as Orek
 
 Rectangle {
     id: main
-    anchors.fill: parent
+//    anchors.fill: parent
     color: orekActive.alternateBase
     SystemPalette {
         id: orekActive
