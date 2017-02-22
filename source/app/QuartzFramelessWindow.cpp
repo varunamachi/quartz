@@ -74,7 +74,7 @@ QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
 
     this->setWindowFlags( Qt::FramelessWindowHint
                           | Qt::WindowMinimizeButtonHint );
-#ifndef Q_OS_WIN
+#if 0
     m_data->m_containerWidget->setAttribute( Qt::WA_TranslucentBackground,
                                              true );
     this->setAttribute( Qt::WA_TranslucentBackground, true );
@@ -90,7 +90,13 @@ QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
     m_data->m_containerWidget->setContentsMargins( 2, 2, 2, 2 );
     m_data->m_chilliWidget->setContentsMargins( 2, 2, 2, 2 );
     m_data->m_layout->setContentsMargins( 0, 0, 0, 0 );
-    this->setStyleSheet( "QMainWindow{ border: 2px solid #FFA858; }");
+    this->setStyleSheet( "QMainWindow{ border: 1px solid #FFA858; }");
+
+//    CustomShadowEffect *effect = new CustomShadowEffect( this );
+//    effect->setBlurRadius( 10.0 );
+//    effect->setDistance( 3.0 );
+//    effect->setColor( QColor( 0xA0, 0x52, 0x2D, 0x80 ));
+//    this->setGraphicsEffect(effect);
 
 #endif
 

@@ -68,7 +68,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
-    policy.setVerticalPolicy( QSizePolicy::Expanding );
+//    policy.setVerticalPolicy( QSizePolicy::Expanding );
 
     m_data->m_content->setSizePolicy( policy );
     auto viewContainer = new StackedSplitContainer{

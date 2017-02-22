@@ -65,7 +65,7 @@ Rectangle {
             selectionMode: SelectionMode.SingleSelection
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumHeight: 600
+//            Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
 
             itemDelegate: Text {

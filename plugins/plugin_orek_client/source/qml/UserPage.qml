@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
-import qz.app 1.0 as App
+import qz.app 1.0 as Qz
 
 import "orek.js" as Orek
 
@@ -34,21 +34,19 @@ Rectangle {
             var func = isEdit ? Orek.updateUser : Orek.createUser
             func(user,
                  function(msg) {
-                     //log
-                     App.Qz.info( "Orek",
-                                 qsTr( "User %1 create/edit successfull",
-                                      userName.text ))
+                     Qz.Service.info( "Orek",
+                                     qsTr("User %1 create/edit successfull")
+                                     .arg(userName.text))
                      load()
                  },
                  function(msg) {
-                     App.Qz.info( "Orek",
-                                 qsTr( "User %1 create/edit failed",
-                                      userName.text ))
+                     Qz.Service.info( "Orek",
+                                     qsTr( "User %1 create/edit failed" )
+                                     .arg(userName.text))
                      load()
                  }
             );
         }
-
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -185,7 +183,6 @@ Rectangle {
             selectionMode: SelectionMode.SingleSelection
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
 
             itemDelegate: Text {

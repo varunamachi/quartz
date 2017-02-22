@@ -33,9 +33,8 @@ bool init()
         qmlRegisterSingletonType< Qz >( "qz.app",
                                         1,
                                         0,
-                                        "Qz",
+                                        "Service",
                                         &Qz::qmlInstance);
-
     }
     return result;
 }
