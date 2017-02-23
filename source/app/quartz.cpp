@@ -30,11 +30,11 @@ bool init()
         context->setLogger( Logger::Logger::get() );
         QzCoreContext::setInstance( std::move( context ));
 
-        qmlRegisterSingletonType< Qz >( "qz.app",
+        qmlRegisterSingletonType< QzBinding >( "qz.app",
                                         1,
                                         0,
                                         "Service",
-                                        &Qz::qmlInstance);
+                                        &QzBinding::qmlInstance);
     }
     return result;
 }

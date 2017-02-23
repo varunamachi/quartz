@@ -12,5 +12,6 @@
         <file>qml/JSONListModel.qml</file>
         <file>qml/LoginPage.qml</file>
         <file>qml/CheckboxDelegate.qml</file>
+        <file>qml/common.js</file>
     </qresource>
 </RCC>

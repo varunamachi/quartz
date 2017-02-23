@@ -5,8 +5,8 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 
-import qz.app 1.0 as Qz
 import "orek.js" as Orek
+import "common.js" as Utils
 
 Rectangle {
     function getGroupProperty(propName) {
@@ -14,6 +14,26 @@ Rectangle {
             return createDialog.group[propName]
         }
         return ""
+    }
+    function removeSelected() {
+        for(var i = 0; i < model.count; i++) {
+            var group = model.model.get(i)
+            var msg = qsTr("Do you really want to delete selected groups?")
+            if(group.selected === true) {
+                if(Utils.confirm(qsTr("Remove Groups"), msg)) {
+                    var suc = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    var fail = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    Orek.deleteGroup(group.userGroupID, suc, fail);
+                    break
+                }
+            }
+        }
     }
     Dialog {
         property bool isEdit: false
@@ -30,15 +50,11 @@ Rectangle {
             var func = isEdit ? Orek.updateGroup : Orek.createGroup
             func(group,
                  function(msg) {
-                     Qz.Service.info( "Orek",
-                                     qsTr("Group %1 create/edit successfull")
-                                     .arg(groupName.text))
+                     Utils.showResult(msg)
                      load()
                  },
                  function(msg) {
-                     Qz.Service.info( "Orek",
-                                     qsTr( "Group %1 create/edit failed" )
-                                     .arg(groupName.text))
+                     Utils.showResult(msg)
                      load()
                  }
             );
@@ -52,7 +68,7 @@ Rectangle {
             TextField {
                 id: groupID
                 placeholderText: qsTr("Enter Group ID")
-                text: getUserProperty("userGroupID")
+                text: getGroupProperty("userGroupID")
                 Layout.fillWidth:  true
                 enabled: !createDialog.isEdit
             }
@@ -63,7 +79,7 @@ Rectangle {
             TextField {
                 id: groupName
                 placeholderText: qsTr("Enter Group Name")
-                text: getUserProperty("userGroupName")
+                text: getGroupProperty("userGroupName")
                 Layout.fillWidth:  true
             }
 
@@ -73,7 +89,7 @@ Rectangle {
             TextField {
                 id: owner
                 placeholderText: qsTr("Enter Group Owner")
-                text: getUserProperty("userGroupOwner")
+                text: getGroupProperty("userGroupOwner")
                 Layout.fillWidth:  true
             }
 
@@ -83,7 +99,7 @@ Rectangle {
             TextField {
                 id: desc
                 placeholderText: qsTr("Enter Description")
-                text: getUserProperty("userGroupDesc")
+                text: getGroupProperty("userGroupDesc")
                 Layout.fillWidth:  true
             }
         }
@@ -149,23 +165,7 @@ Rectangle {
                 id: deleteSelected
                 height: Layout.height
                 text: qsTr("Delete")
-                onClicked: {
-                    for(var i = 0; i < model.count; i++) {
-                        var group = model.model.get(i)
-                        if(group.selected === true) {
-                            Orek.deleteUser(group.userGroupID,
-                                 function(msg) {
-                                     load()
-                                 },
-                                 function(msg) {
-                                     load()
-                                 }
-                            );
-                            break
-                        }
-                    }
-
-                }
+                onClicked: removeSelected()
             }
         }
         TableView {

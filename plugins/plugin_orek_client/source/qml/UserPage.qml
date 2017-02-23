@@ -7,8 +7,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
-import qz.app 1.0 as Qz
-
+import "common.js" as Utils
 import "orek.js" as Orek
 
 Rectangle {
@@ -18,6 +17,27 @@ Rectangle {
             return createDialog.user[propName]
         }
         return ""
+    }
+
+    function removeSelected() {
+        for(var i = 0; i < model.count; i++) {
+            var user = model.model.get(i)
+            var msg = qsTr("Do you really want to delete selected users?")
+            if(user.selected === true) {
+                if(Utils.confirm(qsTr("Remove Users"), msg)) {
+                    var suc = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    var fail = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    Orek.deleteUser(user.name, suc, fail);
+                    break
+                }
+            }
+        }
     }
     Dialog {
         property bool isEdit: false
@@ -34,15 +54,11 @@ Rectangle {
             var func = isEdit ? Orek.updateUser : Orek.createUser
             func(user,
                  function(msg) {
-                     Qz.Service.info( "Orek",
-                                     qsTr("User %1 create/edit successfull")
-                                     .arg(userName.text))
+                     Utils.showResult(msg)
                      load()
                  },
                  function(msg) {
-                     Qz.Service.info( "Orek",
-                                     qsTr( "User %1 create/edit failed" )
-                                     .arg(userName.text))
+                     Utils.showResult(msg)
                      load()
                  }
             );
@@ -152,25 +168,11 @@ Rectangle {
                 }
             }
             Button {
-                id: deleteSelected
+                id: remove
                 height: Layout.height
                 text: qsTr("Delete")
                 onClicked: {
-                    for(var i = 0; i < model.count; i++) {
-                        var user = model.model.get(i)
-                        if(user.selected === true) {
-                            Orek.deleteUser(user.name,
-                                 function(msg) {
-                                     load()
-                                 },
-                                 function(msg) {
-                                     load()
-                                 }
-                            );
-                            break
-                        }
-                    }
-
+                    removeSelected()
                 }
             }
         }

@@ -11,4 +11,5 @@ vq_sources(
     CheckboxDelegate.qml
     orek.js
     jsonpath.js
+    common.js
 )
