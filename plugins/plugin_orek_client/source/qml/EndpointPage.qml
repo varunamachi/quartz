@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 
+import "common.js" as Utils
 import "orek.js" as Orek
 
 Rectangle {
@@ -17,6 +18,126 @@ Rectangle {
         }, function(errorContent) {
             console.log(errorContent)
         });
+    }
+
+
+    function getEndpointProperty(propName) {
+        if(createDialog.isEdit && createDialog.endpoint) {
+            return createDialog.endopoint[propName]
+        }
+        return ""
+    }
+
+    function removeSelected() {
+        for(var i = 0; i < model.count; i++) {
+            var ep = model.model.get(i)
+            var msg = qsTr("Do you really want to delete selected endpoints?")
+            if(ep.selected === true) {
+                if(Utils.confirm(qsTr("Remove Endpoint"), msg)) {
+                    var suc = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    var fail = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    Orek.deleteEndpoint(endpoint.endpointID, suc, fail);
+                    break
+                }
+            }
+        }
+    }
+    Dialog {
+        property bool isEdit: false
+        property var endpoint
+        id: createDialog
+        width: 400
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        onAccepted: {
+            var endpoint = {}
+            endpoint[ "endpointID"  ] = endpointID.text
+            endpoint[ "endpointName"] = name.text
+            endpoint[ "owner"       ] = owner.text
+            endpoint[ "group"       ] = group.text
+            endpoint[ "description" ] = description.text
+            endpoint[ "location"    ] = location.text
+
+            var func = isEdit ? Orek.updateEndpoint : Orek.createEndpoint
+            func(user,
+                 function(msg) {
+                     Utils.showResult(msg)
+                     load()
+                 },
+                 function(msg) {
+                     Utils.showResult(msg)
+                     load()
+                 }
+            );
+        }
+        GridLayout {
+            columns: 2
+            anchors.fill: parent
+            Label {
+                text: qsTr("Endpoint ID")
+            }
+            TextField {
+                //Should be generated
+                id: endpointID
+                placeholderText: qsTr("Enter endpoint identifier")
+                text: getEndpointProperty("endpointID")
+                Layout.fillWidth:  true
+                enabled: !createDialog.isEdit
+            }
+
+            Label {
+                text: qsTr("Endpoint Name")
+            }
+            TextField {
+                id: name
+                placeholderText: qsTr("Enter endpoint name")
+                text: getEndpointProperty("endpointName")
+                Layout.fillWidth:  true
+            }
+
+            Label {
+                text: qsTr("Owner")
+            }
+            TextField {
+                //May be pull the user list and show it in a combobox
+                id: owner
+                placeholderText: qsTr("Enter user name of the owner")
+                text: getEndpointProperty("owner")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Group")
+            }
+            TextField {
+                id: group
+                placeholderText: qsTr("Enter the owning group")
+                text: getEndpointProperty("group")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Description")
+            }
+            TextField {
+                id: description
+                placeholderText: qsTr("Enter the description")
+                text: getEndpointProperty("description")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Location")
+            }
+            TextField {
+                id: location
+                placeholderText: qsTr("Enter the location")
+                text: getEndpointProperty("location")
+                Layout.fillWidth:  true
+            }
+        }
     }
 
     JSONListModel {
@@ -41,19 +162,34 @@ Rectangle {
                 height: Layout.height
                 id: create
                 text: qsTr("Create")
-                onClicked: console.log("Create...")
+                onClicked: {
+                    createDialog.isEdit = false
+                    createDialog.open()
+                }
             }
             Button {
                 height: Layout.height
                 id: editSelected
                 text: qsTr("Edit")
-                onClicked: console.log("Edit...")
+                onClicked: {
+                    createDialog.isEdit = true
+                    for(var i = 0; i < model.count; i++) {
+                        var ep = model.model.get(i)
+                        if(ep.selected === true) {
+                            createDialog.endpoint = ep
+                            createDialog.open()
+                            break
+                        }
+                    }
+                }
             }
             Button {
-                id: deleteSelected
+                id: remove
                 height: Layout.height
                 text: qsTr("Delete")
-                onClicked: console.log("Delete...")
+                onClicked: {
+                    removeSelected()
+                }
             }
         }
         TableView {

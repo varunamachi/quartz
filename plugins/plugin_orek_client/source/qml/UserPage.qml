@@ -11,6 +11,13 @@ import "common.js" as Utils
 import "orek.js" as Orek
 
 Rectangle {
+    function load() {
+        Orek.getAllUsers( function(jsonContent) {
+            model.json = jsonContent.toString()
+        }, function(errorContent) {
+            console.log(errorContent)
+        });
+    }
 
     function getUserProperty(propName) {
         if(createDialog.isEdit && createDialog.user) {
@@ -108,22 +115,9 @@ Rectangle {
             }
         }
     }
-    MessageDialog {
-        id: confirmDialog
-        title: qsTr("Delete User")
-        text: qsTr("Do really want to delete the user(s)")
-    }
-
     color: orekActive.alternateBase
     anchors.fill: parent
 
-    function load() {
-        Orek.getAllUsers( function(jsonContent) {
-            model.json = jsonContent.toString()
-        }, function(errorContent) {
-            console.log(errorContent)
-        });
-    }
     JSONListModel {
         id: model
     }
