@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 
 import "orek.js" as Orek
+import "common.js" as Utils
 
 Rectangle {
     id: main
@@ -80,7 +81,7 @@ Rectangle {
                 stack.currentIndex = 1
             }
             onLogInError: {
-                console.log("Login Error: " + error)
+                Utils.showError("Login Failed", error)
             }
         }
         RowLayout {

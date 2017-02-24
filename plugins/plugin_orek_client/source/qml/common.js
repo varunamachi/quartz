@@ -36,4 +36,12 @@ function confirm(operation, question, callback) {
     return Qz.Service.confirm(operation, question)
 }
 
+function showError(title, msg) {
+    Qz.Service.error("Orek", msg)
+    Qz.Service.statusFailure(title, msg)
+}
 
+function showInfo(title, msg) {
+    Qz.Service.info("Orek", msg)
+    Qz.Service.statusSuccess(title, msg)
+}

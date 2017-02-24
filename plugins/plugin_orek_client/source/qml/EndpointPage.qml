@@ -23,7 +23,7 @@ Rectangle {
 
     function getEndpointProperty(propName) {
         if(createDialog.isEdit && createDialog.endpoint) {
-            return createDialog.endopoint[propName]
+            return createDialog.endpoint[propName]
         }
         return ""
     }
@@ -42,7 +42,7 @@ Rectangle {
                         Utils.showResult(msg)
                         load()
                     }
-                    Orek.deleteEndpoint(endpoint.endpointID, suc, fail);
+                    Orek.deleteEndpoint(ep.endpointID, suc, fail);
                     break
                 }
             }
@@ -64,7 +64,7 @@ Rectangle {
             endpoint[ "location"    ] = location.text
 
             var func = isEdit ? Orek.updateEndpoint : Orek.createEndpoint
-            func(user,
+            func( endpoint,
                  function(msg) {
                      Utils.showResult(msg)
                      load()
@@ -201,7 +201,6 @@ Rectangle {
             selectionMode: SelectionMode.SingleSelection
             Layout.fillWidth: true
             Layout.fillHeight: true
-//            Layout.minimumHeight: 600
             Layout.preferredHeight: parent.height
 
             itemDelegate: Text {

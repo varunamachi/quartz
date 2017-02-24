@@ -34,7 +34,7 @@ bool init()
                                         1,
                                         0,
                                         "Service",
-                                        &QzBinding::qmlInstance);
+                                        &QzBinding::qmlInstance );
     }
     return result;
 }
