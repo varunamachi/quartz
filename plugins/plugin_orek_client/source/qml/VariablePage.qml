@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.0
 import QtQuick.Layouts 1.3
 
+import "common.js" as Utils
 import "orek.js" as Orek
 
 Rectangle {
@@ -17,6 +18,133 @@ Rectangle {
         }, function(errorContent) {
             console.log(errorContent)
         });
+    }
+
+    function getVariableProperty(propName) {
+        if(createDialog.isEdit && createDialog.variable) {
+            return createDialog.variable[propName]
+        }
+        return ""
+    }
+
+    function removeSelected() {
+        for(var i = 0; i < model.count; i++) {
+            var variable = model.model.get(i)
+            var msg = qsTr("Do you really want to delete selected variables?")
+            if(variable.selected === true) {
+                if(Utils.confirm(qsTr("Remove Variable"), msg)) {
+                    var suc = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    var fail = function(msg) {
+                        Utils.showResult(msg)
+                        load()
+                    }
+                    Orek.deleteVariable(variable.variableID, suc, fail);
+                    break
+                }
+            }
+        }
+    }
+
+    Dialog {
+//        variableID
+//        variableName
+//        endpointID
+//        description
+//        unit
+//        type
+
+        property bool isEdit: false
+        property var variable
+        id: createDialog
+        width: 400
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+        onAccepted: {
+            var variable = {}
+            variable[ "variableID"  ] = variableID.text
+            variable[ "variableName"] = variableName.text
+            variable[ "endpointID" ] = endpointID.text
+            variable[ "description" ] = description.text
+            variable[ "unit" ] = unit.text
+            variable[ "type" ] = type.text
+
+            var func = isEdit ? Orek.updateVariable : Orek.createVariable
+            func( variable,
+                 function(msg) {
+                     Utils.showResult(msg)
+                     load()
+                 },
+                 function(msg) {
+                     Utils.showResult(msg)
+                     load()
+                 }
+                 );
+        }
+        GridLayout {
+            columns: 2
+            anchors.fill: parent
+            Label {
+                text: qsTr("Variable ID")
+            }
+            TextField {
+                //Should be generated
+                id: variableID
+                placeholderText: qsTr("Enter variable identifier")
+                text: getVariableProperty("variableID")
+                Layout.fillWidth:  true
+                enabled: !createDialog.isEdit
+            }
+
+            Label {
+                text: qsTr("Variable Name")
+            }
+            TextField {
+                id: variableName
+                placeholderText: qsTr("Enter variable name")
+                text: getVariableProperty("variableName")
+                Layout.fillWidth:  true
+            }
+
+            Label {
+                text: qsTr("Endpoint ID")
+            }
+            TextField {
+                //May be pull the user list and show it in a combobox
+                id: endpointID
+                placeholderText: qsTr("Enter endpoint ID")
+                text: getVariableProperty("endpointID")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Description")
+            }
+            TextField {
+                id: description
+                placeholderText: qsTr("Enter description of variable")
+                text: getVariableProperty("description")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Unit")
+            }
+            TextField {
+                id: unit
+                placeholderText: qsTr("Enter the unit of variable")
+                text: getVariableProperty("unit")
+                Layout.fillWidth:  true
+            }
+            Label {
+                text: qsTr("Type")
+            }
+            TextField {
+                id: type
+                placeholderText: qsTr("Enter the type")
+                text: getVariableProperty("type")
+                Layout.fillWidth:  true
+            }
+        }
     }
 
     JSONListModel {
@@ -41,19 +169,34 @@ Rectangle {
                 height: Layout.height
                 id: create
                 text: qsTr("Create")
-                onClicked: console.log("Create...")
+                onClicked: {
+                    createDialog.isEdit = false
+                    createDialog.open()
+                }
             }
             Button {
                 height: Layout.height
                 id: editSelected
                 text: qsTr("Edit")
-                onClicked: console.log("Edit...")
+                onClicked: {
+                    createDialog.isEdit = true
+                    for(var i = 0; i < model.count; i++) {
+                        var variable = model.model.get(i)
+                        if(variable.selected === true) {
+                            createDialog.variable = variable
+                            createDialog.open()
+                            break
+                        }
+                    }
+                }
             }
             Button {
-                id: deleteSelected
+                id: remove
                 height: Layout.height
                 text: qsTr("Delete")
-                onClicked: console.log("Delete...")
+                onClicked: {
+                    removeSelected()
+                }
             }
         }
         TableView {
