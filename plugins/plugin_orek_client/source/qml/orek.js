@@ -142,7 +142,7 @@ function getParameter(parameterName, callback, errCallback) {
 }
 
 function deleteParameter(parameterName, callback, errCallback) {
-    request("DELETE", "parameters/" + variableName, callback, errCallback );
+    request("DELETE", "parameters/" + parameterName, callback, errCallback );
 }
 
 function createParameter(obj, callback, errCallback) {

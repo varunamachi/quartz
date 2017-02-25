@@ -113,7 +113,7 @@ Rectangle {
         Orek.getAllGroups( function(jsonContent) {
             model.json = jsonContent.toString()
         }, function(errorContent) {
-            console.log(errorContent)
+            Utils.showError(errorContent)
         });
     }
 

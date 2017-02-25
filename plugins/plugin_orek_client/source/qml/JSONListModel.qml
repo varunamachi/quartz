@@ -38,7 +38,6 @@ Item {
         for ( var key in objectArray ) {
             var jo = objectArray[key];
             jo["selected"] = false
-            console.log(jo.selected)
             jsonModel.append( jo );
         }
     }
