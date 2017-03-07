@@ -33,8 +33,8 @@ Apart from this the default plugins are located at ```plugins``` directory. At t
 - ```plugns/orek_client```: Plugin that enables Quartz to be a client to Orek service ( https://github.com/varunamachi/orekng )
 
 
-
-
-
+## Screenshot
+On Linux:
+![alt tag](https://raw.githubusercontent.com/varunamachi/quartz/master/extra/linux_screenshot.png)
 
 
