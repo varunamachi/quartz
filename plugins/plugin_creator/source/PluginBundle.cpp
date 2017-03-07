@@ -2,36 +2,28 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
-#include "ViewProvider.h"
 #include "ContentProvider.h"
 #include "NodeProvider.h"
-#include "TitleItemProvider.h"
 #include "PluginBundle.h"
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Plugin { namespace Creator {
 
-const QString PluginBundle::BUNDLE_ID{ "qzbundle.sample" };
-const QString PluginBundle::BUNDLE_NAME{ "Sample Bundle" };
+const QString PluginBundle::BUNDLE_ID{ "qzbundle.creator" };
+const QString PluginBundle::BUNDLE_NAME{ "Creator Bundle" };
 
 struct PluginBundle::Data
 {
     AdapterList m_adapters;
     PluginList m_plugins;
     DependencyList m_dependencies;
-
 };
 
 PluginBundle::PluginBundle()
     : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
     , m_data{ new Data{} }
 {
-
-#ifdef QT_DEBUG
-    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
     m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
     m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
-#endif
 }
 
 PluginBundle::~PluginBundle()

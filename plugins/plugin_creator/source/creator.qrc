@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="chilli">resources/plugin.txt</file>
+    </qresource>
+</RCC>
