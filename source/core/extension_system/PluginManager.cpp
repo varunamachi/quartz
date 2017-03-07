@@ -159,7 +159,7 @@ std::size_t PluginManager::Impl::loadBundles(
     QDir bundleDir{ bundleRoot.absoluteFilePath( "debug" )};
 #else
 //    QDir pluginDir{ dirInfo.absoluteFilePath() };
-        QDir pluginDir = pluginRoot;
+        QDir bundleDir = bundleRoot;
 #endif
     std::size_t numLoaded = 0;
     QZ_DEBUG( "Qz:Core:Ext" )
