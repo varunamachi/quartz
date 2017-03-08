@@ -10,14 +10,23 @@ The build system does not allow in-source builds, it is recommended that the bui
 ## Building
 Dependency - Qt 5.7+
 
- But the build procedure for debug build on Linux is as follows (in Bash):
+On Linux:
 ```shell
-export QUARTZ_ROOT=<path_to_quartz_root>
-cd $QUARTZ_ROOT/builds
-mkdir -p quartz_full_build/debug
-cd quartz_full_build/debug
-cmake -G "Unix Makefile" -DCMKAE_BUILD_TYPE=Debug ../../../source
-make -j$(nproc)
+export QT_ROOT=<path_to_qt_installation>/<qt_version>/<compiler_id>
+#for example: 
+#export QT_ROOT=/opt/Qt/Qt.5.7.0/5.7/gcc_64
+cd scripts/linux
+chmod u+x build.sh
+./build.sh
+```
+
+On Windows:
+```batch
+set QT_ROOT=<path_to_qt_installation>/<qt_version>/<compiler_id>
+rem -- for example:
+rem -- set QT_ROOT=C:\Qt\Qt.5.7.0\5.7\mingw32_53
+cd scripts\windows
+build.bat
 ```
 
 ## Platform modules
@@ -31,6 +40,7 @@ At this time Quartz has following modules:
 Apart from this the default plugins are located at ```plugins``` directory. At the moment following plugins are implemented:
 - ```plugins/sample```: Plugin for testing and demonstrating the plugin system
 - ```plugns/orek_client```: Plugin that enables Quartz to be a client to Orek service ( https://github.com/varunamachi/orekng )
+- ```plugins/creator```: Work in progress for building a plugin that creates stub for developing other plugins
 
 
 ## Screenshot
