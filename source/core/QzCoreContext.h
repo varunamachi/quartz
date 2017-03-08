@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <iostream>
 
 #include "QuartzCore.h"
 
@@ -60,7 +61,7 @@ public:
         return s_instance.get();
     }
 
-    static void setInstance( std::unique_ptr< QzCoreContext > instance )
+    static void setInstance( std::unique_ptr< QzCoreContext > &&instance )
     {
         s_instance = std::move( instance );
     }
@@ -76,7 +77,7 @@ private:
 template< typename T >
 static T * context()
 {
-    dynamic_cast< T *>( QzCoreContext::get() );
+   return  dynamic_cast< T *>( QzCoreContext::get() );
 }
 
 }

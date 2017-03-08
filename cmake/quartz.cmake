@@ -1,5 +1,7 @@
 file( TO_CMAKE_PATH "$ENV{QUARTZ_ROOT}" QUARTZ_ROOT )
 
+set( CMAKE_MODULE_PATH "${QUARTZ_ROOT}/cmake" ${CMAKE_MODULE_PATH} )
+
 set( PROJECT_ROOT ${QUARTZ_ROOT} )
 include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
 include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
@@ -44,5 +46,15 @@ macro( qz_add_qt )
         QuickWidgets
         Network )
 endmacro( qz_add_qt )
+
+macro( qz_install )
+    vq_install()
+    set( BIN_OUTPUT_DIR "bin/${CMAKE_BUILD_TYPE}" )
+    if( WIN32 )
+        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}.exe" )
+    else()
+        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}" )
+    endif()
+endmacro( qz_install )
 
 

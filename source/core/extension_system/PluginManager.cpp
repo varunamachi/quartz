@@ -158,7 +158,6 @@ std::size_t PluginManager::Impl::loadBundles(
 #ifdef QT_DEBUG
     QDir bundleDir{ bundleRoot.absoluteFilePath( "debug" )};
 #else
-//    QDir pluginDir{ dirInfo.absoluteFilePath() };
         QDir bundleDir = bundleRoot;
 #endif
     std::size_t numLoaded = 0;

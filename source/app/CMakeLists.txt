@@ -30,4 +30,4 @@ add_subdirectory( bindings )
 #vq_dump_vars()
 
 vq_create_app()
-vq_install()
+qz_install()

@@ -32,11 +32,8 @@ namespace Quartz {
 
 struct QzMainWidget::Data
 {
-    explicit Data( QWidget *parent )
+    explicit Data()
         : m_roundedRect{ true }
-        , m_titleBar{ new TitleBar{ 20, parent }}
-        , m_content{ new ContentManager{ parent }}
-        , m_actionBar{ new ActionBar{ 20, parent }}
     {
 
     }
@@ -61,9 +58,11 @@ struct QzMainWidget::Data
 
 QzMainWidget::QzMainWidget( QMainWindow *parent )
     : QWidget{ parent }
-    , m_data{ new Data{ this }}
+    , m_data{ new Data{}}
 {
-    appContext()->setContentManager( m_data->m_content );
+    m_data->m_titleBar  = new TitleBar{ 20, this };
+    m_data->m_content   = new ContentManager{ this };
+    m_data->m_actionBar = new ActionBar{ 20, this };
     this->setObjectName( "quartz_widget" );
 
     QSizePolicy policy;
@@ -139,6 +138,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_data->m_pluginManager->registerPluginAdapter( configTree );
     appContext()->setPluginManager( m_data->m_pluginManager.get() );
 
+    appContext()->setContentManager( m_data->m_content );
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
     if( ! m_data->m_pluginManager->loadFrom( execDir )) {
         QZ_ERROR( "App" ) << "Failed to load all available plugins";

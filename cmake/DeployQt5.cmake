@@ -111,7 +111,8 @@
 # The functions defined in this file depend on the fixup_bundle function
 # (and others) found in BundleUtilities.cmake
 
-include(BundleUtilities)
+file( TO_CMAKE_PATH "$ENV{QUARTZ_ROOT}" QUARTZ_ROOT )
+include(${QUARTZ_ROOT}/cmake/BundleUtilities.cmake)
 set(DeployQt5_cmake_dir "${CMAKE_CURRENT_LIST_DIR}")
 set(DeployQt5_apple_plugins_dir "PlugIns")
 
