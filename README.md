@@ -47,4 +47,5 @@ Apart from this the default plugins are located at ```plugins``` directory. At t
 On Linux:
 ![alt tag](https://raw.githubusercontent.com/varunamachi/quartz/master/extra/linux_screenshot.png)
 
-
+On Windows:
+![alt tag](https://raw.githubusercontent.com/varunamachi/quartz/master/extra/quartz_win10.png)
