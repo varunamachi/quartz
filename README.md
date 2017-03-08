@@ -29,6 +29,8 @@ cd scripts\windows
 build.bat
 ```
 
+The binaries will be present at output/bin/Release
+
 ## Platform modules
 At this time Quartz has following modules:
 - ```source/core```: Core service providers, plugin management and other untility classes
