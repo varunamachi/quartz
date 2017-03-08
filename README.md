@@ -1,8 +1,6 @@
 # Quartz
 Quartz is a plugin based generic cross-platform application. It intends to be a platform for writing wide varity of plugins which need not be related. One of the design goals is to provide as many as plugin hooks without any assumptions about the plugins that will use the platform.
 
-Quartz is in its initial stages and very much a work in progress. There is no guarantee that the code will build.
-
 ## Build System
 Quartz uses a CMake based build system which uses cmake_lib (https://github.com/varunamachi/cmake_lib). Before running CMake a environment variable QUARTZ_ROOT should be set to the root of the Quartz directory.
 The build system does not allow in-source builds, it is recommended that the build be done in $QUARTZ_ROOT/builds The generated binaries and headers in case of libraries are installed to $QUARTZ_ROOT/output directory. Any module can be built independently provided that the dependency modules are already built and their generated output is installed in $QUARTZ_ROOT/output.
@@ -29,7 +27,7 @@ cd scripts\windows
 build.bat
 ```
 
-The binaries will be present at output/bin/Release
+The binaries will be present at ```output/bin/Release```
 
 ## Platform modules
 At this time Quartz has following modules:
