@@ -21,6 +21,7 @@ add_subdirectory( utils )
 add_subdirectory( job_manager )
 add_subdirectory( extension_system )
 add_subdirectory( app_config )
+add_subdirectory( templating )
 
 vq_create_sharedlib()
 vq_install()

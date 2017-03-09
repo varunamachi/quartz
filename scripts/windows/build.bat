@@ -1,8 +1,8 @@
 set INVOKE_DIR=%cd%
-pushd ..
-pushd ..
-
+SET mypath=%~dp0
+cd /d %mypath:~0,-1%\..\..
 set QZ_PATH=%cd%
+
 set QUARTZ_ROOT=%QZ_PATH:\=/%
 echo "Using QUARTZ_ROOT => %QUARTZ_ROOT%"
 
@@ -24,8 +24,9 @@ cd %INVOKE_DIR%
 goto end
 
 :error
-cd %INVOKE_DIR%
+cd /d %INVOKE_DIR%
 EXIT /B %ERRORLEVEL%
 
 :end
+cd /d %INVOKE_DIR%
 endlocal

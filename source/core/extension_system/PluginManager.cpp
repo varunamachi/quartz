@@ -256,9 +256,7 @@ bool PluginManager::Impl::processBundles(
                     << depEntry.first;
             break;
         }
-
     }
-
     if( result ) {
         m_bundles.insert( bundleInfo.m_bundle->bundleId(), bundleInfo );
         QZ_DEBUG( "Qz:Core:Ext" )
