@@ -4,6 +4,8 @@
 
 #include <QHash>
 
+class QTextStream;
+
 namespace Quartz {
 
 class TemplateProcessor final
@@ -15,8 +17,9 @@ public:
 
     ~TemplateProcessor();
 
-    bool process( const QString &inputPath,
-                  const QString &outputPath );
+    bool process( const QString &inputPath, const QString &outputPath );
+
+    bool process( QTextStream &input, QTextStream &output );
 
     const QString & lastError() const;
 
