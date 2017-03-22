@@ -21,6 +21,8 @@ vq_classes(
     PluginBundle
 )
 
+add_subdirectory( resources )
+
 qz_create_plugin()
 qz_install_plugin()
 
