@@ -5,17 +5,6 @@
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
-class Content : public ContentWidget
-{
-public:
-    explicit Content( QWidget *parent = nullptr );
-
-    static const QString CONTENT_ID;
-
-    static const QString CONTENT_NAME;
-
-    static const QString CONTENT_KIND;
-};
 
 class ContentProvider : public AbstractContentProvider
 {

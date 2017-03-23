@@ -6,8 +6,12 @@ namespace Quartz { namespace Plugin { namespace Creator {
 
 class CreatorWidget : public ContentWidget
 {
+    Q_OBJECT
+
 public:
     explicit CreatorWidget( QWidget *parent = nullptr );
+
+    ~CreatorWidget();
 
     static const QString CONTENT_ID;
 
@@ -16,6 +20,8 @@ public:
     static const QString CONTENT_KIND;
 
 private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

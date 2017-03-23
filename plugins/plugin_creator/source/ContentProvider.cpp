@@ -2,21 +2,9 @@
 #include <QLabel>
 
 #include "ContentProvider.h"
+#include "CreatorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
-
-const QString Content::CONTENT_ID{ "qzp.creator.content.main" };
-const QString Content::CONTENT_NAME{ "Plugin Creator" };
-const QString Content::CONTENT_KIND{ "creator" };
-
-Content::Content( QWidget *parent )
-    : ContentWidget{ CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent }
-{
-    auto layout = new QVBoxLayout{ this };
-    layout->addWidget(new QLabel{ "-- -- --" });
-    this->setLayout( layout );
-}
-
 
 /********************** Provider ************************************/
 const QString ContentProvider::PLUGIN_ID{
@@ -48,7 +36,7 @@ bool ContentProvider::destroy()
 QVector< ContentWidget *> ContentProvider::widgets()
 {
     QVector< ContentWidget *> widgets;
-    widgets.push_back( new Content{} );
+    widgets.push_back( new CreatorWidget{} );
     return widgets;
 }
 
