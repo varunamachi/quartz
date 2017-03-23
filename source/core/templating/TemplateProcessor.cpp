@@ -63,32 +63,6 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
     }
     bool result = false;
     auto cursor = 0;
-//    auto size = ( tmpt.size() / 3 ) * 3;
-//    bool replacing = false;
-//    while( cursor < size ) {
-//        auto val1 = tmpt[ cursor ++ ];
-//        auto val2 = tmpt[ cursor ++ ];
-//        auto val3 = tmpt[ cursor ++ ];
-//        if( val1 == '$' && val2 == '<' && val3 == '<' ) {
-//            replacing = true;
-//            //do template processing
-//        }
-//        else {
-//            output << val1 << val2 << val3;
-//        }
-//    }
-//    auto remaining = tmpt.size() - size;
-//    if( remaining != 0 ) {
-//        if( remaining == 2
-//                && tmpt[ cursor ] == '>'
-//                && tmpt[ cursor + 1 ] == '>'
-//                && replacing ) {
-//            //ignore
-//        }
-//        else {
-//            output <<
-//        }
-//    }
     auto matchCount = 0;
     auto inMatch = false;
     while( cursor < tmpl.size() ) {
@@ -102,20 +76,23 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
         }
         else {
             if( matchCount == 1 ) {
-                //because I had eaten doller in the first if
+                //because I ate the doller in the first if
                 output << '$';
                 matchCount = 0;
             }
             output << token;
         }
-        ++ cursor;
         if( inMatch ) {
             matchCount = 0;
             auto unmatchCount = 0;
             QString key;
             QTextStream stream{ &key };
-            while( inMatch && cursor < tmpl.size() ) {
-                token = tmpl[ cursor ];
+            //We copy the cursor because the replaced value can also be a
+            //placeholder and original cursor is still at the beginning of
+            //the replaced placeholder
+            auto matchCursor = cursor + 1;
+            while( inMatch && matchCursor < tmpl.size() ) {
+                token = tmpl[ matchCursor ];
                 if( unmatchCount == 0 && token == '>' ) {
                     ++ unmatchCount;
                 }
@@ -133,8 +110,11 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
                     }
                     stream << token;
                 }
-                ++ cursor;
+                ++ matchCursor;
             }
+        }
+        else {
+            ++ cursor;
         }
     }
     return result;

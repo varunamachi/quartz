@@ -19,6 +19,7 @@ vq_classes(
     NodeProvider
     ContentProvider
     PluginBundle
+    CreatorWidget
 )
 
 add_subdirectory( resources )

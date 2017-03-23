@@ -7,6 +7,8 @@ namespace Quartz { namespace Plugin { namespace Sample {
 
 class SampleContent : public ContentWidget
 {
+    Q_OBJECT
+
 public:
     explicit SampleContent( QWidget *parent = nullptr );
 
