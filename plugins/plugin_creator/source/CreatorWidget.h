@@ -19,6 +19,11 @@ public:
 
     static const QString CONTENT_KIND;
 
+public slots:
+    void onBrowse();
+
+    void onCreate();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

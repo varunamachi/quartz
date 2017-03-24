@@ -3,10 +3,17 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QFileDialog>
+#include <QProcessEnvironment>
+#include <QStandardPaths>
+
+#include <core/templating/TemplateUtils.h>
 
 #include "CreatorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
+
+const QString QUARTZ_ROOT{ "QUARTZ_ROOT" };
 
 const QString CreatorWidget::CONTENT_ID{ "qzp.creator.content.main" };
 const QString CreatorWidget::CONTENT_NAME{ "PluginCreator" };
@@ -43,6 +50,8 @@ CreatorWidget::CreatorWidget(QWidget *parent)
     : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
     , m_data{ new Data{ this }}
 {
+
+
     auto layout = new QGridLayout{ };
     layout->addWidget( new QLabel{ tr( "Plugin ID" ), this }, 0, 0 );
     layout->addWidget( m_data->m_idEdit, 0, 1 );
@@ -57,19 +66,62 @@ CreatorWidget::CreatorWidget(QWidget *parent)
 
     layout->addWidget( new QLabel{ tr( "Plugin Path" ), this }, 3, 0 );
     layout->addLayout( browseLayout , 3, 1 );
-    layout->addWidget( new QLabel{ "", this  }, 4, 0 );
-    layout->addWidget( m_data->m_createButton, 4, 1 );
 
-    this->setLayout( layout );
+    auto  mainLayout = new QVBoxLayout{};
+    mainLayout->addWidget( new QLabel{ tr( "Create Plugin: ")});
+    mainLayout->addLayout( layout );
+    mainLayout->addWidget( m_data->m_createButton );
+    mainLayout->addStretch();
 
-    //PluginNamespace
-    //plugin_id
-    //Plugin Name
+    this->setLayout( mainLayout );
 
+    connect( m_data->m_browseButton,
+             &QPushButton::released,
+             this,
+             &CreatorWidget::onBrowse );
+    connect( m_data->m_createButton,
+             &QPushButton::released,
+             this,
+             &CreatorWidget::onCreate );
 }
 
 CreatorWidget::~CreatorWidget()
 {
+
+}
+
+void CreatorWidget::onBrowse()
+{
+    QString dirPath = m_data->m_dirPath->text().trimmed();
+    //Default directory priority:
+    //  1. Previously selected
+    //  2. QUARTZ_ROOT
+    //  3. Platform Document location
+    if( dirPath.isEmpty() || ! QFile::exists( dirPath )) {
+        auto  env = QProcessEnvironment::systemEnvironment();
+        auto qzRoot = env.value( QUARTZ_ROOT );
+        QFileInfo info{ qzRoot };
+        if( info.exists() && info.isDir() ) {
+            dirPath = info.absoluteFilePath();
+        }
+        else {
+            dirPath = QStandardPaths::writableLocation(
+                        QStandardPaths::DocumentsLocation );
+        }
+    }
+    dirPath = QFileDialog::getExistingDirectory(
+                this,
+                tr( "Plugin Source Location" ),
+                dirPath );
+    m_data->m_dirPath->setText( dirPath );
+}
+
+void CreatorWidget::onCreate()
+{
+    const auto id   = m_data->m_idEdit->text();
+    const auto ns   = m_data->m_namespaceEdit->text();
+    const auto name = m_data->m_nameEdit->text();
+    const auto path = m_data->m_dirPath->text();
 
 }
 
