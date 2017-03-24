@@ -6,8 +6,10 @@
 #include <QFileDialog>
 #include <QProcessEnvironment>
 #include <QStandardPaths>
+#include <QRegExpValidator>
 
 #include <core/templating/TemplateUtils.h>
+#include <core/templating/TemplateProcessor.h>
 
 #include "CreatorWidget.h"
 
@@ -50,8 +52,6 @@ CreatorWidget::CreatorWidget(QWidget *parent)
     : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
     , m_data{ new Data{ this }}
 {
-
-
     auto layout = new QGridLayout{ };
     layout->addWidget( new QLabel{ tr( "Plugin ID" ), this }, 0, 0 );
     layout->addWidget( m_data->m_idEdit, 0, 1 );
@@ -74,6 +74,11 @@ CreatorWidget::CreatorWidget(QWidget *parent)
     mainLayout->addStretch();
 
     this->setLayout( mainLayout );
+
+    m_data->m_idEdit->setValidator(
+                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_\\-]{0,30}$" }});
+    m_data->m_namespaceEdit->setValidator(
+                new QRegExpValidator{ QRegExp{ "^[A-Z][a-zA-Z0-9]{0,30}$" }});
 
     connect( m_data->m_browseButton,
              &QPushButton::released,
@@ -113,7 +118,9 @@ void CreatorWidget::onBrowse()
                 this,
                 tr( "Plugin Source Location" ),
                 dirPath );
-    m_data->m_dirPath->setText( dirPath );
+    if( ! dirPath.isEmpty() ) {
+        m_data->m_dirPath->setText( dirPath );\
+    }
 }
 
 void CreatorWidget::onCreate()
@@ -122,6 +129,28 @@ void CreatorWidget::onCreate()
     const auto ns   = m_data->m_namespaceEdit->text();
     const auto name = m_data->m_nameEdit->text();
     const auto path = m_data->m_dirPath->text();
+
+    TemplateProcessor::Variables vars;
+    vars.insert( "PLUGIN_ID", id );
+    vars.insert( "PLUGIN_NAMESPACE", ns );
+    vars.insert( "PLUGIN_NAME", name );
+
+    bool result = TemplateUtils::generateForDir(
+                vars,
+                QDir{ ":/" },
+                QDir{ path });
+    if( result ) {
+        //create the resource directory and place the plugin.txt there
+        m_data->m_idEdit->clear();
+        m_data->m_namespaceEdit->clear();
+        m_data->m_nameEdit->clear();
+        m_data->m_dirPath->clear();
+//        QZ_INFO( "Qzp:")
+        //log success + show message box or status message
+    }
+    else {
+        //show error dialog or status message
+    }
 
 }
 
