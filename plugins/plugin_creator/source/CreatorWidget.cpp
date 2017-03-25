@@ -11,6 +11,8 @@
 #include <core/templating/TemplateUtils.h>
 #include <core/templating/TemplateProcessor.h>
 
+#include <plugin_base/BundleLoggin.h>
+
 #include "CreatorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
@@ -129,12 +131,15 @@ void CreatorWidget::onCreate()
     const auto ns   = m_data->m_namespaceEdit->text();
     const auto name = m_data->m_nameEdit->text();
     const auto path = m_data->m_dirPath->text();
+    QFileInfo dirInfo{ path };
+    if( dirInfo.exists() && ! dirInfo.isDir() ) {
+        QZP_ERROR << "Bundle destination " << path << "is not a directory";
+    }
 
     TemplateProcessor::Variables vars;
     vars.insert( "PLUGIN_ID", id );
     vars.insert( "PLUGIN_NAMESPACE", ns );
     vars.insert( "PLUGIN_NAME", name );
-
     bool result = TemplateUtils::generateForDir(
                 vars,
                 QDir{ ":/" },
@@ -145,11 +150,10 @@ void CreatorWidget::onCreate()
         m_data->m_namespaceEdit->clear();
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
-//        QZ_INFO( "Qzp:")
-        //log success + show message box or status message
+        QZP_INFO << "Created bundle with id " << id << " at " << path;
     }
     else {
-        //show error dialog or status message
+        QZP_ERROR << "Could not create plugin with " << id << " at " << path;
     }
 
 }
