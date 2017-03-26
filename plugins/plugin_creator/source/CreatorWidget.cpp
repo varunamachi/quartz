@@ -7,6 +7,7 @@
 #include <QProcessEnvironment>
 #include <QStandardPaths>
 #include <QRegExpValidator>
+#include <QMessageBox>
 
 #include <core/templating/TemplateUtils.h>
 #include <core/templating/TemplateProcessor.h>
@@ -132,8 +133,50 @@ void CreatorWidget::onCreate()
     const auto name = m_data->m_nameEdit->text();
     const auto path = m_data->m_dirPath->text();
     QFileInfo dirInfo{ path };
-    if( dirInfo.exists() && ! dirInfo.isDir() ) {
-        QZP_ERROR << "Bundle destination " << path << "is not a directory";
+    QDir dir{ path };
+    if( ! ( dirInfo.exists() && dirInfo.isDir() )) {
+        QMessageBox::critical(
+                    this,
+                    tr( "Bundle Creator"),
+                    tr( "Invalid path given for bundle directory" ));
+        return;
+    }
+    if( id.isEmpty() || ns.isEmpty() || name.isEmpty() ) {
+        auto empty = id.isEmpty() ? tr( "bundle ID" )
+                                  : ns.isEmpty() ? tr( "bundle namespace" )
+                                                 : tr( "bundle name" );
+        auto msg = tr( "Invalid %1 given, cannot create bundle" ).arg( empty );
+        QMessageBox::critical( this, tr( "Bundle Creator" ), msg );
+        return;
+
+    }
+    if( dirInfo.exists() ) {
+        auto msg = tr( "A file/directory already exists at %1,"
+                       "do you want to overwrite it?" ).arg( path );
+        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
+        if( ans != QMessageBox::Ok ) {
+            QZP_DEBUG << "Could not create bundle directory without deleting "
+                         "existing directory at " << path;
+            return;
+        }
+        else {
+            if( dirInfo.isDir() ) {
+                if( ! dir.removeRecursively() ) {
+                    QZP_ERROR << "Failed to delete existing directory at "
+                              << path;
+                    msg = tr( "Failed to delete existing directory at %1" )
+                            .arg( path );
+                    QMessageBox::critical( this, "Bundle Creator", msg );
+                    return;
+                }
+            }
+        }
+    }
+    if( ! dir.mkpath( "" )) {
+        QZP_ERROR << "Could not create bundle directory at " << path;
+        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
+        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
+        return;
     }
 
     TemplateProcessor::Variables vars;
@@ -142,7 +185,7 @@ void CreatorWidget::onCreate()
     vars.insert( "PLUGIN_NAME", name );
     bool result = TemplateUtils::generateForDir(
                 vars,
-                QDir{ ":/" },
+                QDir{ ":/resources" },
                 QDir{ path });
     if( result ) {
         //create the resource directory and place the plugin.txt there
@@ -151,11 +194,14 @@ void CreatorWidget::onCreate()
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
         QZP_INFO << "Created bundle with id " << id << " at " << path;
+        auto msg = tr( "Bundle %1 created successfully" ).arg( id );
+        QMessageBox::information( this, tr( "Bundle Creator"), msg );
     }
     else {
         QZP_ERROR << "Could not create plugin with " << id << " at " << path;
+        auto msg = tr( "Could not create bundle %1" ).arg( id );
+        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
     }
-
 }
 
 
