@@ -12,7 +12,7 @@ qz_add_core()
 qz_add_resource( $<PLUGIN_ID>$.qrc )
 
 vq_sources(
-    $<PLUGIN_NAMESPACE>$Plugin.cpp
+    $<PLUGIN_NAMESPACE>$.cpp
 )
 
 vq_classes(
@@ -21,6 +21,3 @@ vq_classes(
 
 qz_create_plugin()
 qz_install_plugin()
-
-
-

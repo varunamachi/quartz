@@ -11,7 +11,8 @@ namespace Quartz {
 bool TemplateUtils::generateForDir(
         const TemplateProcessor::Variables &variables,
         const QDir &inDir,
-        const QDir &outDir )
+        const QDir &outDir,
+        FileNameSubstituter substr )
 {
     TemplateProcessor processor{ variables };
     bool result = true;
@@ -21,7 +22,14 @@ bool TemplateUtils::generateForDir(
     for( int i = 0; i < list.size(); ++ i ) {
         auto entry = list.at( i );
         auto inputPath = entry.absoluteFilePath();
-        auto outputPath = outDir.absoluteFilePath( entry.completeBaseName() );
+        auto outFileName = entry.completeBaseName();
+        if( substr != nullptr ) {
+            auto substitute = entry.fileName();
+            if( ! substitute.isEmpty() ) {
+                outFileName = substitute;
+            }
+        }
+        auto outputPath = outDir.absoluteFilePath( outFileName );
         auto res = processor.process( inputPath, outputPath );
         if( ! res ) {
             QZ_ERROR( "Qz:Core" )

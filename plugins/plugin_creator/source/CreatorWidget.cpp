@@ -172,7 +172,7 @@ void CreatorWidget::onCreate()
             }
         }
     }
-    if( ! dir.mkpath( "" )) {
+    if( ! dir.mkpath( "." )) {
         QZP_ERROR << "Could not create bundle directory at " << path;
         auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
         QMessageBox::critical( this, tr( "Bundle Creator"), msg );
@@ -186,7 +186,13 @@ void CreatorWidget::onCreate()
     bool result = TemplateUtils::generateForDir(
                 vars,
                 QDir{ ":/resources" },
-                QDir{ path });
+                QDir{ path },
+                [ & ]( const QString &in ) -> QString {
+        if( in == "Plugin.cpp.template" ) {
+            return ns + ".cpp";
+        }
+        return in;
+    });
     if( result ) {
         //create the resource directory and place the plugin.txt there
         m_data->m_idEdit->clear();
