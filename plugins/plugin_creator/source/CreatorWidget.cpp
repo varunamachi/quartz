@@ -150,34 +150,40 @@ void CreatorWidget::onCreate()
         return;
 
     }
-    if( dirInfo.exists() ) {
-        auto msg = tr( "A file/directory already exists at %1,"
-                       "do you want to overwrite it?" ).arg( path );
-        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
-        if( ans != QMessageBox::Ok ) {
-            QZP_DEBUG << "Could not create bundle directory without deleting "
-                         "existing directory at " << path;
-            return;
-        }
-        else {
-            if( dirInfo.isDir() ) {
-                if( ! dir.removeRecursively() ) {
-                    QZP_ERROR << "Failed to delete existing directory at "
-                              << path;
-                    msg = tr( "Failed to delete existing directory at %1" )
-                            .arg( path );
-                    QMessageBox::critical( this, "Bundle Creator", msg );
-                    return;
-                }
-            }
-        }
-    }
-    if( ! dir.mkpath( "." )) {
-        QZP_ERROR << "Could not create bundle directory at " << path;
-        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
-        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
-        return;
-    }
+//    if( dirInfo.exists() ) {
+//        auto msg = tr( "A file/directory already exists at %1,"
+//                       "do you want to overwrite it?" ).arg( path );
+//        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
+//        if( ans != QMessageBox::Yes ) {
+//            QZP_DEBUG << "Could not create bundle directory without deleting "
+//                         "existing directory at " << path;
+//            return;
+//        }
+//        else {
+//            if( dirInfo.isDir() ) {
+//                if( ! dir.removeRecursively() ) {
+//                    QZP_ERROR << "Failed to delete existing directory at "
+//                              << path;
+//                    msg = tr( "Failed to delete existing directory at %1" )
+//                            .arg( path );
+//                    QMessageBox::critical( this, "Bundle Creator", msg );
+//                    return;
+//                }
+//            }
+//        }
+//    }
+//    if( ! dir.mkpath( "." )) {
+//        QZP_ERROR << "Could not create bundle directory at " << path;
+//        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
+//        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
+//        return;
+//    }
+//    if( ! dir.exists() && dir.mkpath( "." )) {
+//        QZP_ERROR << "Could not create bundle directory at " << path;
+//        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
+//        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
+//        return;
+//    }
 
     TemplateProcessor::Variables vars;
     vars.insert( "PLUGIN_ID", id );

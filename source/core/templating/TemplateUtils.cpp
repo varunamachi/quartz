@@ -17,25 +17,28 @@ bool TemplateUtils::generateForDir(
     TemplateProcessor processor{ variables };
     bool result = true;
     QStringList names;
-    names << ".template";
+//    names << ".template";
     auto list = inDir.entryInfoList( names );
     for( int i = 0; i < list.size(); ++ i ) {
         auto entry = list.at( i );
-        auto inputPath = entry.absoluteFilePath();
-        auto outFileName = entry.completeBaseName();
-        if( substr != nullptr ) {
-            auto substitute = entry.fileName();
-            if( ! substitute.isEmpty() ) {
-                outFileName = substitute;
+        if( entry.suffix() == "template" ) {
+            auto inputPath = entry.absoluteFilePath();
+            auto outFileName = entry.completeBaseName();
+            if( substr != nullptr ) {
+                auto substitute = entry.fileName();
+                if( ! substitute.isEmpty() ) {
+                    outFileName = substitute;
+                }
             }
+
+            auto outputPath = outDir.absoluteFilePath( outFileName );
+            auto res = processor.process( inputPath, outputPath );
+            if( ! res ) {
+                QZ_ERROR( "Qz:Core" )
+                        << "Failed to process template file at " << inputPath;
+            }
+            result = result && res;
         }
-        auto outputPath = outDir.absoluteFilePath( outFileName );
-        auto res = processor.process( inputPath, outputPath );
-        if( ! res ) {
-            QZ_ERROR( "Qz:Core" )
-                    << "Failed to process template file at " << inputPath;
-        }
-        result = result && res;
     }
     return result;
 }
