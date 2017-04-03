@@ -51,6 +51,16 @@ struct CreatorWidget::Data
 
 };
 
+inline void error( CreatorWidget *obj, const QString &msg )
+{
+    QMessageBox::critical( obj, QObject::tr( "Bundle Creator" ), msg );
+}
+
+inline void info( CreatorWidget *obj, const QString &msg )
+{
+    QMessageBox::information( obj, QObject::tr( "Bundle Creator" ), msg );
+}
+
 CreatorWidget::CreatorWidget(QWidget *parent)
     : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
     , m_data{ new Data{ this }}
@@ -134,56 +144,59 @@ void CreatorWidget::onCreate()
     const auto path = m_data->m_dirPath->text();
     QFileInfo dirInfo{ path };
     QDir dir{ path };
-    if( ! ( dirInfo.exists() && dirInfo.isDir() )) {
-        QMessageBox::critical(
-                    this,
-                    tr( "Bundle Creator"),
-                    tr( "Invalid path given for bundle directory" ));
-        return;
-    }
     if( id.isEmpty() || ns.isEmpty() || name.isEmpty() ) {
         auto empty = id.isEmpty() ? tr( "bundle ID" )
                                   : ns.isEmpty() ? tr( "bundle namespace" )
                                                  : tr( "bundle name" );
         auto msg = tr( "Invalid %1 given, cannot create bundle" ).arg( empty );
-        QMessageBox::critical( this, tr( "Bundle Creator" ), msg );
+        error( this, msg );
         return;
 
     }
-//    if( dirInfo.exists() ) {
-//        auto msg = tr( "A file/directory already exists at %1,"
-//                       "do you want to overwrite it?" ).arg( path );
-//        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
-//        if( ans != QMessageBox::Yes ) {
-//            QZP_DEBUG << "Could not create bundle directory without deleting "
-//                         "existing directory at " << path;
-//            return;
-//        }
-//        else {
-//            if( dirInfo.isDir() ) {
-//                if( ! dir.removeRecursively() ) {
-//                    QZP_ERROR << "Failed to delete existing directory at "
-//                              << path;
-//                    msg = tr( "Failed to delete existing directory at %1" )
-//                            .arg( path );
-//                    QMessageBox::critical( this, "Bundle Creator", msg );
-//                    return;
-//                }
-//            }
-//        }
-//    }
-//    if( ! dir.mkpath( "." )) {
-//        QZP_ERROR << "Could not create bundle directory at " << path;
-//        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
-//        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
-//        return;
-//    }
-//    if( ! dir.exists() && dir.mkpath( "." )) {
-//        QZP_ERROR << "Could not create bundle directory at " << path;
-//        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
-//        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
-//        return;
-//    }
+    if( dirInfo.exists() ) {
+        auto msg = tr( "A file/directory already exists at %1,"
+                       "do you want to overwrite it?" ).arg( path );
+        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
+        if( ans != QMessageBox::Yes ) {
+            QZP_DEBUG << "Could not create bundle directory without deleting "
+                         "existing directory at " << path;
+            return;
+        }
+        else {
+            if( dirInfo.isDir() ) {
+                if( ! dir.removeRecursively() ) {
+                    QZP_ERROR << "Failed to delete existing directory at "
+                              << path;
+                    msg = tr( "Failed to delete existing directory at %1" )
+                            .arg( path );
+                    error( this, msg );
+                    return;
+                }
+                else {
+                    QZP_DEBUG<< "Removed existing directory " << path;
+                }
+            }
+            else {
+                if( ! QFile::remove( path )) {
+                    QZP_ERROR << "Failed to delete existing file at "
+                              << path;
+                    msg = tr( "Failed to delete existing file at %1" )
+                            .arg( path );
+                    error( this, msg );
+                    return;
+                }
+                else {
+                    QZP_DEBUG<< "Removed existing file" << path;
+                }
+            }
+        }
+    }
+    if( ! dir.exists() && ! QDir{}.mkpath( path )) {
+        QZP_ERROR << "Could not create bundle directory at " << path;
+        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
+        error( this, msg );
+        return;
+    }
 
     TemplateProcessor::Variables vars;
     vars.insert( "PLUGIN_ID", id );
@@ -197,11 +210,38 @@ void CreatorWidget::onCreate()
         if( in == "Plugin.cpp.template" ) {
             return ns + ".cpp";
         }
-        else if( in == "resource.qrc.template" ) {
+        else if( in == "resources.qrc.template" ) {
             return id + ".qrc";
         }
         return "";
     });
+    if( result ) {
+        QString msg;
+        if( dir.mkdir( "resources" )) {
+            QFile ptxt{ dir.absoluteFilePath( "resources/plugin.txt" )};
+            if( ptxt.open( QFile::ReadWrite )) {
+                QTextStream fstream{ &ptxt };
+                fstream << "id=" << id << '\n'
+                        << "name=" << name << '\n'
+                        << "ns=" << ns << '\n'
+                        << "version=0.0.0.0";
+            }
+            else {
+                QZP_ERROR << "Failed to create plugin.txt at " <<
+                             path << "/resources";
+                msg = tr( "Failed to create plugin.txt in resource dir" );
+                result = false;
+            }
+        }
+        else {
+            QZP_ERROR << "Failed to create resource directory at " << path;
+            msg = tr( "Failed to create resource dir at %1" ).arg( path );
+            result = false;
+        }
+        if( ! result ) {
+            error( this, msg );
+        }
+    }
     if( result ) {
         //create the resource directory and place the plugin.txt there
         m_data->m_idEdit->clear();
