@@ -197,7 +197,10 @@ void CreatorWidget::onCreate()
         if( in == "Plugin.cpp.template" ) {
             return ns + ".cpp";
         }
-        return in;
+        else if( in == "resource.qrc.template" ) {
+            return id + ".qrc";
+        }
+        return "";
     });
     if( result ) {
         //create the resource directory and place the plugin.txt there

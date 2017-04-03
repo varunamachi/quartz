@@ -25,7 +25,7 @@ bool TemplateUtils::generateForDir(
             auto inputPath = entry.absoluteFilePath();
             auto outFileName = entry.completeBaseName();
             if( substr != nullptr ) {
-                auto substitute = entry.fileName();
+                auto substitute = substr( entry.fileName() );
                 if( ! substitute.isEmpty() ) {
                     outFileName = substitute;
                 }

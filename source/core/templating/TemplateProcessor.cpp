@@ -61,7 +61,7 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
     if( tmpl.isEmpty() ) {
         return true;
     }
-    bool result = false;
+    bool result = true;
     auto cursor = 0;
     auto matchCount = 0;
     auto inMatch = false;
@@ -90,9 +90,10 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
             //We copy the cursor because the replaced value can also be a
             //placeholder and original cursor is still at the beginning of
             //the replaced placeholder
-            auto matchCursor = cursor + 1;
-            while( inMatch && matchCursor < tmpl.size() ) {
-                token = tmpl[ matchCursor ];
+//            auto matchCursor = cursor + 1;
+            ++ cursor;
+            while( inMatch && cursor < tmpl.size() ) {
+                token = tmpl[ cursor ];
                 if( unmatchCount == 0 && token == '>' ) {
                     ++ unmatchCount;
                 }
@@ -102,6 +103,9 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
                     auto var = m_data->m_variables.value( key, def );
                     output << var;
                     inMatch = false;
+                    -- unmatchCount;
+                    ++ cursor;
+                    break;
                 }
                 else {
                     if( unmatchCount == 1 ) {
@@ -110,7 +114,7 @@ bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
                     }
                     stream << token;
                 }
-                ++ matchCursor;
+                ++ cursor;
             }
         }
         else {

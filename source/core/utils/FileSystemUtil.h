@@ -28,12 +28,14 @@
 #include "../QuartzCore.h"
 #include "Macros.h"
 
-namespace Tanyatu {
+namespace Quartz {
 
 class QUARTZ_CORE_API FileSystemUtil
 {
     QZ_MAKE_STATIC( FileSystemUtil );
 public:
+
+    QDir makePath( QStringList path );
 
 };
 
