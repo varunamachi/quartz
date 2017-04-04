@@ -7,16 +7,16 @@ include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
 include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
 
 macro( qz_add_core )
-    vq_add_module( "quartz" "core" )
+    vq_add_module( "core" )
 endmacro( qz_add_core )
 
 
 macro( qz_add_common )
-    vq_add_module( "quartz" "common" )
+    vq_add_module( "common" )
 endmacro( qz_add_common )
 
 macro( qz_add_base )
-    vq_add_module( "quartz" "base" )
+    vq_add_module( "base" )
 endmacro()
 
 macro( qz_add_resource QRC_FILE )
@@ -50,11 +50,11 @@ endmacro( qz_add_qt )
 macro( qz_install )
     vq_install()
     set( BIN_OUTPUT_DIR "bin/${CMAKE_BUILD_TYPE}" )
-    if( WIN32 )
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}.exe" )
-    else()
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}" )
-    endif()
+#    if( WIN32 )
+#        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}.exe" )
+#    else()
+#        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}" )
+#    endif()
 endmacro( qz_install )
 
 
