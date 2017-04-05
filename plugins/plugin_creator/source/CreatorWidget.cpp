@@ -9,8 +9,8 @@
 #include <QRegExpValidator>
 #include <QMessageBox>
 
-#include <core/templating/TemplateUtils.h>
-#include <core/templating/TemplateProcessor.h>
+#include <common/templating/TemplateUtils.h>
+#include <common/templating/TemplateProcessor.h>
 
 #include <plugin_base/BundleLoggin.h>
 
@@ -27,7 +27,8 @@ const QString CreatorWidget::CONTENT_KIND{ "meta" };
 struct CreatorWidget::Data
 {
     explicit Data( CreatorWidget *parent )
-        : m_idEdit{ new QLineEdit{ parent }}
+        : m_fqIDEdit{ new QLineEdit{ parent }}
+        , m_idEdit{ new QLineEdit{ parent }}
         , m_namespaceEdit{ new QLineEdit{ parent }}
         , m_nameEdit{ new QLineEdit{ parent }}
         , m_dirPath{ new QLineEdit{ parent }}
@@ -36,6 +37,7 @@ struct CreatorWidget::Data
     {
 
     }
+    QLineEdit *m_fqIDEdit;
 
     QLineEdit *m_idEdit;
 
@@ -65,31 +67,44 @@ CreatorWidget::CreatorWidget(QWidget *parent)
     : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
     , m_data{ new Data{ this }}
 {
-    auto layout = new QGridLayout{ };
-    layout->addWidget( new QLabel{ tr( "Plugin ID" ), this }, 0, 0 );
-    layout->addWidget( m_data->m_idEdit, 0, 1 );
-    layout->addWidget( new QLabel{ tr( "Plugin Namespace" ), this }, 1, 0 );
-    layout->addWidget( m_data->m_namespaceEdit, 1, 1 );
-    layout->addWidget( new QLabel{ tr( "Plugin Name" ), this }, 2, 0 );
-    layout->addWidget( m_data->m_nameEdit, 2, 1 );
-
     auto browseLayout = new QHBoxLayout{};
     browseLayout->addWidget( m_data->m_dirPath );
     browseLayout->addWidget( m_data->m_browseButton );
 
-    layout->addWidget( new QLabel{ tr( "Plugin Path" ), this }, 3, 0 );
-    layout->addLayout( browseLayout , 3, 1 );
+    auto layout = new QGridLayout{ };
+    int row = 0;
+    layout->addWidget( new QLabel{ tr( "Fully Qualified Bundle ID ")}, row, 0 );
+    layout->addWidget( m_data->m_fqIDEdit, row, 1 );
+    ++ row;
+
+    layout->addWidget( new QLabel{ tr( "Unique Name" ), this }, row, 0 );
+    layout->addWidget( m_data->m_idEdit, row, 1 );
+    ++ row;
+
+    layout->addWidget( new QLabel{ tr( "Code Namespace" ), this }, row, 0 );
+    layout->addWidget( m_data->m_namespaceEdit, row, 1 );
+    ++ row;
+
+    layout->addWidget( new QLabel{ tr( "Bundle Name" ), this }, row, 0 );
+    layout->addWidget( m_data->m_nameEdit, row, 1 );
+    ++ row;
+
+    layout->addWidget( new QLabel{ tr( "Bundle Project Path" ), this }, row, 0);
+    layout->addLayout( browseLayout , row, 1 );
+    ++ row;
 
     auto  mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget( new QLabel{ tr( "Create Plugin: ")});
+    mainLayout->addWidget( new QLabel{ tr( "Create A Quartz Bundle: ")});
     mainLayout->addLayout( layout );
     mainLayout->addWidget( m_data->m_createButton );
     mainLayout->addStretch();
 
     this->setLayout( mainLayout );
 
+    m_data->m_fqIDEdit->setValidator(
+                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_\\.]{0,30}$" }});
     m_data->m_idEdit->setValidator(
-                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_\\-]{0,30}$" }});
+                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_]{0,30}$" }});
     m_data->m_namespaceEdit->setValidator(
                 new QRegExpValidator{ QRegExp{ "^[A-Z][a-zA-Z0-9]{0,30}$" }});
 
@@ -101,6 +116,10 @@ CreatorWidget::CreatorWidget(QWidget *parent)
              &QPushButton::released,
              this,
              &CreatorWidget::onCreate );
+    connect( m_data->m_fqIDEdit,
+             &QLineEdit::textChanged,
+             this,
+             &CreatorWidget::autoPopulate );
 }
 
 CreatorWidget::~CreatorWidget()
@@ -259,6 +278,13 @@ void CreatorWidget::onCreate()
     }
 }
 
+void CreatorWidget::autoPopulate( const QString &fqid )
+{
+    auto list = fqid.split( "." );
+    auto uniqueName = list[ list.size() - 1 ];
+    auto nameCmp = uniqueName.split( "_" );
+
+}
 
 
 } } }

@@ -8,6 +8,8 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
+
+#include "../QuartzCommon.h"
 #include "QzScroller.h"
 #include "IdButton.h"
 
@@ -15,7 +17,7 @@ namespace Quartz {
 
 
 
-class AbstractContainer : public QWidget
+class QUARTZ_COMMON_API AbstractContainer : public QWidget
 {
     Q_OBJECT
 public:
@@ -91,7 +93,7 @@ private:
 };
 
 
-class StackedContainer : public AbstractContainer
+class QUARTZ_COMMON_API StackedContainer : public AbstractContainer
 {
     Q_OBJECT
 

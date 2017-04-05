@@ -4,7 +4,7 @@
 
 namespace Quartz {
 
-class StackedSplitContainer : public AbstractContainer
+class QUARTZ_COMMON_API StackedSplitContainer : public AbstractContainer
 {
     Q_OBJECT
 

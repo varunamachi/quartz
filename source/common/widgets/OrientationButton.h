@@ -18,10 +18,11 @@
 #include <QPushButton>
 #include <QStyleOptionButton>
 
+#include "../QuartzCommon.h"
 
 namespace Quartz {
 
-class OrientationButton : public QPushButton
+class QUARTZ_COMMON_API OrientationButton : public QPushButton
 {
 public:
     OrientationButton( QWidget* parent = 0 );

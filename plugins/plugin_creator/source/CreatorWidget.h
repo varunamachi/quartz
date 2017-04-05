@@ -24,6 +24,8 @@ public slots:
 
     void onCreate();
 
+    void autoPopulate( const QString &fqid );
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

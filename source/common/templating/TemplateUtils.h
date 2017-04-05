@@ -1,9 +1,10 @@
 #pragma once
 
 #include <functional>
+#include <core/utils/Macros.h>
 
+#include "../QuartzCommon.h"
 #include "TemplateProcessor.h"
-#include "../utils/Macros.h"
 
 
 class QDir;
@@ -11,7 +12,7 @@ class QDir;
 namespace Quartz {
 
 
-class QUARTZ_CORE_API TemplateUtils final
+class QUARTZ_COMMON_API TemplateUtils final
 {
 public:
     using FileNameSubstituter = std::function< QString( const QString & )>;

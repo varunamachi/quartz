@@ -2,6 +2,8 @@
 
 #include <QWidget>
 
+#include "../QuartzCommon.h"
+
 class QBoxLayout;
 class QScrollArea;
 class QPushButton;
@@ -9,7 +11,7 @@ class QResizeEvent;
 
 namespace Quartz {
 
-class QzScroller : public QWidget
+class QUARTZ_COMMON_API QzScroller : public QWidget
 {
     Q_OBJECT
 public:

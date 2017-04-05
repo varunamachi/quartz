@@ -4,13 +4,13 @@
 
 #include <QHash>
 
-#include "../QuartzCore.h"
+#include "../QuartzCommon.h"
 
 class QTextStream;
 
 namespace Quartz {
 
-class QUARTZ_CORE_API TemplateProcessor final
+class QUARTZ_COMMON_API TemplateProcessor final
 {
 public:
     using Variables = QHash< QString, QString >;
