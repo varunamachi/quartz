@@ -103,10 +103,12 @@ CreatorWidget::CreatorWidget(QWidget *parent)
 
     m_data->m_fqIDEdit->setValidator(
                 new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_\\.]{0,30}$" }});
-    m_data->m_idEdit->setValidator(
-                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_]{0,30}$" }});
-    m_data->m_namespaceEdit->setValidator(
-                new QRegExpValidator{ QRegExp{ "^[A-Z][a-zA-Z0-9]{0,30}$" }});
+    m_data->m_idEdit->setEnabled( false );
+    m_data->m_namespaceEdit->setEnabled( false );
+//    m_data->m_idEdit->setValidator(
+//                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_]{0,30}$" }});
+//    m_data->m_namespaceEdit->setValidator(
+//                new QRegExpValidator{ QRegExp{ "^[A-Z][a-zA-Z0-9]{0,30}$" }});
 
     connect( m_data->m_browseButton,
              &QPushButton::released,
@@ -157,13 +159,14 @@ void CreatorWidget::onBrowse()
 
 void CreatorWidget::onCreate()
 {
-    const auto id   = m_data->m_idEdit->text();
+    const auto id   = m_data->m_fqIDEdit->text();
+    const auto name = m_data->m_idEdit->text();
     const auto ns   = m_data->m_namespaceEdit->text();
-    const auto name = m_data->m_nameEdit->text();
+    const auto display = m_data->m_nameEdit->text();
     const auto path = m_data->m_dirPath->text();
     QFileInfo dirInfo{ path };
     QDir dir{ path };
-    if( id.isEmpty() || ns.isEmpty() || name.isEmpty() ) {
+    if( id.isEmpty() || ns.isEmpty() || display.isEmpty() ) {
         auto empty = id.isEmpty() ? tr( "bundle ID" )
                                   : ns.isEmpty() ? tr( "bundle namespace" )
                                                  : tr( "bundle name" );
@@ -218,9 +221,10 @@ void CreatorWidget::onCreate()
     }
 
     TemplateProcessor::Variables vars;
-    vars.insert( "PLUGIN_ID", id );
-    vars.insert( "PLUGIN_NAMESPACE", ns );
-    vars.insert( "PLUGIN_NAME", name );
+    vars.insert( "BUNDLE_ID", id );
+    vars.insert( "BUNDLE_NAME", name );
+    vars.insert( "BUNDLE_NAMESPACE", ns );
+    vars.insert( "BUNDLE_DISPLAY_NAME", display );
     bool result = TemplateUtils::generateForDir(
                 vars,
                 QDir{ ":/resources" },
@@ -230,7 +234,7 @@ void CreatorWidget::onCreate()
             return ns + ".cpp";
         }
         else if( in == "resources.qrc.template" ) {
-            return id + ".qrc";
+            return name + ".qrc";
         }
         return "";
     });
@@ -240,8 +244,10 @@ void CreatorWidget::onCreate()
             QFile ptxt{ dir.absoluteFilePath( "resources/plugin.txt" )};
             if( ptxt.open( QFile::ReadWrite )) {
                 QTextStream fstream{ &ptxt };
-                fstream << "id=" << id << '\n'
+                fstream << "#Created By Quartz Bundle Creator\n"
+                        << "id=" << id << '\n'
                         << "name=" << name << '\n'
+                        << "display=" << display << '\n'
                         << "ns=" << ns << '\n'
                         << "version=0.0.0.0";
             }
@@ -264,6 +270,7 @@ void CreatorWidget::onCreate()
     if( result ) {
         //create the resource directory and place the plugin.txt there
         m_data->m_idEdit->clear();
+        m_data->m_fqIDEdit->clear();
         m_data->m_namespaceEdit->clear();
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
@@ -280,10 +287,31 @@ void CreatorWidget::onCreate()
 
 void CreatorWidget::autoPopulate( const QString &fqid )
 {
+    auto uniqueName = fqid;
     auto list = fqid.split( "." );
-    auto uniqueName = list[ list.size() - 1 ];
+    if( list.size() ) {
+        uniqueName = list.last();
+    }
     auto nameCmp = uniqueName.split( "_" );
-
+    QString ns;
+    QString display;
+    QTextStream nameStream{ &display };
+    QTextStream nsStream{ &ns };
+    for( int i = 0; i < nameCmp.size(); ++ i ) {
+        auto word = nameCmp.at( i );
+        if( ! word.isEmpty() ) {
+            nsStream << word.at( 0 ).toUpper();
+            nameStream << word.at( 0 ).toUpper();
+            if( word.size() > 1 ) {
+                nsStream << word.mid( 1 );
+                nameStream << word.mid( 1 );
+            }
+            nameStream << ' ';
+        }
+    }
+    m_data->m_idEdit->setText( uniqueName );
+    m_data->m_namespaceEdit->setText( ns );
+    m_data->m_nameEdit->setText( display );
 }
 
 

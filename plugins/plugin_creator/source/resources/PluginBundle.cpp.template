@@ -4,10 +4,10 @@
 
 #include "PluginBundle.h"
 
-namespace Quartz { namespace Plugin { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Quartz { namespace Plugin { namespace $<BUNDLE_NAMESPACE>$ {
 
-const QString PluginBundle::BUNDLE_ID{ "qzbundle.$<PLUGIN_ID>$" };
-const QString PluginBundle::BUNDLE_NAME{ "$<PLUGIN_NAME>$" };
+const QString PluginBundle::BUNDLE_ID{ "$<BUNDLE_ID>$" };
+const QString PluginBundle::BUNDLE_NAME{ "$<BUNDLE_DISPLAY_NAME>$" };
 
 struct PluginBundle::Data
 {

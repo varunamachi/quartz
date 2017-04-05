@@ -8,7 +8,7 @@
 #include "PluginBundle.h"
 
 void initResource() {
-    Q_INIT_RESOURCE( $<PLUGIN_ID>$ );
+    Q_INIT_RESOURCE( $<BUNDLE_NAME>$ );
 }
 
 extern "C" {
@@ -18,8 +18,8 @@ Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
 {
     initResource();
     auto bundle = 
-        std::unique_ptr< Quartz::Plugin::$<PLUGIN_NAMESPACE>$::PluginBundle >{
-            new Quartz::Plugin::$<PLUGIN_NAMESPACE>$::PluginBundle{} };
+        std::unique_ptr< Quartz::Plugin::$<BUNDLE_NAMESPACE>$::PluginBundle >{
+            new Quartz::Plugin::$<BUNDLE_NAMESPACE>$::PluginBundle{} };
     auto bundlePtr = bundle.get();
     Quartz::Plugin::BundleContext::init(
                 std::move( bundle ),

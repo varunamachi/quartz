@@ -1,6 +1,6 @@
 #include <QFile>
 
-#include "../logger/Logging.h"
+#include <core/logger/Logging.h>
 
 #include "TemplateProcessor.h"
 

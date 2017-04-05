@@ -1,4 +1,4 @@
-project( plugin_$<PLUGIN_ID>$ )
+project( plugin_$<BUNDLE_NAME>$ )
 cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
@@ -9,10 +9,10 @@ qz_add_common()
 qz_add_base()
 qz_add_core()
 
-qz_add_resource( $<PLUGIN_ID>$.qrc )
+qz_add_resource( $<BUNDLE_NAME>$.qrc )
 
 vq_sources(
-    $<PLUGIN_NAMESPACE>$.cpp
+    $<BUNDLE_NAMESPACE>$.cpp
 )
 
 vq_classes(

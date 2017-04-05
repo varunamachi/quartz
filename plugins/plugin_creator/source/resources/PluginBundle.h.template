@@ -6,7 +6,7 @@ namespace Quartz {
 
 class QzAppContext;
 
-namespace Plugin { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Plugin { namespace $<BUNDLE_NAMESPACE>$ {
 
 class PluginBundle : public AbstractPluginBundle
 {

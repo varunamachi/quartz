@@ -3,7 +3,7 @@
 #include <QStringList>
 #include <QString>
 
-#include "../logger/Logging.h"
+#include <core/logger/Logging.h>
 #include "TemplateUtils.h"
 
 namespace Quartz {
