@@ -163,7 +163,13 @@ void CreatorWidget::onCreate()
     const auto name = m_data->m_idEdit->text();
     const auto ns   = m_data->m_namespaceEdit->text();
     const auto display = m_data->m_nameEdit->text();
-    const auto path = m_data->m_dirPath->text();
+    auto path = m_data->m_dirPath->text();
+    auto dirName = "plugin_" + name;
+
+    if( ! path.endsWith( dirName, Qt::CaseInsensitive )) {
+        path = path + "/" + dirName;
+    }
+    path = path + "/source";
     QFileInfo dirInfo{ path };
     QDir dir{ path };
     if( id.isEmpty() || ns.isEmpty() || display.isEmpty() ) {
