@@ -2,6 +2,8 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include "ContentProvider.h"
+#include "NodeProvider.h"
 #include "PluginBundle.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
@@ -20,7 +22,8 @@ PluginBundle::PluginBundle()
     : Quartz::AbstractPluginBundle{ BUNDLE_ID, BUNDLE_NAME }
     , m_data{ new Data{} }
 {
-
+    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
 }
 
 PluginBundle::~PluginBundle()

@@ -2,11 +2,11 @@
 
 #include <base/content_manager/AbstractContentProvider.h>
 
-namespace Quartz { namespace Plugin { namespace Creator {
-
+namespace Quartz { namespace Plugin { namespace SerialConsole {
 
 class ContentProvider : public AbstractContentProvider
 {
+
 public:
     ContentProvider();
 
@@ -16,7 +16,7 @@ public:
 
     bool destroy() override;
 
-    QVector< ContentWidget *> widgets() override;
+    QVector< ContentWidget * > widgets() override;
 
     static const QString     PLUGIN_ID;
 

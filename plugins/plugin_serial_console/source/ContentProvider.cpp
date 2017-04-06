@@ -1,13 +1,16 @@
-#include "ContentProvider.h"
-#include "CreatorWidget.h"
+#include <QVBoxLayout>
+#include <QLabel>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+#include "ContentProvider.h"
+#include "MainWidget.h"
+
+namespace Quartz { namespace Plugin { namespace SerialConsole {
 
 /********************** Provider ************************************/
 const QString ContentProvider::PLUGIN_ID{
-    "qzp.creator.provider.content" };
+    "qzp.serial_console.provider.content" };
 const QString ContentProvider::PLUGIN_NAME{
-    "Quartz Creator Content" };
+    "Serial Console Content" };
 
 ContentProvider::ContentProvider()
     : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
@@ -33,7 +36,7 @@ bool ContentProvider::destroy()
 QVector< ContentWidget *> ContentProvider::widgets()
 {
     QVector< ContentWidget *> widgets;
-    widgets.push_back( new CreatorWidget{} );
+    widgets.push_back( new MainWidget{ });
     return widgets;
 }
 

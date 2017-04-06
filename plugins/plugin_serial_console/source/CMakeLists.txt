@@ -11,12 +11,18 @@ qz_add_core()
 
 qz_add_resource( serial_console.qrc )
 
+add_subdirectory( resources )
+
 vq_sources(
     SerialConsole.cpp
 )
 
 vq_classes(
     PluginBundle
+    ContentProvider
+    NodeProvider
+    ConsoleWidget
+    MainWidget
 )
 
 qz_create_plugin()
