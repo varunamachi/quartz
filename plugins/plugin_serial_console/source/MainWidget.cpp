@@ -30,6 +30,11 @@ MainWidget::MainWidget( QWidget *parent )
 {
     auto layout = new QVBoxLayout{};
     layout->addWidget( new QLabel{ tr( "Serial Consle PH" )});
+    layout->addWidget( m_data->m_console );
+    this->setLayout( layout );
+
+    this->setContentsMargins( QMargins{} );
+    layout->setContentsMargins( QMargins{} );
 }
 
 MainWidget::~MainWidget()
