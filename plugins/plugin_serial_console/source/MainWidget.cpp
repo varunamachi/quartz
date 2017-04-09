@@ -1,6 +1,7 @@
 
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QSerialPort>
 
 #include "ConsoleWidget.h"
 #include "MainWidget.h"
@@ -17,11 +18,14 @@ struct MainWidget::Data
 {
     Data( QWidget *parent )
         : m_console{ new ConsoleWidget{ parent }}
+        , m_serialPort{ new QSerialPort{ parent }}
     {
 
     }
 
     ConsoleWidget *m_console;
+
+    QSerialPort *m_serialPort;
 };
 
 MainWidget::MainWidget( QWidget *parent )

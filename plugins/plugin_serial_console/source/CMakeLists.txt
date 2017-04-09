@@ -4,6 +4,7 @@ include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
 qz_add_qt()
+qz_add_qt_modules( SerialPort )
 qz_add_plugin_base()
 qz_add_common()
 qz_add_base()
@@ -23,6 +24,8 @@ vq_classes(
     NodeProvider
     ConsoleWidget
     MainWidget
+    SettingsDialog
+    SerialSettings
 )
 
 qz_create_plugin()
