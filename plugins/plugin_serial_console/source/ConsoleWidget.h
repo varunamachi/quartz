@@ -15,7 +15,7 @@ public:
     ~ConsoleWidget();
 
 signals:
-    void getData( const QByteArray &data );
+    void sigDataEntered( const QByteArray &data );
 
 public:
     void putData( const QByteArray &data );

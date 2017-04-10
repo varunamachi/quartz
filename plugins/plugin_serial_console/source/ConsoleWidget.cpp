@@ -30,6 +30,12 @@ ConsoleWidget::~ConsoleWidget()
 
 }
 
+void ConsoleWidget::putData( const QByteArray &data )
+{
+    this->appendPlainText( "\n" + QString{ data });
+    this->appendPlainText( QString{ "\n>> " });
+}
+
 void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
@@ -39,10 +45,13 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
     case Qt::Key_Up:
     case Qt::Key_Down:
         break;
+    case Qt::Key_Enter:
+        emit sigDataEntered( this->toPlainText().toLocal8Bit() );
+        QPlainTextEdit::keyPressEvent( evt );
+        this->appendPlainText( QString{ "\n>> " });
+        break;
     default:
-//        if ( localEchoEnabled )
-        QPlainTextEdit::keyPressEvent(evt);
-        emit getData(evt->text().toLocal8Bit());
+        QPlainTextEdit::keyPressEvent( evt );
     }
 }
 

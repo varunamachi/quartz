@@ -169,11 +169,11 @@ void SettingsDialog::Data::setupUI()
 #ifdef Q_OS_WIN
     m_stopBitsCombo->addItem( tr("1.5"), QSerialPort::OneAndHalfStop );
 #endif
-    m_stopBitsCombo->addItem(QStringLiteral("2"), QSerialPort::TwoStop);
+    m_stopBitsCombo->addItem(QStringLiteral("2"), QSerialPort::TwoStop );
 
-    m_flowControlCombo->addItem(tr("None"), QSerialPort::NoFlowControl);
-    m_flowControlCombo->addItem(tr("RTS/CTS"), QSerialPort::HardwareControl);
-    m_flowControlCombo->addItem(tr("XON/XOFF"), QSerialPort::SoftwareControl);
+    m_flowControlCombo->addItem( tr("None"), QSerialPort::NoFlowControl );
+    m_flowControlCombo->addItem( tr("RTS/CTS"), QSerialPort::HardwareControl );
+    m_flowControlCombo->addItem( tr("XON/XOFF"), QSerialPort::SoftwareControl );
 
     m_desc->setEnabled( false );
     m_manufacturer->setEnabled( false );

@@ -18,6 +18,8 @@ public:
 
     std::unique_ptr< SerialSettings > settings() const;
 
+    void refresh();
+
     void setSettings( std::unique_ptr< SerialSettings > settings );
 
 private:
