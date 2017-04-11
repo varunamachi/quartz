@@ -153,6 +153,14 @@ SettingsDialog::SettingsDialog( QWidget *parent )
              SIGNAL( currentIndexChanged( int ) ),
              this,
              SLOT( showPortDetails( int )));
+    connect( m_data->m_okButton,
+             &QPushButton::released,
+             this,
+             &QDialog::accept );
+    connect( m_data->m_cancelButton,
+             &QPushButton::released,
+             this,
+             &QDialog::reject );
 }
 
 SettingsDialog::~SettingsDialog()
@@ -160,17 +168,38 @@ SettingsDialog::~SettingsDialog()
 
 }
 
+template< typename T >
+T param( QComboBox *box )
+{
+    return static_cast< T >(
+        box->itemData( box->currentIndex() ).toInt() );
+}
+
 std::unique_ptr<SerialSettings> SettingsDialog::settings() const
 {
-    return nullptr;
+
+
+    return std::unique_ptr< SerialSettings >( new SerialSettings {
+        m_data->m_nameCombo->currentText(),
+        param< qint32 >( m_data->m_baudRateCombo ),
+        param< QSerialPort::DataBits >( m_data->m_dataBitsCombo ),
+        param< QSerialPort::Parity >( m_data->m_parityCombo ),
+        param< QSerialPort::StopBits >( m_data->m_stopBitsCombo ),
+        param< QSerialPort::FlowControl >( m_data->m_flowControlCombo )
+    });
 }
 
 void SettingsDialog::setSettings( std::unique_ptr< SerialSettings > settings )
 {
-
 }
 
-void SettingsDialog::showPortDetails( int /*index*/ )
+void SettingsDialog::open()
+{
+    refresh();
+    QDialog::open();
+}
+
+void SettingsDialog::showPortDetails()
 {
     auto selected = m_data->m_nameCombo->currentText();
     if( m_data->m_available.contains( selected )) {
@@ -201,6 +230,7 @@ void SettingsDialog::refresh()
     }
     if( m_data->m_nameCombo->count() != 0 ) {
         m_data->m_nameCombo->setCurrentIndex( selectedIndex );
+        showPortDetails();
     }
 }
 

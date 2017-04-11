@@ -15,8 +15,6 @@ public:
     ~ConsoleHolder();
 
 private slots:
-    void onConfigure();
-
     void onConnect();
 
     void onDisconnect();
