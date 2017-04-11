@@ -2,8 +2,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSerialPort>
+//#include <QTabBar>
 
-#include "ConsoleWidget.h"
+#include "ConsoleHolder.h"
 #include "MainWidget.h"
 
 
@@ -17,15 +18,13 @@ const QString MainWidget::CONTENT_KIND{ "hw" };
 struct MainWidget::Data
 {
     Data( QWidget *parent )
-        : m_console{ new ConsoleWidget{ parent }}
-        , m_serialPort{ new QSerialPort{ parent }}
+        : m_holder{ new ConsoleHolder{ parent }}
     {
 
     }
 
-    ConsoleWidget *m_console;
+    ConsoleHolder *m_holder;
 
-    QSerialPort *m_serialPort;
 };
 
 MainWidget::MainWidget( QWidget *parent )
@@ -33,8 +32,7 @@ MainWidget::MainWidget( QWidget *parent )
     , m_data{ new Data{ this }}
 {
     auto layout = new QVBoxLayout{};
-    layout->addWidget( new QLabel{ tr( "Serial Consle PH" )});
-    layout->addWidget( m_data->m_console );
+    layout->addWidget( m_data->m_holder );
     this->setLayout( layout );
 
     this->setContentsMargins( QMargins{} );

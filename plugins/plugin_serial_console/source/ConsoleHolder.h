@@ -21,6 +21,8 @@ private slots:
 
     void onDisconnect();
 
+    void onClearConsole();
+
     void onDataReceived(const QByteArray &data );
 
     void onDataEntered( const QByteArray &data );

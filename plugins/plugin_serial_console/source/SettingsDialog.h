@@ -22,6 +22,9 @@ public:
 
     void setSettings( std::unique_ptr< SerialSettings > settings );
 
+private slots:
+    void showPortDetails( int index );
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

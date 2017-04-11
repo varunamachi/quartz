@@ -5,6 +5,9 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QSerialPortInfo>
 
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
@@ -29,6 +32,8 @@ struct SettingsDialog::Data
         , m_location{ new QLineEdit{ parent }}
         , m_vid{ new QLineEdit{ parent }}
         , m_pid{ new QLineEdit{ parent }}
+        , m_okButton{ new QPushButton{ tr( "Ok" ), parent }}
+        , m_cancelButton{ new QPushButton{ tr( "Cancel" ), parent }}
     {
 
     }
@@ -58,7 +63,14 @@ struct SettingsDialog::Data
     QLineEdit *m_vid;
 
     QLineEdit *m_pid;
+
+    QPushButton *m_okButton;
+
+    QPushButton *m_cancelButton;
+
+    QHash< QString, QSerialPortInfo > m_available;
 };
+
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog{ parent }
@@ -80,7 +92,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ++ row;
 
     paramLayout->addWidget( new QLabel{ tr( "Stop Bits" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_dataBitsCombo, row, 1 );
+    paramLayout->addWidget( m_data->m_stopBitsCombo, row, 1 );
     ++ row;
 
     paramLayout->addWidget( new QLabel{ tr( "Flow Control" ), this }, row, 0 );
@@ -114,11 +126,33 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     infoLayout->addWidget( m_data->m_pid, row, 1 );
     ++ row;
 
+    auto infoGroup = new QGroupBox{ tr( "Device Information"), this };
+    infoGroup->setLayout( infoLayout );
+    auto paramGroup = new QGroupBox{ tr( "Configuration" ), this };
+    paramGroup->setLayout( paramLayout );
+
+    auto groupLayout = new QHBoxLayout{ };
+    groupLayout->addWidget( infoGroup );
+    groupLayout->addWidget( paramGroup );
+
+    auto btnLayout = new QHBoxLayout{ };
+    btnLayout->addStretch();
+    btnLayout->addWidget( m_data->m_cancelButton );
+    btnLayout->addWidget( m_data->m_okButton );
+    m_data->m_okButton->setDefault( true );
+
     auto mainLayout = new QVBoxLayout{ };
     mainLayout->addWidget( m_data->m_nameCombo );
-    mainLayout->addLayout( infoLayout );
-    mainLayout->addLayout( paramLayout );
+    mainLayout->addLayout( groupLayout );
+    mainLayout->addLayout( btnLayout );
+
     this->setLayout( mainLayout );
+    m_data->setupUI();
+
+    connect( m_data->m_nameCombo,
+             SIGNAL( currentIndexChanged( int ) ),
+             this,
+             SLOT( showPortDetails( int )));
 }
 
 SettingsDialog::~SettingsDialog()
@@ -136,9 +170,38 @@ void SettingsDialog::setSettings( std::unique_ptr< SerialSettings > settings )
 
 }
 
+void SettingsDialog::showPortDetails( int /*index*/ )
+{
+    auto selected = m_data->m_nameCombo->currentText();
+    if( m_data->m_available.contains( selected )) {
+        const auto &info = m_data->m_available.value( selected );
+        m_data->m_desc->setText( info.description() );
+        m_data->m_manufacturer->setText( info.manufacturer() );
+        m_data->m_serialNum->setText( info.serialNumber() );
+        m_data->m_location->setText( info.systemLocation() );
+        m_data->m_vid->setText( QString{ info.vendorIdentifier() });
+        m_data->m_pid->setText( QString{ info.productIdentifier() });
+    }
+}
+
 void SettingsDialog::refresh()
 {
-
+    auto selected = m_data->m_nameCombo->currentText();
+    auto selectedIndex = 0;
+    m_data->m_available.clear();
+    m_data->m_nameCombo->clear();
+    const auto ports = QSerialPortInfo::availablePorts();
+    for( int i = 0; i < ports.size(); ++ i ) {
+        const auto &port = ports.at( i );
+        m_data->m_nameCombo->addItem( port.portName() );
+        m_data->m_available.insert( port.portName(), port );
+        if( port.portName() == selected) {
+            selectedIndex = i;
+        }
+    }
+    if( m_data->m_nameCombo->count() != 0 ) {
+        m_data->m_nameCombo->setCurrentIndex( selectedIndex );
+    }
 }
 
 void SettingsDialog::Data::setupUI()
