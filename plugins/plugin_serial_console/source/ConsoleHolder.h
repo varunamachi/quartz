@@ -21,10 +21,6 @@ private slots:
 
     void onClearConsole();
 
-    void onDataReceived(const QByteArray &data );
-
-    void onDataEntered( const QByteArray &data );
-
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

@@ -4,6 +4,7 @@
 #include <QSerialPort>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 #include <plugin_base/BundleLoggin.h>
 
@@ -33,6 +34,13 @@ struct ConsoleHolder::Data
         m_toolBar->addAction( m_clearConsole );
     }
 
+    void setEnabled( bool value )
+    {
+        m_connect->setEnabled( value );
+        m_disconnect->setEnabled( value );
+        m_console->setEnabled( value );
+    }
+
     QToolBar *m_toolBar;
 
     QAction *m_configure;
@@ -54,6 +62,9 @@ struct ConsoleHolder::Data
 
 };
 
+using SerialErrorFunc =
+    void ( QSerialPort::* )( QSerialPort::SerialPortError );
+
 ConsoleHolder::ConsoleHolder( QWidget *parent )
     : QWidget{ parent }
     , m_data{ new Data{ this }}
@@ -63,6 +74,24 @@ ConsoleHolder::ConsoleHolder( QWidget *parent )
     layout->addWidget( m_data->m_console );
     this->setLayout( layout );
 
+    auto errorFunc = [ this ]( QSerialPort::SerialPortError err ) {
+        if( err == QSerialPort::ResourceError ) {
+            QMessageBox::critical(
+                        this,
+                        tr(" Serial Port Error"),
+                        m_data->m_serial->errorString() );
+            this->onDisconnect();
+        }
+        if( err != QSerialPort::NoError ) {
+            QZP_ERROR << "Serial port error occured. Code: " << err
+                      <<". " << m_data->m_serial->errorString();
+        }
+    };
+
+    connect( m_data->m_serial,
+             static_cast< SerialErrorFunc >( &QSerialPort::error ),
+             this,
+             errorFunc );
     connect( m_data->m_connect,
              &QAction::triggered,
              this,
@@ -74,7 +103,7 @@ ConsoleHolder::ConsoleHolder( QWidget *parent )
     connect( m_data->m_clearConsole,
              &QAction::triggered,
              m_data->m_console,
-             &QPlainTextEdit::clear );
+             &ConsoleWidget::clearConsole );
     connect( m_data->m_configure,
              &QAction::triggered,
              [ this ]() {
@@ -87,7 +116,20 @@ ConsoleHolder::ConsoleHolder( QWidget *parent )
         m_data->m_settings = m_data->m_dialog->settings();
         onConnect();
     });
-    //Disable things that need connection
+    connect( m_data->m_serial,
+             &QSerialPort::readyRead,
+             [ this ]() {
+        auto data = m_data->m_serial->readAll();
+        m_data->m_console->putData( data );
+    });
+
+    connect( m_data->m_console,
+             &ConsoleWidget::sigDataEntered,
+             [ this ]( const QByteArray &data ) {
+        m_data->m_serial->write( data );
+    });
+
+    m_data->setEnabled( false );
 }
 
 ConsoleHolder::~ConsoleHolder()
@@ -107,33 +149,26 @@ void ConsoleHolder::onConnect()
     if( ! m_data->m_serial->open( QIODevice::ReadWrite )) {
         QZP_ERROR << "Failed to open serial port " << settings->name()
                   << ": " << m_data->m_serial->errorString();
-        //Show error dialog
+        m_data->setEnabled( m_data->m_serial->isOpen() );
+        QMessageBox::critical( this,
+                               tr(" Serial Port Error"),
+                               m_data->m_serial->errorString() );
     }
     else {
-        //enable stuff
+        m_data->setEnabled( true );
     }
 }
 
 void ConsoleHolder::onDisconnect()
 {
-    //disable stuff
+    m_data->m_serial->close();
+    m_data->setEnabled( m_data->m_serial->isOpen() );
 }
 
 void ConsoleHolder::onClearConsole()
 {
-
+    m_data->m_console->clear();
 }
-
-void ConsoleHolder::onDataReceived( const QByteArray &/*data*/ )
-{
-
-}
-
-void ConsoleHolder::onDataEntered( const QByteArray &/*data*/ )
-{
-
-}
-
 
 
 } } }

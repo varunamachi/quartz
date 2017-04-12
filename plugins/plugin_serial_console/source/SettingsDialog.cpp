@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QSerialPortInfo>
+#include <QIntValidator>
 
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
@@ -34,6 +35,7 @@ struct SettingsDialog::Data
         , m_pid{ new QLineEdit{ parent }}
         , m_okButton{ new QPushButton{ tr( "Ok" ), parent }}
         , m_cancelButton{ new QPushButton{ tr( "Cancel" ), parent }}
+        , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
     {
 
     }
@@ -67,6 +69,8 @@ struct SettingsDialog::Data
     QPushButton *m_okButton;
 
     QPushButton *m_cancelButton;
+
+    QIntValidator *m_intValidator;
 
     QHash< QString, QSerialPortInfo > m_available;
 };
@@ -149,10 +153,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     this->setLayout( mainLayout );
     m_data->setupUI();
 
+    using ComboIdxFunc = void ( QComboBox::* )( int );
     connect( m_data->m_nameCombo,
              SIGNAL( currentIndexChanged( int ) ),
              this,
-             SLOT( showPortDetails( int )));
+             SLOT( showPortDetails()));
     connect( m_data->m_okButton,
              &QPushButton::released,
              this,
@@ -161,6 +166,30 @@ SettingsDialog::SettingsDialog( QWidget *parent )
              &QPushButton::released,
              this,
              &QDialog::reject );
+
+    connect( m_data->m_baudRateCombo,
+            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
+             [ this ]( int index ) {
+        auto isCustomBaudRate = !
+                m_data->m_baudRateCombo->itemData( index ).isValid();
+        m_data->m_baudRateCombo->setEditable( isCustomBaudRate );
+        if( isCustomBaudRate ) {
+            m_data->m_baudRateCombo->clearEditText();
+            QLineEdit *edit = m_data->m_baudRateCombo->lineEdit();
+            edit->setValidator( m_data->m_intValidator );
+        }
+
+    });
+
+    connect( m_data->m_nameCombo,
+            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
+             [ this ]( int /*index*/ ) {
+        auto custom = ( m_data->m_nameCombo->currentText() == "Custom" );
+        m_data->m_nameCombo->setEditable( custom );
+        if( custom ) {
+            m_data->m_nameCombo->clearEditText();
+        }
+    });
 }
 
 SettingsDialog::~SettingsDialog()
@@ -177,8 +206,6 @@ T param( QComboBox *box )
 
 std::unique_ptr<SerialSettings> SettingsDialog::settings() const
 {
-
-
     return std::unique_ptr< SerialSettings >( new SerialSettings {
         m_data->m_nameCombo->currentText(),
         param< qint32 >( m_data->m_baudRateCombo ),
@@ -191,6 +218,7 @@ std::unique_ptr<SerialSettings> SettingsDialog::settings() const
 
 void SettingsDialog::setSettings( std::unique_ptr< SerialSettings > settings )
 {
+
 }
 
 void SettingsDialog::open()
@@ -228,6 +256,7 @@ void SettingsDialog::refresh()
             selectedIndex = i;
         }
     }
+    m_data->m_nameCombo->addItem( "Custom" );
     if( m_data->m_nameCombo->count() != 0 ) {
         m_data->m_nameCombo->setCurrentIndex( selectedIndex );
         showPortDetails();
@@ -237,14 +266,14 @@ void SettingsDialog::refresh()
 void SettingsDialog::Data::setupUI()
 {
     m_baudRateCombo->addItem( QStringLiteral( "9600" ),
-                              QSerialPort::Baud9600);
+                              QSerialPort::Baud9600 );
     m_baudRateCombo->addItem( QStringLiteral( "19200" ),
-                              QSerialPort::Baud19200);
+                              QSerialPort::Baud19200 );
     m_baudRateCombo->addItem( QStringLiteral( "38400" ),
-                              QSerialPort::Baud38400);
+                              QSerialPort::Baud38400 );
     m_baudRateCombo->addItem( QStringLiteral( "115200" ),
                               QSerialPort::Baud115200 );
-    m_baudRateCombo->addItem( tr("Custom"));
+    m_baudRateCombo->addItem( tr( "Custom" ));
 
     m_dataBitsCombo->addItem( QStringLiteral( "5" ), QSerialPort::Data5 );
     m_dataBitsCombo->addItem( QStringLiteral( "6" ), QSerialPort::Data6 );

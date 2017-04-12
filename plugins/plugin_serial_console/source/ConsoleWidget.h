@@ -20,6 +20,11 @@ signals:
 public:
     void putData( const QByteArray &data );
 
+    QString currentLineText();
+
+public slots:
+    void clearConsole();
+
 protected:
     void keyPressEvent( QKeyEvent *evt ) override;
 
@@ -30,6 +35,8 @@ protected:
     void contextMenuEvent( QContextMenuEvent *evt ) override;
 
 private:
+    void printPrompt();
+
     struct Data;
     std::unique_ptr< Data > m_data;
 
