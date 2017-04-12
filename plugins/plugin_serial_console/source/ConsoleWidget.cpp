@@ -42,16 +42,32 @@ ConsoleWidget::~ConsoleWidget()
 
 void ConsoleWidget::putData( const QByteArray &data )
 {
-    this->appendPlainText( QString{ data });
-    printPrompt();
+//    this->appendPlainText( QString{ data });
+    this->moveCursor( QTextCursor::End );
+    this->insertPlainText( data );
+    this->moveCursor( QTextCursor::End );
+//    printPrompt();
 }
 
-QString ConsoleWidget::currentLineText()
+QString ConsoleWidget::currentCommand()
 {
     auto doc = this->document();
     int curLine = doc->lineCount() - 1;
-    auto block = doc->findBlockByLineNumber( curLine );
-    return block.text();
+    QString cmd = "";
+    while( curLine >= 0 ) {
+        auto block = doc->findBlockByLineNumber( curLine );
+        auto txt = block.text();
+        cmd = txt + cmd;
+        if( txt.startsWith( ">> " ) || txt.isEmpty() ) {
+            break;
+        }
+        -- curLine;
+    }
+    cmd = cmd.trimmed();
+    if( ! cmd.isEmpty() ) {
+        return cmd.mid( 3 ) + "\r\n";
+    }
+    return cmd;
 }
 
 void ConsoleWidget::clearConsole()
@@ -69,8 +85,17 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
     case Qt::Key_Up:
     case Qt::Key_Down:
         break;
+    case Qt::Key_Home: {
+        this->moveCursor( QTextCursor::StartOfLine );
+        auto cursor = this->textCursor();
+        cursor.movePosition( QTextCursor::NextCharacter,
+                             QTextCursor::MoveAnchor,
+                             3 );
+        this->setTextCursor( cursor );
+    }
+        break;
     case Qt::Key_Backspace: {
-        auto curLine = currentLineText();
+        auto curLine = currentCommand();
         if( ! ( curLine.size() == 3 && curLine == ">> " )) {
             QPlainTextEdit::keyPressEvent( evt );
         }
@@ -78,12 +103,18 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter: {
-        if( evt->modifiers() && Qt::ControlModifier ) {
-            emit sigDataEntered( this->toPlainText().toLocal8Bit() );
-            printPrompt();
+        if( evt->modifiers() & Qt::AltModifier ) {
+            this->appendPlainText( "" );
         }
         else {
-            QPlainTextEdit::keyPressEvent( evt );
+            auto str = currentCommand();
+            if( str.isEmpty() ) {
+                printPrompt();
+            }
+            else {
+                emit sigDataEntered(  str.toLocal8Bit() );
+                this->appendPlainText( "" );
+            }
         }
     }
         break;

@@ -20,7 +20,7 @@ signals:
 public:
     void putData( const QByteArray &data );
 
-    QString currentLineText();
+    QString currentCommand();
 
 public slots:
     void clearConsole();

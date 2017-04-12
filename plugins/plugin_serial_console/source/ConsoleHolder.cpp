@@ -122,7 +122,6 @@ ConsoleHolder::ConsoleHolder( QWidget *parent )
         auto data = m_data->m_serial->readAll();
         m_data->m_console->putData( data );
     });
-
     connect( m_data->m_console,
              &ConsoleWidget::sigDataEntered,
              [ this ]( const QByteArray &data ) {

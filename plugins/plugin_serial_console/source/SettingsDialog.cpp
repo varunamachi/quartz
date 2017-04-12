@@ -206,9 +206,13 @@ T param( QComboBox *box )
 
 std::unique_ptr<SerialSettings> SettingsDialog::settings() const
 {
+    auto brate = param< qint32 >( m_data->m_baudRateCombo );
+    if( brate == 0 ) {
+        brate = m_data->m_baudRateCombo->currentText().toInt();
+    }
     return std::unique_ptr< SerialSettings >( new SerialSettings {
         m_data->m_nameCombo->currentText(),
-        param< qint32 >( m_data->m_baudRateCombo ),
+        brate,
         param< QSerialPort::DataBits >( m_data->m_dataBitsCombo ),
         param< QSerialPort::Parity >( m_data->m_parityCombo ),
         param< QSerialPort::StopBits >( m_data->m_stopBitsCombo ),
