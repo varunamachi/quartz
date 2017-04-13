@@ -17,8 +17,9 @@ struct ConsoleWidget::Data
 
     int m_historyIndex;
 
-    QVector< QString > m_history;
+    QTextCursor m_cursor;
 
+    QVector< QString > m_history;
 };
 
 
@@ -105,11 +106,21 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-
+        if( m_data->m_historyIndex > 0
+                && m_data->m_historyIndex < m_data->m_history.size() ) {
+            -- m_data->m_historyIndex;
+            auto prev = m_data->m_history[ m_data->m_historyIndex ];
+            insertCommand( prev );
+        }
     }
         break;
     case Qt::Key_Down: {
-
+        if( m_data->m_historyIndex > 0
+                && m_data->m_historyIndex < m_data->m_history.size() - 1 ) {
+            ++ m_data->m_historyIndex;
+            auto prev = m_data->m_history[ m_data->m_historyIndex ];
+            insertCommand( prev );
+        }
     }
         break;
     case Qt::Key_Home: {
@@ -173,6 +184,10 @@ void ConsoleWidget::printPrompt()
 {
     this->appendHtml(
                 QString{ "<font color = 'red'><bold>\n>></bold></font> " });
+    auto cursor = this->textCursor();
+    cursor.movePosition( QTextCursor::End );
+    m_data->m_cursor = cursor;
+
 }
 
 } } }
