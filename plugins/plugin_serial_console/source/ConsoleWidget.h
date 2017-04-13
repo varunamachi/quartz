@@ -35,6 +35,11 @@ protected:
     void contextMenuEvent( QContextMenuEvent *evt ) override;
 
 private:
+    QString currentLine();
+
+    void insertCommand( const QString &cmd );
+
+private:
     void printPrompt();
 
     struct Data;

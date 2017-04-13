@@ -10,9 +10,15 @@ namespace Quartz { namespace Plugin { namespace SerialConsole {
 struct ConsoleWidget::Data
 {
     explicit Data( QWidget */*parent*/ )
+        : m_historyIndex{ 0 }
     {
 
     }
+
+    int m_historyIndex;
+
+    QVector< QString > m_history;
+
 };
 
 
@@ -52,22 +58,41 @@ void ConsoleWidget::putData( const QByteArray &data )
 QString ConsoleWidget::currentCommand()
 {
     auto doc = this->document();
-    int curLine = doc->lineCount() - 1;
+    int line = doc->lineCount() - 1;
     QString cmd = "";
-    while( curLine >= 0 ) {
-        auto block = doc->findBlockByLineNumber( curLine );
+    while( line >= 0 ) {
+        auto block = doc->findBlockByLineNumber( line );
         auto txt = block.text();
         cmd = txt + cmd;
         if( txt.startsWith( ">> " ) || txt.isEmpty() ) {
             break;
         }
-        -- curLine;
+        -- line;
     }
     cmd = cmd.trimmed();
     if( ! cmd.isEmpty() ) {
         return cmd.mid( 3 ) + "\r\n";
     }
     return cmd;
+}
+
+QString ConsoleWidget::currentLine()
+{
+    auto doc = this->document();
+    int curLine = doc->lineCount() - 1;
+    auto txt = doc->findBlockByLineNumber( curLine );
+    return txt.text();
+}
+
+void ConsoleWidget::insertCommand( const QString &cmd )
+{
+//    this->moveCursor( QTextCursor::StartOfLine );
+//    auto cursor = this->textCursor();
+//    cursor.insertText()
+//    cursor.movePosition( QTextCursor::NextCharacter,
+//                         QTextCursor::MoveAnchor,
+//                         3 );
+//    this->setTextCursor( cursor );
 }
 
 void ConsoleWidget::clearConsole()
@@ -79,11 +104,13 @@ void ConsoleWidget::clearConsole()
 void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
+    case Qt::Key_Up: {
 
-    case Qt::Key_Left:
-    case Qt::Key_Right:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
+    }
+        break;
+    case Qt::Key_Down: {
+
+    }
         break;
     case Qt::Key_Home: {
         this->moveCursor( QTextCursor::StartOfLine );
@@ -94,13 +121,16 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
         this->setTextCursor( cursor );
     }
         break;
+
+    case Qt::Key_Left:
     case Qt::Key_Backspace: {
-        auto curLine = currentCommand();
+        auto curLine = currentLine();
         if( ! ( curLine.size() == 3 && curLine == ">> " )) {
             QPlainTextEdit::keyPressEvent( evt );
         }
     }
         break;
+
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         if( evt->modifiers() & Qt::AltModifier ) {
@@ -113,6 +143,7 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
             }
             else {
                 emit sigDataEntered(  str.toLocal8Bit() );
+                m_data->m_history.push_back( str );
                 this->appendPlainText( "" );
             }
         }
