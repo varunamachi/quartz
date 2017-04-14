@@ -10,7 +10,7 @@ namespace Quartz { namespace Plugin { namespace SerialConsole {
 struct ConsoleWidget::Data
 {
     explicit Data( QWidget */*parent*/ )
-        : m_historyIndex{ 0 }
+        : m_historyIndex{ -1 }
     {
 
     }
@@ -87,13 +87,16 @@ QString ConsoleWidget::currentLine()
 
 void ConsoleWidget::insertCommand( const QString &cmd )
 {
-//    this->moveCursor( QTextCursor::StartOfLine );
-//    auto cursor = this->textCursor();
-//    cursor.insertText()
-//    cursor.movePosition( QTextCursor::NextCharacter,
-//                         QTextCursor::MoveAnchor,
-//                         3 );
-//    this->setTextCursor( cursor );
+    m_data->m_cursor.selectionStart();
+    m_data->m_cursor.movePosition( QTextCursor::End );
+    m_data->m_cursor.selectionEnd();
+    m_data->m_cursor.removeSelectedText();
+    m_data->m_cursor.movePosition( QTextCursor::End );
+
+    m_data->m_cursor.insertText( cmd );
+    this->setTextCursor( m_data->m_cursor );
+
+//    m_data->m_cursor = this->textCursor();
 }
 
 void ConsoleWidget::clearConsole()
@@ -106,20 +109,24 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-        if( m_data->m_historyIndex > 0
+        if( m_data->m_historyIndex >= 0
                 && m_data->m_historyIndex < m_data->m_history.size() ) {
-            -- m_data->m_historyIndex;
             auto prev = m_data->m_history[ m_data->m_historyIndex ];
+            -- m_data->m_historyIndex;
             insertCommand( prev );
         }
     }
         break;
     case Qt::Key_Down: {
-        if( m_data->m_historyIndex > 0
-                && m_data->m_historyIndex < m_data->m_history.size() - 1 ) {
-            ++ m_data->m_historyIndex;
+        if( m_data->m_historyIndex >= 0
+                && m_data->m_historyIndex < m_data->m_history.size() ) {
             auto prev = m_data->m_history[ m_data->m_historyIndex ];
+            ++ m_data->m_historyIndex;
             insertCommand( prev );
+        }
+        else if( m_data->m_historyIndex == m_data->m_history.size() - 1 ) {
+            insertCommand( "" );
+            -- m_data->m_historyIndex;
         }
     }
         break;
@@ -155,6 +162,7 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
             else {
                 emit sigDataEntered(  str.toLocal8Bit() );
                 m_data->m_history.push_back( str );
+                ++ m_data->m_historyIndex;
                 this->appendPlainText( "" );
             }
         }
