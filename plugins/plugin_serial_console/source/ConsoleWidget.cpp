@@ -17,7 +17,7 @@ struct ConsoleWidget::Data
 
     int m_historyIndex;
 
-    QTextCursor m_cursor;
+    int m_pos;
 
     QVector< QString > m_history;
 };
@@ -72,7 +72,7 @@ QString ConsoleWidget::currentCommand()
     }
     cmd = cmd.trimmed();
     if( ! cmd.isEmpty() ) {
-        return cmd.mid( 3 ) + "\r\n";
+        return cmd.mid( 3 );
     }
     return cmd;
 }
@@ -87,16 +87,19 @@ QString ConsoleWidget::currentLine()
 
 void ConsoleWidget::insertCommand( const QString &cmd )
 {
-    m_data->m_cursor.selectionStart();
-    m_data->m_cursor.movePosition( QTextCursor::End );
-    m_data->m_cursor.selectionEnd();
-    m_data->m_cursor.removeSelectedText();
-    m_data->m_cursor.movePosition( QTextCursor::End );
+//    m_data->m_cursor.movePosition( QTextCursor::End, QTextCursor::KeepAnchor );
+//    m_data->m_cursor.select( QTextCursor::BlockUnderCursor );
+//    m_data->m_cursor.removeSelectedText();
+//    m_data->m_cursor.movePosition( QTextCursor::Up );
 
-    m_data->m_cursor.insertText( cmd );
-    this->setTextCursor( m_data->m_cursor );
+    auto cursor = this->textCursor();
+    auto endCursor = cursor;
+    endCursor.movePosition( QTextCursor::End );
+    cursor.setPosition( m_data->m_pos, QTextCursor::MoveAnchor );
+    cursor.setPosition( endCursor.position(), QTextCursor::KeepAnchor );
 
-//    m_data->m_cursor = this->textCursor();
+    cursor.insertText( cmd );
+    this->setTextCursor( cursor );
 }
 
 void ConsoleWidget::clearConsole()
@@ -109,24 +112,21 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-        if( m_data->m_historyIndex >= 0
-                && m_data->m_historyIndex < m_data->m_history.size() ) {
-            auto prev = m_data->m_history[ m_data->m_historyIndex ];
+        if( m_data->m_historyIndex > 0 ) {
             -- m_data->m_historyIndex;
+            auto prev = m_data->m_history[ m_data->m_historyIndex ];
             insertCommand( prev );
         }
     }
         break;
     case Qt::Key_Down: {
-        if( m_data->m_historyIndex >= 0
-                && m_data->m_historyIndex < m_data->m_history.size() ) {
-            auto prev = m_data->m_history[ m_data->m_historyIndex ];
+        if( m_data->m_historyIndex < m_data->m_history.size() - 1 ) {
             ++ m_data->m_historyIndex;
+            auto prev = m_data->m_history[ m_data->m_historyIndex ];
             insertCommand( prev );
         }
         else if( m_data->m_historyIndex == m_data->m_history.size() - 1 ) {
             insertCommand( "" );
-            -- m_data->m_historyIndex;
         }
     }
         break;
@@ -160,10 +160,12 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
                 printPrompt();
             }
             else {
-                emit sigDataEntered(  str.toLocal8Bit() );
-                m_data->m_history.push_back( str );
-                ++ m_data->m_historyIndex;
-                this->appendPlainText( "" );
+                emit sigDataEntered(  ( str  + "\r\n" ).toLocal8Bit() );
+                if( ! str.isEmpty() ) {
+                    m_data->m_history.push_back( str );
+                    m_data->m_historyIndex = m_data->m_history.size() - 1;
+                    this->appendPlainText( "" );
+                }
             }
         }
     }
@@ -192,9 +194,7 @@ void ConsoleWidget::printPrompt()
 {
     this->appendHtml(
                 QString{ "<font color = 'red'><bold>\n>></bold></font> " });
-    auto cursor = this->textCursor();
-    cursor.movePosition( QTextCursor::End );
-    m_data->m_cursor = cursor;
+    m_data->m_pos = this->textCursor().position();
 
 }
 
