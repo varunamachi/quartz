@@ -1,4 +1,3 @@
-
 #include <QTextBlock>
 
 #include <plugin_base/BundleLoggin.h>
@@ -27,30 +26,8 @@ struct ConsoleWidget::Data
 
     inline bool isHistoryIndexValid() const
     {
-        return m_historyIndex >= 0 && m_historyIndex < m_history.size();
-    }
-
-    inline void incrementHistoryIndex()
-    {
-        if( m_historyIndex < m_history.size() - 1 ) {
-            ++ m_historyIndex;
-        }
-        QZP_TRACE << "** INC: " << m_historyIndex
-                  << " : " << m_history.size();
-    }
-
-    inline void decrementHistoryIndex()
-    {
-        if( m_historyIndex > 0 ) {
-            -- m_historyIndex;
-        }
-        QZP_TRACE << "### DEC: " << m_historyIndex
-                  << " : " << m_history.size();
-    }
-
-    inline void resetHistoryIndex()
-    {
-        m_historyIndex = m_history.size() - 1;
+        return ! m_history.isEmpty()
+                && m_historyIndex >= 0 && m_historyIndex <= m_history.size();
     }
 
     inline void addHistory( const QString &historyItem )
@@ -58,17 +35,8 @@ struct ConsoleWidget::Data
         if( m_history.isEmpty() || m_history.last() != historyItem ) {
             m_history.push_back( historyItem );
         }
+        m_historyIndex = m_history.size();
         m_historyDirection = HistoryDirection::None;
-    }
-
-    inline void adjustLastHistoryIndex()
-    {
-//        if( m_historyIndex == 0 ) {
-//            incrementHistoryIndex();
-//        }
-//        if( m_historyIndex == m_history.size() - 1 ) {
-//            decrementHistoryIndex();
-//        }
     }
 
     inline QString history() const
@@ -77,6 +45,28 @@ struct ConsoleWidget::Data
             return m_history[ m_historyIndex ];
         }
         return QStringLiteral( "" );
+    }
+
+    QString nextCommand()
+    {
+        if( isHistoryIndexValid() ) {
+            if( m_historyIndex < m_history.size() ) {
+                ++ m_historyIndex;
+            }
+            m_historyDirection = HistoryDirection::Forward;
+        }
+        return history();
+    }
+
+    QString prevCommand()
+    {
+        if( isHistoryIndexValid()) {
+            if( m_historyIndex > 0 ) {
+                -- m_historyIndex;
+            }
+            m_historyDirection = HistoryDirection::Backward;
+        }
+        return history();
     }
 
     int m_historyIndex;
@@ -176,27 +166,15 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-        if( m_data->isHistoryIndexValid()) {
-            m_data->adjustLastHistoryIndex();
-            auto prev = m_data->history();
+        auto prev = m_data->prevCommand();
+        if( ! prev.isEmpty() ) {
             insertCommand( prev );
-            m_data->decrementHistoryIndex();
-            m_data->m_historyDirection = HistoryDirection::Backward;
         }
     }
         break;
     case Qt::Key_Down: {
-        if( m_data->m_historyIndex == m_data->m_history.size() ) {
-            insertCommand( "" );
-            m_data->resetHistoryIndex();
-        }
-        else if( m_data->isHistoryIndexValid() ) {
-            m_data->adjustLastHistoryIndex();
-            auto prev = m_data->history();
-            insertCommand( prev );
-            m_data->incrementHistoryIndex();
-            m_data->m_historyDirection = HistoryDirection::Forward;
-        }
+        auto prev = m_data->nextCommand();
+        insertCommand( prev );
     }
         break;
     case Qt::Key_Home: {
@@ -232,7 +210,6 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
                 emit sigDataEntered(  ( str  + "\r\n" ).toLocal8Bit() );
                 if( ! str.isEmpty() ) {
                     m_data->addHistory( str );
-                    m_data->resetHistoryIndex();
                     this->appendPlainText( "" );
                 }
             }
