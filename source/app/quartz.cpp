@@ -18,8 +18,12 @@ bool init()
     using namespace Quartz;
     std::unique_ptr< Logger::SpooledDispatcher > dispatcher{
         new Logger::SpooledDispatcher{} };
-    bool result = Logger::Logger::init( std::move( dispatcher ),
-                                        Logger::LogLevel::Debug );
+#ifdef QT_DEBUG
+    const auto llevel = Logger::LogLevel::Trace;
+#else
+    const auto llevel = Logger::LogLevel::Debug;
+#endif
+    bool result = Logger::Logger::init( std::move( dispatcher ), llevel );
     if( result ) {
         std::unique_ptr< Logger::ConsoleTarget > consoleTarget{
             new Logger::ConsoleTarget{} };

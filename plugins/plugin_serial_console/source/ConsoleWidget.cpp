@@ -1,23 +1,89 @@
 
 #include <QTextBlock>
 
+#include <plugin_base/BundleLoggin.h>
+
 #include "ConsoleWidget.h"
 
 //Taken from Qt example
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
+enum class HistoryDirection
+{
+    Backward,
+    Forward,
+    None
+};
+
 struct ConsoleWidget::Data
 {
     explicit Data( QWidget */*parent*/ )
-        : m_historyIndex{ -1 }
+        : m_historyIndex{ 0 }
+        , m_historyDirection{ HistoryDirection::None }
     {
 
+    }
+
+    inline bool isHistoryIndexValid() const
+    {
+        return m_historyIndex >= 0 && m_historyIndex < m_history.size();
+    }
+
+    inline void incrementHistoryIndex()
+    {
+        if( m_historyIndex < m_history.size() - 1 ) {
+            ++ m_historyIndex;
+        }
+        QZP_TRACE << "** INC: " << m_historyIndex
+                  << " : " << m_history.size();
+    }
+
+    inline void decrementHistoryIndex()
+    {
+        if( m_historyIndex > 0 ) {
+            -- m_historyIndex;
+        }
+        QZP_TRACE << "### DEC: " << m_historyIndex
+                  << " : " << m_history.size();
+    }
+
+    inline void resetHistoryIndex()
+    {
+        m_historyIndex = m_history.size() - 1;
+    }
+
+    inline void addHistory( const QString &historyItem )
+    {
+        if( m_history.isEmpty() || m_history.last() != historyItem ) {
+            m_history.push_back( historyItem );
+        }
+        m_historyDirection = HistoryDirection::None;
+    }
+
+    inline void adjustLastHistoryIndex()
+    {
+//        if( m_historyIndex == 0 ) {
+//            incrementHistoryIndex();
+//        }
+//        if( m_historyIndex == m_history.size() - 1 ) {
+//            decrementHistoryIndex();
+//        }
+    }
+
+    inline QString history() const
+    {
+        if( m_historyIndex < m_history.size() ) {
+            return m_history[ m_historyIndex ];
+        }
+        return QStringLiteral( "" );
     }
 
     int m_historyIndex;
 
     int m_pos;
+
+    HistoryDirection m_historyDirection;
 
     QVector< QString > m_history;
 };
@@ -49,11 +115,9 @@ ConsoleWidget::~ConsoleWidget()
 
 void ConsoleWidget::putData( const QByteArray &data )
 {
-//    this->appendPlainText( QString{ data });
     this->moveCursor( QTextCursor::End );
     this->insertPlainText( data );
     this->moveCursor( QTextCursor::End );
-//    printPrompt();
 }
 
 QString ConsoleWidget::currentCommand()
@@ -87,17 +151,11 @@ QString ConsoleWidget::currentLine()
 
 void ConsoleWidget::insertCommand( const QString &cmd )
 {
-//    m_data->m_cursor.movePosition( QTextCursor::End, QTextCursor::KeepAnchor );
-//    m_data->m_cursor.select( QTextCursor::BlockUnderCursor );
-//    m_data->m_cursor.removeSelectedText();
-//    m_data->m_cursor.movePosition( QTextCursor::Up );
-
     auto cursor = this->textCursor();
     auto endCursor = cursor;
     endCursor.movePosition( QTextCursor::End );
     cursor.setPosition( m_data->m_pos, QTextCursor::MoveAnchor );
     cursor.setPosition( endCursor.position(), QTextCursor::KeepAnchor );
-
     cursor.insertText( cmd );
     this->setTextCursor( cursor );
 }
@@ -108,25 +166,36 @@ void ConsoleWidget::clearConsole()
     printPrompt();
 }
 
+void ConsoleWidget::clearHistory()
+{
+    m_data->m_history.clear();
+    m_data->m_historyIndex = 0;
+}
+
 void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-        if( m_data->m_historyIndex > 0 ) {
-            -- m_data->m_historyIndex;
-            auto prev = m_data->m_history[ m_data->m_historyIndex ];
+        if( m_data->isHistoryIndexValid()) {
+            m_data->adjustLastHistoryIndex();
+            auto prev = m_data->history();
             insertCommand( prev );
+            m_data->decrementHistoryIndex();
+            m_data->m_historyDirection = HistoryDirection::Backward;
         }
     }
         break;
     case Qt::Key_Down: {
-        if( m_data->m_historyIndex < m_data->m_history.size() - 1 ) {
-            ++ m_data->m_historyIndex;
-            auto prev = m_data->m_history[ m_data->m_historyIndex ];
-            insertCommand( prev );
-        }
-        else if( m_data->m_historyIndex == m_data->m_history.size() - 1 ) {
+        if( m_data->m_historyIndex == m_data->m_history.size() ) {
             insertCommand( "" );
+            m_data->resetHistoryIndex();
+        }
+        else if( m_data->isHistoryIndexValid() ) {
+            m_data->adjustLastHistoryIndex();
+            auto prev = m_data->history();
+            insertCommand( prev );
+            m_data->incrementHistoryIndex();
+            m_data->m_historyDirection = HistoryDirection::Forward;
         }
     }
         break;
@@ -162,8 +231,8 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
             else {
                 emit sigDataEntered(  ( str  + "\r\n" ).toLocal8Bit() );
                 if( ! str.isEmpty() ) {
-                    m_data->m_history.push_back( str );
-                    m_data->m_historyIndex = m_data->m_history.size() - 1;
+                    m_data->addHistory( str );
+                    m_data->resetHistoryIndex();
                     this->appendPlainText( "" );
                 }
             }

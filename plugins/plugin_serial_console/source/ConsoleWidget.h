@@ -25,6 +25,8 @@ public:
 public slots:
     void clearConsole();
 
+    void clearHistory();
+
 protected:
     void keyPressEvent( QKeyEvent *evt ) override;
 
