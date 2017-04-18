@@ -254,10 +254,12 @@ void SettingsDialog::refresh()
     const auto ports = QSerialPortInfo::availablePorts();
     for( int i = 0; i < ports.size(); ++ i ) {
         const auto &port = ports.at( i );
-        m_data->m_nameCombo->addItem( port.portName() );
-        m_data->m_available.insert( port.portName(), port );
-        if( port.portName() == selected) {
-            selectedIndex = i;
+        if( ! port.isBusy() ) {
+            m_data->m_nameCombo->addItem( port.portName() );
+            m_data->m_available.insert( port.portName(), port );
+            if( port.portName() == selected) {
+                selectedIndex = i;
+            }
         }
     }
     m_data->m_nameCombo->addItem( "Custom" );

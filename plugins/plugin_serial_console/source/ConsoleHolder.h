@@ -6,20 +6,25 @@
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
+class SerialSettings;
+
 class ConsoleHolder : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConsoleHolder( QWidget *parent = nullptr );
+    explicit ConsoleHolder( std::unique_ptr< SerialSettings > settings,
+                            QWidget *parent = nullptr );
 
     ~ConsoleHolder();
 
-private slots:
-    void onConnect();
+    const QString & name() const;
 
-    void onDisconnect();
+public slots:
+    void connectSerial();
 
-    void onClearConsole();
+    void disconnectSerial();
+
+    void clearConsole();
 
 private:
     struct Data;
