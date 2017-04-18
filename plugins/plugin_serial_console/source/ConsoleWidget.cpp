@@ -73,6 +73,8 @@ struct ConsoleWidget::Data
 
     int m_pos;
 
+    int m_curLinePos;
+
     HistoryDirection m_historyDirection;
 
     QVector< QString > m_history;
@@ -108,27 +110,20 @@ void ConsoleWidget::putData( const QByteArray &data )
     this->moveCursor( QTextCursor::End );
     this->insertPlainText( data );
     this->moveCursor( QTextCursor::End );
+    m_data->m_pos = this->textCursor().position();
+    m_data->m_curLinePos = this->textCursor().position();
 }
 
 QString ConsoleWidget::currentCommand()
 {
-    auto doc = this->document();
-    int line = doc->lineCount() - 1;
-    QString cmd = "";
-    while( line >= 0 ) {
-        auto block = doc->findBlockByLineNumber( line );
-        auto txt = block.text();
-        cmd = txt + cmd;
-        if( txt.startsWith( ">> " ) || txt.isEmpty() ) {
-            break;
-        }
-        -- line;
-    }
-    cmd = cmd.trimmed();
-    if( ! cmd.isEmpty() ) {
-        return cmd.mid( 3 );
-    }
-    return cmd;
+    auto cursor = this->textCursor();
+    auto endCursor = cursor;
+    endCursor.movePosition( QTextCursor::End );
+    cursor.setPosition( m_data->m_pos, QTextCursor::MoveAnchor );
+    cursor.setPosition( endCursor.position(), QTextCursor::KeepAnchor );
+    auto selected = cursor.selectedText();
+    cursor.clearSelection();
+    return selected;
 }
 
 QString ConsoleWidget::currentLine()
@@ -148,6 +143,8 @@ void ConsoleWidget::insertCommand( const QString &cmd )
     cursor.setPosition( endCursor.position(), QTextCursor::KeepAnchor );
     cursor.insertText( cmd );
     this->setTextCursor( cursor );
+    cursor.movePosition( QTextCursor::StartOfLine );
+    m_data->m_curLinePos = cursor.position();
 }
 
 void ConsoleWidget::clearConsole()
@@ -178,19 +175,31 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
     }
         break;
     case Qt::Key_Home: {
-        this->moveCursor( QTextCursor::StartOfLine );
         auto cursor = this->textCursor();
-        cursor.movePosition( QTextCursor::NextCharacter,
-                             QTextCursor::MoveAnchor,
-                             3 );
+        if( evt->modifiers() & Qt::CTRL ) {
+            cursor.setPosition( m_data->m_pos );
+        }
+        else {
+            cursor.setPosition( m_data->m_curLinePos );
+        }
+        this->setTextCursor( cursor );
+    }
+        break;
+    case Qt::Key_End: {
+        auto cursor = this->textCursor();
+        if( evt->modifiers() & Qt::CTRL ) {
+            cursor.movePosition( QTextCursor::End );
+        }
+        else {
+            cursor.movePosition( QTextCursor::EndOfLine );
+        }
         this->setTextCursor( cursor );
     }
         break;
 
     case Qt::Key_Left:
     case Qt::Key_Backspace: {
-        auto curLine = currentLine();
-        if( ! ( curLine.size() == 3 && curLine == ">> " )) {
+        if( this->textCursor().position() > m_data->m_pos ) {
             QPlainTextEdit::keyPressEvent( evt );
         }
     }
@@ -207,13 +216,14 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
                 printPrompt();
             }
             else {
-                emit sigDataEntered(  ( str  + "\r\n" ).toLocal8Bit() );
-                if( ! str.isEmpty() ) {
-                    m_data->addHistory( str );
-                    this->appendPlainText( "" );
-                }
+                auto cmd = str.trimmed() + "\r\n";
+                emit sigDataEntered(  cmd.toLocal8Bit() );
+                m_data->addHistory( str );
+                this->appendPlainText( "" );
+                m_data->m_pos = this->textCursor().position();
             }
         }
+        m_data->m_curLinePos = this->textCursor().position();
     }
         break;
     default:
@@ -239,8 +249,9 @@ void ConsoleWidget::contextMenuEvent( QContextMenuEvent */*evt*/ )
 void ConsoleWidget::printPrompt()
 {
     this->appendHtml(
-                QString{ "<font color = 'red'><bold>\n>></bold></font> " });
+                QString{ "<font color = 'red'><b>\n>></b></font> " });
     m_data->m_pos = this->textCursor().position();
+    m_data->m_curLinePos = m_data->m_pos;
 
 }
 
