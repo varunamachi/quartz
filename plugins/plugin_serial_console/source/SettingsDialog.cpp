@@ -175,7 +175,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         m_data->m_baudRateCombo->setEditable( isCustomBaudRate );
         if( isCustomBaudRate ) {
             m_data->m_baudRateCombo->clearEditText();
-            QLineEdit *edit = m_data->m_baudRateCombo->lineEdit();
+            auto edit = m_data->m_baudRateCombo->lineEdit();
             edit->setValidator( m_data->m_intValidator );
         }
 

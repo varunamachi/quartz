@@ -7,7 +7,9 @@
 #include <QMessageBox>
 #include <QSerialPortInfo>
 #include <QTextStream>
-
+#include <QComboBox>
+#include <QLineEdit>
+#include <QIntValidator>
 
 #include <plugin_base/BundleLoggin.h>
 #include <plugin_base/BundleContext.h>
@@ -31,12 +33,26 @@ struct ConsoleHolder::Data
         , m_disconnect{ new QAction{ QObject::tr( "Disconnect" ), parent }}
         , m_clearConsole{ new QAction{ QObject::tr( "Clear" ), parent }}
         , m_console{ new ConsoleWidget{ parent }}
-
+        , m_baudCombo{ new QComboBox{ parent }}
         , m_serial{ new QSerialPort{ parent }}
+        , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
     {
+
+        m_baudCombo->addItem( tr( "Custom" ));
+        m_baudCombo->addItem( QStringLiteral( "9600" ),
+                              QSerialPort::Baud9600 );
+        m_baudCombo->addItem( QStringLiteral( "19200" ),
+                              QSerialPort::Baud19200 );
+        m_baudCombo->addItem( QStringLiteral( "38400" ),
+                              QSerialPort::Baud38400 );
+        m_baudCombo->addItem( QStringLiteral( "115200" ),
+                              QSerialPort::Baud115200 );
+        m_baudCombo->setCurrentIndex( 1 );
+
         m_toolBar->addAction( m_connect );
         m_toolBar->addAction( m_disconnect );
         m_toolBar->addAction( m_clearConsole );
+        m_toolBar->addWidget( m_baudCombo );
 
         updateDisplayName();
         updateCompleteInfo();
@@ -106,7 +122,11 @@ struct ConsoleHolder::Data
 
     ConsoleWidget *m_console;
 
+    QComboBox *m_baudCombo;
+
     QSerialPort *m_serial;
+
+    QIntValidator *m_intValidator;
 
     QString m_displayName;
 
@@ -167,6 +187,35 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
              [ this ]( const QByteArray &data ) {
         m_data->m_serial->write( data );
     });
+    using ComboIdxFunc = void ( QComboBox::* )( int );
+    connect( m_data->m_baudCombo,
+            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
+             [ this ]( int index ) {
+        auto isCustomBaudRate = !
+                m_data->m_baudCombo->itemData( index ).isValid();
+        m_data->m_baudCombo->setEditable( isCustomBaudRate );
+        if( isCustomBaudRate ) {
+            m_data->m_baudCombo->clearEditText();
+            auto edit = m_data->m_baudCombo->lineEdit();
+            edit->setValidator( m_data->m_intValidator );
+        }
+        else {
+            auto txt = m_data->m_baudCombo->currentText();
+            auto baud = static_cast< qint32 >( txt.toLong() );
+            if( ! m_data->m_serial->setBaudRate( baud )) {
+                m_data->m_baudCombo->setCurrentIndex( 1 );
+            }
+        }
+    });
+//    connect( m_data->m_baudCombo,
+//            &QComboBox::editTextChanged,
+//             [ this ]( const QString &text ) {
+//        auto baud = static_cast< qint32 >( text.toLong() );
+//        if( ! m_data->m_serial->setBaudRate( baud )) {
+//            m_data->m_baudCombo->setCurrentIndex( 1 );
+//        }
+//    });
+
 
     m_data->setEnabled( false );
 //    appContext()->configManager()->store()
