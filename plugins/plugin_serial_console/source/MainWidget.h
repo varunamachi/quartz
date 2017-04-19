@@ -20,6 +20,9 @@ public:
 
     static const QString CONTENT_KIND;
 
+public slots:
+    void createNewConnection();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

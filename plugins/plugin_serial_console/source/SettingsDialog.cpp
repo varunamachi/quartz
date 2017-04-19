@@ -216,7 +216,8 @@ std::unique_ptr<SerialSettings> SettingsDialog::settings() const
         param< QSerialPort::DataBits >( m_data->m_dataBitsCombo ),
         param< QSerialPort::Parity >( m_data->m_parityCombo ),
         param< QSerialPort::StopBits >( m_data->m_stopBitsCombo ),
-        param< QSerialPort::FlowControl >( m_data->m_flowControlCombo )
+        param< QSerialPort::FlowControl >( m_data->m_flowControlCombo ),
+        m_data->m_available.value( m_data->m_nameCombo->currentText() )
     });
 }
 
@@ -240,8 +241,8 @@ void SettingsDialog::showPortDetails()
         m_data->m_manufacturer->setText( info.manufacturer() );
         m_data->m_serialNum->setText( info.serialNumber() );
         m_data->m_location->setText( info.systemLocation() );
-        m_data->m_vid->setText( QString{ info.vendorIdentifier() });
-        m_data->m_pid->setText( QString{ info.productIdentifier() });
+        m_data->m_vid->setText( QString::number( info.vendorIdentifier() ));
+        m_data->m_pid->setText( QString::number( info.productIdentifier() ));
     }
 }
 

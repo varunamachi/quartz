@@ -17,14 +17,19 @@ public:
 
     ~ConsoleHolder();
 
-    const QString & name() const;
+    const QString displayName() const;
+
+    const QString description() const;
 
 public slots:
-    void connectSerial();
+    bool connectSerial();
 
-    void disconnectSerial();
+    bool disconnectSerial();
 
     void clearConsole();
+
+signals:
+    void serialDisconnected( ConsoleHolder *holder );
 
 private:
     struct Data;

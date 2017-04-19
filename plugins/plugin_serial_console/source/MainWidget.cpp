@@ -2,9 +2,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSerialPort>
-#include <QTabBar>
 #include <QToolBar>
-#include <QStackedWidget>
+#include <QTabWidget>
+//#include <QTabBar>
+//#include <QStackedWidget>
 
 #include "ConsoleHolder.h"
 #include "MainWidget.h"
@@ -22,8 +23,7 @@ struct MainWidget::Data
 {
     Data( QWidget *parent )
         : m_toolBar{ new QToolBar{ parent }}
-        , m_tabBar{ new QTabBar{ parent }}
-        , m_stackedWidget{ new QStackedWidget{ parent }}
+        , m_tabWidget{ new QTabWidget{ parent }}
         , m_newConnection{ new QAction{ QObject::tr( "New Connection" ),
                            parent }}
         , m_disconnectAll{ new QAction{ QObject::tr( "Disconnect All" ),
@@ -32,13 +32,12 @@ struct MainWidget::Data
     {
         m_toolBar->addAction( m_newConnection );
         m_toolBar->addAction( m_disconnectAll );
+        m_tabWidget->setTabsClosable( true );
     }
 
     QToolBar *m_toolBar;
 
-    QTabBar *m_tabBar;
-
-    QStackedWidget *m_stackedWidget;
+    QTabWidget *m_tabWidget;
 
     QAction *m_newConnection;
 
@@ -53,8 +52,7 @@ MainWidget::MainWidget( QWidget *parent )
 {
     auto layout = new QVBoxLayout{};
     layout->addWidget( m_data->m_toolBar );
-    layout->addWidget( m_data->m_tabBar );
-    layout->addWidget( m_data->m_stackedWidget );
+    layout->addWidget( m_data->m_tabWidget );
     this->setLayout( layout );
 
     this->setContentsMargins( QMargins{} );
@@ -68,20 +66,53 @@ MainWidget::MainWidget( QWidget *parent )
     });
     connect( m_data->m_dialog,
              &QDialog::accepted,
-             [ this ]() {
-//        m_data->m_settings = m_data->m_dialog->settings();
-//        onConnect();
-        auto holder = new ConsoleHolder{ m_data->m_dialog->settings(), this };
-        holder->connectSerial();
-        m_data->m_tabBar->addTab( holder->name() );
-        m_data->m_stackedWidget->addWidget( holder );
+             this,
+             &MainWidget::createNewConnection );
+    connect( m_data->m_tabWidget,
+             &QTabWidget::tabBarDoubleClicked,
+             [ this ]( int index ) {
+        if( index == -1 ) {
+            m_data->m_dialog->refresh();
+            m_data->m_dialog->open();
+        }
+    });
+    connect( m_data->m_tabWidget,
+             &QTabWidget::tabCloseRequested,
+             [ this ]( int index ) {
+        auto widget = m_data->m_tabWidget->widget( index );
+        auto holder = qobject_cast< ConsoleHolder *>( widget );
+        if( holder != nullptr ) {
+            holder->disconnectSerial();
+        }
     });
 
+    layout->setContentsMargins( QMargins{} );
+    m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
+    m_data->m_tabWidget->setContentsMargins( 0, 0, 0, 4 );
 }
 
 MainWidget::~MainWidget()
 {
 
+}
+
+void MainWidget::createNewConnection()
+{
+    auto holder = new ConsoleHolder{ m_data->m_dialog->settings(), this };
+    if( holder->connectSerial() ) {
+        auto index = m_data->m_tabWidget->addTab( holder,
+                                                  holder->displayName() );
+        m_data->m_tabWidget->setTabToolTip( index, holder->description() );
+        connect( holder,
+                 &ConsoleHolder::serialDisconnected,
+                 [ this ]( ConsoleHolder *obj ) {
+            auto index = m_data->m_tabWidget->indexOf( obj );
+            m_data->m_tabWidget->removeTab( index );
+        });
+    }
+    else {
+        delete holder;
+    }
 }
 
 } } }

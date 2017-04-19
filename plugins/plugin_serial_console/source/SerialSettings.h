@@ -14,7 +14,8 @@ public:
                     const QSerialPort::DataBits dataBits,
                     const QSerialPort::Parity parity,
                     const QSerialPort::StopBits stopBits,
-                    const QSerialPort::FlowControl flowControl );
+                    const QSerialPort::FlowControl flowControl,
+                    const QSerialPortInfo &info );
 
     ~SerialSettings();
 
@@ -29,6 +30,8 @@ public:
     QSerialPort::StopBits stopBits() const;
 
     QSerialPort::FlowControl flowControl() const;
+
+    const QSerialPortInfo & info() const;
 
 private:
     struct Data;

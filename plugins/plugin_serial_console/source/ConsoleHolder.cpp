@@ -5,13 +5,19 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QSerialPortInfo>
+#include <QTextStream>
+
 
 #include <plugin_base/BundleLoggin.h>
+#include <plugin_base/BundleContext.h>
+#include <core/app_config/ConfigManager.h>
 
 #include "SerialSettings.h"
 #include "SettingsDialog.h"
 #include "ConsoleWidget.h"
 #include "ConsoleHolder.h"
+#include "SerialUtils.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
@@ -19,9 +25,8 @@ struct ConsoleHolder::Data
 {
     explicit Data( std::unique_ptr< SerialSettings > settings,
                    QWidget *parent )
-        : m_toolBar{ new QToolBar{ parent }}
-        , m_settings{ std::move( settings )}
-
+        : m_settings{ std::move( settings )}
+        , m_toolBar{ new QToolBar{ parent }}
         , m_connect{ new QAction{ QObject::tr( "Connect" ), parent }}
         , m_disconnect{ new QAction{ QObject::tr( "Disconnect" ), parent }}
         , m_clearConsole{ new QAction{ QObject::tr( "Clear" ), parent }}
@@ -32,6 +37,9 @@ struct ConsoleHolder::Data
         m_toolBar->addAction( m_connect );
         m_toolBar->addAction( m_disconnect );
         m_toolBar->addAction( m_clearConsole );
+
+        updateDisplayName();
+        updateCompleteInfo();
     }
 
     void setEnabled( bool value )
@@ -40,6 +48,53 @@ struct ConsoleHolder::Data
         m_disconnect->setEnabled( value );
         m_console->setEnabled( value );
     }
+
+    void updateDisplayName()
+    {
+        QTextStream dpnStream{ &m_displayName };
+        dpnStream << m_settings->name();
+        if( ! m_settings->info().description().isEmpty() ) {
+            dpnStream << " : " << m_settings->info().description();
+        }
+        dpnStream.flush();
+    }
+
+    void updateCompleteInfo()
+    {
+        const QString I = "    ";
+        QTextStream infoStream{ &m_completeInfo };
+        const auto &info = m_settings->info();
+        infoStream << "<b>Information:</b><br>"
+                   << I << tr( "Port Name" ) << ": <b>"
+                   << info.portName() << "</b><br>"
+                   << I << tr( "Description" ) << ": <b>"
+                   << info.description() << "</b><br>"
+                   << I << tr( "Serial Number" ) << ": <b>"
+                   << info.serialNumber() << "</b><br>"
+                   << I << tr( "Location" ) << ": <b>"
+                   << info.systemLocation() << "</b><br>"
+                   << I << tr( "VID" ) << ": <b>"
+                   << int( info.vendorIdentifier() ) << "</b><br>"
+                   << I << tr( "PID" ) << ": <b>"
+                   << int( info.productIdentifier() ) << "</b><br>"
+                   << "<br><b>Settings:</b><br>"
+                   << I << tr( "Baud Rate" ) << ": <b>"
+                   << m_settings->baudRate() << "</b><br>"
+                   << I << tr( "Data Bits" ) << ": <b>"
+                   << m_settings->dataBits() << "</b><br>"
+                   << I << tr( "Parity" ) << ": <b>"
+                   << SerialUtils::decodeParity( m_settings->parity() )
+                   << "</b><br>"
+                   << I << tr( "Stop Bits" ) << ": <b>"
+                   << SerialUtils::decodeStopBits( m_settings->stopBits() )
+                   << "</b><br>"
+                   << I << tr( "Flow Control" ) << ": <b>"
+                   << SerialUtils::decodeFlowControl( m_settings->flowControl())
+                   << "</b><br>";
+        infoStream.flush();
+    }
+
+    std::unique_ptr< SerialSettings > m_settings;
 
     QToolBar *m_toolBar;
 
@@ -53,7 +108,9 @@ struct ConsoleHolder::Data
 
     QSerialPort *m_serial;
 
-    std::unique_ptr< SerialSettings > m_settings;
+    QString m_displayName;
+
+    QString m_completeInfo;
 
 
 };
@@ -112,6 +169,7 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
     });
 
     m_data->setEnabled( false );
+//    appContext()->configManager()->store()
 }
 
 ConsoleHolder::~ConsoleHolder()
@@ -119,13 +177,21 @@ ConsoleHolder::~ConsoleHolder()
 
 }
 
-const QString &ConsoleHolder::name() const
+const QString ConsoleHolder::displayName() const
 {
-    return m_data->m_settings->name();
+    return m_data->m_displayName;
 }
 
-void ConsoleHolder::connectSerial()
+const QString ConsoleHolder::description() const
 {
+    return m_data->m_completeInfo;
+}
+
+
+
+bool ConsoleHolder::connectSerial()
+{
+    bool result = false;
     m_data->m_serial->setPortName( m_data->m_settings->name() );
     m_data->m_serial->setBaudRate( m_data->m_settings->baudRate() );
     m_data->m_serial->setDataBits( m_data->m_settings->dataBits() );
@@ -142,13 +208,21 @@ void ConsoleHolder::connectSerial()
     }
     else {
         m_data->setEnabled( true );
+        result = true;
     }
+    return result;
 }
 
-void ConsoleHolder::disconnectSerial()
+bool ConsoleHolder::disconnectSerial()
 {
     m_data->m_serial->close();
-    m_data->setEnabled( m_data->m_serial->isOpen() );
+    bool result = ! m_data->m_serial->isOpen();
+    if( result ) {
+        m_data->setEnabled( false );
+
+        emit serialDisconnected( this );
+    }
+    return result;
 }
 
 void ConsoleHolder::clearConsole()

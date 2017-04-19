@@ -27,6 +27,7 @@ vq_classes(
     SettingsDialog
     SerialSettings
     ConsoleHolder
+    SerialUtils
 )
 
 qz_create_plugin()

@@ -1,7 +1,7 @@
 
 #include <QString>
 #include <QSerialPort>
-
+#include <QSerialPortInfo>
 
 #include "SerialSettings.h"
 
@@ -15,13 +15,15 @@ struct SerialSettings::Data
           const QSerialPort::DataBits dataBits,
           const QSerialPort::Parity parity,
           const QSerialPort::StopBits stopBits,
-          const QSerialPort::FlowControl flowControl )
+          const QSerialPort::FlowControl flowControl,
+          const QSerialPortInfo &info )
         : m_name{ name }
         , m_baudRate{ baudRate }
         , m_dataBits{ dataBits }
         , m_parity{ parity }
         , m_stopBits{ stopBits }
         , m_flowControl{ flowControl }
+        , m_info{ info }
     {
 
     }
@@ -37,6 +39,8 @@ struct SerialSettings::Data
     QSerialPort::StopBits m_stopBits;
 
     QSerialPort::FlowControl m_flowControl;
+
+    QSerialPortInfo m_info;
 };
 
 SerialSettings::SerialSettings( const QString &name,
@@ -44,13 +48,15 @@ SerialSettings::SerialSettings( const QString &name,
                                 const QSerialPort::DataBits dataBits,
                                 const QSerialPort::Parity parity,
                                 const QSerialPort::StopBits stopBits,
-                                const QSerialPort::FlowControl flowControl)
+                                const QSerialPort::FlowControl flowControl,
+                                const QSerialPortInfo &info )
     : m_data{ new Data{ name,
                         baudRate,
                         dataBits,
                         parity,
                         stopBits,
-                        flowControl }}
+                        flowControl,
+                        info }}
 {
 
 }
@@ -88,6 +94,11 @@ QSerialPort::StopBits SerialSettings::stopBits() const
 QSerialPort::FlowControl SerialSettings::flowControl() const
 {
     return m_data->m_flowControl;
+}
+
+const QSerialPortInfo &SerialSettings::info() const
+{
+    return m_data->m_info;
 }
 
 
