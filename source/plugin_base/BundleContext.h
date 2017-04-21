@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <base/QzAppContext.h>
+
 class QString;
 
 namespace Quartz {
@@ -9,6 +11,7 @@ namespace Quartz {
 class QzAppContext;
 class AbstractPluginBundle;
 class BundleEnv;
+class ConfigManager;
 namespace Logger {
     class Logger;
 }
@@ -68,4 +71,9 @@ inline Quartz::BundleEnv * bundleEnv()
 inline Quartz::AbstractPluginBundle * pluginBundle()
 {
     return bundleContext()->pluginBundle();
+}
+
+inline Quartz::ConfigManager * confman()
+{
+    return bundleContext()->appContext()->configManager();
 }

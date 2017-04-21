@@ -10,6 +10,10 @@
 #include <QSerialPortInfo>
 #include <QIntValidator>
 
+#include <core/app_config/ConfigManager.h>
+
+#include <plugin_base/BundleContext.h>
+
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
 
@@ -190,6 +194,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
             m_data->m_nameCombo->clearEditText();
         }
     });
+
 }
 
 SettingsDialog::~SettingsDialog()
@@ -204,7 +209,7 @@ T param( QComboBox *box )
         box->itemData( box->currentIndex() ).toInt() );
 }
 
-std::unique_ptr<SerialSettings> SettingsDialog::settings() const
+std::unique_ptr< SerialSettings > SettingsDialog::settings() const
 {
     auto brate = param< qint32 >( m_data->m_baudRateCombo );
     if( brate == 0 ) {
@@ -272,15 +277,10 @@ void SettingsDialog::refresh()
 
 void SettingsDialog::Data::setupUI()
 {
-    m_baudRateCombo->addItem( QStringLiteral( "9600" ),
-                              QSerialPort::Baud9600 );
-    m_baudRateCombo->addItem( QStringLiteral( "19200" ),
-                              QSerialPort::Baud19200 );
-    m_baudRateCombo->addItem( QStringLiteral( "38400" ),
-                              QSerialPort::Baud38400 );
-    m_baudRateCombo->addItem( QStringLiteral( "115200" ),
-                              QSerialPort::Baud115200 );
-    m_baudRateCombo->addItem( tr( "Custom" ));
+    m_baudRateCombo->addItem( QStringLiteral( "9600" ));
+    m_baudRateCombo->addItem( QStringLiteral( "19200" ));
+    m_baudRateCombo->addItem( QStringLiteral( "38400" ));
+    m_baudRateCombo->addItem( QStringLiteral( "115200" ));
 
     m_dataBitsCombo->addItem( QStringLiteral( "5" ), QSerialPort::Data5 );
     m_dataBitsCombo->addItem( QStringLiteral( "6" ), QSerialPort::Data6 );

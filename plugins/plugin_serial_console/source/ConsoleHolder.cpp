@@ -38,7 +38,6 @@ struct ConsoleHolder::Data
         , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
     {
 
-        m_baudCombo->addItem( tr( "Custom" ));
         m_baudCombo->addItem( QStringLiteral( "9600" ),
                               QSerialPort::Baud9600 );
         m_baudCombo->addItem( QStringLiteral( "19200" ),
@@ -63,6 +62,7 @@ struct ConsoleHolder::Data
         m_connect->setEnabled( value );
         m_disconnect->setEnabled( value );
         m_console->setEnabled( value );
+        m_baudCombo->setEnabled( value );
     }
 
     void updateDisplayName()
@@ -189,36 +189,16 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
     });
     using ComboIdxFunc = void ( QComboBox::* )( int );
     connect( m_data->m_baudCombo,
-            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
-             [ this ]( int index ) {
-        auto isCustomBaudRate = !
-                m_data->m_baudCombo->itemData( index ).isValid();
-        m_data->m_baudCombo->setEditable( isCustomBaudRate );
-        if( isCustomBaudRate ) {
-            m_data->m_baudCombo->clearEditText();
-            auto edit = m_data->m_baudCombo->lineEdit();
-            edit->setValidator( m_data->m_intValidator );
-        }
-        else {
-            auto txt = m_data->m_baudCombo->currentText();
-            auto baud = static_cast< qint32 >( txt.toLong() );
-            if( ! m_data->m_serial->setBaudRate( baud )) {
-                m_data->m_baudCombo->setCurrentIndex( 1 );
-            }
+             static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
+             [ this ]( int /*index*/ ) {
+
+        auto txt = m_data->m_baudCombo->currentText();
+        auto baud = static_cast< qint32 >( txt.toLong() );
+        if( ! m_data->m_serial->setBaudRate( baud )) {
+            m_data->m_baudCombo->setCurrentIndex( 1 );
         }
     });
-//    connect( m_data->m_baudCombo,
-//            &QComboBox::editTextChanged,
-//             [ this ]( const QString &text ) {
-//        auto baud = static_cast< qint32 >( text.toLong() );
-//        if( ! m_data->m_serial->setBaudRate( baud )) {
-//            m_data->m_baudCombo->setCurrentIndex( 1 );
-//        }
-//    });
-
-
     m_data->setEnabled( false );
-//    appContext()->configManager()->store()
 }
 
 ConsoleHolder::~ConsoleHolder()
