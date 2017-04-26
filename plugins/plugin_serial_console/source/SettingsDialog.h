@@ -20,9 +20,16 @@ public:
 
     void refresh();
 
-    void setSettings( std::unique_ptr< SerialSettings > settings );
+    void setSettings( const SerialSettings &settings );
 
     void open() override;
+
+    int exec() override;
+
+    static void init( QWidget *parent );
+
+public slots:
+    void updateBaudRates( QStringList rates );
 
 private slots:
     void showPortDetails();

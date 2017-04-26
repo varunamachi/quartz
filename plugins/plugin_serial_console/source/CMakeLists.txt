@@ -28,6 +28,8 @@ vq_classes(
     SerialSettings
     ConsoleHolder
     SerialUtils
+    BaudRateEditDialog
+    Dialogs
 )
 
 qz_create_plugin()

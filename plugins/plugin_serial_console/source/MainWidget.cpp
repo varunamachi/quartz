@@ -4,14 +4,12 @@
 #include <QSerialPort>
 #include <QToolBar>
 #include <QTabWidget>
-//#include <QTabBar>
-//#include <QStackedWidget>
 
 #include "ConsoleHolder.h"
 #include "MainWidget.h"
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
-
+#include "Dialogs.h"
 
 namespace Quartz { namespace Plugin { namespace  SerialConsole {
 
@@ -26,12 +24,14 @@ struct MainWidget::Data
         , m_tabWidget{ new QTabWidget{ parent }}
         , m_newConnection{ new QAction{ QObject::tr( "New Connection" ),
                            parent }}
+        , m_editBaudRates{ new QAction{ QObject::tr( "Edit Baud Rates" ),
+                           parent }}
         , m_disconnectAll{ new QAction{ QObject::tr( "Disconnect All" ),
                            parent }}
-        , m_dialog{ new SettingsDialog{ parent }}
     {
         m_toolBar->addAction( m_newConnection );
         m_toolBar->addAction( m_disconnectAll );
+        m_toolBar->addAction( m_editBaudRates );
         m_tabWidget->setTabsClosable( true );
     }
 
@@ -41,9 +41,9 @@ struct MainWidget::Data
 
     QAction *m_newConnection;
 
-    QAction *m_disconnectAll;
+    QAction *m_editBaudRates;
 
-    SettingsDialog *m_dialog;
+    QAction *m_disconnectAll;
 };
 
 MainWidget::MainWidget( QWidget *parent )
@@ -60,21 +60,16 @@ MainWidget::MainWidget( QWidget *parent )
 
     connect( m_data->m_newConnection,
              &QAction::triggered,
-             [ this ]() {
-        m_data->m_dialog->refresh();
-        m_data->m_dialog->open();
-    });
-    connect( m_data->m_dialog,
-             &QDialog::accepted,
              this,
              &MainWidget::createNewConnection );
     connect( m_data->m_tabWidget,
              &QTabWidget::tabBarDoubleClicked,
-             [ this ]( int index ) {
-        if( index == -1 ) {
-            m_data->m_dialog->refresh();
-            m_data->m_dialog->open();
-        }
+             this,
+             &MainWidget::createNewConnection );
+    connect( m_data->m_editBaudRates,
+             &QAction::triggered,
+             [ & ]() {
+        Dialogs::openBaudRateEditor();
     });
     connect( m_data->m_tabWidget,
              &QTabWidget::tabCloseRequested,
@@ -89,6 +84,8 @@ MainWidget::MainWidget( QWidget *parent )
     layout->setContentsMargins( QMargins{} );
     m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
     m_data->m_tabWidget->setContentsMargins( 0, 0, 0, 4 );
+
+    Dialogs::init( this );
 }
 
 MainWidget::~MainWidget()
@@ -98,20 +95,23 @@ MainWidget::~MainWidget()
 
 void MainWidget::createNewConnection()
 {
-    auto holder = new ConsoleHolder{ m_data->m_dialog->settings(), this };
-    if( holder->connectSerial() ) {
-        auto index = m_data->m_tabWidget->addTab( holder,
-                                                  holder->displayName() );
-        m_data->m_tabWidget->setTabToolTip( index, holder->description() );
-        connect( holder,
-                 &ConsoleHolder::serialDisconnected,
-                 [ this ]( ConsoleHolder *obj ) {
-            auto index = m_data->m_tabWidget->indexOf( obj );
-            m_data->m_tabWidget->removeTab( index );
-        });
-    }
-    else {
-        delete holder;
+    auto settings = Dialogs::openSettings();
+    if( settings != nullptr ) {
+        auto holder = new ConsoleHolder{ std::move( settings ), this };
+        if( holder->connectSerial() ) {
+            auto index = m_data->m_tabWidget->addTab( holder,
+                                                      holder->displayName() );
+            m_data->m_tabWidget->setTabToolTip( index, holder->description() );
+            connect( holder,
+                     &ConsoleHolder::serialDisconnected,
+                     [ this ]( ConsoleHolder *obj ) {
+                auto index = m_data->m_tabWidget->indexOf( obj );
+                m_data->m_tabWidget->removeTab( index );
+            });
+        }
+        else {
+            delete holder;
+        }
     }
 }
 

@@ -28,6 +28,8 @@ public slots:
 
     void clearConsole();
 
+    void setBaudRates( QStringList baudRates );
+
 signals:
     void serialDisconnected( ConsoleHolder *holder );
 

@@ -259,5 +259,11 @@ void ConsoleHolder::clearConsole()
     m_data->m_console->clear();
 }
 
+void ConsoleHolder::setBaudRates( QStringList baudRates )
+{
+    m_data->m_baudCombo->clear();
+    m_data->m_baudCombo->addItems( baudRates );
+}
+
 
 } } }

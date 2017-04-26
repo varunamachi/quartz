@@ -226,7 +226,7 @@ std::unique_ptr< SerialSettings > SettingsDialog::settings() const
     });
 }
 
-void SettingsDialog::setSettings( std::unique_ptr< SerialSettings > settings )
+void SettingsDialog::setSettings( const SerialSettings & /*settings*/ )
 {
 
 }
@@ -235,6 +235,18 @@ void SettingsDialog::open()
 {
     refresh();
     QDialog::open();
+}
+
+int SettingsDialog::exec()
+{
+    refresh();
+    return QDialog::exec();
+}
+
+void SettingsDialog::updateBaudRates( QStringList rates )
+{
+    m_data->m_baudRateCombo->clear();
+    m_data->m_baudRateCombo->addItems( rates );
 }
 
 void SettingsDialog::showPortDetails()
@@ -296,7 +308,7 @@ void SettingsDialog::Data::setupUI()
 
     m_stopBitsCombo->addItem( QStringLiteral( "1" ), QSerialPort::OneStop );
 #ifdef Q_OS_WIN
-    m_stopBitsCombo->addItem( tr("1.5"), QSerialPort::OneAndHalfStop );
+    m_stopBitsCombo->addItem( tr( "1.5" ), QSerialPort::OneAndHalfStop );
 #endif
     m_stopBitsCombo->addItem(QStringLiteral("2"), QSerialPort::TwoStop );
 
