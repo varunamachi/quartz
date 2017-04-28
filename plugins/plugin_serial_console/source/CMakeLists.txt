@@ -30,6 +30,7 @@ vq_classes(
     SerialUtils
     BaudRateEditDialog
     Dialogs
+    Constants
 )
 
 qz_create_plugin()

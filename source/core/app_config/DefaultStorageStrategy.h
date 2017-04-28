@@ -2,11 +2,12 @@
 
 #include <memory>
 
+#include "../QuartzCore.h"
 #include "IConfigStorageStrategy.h"
 
 namespace  Quartz {
 
-class DefaultStorageStrategy : public IConfigStorageStrategy
+class QUARTZ_CORE_API DefaultStorageStrategy : public IConfigStorageStrategy
 {
 public:
     explicit DefaultStorageStrategy( const QString &dbPath );

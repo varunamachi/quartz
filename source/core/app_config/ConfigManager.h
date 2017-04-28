@@ -5,6 +5,7 @@
 #include <QString>
 
 #include "../utils/Macros.h"
+#include "../QuartzCore.h"
 
 class QVariant;
 class QString;
@@ -14,7 +15,7 @@ namespace Quartz {
 QZ_INTERFACE IConfigStorageStrategy;
 QZ_INTERFACE AbstractConfigLoader;
 
-class ConfigManager
+class QUARTZ_CORE_API ConfigManager
 {
 public:
     explicit ConfigManager(

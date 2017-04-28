@@ -34,7 +34,10 @@ namespace Quartz { namespace Logger {
 class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
 {
 public:
-    explicit FileTarget( const QString &fileSuffix );
+    explicit FileTarget( const QString &logDirPaht,
+                         const QString &fileSuffix );
+
+    ~FileTarget();
 
     void flush() override;
 

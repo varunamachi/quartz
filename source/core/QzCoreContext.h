@@ -5,15 +5,22 @@
 
 #include "QuartzCore.h"
 
+#define QZCONTEXT_FUNC_DECL_NS( NameSpace, ClassName, VarName ) \
+    void set##ClassName( NameSpace::ClassName *VarName ); \
+    NameSpace::ClassName * VarName() const; \
+    bool has##ClassName() const
+
 #define QZCONTEXT_FUNC_DECL( ClassName, VarName ) \
     void set##ClassName( ClassName *VarName ); \
     ClassName * VarName() const; \
     bool has##ClassName() const
 
-#define QZCONTEXT_FUNC_DECL_NS( NameSpace, ClassName, VarName ) \
-    void set##ClassName( NameSpace::ClassName *VarName ); \
-    NameSpace::ClassName * VarName() const; \
+#define QZCONTEXT_FUNC_DECL_FOR_UP( ClassName, VarName ) \
+    void set##ClassName( std::unique_ptr< ClassName > VarName ); \
+    ClassName * VarName() const; \
     bool has##ClassName() const
+
+
 
 #define QZCONTEXT_FUNC_DEFINE_NS( Context, NameSpace, ClassName, VarName ) \
     void Context::set##ClassName( NameSpace::ClassName *VarName ) { \
@@ -32,6 +39,18 @@
     } \
     ClassName * Context::VarName() const { \
         return m_data->m_##VarName; \
+    } \
+    bool Context::has##ClassName() const { \
+        return m_data->m_##VarName != nullptr; \
+    }
+
+#define QZCONTEXT_FUNC_DEFINE_FOR_UP( Context, ClassName, VarName ) \
+    void Context::set##ClassName( std::unique_ptr< ClassName > VarName ) { \
+        m_data->m_##VarName = std::move( VarName ); \
+    } \
+    ClassName * Context::VarName() const { \
+        auto &up = m_data->m_##VarName; \
+        return up.get() \
     } \
     bool Context::has##ClassName() const { \
         return m_data->m_##VarName != nullptr; \

@@ -2,11 +2,12 @@
 
 #include <memory>
 
+#include "../QuartzCore.h"
 #include "AbstractConfigLoader.h"
 
 namespace Quartz {
 
-class XMLConfigLoader : public AbstractConfigLoader
+class QUARTZ_CORE_API XMLConfigLoader : public AbstractConfigLoader
 {
 public:
     explicit XMLConfigLoader( StoreFunc storeFunc );

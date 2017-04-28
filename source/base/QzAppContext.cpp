@@ -1,4 +1,4 @@
-
+#include <QStandardPaths>
 
 #include <core/logger/Logger.h>
 #include <base/content_manager/ContentManager.h>
@@ -14,8 +14,6 @@ namespace Quartz {
 
 struct QzAppContext::Data
 {
-    Logger::Logger *m_logger;
-
     ContentManager *m_contentManager;
 
     SelectorManager *m_selectorManager;
@@ -37,6 +35,23 @@ QzAppContext::QzAppContext()
 QzAppContext::~QzAppContext()
 {
 
+}
+
+QString QzAppContext::expand( StdPath pathID )
+{
+    //version?
+    switch( pathID ) {
+    case StdPath::DataDirectory: {
+        return QStandardPaths::writableLocation(
+                    QStandardPaths::AppDataLocation );
+    }
+    case StdPath::LogDirectory: {
+        auto path = QStandardPaths::writableLocation(
+                    QStandardPaths::AppDataLocation );
+        return path + "/logs";
+    }
+    }
+    return QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
 }
 
 QZCONTEXT_FUNC_DEFINE( QzAppContext, ContentManager, contentManager );

@@ -11,9 +11,10 @@ namespace Quartz {
 
 const QString CREATE_QUERY =
         "CREATE TABLE Config ("
-        "    key            TEXT	PRIMARY KEY,"
+        "    key            TEXT,"
         "    value          BLOB,"
-        "    domain         TEXT";
+        "    domain         TEXT,"
+        "PRIMARY KEY( key, domain )";
 
 const QString RETRIEVE_QUERY =
         "SELECT value FROM Config WHERE key = ? AND domain = ?";
@@ -55,7 +56,7 @@ DefaultStorageStrategy::Impl::Impl( const QString &dbPath )
 
     if ( db.open() ) {
         QSqlQuery query( "SELECT name FROM sqlite_master "
-                         "WHERE type='table' AND name='AudioLibrary'" );
+                         "WHERE type='table' AND name='Config'" );
         if( query.exec() && query.next() ) {
             QZ_INFO( "Qz:Core:Config" ) << "Database initiation succesful";
         }

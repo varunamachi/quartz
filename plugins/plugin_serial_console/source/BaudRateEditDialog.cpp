@@ -7,8 +7,14 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QListWidgetItem>
+
+#include <core/app_config/ConfigManager.h>
+
+#include <plugin_base/BundleContext.h>
 
 #include "BaudRateEditDialog.h"
+#include "Constants.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
@@ -53,9 +59,10 @@ BaudRateEditDialog::BaudRateEditDialog( QWidget *parent )
     auto cstLayout = new QGridLayout{  };
     cstLayout->addWidget( m_data->m_addField, 0, 0 );
     cstLayout->addWidget( m_data->m_addButton, 0, 1 );
-    cstLayout->addWidget( m_data->m_customRates, 1, 0, 2, 1 );
-    cstLayout->addWidget( m_data->m_removeButton, 1, 1 );
-    cstLayout->addWidget( m_data->m_clearButton, 2, 1 );
+    cstLayout->addWidget( m_data->m_customRates, 1, 0, 3, 1 );
+    cstLayout->addWidget( new QWidget{ this }, 1, 1 );
+    cstLayout->addWidget( m_data->m_removeButton, 2, 1 );
+    cstLayout->addWidget( m_data->m_clearButton, 3, 1 );
     m_data->m_customRates->setMinimumSize( QSize{ 100, 100 });
     auto cstGroup = new QGroupBox{ tr( "Custom baud rates" ), this };
     cstGroup->setLayout( cstLayout );
@@ -74,7 +81,16 @@ BaudRateEditDialog::BaudRateEditDialog( QWidget *parent )
     connect( m_data->m_okButton,
              &QPushButton::released,
              this,
-             &QDialog::accept );
+             [ this ]() {
+        QStringList rates;
+        for( int i = 0; i < m_data->m_customRates->count(); ++ i ) {
+            rates << m_data->m_customRates->item( i )->text();
+        }
+        confman()->store( Constants::KEY_BAUD_RATES,
+                          rates,
+                          Constants::CONFIG_DOMAIN );
+        this->accept();
+    });
 }
 
 BaudRateEditDialog::~BaudRateEditDialog()

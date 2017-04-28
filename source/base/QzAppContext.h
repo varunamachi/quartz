@@ -18,7 +18,11 @@ class ConfigPageManager;
 class ThemeManager;
 
 
-
+enum class StdPath
+{
+    DataDirectory,
+    LogDirectory
+};
 
 class QUARTZ_BASE_API QzAppContext : public QzCoreContext
 {
@@ -32,6 +36,8 @@ public:
     QZCONTEXT_FUNC_DECL( GeneralSelector, nodeSelector );
     QZCONTEXT_FUNC_DECL( ConfigPageManager, configPageManager );
     QZCONTEXT_FUNC_DECL( ThemeManager, themeManager );
+
+    static QString expand( StdPath pathID );
 
 private:
     struct Data;
