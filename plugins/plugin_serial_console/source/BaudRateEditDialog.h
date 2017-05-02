@@ -18,9 +18,6 @@ public:
 signals:
     void baudRateChanged( QStringList rates );
 
-private slots:
-    void persist();
-
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

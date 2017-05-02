@@ -38,4 +38,14 @@ QString SerialUtils::decodeFlowControl(QSerialPort::FlowControl flowControl)
     return "Unknown";
 }
 
+QStringList SerialUtils::standardBaudRates()
+{
+    QStringList stdRates;
+    stdRates << QStringLiteral( "9600" )
+             << QStringLiteral( "19200" )
+             << QStringLiteral( "38400" )
+             << QStringLiteral( "115200" );
+    return stdRates;
+}
+
 } } }

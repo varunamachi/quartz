@@ -10,6 +10,8 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QIntValidator>
+#include <QVariant>
+#include <QVariant>
 
 #include <plugin_base/BundleLoggin.h>
 #include <plugin_base/BundleContext.h>
@@ -20,6 +22,7 @@
 #include "ConsoleWidget.h"
 #include "ConsoleHolder.h"
 #include "SerialUtils.h"
+#include "Constants.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
@@ -38,14 +41,14 @@ struct ConsoleHolder::Data
         , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
     {
 
-        m_baudCombo->addItem( QStringLiteral( "9600" ),
-                              QSerialPort::Baud9600 );
-        m_baudCombo->addItem( QStringLiteral( "19200" ),
-                              QSerialPort::Baud19200 );
-        m_baudCombo->addItem( QStringLiteral( "38400" ),
-                              QSerialPort::Baud38400 );
-        m_baudCombo->addItem( QStringLiteral( "115200" ),
-                              QSerialPort::Baud115200 );
+//        m_baudCombo->addItem( QStringLiteral( "9600" ),
+//                              QSerialPort::Baud9600 );
+//        m_baudCombo->addItem( QStringLiteral( "19200" ),
+//                              QSerialPort::Baud19200 );
+//        m_baudCombo->addItem( QStringLiteral( "38400" ),
+//                              QSerialPort::Baud38400 );
+//        m_baudCombo->addItem( QStringLiteral( "115200" ),
+//                              QSerialPort::Baud115200 );
         m_baudCombo->setCurrentIndex( 1 );
 
         m_toolBar->addAction( m_connect );
@@ -199,6 +202,10 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
         }
     });
     m_data->setEnabled( false );
+
+    auto rates = confman()->retrieve( Constants::KEY_BAUD_RATES,
+                                       Constants::CONFIG_DOMAIN );
+    m_data->m_baudCombo->addItems( rates.toStringList() );
 }
 
 ConsoleHolder::~ConsoleHolder()
