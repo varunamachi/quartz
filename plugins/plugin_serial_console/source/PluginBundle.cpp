@@ -2,6 +2,7 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include "Constants.h"
 #include "ContentProvider.h"
 #include "NodeProvider.h"
 #include "PluginBundle.h"

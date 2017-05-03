@@ -98,12 +98,14 @@ void FileTarget::Impl::initFile()
     auto filePath = m_logDirPath + "/" + fileName;
     m_stream.reset();
     m_logFile = std::unique_ptr< QFile >{ new QFile{ filePath }};
-    if( m_logFile->open( QIODevice::Append | QIODevice::Unbuffered )) {
+    if( m_logFile->open( QIODevice::WriteOnly
+                         | QIODevice::Append
+                         | QIODevice::Unbuffered )) {
         m_stream.setDevice( m_logFile.get() );
         m_valid = true;
     }
     else {
-        qDebug() << "Could not open the file....";
+        qDebug() << "Could not open the file " << filePath;
         m_valid = false;
     }
 }

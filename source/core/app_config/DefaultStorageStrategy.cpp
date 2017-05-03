@@ -14,7 +14,7 @@ const QString CREATE_QUERY =
         "    key            TEXT,"
         "    value          BLOB,"
         "    domain         TEXT,"
-        "PRIMARY KEY( key, domain )";
+        "PRIMARY KEY( key, domain ))";
 
 const QString RETRIEVE_QUERY =
         "SELECT value FROM Config WHERE key = ? AND domain = ?";
@@ -23,7 +23,7 @@ const QString REMOVE_QUERY =
         "DELETE FROM Config WHERE key = ? AND domain = ?";
 
 const QString STORE_QUERY =
-        "INSERT INTO Config( key, value, domain ) VALUES( ?, ?, ? )";
+        "INSERT OR REPLACE INTO Config( key, value, domain ) VALUES( ?, ?, ? )";
 
 
 class DefaultStorageStrategy::Impl
@@ -58,11 +58,12 @@ DefaultStorageStrategy::Impl::Impl( const QString &dbPath )
         QSqlQuery query( "SELECT name FROM sqlite_master "
                          "WHERE type='table' AND name='Config'" );
         if( query.exec() && query.next() ) {
-            QZ_INFO( "Qz:Core:Config" ) << "Database initiation succesful";
+            QZ_INFO( "Qz:Core:Config" ) << "Database initialization successful";
         }
         else {
             //Database does not exists
-            QZ_INFO( "Qz:Core:Config" ) << "Creating database";
+            QZ_INFO( "Qz:Core:Config" ) << "Creating database at "
+                                        << dbPath;
             if( createSchema() ) {
                 QZ_INFO( "Qz:Core:Config" )
                         << "Database creation successfull";
@@ -117,11 +118,11 @@ QByteArray DefaultStorageStrategy::Impl::retrieve( const QString &domain,
     query.addBindValue( key );
     query.addBindValue( domain );
     bool result = query.exec();
-    if( result ) {
+    if( result && query.first() ) {
         auto rawData = query.value( 0 ).toByteArray();
         return rawData;
     }
-    QZ_ERROR( "Qz:Core:Config" )
+    QZ_TRACE( "Qz:Core:Config" )
             << "Failed to retrieve value for " << domain << "." << key
             << " -- " << query.lastError().text();
     return QByteArray{};

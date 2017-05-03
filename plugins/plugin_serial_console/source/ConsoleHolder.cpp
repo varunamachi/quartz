@@ -49,6 +49,7 @@ struct ConsoleHolder::Data
 //                              QSerialPort::Baud38400 );
 //        m_baudCombo->addItem( QStringLiteral( "115200" ),
 //                              QSerialPort::Baud115200 );
+        m_baudCombo->addItems( SerialUtils::allBaudRates() );
         m_baudCombo->setCurrentIndex( 1 );
 
         m_toolBar->addAction( m_connect );
@@ -202,10 +203,6 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
         }
     });
     m_data->setEnabled( false );
-
-    auto rates = confman()->retrieve( Constants::KEY_BAUD_RATES,
-                                       Constants::CONFIG_DOMAIN );
-    m_data->m_baudCombo->addItems( rates.toStringList() );
 }
 
 ConsoleHolder::~ConsoleHolder()
@@ -266,11 +263,26 @@ void ConsoleHolder::clearConsole()
     m_data->m_console->clear();
 }
 
-void ConsoleHolder::setBaudRates( QStringList baudRates )
+void ConsoleHolder::updateBaudRates()
 {
     m_data->m_baudCombo->clear();
-    m_data->m_baudCombo->addItems( baudRates );
+    auto curRate = m_data->m_baudCombo->currentText();
+    auto newCurIndex = -1;
+    auto baudRates = SerialUtils::allBaudRates();
+    for( auto i = 0; i < baudRates.size(); ++ i ) {
+        const auto &rate = baudRates.at( i );
+        if( rate == curRate ) {
+            newCurIndex = i;
+        }
+        m_data->m_baudCombo->addItem( rate );
+    }
+    if( newCurIndex == -1 && ! curRate.isEmpty() ) {
+        m_data->m_baudCombo->insertItem( 0, curRate );
+        m_data->m_baudCombo->setCurrentIndex( 0 );
+    }
+    else {
+        m_data->m_baudCombo->setCurrentIndex( newCurIndex );
+    }
 }
-
 
 } } }

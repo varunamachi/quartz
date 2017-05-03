@@ -18,6 +18,14 @@ public:
 
     static QString decodeFlowControl( QSerialPort::FlowControl flowControl );
 
+    static QStringList standardBaudRates();
+
+    static QStringList customBaudRates();
+
+    static QStringList allBaudRates();
+
+    static void storeBaudRates( const QStringList &rates );
+
 private:
 };
 

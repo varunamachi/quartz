@@ -26,12 +26,15 @@
 bool createFileSystem()
 {
     using namespace Quartz;
-    bool result = false;
-    auto path = QzAppContext::expand( StdPath::DataDirectory );
+    bool result = true;
+    auto path = QzAppContext::expand( StdPath::LogDirectory );
     QFileInfo info{ path };
     if( ! ( info.exists() && info.isDir() )) {
         QDir dir{ "" };
         result = dir.mkpath( path );
+    }
+    if( ! result ) {
+        qDebug() << "Failed to create Quartz file system";
     }
     return result;
 }
@@ -50,12 +53,15 @@ bool initLogger()
     if( result ) {
         std::unique_ptr< Logger::ConsoleTarget > consoleTarget{
             new Logger::ConsoleTarget{} };
-        Logger::Logger::get()->dispatcher()->addTarget(
-                    std::move( consoleTarget ));
         auto path = QzAppContext::expand( StdPath::LogDirectory );
         std::unique_ptr< Logger::FileTarget > fileTarget{
             new Logger::FileTarget{ path, "quartz" }};
-
+        Logger::Logger::get()->dispatcher()->addTarget(
+                    std::move( consoleTarget ));
+        Logger::Logger::get()->dispatcher()->addTarget(
+                    std::move( fileTarget ));
+        QZ_INFO( "Qz:App" ) << "---------------------------------------------";
+        QZ_INFO( "Qz:App" ) << "Starting Quartz!!!!";
 
     }
     else {
@@ -72,8 +78,7 @@ std::unique_ptr< Quartz::ConfigManager > initConfigManager()
                          const QVariant &val ) {
         QzAppContext::get()->configManager()->store( key, val, domain );
     };
-    auto path = QzAppContext::expand( StdPath::DataDirectory ) +
-            "/quartz.db";
+    auto path = QzAppContext::expand( StdPath::DataDirectory ) + "/quartz.db";
     std::unique_ptr< DefaultStorageStrategy > storageStrategy{
         new DefaultStorageStrategy{ path }};
     std::unique_ptr< XMLConfigLoader > loader{
@@ -84,16 +89,11 @@ std::unique_ptr< Quartz::ConfigManager > initConfigManager()
     return confMan;
 }
 
-bool initApp( Quartz::ConfigManager *configManager )
+bool initApp()
 {
-    if( configManager == nullptr ) {
-        qDebug() << "Config manager iniaization failed";
-        return false;
-    }
     using namespace Quartz;
     std::unique_ptr< QzAppContext > context{ new QzAppContext{} };
     context->setLogger( Logger::Logger::get() );
-    context->setConfigManager( configManager );
     QzCoreContext::setInstance( std::move( context ));
     qmlRegisterSingletonType< QzBinding >( "qz.app",
                                            1,
@@ -113,10 +113,14 @@ bool uninit()
 
 int main( int argc, char **argv )
 {
-    auto result = initLogger();
-    auto confMan = initConfigManager();
-    result = result && initApp( confMan.get() );
+
+    auto result = createFileSystem()
+            && initLogger()
+            && initApp( );
     if( result ) {
+        using namespace Quartz;
+        auto confMan = initConfigManager();
+        context< QzAppContext >()->setConfigManager( confMan.get() );
         QApplication app( argc, argv );
         Quartz::QuartzFramelessWindow window;
         window.show();
@@ -127,7 +131,6 @@ int main( int argc, char **argv )
     else {
         qDebug() << "Application initialization failed";
     }
-
     return -1;
 }
 

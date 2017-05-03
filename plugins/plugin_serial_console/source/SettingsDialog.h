@@ -29,7 +29,7 @@ public:
     static void init( QWidget *parent );
 
 public slots:
-    void updateBaudRates( QStringList rates );
+    void updateBaudRates();
 
 private slots:
     void showPortDetails();

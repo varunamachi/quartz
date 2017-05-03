@@ -15,8 +15,14 @@ public:
 
     ~BaudRateEditDialog();
 
+private slots:
+    void add();
+
+    void removeSelected();
+
 signals:
-    void baudRateChanged( QStringList rates );
+    void baudRateChanged();
+
 
 private:
     struct Data;

@@ -1,4 +1,11 @@
 
+#include <QVariant>
+
+#include <core/app_config/ConfigManager.h>
+
+#include <plugin_base/BundleContext.h>
+
+#include "Constants.h"
 #include "SerialUtils.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
@@ -46,6 +53,37 @@ QStringList SerialUtils::standardBaudRates()
              << QStringLiteral( "38400" )
              << QStringLiteral( "115200" );
     return stdRates;
+}
+
+QStringList SerialUtils::customBaudRates()
+{
+    auto var = confman()->retrieve( Constants::KEY_BAUD_RATES,
+                                    Constants::CONFIG_DOMAIN );
+    return var.toStringList();
+}
+
+QStringList SerialUtils::allBaudRates()
+{
+    auto rates = standardBaudRates();
+    auto var = confman()->retrieve( Constants::KEY_BAUD_RATES,
+                                    Constants::CONFIG_DOMAIN );
+    QStringList nonStd = var.toStringList();
+    rates.append( nonStd );
+    return rates;
+}
+
+void SerialUtils::storeBaudRates( const QStringList &rates )
+{
+    auto stdRates = standardBaudRates();
+    QStringList nonStandard;
+    foreach( auto &rate, rates ) {
+        if( ! stdRates.contains( rate )) {
+            nonStandard << rate;
+        }
+    }
+    confman()->store( Constants::KEY_BAUD_RATES,
+                      nonStandard,
+                      Constants::CONFIG_DOMAIN );
 }
 
 } } }

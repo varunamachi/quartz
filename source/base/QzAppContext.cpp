@@ -43,12 +43,12 @@ QString QzAppContext::expand( StdPath pathID )
     switch( pathID ) {
     case StdPath::DataDirectory: {
         return QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation );
+                    QStandardPaths::AppDataLocation ) + "/.quartz/";
     }
     case StdPath::LogDirectory: {
         auto path = QStandardPaths::writableLocation(
                     QStandardPaths::AppDataLocation );
-        return path + "/logs";
+        return path + "/.quartz/logs";
     }
     }
     return QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );

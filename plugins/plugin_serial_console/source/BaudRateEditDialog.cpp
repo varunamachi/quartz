@@ -9,12 +9,8 @@
 #include <QGroupBox>
 #include <QListWidgetItem>
 
-#include <core/app_config/ConfigManager.h>
-
-#include <plugin_base/BundleContext.h>
-
+#include "SerialUtils.h"
 #include "BaudRateEditDialog.h"
-#include "Constants.h"
 
 namespace Quartz { namespace Plugin { namespace SerialConsole {
 
@@ -78,6 +74,12 @@ BaudRateEditDialog::BaudRateEditDialog( QWidget *parent )
 
     this->setLayout( layout );
 
+
+    m_data->m_customRates->addItems( SerialUtils::customBaudRates() );
+    m_data->m_standardRates->addItems( SerialUtils::standardBaudRates() );
+    m_data->m_standardRates->setEnabled( false );
+
+
     connect( m_data->m_okButton,
              &QPushButton::released,
              this,
@@ -86,11 +88,23 @@ BaudRateEditDialog::BaudRateEditDialog( QWidget *parent )
         for( int i = 0; i < m_data->m_customRates->count(); ++ i ) {
             rates << m_data->m_customRates->item( i )->text();
         }
-        confman()->store( Constants::KEY_BAUD_RATES,
-                          rates,
-                          Constants::CONFIG_DOMAIN );
+        SerialUtils::storeBaudRates( rates );
+        emit this->baudRateChanged();
         this->accept();
     });
+
+    connect( m_data->m_addButton,
+             &QPushButton::released,
+             this,
+             &BaudRateEditDialog::add );
+    connect( m_data->m_removeButton,
+             &QPushButton::released,
+             this,
+             &BaudRateEditDialog::removeSelected );
+    connect( m_data->m_clearButton,
+             &QPushButton::released,
+             m_data->m_customRates,
+             &QListWidget::clear );
 }
 
 BaudRateEditDialog::~BaudRateEditDialog()
@@ -98,10 +112,37 @@ BaudRateEditDialog::~BaudRateEditDialog()
 
 }
 
-void BaudRateEditDialog::persist()
+void BaudRateEditDialog::add()
 {
-
+    auto baudRateStr = m_data->m_addField->text();
+    if( baudRateStr.isEmpty() ) {
+        return;
+    }
+    bool contains = false;
+    for( int  i = 0; i < m_data->m_customRates->count(); ++ i ) {
+        const auto &itemText = m_data->m_customRates->item( i )->text();
+        if( baudRateStr == itemText ) {
+            contains = true;
+        }
+    }
+    if( ! contains ) {
+        m_data->m_customRates->addItem( baudRateStr );
+    }
+    else {
+        //show error
+    }
+    m_data->m_addField->clear();
 }
+
+void BaudRateEditDialog::removeSelected()
+{
+    auto selected = m_data->m_customRates->selectionModel()->selectedRows();
+    for( auto i = selected.size() - 1; i >= 0; -- i ) {
+        auto row = selected.at( i ).row();
+        delete m_data->m_customRates->takeItem( row );
+    }
+}
+
 
 
 } } }

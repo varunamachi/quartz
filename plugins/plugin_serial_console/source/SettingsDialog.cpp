@@ -16,6 +16,7 @@
 
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
+#include "SerialUtils.h"
 
 //Some information is adapted from Qt's serial terminal example
 //Under BSD License - check License.txt in the same directory
@@ -171,20 +172,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
              this,
              &QDialog::reject );
 
-    connect( m_data->m_baudRateCombo,
-            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
-             [ this ]( int index ) {
-        auto isCustomBaudRate = !
-                m_data->m_baudRateCombo->itemData( index ).isValid();
-        m_data->m_baudRateCombo->setEditable( isCustomBaudRate );
-        if( isCustomBaudRate ) {
-            m_data->m_baudRateCombo->clearEditText();
-            auto edit = m_data->m_baudRateCombo->lineEdit();
-            edit->setValidator( m_data->m_intValidator );
-        }
-
-    });
-
     connect( m_data->m_nameCombo,
             static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
              [ this ]( int /*index*/ ) {
@@ -194,7 +181,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
             m_data->m_nameCombo->clearEditText();
         }
     });
-
 }
 
 SettingsDialog::~SettingsDialog()
@@ -243,10 +229,11 @@ int SettingsDialog::exec()
     return QDialog::exec();
 }
 
-void SettingsDialog::updateBaudRates( QStringList rates )
+void SettingsDialog::updateBaudRates()
 {
     m_data->m_baudRateCombo->clear();
-    m_data->m_baudRateCombo->addItems( rates );
+    m_data->m_baudRateCombo->addItems(
+                SerialUtils::allBaudRates() );
 }
 
 void SettingsDialog::showPortDetails()
@@ -289,10 +276,7 @@ void SettingsDialog::refresh()
 
 void SettingsDialog::Data::setupUI()
 {
-    m_baudRateCombo->addItem( QStringLiteral( "9600" ));
-    m_baudRateCombo->addItem( QStringLiteral( "19200" ));
-    m_baudRateCombo->addItem( QStringLiteral( "38400" ));
-    m_baudRateCombo->addItem( QStringLiteral( "115200" ));
+    m_baudRateCombo->addItems( SerialUtils::allBaudRates() );
 
     m_dataBitsCombo->addItem( QStringLiteral( "5" ), QSerialPort::Data5 );
     m_dataBitsCombo->addItem( QStringLiteral( "6" ), QSerialPort::Data6 );

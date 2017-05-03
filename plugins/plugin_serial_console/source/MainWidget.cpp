@@ -10,6 +10,7 @@
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
 #include "Dialogs.h"
+#include "BaudRateEditDialog.h"
 
 namespace Quartz { namespace Plugin { namespace  SerialConsole {
 
@@ -108,6 +109,10 @@ void MainWidget::createNewConnection()
                 auto index = m_data->m_tabWidget->indexOf( obj );
                 m_data->m_tabWidget->removeTab( index );
             });
+            connect( Dialogs::baudRateEditDialog(),
+                     &BaudRateEditDialog::baudRateChanged,
+                     holder,
+                     &ConsoleHolder::updateBaudRates );
         }
         else {
             delete holder;
