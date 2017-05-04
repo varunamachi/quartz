@@ -87,6 +87,7 @@ public:
     {
 
     }
+
 private:
     std::unique_ptr< AbstractLogDispatcher > m_dispatcher;
 
@@ -182,7 +183,7 @@ bool Logger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
 
 void Logger::destroy()
 {
-
+    s_instance.release();
 }
 
 

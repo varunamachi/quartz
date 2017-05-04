@@ -42,9 +42,9 @@ public:
 
     static const QString TARGET_ID;
 
-private:
     void initFile();
 
+private:
     std::unique_ptr< QFile > m_logFile;
 
     QString m_logDirPath;
@@ -127,7 +127,6 @@ FileTarget::FileTarget( const QString &logDirPath,
 
 FileTarget::~FileTarget()
 {
-
 }
 
 
