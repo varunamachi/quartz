@@ -13,9 +13,11 @@
 #include <QVariant>
 #include <QVariant>
 
+#include <core/app_config/ConfigManager.h>
+#include <core/utils/ScopedOperation.h>
+
 #include <plugin_base/BundleLoggin.h>
 #include <plugin_base/BundleContext.h>
-#include <core/app_config/ConfigManager.h>
 
 #include "SerialSettings.h"
 #include "SettingsDialog.h"
@@ -40,17 +42,9 @@ struct ConsoleHolder::Data
         , m_serial{ new QSerialPort{ parent }}
         , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
     {
-
-//        m_baudCombo->addItem( QStringLiteral( "9600" ),
-//                              QSerialPort::Baud9600 );
-//        m_baudCombo->addItem( QStringLiteral( "19200" ),
-//                              QSerialPort::Baud19200 );
-//        m_baudCombo->addItem( QStringLiteral( "38400" ),
-//                              QSerialPort::Baud38400 );
-//        m_baudCombo->addItem( QStringLiteral( "115200" ),
-//                              QSerialPort::Baud115200 );
         m_baudCombo->addItems( SerialUtils::allBaudRates() );
-        m_baudCombo->setCurrentIndex( 1 );
+        auto curBaudText = QString::number( m_settings->baudRate() );
+        m_baudCombo->setCurrentText( curBaudText );
 
         m_toolBar->addAction( m_connect );
         m_toolBar->addAction( m_disconnect );
@@ -194,12 +188,27 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
     using ComboIdxFunc = void ( QComboBox::* )( int );
     connect( m_data->m_baudCombo,
              static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
-             [ this ]( int /*index*/ ) {
-
-        auto txt = m_data->m_baudCombo->currentText();
-        auto baud = static_cast< qint32 >( txt.toLong() );
-        if( ! m_data->m_serial->setBaudRate( baud )) {
-            m_data->m_baudCombo->setCurrentIndex( 1 );
+             [ this ]( int index ) {
+        if( index != -1 ) {
+            auto txt = m_data->m_baudCombo->currentText();
+            auto baud = static_cast< qint32 >( txt.toLong() );
+            if( baud == m_data->m_serial->baudRate() ) {
+                return;
+            }
+            if( ! m_data->m_serial->setBaudRate( baud )) {
+                SCOPE_LIMIT( m_data->m_baudCombo->blockSignals( true ),
+                             m_data->m_baudCombo->blockSignals( false ));
+                auto oldRate = m_data->m_serial->baudRate();
+                auto rateStr = QString::number( oldRate );
+                m_data->m_baudCombo->setCurrentText( rateStr );
+                QZP_ERROR << "Failed to set baud rate of " << baud << " to "
+                          << m_data->m_serial->portName() << ". Reverting to "
+                          << oldRate;
+            }
+            else {
+                QZP_INFO << "Baud rate of " << m_data->m_serial->portName()
+                         << " set to " << baud;
+            }
         }
     });
     m_data->setEnabled( false );
@@ -265,22 +274,23 @@ void ConsoleHolder::clearConsole()
 
 void ConsoleHolder::updateBaudRates()
 {
-    m_data->m_baudCombo->clear();
     auto curRate = m_data->m_baudCombo->currentText();
     auto newCurIndex = -1;
+    m_data->m_baudCombo->clear();
     auto baudRates = SerialUtils::allBaudRates();
     for( auto i = 0; i < baudRates.size(); ++ i ) {
         const auto &rate = baudRates.at( i );
         if( rate == curRate ) {
             newCurIndex = i;
         }
+//        m_data->m_baudCombo->blockSignals( true );
         m_data->m_baudCombo->addItem( rate );
+//        m_data->m_baudCombo->blockSignals( false );
     }
-    if( newCurIndex == -1 && ! curRate.isEmpty() ) {
-        m_data->m_baudCombo->insertItem( 0, curRate );
+    if( newCurIndex == -1 || curRate.isEmpty() ) {
         m_data->m_baudCombo->setCurrentIndex( 0 );
     }
-    else {
+    else if( ! curRate.isEmpty() ){
         m_data->m_baudCombo->setCurrentIndex( newCurIndex );
     }
 }

@@ -86,7 +86,9 @@ void FileTarget::Impl::write( const QString &&message )
 
 void FileTarget::Impl::flush()
 {
-    m_stream.flush();
+    if( m_valid ) {
+        m_stream.flush();
+    }
 }
 
 
