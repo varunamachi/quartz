@@ -13,6 +13,7 @@
 #include <QVariant>
 #include <QVariant>
 #include <QSplitter>
+#include <QScrollBar>
 
 #include <core/app_config/ConfigManager.h>
 #include <core/utils/ScopedOperation.h>
@@ -100,7 +101,12 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
     p.setColor( QPalette::Base, Qt::black );
     p.setColor( QPalette::Text, Qt::green );
     m_outConsole->setPalette( p );
-    m_outConsole->setEnabled( false );
+    m_outConsole->setReadOnly( true );
+#ifdef Q_OS_WIN
+    m_outConsole->setFont( QFont{ "Consolas", 12 });
+#else
+    m_outConsole->setFont( QFont{ "Monospace", 12 });
+#endif
 
     updateDisplayName();
     updateCompleteInfo();
@@ -215,15 +221,21 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
              &QSerialPort::readyRead,
              [ this ]() {
         auto data = m_data->m_serial->readAll();
-//        m_data->m_outConsole->putData( data );
-        m_data->m_outConsole->appendPlainText( QString{ data });
+        m_data->m_outConsole->insertPlainText( QString{ data });
+        m_data->m_outConsole->verticalScrollBar()->setValue(
+                    m_data->m_outConsole->verticalScrollBar()->maximum());
     });
     connect( m_data->m_console,
              &ConsoleWidget::sigDataEntered,
              [ this ]( const QByteArray &data ) {
-        auto html = "<font color=red><b>" + QString{ data } + "</b></font><br>";
+        auto html = "<br>Command: <font color=red><b>"
+                    + QString{ data }
+                    + "</b></font><br>"
+                    + "---------------------------------------------------<br>";
         m_data->m_serial->write( data );
-        m_data->m_outConsole->appendHtml( html );
+        m_data->m_outConsole->textCursor().insertHtml( html );
+        m_data->m_outConsole->verticalScrollBar()->setValue(
+                    m_data->m_outConsole->verticalScrollBar()->maximum());
     });
 
     m_data->setEnabled( false );
