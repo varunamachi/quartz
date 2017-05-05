@@ -90,7 +90,7 @@ ConsoleWidget::ConsoleWidget( QWidget *parent )
     QPalette p = palette();
     p.setColor( QPalette::Base, Qt::black );
     p.setColor( QPalette::Text, Qt::green );
-    setPalette(p);
+    setPalette( p );
     printPrompt();
 #ifdef Q_OS_WIN
     this->setFont( QFont{ "Consolas", 12 });
@@ -212,16 +212,14 @@ void ConsoleWidget::keyPressEvent( QKeyEvent *evt )
         }
         else {
             auto str = currentCommand();
-            if( str.isEmpty() ) {
-                printPrompt();
-            }
-            else {
+            if( ! str.isEmpty() ) {
                 auto cmd = str.trimmed() + "\r\n";
                 emit sigDataEntered(  cmd.toLocal8Bit() );
                 m_data->addHistory( str );
                 this->appendPlainText( "" );
                 m_data->m_pos = this->textCursor().position();
             }
+            printPrompt();
         }
         m_data->m_curLinePos = this->textCursor().position();
     }

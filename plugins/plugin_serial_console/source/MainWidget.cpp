@@ -81,6 +81,10 @@ MainWidget::MainWidget( QWidget *parent )
             holder->disconnectSerial();
         }
     });
+    connect( m_data->m_disconnectAll,
+             &QAction::triggered,
+             this,
+             &MainWidget::disconnectAll );
 
     layout->setContentsMargins( QMargins{} );
     m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
@@ -116,6 +120,17 @@ void MainWidget::createNewConnection()
         }
         else {
             delete holder;
+        }
+    }
+}
+
+void MainWidget::disconnectAll()
+{
+    for( auto i = 0; i < m_data->m_tabWidget->count(); ++ i ) {
+        auto item = m_data->m_tabWidget->widget( i );
+        auto conHolder = qobject_cast< ConsoleHolder *>( item );
+        if( conHolder != nullptr ) {
+            conHolder->disconnectSerial();
         }
     }
 }

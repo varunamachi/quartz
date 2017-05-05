@@ -30,6 +30,9 @@ public slots:
 
     void updateBaudRates();
 
+private slots:
+    void setBaudRate( int index );
+
 signals:
     void serialDisconnected( ConsoleHolder *holder );
 

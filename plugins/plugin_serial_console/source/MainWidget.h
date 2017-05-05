@@ -23,6 +23,8 @@ public:
 public slots:
     void createNewConnection();
 
+    void disconnectAll();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
