@@ -1,6 +1,8 @@
 #pragma once
 
+#include <memory>
 #include <functional>
+
 #include <QByteArray>
 
 class QVariant;
@@ -18,25 +20,18 @@ public:
 
 
 
-    StoreFunc storeFunc() const
-    {
-        return m_storeFunc;
-    }
+    virtual ~AbstractConfigLoader();
+
+    StoreFunc storeFunc() const;
 
     virtual bool load( const QByteArray content ) const = 0;
 
-    virtual ~AbstractConfigLoader() { }
-
 protected:
-    explicit AbstractConfigLoader( StoreFunc storeFunc )
-        : m_storeFunc( storeFunc )
-    {
-
-    }
-
+    explicit AbstractConfigLoader( StoreFunc storeFunc );
 
 private:
-    StoreFunc m_storeFunc;
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

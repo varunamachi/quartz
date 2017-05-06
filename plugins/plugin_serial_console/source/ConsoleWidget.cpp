@@ -248,7 +248,10 @@ void ConsoleWidget::printPrompt()
 {
     this->appendHtml(
                 QString{ "<font color = 'red'><b>\n>></b></font> " });
-    m_data->m_pos = this->textCursor().position();
+    auto cur = this->textCursor();
+    cur.movePosition( QTextCursor::End, QTextCursor::MoveAnchor );
+    this->setTextCursor( cur );
+    m_data->m_pos = cur.position();
     m_data->m_curLinePos = m_data->m_pos;
 
 }
