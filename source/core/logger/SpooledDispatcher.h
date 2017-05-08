@@ -31,17 +31,19 @@ namespace Quartz { namespace Logger {
 class QUARTZ_CORE_API SpooledDispatcher: public AbstractLogDispatcher
 {
 public:
-        SpooledDispatcher();
+    SpooledDispatcher();
 
-        void write( LogMessage *message ) override;
+    void write( LogMessage *message ) override;
 
-        void stopDispatch() override;
+    void stopDispatch() override;
 
-        void run();
+    void run();
 
-        virtual ~SpooledDispatcher();
+    virtual ~SpooledDispatcher();
 
 private:
+    void flushQueue();
+
     struct Data;
     std::unique_ptr< Data > m_data;
 };

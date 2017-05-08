@@ -95,7 +95,7 @@ MainWidget::MainWidget( QWidget *parent )
 
 MainWidget::~MainWidget()
 {
-
+    disconnectAll();
 }
 
 void MainWidget::createNewConnection()

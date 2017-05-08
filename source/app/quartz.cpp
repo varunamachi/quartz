@@ -57,11 +57,14 @@ bool initLogger()
         std::unique_ptr< Logger::FileTarget > fileTarget{
             new Logger::FileTarget{ path, "quartz" }};
         Logger::Logger::get()->dispatcher()->addTarget(
-                    std::move( consoleTarget ));
-        Logger::Logger::get()->dispatcher()->addTarget(
                     std::move( fileTarget ));
+        //We need below messages only on log file to distinguish between
+        //launches, hence these are logged before console logger is registered
         QZ_INFO( "Qz:App" ) << "---------------------------------------------";
         QZ_INFO( "Qz:App" ) << "Starting Quartz!!!!";
+        Logger::Logger::get()->dispatcher()->flush();
+        Logger::Logger::get()->dispatcher()->addTarget(
+                    std::move( consoleTarget ));
 
     }
     else {
@@ -105,7 +108,6 @@ bool initApp()
 
 bool uninit()
 {
-    QZ_LOGGER()->dispatcher()->removeTarget( Quartz::LogView::LOG_TARGET_ID );
     QZ_LOGGER()->dispatcher()->stopDispatch();
     QZ_LOGGER()->destroy();
     return true;
@@ -113,7 +115,7 @@ bool uninit()
 
 int main( int argc, char **argv )
 {
-
+    auto returnCode = -1;
     auto result = createFileSystem()
             && initLogger()
             && initApp( );
@@ -122,15 +124,16 @@ int main( int argc, char **argv )
         auto confMan = initConfigManager();
         context< QzAppContext >()->setConfigManager( confMan.get() );
         QApplication app( argc, argv );
-        Quartz::QuartzFramelessWindow window;
-        window.show();
-        auto returnCode = app.exec();
+        QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
+            Quartz::QuartzFramelessWindow window;
+            window.show();
+            returnCode = app.exec();
+        }
         uninit();
-        return returnCode;
     }
     else {
         qDebug() << "Application initialization failed";
     }
-    return -1;
+    return returnCode;
 }
 

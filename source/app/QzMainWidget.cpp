@@ -151,6 +151,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
 QzMainWidget::~QzMainWidget()
 {
     m_data->m_pluginManager->destroy();
+    QZ_LOGGER()->dispatcher()->removeTarget( LogView::LOG_TARGET_ID );
 }
 
 
