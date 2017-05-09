@@ -10,7 +10,7 @@ class QTextStream;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API TemplateProcessor final
+class QUARTZ_COMMON_API TemplateProcessor
 {
 public:
     using Variables = QHash< QString, QString >;
@@ -23,9 +23,16 @@ public:
 
     bool process( QTextStream &input, QTextStream &output );
 
+    virtual bool process( QString &input, QTextStream &output );
+
     const QString & lastError() const;
 
     void reset();
+
+protected:
+    QString expand( const QString &key ) const;
+
+    void setError( const QString &errorString );
 
 private:
     struct Data;

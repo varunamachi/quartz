@@ -51,16 +51,16 @@ bool TemplateProcessor::process( const QString &inputPath,
     }
     QTextStream input{ &inputFile };
     QTextStream output{ &outputFile };
-    return process( input, output );
-
-}
-
-bool TemplateProcessor::process( QTextStream &input, QTextStream &output )
-{
     auto tmpl = input.readAll();
     if( tmpl.isEmpty() ) {
         return true;
     }
+    return process( tmpl, output );
+}
+
+bool TemplateProcessor::process( QString &tmpl, QTextStream &output )
+{
+
     bool result = true;
     auto cursor = 0;
     auto matchCount = 0;
@@ -132,6 +132,16 @@ const QString & TemplateProcessor::lastError() const
 void TemplateProcessor::reset()
 {
     m_data->m_lastError = "";
+}
+
+QString TemplateProcessor::expand( const QString &key ) const
+{
+    return m_data->m_variables.value( key,  )
+}
+
+void TemplateProcessor::setError(const QString &errorString)
+{
+    m_data->m_lastError = errorString;
 }
 
 
