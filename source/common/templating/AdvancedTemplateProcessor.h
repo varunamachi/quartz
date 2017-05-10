@@ -16,6 +16,8 @@ public:
     bool process( QString &input, QTextStream &output ) override;
 
 private:
+    QString processForeach( QString &input );
+
     struct Data;
     std::unique_ptr< Data > m_data;
 };

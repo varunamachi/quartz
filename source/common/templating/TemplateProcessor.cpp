@@ -1,6 +1,7 @@
 #include <QFile>
 
 #include <core/logger/Logging.h>
+#include <core/utils/Constants.h>
 
 #include "TemplateProcessor.h"
 
@@ -35,16 +36,16 @@ bool TemplateProcessor::process( const QString &inputPath,
 {
     QFile inputFile{ inputPath };
     if( ! inputFile.open( QFile::ReadOnly )) {
-        QZ_ERROR( "Qz:Core" ) << "Failed to open template file at "
-                              << inputPath;
+        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to open template file at "
+                                  << inputPath;
         m_data->m_lastError = QObject::tr( "Could not open template input "
                                            "file at %1" ).arg( inputPath);
         return false;
     }
     QFile outputFile{ outputPath };
     if( ! outputFile.open( QFile::WriteOnly )) {
-        QZ_ERROR( "Qz:Core" ) << "Could not open template output file at "
-                              << outputPath;
+        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Could not open template output file at "
+                                  << outputPath;
         m_data->m_lastError = QObject::tr( "Could not open template output "
                                            "file at %1" ).arg( outputPath);
         return false;
@@ -58,15 +59,26 @@ bool TemplateProcessor::process( const QString &inputPath,
     return process( tmpl, output );
 }
 
-bool TemplateProcessor::process( QString &tmpl, QTextStream &output )
+bool TemplateProcessor::process( QString &input, QTextStream &output )
 {
+    return process( input, output,
+                    [ & ]( const QString &key, const QString &def ) -> QString {
+        auto var = m_data->m_variables.value( key, def );
+        return this->toString( var );
+    });
+}
 
+bool TemplateProcessor::process(
+        const QString &input,
+        QTextStream &output,
+        ValueProvider getVar )
+{
     bool result = true;
     auto cursor = 0;
     auto matchCount = 0;
     auto inMatch = false;
-    while( cursor < tmpl.size() ) {
-        auto token = tmpl[ cursor ];
+    while( cursor < input.size() ) {
+        auto token = input[ cursor ];
         if( matchCount == 0 && token == '$' ) {
             ++ matchCount;
         }
@@ -92,16 +104,15 @@ bool TemplateProcessor::process( QString &tmpl, QTextStream &output )
             //the replaced placeholder
 //            auto matchCursor = cursor + 1;
             ++ cursor;
-            while( inMatch && cursor < tmpl.size() ) {
-                token = tmpl[ cursor ];
+            while( inMatch && cursor < input.size() ) {
+                token = input[ cursor ];
                 if( unmatchCount == 0 && token == '>' ) {
                     ++ unmatchCount;
                 }
                 else if( unmatchCount == 1 && token == '$' ) {
                     stream.flush();
                     auto def = "$<" + key + ">$";
-                    auto var = m_data->m_variables.value( key, def );
-                    output << var;
+                    output << getVar( key, def );
                     inMatch = false;
                     -- unmatchCount;
                     ++ cursor;
@@ -134,9 +145,25 @@ void TemplateProcessor::reset()
     m_data->m_lastError = "";
 }
 
-QString TemplateProcessor::expand( const QString &key ) const
+QVariant TemplateProcessor::var( const QString &key ) const
 {
-    return m_data->m_variables.value( key,  )
+    return m_data->m_variables.value( key, QVariant{} );
+}
+
+QString TemplateProcessor::toString( const QVariant &var ) const
+{
+    if( ! var.isValid() ) {
+        auto strVar = var.toString();
+        if( strVar.isEmpty()  ) {
+            auto list = var.toStringList();
+            QTextStream varStream{ &strVar };
+            foreach( QString item, list ) {
+                varStream << item;
+            }
+        }
+        return strVar;
+    }
+    return QString{};
 }
 
 void TemplateProcessor::setError(const QString &errorString)

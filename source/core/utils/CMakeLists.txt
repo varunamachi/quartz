@@ -9,5 +9,6 @@ vq_classes(
     FileSystemUtil
     Utils
     STLUtils
+    Constants
 )
 

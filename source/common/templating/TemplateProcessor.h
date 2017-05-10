@@ -7,17 +7,18 @@
 #include "../QuartzCommon.h"
 
 class QTextStream;
+class QVariant;
 
 namespace Quartz {
 
 class QUARTZ_COMMON_API TemplateProcessor
 {
 public:
-    using Variables = QHash< QString, QString >;
+    using Variables = QHash< QString, QVariant >;
 
     explicit TemplateProcessor( const Variables &vars );
 
-    ~TemplateProcessor();
+    virtual ~TemplateProcessor();
 
     bool process( const QString &inputPath, const QString &outputPath );
 
@@ -30,7 +31,16 @@ public:
     void reset();
 
 protected:
-    QString expand( const QString &key ) const;
+    using ValueProvider =
+        std::function< QString( const QString &, const QString & )>;
+
+    bool process( const QString &input,
+                  QTextStream &output,
+                  ValueProvider getVar );
+
+    QVariant var( const QString &key ) const;
+
+    QString toString( const QVariant &variant ) const;
 
     void setError( const QString &errorString );
 
