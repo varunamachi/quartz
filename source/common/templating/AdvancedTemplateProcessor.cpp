@@ -8,11 +8,12 @@
 
 namespace Quartz {
 
-const QString ADV_END_TOKEN = QString{ "%>" };
-const QString ADV_START_TOKEN = QString{ "<%" };
+const QString ADV_TOKEN_FIRST = QString{ "$" };
+const QString ADV_TOKEN_SEC = QString{ "[" };
 const QString ADV_FOREACH_DELEM = QString{ ":>" };
-const QString ADV_FOREACH_KW = QString{ "foreach" };
-const QString ADV_FOR_IN_KW = QString{ "in" };
+const QString ADV_FOREACH_KW = QString{ "FOREACH" };
+const QString ADV_IF_KW = QString{ "IF" };
+const QString ADV_FOR_IN_KW = QString{ "IN" };
 
 
 struct AdvancedTemplateProcessor::Data
@@ -40,48 +41,45 @@ AdvancedTemplateProcessor::~AdvancedTemplateProcessor()
 bool AdvancedTemplateProcessor::process( QString &input,
                                          QTextStream &output )
 {
-//    bool result = false;
-//    auto firstBlocks = input.split( ADV_END_TOKEN );
-//    foreach( QString one, firstBlocks ) {
-//        if( one.contains( ADV_START_TOKEN )) {
-//            auto loopBlock = one.split( ADV_START_TOKEN );
-//            if( loopBlock.size() == 2 ) {
-//                //now parse the for loop
-//                //if could be tricky since we need to evaluate the condition
-//                //Also if we are using parent's process function to replace
-//                //  variables then we need a way to temporarily add variables
-//                //  to variable map so that loop variables get replaced
-//            }
-//            else {
-//                //template is wrong
-//            }
-//        }
-//    }
+    bool result = false;
+    if( ! input.isEmpty() ) {
+        auto blockExpanded = processBlocks( QStringRef{ &input });
+        result = TemplateProcessor::process( blockExpanded, output );
+    }
+    else {
+        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Invalid template text given";
+    }
 
-//    return result;
-    auto cursor = 0;
-
-    return false;
+    return result;
 }
 
-QString AdvancedTemplateProcessor::processBlock( const QStringRef &input ) {
+QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
     auto cursor = 0;
     auto matchCount = 0;
     auto inMatch = false;
     auto blockStart = -1;
     QString result;
+    QTextStream  stream{ &result };
     while( cursor < input.size() ) {
         auto token = input[ cursor ];
-        if( matchCount == 0 && token == '<' ) {
+        if( matchCount == 0 && token == ADV_TOKEN_FIRST ) {
             ++ matchCount;
         }
-        else if( matchCount == 1 && token == '%' ) {
+        else if( matchCount == 1 && token == ADV_TOKEN_SEC ) {
             ++ matchCount;
             blockStart = cursor + 1;
             if( inMatch ) {
-                auto block = processBlock( input.right( cursor ));
-                //What to do with the processed data - thats the question
+                auto block = processBlocks( input.right( cursor ));
+                stream << block;
             }
+        }
+        else {
+            if( matchCount == 1 ) {
+                //because I ate the first token in the first if
+                stream << ADV_TOKEN_FIRST;
+                matchCount = 0;
+            }
+            stream << token;
         }
         if( inMatch ) {
             matchCount = 0;
@@ -89,12 +87,17 @@ QString AdvancedTemplateProcessor::processBlock( const QStringRef &input ) {
             ++ cursor;
             while( inMatch && cursor < input.size() ) {
                 token = input[ cursor ];
-                if( unmatchCount == 0 && token == '>' ) {
+                if( unmatchCount == 0 && token == ADV_TOKEN_SEC ) {
                     ++ unmatchCount;
                 }
-                else if( unmatchCount == 1 && token == '$' ) {
+                else if( unmatchCount == 1 && token == ADV_TOKEN_FIRST ) {
                     auto block = input.mid( blockStart, cursor - 2 );
-                    result = processForeach( *block.string() );
+                    if( block.startsWith( ADV_FOREACH_KW )) {
+                        result = processForeach( *block.string() );
+                    }
+                    else if( block.startsWith( ADV_IF_KW )) {
+                        result = processIf( *block.string() );
+                    }
                     inMatch = false;
                     ++ cursor;
                     -- unmatchCount;
@@ -154,6 +157,11 @@ QString AdvancedTemplateProcessor::processForeach( const QString &input )
         //print error
     }
     return input;
+}
+
+QString AdvancedTemplateProcessor::processIf(const QString &input)
+{
+    return QString{}; //not supported yet
 }
 
 }
