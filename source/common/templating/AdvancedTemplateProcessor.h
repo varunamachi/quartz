@@ -18,6 +18,8 @@ public:
 private:
     QString processForeach( const QString &input );
 
+    QString processFor( const QString &input );
+
     QString processIf( const QString &input );
 
     QString processBlocks( const QStringRef &input );

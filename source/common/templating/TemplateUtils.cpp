@@ -4,6 +4,8 @@
 #include <QString>
 
 #include <core/logger/Logging.h>
+
+#include "AdvancedTemplateProcessor.h"
 #include "TemplateUtils.h"
 
 namespace Quartz {
@@ -14,7 +16,7 @@ bool TemplateUtils::generateForDir(
         const QDir &outDir,
         FileNameSubstituter substr )
 {
-    TemplateProcessor processor{ variables };
+    AdvancedTemplateProcessor processor{ variables };
     bool result = true;
     QStringList names;
 //    names << ".template";
@@ -30,9 +32,9 @@ bool TemplateUtils::generateForDir(
                     outFileName = substitute;
                 }
             }
-
             auto outputPath = outDir.absoluteFilePath( outFileName );
-            auto res = processor.process( inputPath, outputPath );
+            auto tp = static_cast< TemplateProcessor *>( &processor );
+            auto res = tp->process( inputPath, outputPath );
             if( ! res ) {
                 QZ_ERROR( "Qz:Core" )
                         << "Failed to process template file at " << inputPath;

@@ -12,6 +12,7 @@ const QString ADV_TOKEN_FIRST = QString{ "$" };
 const QString ADV_TOKEN_SEC = QString{ "[" };
 const QString ADV_FOREACH_DELEM = QString{ ":>" };
 const QString ADV_FOREACH_KW = QString{ "FOREACH" };
+const QString ADV_FOR_KW = QString{ "FOREACH" };
 const QString ADV_IF_KW = QString{ "IF" };
 const QString ADV_FOR_IN_KW = QString{ "IN" };
 
@@ -98,6 +99,9 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
                     else if( block.startsWith( ADV_IF_KW )) {
                         result = processIf( *block.string() );
                     }
+                    else if( block.startsWith( ADV_FOR_KW )) {
+                        result = processFor( *block.string() );
+                    }
                     inMatch = false;
                     ++ cursor;
                     -- unmatchCount;
@@ -115,6 +119,11 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
 
 QString AdvancedTemplateProcessor::processForeach( const QString &input )
 {
+    //To support loop like:
+    //$[forach val in list :>
+    //  cout << val;
+    //]$
+
     auto segments = input.split( ADV_FOREACH_DELEM );
     if( segments.size() != 2 ) {
         QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Malformed foreach loop found";
@@ -154,13 +163,23 @@ QString AdvancedTemplateProcessor::processForeach( const QString &input )
         return  block;
     }
     else {
-        //print error
+        //print errore
     }
     return input;
 }
 
-QString AdvancedTemplateProcessor::processIf(const QString &input)
+QString AdvancedTemplateProcessor::processFor( const QString &/*input*/ )
 {
+    //To support loops like:
+    //$[for i in range(1, 100)]$
+    //Not implemented yet
+    return QString{};
+}
+
+QString AdvancedTemplateProcessor::processIf( const QString &/*input*/ )
+{
+    //TO support conditions like
+    //$[if var == "0"]$
     return QString{}; //not supported yet
 }
 
