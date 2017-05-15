@@ -168,11 +168,70 @@ QString AdvancedTemplateProcessor::processForeach( const QString &input )
     return input;
 }
 
-QString AdvancedTemplateProcessor::processFor( const QString &/*input*/ )
+bool isWhiteSpace( const QChar &ch )
 {
+    return ch == ' '
+            || ch == '\t'
+            || ch == '\n'
+            || ch == '\r';
+}
+
+QString AdvancedTemplateProcessor::processFor( const QString &input )
+{
+
+
     //To support loops like:
     //$[for i in range(1, 100)]$
     //Not implemented yet
+    auto cursor = 0;
+    auto is = [ & ]( const QString &token ) -> bool {
+        bool result = true;
+        auto dupCursor = cursor;
+        for( auto i = 0; i < token.size(); ++ i, ++ dupCursor ) {
+            if( dupCursor >= input.size()
+                    || input[ dupCursor ] != token[ i ]) {
+                result = false;
+                break;
+            }
+        }
+        if( result ) {
+            cursor = cursor + token.size();
+        }
+        return result;
+    };
+
+
+    auto tokenStart = 0;
+    auto tokenNumber = 0;
+    QString content;
+    QString varName;
+    QString listName;
+    while( cursor <= input.size() ) {
+        if( isWhiteSpace( input[ cursor ]) || cursor == input.size() ) {
+            auto num = cursor - tokenStart - 1;
+            if( num != 0 ) {
+                auto token = input.mid( tokenStart, num );
+                ++ cursor;
+                if( tokenNumber == 0 && token == ADV_FOREACH_KW ) {
+                    //expected
+                    continue;
+                }
+                else if( tokenNumber == 2 && token == ADV_FOR_IN_KW ) {
+                    //expected
+                    continue;
+                }
+                else if( tokenNumber == 1 ) {
+                    varName = token;
+                }
+                else if( tokenNumber == 3 ) {
+                    //range or list
+                }
+            }
+        }
+        else {
+            tokenStart = cursor;
+        }
+    }
     return QString{};
 }
 
