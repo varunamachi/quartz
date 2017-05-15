@@ -168,23 +168,14 @@ QString AdvancedTemplateProcessor::processForeach( const QString &input )
     return input;
 }
 
-bool isWhiteSpace( const QChar &ch )
-{
-    return ch == ' '
-            || ch == '\t'
-            || ch == '\n'
-            || ch == '\r';
-}
 
 QString AdvancedTemplateProcessor::processFor( const QString &input )
 {
-
-
     //To support loops like:
     //$[for i in range(1, 100)]$
     //Not implemented yet
     auto cursor = 0;
-    auto is = [ & ]( const QString &token ) -> bool {
+    auto check = [ & ]( const QString &token ) -> bool {
         bool result = true;
         auto dupCursor = cursor;
         for( auto i = 0; i < token.size(); ++ i, ++ dupCursor ) {
@@ -200,6 +191,19 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
         return result;
     };
 
+    auto checkWhitespace = [ & ] () -> bool {
+        auto result = false;
+        auto ch = input.at( cursor );
+        if( ch == ' '
+                || ch == '\t'
+                || ch == '\n'
+                || ch == '\r' ) {
+            ++ cursor;
+            result = true;
+        }
+        return result;
+    };
+
 
     auto tokenStart = 0;
     auto tokenNumber = 0;
@@ -207,7 +211,9 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
     QString varName;
     QString listName;
     while( cursor <= input.size() ) {
-        if( isWhiteSpace( input[ cursor ]) || cursor == input.size() ) {
+        if( checkWhitespace()
+                || check( ":>" )
+                || cursor == input.size() ) {
             auto num = cursor - tokenStart - 1;
             if( num != 0 ) {
                 auto token = input.mid( tokenStart, num );
@@ -216,15 +222,26 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     //expected
                     continue;
                 }
+                else if( tokenNumber == 1 ) {
+                    varName = token;
+                }
                 else if( tokenNumber == 2 && token == ADV_FOR_IN_KW ) {
                     //expected
                     continue;
                 }
-                else if( tokenNumber == 1 ) {
-                    varName = token;
-                }
                 else if( tokenNumber == 3 ) {
-                    //range or list
+                    auto list = token;
+                    if( list.startsWith( "range" )) {
+                        //parse range
+                    }
+                    else {
+                        listName = token;
+                    }
+                }
+                else if( tokenNumber == 4 ) {
+                    //We got the content, we are done with the looping
+                    content = token;
+                    break;
                 }
             }
         }
