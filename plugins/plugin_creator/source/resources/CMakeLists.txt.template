@@ -21,3 +21,9 @@ vq_classes(
 
 qz_create_plugin()
 qz_install_plugin()
+
+#hello
+$[FOR file IN files :>
+    #$<file>$
+]$
+

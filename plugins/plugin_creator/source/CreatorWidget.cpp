@@ -231,6 +231,9 @@ void CreatorWidget::onCreate()
     vars.insert( "BUNDLE_NAME", name );
     vars.insert( "BUNDLE_NAMESPACE", ns );
     vars.insert( "BUNDLE_DISPLAY_NAME", display );
+    QStringList files;
+    files << "one" << "two" << "three";
+    vars.insert( "files", files );
     bool result = TemplateUtils::generateForDir(
                 vars,
                 QDir{ ":/resources" },

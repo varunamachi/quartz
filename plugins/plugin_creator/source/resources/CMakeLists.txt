@@ -5,3 +5,6 @@ vq_sources(
     PluginBundle.h.template
     resources.qrc.template
 )
+
+
+

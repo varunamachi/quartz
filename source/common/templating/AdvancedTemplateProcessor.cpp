@@ -9,7 +9,8 @@
 namespace Quartz {
 
 const QString ADV_TOKEN_FIRST = QString{ "$" };
-const QString ADV_TOKEN_SEC = QString{ "[" };
+const QString ADV_TOKEN_BEGIN_SEC = QString{ "[" };
+const QString ADV_TOKEN_END_SEC = QString{ "]" };
 const QString ADV_FOREACH_DELEM = QString{ ":>" };
 const QString ADV_FOR_KW = QString{ "FOR" };
 const QString ADV_IF_KW = QString{ "IF" };
@@ -58,20 +59,21 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
     auto matchCount = 0;
     auto inMatch = false;
     auto blockStart = -1;
-    QString result;
+    QString result{};
     QTextStream  stream{ &result };
     while( cursor < input.size() ) {
         auto token = input[ cursor ];
         if( matchCount == 0 && token == ADV_TOKEN_FIRST ) {
             ++ matchCount;
         }
-        else if( matchCount == 1 && token == ADV_TOKEN_SEC ) {
+        else if( matchCount == 1 && token == ADV_TOKEN_BEGIN_SEC ) {
             ++ matchCount;
             blockStart = cursor + 1;
             if( inMatch ) {
                 auto block = processBlocks( input.right( cursor ));
                 stream << block;
             }
+            inMatch = true;
         }
         else {
             if( matchCount == 1 ) {
@@ -87,16 +89,16 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
             ++ cursor;
             while( inMatch && cursor < input.size() ) {
                 token = input[ cursor ];
-                if( unmatchCount == 0 && token == ADV_TOKEN_SEC ) {
+                if( unmatchCount == 0 && token == ADV_TOKEN_END_SEC ) {
                     ++ unmatchCount;
                 }
                 else if( unmatchCount == 1 && token == ADV_TOKEN_FIRST ) {
                     auto block = input.mid( blockStart, cursor - 2 );
                     if( block.startsWith( ADV_IF_KW )) {
-                        result = processIf( *block.string() );
+                        result = processIf( block.toString() );
                     }
                     else if( block.startsWith( ADV_FOR_KW )) {
-                        result = processFor( *block.string() );
+                        result = processFor( block.toString() );
                     }
                     inMatch = false;
                     ++ cursor;
@@ -110,7 +112,7 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
             ++ cursor;
         }
     }
-    return result;
+    return result.isEmpty() ? input.toString() : result;
 }
 
 //QString AdvancedTemplateProcessor::processForeach( const QString &input )
@@ -255,20 +257,19 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
 {
     //For parsing for-each and for-range loop and expanding the content
     auto cursor = 0;
-    auto tokenStart = 0;
+    auto tokenStart = -1;
     auto tokenNumber = 0;
     QString content;
     QString varName;
     QString listName;
     Range range;
     while( cursor <= input.size() ) {
-        if( checkWhitespace( input, cursor )
-                || check( input, ":>", cursor )
-                || cursor == input.size() ) {
+        if( cursor == input.size()
+                || checkWhitespace( input, cursor )
+                || check( input, ":>", cursor )) {
             auto num = cursor - tokenStart - 1;
             if( num != 0 ) {
                 auto token = input.mid( tokenStart, num );
-                ++ cursor;
                 if( tokenNumber == 0 && token == ADV_FOR_KW ) {
                     //expected
                     continue;
@@ -300,9 +301,13 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     break;
                 }
             }
+            tokenStart = -1;
         }
         else {
-            tokenStart = cursor;
+            if( tokenStart == -1 ) {
+                tokenStart = cursor;
+            }
+            ++ cursor;
         }
     }
     //Now expand the content if its not empty
@@ -336,10 +341,9 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                 stream << '\n';
             }
         }
+        return output;
     }
-    else {
-        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to parse for loop";
-    }
+    QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to parse for loop";
     return QString{};
 }
 
