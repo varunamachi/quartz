@@ -16,7 +16,7 @@ public:
     bool process( QString &input, QTextStream &output ) override;
 
 private:
-    QString processForeach( const QString &input );
+//    QString processForeach( const QString &input );
 
     QString processFor( const QString &input );
 
