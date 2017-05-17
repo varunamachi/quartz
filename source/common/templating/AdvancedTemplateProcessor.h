@@ -22,7 +22,7 @@ private:
 
     QString processIf( const QString &input );
 
-    QString processBlocks( const QStringRef &input );
+    QString processBlocks( const QString &input );
 
     struct Data;
     std::unique_ptr< Data > m_data;

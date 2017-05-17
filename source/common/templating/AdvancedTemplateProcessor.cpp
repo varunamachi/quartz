@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QString>
 #include <QStack>
+#include <QDebug>
 
 #include <core/logger/Logging.h>
 
@@ -44,7 +45,7 @@ bool AdvancedTemplateProcessor::process( QString &input,
 {
     bool result = false;
     if( ! input.isEmpty() ) {
-        auto blockExpanded = processBlocks( QStringRef{ &input });
+        auto blockExpanded = processBlocks( input );
         result = TemplateProcessor::process( blockExpanded, output );
     }
     else {
@@ -54,7 +55,7 @@ bool AdvancedTemplateProcessor::process( QString &input,
     return result;
 }
 
-QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
+QString AdvancedTemplateProcessor::processBlocks( const QString &input ) {
     auto cursor = 0;
     auto matchCount = 0;
     auto inMatch = false;
@@ -83,88 +84,45 @@ QString AdvancedTemplateProcessor::processBlocks( const QStringRef &input ) {
             }
             stream << token;
         }
+        ++ cursor;
+
         if( inMatch ) {
             matchCount = 0;
             auto unmatchCount = 0;
-            ++ cursor;
             while( inMatch && cursor < input.size() ) {
                 token = input[ cursor ];
+                qDebug() << "UM: " << token;
                 if( unmatchCount == 0 && token == ADV_TOKEN_END_SEC ) {
+                    qDebug() << "One";
                     ++ unmatchCount;
                 }
                 else if( unmatchCount == 1 && token == ADV_TOKEN_FIRST ) {
-                    auto block = input.mid( blockStart, cursor - 2 );
+                    qDebug() << "Two";
+                    auto block = input.mid( blockStart,
+                                            cursor - blockStart - 2 );
+                    qDebug() << "BLOCK: " << block;
                     if( block.startsWith( ADV_IF_KW )) {
-                        result = processIf( block.toString() );
+                        auto content = processIf( block );
+                        stream << content;
                     }
                     else if( block.startsWith( ADV_FOR_KW )) {
-                        result = processFor( block.toString() );
+                        auto content = processFor( block );
+                        stream << content;
+                    }
+                    else {
+                        stream << block;
                     }
                     inMatch = false;
-                    ++ cursor;
                     -- unmatchCount;
-                    break;
                 }
                 ++ cursor;
             }
         }
-        else {
-            ++ cursor;
-        }
+
+
     }
-    return result.isEmpty() ? input.toString() : result;
+    return result.isEmpty() ? input : result;
 }
-
-//QString AdvancedTemplateProcessor::processForeach( const QString &input )
-//{
-//    //To support loop like:
-//    //$[forach val in list :>
-//    //  cout << val;
-//    //]$
-
-//    auto segments = input.split( ADV_FOREACH_DELEM );
-//    if( segments.size() != 2 ) {
-//        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Malformed foreach loop found";
-//        return input;
-//    }
-
-//    auto validate = []( const QStringList &tokens ) -> bool {
-//        return tokens.size() == 4
-//                && tokens.at( 0 ) == ADV_FOREACH_KW
-//                && tokens.at( 2 ) == ADV_FOR_IN_KW;
-//    };
-
-
-//    auto forTokens = segments.at( 0 ).split( QRegExp("\\s+"),
-//                                             QString::SkipEmptyParts );
-//    if( validate( forTokens )) {
-//        QString varValue{};
-//        auto varName = forTokens.at( 1 );
-//        auto list = var( forTokens.at( 3 )).toStringList();
-//        auto provider = [ & ]( const QString &key,
-//                               const QString &def ) -> QString {
-//            if( key == varName ) {
-//                return varValue;
-//            }
-//            auto var = this->var( key );
-//            if( ! var.isValid() ) {
-//                return this->toString( var );
-//            }
-//            return def;
-//        };
-//        QString block;
-//        QTextStream stream{ &block };
-//        foreach( const QString &item, list ) {
-//            varValue = item;
-//            TemplateProcessor::process( input, stream, provider );
-//        }
-//        return  block;
-//    }
-//    else {
-//        //print errore
-//    }
-//    return input;
-//}
 
 static bool check( const QString &input,
                    const QString &token,
@@ -190,11 +148,10 @@ static inline bool checkWhitespace( const QString &input,
 {
     auto result = false;
     auto ch = input.at( cursor );
-    if( ch == ' '
-            || ch == '\t'
-            || ch == '\n'
-            || ch == '\r' ) {
+    while( cursor < input.size()
+           && ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' )) {
         ++ cursor;
+        ch = input.at( cursor );
         result = true;
     }
     return result;
@@ -263,23 +220,25 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
     QString varName;
     QString listName;
     Range range;
+    qDebug() << "INPUT: " << input;
     while( cursor <= input.size() ) {
-        if( cursor == input.size()
-                || checkWhitespace( input, cursor )
-                || check( input, ":>", cursor )) {
+        if( cursor == input.size() || checkWhitespace( input, cursor )) {
             auto num = cursor - tokenStart - 1;
-            if( num != 0 ) {
+            if( num > 0 ) {
                 auto token = input.mid( tokenStart, num );
-                if( tokenNumber == 0 && token == ADV_FOR_KW ) {
-                    //expected
-                    continue;
+                qDebug() << "TOKEN: " << token << " -- " << tokenStart;
+                if( tokenNumber == 0 && token != ADV_FOR_KW ) {
+                    QZ_ERROR( "Qz:Cmn:Tmpl" )
+                            << "Could not find FOR keyword in for loop";
+                    break;
                 }
                 else if( tokenNumber == 1 ) {
                     varName = token;
                 }
-                else if( tokenNumber == 2 && token == ADV_FOR_IN_KW ) {
-                    //expected
-                    continue;
+                else if( tokenNumber == 2 && token != ADV_FOR_IN_KW ) {
+                    QZ_ERROR( "Qz:Cmn:Tmpl" )
+                            << "Could not find IN keyword in for loop";
+                    break;
                 }
                 else if( tokenNumber == 3 ) {
                     auto list = token;
@@ -296,12 +255,19 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     }
                 }
                 else if( tokenNumber == 4 ) {
-                    //We got the content, we are done with the looping
-                    content = token;
-                    break;
+//                    QZ_ERROR( "Qz:Cmn:Tmpl" )
+                    qDebug() << "We shouldnt come here!!!" << token;
                 }
+                ++ tokenNumber;
             }
             tokenStart = -1;
+            if( cursor == input.size() ) {
+                break;
+            }
+        }
+        else if( check( input, ":>", cursor )){
+            content = input.mid( cursor, input.size() - cursor - 1 );
+            break;
         }
         else {
             if( tokenStart == -1 ) {
@@ -310,6 +276,12 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
             ++ cursor;
         }
     }
+
+    qDebug() << "VarName :" << varName
+             << "\nListName: " << listName
+             << "\nContent: "  << content;
+
+
     //Now expand the content if its not empty
     if( ! content.isEmpty() ) {
         QString value = "";
@@ -329,16 +301,14 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
         if( range.m_valid ) {
             for( auto i = range.m_start; i < range.m_end; i += range.m_inc ) {
                 value = QString::number( i );
-                TemplateProcessor::process( input, stream, provider );
-                stream << '\n';
+                TemplateProcessor::process( content, stream, provider );
             }
         }
         else {
             auto list = var( listName ).toStringList();
             foreach( const QString &item, list ) {
                 value = item;
-                TemplateProcessor::process( input, stream, provider );
-                stream << '\n';
+                TemplateProcessor::process( content, stream, provider );
             }
         }
         return output;

@@ -25,5 +25,6 @@ qz_install_plugin()
 #hello
 $[FOR file IN files :>
     #$<file>$
+    #$<file>$
 ]$
 
