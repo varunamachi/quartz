@@ -28,3 +28,6 @@ $[FOR file IN files :>
     #$<file>$
 ]$
 
+$[FOR i IN range(0, 100, 5) :>
+    #$<i>$
+]$

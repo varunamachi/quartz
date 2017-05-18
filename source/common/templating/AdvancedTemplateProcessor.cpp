@@ -188,10 +188,16 @@ struct Range
     bool m_valid;
 };
 
-Range parseRange( const QString &range )
+
+
+Range parseRange( const QString &input,
+                  QZ_IN_OUT int &cursor )
 {
-    auto rg = range.mid( 4, ( range.size() - 2 - 4 ));
-    auto parts = rg.split( "," );
+    auto block = input.mid( input.indexOf( '(' ), input.indexOf( ')' ));
+//    auto rg = rangeParam.mid( 1, ( rangeParam.size() - 2 - 1 ));
+    qDebug() << "INPUT " << input
+             << "\nRG: " << block;
+    auto parts = block.split( "," );
     Range result{};
     if( parts.size() == 2 || parts.size() == 3 ) {
         auto startOk = true;
@@ -206,6 +212,10 @@ Range parseRange( const QString &range )
         if( startOk && endOk && incOk ) {
             result = Range{ start, end, inc };
         }
+    }
+    if( result.m_valid ) {
+        // move cursor by sz('range(') + sz(block) + sz( ')' )
+        cursor = cursor + 5 + block.size() + 1;
     }
     return result;
 }
@@ -241,10 +251,15 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     break;
                 }
                 else if( tokenNumber == 3 ) {
-                    auto list = token;
-                    if( list.startsWith( "range" )) {
-                        range = parseRange( list );
+                    if( token.startsWith( "range" )) {
+                        //we want the whole range block for parsing, hence we
+                        //are moving the cursor back to where range* started
+                        cursor = cursor - token.size();
+                        range = parseRange( input.right( cursor ), cursor );
                         if( ! range.m_valid ) {
+                            //since parsing of 'range' failed we restore the
+                            //cursor value
+                            cursor = cursor + token.size();
                             QZ_ERROR( "Qz:Cmn:Tmpl" )
                                     << "Failed to parse range of for loop";
                             break;
