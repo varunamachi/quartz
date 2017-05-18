@@ -8,6 +8,7 @@
 #include <QStandardPaths>
 #include <QRegExpValidator>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/TemplateProcessor.h>
@@ -122,6 +123,16 @@ CreatorWidget::CreatorWidget(QWidget *parent)
              &QLineEdit::textChanged,
              this,
              &CreatorWidget::autoPopulate );
+#ifdef QT_DEBUG
+    auto testBundleLoc = QStandardPaths::writableLocation(
+                QStandardPaths::TempLocation ) + "/qz_bundle/";
+    m_data->m_idEdit->setText( "test" );
+    m_data->m_fqIDEdit->setText( "test" );
+    m_data->m_namespaceEdit->setText( "Test" );
+    m_data->m_nameEdit->setText( "Test" );
+    m_data->m_dirPath->setText( testBundleLoc );
+
+#endif
 }
 
 CreatorWidget::~CreatorWidget()
@@ -277,12 +288,14 @@ void CreatorWidget::onCreate()
         }
     }
     if( result ) {
+#ifndef QT_DEBUG
         //create the resource directory and place the plugin.txt there
         m_data->m_idEdit->clear();
         m_data->m_fqIDEdit->clear();
         m_data->m_namespaceEdit->clear();
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
+#endif
         QZP_INFO << "Created bundle with id " << id << " at " << path;
         auto msg = tr( "Bundle %1 created successfully" ).arg( id );
         QMessageBox::information( this, tr( "Bundle Creator"), msg );

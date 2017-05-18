@@ -281,7 +281,7 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
             }
         }
         else if( check( input, ":>", cursor )){
-            content = input.mid( cursor, input.size() - cursor - 1 );
+            content = input.mid( cursor, input.size() - cursor /*- 1 */);
             break;
         }
         else {

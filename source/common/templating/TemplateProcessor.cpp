@@ -152,7 +152,7 @@ QVariant TemplateProcessor::var( const QString &key ) const
 
 QString TemplateProcessor::toString( const QVariant &var ) const
 {
-    if( ! var.isValid() ) {
+//    if( ! var.isValid() ) {
         auto strVar = var.toString();
         if( strVar.isEmpty()  ) {
             auto list = var.toStringList();
@@ -162,8 +162,8 @@ QString TemplateProcessor::toString( const QVariant &var ) const
             }
         }
         return strVar;
-    }
-    return QString{};
+//    }
+//    return QString{};
 }
 
 void TemplateProcessor::setError(const QString &errorString)
