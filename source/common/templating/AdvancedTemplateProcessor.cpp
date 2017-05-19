@@ -193,7 +193,9 @@ struct Range
 Range parseRange( const QString &input,
                   QZ_IN_OUT int &cursor )
 {
-    auto block = input.mid( input.indexOf( '(' ), input.indexOf( ')' ));
+    auto start = input.indexOf( '(' ) + 1;
+    auto size = input.indexOf( ')' ) - start;
+    auto block = input.mid( start, size );
 //    auto rg = rangeParam.mid( 1, ( rangeParam.size() - 2 - 1 ));
     qDebug() << "INPUT " << input
              << "\nRG: " << block;
@@ -214,8 +216,7 @@ Range parseRange( const QString &input,
         }
     }
     if( result.m_valid ) {
-        // move cursor by sz('range(') + sz(block) + sz( ')' )
-        cursor = cursor + 5 + block.size() + 1;
+        cursor = cursor + size + 6 + 1;
     }
     return result;
 }
@@ -252,10 +253,10 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                 }
                 else if( tokenNumber == 3 ) {
                     if( token.startsWith( "range" )) {
-                        //we want the whole range block for parsing, hence we
-                        //are moving the cursor back to where range* started
-                        cursor = cursor - token.size();
-                        range = parseRange( input.right( cursor ), cursor );
+                        cursor = tokenStart;
+                        auto frr = input.mid( tokenStart,
+                                              input.size() - tokenStart );
+                        range = parseRange( frr, cursor );
                         if( ! range.m_valid ) {
                             //since parsing of 'range' failed we restore the
                             //cursor value
