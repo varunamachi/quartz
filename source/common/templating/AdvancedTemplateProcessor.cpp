@@ -1,7 +1,7 @@
 #include <QFile>
 #include <QString>
 #include <QStack>
-#include <QDebug>
+//#include <QDebug>
 
 #include <core/logger/Logging.h>
 
@@ -20,23 +20,95 @@ const QString ADV_FOR_IN_KW = QString{ "IN" };
 
 struct AdvancedTemplateProcessor::Data
 {
-    explicit Data()
+    explicit Data( const TemplateProcessor::Variables &vars )
+        : m_variables{ vars }
+        , m_lastError{ "" }
     {
 
     }
+
+    TemplateProcessor::Variables m_variables;
+
+    QString m_lastError;
 
 };
 
 AdvancedTemplateProcessor::AdvancedTemplateProcessor(
         const TemplateProcessor::Variables &vars )
-    : TemplateProcessor{ vars }
-    , m_data{ new Data{}}
+    : m_data{ new Data{ vars }}
 {
 
 }
 
 AdvancedTemplateProcessor::~AdvancedTemplateProcessor()
 {
+}
+
+bool AdvancedTemplateProcessor::replaceVariables(
+        const QString &input,
+        QTextStream &output,
+        ValueProvider getVar )
+{
+        bool result = true;
+        auto cursor = 0;
+        auto matchCount = 0;
+        auto inMatch = false;
+        while( cursor < input.size() ) {
+            auto token = input[ cursor ];
+            if( matchCount == 0 && token == '$' ) {
+                ++ matchCount;
+            }
+            else if( matchCount == 1 && token == '<' ) {
+                ++ matchCount;
+                inMatch = true;
+            }
+            else {
+                if( matchCount == 1 ) {
+                    //because I ate the doller in the first if
+                    output << '$';
+                    matchCount = 0;
+                }
+                output << token;
+            }
+            if( inMatch ) {
+                matchCount = 0;
+                auto unmatchCount = 0;
+                QString key;
+                QTextStream stream{ &key };
+                //We copy the cursor because the replaced value can also be a
+                //placeholder and original cursor is still at the beginning of
+                //the replaced placeholder
+    //            auto matchCursor = cursor + 1;
+                ++ cursor;
+                while( inMatch && cursor < input.size() ) {
+                    token = input[ cursor ];
+                    if( unmatchCount == 0 && token == '>' ) {
+                        ++ unmatchCount;
+                    }
+                    else if( unmatchCount == 1 && token == '$' ) {
+                        stream.flush();
+                        auto def = "$<" + key + ">$";
+                        output << getVar( key, def );
+                        inMatch = false;
+                        -- unmatchCount;
+                        ++ cursor;
+                        break;
+                    }
+                    else {
+                        if( unmatchCount == 1 ) {
+                            stream << '$';
+                            unmatchCount = 0;
+                        }
+                        stream << token;
+                    }
+                    ++ cursor;
+                }
+            }
+            else {
+                ++ cursor;
+            }
+        }
+        return result;
 }
 
 
@@ -46,7 +118,13 @@ bool AdvancedTemplateProcessor::process( QString &input,
     bool result = false;
     if( ! input.isEmpty() ) {
         auto blockExpanded = processBlocks( input );
-        result = TemplateProcessor::process( blockExpanded, output );
+        result = replaceVariables(
+                    blockExpanded,
+                    output,
+                    [ & ]( const QString &key, const QString &def ) -> QString {
+            auto var = m_data->m_variables.value( key, def );
+            return this->toString( var );
+        } );
     }
     else {
         QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Invalid template text given";
@@ -91,16 +169,12 @@ QString AdvancedTemplateProcessor::processBlocks( const QString &input ) {
             auto unmatchCount = 0;
             while( inMatch && cursor < input.size() ) {
                 token = input[ cursor ];
-                qDebug() << "UM: " << token;
                 if( unmatchCount == 0 && token == ADV_TOKEN_END_SEC ) {
-                    qDebug() << "One";
                     ++ unmatchCount;
                 }
                 else if( unmatchCount == 1 && token == ADV_TOKEN_FIRST ) {
-                    qDebug() << "Two";
                     auto block = input.mid( blockStart,
                                             cursor - blockStart - 2 );
-                    qDebug() << "BLOCK: " << block;
                     if( block.startsWith( ADV_IF_KW )) {
                         auto content = processIf( block );
                         stream << content;
@@ -197,8 +271,6 @@ Range parseRange( const QString &input,
     auto size = input.indexOf( ')' ) - start;
     auto block = input.mid( start, size );
 //    auto rg = rangeParam.mid( 1, ( rangeParam.size() - 2 - 1 ));
-    qDebug() << "INPUT " << input
-             << "\nRG: " << block;
     auto parts = block.split( "," );
     Range result{};
     if( parts.size() == 2 || parts.size() == 3 ) {
@@ -221,6 +293,34 @@ Range parseRange( const QString &input,
     return result;
 }
 
+bool AdvancedTemplateProcessor::process( const QString &inputPath,
+                                         const QString &outputPath )
+{
+    QFile inputFile{ inputPath };
+    if( ! inputFile.open( QFile::ReadOnly )) {
+        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to open template file at "
+                                  << inputPath;
+        m_data->m_lastError = QObject::tr( "Could not open template input "
+                                           "file at %1" ).arg( inputPath);
+        return false;
+    }
+    QFile outputFile{ outputPath };
+    if( ! outputFile.open( QFile::WriteOnly )) {
+        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Could not open template output file at "
+                                  << outputPath;
+        m_data->m_lastError = QObject::tr( "Could not open template output "
+                                           "file at %1" ).arg( outputPath);
+        return false;
+    }
+    QTextStream input{ &inputFile };
+    QTextStream output{ &outputFile };
+    auto tmpl = input.readAll();
+    if( tmpl.isEmpty() ) {
+        return true;
+    }
+    return process( tmpl, output );
+}
+
 QString AdvancedTemplateProcessor::processFor( const QString &input )
 {
     //For parsing for-each and for-range loop and expanding the content
@@ -231,13 +331,11 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
     QString varName;
     QString listName;
     Range range;
-    qDebug() << "INPUT: " << input;
     while( cursor <= input.size() ) {
         if( cursor == input.size() || checkWhitespace( input, cursor )) {
             auto num = cursor - tokenStart - 1;
             if( num > 0 ) {
                 auto token = input.mid( tokenStart, num );
-                qDebug() << "TOKEN: " << token << " -- " << tokenStart;
                 if( tokenNumber == 0 && token != ADV_FOR_KW ) {
                     QZ_ERROR( "Qz:Cmn:Tmpl" )
                             << "Could not find FOR keyword in for loop";
@@ -271,8 +369,8 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     }
                 }
                 else if( tokenNumber == 4 ) {
-//                    QZ_ERROR( "Qz:Cmn:Tmpl" )
-                    qDebug() << "We shouldnt come here!!!" << token;
+                    QZ_WARN( "Qz:Cmn:Tmpl" ) << "Unknown token string "
+                                                "[4] received!";
                 }
                 ++ tokenNumber;
             }
@@ -292,12 +390,6 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
             ++ cursor;
         }
     }
-
-    qDebug() << "VarName :" << varName
-             << "\nListName: " << listName
-             << "\nContent: "  << content;
-
-
     //Now expand the content if its not empty
     if( ! content.isEmpty() ) {
         QString value = "";
@@ -317,14 +409,14 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
         if( range.m_valid ) {
             for( auto i = range.m_start; i < range.m_end; i += range.m_inc ) {
                 value = QString::number( i );
-                TemplateProcessor::process( content, stream, provider );
+                replaceVariables( content, stream, provider );
             }
         }
         else {
             auto list = var( listName ).toStringList();
             foreach( const QString &item, list ) {
                 value = item;
-                TemplateProcessor::process( content, stream, provider );
+                replaceVariables( content, stream, provider );
             }
         }
         return output;
@@ -339,5 +431,43 @@ QString AdvancedTemplateProcessor::processIf( const QString &/*input*/ )
     //$[if var == "0"]$
     return QString{}; //not supported yet
 }
+
+const QString & AdvancedTemplateProcessor::lastError() const
+{
+    return m_data->m_lastError;
+}
+
+void AdvancedTemplateProcessor::reset()
+{
+    m_data->m_lastError = "";
+}
+
+QVariant AdvancedTemplateProcessor::var( const QString &key ) const
+{
+    return m_data->m_variables.value( key, QVariant{} );
+}
+
+QString AdvancedTemplateProcessor::toString( const QVariant &var ) const
+{
+//    if( ! var.isValid() ) {
+        auto strVar = var.toString();
+        if( strVar.isEmpty()  ) {
+            auto list = var.toStringList();
+            QTextStream varStream{ &strVar };
+            foreach( QString item, list ) {
+                varStream << item;
+            }
+        }
+        return strVar;
+//    }
+//    return QString{};
+}
+
+void AdvancedTemplateProcessor::setError(const QString &errorString)
+{
+    m_data->m_lastError = errorString;
+}
+
+
 
 }

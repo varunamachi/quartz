@@ -33,8 +33,8 @@ bool TemplateUtils::generateForDir(
                 }
             }
             auto outputPath = outDir.absoluteFilePath( outFileName );
-            auto tp = static_cast< TemplateProcessor *>( &processor );
-            auto res = tp->process( inputPath, outputPath );
+//            auto tp = static_cast< TemplateProcessor *>( &processor );
+            auto res = processor.process( inputPath, outputPath );
             if( ! res ) {
                 QZ_ERROR( "Qz:Core" )
                         << "Failed to process template file at " << inputPath;

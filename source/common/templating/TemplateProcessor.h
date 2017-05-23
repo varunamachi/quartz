@@ -22,7 +22,7 @@ public:
 
     bool process( const QString &inputPath, const QString &outputPath );
 
-    bool process( QTextStream &input, QTextStream &output );
+//    bool process( QTextStream &input, QTextStream &output );
 
     virtual bool process( QString &input, QTextStream &output );
 
