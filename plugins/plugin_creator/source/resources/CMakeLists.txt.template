@@ -13,21 +13,18 @@ qz_add_resource( $<BUNDLE_NAME>$.qrc )
 
 vq_sources(
     $<BUNDLE_NAMESPACE>$.cpp
+$[FOR file IN files:>
+    $<file>$
+]$
 )
 
 vq_classes(
-    PluginBundle
+$[FOR class IN classes:>
+    $<class>$
+]$
 )
 
 qz_create_plugin()
 qz_install_plugin()
 
-#hello
-$[FOR file IN files :>
-    #$<file>$
-    #$<file>$
-]$
 
-$[FOR i IN range(0, 100, 5) :>
-    #$<i>$
-]$

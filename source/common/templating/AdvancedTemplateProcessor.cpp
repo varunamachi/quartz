@@ -331,6 +331,28 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
     QString varName;
     QString listName;
     Range range;
+
+    auto parseRangeField = [ & ]( const QString &token ) -> bool {
+        if( token.startsWith( "range" )) {
+            cursor = tokenStart;
+            auto frr = input.mid( tokenStart,
+                                  input.size() - tokenStart );
+            range = parseRange( frr, cursor );
+            if( ! range.m_valid ) {
+                //since parsing of 'range' failed we restore the
+                //cursor value
+                cursor = cursor + token.size();
+                QZ_ERROR( "Qz:Cmn:Tmpl" )
+                        << "Failed to parse range of for loop";
+                return false;
+            }
+        }
+        else {
+            listName = token;
+        }
+        return true;
+    };
+
     while( cursor <= input.size() ) {
         if( cursor == input.size() || checkWhitespace( input, cursor )) {
             auto num = cursor - tokenStart - 1;
@@ -350,22 +372,8 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
                     break;
                 }
                 else if( tokenNumber == 3 ) {
-                    if( token.startsWith( "range" )) {
-                        cursor = tokenStart;
-                        auto frr = input.mid( tokenStart,
-                                              input.size() - tokenStart );
-                        range = parseRange( frr, cursor );
-                        if( ! range.m_valid ) {
-                            //since parsing of 'range' failed we restore the
-                            //cursor value
-                            cursor = cursor + token.size();
-                            QZ_ERROR( "Qz:Cmn:Tmpl" )
-                                    << "Failed to parse range of for loop";
-                            break;
-                        }
-                    }
-                    else {
-                        listName = token;
+                    if( ! parseRangeField( token )) {
+                        break;
                     }
                 }
                 else if( tokenNumber == 4 ) {
@@ -380,6 +388,12 @@ QString AdvancedTemplateProcessor::processFor( const QString &input )
             }
         }
         else if( check( input, ":>", cursor )){
+            if( tokenStart != -1 ) {
+                auto token = input.mid( tokenStart, cursor - tokenStart - 2 );
+                if( ! parseRangeField( token )) {
+                    break;
+                }
+            }
             content = input.mid( cursor, input.size() - cursor /*- 1 */);
             break;
         }
