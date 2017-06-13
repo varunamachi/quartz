@@ -64,6 +64,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_data->m_content   = new ContentManager{ this };
     m_data->m_actionBar = new ActionBar{ 20, this };
     this->setObjectName( "quartz_widget" );
+    m_data->m_titleBar->setContentsMargins( QMargins{} );
 
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
