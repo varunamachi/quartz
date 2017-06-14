@@ -6,3 +6,5 @@ vq_classes(
     PluginItemModel
     AdapterItemModel
 )
+
+add_subdirectory( creation )
