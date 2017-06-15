@@ -17,6 +17,8 @@ QZ_INTERFACE IPluginAdapter
 
     virtual bool finalizePlugins() = 0;
 
+    virtual ~IPluginAdapter() { }
+
 };
 
 }

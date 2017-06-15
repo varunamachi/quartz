@@ -1,6 +1,7 @@
 
 
 vq_classes(
-    TemplateInfo
-    TemplateProvider
+    Template
+    AbstractTemplateProvider
+    TemplateManager
 )
