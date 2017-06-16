@@ -7,6 +7,8 @@
 
 namespace Quartz {
 
+const Template::Variable Template::EMPTY_VARIABLE{ "", "", "" };
+
 struct Template::Data
 {
     Data( const QString &name,
@@ -21,7 +23,7 @@ struct Template::Data
 
     QString m_content;
 
-    QHash< QString, QString > m_vars;
+    QHash< QString, Variable > m_vars;
 };
 
 
@@ -44,14 +46,15 @@ QString Template::name() const
 }
 
 void Template::addVariable( const QString &key,
-                                const QString &value )
+                            const QString &value,
+                            const QString &description )
 {
-    m_data->m_vars.insert( key, value );
+    m_data->m_vars.insert( key, Variable{ key, value , description });
 }
 
-QString Template::variable(const QString &key) const
+const Template::Variable Template::variable(const QString &key) const
 {
-    m_data->m_vars.value( key, "" );
+   return  m_data->m_vars.value( key, EMPTY_VARIABLE );
 }
 
 const QString &Template::content() const
