@@ -6,7 +6,6 @@
 #include <base/general_selector/GeneralSelector.h>
 #include <base/settings/ConfigPageManager.h>
 #include <base/theme/ThemeManager.h>
-#include <base/extension_details/creation/TemplateManager.h>
 
 #include "QzAppContext.h"
 
@@ -24,8 +23,6 @@ struct QzAppContext::Data
     ConfigPageManager *m_configPageManager;
 
     ThemeManager *m_themeManager;
-
-    TemplateManager *m_templateManager;
 };
 
 QzAppContext::QzAppContext()
@@ -62,6 +59,5 @@ QZCONTEXT_FUNC_DEFINE( QzAppContext, SelectorManager, selectorManager );
 QZCONTEXT_FUNC_DEFINE( QzAppContext, GeneralSelector, nodeSelector );
 QZCONTEXT_FUNC_DEFINE( QzAppContext, ConfigPageManager, configPageManager );
 QZCONTEXT_FUNC_DEFINE( QzAppContext, ThemeManager, themeManager );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, TemplateManager, templateManager );
 
 }

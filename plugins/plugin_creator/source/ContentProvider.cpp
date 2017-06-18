@@ -9,8 +9,19 @@ const QString ContentProvider::PLUGIN_ID{
 const QString ContentProvider::PLUGIN_NAME{
     "Quartz Creator Content" };
 
-ContentProvider::ContentProvider()
+struct ContentProvider::Data
+{
+    explicit Data( std::shared_ptr< TemplateManager > tman )
+    {
+        m_widgets.push_back( new CreatorWidget{ tman } );
+    }
+
+    QVector< ContentWidget *> m_widgets;
+};
+
+ContentProvider::ContentProvider( std::shared_ptr< TemplateManager > tman  )
     : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    , m_data{ new Data{ tman }}
 {
 
 }
@@ -32,9 +43,7 @@ bool ContentProvider::destroy()
 
 QVector< ContentWidget *> ContentProvider::widgets()
 {
-    QVector< ContentWidget *> widgets;
-    widgets.push_back( new CreatorWidget{} );
-    return widgets;
+    return m_data->m_widgets;
 }
 
 

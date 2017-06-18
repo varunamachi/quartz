@@ -5,7 +5,7 @@
 
 #include "Template.h"
 
-namespace Quartz {
+namespace Quartz { namespace Plugin { namespace Creator {
 
 const Template::Variable Template::EMPTY_VARIABLE{ "", "", "" };
 
@@ -63,4 +63,4 @@ const QString &Template::content() const
 }
 
 
-}
+} } }

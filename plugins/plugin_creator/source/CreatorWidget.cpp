@@ -15,6 +15,7 @@
 
 #include <plugin_base/BundleLoggin.h>
 
+#include "TemplateManager.h"
 #include "CreatorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
@@ -27,7 +28,8 @@ const QString CreatorWidget::CONTENT_KIND{ "meta" };
 
 struct CreatorWidget::Data
 {
-    explicit Data( CreatorWidget *parent )
+    explicit Data( std::shared_ptr< TemplateManager > tman,
+                   CreatorWidget *parent )
         : m_fqIDEdit{ new QLineEdit{ parent }}
         , m_idEdit{ new QLineEdit{ parent }}
         , m_namespaceEdit{ new QLineEdit{ parent }}
@@ -35,6 +37,7 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
+        , m_templateManager{ tman }
     {
 
     }
@@ -52,6 +55,8 @@ struct CreatorWidget::Data
 
     QPushButton *m_createButton;
 
+    std::shared_ptr< TemplateManager > m_templateManager;
+
 };
 
 inline void error( CreatorWidget *obj, const QString &msg )
@@ -64,9 +69,10 @@ inline void info( CreatorWidget *obj, const QString &msg )
     QMessageBox::information( obj, QObject::tr( "Bundle Creator" ), msg );
 }
 
-CreatorWidget::CreatorWidget(QWidget *parent)
+CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
+                              QWidget *parent)
     : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
-    , m_data{ new Data{ this }}
+    , m_data{ new Data{ tman, this }}
 {
     auto browseLayout = new QHBoxLayout{};
     browseLayout->addWidget( m_data->m_dirPath );

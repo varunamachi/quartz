@@ -22,7 +22,6 @@
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
 #include <base/extension_details/BundleSelector.h>
-#include <base/extension_details/creation/TemplateManager.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -54,7 +53,6 @@ struct QzMainWidget::Data
 
     std::unique_ptr< PluginManager > m_pluginManager;
 
-    std::unique_ptr< TemplateManager > m_templateManager;
 };
 
 
@@ -129,9 +127,6 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     auto logView = new LogView{ this };
     m_data->m_viewManager->addView( logView );
     QZ_LOGGER()->dispatcher()->addTarget( logView );
-
-    m_data->m_templateManager
-            = std::unique_ptr< TemplateManager >{ new TemplateManager };
 
     m_data->m_pluginManager =
             std::unique_ptr< PluginManager >{ new PluginManager{} };

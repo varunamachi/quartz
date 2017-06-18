@@ -4,7 +4,7 @@
 
 #include <QString>
 
-namespace Quartz {
+namespace Quartz { namespace Plugin { namespace Creator {
 
 
 class Template
@@ -41,4 +41,4 @@ private:
     std::unique_ptr< Data > m_data;
 };
 
-}
+} } }

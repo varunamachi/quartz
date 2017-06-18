@@ -5,7 +5,7 @@
 
 #include <core/extension_system/AbstractPlugin.h>
 
-namespace Quartz {
+namespace Quartz { namespace Plugin { namespace Creator {
 
 class Template;
 
@@ -25,4 +25,4 @@ public:
 private:
 };
 
-}
+} } }

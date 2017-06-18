@@ -4,11 +4,12 @@
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
+class TemplateManager;
 
 class ContentProvider : public AbstractContentProvider
 {
 public:
-    ContentProvider();
+    explicit ContentProvider( std::shared_ptr< TemplateManager > tman );
 
     ~ContentProvider();
 
@@ -21,6 +22,10 @@ public:
     static const QString     PLUGIN_ID;
 
     static const QString     PLUGIN_NAME;
+
+private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
 } } }

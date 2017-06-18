@@ -4,12 +4,16 @@
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
+class TemplateManager;
+
 class CreatorWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit CreatorWidget( QWidget *parent = nullptr );
+    explicit CreatorWidget(
+            std::shared_ptr< TemplateManager > tman,
+            QWidget *parent = nullptr );
 
     ~CreatorWidget();
 

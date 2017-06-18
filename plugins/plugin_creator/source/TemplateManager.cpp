@@ -6,7 +6,7 @@
 #include "AbstractTemplateProvider.h"
 
 
-namespace Quartz {
+namespace Quartz { namespace Plugin { namespace Creator {
 
 const QString TemplateManager::ADAPTER_NAME{ "Template Adapter" };
 
@@ -73,4 +73,4 @@ bool TemplateManager::finalizePlugins()
 
 
 
-}
+} } }

@@ -7,7 +7,7 @@
 #include <core/extension_system/IPluginAdapter.h>
 
 
-namespace Quartz {
+namespace Quartz { namespace Plugin { namespace Creator {
 
 class Template;
 
@@ -39,4 +39,4 @@ private:
 };
 
 
-}
+} } }
