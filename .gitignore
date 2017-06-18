@@ -41,7 +41,14 @@ Makefile*
 *.qmlproject.user
 *.qmlproject.user.*
 
-# QtCtreator CMake
-CMakeLists.txt.user
 
 /.vscode
+
+# QtCtreator CMake
+CMakeLists.txt.user
+CMakeLists.txt.user.*
+
+logfile.txt
+source/.kdev4/
+*.kdev4
+

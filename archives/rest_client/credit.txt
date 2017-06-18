@@ -1,0 +1,3 @@
+Adapted from http://www.creativepulse.gr 
+
+MIT/X11 license

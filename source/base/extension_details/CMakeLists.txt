@@ -7,4 +7,3 @@ vq_classes(
     AdapterItemModel
 )
 
-add_subdirectory( creation )

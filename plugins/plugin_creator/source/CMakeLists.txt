@@ -20,6 +20,10 @@ vq_classes(
     ContentProvider
     PluginBundle
     CreatorWidget
+    Template
+    TemplateManager
+    AbstractTemplateProvider
+
 )
 
 add_subdirectory( resources )

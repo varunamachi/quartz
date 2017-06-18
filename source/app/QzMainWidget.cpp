@@ -142,6 +142,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_content );
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_viewManager );
     m_data->m_pluginManager->registerPluginAdapter( configTree );
+
     appContext()->setPluginManager( m_data->m_pluginManager.get() );
 
     appContext()->setContentManager( m_data->m_content );
