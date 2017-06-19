@@ -41,6 +41,7 @@ struct CreatorWidget::Data
     {
 
     }
+
     QLineEdit *m_fqIDEdit;
 
     QLineEdit *m_idEdit;
@@ -58,6 +59,11 @@ struct CreatorWidget::Data
     std::shared_ptr< TemplateManager > m_templateManager;
 
 };
+
+void addStandaredTemplates( TemplateManager *tman )
+{
+
+}
 
 inline void error( CreatorWidget *obj, const QString &msg )
 {

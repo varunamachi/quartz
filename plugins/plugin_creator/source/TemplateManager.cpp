@@ -16,6 +16,8 @@ struct TemplateManager::Data {
     }
 
     QHash< QString, std::shared_ptr< Template >> m_templates;
+
+    QHash< QString, QString > m_variables;
 };
 
 TemplateManager::TemplateManager()
@@ -70,7 +72,47 @@ bool TemplateManager::finalizePlugins()
     return true;
 }
 
+void TemplateManager::addVariable( const QString& key, const QString& value )
+{
+    m_data->m_variables.insert( key, value );
+}
 
+QString TemplateManager::variable(const QString& key)
+{
+    return m_data->m_variables.value( key );
+}
 
+QModelIndex TemplateManager::index( int /*row*/,
+                                    int /*column*/,
+                                    const QModelIndex& /*parent*/ ) const
+{
+    return QModelIndex{};
+}
+
+QModelIndex TemplateManager::parent( const QModelIndex& /*child*/ ) const
+{
+    return QModelIndex{};
+}
+
+int TemplateManager::rowCount( const QModelIndex& /*parent*/ ) const
+{
+    return 0;
+}
+
+int TemplateManager::columnCount( const QModelIndex& /*parent*/ ) const
+{
+    return 0;
+}
+
+QVariant TemplateManager::data( const QModelIndex& /*index*/,
+                                int /*role*/ ) const
+{
+    return QVariant{};
+}
+
+bool TemplateManager::hasChildren( const QModelIndex& /*parent*/ ) const
+{
+    return  false;
+}
 
 } } }

@@ -23,7 +23,7 @@ vq_classes(
     Template
     TemplateManager
     AbstractTemplateProvider
-
+    TemplateSelectorWidget
 )
 
 add_subdirectory( resources )
