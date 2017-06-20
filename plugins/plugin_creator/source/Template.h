@@ -30,7 +30,9 @@ public:
                       const QString &value,
                       const QString &description );
 
-    const Variable variable( const QString &key ) const;
+    const Variable & variable( const QString &key ) const;
+
+    const Variable & variableAt( int index ) const;
 
     const QString & content() const;
 

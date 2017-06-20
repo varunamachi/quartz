@@ -17,6 +17,7 @@
 
 #include "TemplateManager.h"
 #include "CreatorWidget.h"
+#include "Template.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
@@ -62,7 +63,26 @@ struct CreatorWidget::Data
 
 void addStandaredTemplates( TemplateManager *tman )
 {
-
+    QStringList names;
+    QDir inDir{ ":/resources" };
+    auto list = inDir.entryInfoList( names );
+    for( int i = 0; i < list.size(); ++ i ) {
+        auto entry = list.at( i );
+        if( entry.suffix() == "template" ) {
+            auto key = entry.baseName();
+            QFile file{ entry.absoluteFilePath() };
+            auto content = QString{ file.readAll() };
+            auto tmpl = std::make_shared< Template >( key, content );
+            tman->addTemplate( tmpl );
+            //? Handle renaming
+//            if( substr != nullptr ) {
+//                auto substitute = substr( entry.fileName() );
+//                if( ! substitute.isEmpty() ) {
+//                    outFileName = substitute;
+//                }
+//            }
+        }
+    }
 }
 
 inline void error( CreatorWidget *obj, const QString &msg )

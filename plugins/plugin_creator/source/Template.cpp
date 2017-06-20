@@ -1,7 +1,7 @@
 
 #include <QStringList>
 #include <QMap>
-#include <QHash>
+#include <QVector>
 
 #include "Template.h"
 
@@ -23,7 +23,7 @@ struct Template::Data
 
     QString m_content;
 
-    QHash< QString, Variable > m_vars;
+    QVector< Variable > m_vars;
 };
 
 
@@ -49,12 +49,26 @@ void Template::addVariable( const QString &key,
                             const QString &value,
                             const QString &description )
 {
-    m_data->m_vars.insert( key, Variable{ key, value , description });
+    m_data->m_vars.push_back( Variable{ key, value , description });
 }
 
-const Template::Variable Template::variable(const QString &key) const
+const Template::Variable & Template::variable( const QString &key ) const
 {
-   return  m_data->m_vars.value( key, EMPTY_VARIABLE );
+    for( auto i = 0; i < m_data->m_vars.size(); ++ i ) {
+        auto &var = m_data->m_vars.at( i );
+        if( var.m_name == key ) {
+            return var;
+        }
+    }
+    return EMPTY_VARIABLE;
+}
+
+const Template::Variable&Template::variableAt(int index) const
+{
+    if( index < m_data->m_vars.size() ) {
+        return m_data->m_vars.at( index );
+    }
+    return EMPTY_VARIABLE;
 }
 
 const QString &Template::content() const

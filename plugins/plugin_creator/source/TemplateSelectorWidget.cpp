@@ -1,5 +1,7 @@
 #include <QTreeView>
+#include <QVBoxLayout>
 
+#include "TemplateManager.h"
 #include "TemplateSelectorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
@@ -20,7 +22,11 @@ TemplateSelectorWidget::TemplateSelectorWidget( QWidget* parent )
     : QWidget{ parent }
     , m_data{ new Data{ this }}
 {
-
+    auto main = new QVBoxLayout{ };
+    main->addWidget( m_data->m_view );
+    this->setLayout( main );
+    main->setContentsMargins( QMargins{} );
+    this->setContentsMargins( QMargins{} );
 }
 
 TemplateSelectorWidget::~TemplateSelectorWidget()

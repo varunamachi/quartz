@@ -11,16 +11,18 @@ namespace Quartz { namespace Plugin { namespace Creator {
 const QString TemplateManager::ADAPTER_NAME{ "Template Adapter" };
 
 struct TemplateManager::Data {
-    explicit Data() {
 
-    }
+    explicit Data() { }
 
     QHash< QString, std::shared_ptr< Template >> m_templates;
 
     QHash< QString, QString > m_variables;
+
+    QList< Template *> m_templateList;
 };
 
 TemplateManager::TemplateManager()
+    : m_data{ new Data{} }
 {
 
 }
@@ -30,9 +32,10 @@ TemplateManager::~TemplateManager()
 
 }
 
-void TemplateManager::addTemplate( std::shared_ptr<Template> tmplt )
+void TemplateManager::addTemplate( std::shared_ptr< Template > tmplt )
 {
     m_data->m_templates.insert( tmplt->name(), tmplt );
+    m_data->m_templateList.push_back( tmplt.get() );
 }
 
 QList< Template *> TemplateManager::templates() const
@@ -77,16 +80,21 @@ void TemplateManager::addVariable( const QString& key, const QString& value )
     m_data->m_variables.insert( key, value );
 }
 
-QString TemplateManager::variable(const QString& key)
+QString TemplateManager::variable( const QString& key )
 {
     return m_data->m_variables.value( key );
 }
 
-QModelIndex TemplateManager::index( int /*row*/,
-                                    int /*column*/,
-                                    const QModelIndex& /*parent*/ ) const
+QModelIndex TemplateManager::index( int row,
+                                    int column,
+                                    const QModelIndex &parent ) const
 {
-    return QModelIndex{};
+    QModelIndex index;
+    if( ! hasIndex( row, column, parent ) ) {
+        return index;
+    }
+
+    return index;
 }
 
 QModelIndex TemplateManager::parent( const QModelIndex& /*child*/ ) const
