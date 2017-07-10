@@ -6,19 +6,11 @@
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
+class Variable;
 
 class Template
 {
 public:
-    struct Variable
-    {
-        QString m_name;
-
-        QString m_value;
-
-        QString m_description;
-    };
-
     explicit Template( const QString &name,
                        const QString &content );
 

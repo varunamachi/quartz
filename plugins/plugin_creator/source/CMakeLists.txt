@@ -24,6 +24,11 @@ vq_classes(
     TemplateManager
     AbstractTemplateProvider
     TemplateSelectorWidget
+    Variable
+)
+
+vq_interfaces(
+    ITreeNode
 )
 
 add_subdirectory( resources )
