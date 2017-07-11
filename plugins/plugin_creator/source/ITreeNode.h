@@ -20,7 +20,9 @@ QZ_INTERFACE ITreeNode
 
     virtual void setSelected( bool value ) = 0;
 
-    virtual bool isSelected() = 0;
+    virtual bool isSelected() const = 0;
+
+    virtual ITreeNode * parent() const = 0;
 
     virtual ~ITreeNode() {}
 

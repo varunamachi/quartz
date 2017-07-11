@@ -13,7 +13,9 @@ class Variable : public ITreeNode
 public:
     Variable( const QString &name,
               const QString &description,
-              const QString &value );
+              const QString &value,
+              ITreeNode *parent,
+              bool selected = false );
 
     ~Variable();
 
@@ -33,7 +35,9 @@ public:
 
     void setSelected( bool value ) override;
 
-    bool isSelected() override;
+    bool isSelected() const override;
+
+    ITreeNode * parent() const override;
 
 private:
     struct Data;

@@ -9,10 +9,14 @@ struct Variable::Data
 {
     Data( const QString &name,
           const QString &description,
-          const QString &value )
+          const QString &value,
+          ITreeNode *parent,
+          bool selected )
         : m_name( name )
         , m_description( description )
         , m_value( value )
+        , m_parent{ parent }
+        , m_isSelected{ selected }
     {
 
     }
@@ -23,13 +27,17 @@ struct Variable::Data
 
     QString m_value;
 
+    ITreeNode *m_parent;
+
     bool m_isSelected;
 };
 
-Variable::Variable( const QString& name,
-                    const QString& description,
-                    const QString& value )
-    : m_data{ new Data{ name, description, value }}
+Variable::Variable( const QString &name,
+                    const QString &description,
+                    const QString &value,
+                    ITreeNode *parent,
+                    bool selected )
+    : m_data{ new Data{ name, description, value, parent, selected }}
 {
 
 }
@@ -39,17 +47,17 @@ Variable::~Variable()
 
 }
 
-const QString&Variable::name() const
+const QString & Variable::name() const
 {
     return m_data->m_name;
 }
 
-const QString&Variable::value() const
+const QString & Variable::value() const
 {
     return m_data->m_value;
 }
 
-const QString&Variable::description() const
+const QString & Variable::description() const
 {
     return m_data->m_description;
 }
@@ -84,9 +92,14 @@ void Variable::setSelected( bool value )
     m_data->m_isSelected = value;
 }
 
-bool Variable::isSelected()
+bool Variable::isSelected() const
 {
     return m_data->m_isSelected;
+}
+
+ITreeNode *Variable::parent() const
+{
+    return m_data->m_parent;
 }
 
 
