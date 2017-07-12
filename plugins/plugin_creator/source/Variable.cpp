@@ -102,5 +102,11 @@ ITreeNode *Variable::parent() const
     return m_data->m_parent;
 }
 
+int Variable::indexOfChild( const ITreeNode */*child*/ ) const
+{
+    //There are no children of variable, hence -1
+    return -1;
+}
+
 
 } } }

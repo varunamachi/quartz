@@ -39,6 +39,8 @@ public:
 
     ITreeNode * parent() const override;
 
+    int indexOfChild( const ITreeNode *child ) const override;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

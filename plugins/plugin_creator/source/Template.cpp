@@ -138,5 +138,17 @@ ITreeNode * Template::parent() const
     return nullptr;
 }
 
+int Template::indexOfChild( const ITreeNode *child ) const
+{
+    int index = -1;
+    for( int i = 0; i < m_data->m_vars.size(); ++ i ) {
+        if( child == m_data->m_vars.at( i ).get() ) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 
 } } }

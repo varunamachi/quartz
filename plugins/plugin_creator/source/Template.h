@@ -44,6 +44,8 @@ public:
 
     ITreeNode * parent () const override;
 
+    int indexOfChild( const ITreeNode *child ) const override;
+
     static const Variable EMPTY_VARIABLE;
 
 private:

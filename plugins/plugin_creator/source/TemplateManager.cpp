@@ -90,37 +90,90 @@ QModelIndex TemplateManager::index( int row,
                                     const QModelIndex &parent ) const
 {
     QModelIndex index;
-    if( ! hasIndex( row, column, parent ) ) {
+    if( ! hasIndex( row, column, parent )) {
         return index;
     }
-
+    if( parent.isValid() ) {
+        auto node = static_cast< ITreeNode * >( parent.internalPointer() );
+        auto child = node->child( row );
+        if( child != nullptr ) {
+            index = createIndex( row, column, child );
+        }
+    } else {
+        auto node = m_data->m_templateList.at( row );
+        if( node != nullptr ) {
+            index = createIndex( row, column, node );
+        }
+    }
     return index;
 }
 
-QModelIndex TemplateManager::parent( const QModelIndex& /*child*/ ) const
+QModelIndex TemplateManager::parent( const QModelIndex& childIndex ) const
 {
-    return QModelIndex{};
+    if( ! childIndex.isValid() ) {
+        return QModelIndex{};
+    }
+    auto index = QModelIndex{};
+    auto node = static_cast< ITreeNode *>( childIndex.internalPointer() );
+    if( node != nullptr && node->parent() != nullptr ) {
+        auto parent = node->parent();
+        auto grandParent = parent->parent();
+        auto row = 0;
+        if( grandParent != nullptr ) {
+            row = grandParent->indexOfChild( parent );
+        }
+        if( row != -1 ) {
+            //only zeroth column ??
+            index = createIndex( row, 0, parent );
+        }
+    }
+    return index;
+
 }
 
-int TemplateManager::rowCount( const QModelIndex& /*parent*/ ) const
+int TemplateManager::rowCount( const QModelIndex& parent ) const
 {
-    return 0;
+    //default is list of templates
+    auto count = m_data->m_templateList.size();
+    if( parent.isValid() ) {
+        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        count = node->numChildren();
+    }
+    return count;
 }
 
-int TemplateManager::columnCount( const QModelIndex& /*parent*/ ) const
+int TemplateManager::columnCount( const QModelIndex& parent ) const
 {
-    return 0;
+    //default is list of templates
+    auto count = 0;
+    if( parent.isValid() ) {
+        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        count = node->numFields();
+    }
+    return count;
 }
 
-QVariant TemplateManager::data( const QModelIndex& /*index*/,
-                                int /*role*/ ) const
+QVariant TemplateManager::data( const QModelIndex& index,
+                                int role ) const
 {
-    return QVariant{};
+    QVariant data;
+    if( index.isValid() ) {
+        auto node = static_cast< ITreeNode *>( index.internalPointer() );
+        if( node != nullptr ) {
+            data = node->data( index.column() )            ;
+        }
+    }
+    return data;
 }
 
-bool TemplateManager::hasChildren( const QModelIndex& /*parent*/ ) const
+bool TemplateManager::hasChildren( const QModelIndex& parent ) const
 {
-    return  false;
+    auto has = ! m_data->m_templateList.isEmpty();
+    if(  parent.isValid() ) {
+        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        has = node->numChildren() != 0;
+    }
+    return has;
 }
 
 } } }

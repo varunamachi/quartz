@@ -24,6 +24,8 @@ QZ_INTERFACE ITreeNode
 
     virtual ITreeNode * parent() const = 0;
 
+    virtual int indexOfChild( const ITreeNode *child ) const = 0;
+
     virtual ~ITreeNode() {}
 
 };

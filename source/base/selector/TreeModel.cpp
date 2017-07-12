@@ -176,14 +176,16 @@ QModelIndex TreeModel::parent( const QModelIndex &childIndex ) const
     if( ! childIndex.isValid() ) {
         return QModelIndex();
     }
-    auto child = static_cast< Node * >( childIndex.internalPointer() );
-    auto parent = child->parent();
     QModelIndex parentIndex{ };
-    if( parent != m_data->m_root.get() ) {
-        auto gprnt = parent->parent();
-        parentIndex = createIndex( gprnt->indexOfChild( parent ),
-                                   0,
-                                   parent );
+    auto child = static_cast< Node * >( childIndex.internalPointer() );
+    if( child != nullptr ) {
+        auto parent = child->parent();
+        if( parent != m_data->m_root.get() ) {
+            auto gprnt = parent->parent();
+            parentIndex = createIndex( gprnt->indexOfChild( parent ),
+                                       0,
+                                       parent );
+        }
     }
     return parentIndex;
 }
