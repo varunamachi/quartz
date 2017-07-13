@@ -158,9 +158,11 @@ QVariant TemplateManager::data( const QModelIndex& index,
 {
     QVariant data;
     if( index.isValid() ) {
-        auto node = static_cast< ITreeNode *>( index.internalPointer() );
-        if( node != nullptr ) {
-            data = node->data( index.column() )            ;
+        if( role == Qt::DisplayRole ) {
+            auto node = static_cast< ITreeNode *>( index.internalPointer() );
+            if( node != nullptr ) {
+                data = node->data( index.column() )            ;
+            }
         }
     }
     return data;

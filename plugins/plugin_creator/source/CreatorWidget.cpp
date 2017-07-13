@@ -9,6 +9,7 @@
 #include <QRegExpValidator>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QTreeView>
 
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/TemplateProcessor.h>
@@ -38,6 +39,7 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
+        , m_treeView{ new QTreeView{ parent }}
         , m_templateManager{ tman }
     {
 
@@ -56,6 +58,8 @@ struct CreatorWidget::Data
     QPushButton *m_browseButton;
 
     QPushButton *m_createButton;
+
+    QTreeView *m_treeView;
 
     std::shared_ptr< TemplateManager > m_templateManager;
 
@@ -131,6 +135,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     mainLayout->addLayout( layout );
     mainLayout->addWidget( m_data->m_createButton );
     mainLayout->addStretch();
+    mainLayout->addWidget( m_data->m_treeView );
 
     this->setLayout( mainLayout );
 

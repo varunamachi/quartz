@@ -25,6 +25,7 @@ vq_classes(
     AbstractTemplateProvider
     TemplateSelectorWidget
     Variable
+    CheckBoxDeligate
 )
 
 vq_interfaces(
