@@ -25,12 +25,11 @@ vq_classes(
     AbstractTemplateProvider
     TemplateSelectorWidget
     Variable
-    CheckBoxDeligate
 )
 
-vq_interfaces(
-    ITreeNode
-)
+#vq_interfaces(
+#    ITreeNode
+#)
 
 add_subdirectory( resources )
 

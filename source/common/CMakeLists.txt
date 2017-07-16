@@ -15,6 +15,7 @@ vq_headers(
 add_subdirectory( generic_config )
 add_subdirectory( widgets )
 add_subdirectory( templating )
+add_subdirectory( model_view )
 
 vq_create_sharedlib()
 vq_install()

@@ -2,7 +2,7 @@
 
 #include <QStyledItemDelegate>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 class CheckBoxDelegate : public QStyledItemDelegate
 {
@@ -34,4 +34,4 @@ private:
 
 };
 
-} } }
+}

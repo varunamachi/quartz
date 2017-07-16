@@ -4,7 +4,7 @@
 
 #include <QString>
 
-#include "ITreeNode.h"
+#include <common/model_view/ITreeNode.h>
 
 namespace Quartz { namespace Plugin { namespace Creator {
 

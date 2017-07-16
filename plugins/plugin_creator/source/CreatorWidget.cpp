@@ -19,6 +19,7 @@
 #include "TemplateManager.h"
 #include "CreatorWidget.h"
 #include "Template.h"
+#include "TemplateSelectorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
@@ -39,7 +40,7 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
-        , m_treeView{ new QTreeView{ parent }}
+        , m_templateSelector{ new TemplateSelectorWidget{ parent }}
         , m_templateManager{ tman }
     {
 
@@ -59,7 +60,7 @@ struct CreatorWidget::Data
 
     QPushButton *m_createButton;
 
-    QTreeView *m_treeView;
+    TemplateSelectorWidget *m_templateSelector;
 
     std::shared_ptr< TemplateManager > m_templateManager;
 
@@ -135,7 +136,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     mainLayout->addLayout( layout );
     mainLayout->addWidget( m_data->m_createButton );
     mainLayout->addStretch();
-    mainLayout->addWidget( m_data->m_treeView );
+    mainLayout->addWidget( m_data->m_templateSelector );
 
     this->setLayout( mainLayout );
 

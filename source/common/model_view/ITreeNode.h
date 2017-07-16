@@ -6,7 +6,7 @@
 //Just to keep clang quiet
 class QVariant;
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 QZ_INTERFACE ITreeNode
 {
@@ -30,4 +30,4 @@ QZ_INTERFACE ITreeNode
 
 };
 
-} } }
+}

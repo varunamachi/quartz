@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "ITreeNode.h"
+#include <common/model_view/ITreeNode.h>
 
 class QString;
 
