@@ -41,6 +41,10 @@ public:
 
     int indexOfChild( const ITreeNode *child ) const override;
 
+    bool isEditable( int column ) const override;
+
+    void setData( int column, const QVariant &data ) override;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

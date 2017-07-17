@@ -46,6 +46,10 @@ public:
 
     int indexOfChild( const ITreeNode *child ) const override;
 
+    bool isEditable( int column ) const override;
+
+    void setData( int column, const QVariant &data ) override;
+
     static const Variable EMPTY_VARIABLE;
 
 private:

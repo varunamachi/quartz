@@ -7,13 +7,15 @@
 
 #include <core/extension_system/IPluginAdapter.h>
 
+#include <common/model_view/AbstractTreeModel.h>
+
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
 class Template;
 
 class TemplateManager : public IPluginAdapter
-                      , public QAbstractItemModel
+                      , public AbstractTreeModel
 {
 public:
     explicit TemplateManager();
@@ -40,24 +42,15 @@ public:
 
     static const QString ADAPTER_NAME;
 
-public:
-    QModelIndex index( int row,
-                       int column,
-                       const QModelIndex &parent ) const override;
+protected:
+    ITreeNode *rootAt(int rowIndex) const override;
 
-    QModelIndex parent( const QModelIndex &child ) const override;
-
-    int rowCount( const QModelIndex &parent ) const override;
-
-    int columnCount( const QModelIndex &parent ) const override;
-
-    QVariant data( const QModelIndex &index, int role ) const override;
-
-    bool hasChildren( const QModelIndex &parent ) const override;
+    int rootCount() const override;
 
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
 
 };
 

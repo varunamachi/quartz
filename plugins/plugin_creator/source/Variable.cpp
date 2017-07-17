@@ -108,5 +108,17 @@ int Variable::indexOfChild( const ITreeNode */*child*/ ) const
     return -1;
 }
 
+bool Variable::isEditable( int column ) const
+{
+    return column == 2;
+}
+
+void Variable::setData( int column, const QVariant &data )
+{
+    if( column == 2 ) {
+        m_data->m_value = data.toString();
+    }
+}
+
 
 } } }

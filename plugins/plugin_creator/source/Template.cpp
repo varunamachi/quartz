@@ -150,5 +150,14 @@ int Template::indexOfChild( const ITreeNode *child ) const
     return index;
 }
 
+bool Template::isEditable( int /*column*/ ) const
+{
+    return false;
+}
+
+void Template::setData( int /*column*/, const QVariant &/*data*/ )
+{
+    //Nothing to set
+}
 
 } } }

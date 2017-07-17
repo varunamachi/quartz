@@ -1,5 +1,6 @@
 
 vq_classes(
+    EditorDelegate
     CheckBoxDeligate
     AbstractTreeModel
 )

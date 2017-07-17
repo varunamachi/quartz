@@ -26,6 +26,10 @@ QZ_INTERFACE ITreeNode
 
     virtual int indexOfChild( const ITreeNode *child ) const = 0;
 
+    virtual bool isEditable( int column ) const = 0;
+
+    virtual void setData( int column, const QVariant &data );
+
     virtual ~ITreeNode() {}
 
 };
