@@ -25,14 +25,19 @@ public:
 
     bool hasChildren( const QModelIndex &parent ) const override;
 
+    bool setData( const QModelIndex &index,
+                  const QVariant &value,
+                  int role ) override;
+
+    Qt::ItemFlags flags( const QModelIndex &index ) const override;
+
+
 protected:
 
     virtual ITreeNode * rootAt( int rowIndex ) const = 0;
 
     virtual int rootCount() const = 0;
 
-
-private:
 
 };
 

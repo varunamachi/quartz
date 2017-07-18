@@ -99,5 +99,32 @@ bool AbstractTreeModel::hasChildren( const QModelIndex& parent ) const
     return has;
 }
 
+bool AbstractTreeModel::setData( const QModelIndex &index,
+                                 const QVariant &value,
+                                 int role )
+{
+    bool set = false;
+    if( index.isValid() ) {
+        if( role == Qt::EditRole ) {
+            auto node = static_cast< ITreeNode *>( index.internalPointer() );
+            if( node != nullptr ) {
+                node->setData( index.column(), value );
+                set = true;
+            }
+        }
+    }
+    return set;
+}
+
+Qt::ItemFlags AbstractTreeModel::flags( const QModelIndex &index ) const
+{
+    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
+    auto node = static_cast< ITreeNode *>( index.internalPointer() );
+    if( node != nullptr && node->isEditable( index.column() )) {
+            return flags |= Qt::ItemIsEditable;
+    }
+    return flags;
+}
+
 
 }

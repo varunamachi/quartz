@@ -1,6 +1,9 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include <common/model_view/CheckBoxDeligate.h>
+#include <common/model_view/EditorDelegate.h>
+
 #include "TemplateManager.h"
 #include "TemplateSelectorWidget.h"
 
@@ -24,6 +27,9 @@ TemplateSelectorWidget::TemplateSelectorWidget( QWidget* parent )
 {
     auto main = new QVBoxLayout{ };
     main->addWidget( m_data->m_view );
+    m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
+    m_data->m_view->setItemDelegateForColumn( 2, new EditorDelegate{ this });
+
     this->setLayout( main );
     main->setContentsMargins( QMargins{} );
     this->setContentsMargins( QMargins{} );
