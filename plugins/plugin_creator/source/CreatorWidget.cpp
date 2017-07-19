@@ -381,3 +381,14 @@ void CreatorWidget::autoPopulate( const QString &fqid )
 
 
 } } }
+
+
+//ActionBar          - AbstractActionItemProvider   - QuartzItem
+//ConfigPageSelector - AbstractConfigPageProvider   - AbstractConfigPage
+//ContentManager     - AbstractContentProvider      - ContentWidget
+//GeneralNodelTree   - AbstractGeneralNodeProvider  - NodeInfo
+//PageManager        - AbstractPageProvider         - QuartzPage
+//SelectorManager    - AbstractSelectorProvider     - AbstractSelector
+//TemplateManager    - AbstractTemplateProvider     - Template
+//TitleBar           - AbstractTitleItemProvider    - QuartzItem
+//ViewManager        - AbstractViewProvider         - QuartzView

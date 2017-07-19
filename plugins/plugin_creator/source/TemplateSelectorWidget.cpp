@@ -1,5 +1,6 @@
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QLineEdit>
 
 #include <common/model_view/CheckBoxDeligate.h>
 #include <common/model_view/EditorDelegate.h>
@@ -12,13 +13,15 @@ namespace Quartz { namespace Plugin { namespace Creator {
 struct TemplateSelectorWidget::Data
 {
     Data( TemplateSelectorWidget *parent )
-        : m_view{ new QTreeView{ parent }}
+        : m_filterEdit{ new QLineEdit{ parent }}
+        , m_view{ new QTreeView{ parent }}
     {
 
     }
 
-    QTreeView *m_view;
+    QLineEdit *m_filterEdit;
 
+    QTreeView *m_view;
 };
 
 TemplateSelectorWidget::TemplateSelectorWidget( QWidget* parent )
@@ -26,7 +29,9 @@ TemplateSelectorWidget::TemplateSelectorWidget( QWidget* parent )
     , m_data{ new Data{ this }}
 {
     auto main = new QVBoxLayout{ };
+    main->addWidget( m_data->m_filterEdit );
     main->addWidget( m_data->m_view );
+
     m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
     m_data->m_view->setItemDelegateForColumn( 2, new EditorDelegate{ this });
 
