@@ -8,42 +8,20 @@ class QString;
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
-class Variable : public ITreeNode
+class Variable
 {
 public:
     Variable( const QString &name,
               const QString &description,
-              const QString &value,
-              ITreeNode *parent,
-              bool selected = false );
+              const QString &defaultValue );
 
     ~Variable();
 
     const QString & name() const;
 
-    const QString & value() const;
+    const QString & defaultValue() const;
 
     const QString & description() const;
-
-    int numChildren() const override;
-
-    int numFields() const override;
-
-    ITreeNode*child(int row) const override;
-
-    QVariant data(int column) const override;
-
-    void setSelected( bool value ) override;
-
-    bool isSelected() const override;
-
-    ITreeNode * parent() const override;
-
-    int indexOfChild( const ITreeNode *child ) const override;
-
-    bool isEditable( int column ) const override;
-
-    void setData( int column, const QVariant &data ) override;
 
 private:
     struct Data;

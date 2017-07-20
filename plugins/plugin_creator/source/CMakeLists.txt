@@ -25,6 +25,7 @@ vq_classes(
     AbstractTemplateProvider
     TemplateSelectorWidget
     Variable
+    TemplateInstance
 )
 
 #vq_interfaces(

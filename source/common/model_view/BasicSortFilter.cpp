@@ -33,7 +33,9 @@ bool BasicSortFilter::filterAcceptsRow( int sourceRow,
         for( auto i = 0; i < node->numFields(); ++ i ) {
             const auto str = node->data( i ).toString();
             accept = str.contains( m_data->m_expression, Qt::CaseInsensitive );
-            break;
+            if( accept ) {
+                break;
+            }
         }
     }
     return  accept;

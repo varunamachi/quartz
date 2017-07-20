@@ -6,10 +6,11 @@
 
 #include "Variable.h"
 #include "Template.h"
+#include "TemplateInstance.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
-const Variable Template::EMPTY_VARIABLE{ "", "", "", nullptr, false };
+const Variable Template::EMPTY_VARIABLE{ "", "", "" };
 
 struct Template::Data
 {
@@ -29,6 +30,8 @@ struct Template::Data
     bool m_selected;
 
     QVector< std::shared_ptr< Variable >> m_vars;
+
+    QVector< std::shared_ptr< TemplateInstance >> m_instances;
 };
 
 
@@ -58,9 +61,7 @@ void Template::addVariable( const QString &key,
                 std::make_shared< Variable >(
                     key,
                     value ,
-                    description,
-                    this,
-                    m_data->m_selected ));
+                    description ));
 }
 
 const Variable & Template::variable( const QString &key ) const
@@ -90,7 +91,7 @@ const QString & Template::content() const
 int Template::numChildren() const
 {
     if( m_data->m_selected ) {
-        return m_data->m_vars.size();
+        return m_data->m_instances.size();
     }
     return 0;
 }
@@ -102,8 +103,8 @@ int Template::numFields() const
 
 ITreeNode *Template::child( int row ) const
 {
-    if( row < m_data->m_vars.size() ) {
-        return m_data->m_vars.at( row ).get();
+    if( row < m_data->m_instances.size() ) {
+        return m_data->m_instances.at( row ).get();
     }
     return nullptr;
 }
@@ -113,7 +114,7 @@ QVariant Template::data( int column ) const
     switch( column ) {
     case 0: return m_data->m_selected;
     case 1: return m_data->m_name;
-    case 2: return m_data->m_vars.size();
+    case 2: return m_data->m_instances.size();
     }
     return QVariant{};
 }
@@ -122,9 +123,9 @@ void Template::setSelected( bool value )
 {
     m_data->m_selected = value;
     //Set the value for children
-    for( auto i = 0; i < m_data->m_vars.size(); ++ i ) {
-        auto var = m_data->m_vars.at( i ).get();
-        var->setSelected( value );
+    for( auto i = 0; i < m_data->m_instances.size(); ++ i ) {
+        auto ins = m_data->m_instances.at( i ).get();
+        ins->setSelected( value );
     }
 }
 
@@ -141,8 +142,8 @@ ITreeNode * Template::parent() const
 int Template::indexOfChild( const ITreeNode *child ) const
 {
     int index = -1;
-    for( int i = 0; i < m_data->m_vars.size(); ++ i ) {
-        if( child == m_data->m_vars.at( i ).get() ) {
+    for( int i = 0; i < m_data->m_instances.size(); ++ i ) {
+        if( child == m_data->m_instances.at( i ).get() ) {
             index = i;
             break;
         }
@@ -158,6 +159,29 @@ bool Template::isEditable( int /*column*/ ) const
 void Template::setData( int /*column*/, const QVariant &/*data*/ )
 {
     //Nothing to set
+}
+
+void Template::addChild( std::shared_ptr< ITreeNode > child )
+{
+    //Check if already exists
+    auto templateInsace = std::dynamic_pointer_cast<
+            TemplateInstance >( child );
+    if( templateInsace ) {
+        m_data->m_instances.push_back( templateInsace );
+    }
+}
+
+void Template::removeChild( const ITreeNode *child )
+{
+    if( child == nullptr ) {
+        return;
+    }
+    for( auto i = m_data->m_instances.size() - 1; i <= 0 ; i -- ) {
+        const auto &ins = m_data->m_instances.at( i );
+        if( ins.get() == child ) {
+            m_data->m_instances.remove( i );
+        }
+    }
 }
 
 } } }

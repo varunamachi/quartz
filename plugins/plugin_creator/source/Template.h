@@ -50,6 +50,10 @@ public:
 
     void setData( int column, const QVariant &data ) override;
 
+    void addChild( std::shared_ptr< ITreeNode > child ) override;
+
+    void removeChild( const ITreeNode *child ) override;
+
     static const Variable EMPTY_VARIABLE;
 
 private:

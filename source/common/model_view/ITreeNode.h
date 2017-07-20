@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 
 #include <core/utils/Macros.h>
 
@@ -29,6 +31,10 @@ QZ_INTERFACE ITreeNode
     virtual bool isEditable( int column ) const = 0;
 
     virtual void setData( int column, const QVariant &data );
+
+    virtual void addChild( std::shared_ptr< ITreeNode > child ) = 0;
+
+    virtual void removeChild( const ITreeNode *child ) = 0;
 
     virtual ~ITreeNode() {}
 
