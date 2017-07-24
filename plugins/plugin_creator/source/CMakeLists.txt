@@ -26,6 +26,7 @@ vq_classes(
     TemplateSelectorWidget
     Variable
     TemplateInstance
+    VarConfigWidget
 )
 
 #vq_interfaces(
