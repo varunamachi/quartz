@@ -15,6 +15,10 @@ public:
               const QString &description,
               const QString &defaultValue );
 
+    Variable( const Variable &other );
+
+    Variable & operator = ( const Variable &other );
+
     ~Variable();
 
     const QString & name() const;

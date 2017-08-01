@@ -21,6 +21,8 @@ struct TemplateInstance::Data
 
     Template *m_parent;
 
+    QHash< QString, QString > m_varValues;
+
     bool m_selected;
 
 };
@@ -106,6 +108,17 @@ void TemplateInstance::addChild( std::shared_ptr< ITreeNode > /*child*/ )
 void TemplateInstance::removeChild( const ITreeNode */*child*/ )
 {
     //nothing
+}
+
+void TemplateInstance::setVariableValue( const QString &variableName,
+                                         const QString &variableValue )
+{
+    m_data->m_varValues[ variableName ] = variableValue;
+}
+
+QString TemplateInstance::variableValue( const QString &variableName ) const
+{
+    return m_data->m_varValues[ variableName ];
 }
 
 

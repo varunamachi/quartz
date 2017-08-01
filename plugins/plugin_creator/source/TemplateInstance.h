@@ -23,7 +23,7 @@ public:
 
     int numFields() const override;
 
-    ITreeNode*child(int row) const override;
+    ITreeNode * child(int row) const override;
 
     QVariant data(int column) const override;
 
@@ -44,6 +44,11 @@ public:
     void addChild( std::shared_ptr< ITreeNode > child ) override;
 
     void removeChild( const ITreeNode *child ) override;
+
+    void setVariableValue( const QString &variableName,
+                           const QString &variableValue );
+
+    QString variableValue( const QString &variableName ) const;
 
 private:
     struct Data;

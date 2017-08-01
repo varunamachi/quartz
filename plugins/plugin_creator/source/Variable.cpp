@@ -17,6 +17,14 @@ struct Variable::Data
 
     }
 
+    Data( const Data &other )
+        : m_name{ other.m_name }
+        , m_description{ other.m_description }
+        , m_defaultValue{ other.m_defaultValue }
+    {
+
+    }
+
     QString m_name;
 
     QString m_description;
@@ -31,6 +39,21 @@ Variable::Variable( const QString &name,
     : m_data{ new Data{ name, description, defaultValue }}
 {
 
+}
+
+Variable::Variable( const Variable &other )
+    : m_data{ new Data { other.m_data->m_name,
+              other.m_data->m_description,
+              other.m_data->m_defaultValue }}
+{
+}
+
+Variable &Variable::operator =( const Variable &other )
+{
+    m_data->m_name = other.m_data->m_name;
+    m_data->m_description = other.m_data->m_description;
+    m_data->m_defaultValue = other.m_data->m_defaultValue;
+    return *this;
 }
 
 Variable::~Variable()
