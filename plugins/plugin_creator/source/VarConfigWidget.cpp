@@ -35,7 +35,7 @@ VarConfigWidget::VarConfigWidget( TemplateInstance *templInst,
     //iterate through template variables
     //create line editor for each variable
     //add it to layout and the map
-    auto tmpl = templInst->parentTemplate();
+    auto tmpl = templInst->instanceOf();
     for( auto i = 0; i < templInst->numChildren(); ++ i ) {
         auto &var = tmpl->variableAt( i );
         auto lab = new QLabel{ var.name(), this };
@@ -51,6 +51,11 @@ VarConfigWidget::VarConfigWidget( TemplateInstance *templInst,
     }
     this->setLayout( m_data->m_layout );
 
+
+}
+
+VarConfigWidget::~VarConfigWidget()
+{
 
 }
 

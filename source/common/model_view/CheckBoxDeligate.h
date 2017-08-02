@@ -2,9 +2,11 @@
 
 #include <QStyledItemDelegate>
 
+#include "../QuartzCommon.h"
+
 namespace Quartz {
 
-class CheckBoxDelegate : public QStyledItemDelegate
+class QUARTZ_COMMON_API CheckBoxDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 

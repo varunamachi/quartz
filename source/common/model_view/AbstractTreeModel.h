@@ -2,18 +2,24 @@
 
 #include <QAbstractItemModel>
 
+#include "../QuartzCommon.h"
 
 namespace Quartz {
 
 class ITreeNode;
 
-class AbstractTreeModel : public QAbstractItemModel
+class QUARTZ_COMMON_API AbstractTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
+    AbstractTreeModel( QObject *parent = nullptr );
+
+    virtual ~AbstractTreeModel();
+
     QModelIndex index( int row,
                        int column,
                        const QModelIndex &parent ) const override;
+
 
     QModelIndex parent( const QModelIndex &child ) const override;
 

@@ -100,6 +100,11 @@ void TemplateInstance::setData( int column, const QVariant &data )
     }
 }
 
+Template * TemplateInstance::instanceOf() const
+{
+    return m_data->m_parent;
+}
+
 void TemplateInstance::addChild( std::shared_ptr< ITreeNode > /*child*/ )
 {
     //nothing

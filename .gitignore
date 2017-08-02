@@ -4,6 +4,8 @@ builds/*
 output/lib/*
 output/include/*
 output/bin/*
+exp/*
+archives/*
 *.autosave
 
 # C++ objects and libs

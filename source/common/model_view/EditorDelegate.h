@@ -2,9 +2,11 @@
 
 #include <QStyledItemDelegate>
 
+#include "../QuartzCommon.h"
+
 namespace Quartz {
 
-class EditorDelegate : public QStyledItemDelegate
+class QUARTZ_COMMON_API EditorDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:

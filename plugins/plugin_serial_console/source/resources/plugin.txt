@@ -1,0 +1,6 @@
+#Created By Quartz Bundle Creator
+id=qzbundle.serial_console
+name=serial_console
+display=Serial Console 
+ns=SerialConsole
+version=0.0.0.0

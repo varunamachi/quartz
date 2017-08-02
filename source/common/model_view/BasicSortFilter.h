@@ -4,9 +4,11 @@
 
 #include <QSortFilterProxyModel>
 
+#include "../QuartzCommon.h"
+
 namespace Quartz {
 
-class BasicSortFilter : public QSortFilterProxyModel
+class QUARTZ_COMMON_API BasicSortFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:

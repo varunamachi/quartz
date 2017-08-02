@@ -30,7 +30,7 @@ QZ_INTERFACE ITreeNode
 
     virtual bool isEditable( int column ) const = 0;
 
-    virtual void setData( int column, const QVariant &data );
+    virtual void setData( int column, const QVariant &data ) = 0;
 
     virtual void addChild( std::shared_ptr< ITreeNode > child ) = 0;
 

@@ -14,9 +14,10 @@ namespace Quartz { namespace Plugin { namespace Creator {
 
 class Template;
 
-class TemplateManager : public IPluginAdapter
-                      , public AbstractTreeModel
+class TemplateManager : public AbstractTreeModel
+                      , public IPluginAdapter
 {
+    Q_OBJECT
 public:
     explicit TemplateManager();
 

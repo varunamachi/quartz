@@ -6,6 +6,19 @@
 
 namespace Quartz {
 
+AbstractTreeModel::AbstractTreeModel( QObject *parent )
+    : QAbstractItemModel{ parent }
+{
+
+}
+
+
+AbstractTreeModel::~AbstractTreeModel()
+{
+
+}
+
+
 QModelIndex AbstractTreeModel::index( int row,
                                     int column,
                                     const QModelIndex &parent ) const
@@ -28,6 +41,7 @@ QModelIndex AbstractTreeModel::index( int row,
     }
     return index;
 }
+
 
 QModelIndex AbstractTreeModel::parent( const QModelIndex& childIndex ) const
 {

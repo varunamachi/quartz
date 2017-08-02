@@ -39,7 +39,7 @@ public:
 
     void setData( int column, const QVariant &data ) override;
 
-    Template * parentTemplate() const;
+    Template * instanceOf() const;
 
     void addChild( std::shared_ptr< ITreeNode > child ) override;
 
