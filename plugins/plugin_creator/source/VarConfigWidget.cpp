@@ -8,6 +8,7 @@
 #include "TemplateInstance.h"
 #include "VarConfigWidget.h"
 
+
 namespace Quartz { namespace Plugin { namespace Creator {
 
 struct VarConfigWidget::Data
@@ -50,8 +51,6 @@ VarConfigWidget::VarConfigWidget( TemplateInstance *templInst,
         });
     }
     this->setLayout( m_data->m_layout );
-
-
 }
 
 VarConfigWidget::~VarConfigWidget()

@@ -4,6 +4,8 @@
 
 #include <QWidget>
 
+class QModelIndex;
+
 namespace Quartz {
 
 namespace Plugin { namespace Creator {
@@ -15,6 +17,8 @@ public:
     explicit TemplateSelectorWidget( QWidget *parent = nullptr );
 
     ~TemplateSelectorWidget();
+
+    void selected( const QModelIndex &index );
 
 private:
     struct Data;
