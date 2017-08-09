@@ -1,5 +1,3 @@
-vq_classes(
-    ConfigParser
-    Config
-    Param
-)
+
+add_subdirectory( model )
+add_subdirectory( ui )

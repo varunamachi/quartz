@@ -15,8 +15,9 @@ namespace Quartz {
 class ConfigParser
 {
 public:
-    std::size_t parse( const QString &filePath,
-                       QZ_OUT QHash< QString, Config::Ptr > &configsOut);
+    std::size_t parse(
+            const QString &filePath,
+            QZ_OUT QHash< QString, std::shared_ptr< Config>> &configsOut);
 
 private:
 
