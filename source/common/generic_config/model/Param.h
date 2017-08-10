@@ -22,7 +22,7 @@ class Param
 public:
     Param( const QString &id,
            const QString &name,
-           const QString &category );
+           const QString &description );
 
     virtual ~Param();
 
@@ -30,13 +30,7 @@ public:
 
     const QString & name() const;
 
-    const QString & category() const;
-
-    void addSubParam( std::shared_ptr< Param > param );
-
-    int numSubParams() const;
-
-    Param * subParam( int index ) const;
+    const QString & description() const;
 
     virtual ParamType type() const = 0;
 

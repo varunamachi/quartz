@@ -1,13 +1,19 @@
 
+#include <QByteArray>
+
 #include "ConfigParser.h"
+#include "Config.h"
 
 namespace Quartz {
 
-size_t ConfigParser::parse(
-        const QString &/*filePath*/,
-        QZ_OUT QHash< QString, std::shared_ptr< Config>> &/*configsOut*/ )
+std::unique_ptr< Config > ConfigParser::parse( const QByteArray &content )
 {
-    return 0;
+    if( content.isNull() ) {
+        return nullptr;
+    }
+    std::unique_ptr< Config > config;
+
+    return config;
 }
 
 

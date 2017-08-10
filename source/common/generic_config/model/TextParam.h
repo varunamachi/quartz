@@ -22,7 +22,7 @@ public:
 
     explicit TextParam( const QString &id,
                         const QString &name,
-                        const QString &category );
+                        const QString &description );
 
     ~TextParam();
 

@@ -11,7 +11,7 @@ class RangeParam : public Param
 public:
     RangeParam( const QString &id,
                 const QString &name,
-                const QString &category );
+                const QString &description );
 
     std::size_t maxVal() const;
 

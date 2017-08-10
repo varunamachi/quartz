@@ -9,10 +9,10 @@ struct Param::Data
 {
     Data( const QString &id,
           const QString &name,
-          const QString &category )
-        : m_id( id )
-        , m_name( name )
-        , m_category( category )
+          const QString &description )
+        : m_id{ id }
+        , m_name{ name }
+        , m_description{ description }
     {
     }
 
@@ -20,16 +20,14 @@ struct Param::Data
 
     QString m_name;
 
-    QString m_category;
-
-    QVector< std::shared_ptr< Param >> m_subParams;
+    QString m_description;
 
 };
 
 Param::Param( const QString &id,
               const QString &name,
-              const QString &category )
-    : m_data{ new Data{ id, name, category  }}
+              const QString &description )
+    : m_data{ new Data{ id, name, description  }}
 {
 
 }
@@ -49,29 +47,9 @@ const QString & Param::name() const
     return m_data->m_name;
 }
 
-const QString & Param::category() const
+const QString &Param::description() const
 {
-    return m_data->m_category;
-}
-
-void Param::addSubParam( std::shared_ptr< Param > param )
-{
-    m_data->m_subParams.append( param );
-}
-
-
-int Param::numSubParams() const
-{
-    return m_data->m_subParams.size();
-}
-
-Param * Param::subParam( int index ) const
-{
-    Param *param = nullptr;
-    if( index < m_data->m_subParams.size() ) {
-        param = m_data->m_subParams.at( index ).get();
-    }
-    return nullptr;
+    return m_data->m_description;
 }
 
 }

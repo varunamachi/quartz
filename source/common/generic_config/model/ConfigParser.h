@@ -1,23 +1,17 @@
 #pragma once
 
-#include <QString>
-#include <QHash>
+#include <memory>
 
-#include <core/utils/Macros.h>
-#include <core/QuartzCore.h>
-
-
-#include "Param.h"
-#include "Config.h"
+class QByteArray;
 
 namespace Quartz {
+
+class Config;
 
 class ConfigParser
 {
 public:
-    std::size_t parse(
-            const QString &filePath,
-            QZ_OUT QHash< QString, std::shared_ptr< Config>> &configsOut);
+    std::unique_ptr< Config > parse( const QByteArray &content );
 
 private:
 

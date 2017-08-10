@@ -9,7 +9,7 @@ class BooleanParam : public Param
 public:
     BooleanParam( const QString &id,
                   const QString &name,
-                  const QString &category );
+                  const QString &description );
 
     void setDefaultValue( bool value );
 

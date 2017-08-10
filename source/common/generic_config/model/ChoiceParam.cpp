@@ -23,8 +23,8 @@ struct ChoiceParam::Data {
 
 ChoiceParam::ChoiceParam( const QString &id,
                           const QString &name,
-                          const QString &category )
-    : Param{ id, name, category }
+                          const QString &description )
+    : Param{ id, name, description }
     , m_data{ new Data{} }
 
 {

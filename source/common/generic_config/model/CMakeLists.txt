@@ -6,4 +6,9 @@ vq_classes(
     ChoiceParam
     RangeParam
     TextParam
+    Group
+)
+
+vq_sources(
+    ConfigSample.xml
 )

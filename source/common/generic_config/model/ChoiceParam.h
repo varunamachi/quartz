@@ -9,7 +9,7 @@ class ChoiceParam : public Param
 public:
     explicit ChoiceParam( const QString &id,
                           const QString &name,
-                          const QString &category );
+                          const QString &description );
 
     ~ChoiceParam();
 
