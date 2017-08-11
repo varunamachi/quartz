@@ -12,7 +12,9 @@
             name="choice param one"
             description="A choice param"
             default="0">
-            <option id="" name="" value=""/>
+            <option name="One" value="1"/>
+            <option name="Two" value="2"/>
+            <option name="Three" value="3"/>
         </param>
         <param
             type="range"
@@ -30,7 +32,5 @@
             name="text param one"
             description="A text param"
             default=""/>
-
-
     </group>
 </config>
