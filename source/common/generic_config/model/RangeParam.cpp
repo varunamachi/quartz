@@ -9,20 +9,20 @@ struct RangeParam::Data
 {
     Data()
         : m_min( 0x0 )
-        , m_max( 0xFFFFFFFF )
+        , m_max( 0x7FFFFFFF )
         , m_defaultValue( m_min )
         , m_inc( 1 )
     {
 
     }
 
-    std::size_t m_min;
+    int m_min;
 
-    std::size_t m_max;
+    int m_max;
 
-    std::size_t m_defaultValue;
+    int m_defaultValue;
 
-    std::uint8_t m_inc;
+    int m_inc;
 
 };
 
@@ -36,42 +36,47 @@ RangeParam::RangeParam( const QString &id,
 
 }
 
-std::size_t RangeParam::maxVal() const
+RangeParam::~RangeParam()
+{
+
+}
+
+int RangeParam::maxVal() const
 {
     return m_data->m_max;
 }
 
-void RangeParam::setMax( std::size_t max )
+void RangeParam::setMax( int max )
 {
     m_data->m_max = max;
 }
 
-std::size_t RangeParam::minVal() const
+int RangeParam::minVal() const
 {
     return m_data->m_min;
 }
 
-void RangeParam::setMin( std::size_t min )
+void RangeParam::setMin( int min )
 {
     m_data->m_min = min;
 }
 
-std::uint8_t RangeParam::inc() const
+int RangeParam::inc() const
 {
     return m_data->m_inc;
 }
 
-void RangeParam::setIncrement( std::uint8_t inc )
+void RangeParam::setIncrement( int inc )
 {
     m_data->m_inc = inc;
 }
 
-std::size_t RangeParam::defaultValue() const
+int RangeParam::defaultValue() const
 {
     return m_data->m_defaultValue;
 }
 
-void RangeParam::setDefaultValue( std::size_t defaultValue )
+void RangeParam::setDefaultValue( int defaultValue )
 {
     m_data->m_defaultValue = defaultValue;
 }

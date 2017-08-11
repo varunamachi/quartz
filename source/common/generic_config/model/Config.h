@@ -8,6 +8,7 @@ class QString;
 namespace Quartz {
 
 class Param;
+class Group;
 
 class Config
 {
@@ -20,11 +21,21 @@ public:
 
     const QString & name() const;
 
-    int numParams() const;
+    int numChildParams() const;
 
-    const Param * paramAt( int index ) const;
+    const Param * childParamAt( int index ) const;
 
-    void addParameter( std::shared_ptr< Param > param );
+    void addChildParameter( std::shared_ptr< Param > param );
+
+    int numGroups() const;
+
+    const Group * groupAt( int index ) const;
+
+    void addGroup( std::shared_ptr< Group > group );
+
+    const Param * param( const QString &id ) const;
+
+    bool registerParam( Param *param );
 
 private:
     struct Data;

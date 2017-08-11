@@ -13,21 +13,23 @@ public:
                 const QString &name,
                 const QString &description );
 
-    std::size_t maxVal() const;
+    ~RangeParam();
 
-    void setMax( std::size_t max );
+    int maxVal() const;
 
-    std::size_t minVal() const;
+    void setMax( int max );
 
-    void setMin( std::size_t min );
+    int minVal() const;
 
-    std::uint8_t inc() const;
+    void setMin( int min );
 
-    void setIncrement( std::uint8_t inc );
+    int inc() const;
 
-    std::size_t defaultValue() const;
+    void setIncrement( int inc );
 
-    void setDefaultValue( std::size_t defaultValue );
+    int defaultValue() const;
+
+    void setDefaultValue( int defaultValue );
 
     ParamType type() const override;
 
