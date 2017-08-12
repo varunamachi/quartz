@@ -37,6 +37,11 @@ Group::Group( const QString &id,
 
 }
 
+Group::~Group()
+{
+
+}
+
 const QString &Group::id() const
 {
     return m_data->m_id;

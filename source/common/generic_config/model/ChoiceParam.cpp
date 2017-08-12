@@ -35,7 +35,7 @@ ChoiceParam::~ChoiceParam()
 
 }
 
-void ChoiceParam::addChoice( const QString &name, const QString &value )
+void ChoiceParam::addOption( const QString &name, const QString &value )
 {
 
     if( ! m_data->m_choices.contains( name )) {
@@ -77,11 +77,9 @@ void ChoiceParam::setDefaultIndex( int defaultIndex )
     m_data->m_defaultIndex = defaultIndex;
 }
 
-int ChoiceParam::numChoices() const
+int ChoiceParam::numOption() const
 {
     return m_data->m_choices.size();
 }
-
-
 
 }

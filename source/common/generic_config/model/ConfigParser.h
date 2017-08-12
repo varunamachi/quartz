@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <QVector>
+
 class QByteArray;
 class QDomElement;
 
@@ -15,13 +17,22 @@ class Group;
 class ConfigParser
 {
 public:
-    std::unique_ptr< Config > parse( const QByteArray &content );
+    ConfigParser();
+
+    virtual ~ConfigParser();
+
+    QVector< std::shared_ptr< Config >> parse( const QByteArray &content );
 
     std::unique_ptr< Config > parse( const QDomElement &configRoot );
 
+
+protected:
     std::shared_ptr< Param > parseParam( const QDomElement &paramNode );
 
-    std::shared_ptr< Group > parseGroup( const QDomElement &groupNode );
+    std::shared_ptr< Group > parseGroup(
+            Config &config,
+            const QDomElement &groupNode );
+
 };
 
 }

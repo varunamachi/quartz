@@ -15,6 +15,8 @@ public:
            const QString &name,
            const QString &description );
 
+    ~Group();
+
     const QString & id() const;
 
     const QString & name() const;

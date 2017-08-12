@@ -13,6 +13,7 @@
 #include "ChoiceParam.h"
 #include "RangeParam.h"
 #include "TextParam.h"
+#include "Group.h"
 
 namespace Quartz {
 
@@ -41,34 +42,118 @@ QString nodeValue( const QDomNamedNodeMap &attr, const QString &key )
 
 void parseOptions( ChoiceParam *param, const QDomElement &choiceNode )
 {
-
+    auto oNodes = choiceNode.elementsByTagName( "option" );
+    for( auto i = 0; i < oNodes.size(); ++ i ) {
+        auto opt = oNodes.at( i );
+        auto attr = opt.attributes();
+        auto name = nodeValue( attr, "name" );
+        auto val = nodeValue( attr, "value" );
+        if( ! name.isEmpty() && ! val.isEmpty() ) {
+            param->addOption( name, val );
+        }
+        else {
+            QZ_ERROR( "Qz:Cmn:GenParam" )
+                    << "Invalid option found for choice param "
+                    << param->name();
+        }
+    }
 }
 
-std::unique_ptr< Config > ConfigParser::parse( const QByteArray &content )
+ConfigParser::ConfigParser()
 {
-    if( content.isNull() ) {
-        return nullptr;
-    }
-    std::unique_ptr< Config > config;
+    //Nothing here...
+}
 
-    return config;
+ConfigParser::~ConfigParser()
+{
+    //Nothing here...
+}
+
+QVector< std::shared_ptr< Config >> ConfigParser::parse(
+        const QByteArray &content )
+{
+    QVector< std::shared_ptr< Config >> configs;
+    if( content.isNull() ) {
+        QZ_ERROR( "Qz:Cmn:GenParam" )
+                << "Invalid content given to general param parser";
+        return configs;
+    }
+    QDomDocument doc;
+    QString errorMsg{ "" };
+    int errorLine = 0;
+    if( doc.setContent( content, false, &errorMsg, &errorLine )) {
+        auto root = doc.documentElement();
+        if( root.tagName() == "configs" ) {
+            auto configLists = root.elementsByTagName( "config" );
+            for( auto i = 0; i < configLists.size(); ++ i ) {
+                auto configNode = configLists.at( i );
+                auto config = parse( configNode.toElement() );
+                if( config != nullptr ) {
+                    std::shared_ptr< Config > cp = std::move( config );
+                    configs.append( cp );
+                }
+                else {
+                    QZ_ERROR( "Qz:Cmn:GenParam" )
+                            << "Could not parse one of the 'config' tag";
+                }
+            }
+            if( configLists.isEmpty() ) {
+                QZ_ERROR( "Qz:Cmn:GenParam" )
+                        << "Could not find 'config' tags inside 'configs'";
+            }
+        }
+        else {
+            QZ_ERROR( "Qz:Cmn:GenParam" )
+                    << "Could not find root 'configs' tag";
+        }
+    }
+    else {
+        QZ_ERROR( "Qz:Cmn:GenParam" )
+                << "Failed to read config XML content at " << errorLine
+                << " Msg: " << errorMsg;
+
+    }
+    return configs;
 }
 
 std::unique_ptr< Config > ConfigParser::parse( const QDomElement &configRoot )
 {
     std::unique_ptr< Config > config;
-    auto paramList = configRoot.elementsByTagName( "param" );
-    for( auto i = 0; i < paramList.size(); ++ i ) {
-        auto paramNode = paramList.at( i );
-        auto param = parseParam( paramNode.toElement() );
-        if( param != nullptr ) {
-
+    auto name = configRoot.attribute( "name" );
+    auto id   = configRoot.attribute( "id" );
+    auto configName = configRoot.tagName();
+    if( configName == "config" && ! name.isEmpty() && ! id.isEmpty() ) {
+        config = std::unique_ptr< Config >{ new Config{ id, name }};
+        auto paramList = configRoot.elementsByTagName( "param" );
+        for( auto i = 0; i < paramList.size(); ++ i ) {
+            auto paramNode = paramList.at( i );
+            auto param = parseParam( paramNode.toElement() );
+            if( param != nullptr ) {
+                config->registerParam( param.get() );
+                config->addChildParameter( param );
+            }
+            else {
+                QZ_ERROR( "Qz:Cmn:GenParam" )
+                        << "Failed to parse top level parameter for config "
+                        << name;
+            }
         }
-        else {
-            //log error
-            //continue
+        auto groupList = configRoot.elementsByTagName( "group" );
+        for( auto i = 0; i < groupList.size(); ++ i ) {
+            auto groupNode = groupList.at( i );
+            auto group = parseGroup( *config.get(), groupNode.toElement() );
+            if( group != nullptr ) {
+                config->addGroup( group );
+            }
+            else {
+                QZ_ERROR( "Qz:Cmn:GenParam" )
+                        << "Failed to parse a high level group for config "
+                        << name;
+            }
         }
-
+    }
+    else {
+        QZ_ERROR( "Qz:Cmn:GenParam" ) << "Invalid 'config' found";
     }
     return config;
 }
@@ -110,7 +195,7 @@ std::shared_ptr< Param > ConfigParser::parseParam(
             param = rparam;
         }
         else {
-            QZ_ERROR( "Cmn:GenParam" )
+            QZ_ERROR( "Qz:Cmn:GenParam" )
                     << "Failed to parse range parameter with ID " << id;
         }
     }
@@ -123,16 +208,42 @@ std::shared_ptr< Param > ConfigParser::parseParam(
 }
 
 std::shared_ptr< Group > ConfigParser::parseGroup(
+        Config &config,
         const QDomElement &groupNode )
 {
     std::shared_ptr< Group > group;
-    //parse group attributes
-    //create group object
-    //iterate and process the param tags
-    //iterate and parse group tag - recursive
+    auto name   = groupNode.attribute( "name" );
+    auto id     = groupNode.attribute( "id" );
+    auto desc   = groupNode.attribute( "description" );
+    if( ! id.isEmpty() && ! name.isEmpty() ) {
+        group = std::make_shared< Group >( id, name, desc );
+        auto pNodes = groupNode.elementsByTagName( "param" );
+        for( auto i = 0; i < pNodes.size(); ++ i ) {
+            auto pn = pNodes.at( i );
+            auto param = parseParam( pn.toElement() );
+            if( param != nullptr ) {
+                config.registerParam( param.get() );
+                group->addParam( param );
+            }
+            else {
+                QZ_ERROR( "Qz:Cmn:GenParam" )
+                        << "Invalid parameter found in group " << name;
+            }
+        }
+        auto gNodes = groupNode.elementsByTagName( "group" );
+        for( auto i = 0; i < gNodes.count(); ++ i ) {
+            auto gn = gNodes.at( i );
+            auto subGroup = parseGroup( config, gn.toElement() );
+            if( subGroup != nullptr ) {
+                group->addSubGroup( subGroup );
+            }
+            else {
+                QZ_ERROR( "Qz:Cmn:GenParam" )
+                        << "Invalid sub group found under group " << name;
+            }
+        }
+    }
     return  group;
 }
-
-
 
 }

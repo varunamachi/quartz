@@ -13,7 +13,7 @@ public:
 
     ~ChoiceParam();
 
-    void addChoice( const QString &name, const QString &value );
+    void addOption( const QString &name, const QString &value );
 
     QString value( const QString &name ) const;
 
@@ -25,7 +25,7 @@ public:
 
     void setDefaultIndex( int defaultIndex );
 
-    int numChoices() const;
+    int numOption() const;
 
 private:
     struct Data;
