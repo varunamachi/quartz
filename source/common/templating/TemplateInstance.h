@@ -2,9 +2,11 @@
 
 #include <memory>
 
-#include "Variable.h"
+#include "../model_view/ITreeNode.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+class QString;
+
+namespace Quartz {
 
 class Template;
 
@@ -21,10 +23,10 @@ public:
 
     Template * instanceOf() const;
 
-    void setVariableValue( const QString &variableName,
-                           const QString &variableValue );
+    void setParamValue( const QString &paramName,
+                           const QString &paramValue );
 
-    QString variableValue( const QString &variableName ) const;
+    QString paramValue( const QString &paramName ) const;
 
     int numChildren() const override;
 
@@ -50,10 +52,9 @@ public:
 
     void removeChild( const ITreeNode *child ) override;
 
-
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
 };
 
-} } }
+}

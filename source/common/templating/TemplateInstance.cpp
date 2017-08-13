@@ -4,7 +4,7 @@
 #include "Template.h"
 #include "TemplateInstance.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 struct TemplateInstance::Data
 {
@@ -12,7 +12,7 @@ struct TemplateInstance::Data
           Template *parent )
      : m_name{ name }
      , m_parent{ parent }
-     , m_selected{ true }
+     , m_selected{ false }
     {
 
     }
@@ -21,10 +21,9 @@ struct TemplateInstance::Data
 
     Template *m_parent;
 
-    QHash< QString, QString > m_varValues;
+    QHash< QString, QString > m_paramValues;
 
     bool m_selected;
-
 };
 
 TemplateInstance::TemplateInstance( const QString &name,
@@ -39,24 +38,25 @@ TemplateInstance::~TemplateInstance()
 
 }
 
+const QString & TemplateInstance::name() const
+{
+    return m_data->m_name;
+}
+
 Template * TemplateInstance::instanceOf() const
 {
     return m_data->m_parent;
 }
-void TemplateInstance::setVariableValue( const QString &variableName,
-                                         const QString &variableValue )
+
+void TemplateInstance::setParamValue( const QString &paramName,
+                                      const QString &paramValue )
 {
-    m_data->m_varValues[ variableName ] = variableValue;
+    m_data->m_paramValues[ paramName ] = paramValue;
 }
 
-QString TemplateInstance::variableValue( const QString &variableName ) const
+QString TemplateInstance::paramValue( const QString &paramName ) const
 {
-    return m_data->m_varValues[ variableName ];
-}
-
-const QString & TemplateInstance::name() const
-{
-    return m_data->m_name;
+    return m_data->m_paramValues[ paramName ];
 }
 
 int TemplateInstance::numChildren() const
@@ -126,5 +126,4 @@ void TemplateInstance::removeChild( const ITreeNode */*child*/ )
 }
 
 
-
-} } }
+}
