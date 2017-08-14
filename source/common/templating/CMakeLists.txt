@@ -8,3 +8,7 @@ vq_classes(
         TemplateContainerParser
 )
 
+vq_sources(
+    sample.template.xml
+)
+
