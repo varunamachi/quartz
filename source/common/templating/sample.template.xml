@@ -1,71 +1,73 @@
-<template name="CMakeLists">
-    <config id="sample" name="Sample">
-        <group name="group1">
-            <parm
-                type="boolean"
-                id="bp1"
-                name="bool param 1"
-                description="A boolean param"
-                default="true"/>
-             <param
-                type="choice"
-                id="ch1"
-                name="choice param one"
-                description="A choice param"
-                default="0">
-                <option name="One" value="1"/>
-                <option name="Two" value="2"/>
-                <option name="Three" value="3"/>
-            </param>
-            <param
-                type="range"
-                id="rp1"
-                name="range param one"
-                description="A range parameter"
-                default="0"
-                min="0"
-                max="100"
-                inc="1">
-            </param>
-            <param
-                type="text"
-                id="tx1"
-                name="text param one"
-                description="A text param"
-                default=""/>
-        </group>
-    </config>
-    <content>
-        <![CDATA[
-            project( plugin_$<BUNDLE_NAME>$ )
-            cmake_minimum_required( VERSION 3.1 )
-            include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
-            include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
+<templates>
+    <template name="CMakeLists">
+        <config id="sample" name="Sample">
+            <group name="group1">
+                <parm
+                    type="boolean"
+                    id="bp1"
+                    name="bool param 1"
+                    description="A boolean param"
+                    default="true"/>
+                 <param
+                    type="choice"
+                    id="ch1"
+                    name="choice param one"
+                    description="A choice param"
+                    default="0">
+                    <option name="One" value="1"/>
+                    <option name="Two" value="2"/>
+                    <option name="Three" value="3"/>
+                </param>
+                <param
+                    type="range"
+                    id="rp1"
+                    name="range param one"
+                    description="A range parameter"
+                    default="0"
+                    min="0"
+                    max="100"
+                    inc="1">
+                </param>
+                <param
+                    type="text"
+                    id="tx1"
+                    name="text param one"
+                    description="A text param"
+                    default=""/>
+            </group>
+        </config>
+        <content>
+            <![CDATA[
+                project( plugin_$<BUNDLE_NAME>$ )
+                cmake_minimum_required( VERSION 3.1 )
+                include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
+                include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
-            qz_add_qt()
-            qz_add_plugin_base()
-            qz_add_common()
-            qz_add_base()
-            qz_add_core()
+                qz_add_qt()
+                qz_add_plugin_base()
+                qz_add_common()
+                qz_add_base()
+                qz_add_core()
 
-            qz_add_resource( $<BUNDLE_NAME>$.qrc )
+                qz_add_resource( $<BUNDLE_NAME>$.qrc )
 
-            vq_sources(
-                $<BUNDLE_NAMESPACE>$.cpp
-            $[FOR file IN files:>
-                $<file>$
-            ]$
-            )
+                vq_sources(
+                    $<BUNDLE_NAMESPACE>$.cpp
+                $[FOR file IN files:>
+                    $<file>$
+                ]$
+                )
 
-            vq_classes(
-            $[FOR class IN classes:>
-                $<class>$
-            ]$
-            )
+                vq_classes(
+                $[FOR class IN classes:>
+                    $<class>$
+                ]$
+                )
 
-            qz_create_plugin()
-            qz_install_plugin()
-        ]]>
-    </content>
+                qz_create_plugin()
+                qz_install_plugin()
+            ]]>
+        </content>
 
-</template>
+    </template>
+</templates>

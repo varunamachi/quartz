@@ -94,7 +94,7 @@ QVector< std::shared_ptr< Config >> ConfigParser::parse(
                 }
                 else {
                     QZ_ERROR( "Qz:Cmn:GenParam" )
-                            << "Could not parse one of the 'config' tag";
+                            << "Could not parse one of the 'config' tags";
                 }
             }
             if( configLists.isEmpty() ) {
