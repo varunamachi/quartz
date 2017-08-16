@@ -4,9 +4,15 @@
 
 namespace Quartz {
 
+class Config;
+
 class ConfigTreeNode : public ITreeNode
 {
 public:
+    ConfigTreeNode( ITreeNode *parent, Config *config );
+
+    ~ConfigTreeNode();
+
     int numChildren() const override;
 
     int numFields() const override;
@@ -32,6 +38,8 @@ public:
     void removeChild( const ITreeNode *child ) override;
 
 private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

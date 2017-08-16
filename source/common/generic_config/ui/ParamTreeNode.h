@@ -4,9 +4,17 @@
 
 namespace Quartz {
 
+class Param;
+
 class ParamTreeNode : public ITreeNode
 {
 public:
+    ParamTreeNode( ITreeNode *parent,
+                   Param *param,
+                   QVariant value );
+
+    ~ParamTreeNode();
+
     int numChildren() const override;
 
     int numFields() const override;
@@ -32,6 +40,8 @@ public:
     void removeChild( const ITreeNode *child ) override;
 
 private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

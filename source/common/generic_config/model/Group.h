@@ -25,7 +25,13 @@ public:
 
     void addParam( std::shared_ptr< Param > param );
 
+    int numParams() const;
+
     Param * paramAt( int index ) const;
+
+    Param * paramAt( int index );
+
+    int numSubGroups() const;
 
     void addSubGroup( std::shared_ptr< Group > subGroup );
 

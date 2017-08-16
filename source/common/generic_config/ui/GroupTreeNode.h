@@ -4,9 +4,16 @@
 
 namespace Quartz {
 
+class Group;
+
 class GroupTreeNode : public ITreeNode
 {
 public:
+    GroupTreeNode( ITreeNode *parent,
+                   Group *group );
+
+    ~GroupTreeNode();
+
     int numChildren() const override;
 
     int numFields() const override;
@@ -32,6 +39,8 @@ public:
     void removeChild( const ITreeNode *child ) override;
 
 private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

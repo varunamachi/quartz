@@ -1,9 +1,44 @@
 
+#include <QVector>
 #include <QVariant>
 
 #include "ConfigTreeNode.h"
 
 namespace Quartz {
+
+struct ConfigTreeNode::Data
+{
+    Data( ITreeNode *parent,
+          Config *config)
+        : m_parent{ parent }
+        , m_config{ config }
+        , m_selected{ false }
+    {
+
+    }
+
+    ITreeNode *m_parent;
+
+    Config *m_config;
+
+    QVariant m_value;
+
+    bool m_selected;
+
+    QVector< std::shared_ptr< ITreeNode >> m_children;
+};
+
+ConfigTreeNode::ConfigTreeNode( ITreeNode *parent,
+                                Config *config)
+    : m_data{ new Data{ parent, config }}
+{
+
+}
+
+ConfigTreeNode::~ConfigTreeNode()
+{
+
+}
 
 int ConfigTreeNode::numChildren() const
 {

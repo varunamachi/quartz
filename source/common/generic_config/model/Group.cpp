@@ -64,6 +64,11 @@ void Group::addParam( std::shared_ptr< Param > param )
     }
 }
 
+int Group::numParams() const
+{
+    return m_data->m_params.size();
+}
+
 Param * Group::paramAt( int index ) const
 {
     Param *param = nullptr;
@@ -71,6 +76,20 @@ Param * Group::paramAt( int index ) const
         param = m_data->m_params.at( index ).get();
     }
     return param;
+}
+
+Param * Group::paramAt( int index )
+{
+    Param *param = nullptr;
+    if( index < m_data->m_params.size() ) {
+        param = m_data->m_params.at( index ).get();
+    }
+    return param;
+}
+
+int Group::numSubGroups() const
+{
+    return m_data->m_subGroups.size();
 }
 
 void Group::addSubGroup( std::shared_ptr< Group > subGroup )
