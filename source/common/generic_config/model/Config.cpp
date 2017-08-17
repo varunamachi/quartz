@@ -55,7 +55,7 @@ int Config::numChildParams() const
     return m_data->m_params.size();
 }
 
-const Param * Config::childParamAt( int index ) const
+Param * Config::childParamAt( int index ) const
 {
     if( index < m_data->m_params.size() ) {
         return m_data->m_params.at( index ).get();
@@ -73,7 +73,7 @@ int Config::numGroups() const
     return m_data->m_groups.size();
 }
 
-const Group *Config::groupAt( int index ) const
+Group *Config::groupAt( int index ) const
 {
     Group *group = nullptr;
     if( index < m_data->m_groups.size() ) {

@@ -2,7 +2,10 @@
 #include <QVector>
 #include <QVariant>
 
+#include "../model/Config.h"
 #include "ConfigTreeNode.h"
+#include "ParamTreeNode.h"
+#include "GroupTreeNode.h"
 
 namespace Quartz {
 
@@ -42,42 +45,75 @@ ConfigTreeNode::~ConfigTreeNode()
 
 int ConfigTreeNode::numChildren() const
 {
-    return 0;
+    return m_data->m_config->numChildParams() + m_data->m_config->numGroups();
 }
 
 int ConfigTreeNode::numFields() const
 {
-    return 0;
+    return 1;
 }
 
-ITreeNode * ConfigTreeNode::child( int /*row*/ ) const
+ITreeNode * ConfigTreeNode::child( int row ) const
 {
-    return nullptr;
+    std::shared_ptr< ITreeNode > child;
+    if( row > m_data->m_children.size() ) {
+        if( row < m_data->m_config->numChildParams() ) {
+            auto *param = m_data->m_config->childParamAt( row );
+            ///TODO somehow need to remove the const_cast below
+            child = std::make_shared< ParamTreeNode >(
+                        const_cast< ConfigTreeNode *>( this ),
+                        param,
+                        QVariant{} );
+        }
+        else if( row < m_data->m_config->numGroups() ){
+            ///TODO somehow need to remove the const_cast below
+            auto *group = m_data->m_config->groupAt( row );
+            child = std::make_shared< GroupTreeNode >(
+                        const_cast< ConfigTreeNode *>( this ),
+                        group );
+        }
+    }
+    else {
+        child = m_data->m_children.at( row );
+    }
+    return child.get();
 }
 
-QVariant ConfigTreeNode::data( int /*column*/ ) const
+QVariant ConfigTreeNode::data( int column ) const
 {
+    if( column == 0 ) {
+        return m_data->m_config->name();
+    }
     return QVariant{};
 }
 
-void ConfigTreeNode::setSelected( bool /*value*/ )
+void ConfigTreeNode::setSelected( bool value )
 {
-
+    m_data->m_selected = value;
 }
 
 bool ConfigTreeNode::isSelected() const
 {
-    return false;
+    return m_data->m_selected;
 }
 
 ITreeNode * ConfigTreeNode::parent() const
 {
-    return nullptr;
+    return m_data->m_parent;
 }
 
-int ConfigTreeNode::indexOfChild( const ITreeNode */*child*/ ) const
+int ConfigTreeNode::indexOfChild( const ITreeNode *child ) const
 {
-    return -1;
+    //Should we create all the children??
+    auto index = -1;
+    for( auto i = 0; i < m_data->m_children.size(); ++ i  ) {
+        auto ch = m_data->m_children.at( i ).get();
+        if( ch == child ) {
+            index = i;
+            break;
+        }
+    }
+    return index;
 }
 
 bool ConfigTreeNode::isEditable( int /*column*/ ) const
@@ -87,17 +123,17 @@ bool ConfigTreeNode::isEditable( int /*column*/ ) const
 
 void ConfigTreeNode::setData( int /*column*/, const QVariant &/*data*/ )
 {
-
+    //nothing here...
 }
 
 void ConfigTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
 {
-
+    //nothing here...
 }
 
 void ConfigTreeNode::removeChild( const ITreeNode */*child*/ )
 {
-
+    //nothing here..
 }
 
 }

@@ -23,13 +23,13 @@ public:
 
     int numChildParams() const;
 
-    const Param * childParamAt( int index ) const;
+    Param * childParamAt( int index ) const;
 
     void addChildParameter( std::shared_ptr< Param > param );
 
     int numGroups() const;
 
-    const Group * groupAt( int index ) const;
+    Group * groupAt( int index ) const;
 
     void addGroup( std::shared_ptr< Group > group );
 

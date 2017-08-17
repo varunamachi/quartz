@@ -46,8 +46,7 @@ GroupTreeNode::~GroupTreeNode()
 
 int GroupTreeNode::numChildren() const
 {
-    return m_data->m_group->numParams()
-            + m_data->m_group->numSubGroups();
+    return m_data->m_group->numParams() + m_data->m_group->numSubGroups();
 }
 
 int GroupTreeNode::numFields() const
@@ -126,17 +125,17 @@ bool GroupTreeNode::isEditable( int /*column*/ ) const
 
 void GroupTreeNode::setData( int /*column*/, const QVariant &/*data*/ )
 {
-
+    //nothing here...
 }
 
 void GroupTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
 {
-
+    //nothing here...
 }
 
 void GroupTreeNode::removeChild( const ITreeNode */*child*/ )
 {
-
+    //nothing here...
 }
 
 }
