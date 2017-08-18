@@ -3,4 +3,5 @@ vq_classes(
     GroupTreeNode
     ParamTreeNode
     GenConfigWidget
+    GenConfigTreeModel
 )

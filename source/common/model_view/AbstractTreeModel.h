@@ -39,7 +39,6 @@ public:
 
 
 protected:
-
     virtual ITreeNode * rootAt( int rowIndex ) const = 0;
 
     virtual int rootCount() const = 0;
