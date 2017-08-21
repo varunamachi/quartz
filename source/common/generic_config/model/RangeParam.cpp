@@ -1,4 +1,4 @@
-
+#include <QVariant>
 #include <QString>
 
 #include "RangeParam.h"
@@ -12,6 +12,7 @@ struct RangeParam::Data
         , m_max( 0x7FFFFFFF )
         , m_defaultValue( m_min )
         , m_inc( 1 )
+        , m_value{ m_defaultValue }
     {
 
     }
@@ -23,6 +24,8 @@ struct RangeParam::Data
     int m_defaultValue;
 
     int m_inc;
+
+    int m_value;
 
 };
 
@@ -84,6 +87,20 @@ void RangeParam::setDefaultValue( int defaultValue )
 ParamType RangeParam::type() const
 {
     return ParamType::Range;
+}
+
+QVariant RangeParam::value() const
+{
+    return QVariant{ m_data->m_value };
+}
+
+void RangeParam::setValue( const QVariant &value )
+{
+    bool ok = false;
+    int val = value.toInt( &ok );
+    if( ok && val >= m_data->m_min && val <= m_data->m_max ) {
+        m_data->m_value = val;
+    }
 }
 
 }

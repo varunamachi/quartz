@@ -11,14 +11,21 @@ public:
                   const QString &name,
                   const QString &description );
 
+    ~BooleanParam();
+
     void setDefaultValue( bool value );
 
     bool defaultValue() const;
 
     ParamType type() const override;
 
+    QVariant value() const override;
+
+    void setValue( const QVariant &value ) override;
+
 private:
-    bool m_default;
+    struct Data;
+    std::unique_ptr< Data > m_data;
 
 };
 

@@ -39,6 +39,8 @@ public:
 
     void removeChild( const ITreeNode *child ) override;
 
+    Param * param() const;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

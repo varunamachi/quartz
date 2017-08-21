@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QPair>
+
 #include "Param.h"
 
 namespace Quartz {
@@ -15,17 +17,21 @@ public:
 
     void addOption( const QString &name, const QString &value );
 
-    QString value( const QString &name ) const;
+    QString optionValue( const QString &name ) const;
 
-    QString value( int index ) const;
-
-    ParamType type() const override;
+    QPair< QString, QString > option( int index ) const;
 
     int defaultIndex() const;
 
     void setDefaultIndex( int defaultIndex );
 
     int numOption() const;
+
+    ParamType type() const override;
+
+    QVariant value() const override;
+
+    void setValue( const QVariant &value ) override;
 
 private:
     struct Data;

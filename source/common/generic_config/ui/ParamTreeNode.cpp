@@ -13,7 +13,6 @@ struct ParamTreeNode::Data
           QVariant value )
         : m_parent{ parent }
         , m_param{ param }
-        , m_value{ value }
         , m_selected{ false }
     {
 
@@ -22,8 +21,6 @@ struct ParamTreeNode::Data
     ITreeNode *m_parent;
 
     Param *m_param;
-
-    QVariant m_value;
 
     bool m_selected;
 };
@@ -61,7 +58,7 @@ QVariant ParamTreeNode::data( int column ) const
     switch( column ) {
     case 0: return m_data->m_param->id();
     case 1: return m_data->m_param->name();
-    case 2: return m_data->m_value;
+    case 2: return m_data->m_param->value();
     }
     return QVariant{};
 }
@@ -98,7 +95,7 @@ bool ParamTreeNode::isEditable( int column ) const
 void ParamTreeNode::setData( int column, const QVariant &data )
 {
     if( column == 2 ) {
-        m_data->m_value = data;
+        m_data->m_param->setValue( data );
     }
 }
 
@@ -110,6 +107,11 @@ void ParamTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
 void ParamTreeNode::removeChild( const ITreeNode */*child*/ )
 {
 
+}
+
+Param * ParamTreeNode::param() const
+{
+    return m_data->m_param;
 }
 
 }

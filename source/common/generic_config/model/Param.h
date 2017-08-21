@@ -5,6 +5,7 @@
 
 
 class QString;
+class QVariant;
 
 namespace Quartz {
 
@@ -32,7 +33,13 @@ public:
 
     const QString & description() const;
 
+    virtual QVariant value() const = 0;
+
+    virtual void setValue( const QVariant &value ) = 0;
+
     virtual ParamType type() const = 0;
+
+
 
 private:
     struct Data;

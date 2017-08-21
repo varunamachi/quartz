@@ -1,4 +1,4 @@
-
+#include <QVariant>
 #include <QString>
 #include <QHash>
 
@@ -9,7 +9,8 @@ namespace Quartz {
 struct ChoiceParam::Data {
 
     Data()
-        : m_defaultIndex( -1 )
+        : m_defaultIndex{ -1 }
+        , m_index{ m_defaultIndex }
     {
 
     }
@@ -19,6 +20,8 @@ struct ChoiceParam::Data {
     QHash< QString, QString > m_choices;
 
     int m_defaultIndex;
+
+    int m_index;
 };
 
 ChoiceParam::ChoiceParam( const QString &id,
@@ -47,17 +50,18 @@ void ChoiceParam::addOption( const QString &name, const QString &value )
     }
 }
 
-QString ChoiceParam::value( const QString &name ) const
+QString ChoiceParam::optionValue( const QString &name ) const
 {
     QString value = m_data->m_choices.value( name, "" );
     return value;
 }
 
-QString ChoiceParam::value( int index ) const
+QPair< QString, QString > ChoiceParam::option( int index ) const
 {
-    QString result = "";
+    QPair< QString, QString > result;
     if( m_data->m_names.size() > index ) {
-        result = m_data->m_names.at( index );
+        auto name = m_data->m_names.at( index );
+        result = QPair< QString, QString >{ name, optionValue( name )};
     }
     return result;
 }
@@ -65,6 +69,20 @@ QString ChoiceParam::value( int index ) const
 ParamType ChoiceParam::type() const
 {
     return ParamType::Choice;
+}
+
+QVariant ChoiceParam::value() const
+{
+    return QVariant{ m_data->m_index };
+}
+
+void ChoiceParam::setValue( const QVariant &value )
+{
+    bool ok = false;
+    int val = value.toInt( &ok );
+    if( ok && val >= 0 ) {
+        m_data->m_index = val;
+    }
 }
 
 int ChoiceParam::defaultIndex() const
