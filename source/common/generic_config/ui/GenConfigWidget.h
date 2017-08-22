@@ -16,6 +16,8 @@ public:
 
     ~GenConfigWidget();
 
+    void setConfig( Config *config );
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
