@@ -24,13 +24,24 @@ GenConfigWidget::GenConfigWidget( Config *config, QWidget *parent )
     , m_data{ new Data{ new GenConfigTreeModel{ config, parent }}}
 {
     auto layout = new QVBoxLayout{ this };
-//    auto model =
+    auto view = new QTreeView{ this };
+    //proxy model
+    view->setModel( m_data->m_model );
+    layout->addWidget( view );
     this->setLayout( layout );
+
+    view->setContentsMargins( QMargins{} );
+    layout->setContentsMargins( QMargins{} );
 }
 
 GenConfigWidget::~GenConfigWidget()
 {
 
+}
+
+void GenConfigWidget::setConfig( Config *config )
+{
+    m_data->m_model->setConfig( config );
 }
 
 

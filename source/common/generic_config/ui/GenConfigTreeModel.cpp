@@ -32,6 +32,13 @@ GenConfigTreeModel::~GenConfigTreeModel()
 
 }
 
+void GenConfigTreeModel::setConfig( Config *config )
+{
+    beginResetModel();
+    m_data->m_config = config;
+
+}
+
 ITreeNode *GenConfigTreeModel::rootAt( int rowIndex ) const
 {
     if( rowIndex > 1 ) {

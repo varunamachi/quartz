@@ -6,6 +6,7 @@ vq_sources(
     ActionProvider.h.template
     ActionProvider.cpp.template
     resources.qrc.template
+    templates.xml
 )
 
 

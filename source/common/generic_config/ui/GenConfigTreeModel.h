@@ -16,6 +16,8 @@ public:
 
     ~GenConfigTreeModel();
 
+    void setConfig( Config *config );
+
 protected:
     ITreeNode *rootAt(int rowIndex) const;
 
