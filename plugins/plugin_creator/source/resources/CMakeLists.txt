@@ -9,5 +9,10 @@ vq_sources(
 #    templates.xml
 )
 
+vq_sources(
+    CMakeLists.txt.xml
+    Plugin.cpp.xml
+)
+
 
 
