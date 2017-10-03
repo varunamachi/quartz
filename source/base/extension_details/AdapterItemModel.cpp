@@ -34,8 +34,8 @@ AdapterItemModel::~AdapterItemModel()
 }
 
 QModelIndex AdapterItemModel::index( int row,
-                                    int column,
-                                    const QModelIndex &parent ) const
+                                     int column,
+                                     const QModelIndex &parent ) const
 {
     auto index = QModelIndex();
     if( hasIndex( row, column, parent )) {

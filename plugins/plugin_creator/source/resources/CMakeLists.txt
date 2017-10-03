@@ -1,18 +1,14 @@
-vq_sources(
-    CMakeLists.txt.template
-    Plugin.cpp.template
-    PluginBundle.cpp.template
-    PluginBundle.h.template
-    ActionProvider.h.template
-    ActionProvider.cpp.template
-    resources.qrc.template
-#    templates.xml
+vq_headers(
+    ActionProvider.cpp.xml
+    ActionProvider.h.xml
+    CMakeLists.txt.xml
+    PluginBundle.cpp.xml
+    PluginBundle.h.xml
+    Plugin.cpp.xml
+    resources.qrc.xml
 )
 
-vq_sources(
-    CMakeLists.txt.xml
-    Plugin.cpp.xml
-)
+add_subdirectory( templates )
 
 
 

@@ -1,0 +1,15 @@
+<templates>
+    <template name="resources.qrt">
+        <config>
+
+        </config>
+        <content>
+            <![CDATA[
+<RCC>
+    <qresource prefix="/">
+        <file alias="plugin.txt">resources/plugin.txt</file>
+    </qresource>
+</RCC>
+            ]]>
+    </template>
+</templates>

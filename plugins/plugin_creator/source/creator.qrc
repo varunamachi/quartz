@@ -1,9 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/CMakeLists.txt.template</file>
-        <file>resources/Plugin.cpp.template</file>
-        <file>resources/PluginBundle.cpp.template</file>
-        <file>resources/PluginBundle.h.template</file>
-        <file>resources/resources.qrc.template</file>
+        <file>resources/CMakeLists.txt.xml</file>
+        <file>resources/Plugin.cpp.xml</file>
+        <file>resources/PluginBundle.cpp.xml</file>
+        <file>resources/PluginBundle.h.xml</file>
+        <file>resources/resources.qrc.xml</file>
     </qresource>
 </RCC>

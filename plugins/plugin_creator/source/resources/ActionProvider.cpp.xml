@@ -1,0 +1,11 @@
+<templates>
+    <template name="ActionProvider.cpp">
+        <config>
+
+        </config>
+        <content>
+            <![CDATA[
+
+            ]]>
+    </template>
+</templates>
