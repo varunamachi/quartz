@@ -10,9 +10,11 @@
 #include <common/model_view/AbstractTreeModel.h>
 
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 class Template;
+
+namespace Plugin { namespace Creator {
 
 class TemplateManager : public AbstractTreeModel
                       , public IPluginAdapter
@@ -44,6 +46,8 @@ public:
     static const QString ADAPTER_NAME;
 
 protected:
+    bool loadCoreTemplates();
+
     ITreeNode *rootAt(int rowIndex) const override;
 
     int rootCount() const override;

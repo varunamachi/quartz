@@ -11,6 +11,8 @@ class QDir;
 
 namespace Quartz {
 
+class Template;
+
 
 class QUARTZ_COMMON_API TemplateUtils final
 {
@@ -25,6 +27,8 @@ public:
                                 const QDir &inDir,
                                 const QDir &outDir,
                                 FileNameSubstituter substr = nullptr );
+
+    static QVector< std::shared_ptr< Template >> templatesInDir( QDir dir );
 
 private:
 

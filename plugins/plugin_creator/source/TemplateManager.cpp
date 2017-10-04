@@ -1,8 +1,10 @@
 
+#include <QDir>
 #include <QHash>
 
+#include <common/templating/Template.h>
+
 #include "TemplateManager.h"
-#include "Template.h"
 #include "AbstractTemplateProvider.h"
 
 
@@ -34,7 +36,7 @@ TemplateManager::~TemplateManager()
 
 void TemplateManager::addTemplate( std::shared_ptr< Template > tmplt )
 {
-    m_data->m_templates.insert( tmplt->name(), tmplt );
+//    m_data->m_templates.insert( tmplt->name(), tmplt );
     m_data->m_templateList.push_back( tmplt.get() );
 }
 
@@ -83,6 +85,12 @@ void TemplateManager::addVariable( const QString& key, const QString& value )
 QString TemplateManager::variable( const QString& key )
 {
     return m_data->m_variables.value( key );
+}
+
+bool TemplateManager::loadCoreTemplates()
+{
+    const QDir resDir{ ":/resources" };
+    return false;
 }
 
 ITreeNode * TemplateManager::rootAt( int rowIndex ) const

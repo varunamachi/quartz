@@ -5,9 +5,11 @@
 
 #include <core/extension_system/AbstractPlugin.h>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 class Template;
+
+namespace Plugin { namespace Creator {
 
 class AbstractTemplateProvider : public AbstractPlugin
 {

@@ -20,12 +20,9 @@ vq_classes(
     ContentProvider
     PluginBundle
     CreatorWidget
-    Template
     TemplateManager
     AbstractTemplateProvider
     TemplateSelectorWidget
-    Variable
-    TemplateInstance
     VarConfigWidget
 )
 

@@ -13,12 +13,12 @@
 
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/TemplateProcessor.h>
+#include <common/templating/Template.h>
 
 #include <plugin_base/BundleLoggin.h>
 
 #include "TemplateManager.h"
 #include "CreatorWidget.h"
-#include "Template.h"
 #include "TemplateSelectorWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {

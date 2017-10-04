@@ -7,12 +7,12 @@
 
 #include <common/model_view/CheckBoxDeligate.h>
 #include <common/model_view/EditorDelegate.h>
+#include <common/templating/TemplateInstance.h>
+#include <common/templating/Template.h>
 
 #include "TemplateManager.h"
 #include "TemplateSelectorWidget.h"
 #include "VarConfigWidget.h"
-#include "TemplateInstance.h"
-#include "Template.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 

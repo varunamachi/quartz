@@ -6,7 +6,10 @@
 #include <core/logger/Logging.h>
 
 #include "AdvancedTemplateProcessor.h"
+#include "Template.h"
 #include "TemplateUtils.h"
+#include "TemplateContainerParser.h"
+
 
 namespace Quartz {
 
@@ -43,6 +46,25 @@ bool TemplateUtils::generateForDir(
         }
     }
     return result;
+}
+
+QVector< std::shared_ptr< Template >> TemplateUtils::templatesInDir( QDir dir )
+{
+    QVector< std::shared_ptr< Template >> templates;
+    auto list = dir.entryInfoList();
+    for( int i = 0; i < list.size(); ++ i ) {
+        auto entry = list.at( i );
+        if( entry.suffix() == "xml" ) {
+            auto inputPath = entry.absoluteFilePath();
+            //read the file
+            //parse it using continer parser
+            //add the resulting vector to result vector
+            //ignore errors... because we might try to parse non container xml
+            //    -> which is fine
+
+        }
+    }
+    return templates;
 }
 
 

@@ -4,9 +4,11 @@
 
 #include <QWidget>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
 class TemplateInstance;
+
+namespace Plugin { namespace Creator {
 
 class VarConfigWidget : public QWidget
 {
