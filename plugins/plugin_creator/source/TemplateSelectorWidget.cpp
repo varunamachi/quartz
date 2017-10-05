@@ -18,13 +18,17 @@ namespace Quartz { namespace Plugin { namespace Creator {
 
 struct TemplateSelectorWidget::Data
 {
-    Data( TemplateSelectorWidget *parent )
-        : m_filterEdit{ new QLineEdit{ parent }}
+    Data( TemplateManager *templateManager,
+          TemplateSelectorWidget *parent )
+        : m_templateManager{ templateManager }
+        , m_filterEdit{ new QLineEdit{ parent }}
         , m_varConfigHolder{ new QStackedWidget{ parent }}
         , m_view{ new QTreeView{ parent }}
     {
 
     }
+
+    TemplateManager *m_templateManager;
 
     QLineEdit *m_filterEdit;
 
@@ -35,9 +39,11 @@ struct TemplateSelectorWidget::Data
     QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };
 
-TemplateSelectorWidget::TemplateSelectorWidget( QWidget* parent )
+TemplateSelectorWidget::TemplateSelectorWidget(
+        TemplateManager *templateManager,
+        QWidget* parent )
     : QWidget{ parent }
-    , m_data{ new Data{ this }}
+    , m_data{ new Data{ templateManager, this }}
 {
     auto main = new QGridLayout{ };
     main->addWidget( m_data->m_filterEdit, 0, 0 );

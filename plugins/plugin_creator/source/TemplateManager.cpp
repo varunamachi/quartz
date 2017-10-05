@@ -3,6 +3,7 @@
 #include <QHash>
 
 #include <common/templating/Template.h>
+#include <common/templating/TemplateUtils.h>
 
 #include "TemplateManager.h"
 #include "AbstractTemplateProvider.h"
@@ -90,6 +91,10 @@ QString TemplateManager::variable( const QString& key )
 bool TemplateManager::loadCoreTemplates()
 {
     const QDir resDir{ ":/resources" };
+    auto tmps = TemplateUtils::templatesInDir( resDir );
+    foreach( auto &tmpl, tmps ) {
+        addTemplate( tmpl );
+    }
     return false;
 }
 

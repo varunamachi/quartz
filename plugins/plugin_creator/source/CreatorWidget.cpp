@@ -40,8 +40,9 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
-        , m_templateSelector{ new TemplateSelectorWidget{ parent }}
         , m_templateManager{ tman }
+        , m_templateSelector{
+              new TemplateSelectorWidget{ templateManager.get(), parent }}
     {
 
     }
@@ -60,10 +61,9 @@ struct CreatorWidget::Data
 
     QPushButton *m_createButton;
 
-    TemplateSelectorWidget *m_templateSelector;
-
     std::shared_ptr< TemplateManager > m_templateManager;
 
+    TemplateSelectorWidget *m_templateSelector;
 };
 
 void addStandaredTemplates( TemplateManager *tman )

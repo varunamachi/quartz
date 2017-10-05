@@ -1,4 +1,5 @@
-
+#include <QFile>
+#include <QTextStream>
 #include <QDir>
 #include <QStringList>
 #include <QString>
@@ -52,16 +53,20 @@ QVector< std::shared_ptr< Template >> TemplateUtils::templatesInDir( QDir dir )
 {
     QVector< std::shared_ptr< Template >> templates;
     auto list = dir.entryInfoList();
+    TemplateContainerParser parser;
     for( int i = 0; i < list.size(); ++ i ) {
         auto entry = list.at( i );
         if( entry.suffix() == "xml" ) {
             auto inputPath = entry.absoluteFilePath();
-            //read the file
-            //parse it using continer parser
-            //add the resulting vector to result vector
-            //ignore errors... because we might try to parse non container xml
-            //    -> which is fine
-
+            QFile file{ inputPath };
+            if( file.exists() && file.open( QFile::ReadOnly )) {
+                QTextStream stream{ &file };
+                auto content = stream.readAll();
+                auto tmps = parser.parse( content );
+                for( auto i = 0; i < tmps.length(); ++ i ) {
+                    templates.append( tmps.at( i ));
+                }
+            }
         }
     }
     return templates;
