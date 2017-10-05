@@ -8,13 +8,17 @@ class QModelIndex;
 
 namespace Quartz {
 
+class TemplateManager;
+
 namespace Plugin { namespace Creator {
 
 class TemplateSelectorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TemplateSelectorWidget( QWidget *parent = nullptr );
+    explicit TemplateSelectorWidget(
+            TemplateManager *templateManager,
+            QWidget *parent = nullptr );
 
     ~TemplateSelectorWidget();
 
