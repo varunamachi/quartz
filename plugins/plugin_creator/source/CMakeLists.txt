@@ -24,6 +24,7 @@ vq_classes(
     AbstractTemplateProvider
     TemplateSelectorWidget
     VarConfigWidget
+    GenInfo
 )
 
 #vq_interfaces(

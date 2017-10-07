@@ -51,14 +51,13 @@ TemplateSelectorWidget::TemplateSelectorWidget(
     main->addWidget( m_data->m_view, 1, 0 );
     main->addWidget( m_data->m_varConfigHolder, 1, 1 );
 
+    m_data->m_view->setModel( m_data->m_templateManager );
     m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
     m_data->m_view->setItemDelegateForColumn( 2, new EditorDelegate{ this });
 
     this->setLayout( main );
     main->setContentsMargins( QMargins{} );
     this->setContentsMargins( QMargins{} );
-
-
 }
 
 

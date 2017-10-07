@@ -42,7 +42,7 @@ struct CreatorWidget::Data
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
         , m_templateManager{ tman }
         , m_templateSelector{
-              new TemplateSelectorWidget{ templateManager.get(), parent }}
+              new TemplateSelectorWidget{ tman.get(), parent }}
     {
 
     }
