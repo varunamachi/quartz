@@ -36,7 +36,7 @@ struct TemplateSelectorWidget::Data
 
     QTreeView *m_view;
 
-    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
+//    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };
 
 TemplateSelectorWidget::TemplateSelectorWidget(
@@ -63,20 +63,20 @@ TemplateSelectorWidget::TemplateSelectorWidget(
 
 void TemplateSelectorWidget::selected( const QModelIndex &index )
 {
-    if( ! index.isValid() ) {
-        return;
-    }
-    auto tn = static_cast< ITreeNode *>( index.internalPointer() );
-    auto ti = dynamic_cast< TemplateInstance *>( tn );
-    if( ti != nullptr ) {
-        VarConfigWidget *vcw = nullptr;
-        if( m_data->m_configWidgets.contains( ti )) {
-            vcw = new VarConfigWidget{ ti, this };
-            m_data->m_configWidgets.insert( ti, vcw );
-            m_data->m_varConfigHolder->addWidget( vcw );
-        }
-        m_data->m_varConfigHolder->setCurrentWidget( vcw );
-    }
+//    if( ! index.isValid() ) {
+//        return;
+//    }
+//    auto tn = static_cast< ITreeNode *>( index.internalPointer() );
+//    auto ti = dynamic_cast< TemplateInstance *>( tn );
+//    if( ti != nullptr ) {
+//        VarConfigWidget *vcw = nullptr;
+//        if( m_data->m_configWidgets.contains( ti )) {
+//            vcw = new VarConfigWidget{ ti, this };
+//            m_data->m_configWidgets.insert( ti, vcw );
+//            m_data->m_varConfigHolder->addWidget( vcw );
+//        }
+//        m_data->m_varConfigHolder->setCurrentWidget( vcw );
+//    }
 }
 
 

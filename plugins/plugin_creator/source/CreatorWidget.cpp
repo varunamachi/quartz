@@ -20,6 +20,8 @@
 #include "TemplateManager.h"
 #include "CreatorWidget.h"
 #include "TemplateSelectorWidget.h"
+#include "GenInfo.h"
+#include "CodeGenerator.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
@@ -202,7 +204,7 @@ void CreatorWidget::onBrowse()
                 tr( "Plugin Source Location" ),
                 dirPath );
     if( ! dirPath.isEmpty() ) {
-        m_data->m_dirPath->setText( dirPath );\
+        m_data->m_dirPath->setText( dirPath );
     }
 }
 
@@ -275,61 +277,9 @@ void CreatorWidget::onCreate()
         return;
     }
 
-    TemplateProcessor::Variables vars;
-    vars.insert( "BUNDLE_ID", id );
-    vars.insert( "BUNDLE_NAME", name );
-    vars.insert( "BUNDLE_NAMESPACE", ns );
-    vars.insert( "BUNDLE_DISPLAY_NAME", display );
-    QStringList classes;
-    classes << "PluginBundle";
-    vars.insert( "classes", classes );
-
-    QStringList files;
-    files << "#other files go here";
-    vars.insert( "files", files );
-
-    bool result = TemplateUtils::generateForDir(
-                vars,
-                QDir{ ":/resources" },
-                QDir{ path },
-                [ & ]( const QString &in ) -> QString {
-        if( in == "Plugin.cpp.template" ) {
-            return ns + ".cpp";
-        }
-        else if( in == "resources.qrc.template" ) {
-            return name + ".qrc";
-        }
-        return "";
-    });
-    if( result ) {
-        QString msg;
-        if( dir.mkdir( "resources" )) {
-            QFile ptxt{ dir.absoluteFilePath( "resources/plugin.txt" )};
-            if( ptxt.open( QFile::ReadWrite )) {
-                QTextStream fstream{ &ptxt };
-                fstream << "#Created By Quartz Bundle Creator\n"
-                        << "id=" << id << '\n'
-                        << "name=" << name << '\n'
-                        << "display=" << display << '\n'
-                        << "ns=" << ns << '\n'
-                        << "version=0.0.0.0";
-            }
-            else {
-                QZP_ERROR << "Failed to create plugin.txt at " <<
-                             path << "/resources";
-                msg = tr( "Failed to create plugin.txt in resource dir" );
-                result = false;
-            }
-        }
-        else {
-            QZP_ERROR << "Failed to create resource directory at " << path;
-            msg = tr( "Failed to create resource dir at %1" ).arg( path );
-            result = false;
-        }
-        if( ! result ) {
-            error( this, msg );
-        }
-    }
+    GenInfo info{ id, name, display, ns };
+    CodeGenerator generator{ &info };
+    auto result = generator.generate( path );
     if( result ) {
 #ifndef QT_DEBUG
         //create the resource directory and place the plugin.txt there
@@ -345,8 +295,8 @@ void CreatorWidget::onCreate()
     }
     else {
         QZP_ERROR << "Could not create plugin with " << id << " at " << path;
-        auto msg = tr( "Could not create bundle %1" ).arg( id );
-        QMessageBox::critical( this, tr( "Bundle Creator"), msg );
+        QMessageBox::critical( this, tr( "Bundle Creator"),
+                               generator.lastError());
     }
 }
 

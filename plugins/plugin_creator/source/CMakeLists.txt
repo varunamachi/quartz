@@ -25,6 +25,7 @@ vq_classes(
     TemplateSelectorWidget
     VarConfigWidget
     GenInfo
+    CodeGenerator
 )
 
 #vq_interfaces(
