@@ -122,5 +122,10 @@ const QString & CodeGenerator::lastError() const
     return m_data->m_lastError;
 }
 
+bool CodeGenerator::generateForInstance( const TemplateInstance *instance )
+{
+    return false;
+}
+
 
 } } }

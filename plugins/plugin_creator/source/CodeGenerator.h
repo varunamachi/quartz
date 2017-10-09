@@ -7,6 +7,7 @@ class QString;
 namespace Quartz { namespace Plugin { namespace Creator {
 
 class GenInfo;
+class TemplateInstance;
 
 class CodeGenerator
 {
@@ -14,11 +15,14 @@ public:
 
     CodeGenerator( const GenInfo *info );
 
-    ~CodeGenerator();
+    virtual ~CodeGenerator();
 
-    bool generate(const QString &path );
+    virtual bool generate(const QString &path );
 
     const QString & lastError() const;
+
+protected:
+
 
 private:
     struct Data;

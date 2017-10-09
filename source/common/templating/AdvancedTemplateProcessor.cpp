@@ -5,6 +5,8 @@
 
 #include <core/logger/Logging.h>
 
+#include "Template.h"
+#include "TemplateInstance.h"
 #include "AdvancedTemplateProcessor.h"
 
 namespace Quartz {
@@ -20,22 +22,22 @@ const QString ADV_FOR_IN_KW = QString{ "IN" };
 
 struct AdvancedTemplateProcessor::Data
 {
-    explicit Data( const TemplateProcessor::Variables &vars )
-        : m_variables{ vars }
+    explicit Data( const TemplateInstance *tmplInst )
+        : m_tmplInstance{ tmplInst }
         , m_lastError{ "" }
     {
 
     }
 
-    TemplateProcessor::Variables m_variables;
+    const TemplateInstance *m_tmplInstance;
 
     QString m_lastError;
 
 };
 
 AdvancedTemplateProcessor::AdvancedTemplateProcessor(
-        const TemplateProcessor::Variables &vars )
-    : m_data{ new Data{ vars }}
+        const TemplateInstance *tmplInst )
+    : m_data{ new Data{ tmplInst }}
 {
 
 }
@@ -122,7 +124,7 @@ bool AdvancedTemplateProcessor::process( QString &input,
                     blockExpanded,
                     output,
                     [ & ]( const QString &key, const QString &def ) -> QString {
-            auto var = m_data->m_variables.value( key, def );
+            auto var = m_data->m_tmplInstance->paramValue( key, def );
             return this->toString( var );
         } );
     }
@@ -458,23 +460,20 @@ void AdvancedTemplateProcessor::reset()
 
 QVariant AdvancedTemplateProcessor::var( const QString &key ) const
 {
-    return m_data->m_variables.value( key, QVariant{} );
+    return m_data->m_tmplInstance->paramValue( key );
 }
 
 QString AdvancedTemplateProcessor::toString( const QVariant &var ) const
 {
-//    if( ! var.isValid() ) {
-        auto strVar = var.toString();
-        if( strVar.isEmpty()  ) {
-            auto list = var.toStringList();
-            QTextStream varStream{ &strVar };
-            foreach( QString item, list ) {
-                varStream << item;
-            }
+    auto strVar = var.toString();
+    if( strVar.isEmpty()  ) {
+        auto list = var.toStringList();
+        QTextStream varStream{ &strVar };
+        foreach( QString item, list ) {
+            varStream << item;
         }
-        return strVar;
-//    }
-//    return QString{};
+    }
+    return strVar;
 }
 
 void AdvancedTemplateProcessor::setError(const QString &errorString)

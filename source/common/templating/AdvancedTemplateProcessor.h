@@ -1,18 +1,26 @@
 #pragma once
 
-#include "TemplateProcessor.h"
+#include <functional>
+#include <memory>
+
+class QVariant;
+
+#include "../QuartzCommon.h"
 
 class QTextStream;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API AdvancedTemplateProcessor {
+class TemplateInstance;
+
+class QUARTZ_COMMON_API AdvancedTemplateProcessor
+{
 public:
     using ValueProvider =
         std::function< QString( const QString &, const QString & )>;
 
     explicit AdvancedTemplateProcessor(
-            const TemplateProcessor::Variables &vars );
+            const TemplateInstance *tmpl );
 
     ~AdvancedTemplateProcessor();
 

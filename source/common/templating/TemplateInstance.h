@@ -24,17 +24,20 @@ public:
     Template * instanceOf() const;
 
     void setParamValue( const QString &paramName,
-                           const QString &paramValue );
+                        const QVariant &paramValue );
 
-    QString paramValue( const QString &paramName ) const;
+    QVariant paramValue( const QString &paramName ) const;
+
+    QVariant  paramValue( const QString &paramName,
+                          const QString &defValue ) const;
 
     int numChildren() const override;
 
     int numFields() const override;
 
-    ITreeNode * child(int row) const override;
+    ITreeNode * child(int row ) const override;
 
-    QVariant data(int column) const override;
+    QVariant data( int column ) const override;
 
     void setSelected( bool value ) override;
 

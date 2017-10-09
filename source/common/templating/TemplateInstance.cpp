@@ -21,7 +21,7 @@ struct TemplateInstance::Data
 
     Template *m_parent;
 
-    QHash< QString, QString > m_paramValues;
+    QHash< QString, QVariant > m_paramValues;
 
     bool m_selected;
 };
@@ -49,14 +49,20 @@ Template * TemplateInstance::instanceOf() const
 }
 
 void TemplateInstance::setParamValue( const QString &paramName,
-                                      const QString &paramValue )
+                                      const QVariant &paramValue )
 {
     m_data->m_paramValues[ paramName ] = paramValue;
 }
 
-QString TemplateInstance::paramValue( const QString &paramName ) const
+QVariant TemplateInstance::paramValue( const QString &paramName ) const
 {
     return m_data->m_paramValues[ paramName ];
+}
+
+QVariant TemplateInstance::paramValue( const QString &paramName,
+                                      const QString &defValue ) const
+{
+    return m_data->m_paramValues.value( paramName, defValue );
 }
 
 int TemplateInstance::numChildren() const
