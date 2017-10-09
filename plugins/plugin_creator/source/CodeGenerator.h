@@ -17,12 +17,12 @@ public:
 
     virtual ~CodeGenerator();
 
-    virtual bool generate(const QString &path );
+    virtual bool generate( const QString &path );
 
     const QString & lastError() const;
 
 protected:
-
+    virtual bool generateForInstance( const TemplateInstance *instance );
 
 private:
     struct Data;
