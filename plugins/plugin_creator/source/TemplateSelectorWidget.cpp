@@ -12,7 +12,6 @@
 
 #include "TemplateManager.h"
 #include "TemplateSelectorWidget.h"
-#include "VarConfigWidget.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 

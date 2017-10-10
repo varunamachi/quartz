@@ -23,7 +23,6 @@ vq_classes(
     TemplateManager
     AbstractTemplateProvider
     TemplateSelectorWidget
-    VarConfigWidget
     GenInfo
     CodeGenerator
 )

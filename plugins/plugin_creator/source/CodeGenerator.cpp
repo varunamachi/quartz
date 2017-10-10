@@ -5,8 +5,9 @@
 
 #include <plugin_base/BundleLoggin.h>
 
-#include <common/templating/TemplateProcessor.h>
-#include <common/templating/TemplateUtils.h>
+#include <common/templating/AdvancedTemplateProcessor.h>
+#include <common/templating/TemplateInstance.h>
+#include <common/templating/Template.h>
 
 #include "GenInfo.h"
 #include "CodeGenerator.h"
@@ -39,33 +40,37 @@ CodeGenerator::~CodeGenerator()
 
 bool CodeGenerator::generate( const QString &path )
 {
-    bool result = false;
-    TemplateProcessor::Variables vars;
-    vars.insert( "BUNDLE_ID", m_data->m_info->id() );
-    vars.insert( "BUNDLE_NAME", m_data->m_info->name() );
-    vars.insert( "BUNDLE_NAMESPACE", m_data->m_info->ns() );
-    vars.insert( "BUNDLE_DISPLAY_NAME", m_data->m_info->display() );
-    QStringList classes;
-    classes << "PluginBundle";
-    vars.insert( "classes", classes );
+//    TemplateProcessor::Variables vars;
+//    vars.insert( "BUNDLE_ID", m_data->m_info->id() );
+//    vars.insert( "BUNDLE_NAME", m_data->m_info->name() );
+//    vars.insert( "BUNDLE_NAMESPACE", m_data->m_info->ns() );
+//    vars.insert( "BUNDLE_DISPLAY_NAME", m_data->m_info->display() );
+//    QStringList classes;
+//    classes << "PluginBundle";
+//    vars.insert( "classes", classes );
 
-    QStringList files;
-    files << "#other files go here";
-    vars.insert( "files", files );
+//    QStringList files;
+//    files << "#other files go here";
+//    vars.insert( "files", files );
 
-    result = TemplateUtils::generateForDir(
-                vars,
-                QDir{ ":/resources" },
-                QDir{ path },
-                [ & ]( const QString &in ) -> QString {
-        if( in == "Plugin.cpp.template" ) {
-            return m_data->m_info->ns() + ".cpp";
-        }
-        else if( in == "resources.qrc.template" ) {
-            return m_data->m_info->name() + ".qrc";
-        }
-        return "";
-    });
+//    result = TemplateUtils::generateForDir(
+//                vars,
+//                QDir{ ":/resources" },
+//                QDir{ path },
+//                [ & ]( const QString &in ) -> QString {
+//        if( in == "Plugin.cpp.template" ) {
+//            return m_data->m_info->ns() + ".cpp";
+//        }
+//        else if( in == "resources.qrc.template" ) {
+//            return m_data->m_info->name() + ".qrc";
+//        }
+//        return "";
+//    });
+    bool result = true;
+    for( auto i = 0; i < m_data->m_info->numTemplateInstances(); ++ i ) {
+        auto tinst = m_data->m_info->templateInstanceAt( i );
+        result = this->generateForInstance( path, tinst ) && result;
+    }
     if( result ) {
         QDir dir{ path };
         QString msg;
@@ -122,9 +127,34 @@ const QString & CodeGenerator::lastError() const
     return m_data->m_lastError;
 }
 
-bool CodeGenerator::generateForInstance( const TemplateInstance *instance )
+bool CodeGenerator::generateForInstance( const QString &path,
+                                         const TemplateInstance *instance )
 {
-    return false;
+    auto filePath = path + "/" + instance->name();
+    QFile genFile{ filePath };
+    if(  genFile.exists() ) {
+        QZP_ERROR << "Could not generate file " << instance->name()
+                  << ", target already exists at: " << filePath;
+        m_data->m_lastError = QObject::tr(
+                    "Template Generation: output file %1 already exist, cannot "
+                    "overwrite").arg( path );
+        return false;
+    }
+    if( ! genFile.open( QFile::ReadWrite )) {
+        QZP_ERROR << "Could not generate file " << instance->name()
+                  << ", failed to create" << filePath;
+        m_data->m_lastError = QObject::tr(
+                    "Template Generation: Failed to create file at %1")
+                .arg( path );
+        return false;
+    }
+    QTextStream stream{ &genFile };
+    AdvancedTemplateProcessor tproc{ instance };
+    auto result = tproc.process( stream );
+    if( ! result ) {
+        m_data->m_lastError = tproc.lastError();
+    }
+    return result;
 }
 
 

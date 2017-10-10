@@ -114,12 +114,12 @@ bool AdvancedTemplateProcessor::replaceVariables(
 }
 
 
-bool AdvancedTemplateProcessor::process( QString &input,
-                                         QTextStream &output )
+bool AdvancedTemplateProcessor::process( QTextStream &output )
 {
     bool result = false;
-    if( ! input.isEmpty() ) {
-        auto blockExpanded = processBlocks( input );
+    const auto & content = m_data->m_tmplInstance->instanceOf()->content();
+    if( ! content.isEmpty() ) {
+        auto blockExpanded = processBlocks( content );
         result = replaceVariables(
                     blockExpanded,
                     output,
@@ -295,33 +295,33 @@ Range parseRange( const QString &input,
     return result;
 }
 
-bool AdvancedTemplateProcessor::process( const QString &inputPath,
-                                         const QString &outputPath )
-{
-    QFile inputFile{ inputPath };
-    if( ! inputFile.open( QFile::ReadOnly )) {
-        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to open template file at "
-                                  << inputPath;
-        m_data->m_lastError = QObject::tr( "Could not open template input "
-                                           "file at %1" ).arg( inputPath);
-        return false;
-    }
-    QFile outputFile{ outputPath };
-    if( ! outputFile.open( QFile::WriteOnly )) {
-        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Could not open template output file at "
-                                  << outputPath;
-        m_data->m_lastError = QObject::tr( "Could not open template output "
-                                           "file at %1" ).arg( outputPath);
-        return false;
-    }
-    QTextStream input{ &inputFile };
-    QTextStream output{ &outputFile };
-    auto tmpl = input.readAll();
-    if( tmpl.isEmpty() ) {
-        return true;
-    }
-    return process( tmpl, output );
-}
+//bool AdvancedTemplateProcessor::process( const QString &inputPath,
+//                                         const QString &outputPath )
+//{
+//    QFile inputFile{ inputPath };
+//    if( ! inputFile.open( QFile::ReadOnly )) {
+//        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to open template file at "
+//                                  << inputPath;
+//        m_data->m_lastError = QObject::tr( "Could not open template input "
+//                                           "file at %1" ).arg( inputPath);
+//        return false;
+//    }
+//    QFile outputFile{ outputPath };
+//    if( ! outputFile.open( QFile::WriteOnly )) {
+//        QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Could not open template output file at "
+//                                  << outputPath;
+//        m_data->m_lastError = QObject::tr( "Could not open template output "
+//                                           "file at %1" ).arg( outputPath);
+//        return false;
+//    }
+//    QTextStream input{ &inputFile };
+//    QTextStream output{ &outputFile };
+//    auto tmpl = input.readAll();
+//    if( tmpl.isEmpty() ) {
+//        return true;
+//    }
+//    return process( tmpl, output );
+//}
 
 QString AdvancedTemplateProcessor::processFor( const QString &input )
 {
