@@ -28,10 +28,6 @@ public:
                            QTextStream &output,
                            ValueProvider getVar );
 
-//    bool process( const QString &inputPath, const QString &outputPath );
-
-//    bool process( QString &input, QTextStream &output );
-
     bool process( QTextStream &output );
 
     const QString & lastError() const;

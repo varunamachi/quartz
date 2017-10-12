@@ -23,6 +23,9 @@ struct TemplateInstance::Data
 
     QHash< QString, QVariant > m_paramValues;
 
+    //GlobalVars *m_globalVars - reference to global variables such as source
+    //files etc. The global variables shall have name of format g:<varName>
+
     bool m_selected;
 };
 

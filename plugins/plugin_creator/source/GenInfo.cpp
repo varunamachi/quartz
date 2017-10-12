@@ -21,8 +21,6 @@ struct GenInfo::Data
 
     }
 
-    QVector< std::shared_ptr< TemplateInstance >> m_tmpInstances;
-
     QString m_id;
 
     QString m_name;
@@ -30,6 +28,10 @@ struct GenInfo::Data
     QString m_display;
 
     QString m_namespace;
+
+    QVector< std::shared_ptr< TemplateInstance >> m_tmpInstances;
+
+    QStringList m_files;
 
 };
 
@@ -85,9 +87,12 @@ const TemplateInstance * GenInfo::templateInstanceAt( int i ) const
     return instance;
 }
 
-void GenInfo::addTemplateInstance( std::shared_ptr<TemplateInstance> inst )
+void GenInfo::addTemplateInstance( std::shared_ptr< TemplateInstance > inst )
 {
-    m_data->m_tmpInstances.push_back( inst );
+    if( inst != nullptr ) {
+        m_data->m_tmpInstances.push_back( inst );
+        m_data->m_files.removeAll( inst->name() );
+    }
 }
 
 void GenInfo::removeTemplateInstance( const QString &instanceName )

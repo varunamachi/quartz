@@ -3,6 +3,8 @@
 #include <memory>
 
 class QString;
+class QStringList;
+class QVariant;
 
 namespace Quartz {
 
@@ -27,6 +29,8 @@ public:
     const QString & display() const;
 
     const QString & ns() const;
+
+    const QStringList & files() const;
 
     int numTemplateInstances() const;
 

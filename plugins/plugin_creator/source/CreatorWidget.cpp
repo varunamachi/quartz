@@ -66,6 +66,8 @@ struct CreatorWidget::Data
     std::shared_ptr< TemplateManager > m_templateManager;
 
     TemplateSelectorWidget *m_templateSelector;
+
+    QVector< std::shared_ptr< TemplateInstance >> m_instances;
 };
 
 void addStandaredTemplates( TemplateManager *tman )
@@ -278,6 +280,7 @@ void CreatorWidget::onCreate()
     }
 
     GenInfo info{ id, name, display, ns };
+
     CodeGenerator generator{ &info };
     auto result = generator.generate( path );
     if( result ) {
