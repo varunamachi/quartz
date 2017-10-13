@@ -14,6 +14,7 @@
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/TemplateProcessor.h>
 #include <common/templating/Template.h>
+#include <common/templating/TemplateInstance.h>
 
 #include <plugin_base/BundleLoggin.h>
 
@@ -45,8 +46,9 @@ struct CreatorWidget::Data
         , m_templateManager{ tman }
         , m_templateSelector{
               new TemplateSelectorWidget{ tman.get(), parent }}
+        , m_globalConfig{ std::make_shared< GlobalConfig >() }
     {
-
+//        m_globalConfig = ;
     }
 
     QLineEdit *m_fqIDEdit;
@@ -68,6 +70,8 @@ struct CreatorWidget::Data
     TemplateSelectorWidget *m_templateSelector;
 
     QVector< std::shared_ptr< TemplateInstance >> m_instances;
+
+    std::shared_ptr< GlobalConfig > m_globalConfig;
 };
 
 void addStandaredTemplates( TemplateManager *tman )
@@ -279,6 +283,7 @@ void CreatorWidget::onCreate()
         return;
     }
 
+//    m_data->m_globalConfig->insert( "g:files", files)
     GenInfo info{ id, name, display, ns };
 
     CodeGenerator generator{ &info };
@@ -330,6 +335,15 @@ void CreatorWidget::autoPopulate( const QString &fqid )
     m_data->m_idEdit->setText( uniqueName );
     m_data->m_namespaceEdit->setText( ns );
     m_data->m_nameEdit->setText( display );
+}
+
+void CreatorWidget::addTemplateInstance(
+        const QString &name,
+        Template *tmpl )
+{
+    auto tinst = std::make_shared< TemplateInstance >( name, tmpl );
+    tinst->setGlobalConfig( m_data->m_globalConfig );
+    m_data->m_instances.push_back( tinst );
 }
 
 

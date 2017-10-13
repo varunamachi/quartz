@@ -23,8 +23,7 @@ struct TemplateInstance::Data
 
     QHash< QString, QVariant > m_paramValues;
 
-    //GlobalVars *m_globalVars - reference to global variables such as source
-    //files etc. The global variables shall have name of format g:<varName>
+    std::shared_ptr< GlobalConfig > m_globalConfig;
 
     bool m_selected;
 };
@@ -57,6 +56,16 @@ void TemplateInstance::setParamValue( const QString &paramName,
     m_data->m_paramValues[ paramName ] = paramValue;
 }
 
+void TemplateInstance::setGlobalConfig( std::shared_ptr<GlobalConfig> gconf )
+{
+    m_data->m_globalConfig = gconf;
+}
+
+QVariant TemplateInstance::globalConfig( const QString &key ) const
+{
+    return m_data->m_globalConfig->value( key );
+}
+
 QVariant TemplateInstance::paramValue( const QString &paramName ) const
 {
     return m_data->m_paramValues[ paramName ];
@@ -65,7 +74,10 @@ QVariant TemplateInstance::paramValue( const QString &paramName ) const
 QVariant TemplateInstance::paramValue( const QString &paramName,
                                       const QString &defValue ) const
 {
-    return m_data->m_paramValues.value( paramName, defValue );
+    if( m_data->m_paramValues.contains( paramName )) {
+        return m_data->m_paramValues.value( paramName, defValue );
+    }
+    return m_data->m_globalConfig->value( paramName );
 }
 
 int TemplateInstance::numChildren() const

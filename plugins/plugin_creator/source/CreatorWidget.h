@@ -2,6 +2,8 @@
 
 #include <base/content_manager/ContentWidget.h>
 
+class Template;
+
 namespace Quartz { namespace Plugin { namespace Creator {
 
 class TemplateManager;
@@ -30,7 +32,10 @@ public slots:
 
     void autoPopulate( const QString &fqid );
 
+    void addTemplateInstance( const QString &name, Template *tmpl ) ;
+
 private:
+
     struct Data;
     std::unique_ptr< Data > m_data;
 

@@ -2,13 +2,17 @@
 
 #include <memory>
 
+#include <QHash>
+
 #include "../model_view/ITreeNode.h"
 
-class QString;
+
 
 namespace Quartz {
 
 class Template;
+
+using GlobalConfig = QHash< QString, QVariant >;
 
 class TemplateInstance : public ITreeNode
 {
@@ -25,6 +29,10 @@ public:
 
     void setParamValue( const QString &paramName,
                         const QVariant &paramValue );
+
+    void setGlobalConfig( std::shared_ptr< GlobalConfig > gconf );
+
+    QVariant globalConfig( const QString &key ) const;
 
     QVariant paramValue( const QString &paramName ) const;
 
