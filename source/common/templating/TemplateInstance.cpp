@@ -72,7 +72,7 @@ QVariant TemplateInstance::paramValue( const QString &paramName ) const
 }
 
 QVariant TemplateInstance::paramValue( const QString &paramName,
-                                      const QString &defValue ) const
+                                       const QString &defValue ) const
 {
     if( m_data->m_paramValues.contains( paramName )) {
         return m_data->m_paramValues.value( paramName, defValue );
@@ -126,7 +126,7 @@ int TemplateInstance::indexOfChild( const ITreeNode */*child*/ ) const
 
 bool TemplateInstance::isEditable( int column ) const
 {
-    return column == 0;
+    return column == 1;
 }
 
 void TemplateInstance::setData( int column, const QVariant &data )

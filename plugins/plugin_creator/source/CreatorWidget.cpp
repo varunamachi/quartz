@@ -16,6 +16,8 @@
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
 
+#include <common/model_view/ArrayModel.h>
+
 #include <plugin_base/BundleLoggin.h>
 
 #include "TemplateManager.h"
@@ -43,9 +45,10 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
+        , m_view{ new QTreeView{ parent }}
+        , m_tmodel{ new ArrayModel{ parent }}
         , m_templateManager{ tman }
-        , m_templateSelector{
-              new TemplateSelectorWidget{ tman.get(), parent }}
+//        ,m_templateSelector{ new TemplateSelectorWidget{ tman.get(), parent }}
         , m_globalConfig{ std::make_shared< GlobalConfig >() }
     {
 //        m_globalConfig = ;
@@ -65,11 +68,13 @@ struct CreatorWidget::Data
 
     QPushButton *m_createButton;
 
+    QTreeView *m_view;
+
+    ArrayModel *m_tmodel;
+
     std::shared_ptr< TemplateManager > m_templateManager;
 
-    TemplateSelectorWidget *m_templateSelector;
-
-    QVector< std::shared_ptr< TemplateInstance >> m_instances;
+//    TemplateSelectorWidget *m_templateSelector;
 
     std::shared_ptr< GlobalConfig > m_globalConfig;
 };
@@ -87,13 +92,6 @@ void addStandaredTemplates( TemplateManager *tman )
             auto content = QString{ file.readAll() };
             auto tmpl = std::make_shared< Template >( key, content );
             tman->addTemplate( tmpl );
-            //? Handle renaming
-//            if( substr != nullptr ) {
-//                auto substitute = substr( entry.fileName() );
-//                if( ! substitute.isEmpty() ) {
-//                    outFileName = substitute;
-//                }
-//            }
         }
     }
 }
@@ -143,8 +141,10 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     mainLayout->addWidget( new QLabel{ tr( "Create A Quartz Bundle: ")});
     mainLayout->addLayout( layout );
     mainLayout->addWidget( m_data->m_createButton );
+    mainLayout->addWidget( m_data->m_view );
     mainLayout->addStretch();
-    mainLayout->addWidget( m_data->m_templateSelector );
+    m_data->m_view->setModel( m_data->m_tmodel );
+//    mainLayout->addWidget( m_data->m_templateSelector );
 
     this->setLayout( mainLayout );
 
@@ -337,13 +337,14 @@ void CreatorWidget::autoPopulate( const QString &fqid )
     m_data->m_nameEdit->setText( display );
 }
 
-void CreatorWidget::addTemplateInstance(
-        const QString &name,
-        Template *tmpl )
+void CreatorWidget::addTemplateInstance( const QString &name, Template *tmpl )
 {
     auto tinst = std::make_shared< TemplateInstance >( name, tmpl );
     tinst->setGlobalConfig( m_data->m_globalConfig );
-    m_data->m_instances.push_back( tinst );
+    tmpl->addChild( tinst );
+    if( m_data->m_tmodel->contains( tmpl )) {
+        m_data->m_tmodel->addRoot( tmpl );
+    }
 }
 
 

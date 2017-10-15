@@ -4,6 +4,7 @@ vq_classes(
     CheckBoxDeligate
     AbstractTreeModel
     BasicSortFilter
+    ArrayModel
 )
 
 vq_interfaces(
