@@ -4,9 +4,15 @@
 
 #include <QWidget>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz {
 
+class Template;
 
+namespace Plugin { namespace Creator {
+
+/**
+ * @brief The TemplateConfigWidget class allows configuring selected templates
+ */
 class TemplateConfigWidget : public QWidget
 {
     Q_OBJECT
@@ -14,6 +20,8 @@ public:
     TemplateConfigWidget( QWidget *parent = nullptr );
 
     ~TemplateConfigWidget();
+
+    void createInstanceOf( Template *tmpl );
 
 private:
     struct Data;

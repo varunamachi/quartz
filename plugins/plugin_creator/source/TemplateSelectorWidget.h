@@ -12,6 +12,10 @@ class TemplateManager;
 
 namespace Plugin { namespace Creator {
 
+/**
+ * @brief The TemplateSelectorWidget class allows selecting template to be used
+ * for generation
+ */
 class TemplateSelectorWidget : public QWidget
 {
     Q_OBJECT

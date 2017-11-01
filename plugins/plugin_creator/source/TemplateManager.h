@@ -41,7 +41,9 @@ public:
 
     QString variable( const QString &key );
 
-//    bool generate( const QString &templateName )
+    Template * templateAt( int index ) const;
+
+    int numTemplates() const;
 
     static const QString ADAPTER_NAME;
 

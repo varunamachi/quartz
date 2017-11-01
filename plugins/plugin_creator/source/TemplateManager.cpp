@@ -88,6 +88,20 @@ QString TemplateManager::variable( const QString& key )
     return m_data->m_variables.value( key );
 }
 
+Template * TemplateManager::templateAt( int index ) const
+{
+    if( index < m_data->m_templateList.size() ) {
+        return m_data->m_templateList.at( index );
+    }
+    return nullptr;
+}
+
+int TemplateManager::numTemplates() const
+{
+    return m_data->m_templateList.size();
+}
+
+
 bool TemplateManager::loadCoreTemplates()
 {
     const QDir resDir{ ":/resources" };

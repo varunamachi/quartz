@@ -21,7 +21,6 @@ struct TemplateSelectorWidget::Data
           TemplateSelectorWidget *parent )
         : m_templateManager{ templateManager }
         , m_filterEdit{ new QLineEdit{ parent }}
-        , m_varConfigHolder{ new QStackedWidget{ parent }}
         , m_view{ new QTreeView{ parent }}
     {
 
@@ -30,8 +29,6 @@ struct TemplateSelectorWidget::Data
     TemplateManager *m_templateManager;
 
     QLineEdit *m_filterEdit;
-
-    QStackedWidget *m_varConfigHolder;
 
     QTreeView *m_view;
 
@@ -46,13 +43,10 @@ TemplateSelectorWidget::TemplateSelectorWidget(
 {
     auto main = new QGridLayout{ };
     main->addWidget( m_data->m_filterEdit, 0, 0 );
-    main->addWidget( new QLabel{ this }, 0, 1 );
     main->addWidget( m_data->m_view, 1, 0 );
-    main->addWidget( m_data->m_varConfigHolder, 1, 1 );
 
     m_data->m_view->setModel( m_data->m_templateManager );
     m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
-    m_data->m_view->setItemDelegateForColumn( 2, new EditorDelegate{ this });
 
     this->setLayout( main );
     main->setContentsMargins( QMargins{} );
