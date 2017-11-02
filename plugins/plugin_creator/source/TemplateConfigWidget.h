@@ -7,6 +7,7 @@
 namespace Quartz {
 
 class Template;
+class TemplateInstance;
 
 namespace Plugin { namespace Creator {
 
@@ -22,6 +23,8 @@ public:
     ~TemplateConfigWidget();
 
     void createInstanceOf( Template *tmpl );
+
+    QVector< TemplateInstance *>  instances() const;
 
 private:
     struct Data;

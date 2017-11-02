@@ -38,7 +38,7 @@ struct TemplateSelectorWidget::Data
 TemplateSelectorWidget::TemplateSelectorWidget(
         TemplateManager *templateManager,
         QWidget* parent )
-    : QWidget{ parent }
+    : QDialog{ parent }
     , m_data{ new Data{ templateManager, this }}
 {
     auto main = new QGridLayout{ };
@@ -54,8 +54,8 @@ TemplateSelectorWidget::TemplateSelectorWidget(
 }
 
 
-void TemplateSelectorWidget::selected( const QModelIndex &index )
-{
+//void TemplateSelectorWidget::selected( const QModelIndex &index )
+//{
 //    if( ! index.isValid() ) {
 //        return;
 //    }
@@ -70,12 +70,24 @@ void TemplateSelectorWidget::selected( const QModelIndex &index )
 //        }
 //        m_data->m_varConfigHolder->setCurrentWidget( vcw );
 //    }
-}
+//}
 
 
 TemplateSelectorWidget::~TemplateSelectorWidget()
 {
 
+}
+
+QVector< Template * > TemplateSelectorWidget::getSelected() const
+{
+    QVector< Template * > selected;
+    for( auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i ) {
+        auto t = m_data->m_templateManager->templateAt( i );
+        if( t->isSelected() ) {
+            selected.append( t );
+        }
+    }
+    return selected;
 }
 
 } } }

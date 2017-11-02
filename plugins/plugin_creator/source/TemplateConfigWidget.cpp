@@ -13,7 +13,10 @@ namespace Quartz { namespace Plugin { namespace Creator {
 
 struct TemplateConfigWidget::Data
 {
-    explicit Data( TemplateConfigWidget */*parent*/ )
+    explicit Data( TemplateConfigWidget *parent )
+        : m_filter{ new QLineEdit{ parent }}
+        , m_view{ new QTreeView{ parent }}
+        , m_configWidget{ new GenConfigWidget{ nullptr, parent }}
     {
 
     }
@@ -22,9 +25,13 @@ struct TemplateConfigWidget::Data
 
     QTreeView *m_view;
 
+    GenConfigWidget *m_configWidget;
+
     QVector< TemplateInstance *> m_tinsts;
 
     QSet< QString > m_names;
+
+    //might need a empty genconfig object!
 
 };
 
@@ -54,6 +61,11 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
     auto inst = new TemplateInstance{name, tmpl };
     m_data->m_tinsts.append( inst );
     m_data->m_names.insert( name );
+}
+
+QVector<TemplateInstance *> TemplateConfigWidget::instances() const
+{
+    return m_data->m_tinsts;
 }
 
 

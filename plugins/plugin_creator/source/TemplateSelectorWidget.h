@@ -2,13 +2,14 @@
 
 #include <memory>
 
-#include <QWidget>
+#include <QDialog>
 
 class QModelIndex;
 
 namespace Quartz {
 
 class TemplateManager;
+class Template;
 
 namespace Plugin { namespace Creator {
 
@@ -16,7 +17,7 @@ namespace Plugin { namespace Creator {
  * @brief The TemplateSelectorWidget class allows selecting template to be used
  * for generation
  */
-class TemplateSelectorWidget : public QWidget
+class TemplateSelectorWidget : public QDialog
 {
     Q_OBJECT
 public:
@@ -26,7 +27,9 @@ public:
 
     ~TemplateSelectorWidget();
 
-    void selected( const QModelIndex &index );
+//    void selected( const QModelIndex &index );
+
+    QVector< Template * > getSelected() const;
 
 private:
     struct Data;
