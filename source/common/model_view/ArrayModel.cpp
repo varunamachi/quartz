@@ -23,6 +23,11 @@ ArrayModel::~ArrayModel()
 
 }
 
+void ArrayModel::setRoots( QVector< ITreeNode *> roots )
+{
+    m_data->m_roots = roots;
+}
+
 ITreeNode * ArrayModel::rootAt( int rowIndex ) const
 {
     ITreeNode *root = nullptr;

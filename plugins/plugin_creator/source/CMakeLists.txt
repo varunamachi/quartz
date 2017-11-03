@@ -22,7 +22,7 @@ vq_classes(
     CreatorWidget
     TemplateManager
     AbstractTemplateProvider
-    TemplateSelectorWidget
+    TemplateSelectorDialog
     GenInfo
     CodeGenerator
     TemplateConfigWidget

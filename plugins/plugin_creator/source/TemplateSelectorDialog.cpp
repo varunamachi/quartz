@@ -11,14 +11,14 @@
 #include <common/templating/Template.h>
 
 #include "TemplateManager.h"
-#include "TemplateSelectorWidget.h"
+#include "TemplateSelectorDialog.h"
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
-struct TemplateSelectorWidget::Data
+struct TemplateSelectorDialog::Data
 {
     Data( TemplateManager *templateManager,
-          TemplateSelectorWidget *parent )
+          TemplateSelectorDialog *parent )
         : m_templateManager{ templateManager }
         , m_filterEdit{ new QLineEdit{ parent }}
         , m_view{ new QTreeView{ parent }}
@@ -35,7 +35,7 @@ struct TemplateSelectorWidget::Data
 //    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };
 
-TemplateSelectorWidget::TemplateSelectorWidget(
+TemplateSelectorDialog::TemplateSelectorDialog(
         TemplateManager *templateManager,
         QWidget* parent )
     : QDialog{ parent }
@@ -73,12 +73,12 @@ TemplateSelectorWidget::TemplateSelectorWidget(
 //}
 
 
-TemplateSelectorWidget::~TemplateSelectorWidget()
+TemplateSelectorDialog::~TemplateSelectorDialog()
 {
 
 }
 
-QVector< Template * > TemplateSelectorWidget::getSelected() const
+QVector< Template * > TemplateSelectorDialog::selectedTemplates() const
 {
     QVector< Template * > selected;
     for( auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i ) {

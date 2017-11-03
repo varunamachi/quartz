@@ -15,6 +15,8 @@ public:
 
     ~ArrayModel();
 
+    void setRoots( QVector< ITreeNode *> roots );
+
     ITreeNode * rootAt( int rowIndex ) const override;
 
     int rootCount() const override;

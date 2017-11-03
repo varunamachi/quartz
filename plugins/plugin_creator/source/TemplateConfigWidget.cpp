@@ -1,10 +1,13 @@
 
+#include <QSet>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QTreeView>
 #include <QLineEdit>
-#include <QSet>
 
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
+#include <common/model_view/ArrayModel.h>
 #include <common/generic_config/ui/GenConfigWidget.h>
 
 #include "TemplateConfigWidget.h"
@@ -17,6 +20,7 @@ struct TemplateConfigWidget::Data
         : m_filter{ new QLineEdit{ parent }}
         , m_view{ new QTreeView{ parent }}
         , m_configWidget{ new GenConfigWidget{ nullptr, parent }}
+        , m_tmodel{ new ArrayModel{ parent }}
     {
 
     }
@@ -27,9 +31,11 @@ struct TemplateConfigWidget::Data
 
     GenConfigWidget *m_configWidget;
 
-    QVector< TemplateInstance *> m_tinsts;
+    QVector< ITreeNode *> m_tinsts;
 
     QSet< QString > m_names;
+
+    ArrayModel *m_tmodel;
 
     //might need a empty genconfig object!
 
@@ -39,7 +45,20 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     : QWidget{ parent }
     , m_data{ new Data{ this }}
 {
+    auto mainLayout = new QHBoxLayout{};
+    auto leftLayout = new QVBoxLayout{};
+    leftLayout->addWidget( m_data->m_filter );
+    leftLayout->addWidget( m_data->m_view );
+    mainLayout->addLayout( leftLayout );
+    mainLayout->addWidget( m_data->m_configWidget );
 
+    m_data->m_tmodel->setRoots( m_data->m_tinsts );
+    m_data->m_view->setModel( m_data->m_tmodel );
+
+    mainLayout->setContentsMargins( QMargins{} );
+    leftLayout->setContentsMargins( QMargins{} );
+
+    this->setLayout( mainLayout );
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()
@@ -63,9 +82,26 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
     m_data->m_names.insert( name );
 }
 
-QVector<TemplateInstance *> TemplateConfigWidget::instances() const
+int TemplateConfigWidget::numInstances() const
 {
-    return m_data->m_tinsts;
+    return m_data->m_tinsts.size();
+}
+
+TemplateInstance * TemplateConfigWidget::instanceAt(int index)
+{
+    TemplateInstance *tinst = nullptr;
+    if( index < m_data->m_tinsts.size() ) {
+        tinst = static_cast< TemplateInstance *>( m_data->m_tinsts.at( index ));
+    }
+    return tinst;
+}
+
+
+void TemplateConfigWidget::clear()
+{
+    m_data->m_tinsts.clear();
+    m_data->m_names.clear();
+    m_data->m_configWidget->setConfig( nullptr );
 }
 
 

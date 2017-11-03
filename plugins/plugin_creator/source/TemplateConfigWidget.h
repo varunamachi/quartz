@@ -24,7 +24,11 @@ public:
 
     void createInstanceOf( Template *tmpl );
 
-    QVector< TemplateInstance *>  instances() const;
+    int numInstances() const;
+
+    TemplateInstance * instanceAt( int index );
+
+    void clear();
 
 private:
     struct Data;

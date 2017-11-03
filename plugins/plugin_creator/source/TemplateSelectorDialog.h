@@ -17,19 +17,18 @@ namespace Plugin { namespace Creator {
  * @brief The TemplateSelectorWidget class allows selecting template to be used
  * for generation
  */
-class TemplateSelectorWidget : public QDialog
+class TemplateSelectorDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    explicit TemplateSelectorWidget(
+    explicit TemplateSelectorDialog(
             TemplateManager *templateManager,
             QWidget *parent = nullptr );
 
-    ~TemplateSelectorWidget();
+    ~TemplateSelectorDialog();
 
-//    void selected( const QModelIndex &index );
-
-    QVector< Template * > getSelected() const;
+    QVector< Template * > selectedTemplates() const;
 
 private:
     struct Data;

@@ -32,7 +32,7 @@ public slots:
 
     void autoPopulate( const QString &fqid );
 
-    void addTemplateInstance( const QString &name, Template *tmpl ) ;
+    void addTemplates() ;
 
 private:
 
