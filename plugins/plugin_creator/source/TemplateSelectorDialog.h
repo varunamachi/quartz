@@ -30,6 +30,8 @@ public:
 
     QVector< Template * > selectedTemplates() const;
 
+    void clearSelection();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

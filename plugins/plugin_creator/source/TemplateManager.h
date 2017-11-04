@@ -45,10 +45,11 @@ public:
 
     int numTemplates() const;
 
+    bool loadCoreTemplates();
+
     static const QString ADAPTER_NAME;
 
 protected:
-    bool loadCoreTemplates();
 
     ITreeNode *rootAt(int rowIndex) const override;
 

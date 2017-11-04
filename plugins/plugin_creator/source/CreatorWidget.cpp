@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QTreeView>
+#include <QGroupBox>
 
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/TemplateProcessor.h>
@@ -47,13 +48,11 @@ struct CreatorWidget::Data
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
         , m_view{ new QTreeView{ parent }}
-//        , m_tmodel{ new ArrayModel{ parent }}
         , m_templateManager{ tman }
         , m_templateSelector{ new TemplateSelectorDialog{ tman.get(), parent }}
         , m_configWidget{ new TemplateConfigWidget{ parent }}
         , m_globalConfig{ std::make_shared< GlobalConfig >() }
     {
-//        m_globalConfig = ;
     }
 
     QLineEdit *m_fqIDEdit;
@@ -141,26 +140,35 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     layout->addLayout( browseLayout , row, 1 );
     ++ row;
 
-    auto  mainLayout = new QVBoxLayout{};
-    mainLayout->addWidget( new QLabel{ tr( "Create A Quartz Bundle: ")});
-    mainLayout->addLayout( layout );
-    mainLayout->addWidget( m_data->m_configWidget );
-    mainLayout->addWidget( m_data->m_createButton );
-//    mainLayout->addStretch();
-//    m_data->m_view->setModel( m_data->  );
-//    mainLayout->addWidget( m_data->m_templateSelector );
+    //Configuration part
+    auto addBtn = new QPushButton{ tr("Add Plugin"), this };
+    auto addLyt = new QHBoxLayout{};
+    addLyt->addStretch();
+    addLyt->addWidget( addBtn );
 
+    auto configLyt = new QVBoxLayout{};
+    configLyt->addLayout( addLyt );
+    configLyt->addWidget( m_data->m_configWidget );
+    configLyt->addWidget( m_data->m_createButton );
+
+    auto gbx = new QGroupBox{ tr( "Confirure Plugins" ), this };
+    gbx->setLayout( configLyt );
+
+
+    //Main layout
+    auto  mainLayout = new QVBoxLayout{};
+    mainLayout->addWidget( new QLabel{ tr( "Create A Quartz Plugin: ")});
+    mainLayout->addLayout( layout );
+    mainLayout->addWidget( gbx );
     this->setLayout( mainLayout );
 
+    //Setup initial state and validators
     m_data->m_fqIDEdit->setValidator(
                 new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_\\.]{0,30}$" }});
     m_data->m_idEdit->setEnabled( false );
     m_data->m_namespaceEdit->setEnabled( false );
-//    m_data->m_idEdit->setValidator(
-//                new QRegExpValidator{ QRegExp{ "^[a-z][a-z0-9_]{0,30}$" }});
-//    m_data->m_namespaceEdit->setValidator(
-//                new QRegExpValidator{ QRegExp{ "^[A-Z][a-zA-Z0-9]{0,30}$" }});
 
+    //Connections
     connect( m_data->m_browseButton,
              &QPushButton::released,
              this,
@@ -173,6 +181,14 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
              &QLineEdit::textChanged,
              this,
              &CreatorWidget::autoPopulate );
+    connect( addBtn, &QPushButton::clicked, [ this ](){
+        m_data->m_templateSelector->open();
+        if( m_data->m_templateSelector->result() == QDialog::Accepted ) {
+            this->addTemplates();
+        }
+        m_data->m_templateSelector->clearSelection();
+    });
+
 #ifdef QT_DEBUG
     auto testBundleLoc = QStandardPaths::writableLocation(
                 QStandardPaths::TempLocation ) + "/qz_bundle/";
@@ -183,6 +199,8 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     m_data->m_dirPath->setText( testBundleLoc );
 
 #endif
+
+    m_data->m_templateManager->loadCoreTemplates();
 }
 
 CreatorWidget::~CreatorWidget()
@@ -286,10 +304,7 @@ void CreatorWidget::onCreate()
         error( this, msg );
         return;
     }
-
-//    m_data->m_globalConfig->insert( "g:files", files)
     GenInfo info{ id, name, display, ns };
-
     CodeGenerator generator{ &info };
     auto result = generator.generate( path );
     if( result ) {

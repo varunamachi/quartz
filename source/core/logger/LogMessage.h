@@ -21,6 +21,7 @@ public:
                 std::uint64_t threadId,
                 const QString &module,
                 QString &&method,
+                QString &&fileName,
                 int lineNum,
                 const QString &message );
 
@@ -29,6 +30,7 @@ public:
                 std::uint64_t threadId,
                 const QString &module,
                 QString &&method,
+                QString &&fileName,
                 int lineNum,
                 QString &&message );
 
@@ -37,6 +39,7 @@ public:
                 std::uint64_t threadId,
                 QString &&module,
                 QString &&method,
+                QString &&fileName,
                 int lineNum,
                 QString &&message );
 
@@ -49,6 +52,8 @@ public:
     const QString & moduleName() const;
 
     const QString & methodName() const;
+
+    const QString & fileName() const;
 
     const int & lineNum() const;
 
@@ -63,8 +68,8 @@ public:
     ~LogMessage();
 
 private:
-    class Impl;
-    std::unique_ptr< Impl > m_impl;
+    class Data;
+    std::unique_ptr< Data > m_data;
 };
 
 } }

@@ -13,7 +13,7 @@ struct ContentProvider::Data
 {
     explicit Data( std::shared_ptr< TemplateManager > tman )
     {
-        m_widgets.push_back( new CreatorWidget{ tman } );
+        m_widgets.push_back( new CreatorWidget{ tman });
     }
 
     QVector< ContentWidget *> m_widgets;

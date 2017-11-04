@@ -4,6 +4,7 @@
 #include <QLineEdit>
 #include <QStackedWidget>
 #include <QLabel>
+#include <QPushButton>
 
 #include <common/model_view/CheckBoxDeligate.h>
 #include <common/model_view/EditorDelegate.h>
@@ -32,7 +33,7 @@ struct TemplateSelectorDialog::Data
 
     QTreeView *m_view;
 
-//    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
+    //    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };
 
 TemplateSelectorDialog::TemplateSelectorDialog(
@@ -41,16 +42,29 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     : QDialog{ parent }
     , m_data{ new Data{ templateManager, this }}
 {
-    auto main = new QGridLayout{ };
-    main->addWidget( m_data->m_filterEdit, 0, 0 );
-    main->addWidget( m_data->m_view, 1, 0 );
-
     m_data->m_view->setModel( m_data->m_templateManager );
     m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
 
+    auto okBtn = new QPushButton{ tr( "Select" ), this };
+    auto cancelBtn = new QPushButton{ tr( "Cancel"), this };
+    auto btnLyt = new QHBoxLayout{};
+    btnLyt->addStretch();
+    btnLyt->addWidget( okBtn );
+    btnLyt->addWidget( cancelBtn );
+
+    auto main = new QVBoxLayout{ };
+    main->addWidget( m_data->m_filterEdit );
+    main->addWidget( m_data->m_view );
+    main->addLayout( btnLyt );
     this->setLayout( main );
-    main->setContentsMargins( QMargins{} );
-    this->setContentsMargins( QMargins{} );
+    this->setMinimumSize( QSize{ 500, 600 });
+
+    connect( okBtn, &QPushButton::released, [ this ](){
+        this->accept();
+    });
+    connect( cancelBtn, &QPushButton::released, [ this ](){
+        this->reject();
+    });
 }
 
 
@@ -88,6 +102,13 @@ QVector< Template * > TemplateSelectorDialog::selectedTemplates() const
         }
     }
     return selected;
+}
+
+void TemplateSelectorDialog::clearSelection()
+{
+    for( auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i ) {
+        m_data->m_templateManager->templateAt( i )->setSelected( false );
+    }
 }
 
 } } }

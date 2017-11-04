@@ -54,5 +54,6 @@ const AdapterList &PluginBundle::adapters() const
 
 } } }
             ]]>
+        </content>
     </template>
 </templates>

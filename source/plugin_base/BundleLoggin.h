@@ -18,13 +18,14 @@
 #define QZ_COMMON( level, mod )                                             \
     Quartz::Logger::LogLineHolder(                                          \
         appContext()->logger(),                                             \
-        new Quartz::Logger::LogMessage( QDateTime::currentDateTime(),       \
+        new Quartz::Logger::LogMessage{ QDateTime::currentDateTime(),       \
                                         level,                              \
                                         CUR_THREAD_ID,                      \
                                         mod,                                \
                                         FUNCTION_NAME,                      \
+                                        __FILE__,                           \
                                         __LINE__,                           \
-                                        QString{ "" }))
+                                        QString{ "" }})
 
 
 #define QZ_TRACE( module ) \

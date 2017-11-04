@@ -132,7 +132,6 @@ QString getTemplateContent( const QDomElement &root )
     if( ! gotContent ) {
         QZ_ERROR( "Qz:Cmn:Tmpl" ) << "Failed to fetch template content";
     }
-
     return content;
 }
 

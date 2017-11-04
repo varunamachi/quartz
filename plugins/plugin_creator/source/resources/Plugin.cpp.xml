@@ -42,5 +42,6 @@ Q_DECL_EXPORT void destroy()
 
 }
             ]]>
+        </content>
     </template>
 </templates>

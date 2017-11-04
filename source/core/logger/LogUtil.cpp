@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QTextStream>
 
 #include "LogUtil.h"
 #include "LogStructures.h"
@@ -50,18 +51,33 @@ QString LogUtil::getSeverityString( LogLevel level )
 
 QString LogUtil::format( const LogMessage *msg )
 {
-    QString strMsg{ msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
-            + " "
-            + getSeverityString( msg->logLevel() )
-            + "  "
-            + msg->message()
-  /*          + " ["
-            + msg->moduleName() + " | "
-            + QString::number( msg->lineNum()  ) + " | "
-            + QString::number( msg->threadId() ) + " | "
-            + msg->methodName() + " ] "*/
-    };
-    return strMsg;
+
+
+//    QString strMsg{ msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
+//            + " "
+//            + getSeverityString( msg->logLevel() )
+//            + "  "
+//            + msg->message()
+//  /*          + " ["
+//            + msg->moduleName() + " | "
+//            + QString::number( msg->lineNum()  ) + " | "
+//            + QString::number( msg->threadId() ) + " | "
+//            + msg->methodName() + " ] "*/
+//            + "@"
+//            + QString::number( msg->lineNum() )
+//    };
+//    return strMsg;
+//}
+    QString str;
+    QTextStream stream{ &str };
+    stream << msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
+           << " " << getSeverityString( msg->logLevel() )
+           << " " << msg->message();
+    if( msg->logLevel() >= LogLevel::Error ) {
+           stream << " @ " << msg->fileName() << ":" << msg->lineNum();
+    }
+    return str;
+
 }
 
 } } //end of namespces
