@@ -1,6 +1,6 @@
 <templates>
     <template name="resources.qrt">
-        <config>
+        <config id="resources" name="Resources">
 
         </config>
         <content>

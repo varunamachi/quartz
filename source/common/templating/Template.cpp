@@ -131,12 +131,14 @@ int Template::indexOfChild( const ITreeNode *child ) const
 
 bool Template::isEditable( int /*column*/ ) const
 {
-    return false;
+    return true;
 }
 
-void Template::setData( int /*column*/, const QVariant &/*data*/ )
+void Template::setData( int column, const QVariant &data )
 {
-    //Nothing to set
+    if( column == 0 ) {
+         m_data->m_selected = data.toBool();
+    }
 }
 
 void Template::addChild( std::shared_ptr< ITreeNode > child )

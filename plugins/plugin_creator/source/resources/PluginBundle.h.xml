@@ -1,6 +1,6 @@
 <templates>
     <template name="PluginBundle.h">
-        <config>
+        <config id="PluginBundle.h" name="Plugin Bundle Hdr">
 
         </config>
         <content>

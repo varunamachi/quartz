@@ -182,7 +182,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
              this,
              &CreatorWidget::autoPopulate );
     connect( addBtn, &QPushButton::clicked, [ this ](){
-        m_data->m_templateSelector->open();
+        m_data->m_templateSelector->exec();
         if( m_data->m_templateSelector->result() == QDialog::Accepted ) {
             this->addTemplates();
         }
@@ -197,9 +197,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     m_data->m_namespaceEdit->setText( "Test" );
     m_data->m_nameEdit->setText( "Test" );
     m_data->m_dirPath->setText( testBundleLoc );
-
 #endif
-
     m_data->m_templateManager->loadCoreTemplates();
 }
 

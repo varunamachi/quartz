@@ -17,7 +17,7 @@ struct GenConfigTreeModel::Data
 
     Config * m_config;
 
-    ConfigTreeNode *m_node;
+    std::unique_ptr< ConfigTreeNode > m_node;
 };
 
 GenConfigTreeModel::GenConfigTreeModel( Config *config, QObject *parent )
@@ -36,20 +36,20 @@ void GenConfigTreeModel::setConfig( Config *config )
 {
     beginResetModel();
     m_data->m_config = config;
+    m_data->m_node = std::unique_ptr< ConfigTreeNode >{
+            new ConfigTreeNode{ nullptr, config }};
+    endResetModel();
 
 }
 
-ITreeNode *GenConfigTreeModel::rootAt( int rowIndex ) const
+ITreeNode *GenConfigTreeModel::rootAt( int /*rowIndex*/ ) const
 {
-    if( rowIndex > 1 ) {
-        return m_data->m_node;
-    }
-    return nullptr;
+    return m_data->m_node.get();
 }
 
 int GenConfigTreeModel::rootCount() const
 {
-    return 1;
+    return m_data->m_node->numChildren() != 0 ? 1 : 0;
 }
 
 

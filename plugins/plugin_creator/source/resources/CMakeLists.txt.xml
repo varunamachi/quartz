@@ -1,6 +1,6 @@
 <templates>
     <template name="CMakeLists.txt">
-        <config>
+        <config id="CMakeLists.txt" name="CMakeList">
 
         </config>
         <content>

@@ -1,6 +1,6 @@
 <templates>
-    <template name="ActionProvider.cpp">
-        <config>
+    <template name="ActionProvider.h">
+        <config id="ActionProvider.h" name="Action Provider Hdr">
 
         </config>
         <content>

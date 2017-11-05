@@ -1,6 +1,6 @@
 <templates>
     <template name="Plugin.cpp">
-        <config>
+        <config id="Plugin.cpp" name="Plugin Src" >
 
         </config>
         <content>

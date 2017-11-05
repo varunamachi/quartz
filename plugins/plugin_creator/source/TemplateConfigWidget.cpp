@@ -9,6 +9,7 @@
 #include <common/templating/TemplateInstance.h>
 #include <common/model_view/ArrayModel.h>
 #include <common/generic_config/ui/GenConfigWidget.h>
+#include <common/generic_config/model/Config.h>
 
 #include "TemplateConfigWidget.h"
 
@@ -19,7 +20,8 @@ struct TemplateConfigWidget::Data
     explicit Data( TemplateConfigWidget *parent )
         : m_filter{ new QLineEdit{ parent }}
         , m_view{ new QTreeView{ parent }}
-        , m_configWidget{ new GenConfigWidget{ nullptr, parent }}
+        , m_emptyConfig{ "none", "None" }
+        , m_configWidget{ new GenConfigWidget{ &m_emptyConfig, parent }}
         , m_tmodel{ new ArrayModel{ parent }}
     {
 
@@ -29,6 +31,8 @@ struct TemplateConfigWidget::Data
 
     QTreeView *m_view;
 
+    Config m_emptyConfig;
+
     GenConfigWidget *m_configWidget;
 
     QVector< ITreeNode *> m_tinsts;
@@ -36,6 +40,7 @@ struct TemplateConfigWidget::Data
     QSet< QString > m_names;
 
     ArrayModel *m_tmodel;
+
 
     //might need a empty genconfig object!
 

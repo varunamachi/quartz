@@ -107,7 +107,11 @@ QVector< Template * > TemplateSelectorDialog::selectedTemplates() const
 void TemplateSelectorDialog::clearSelection()
 {
     for( auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i ) {
-        m_data->m_templateManager->templateAt( i )->setSelected( false );
+        auto t = m_data->m_templateManager->templateAt( i );
+        if( t != nullptr ) {
+            t->setSelected( false );
+        }
+//        m_data->m_templateManager->templateAt( i )->setSelected( false );
     }
 }
 

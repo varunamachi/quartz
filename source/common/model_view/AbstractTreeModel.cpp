@@ -20,13 +20,13 @@ AbstractTreeModel::~AbstractTreeModel()
 
 
 QModelIndex AbstractTreeModel::index( int row,
-                                    int column,
-                                    const QModelIndex &parent ) const
+                                      int column,
+                                      const QModelIndex &parent ) const
 {
+//    if( ! hasIndex( row, column, parent )) {
+//        return index;
+//    }
     QModelIndex index;
-    if( ! hasIndex( row, column, parent )) {
-        return index;
-    }
     if( parent.isValid() ) {
         auto node = static_cast< ITreeNode * >( parent.internalPointer() );
         auto child = node->child( row );
@@ -84,6 +84,8 @@ int AbstractTreeModel::columnCount( const QModelIndex& parent ) const
     if( parent.isValid() ) {
         auto node = static_cast< ITreeNode *>( parent.internalPointer() );
         count = node->numFields();
+    } else if( rootCount() != 0 ){
+        count = rootAt( 0 )->numFields();
     }
     return count;
 }

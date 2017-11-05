@@ -37,7 +37,7 @@ TemplateManager::~TemplateManager()
 
 void TemplateManager::addTemplate( std::shared_ptr< Template > tmplt )
 {
-//    m_data->m_templates.insert( tmplt->name(), tmplt );
+    m_data->m_templates.insert( tmplt->name(), tmplt );
     m_data->m_templateList.push_back( tmplt.get() );
 }
 
@@ -104,12 +104,14 @@ int TemplateManager::numTemplates() const
 
 bool TemplateManager::loadCoreTemplates()
 {
+    beginResetModel();
     const QDir resDir{ ":/resources" };
     auto tmps = TemplateUtils::templatesInDir( resDir );
     foreach( auto &tmpl, tmps ) {
         addTemplate( tmpl );
     }
-    return false;
+    endResetModel();
+    return true;
 }
 
 ITreeNode * TemplateManager::rootAt( int rowIndex ) const
