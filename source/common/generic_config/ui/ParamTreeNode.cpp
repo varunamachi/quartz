@@ -48,6 +48,11 @@ int ParamTreeNode::numFields() const
     return 3;
 }
 
+bool ParamTreeNode::isSelectable() const
+{
+    return false;
+}
+
 ITreeNode * ParamTreeNode::child( int /*row*/ ) const
 {
     return nullptr;

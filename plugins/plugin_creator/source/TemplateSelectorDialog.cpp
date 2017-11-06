@@ -43,7 +43,7 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     , m_data{ new Data{ templateManager, this }}
 {
     m_data->m_view->setModel( m_data->m_templateManager );
-    m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
+//    m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
 
     auto okBtn = new QPushButton{ tr( "Select" ), this };
     auto cancelBtn = new QPushButton{ tr( "Cancel"), this };

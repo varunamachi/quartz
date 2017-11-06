@@ -23,9 +23,9 @@ QModelIndex AbstractTreeModel::index( int row,
                                       int column,
                                       const QModelIndex &parent ) const
 {
-//    if( ! hasIndex( row, column, parent )) {
-//        return index;
-//    }
+    //    if( ! hasIndex( row, column, parent )) {
+    //        return index;
+    //    }
     QModelIndex index;
     if( parent.isValid() ) {
         auto node = static_cast< ITreeNode * >( parent.internalPointer() );
@@ -91,14 +91,20 @@ int AbstractTreeModel::columnCount( const QModelIndex& parent ) const
 }
 
 QVariant AbstractTreeModel::data( const QModelIndex& index,
-                                int role ) const
+                                  int role ) const
 {
     QVariant data;
     if( index.isValid() ) {
-        if( role == Qt::DisplayRole ) {
-            auto node = static_cast< ITreeNode *>( index.internalPointer() );
-            if( node != nullptr ) {
+        auto node = static_cast< ITreeNode *>( index.internalPointer() );
+        if( node != nullptr ) {
+            if( role == Qt::DisplayRole
+                    && ! ( node->isSelectable() && index.column() == 0 )) {
                 data = node->data( index.column() )            ;
+            }
+            else if ( role == Qt::CheckStateRole
+                      && node->isSelectable()
+                      && index.column() == 0 ) {
+                data = static_cast< int >( node->isSelected() );
             }
         }
     }
@@ -134,10 +140,20 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
 
 Qt::ItemFlags AbstractTreeModel::flags( const QModelIndex &index ) const
 {
-    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
+    //https://stackoverflow.com/questions/14158191/qt-qtreeview-and-custom-model-with-checkbox-columns
+    if( ! index.isValid() ) {
+        return 0;
+    }
+    //    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     auto node = static_cast< ITreeNode *>( index.internalPointer() );
     if( node != nullptr && node->isEditable( index.column() )) {
-            return flags |= Qt::ItemIsEditable;
+        if( node->isSelectable() && index.column() == 0 ) {
+            flags |= Qt::ItemIsUserCheckable;
+        }
+        else {
+            flags |= Qt::ItemIsEditable;
+        }
     }
     return flags;
 }

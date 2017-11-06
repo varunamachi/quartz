@@ -20,6 +20,8 @@ QZ_INTERFACE ITreeNode
 
     virtual QVariant data( int column ) const = 0;
 
+    virtual bool isSelectable() const = 0;
+
     virtual void setSelected( bool value ) = 0;
 
     virtual bool isSelected() const = 0;

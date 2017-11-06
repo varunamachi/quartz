@@ -53,6 +53,11 @@ int ConfigTreeNode::numFields() const
     return 1;
 }
 
+bool ConfigTreeNode::isSelectable() const
+{
+    return false;
+}
+
 ITreeNode * ConfigTreeNode::child( int row ) const
 {
     std::shared_ptr< ITreeNode > child;

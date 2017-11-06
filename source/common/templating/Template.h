@@ -30,6 +30,8 @@ public:
 
     int numFields() const override;
 
+    bool isSelectable() const override;
+
     ITreeNode * child( int row ) const override;
 
     QVariant data( int column ) const override;

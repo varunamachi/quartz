@@ -79,6 +79,11 @@ int Template::numFields() const
     return 2;
 }
 
+bool Template::isSelectable() const
+{
+    return true;
+}
+
 ITreeNode *Template::child( int row ) const
 {
     if( row < m_data->m_instances.size() ) {
@@ -129,9 +134,9 @@ int Template::indexOfChild( const ITreeNode *child ) const
     return index;
 }
 
-bool Template::isEditable( int /*column*/ ) const
+bool Template::isEditable( int column ) const
 {
-    return true;
+    return column == 0;
 }
 
 void Template::setData( int column, const QVariant &data )

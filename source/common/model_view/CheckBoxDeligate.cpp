@@ -33,7 +33,7 @@ void CheckBoxDelegate::paint( QPainter *painter,
                     QStyle::SE_CheckBoxIndicator,
                     &checkbox,
                     nullptr );
-        auto x = option.rect.center().x() - checkbox.rect.width() / 2;
+        auto x = option.rect.center().x() - checkbox.rect.width() / 2 - 20;
         auto y = option.rect.center().y() - checkbox.rect.height() / 2;
         checkbox.rect.moveTo( x, y );
         if( option.state & QStyle::State_Selected ) {
@@ -56,7 +56,10 @@ QWidget * CheckBoxDelegate::createEditor(
         const QStyleOptionViewItem &/*option*/,
         const QModelIndex &/*index*/ ) const
 {
-    return new QCheckBox{ parent };
+    auto checkbox = new QCheckBox{ parent };
+    checkbox->setStyleSheet(
+        "QCheckBox {margin-left: 10%;}");
+    return checkbox;
 }
 
 void CheckBoxDelegate::setEditorData( QWidget *editor,

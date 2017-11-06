@@ -54,6 +54,11 @@ int GroupTreeNode::numFields() const
     return 2;
 }
 
+bool GroupTreeNode::isSelectable() const
+{
+    return false;
+}
+
 ITreeNode * GroupTreeNode::child( int row ) const
 {
     std::shared_ptr< ITreeNode > child;

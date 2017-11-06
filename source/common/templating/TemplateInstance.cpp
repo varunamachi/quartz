@@ -90,6 +90,11 @@ int TemplateInstance::numFields() const
     return 1;
 }
 
+bool TemplateInstance::isSelectable() const
+{
+    return false;
+}
+
 ITreeNode * TemplateInstance::child( int /*row*/ ) const
 {
     return nullptr;
