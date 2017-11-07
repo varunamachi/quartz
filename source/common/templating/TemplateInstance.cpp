@@ -120,7 +120,8 @@ bool TemplateInstance::isSelected() const
 
 ITreeNode *TemplateInstance::parent() const
 {
-    return m_data->m_parent;
+//    return m_data->m_parent;
+    return nullptr;
 }
 
 int TemplateInstance::indexOfChild( const ITreeNode */*child*/ ) const
@@ -131,7 +132,7 @@ int TemplateInstance::indexOfChild( const ITreeNode */*child*/ ) const
 
 bool TemplateInstance::isEditable( int column ) const
 {
-    return column == 1;
+    return column == 0;
 }
 
 void TemplateInstance::setData( int column, const QVariant &data )

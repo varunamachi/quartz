@@ -23,10 +23,10 @@ QModelIndex AbstractTreeModel::index( int row,
                                       int column,
                                       const QModelIndex &parent ) const
 {
-    //    if( ! hasIndex( row, column, parent )) {
-    //        return index;
-    //    }
     QModelIndex index;
+    if( ! hasIndex( row, column, parent )) {
+        return index;
+    }
     if( parent.isValid() ) {
         auto node = static_cast< ITreeNode * >( parent.internalPointer() );
         auto child = node->child( row );
@@ -106,6 +106,10 @@ QVariant AbstractTreeModel::data( const QModelIndex& index,
                       && ! (index.column() == 0 && node->isSelectable() )) {
                 data = node->data( index.column() );
             }
+            if( role == Qt::EditRole
+                    && ! (index.column() == 0 && node->isSelectable() )) {
+                data = node->data( index.column() );
+            }
         }
     }
     return data;
@@ -148,11 +152,9 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
 
 Qt::ItemFlags AbstractTreeModel::flags( const QModelIndex &index ) const
 {
-    //https://stackoverflow.com/questions/14158191/qt-qtreeview-and-custom-model-with-checkbox-columns
     if( ! index.isValid() ) {
         return 0;
     }
-    //    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     auto node = static_cast< ITreeNode *>( index.internalPointer() );
     if( node != nullptr && node->isEditable( index.column() )) {

@@ -56,7 +56,7 @@ void Template::setConfig( std::unique_ptr<Config> config )
     m_data->m_config = std::move( config );
 }
 
-const Config * Template::config() const
+Config * Template::config() const
 {
     return  m_data->m_config.get();
 }

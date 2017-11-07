@@ -26,10 +26,6 @@ public:
 
     bool contains( ITreeNode *node );
 
-    int numItems() const;
-
-    ITreeNode * itemAt( int index ) const;
-
     void clear();
 
 private:

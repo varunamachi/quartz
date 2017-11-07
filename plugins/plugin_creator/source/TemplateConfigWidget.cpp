@@ -35,15 +35,9 @@ struct TemplateConfigWidget::Data
 
     GenConfigWidget *m_configWidget;
 
-//    QVector< ITreeNode *> m_tinsts;
-
-    QSet< QString > m_names;
-
     ArrayModel *m_tmodel;
 
-
-    //might need a empty genconfig object!
-
+    QHash< QString, std::shared_ptr< TemplateInstance >> m_instances;
 };
 
 TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
@@ -57,13 +51,27 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     mainLayout->addLayout( leftLayout );
     mainLayout->addWidget( m_data->m_configWidget );
 
-//    m_data->m_tmodel->setRoots( m_data->m_tinsts );
     m_data->m_view->setModel( m_data->m_tmodel );
 
     mainLayout->setContentsMargins( QMargins{} );
     leftLayout->setContentsMargins( QMargins{} );
 
     this->setLayout( mainLayout );
+
+    connect( m_data->m_view->selectionModel(),
+             &QItemSelectionModel::currentChanged,
+             [ this ]( const QModelIndex &current, const QModelIndex &){
+        auto ti = static_cast< TemplateInstance *>(
+                    current.internalPointer() );
+        if( ti != nullptr ) {
+            if( ti->instanceOf()->config() != nullptr ) {
+                m_data->m_configWidget->setConfig(
+                            ti->instanceOf()->config() );
+            } else {
+                m_data->m_configWidget->setConfig( &m_data->m_emptyConfig );
+            }
+        }
+    });
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()
@@ -77,36 +85,36 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
     auto index = 1;
     //If there is a name clash, we suffix numbers
     do {
-        if( ! m_data->m_names.contains( name )) {
+        if( ! m_data->m_instances.contains( name )) {
             break;
         }
         name = tmpl->name() + "_" + QString::number( index );
     } while( index <= 1000 ); //1000 should be enough
-    auto inst = new TemplateInstance{ name, tmpl };
-//    m_data->m_tinsts.append( inst );
-    m_data->m_tmodel->addRoot( inst );
-    m_data->m_names.insert( name );
+    auto inst = std::make_shared< TemplateInstance >( name, tmpl );
+    m_data->m_instances.insert( name, inst );
+    m_data->m_tmodel->addRoot( inst.get() );
 }
 
 int TemplateConfigWidget::numInstances() const
 {
-    return m_data->m_tmodel->numItems();
+    return m_data->m_tmodel->rootCount();
 }
 
-TemplateInstance * TemplateConfigWidget::instanceAt(int index)
+TemplateInstance * TemplateConfigWidget::instanceAt( int index )
 {
     TemplateInstance *tinst = nullptr;
-    if( index < m_data->m_tmodel->numItems() ) {
+    if( index < m_data->m_tmodel->rootCount() ) {
         tinst = static_cast< TemplateInstance * >(
-                    m_data->m_tmodel->itemAt( index ));
+                    m_data->m_tmodel->rootAt( index ));
     }
     return tinst;
 }
 
 void TemplateConfigWidget::clear()
 {
-    m_data->m_names.clear();
-    m_data->m_configWidget->setConfig( nullptr );
+    m_data->m_tmodel->clear();
+    m_data->m_instances.clear();
+    m_data->m_configWidget->setConfig( &m_data->m_emptyConfig );
 }
 
 } } }

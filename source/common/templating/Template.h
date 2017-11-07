@@ -23,7 +23,7 @@ public:
 
     void setConfig( std::unique_ptr< Config > config );
 
-    const Config * config() const;
+    Config * config() const;
 
     const QString & content() const;
 

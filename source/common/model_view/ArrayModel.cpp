@@ -56,20 +56,6 @@ bool ArrayModel::contains( ITreeNode *node )
     return m_data->m_roots.contains( node );
 }
 
-int ArrayModel::numItems() const
-{
-    return m_data->m_roots.size();
-}
-
-ITreeNode *ArrayModel::itemAt( int index ) const
-{
-    ITreeNode *node = nullptr;
-    if( index < m_data->m_roots.size() ) {
-        node = m_data->m_roots.at( index );
-    }
-    return node;
-}
-
 void ArrayModel::clear()
 {
     beginResetModel();
