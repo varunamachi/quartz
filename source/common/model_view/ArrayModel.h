@@ -2,11 +2,12 @@
 
 #include <memory>
 
+#include "../QuartzCommon.h"
 #include "AbstractTreeModel.h"
 
 namespace Quartz {
 
-class ArrayModel : public AbstractTreeModel
+class QUARTZ_COMMON_API ArrayModel : public AbstractTreeModel
 {
     Q_OBJECT
 
@@ -14,8 +15,6 @@ public:
     ArrayModel( QObject *parent = nullptr );
 
     ~ArrayModel();
-
-    void setRoots( QVector< ITreeNode *> roots );
 
     ITreeNode * rootAt( int rowIndex ) const override;
 
@@ -26,6 +25,12 @@ public:
     void removeRoot( ITreeNode *node );
 
     bool contains( ITreeNode *node );
+
+    int numItems() const;
+
+    ITreeNode * itemAt( int index ) const;
+
+    void clear();
 
 private:
     struct Data;

@@ -148,7 +148,7 @@ void Template::setData( int column, const QVariant &data )
 
 void Template::addChild( std::shared_ptr< ITreeNode > child )
 {
-//    Check if already exists
+    ///@todo Check if already exists
     auto templateInsace = std::dynamic_pointer_cast<
             TemplateInstance >( child );
     if( templateInsace ) {

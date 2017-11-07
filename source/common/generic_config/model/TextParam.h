@@ -2,6 +2,8 @@
 
 #include "Param.h"
 
+#include "../../QuartzCommon.h"
+
 class QString;
 
 namespace Quartz {
@@ -16,7 +18,7 @@ enum class TextType
     Binary
 };
 
-class TextParam : public Param
+class QUARTZ_COMMON_API  TextParam : public Param
 {
 public:
 

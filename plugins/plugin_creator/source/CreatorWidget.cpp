@@ -47,7 +47,6 @@ struct CreatorWidget::Data
         , m_dirPath{ new QLineEdit{ parent }}
         , m_browseButton{ new QPushButton{ tr( "Browse "), parent }}
         , m_createButton{ new QPushButton{ tr( "Create" ), parent }}
-        , m_view{ new QTreeView{ parent }}
         , m_templateManager{ tman }
         , m_templateSelector{ new TemplateSelectorDialog{ tman.get(), parent }}
         , m_configWidget{ new TemplateConfigWidget{ parent }}
@@ -68,8 +67,6 @@ struct CreatorWidget::Data
     QPushButton *m_browseButton;
 
     QPushButton *m_createButton;
-
-    QTreeView *m_view;
 
 //    ArrayModel *m_tmodel;
 

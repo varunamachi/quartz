@@ -4,11 +4,13 @@
 
 #include <QWidget>
 
+#include "../../QuartzCommon.h"
+
 namespace Quartz {
 
 class Config;
 
-class GenConfigWidget : public QWidget
+class QUARTZ_COMMON_API GenConfigWidget : public QWidget
 {
     Q_OBJECT
 public:

@@ -4,6 +4,8 @@
 
 #include <QVector>
 
+#include "../../QuartzCommon.h"
+
 class QByteArray;
 class QDomElement;
 
@@ -14,7 +16,7 @@ class Param;
 class Param;
 class Group;
 
-class ConfigParser
+class QUARTZ_COMMON_API ConfigParser
 {
 public:
     ConfigParser();

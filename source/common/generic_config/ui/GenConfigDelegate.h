@@ -2,9 +2,11 @@
 
 #include <QStyledItemDelegate>
 
+#include "../../QuartzCommon.h"
+
 namespace Quartz {
 
-class GenConfigDelegate : public QStyledItemDelegate
+class QUARTZ_COMMON_API  GenConfigDelegate : public QStyledItemDelegate
 {
     explicit GenConfigDelegate( QWidget *parent = nullptr );
 

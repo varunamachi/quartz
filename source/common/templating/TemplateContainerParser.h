@@ -4,13 +4,15 @@
 
 #include <QVector>
 
+#include "../QuartzCommon.h"
+
 class QDomElement;
 
 namespace Quartz {
 
 class Template;
 
-class TemplateContainerParser
+class QUARTZ_COMMON_API TemplateContainerParser
 {
 public:
     TemplateContainerParser();

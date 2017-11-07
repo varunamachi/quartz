@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../../QuartzCommon.h"
+
 #include "Param.h"
 
 namespace Quartz {
 
-class BooleanParam : public Param
+class QUARTZ_COMMON_API BooleanParam : public Param
 {
 public:
     BooleanParam( const QString &id,

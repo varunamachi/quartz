@@ -2,11 +2,12 @@
 
 #include <QPair>
 
+#include "../../QuartzCommon.h"
 #include "Param.h"
 
 namespace Quartz {
 
-class ChoiceParam : public Param
+class QUARTZ_COMMON_API ChoiceParam : public Param
 {
 public:
     explicit ChoiceParam( const QString &id,

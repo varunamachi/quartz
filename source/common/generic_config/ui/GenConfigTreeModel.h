@@ -2,13 +2,14 @@
 
 #include <memory>
 
+#include "../../QuartzCommon.h"
 #include "../../model_view/AbstractTreeModel.h"
 
 namespace Quartz {
 
 class Config;
 
-class GenConfigTreeModel : public AbstractTreeModel
+class QUARTZ_COMMON_API  GenConfigTreeModel : public AbstractTreeModel
 {
     Q_OBJECT
 public:

@@ -97,14 +97,14 @@ QVariant AbstractTreeModel::data( const QModelIndex& index,
     if( index.isValid() ) {
         auto node = static_cast< ITreeNode *>( index.internalPointer() );
         if( node != nullptr ) {
-            if( role == Qt::DisplayRole
-                    && ! ( node->isSelectable() && index.column() == 0 )) {
-                data = node->data( index.column() )            ;
-            }
-            else if ( role == Qt::CheckStateRole
+            if ( role == Qt::CheckStateRole
                       && node->isSelectable()
                       && index.column() == 0 ) {
-                data = static_cast< int >( node->isSelected() );
+                data = node->isSelected() ? Qt::Checked : Qt::Unchecked;
+            }
+            if( role == Qt::DisplayRole
+                      && ! (index.column() == 0 && node->isSelectable() )) {
+                data = node->data( index.column() );
             }
         }
     }
@@ -127,14 +127,22 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
 {
     bool set = false;
     if( index.isValid() ) {
-        if( role == Qt::EditRole ) {
-            auto node = static_cast< ITreeNode *>( index.internalPointer() );
-            if( node != nullptr ) {
+        auto node = static_cast< ITreeNode *>( index.internalPointer() );
+        if( node != nullptr ) {
+            if ( role == Qt::CheckStateRole
+                      && node->isSelectable()
+                      && index.column() == 0 ) {
+                auto val = value.toInt();
+                node->setSelected( val == Qt::Checked );
+            }
+            if( role == Qt::EditRole
+                      && ! (index.column() == 0 && node->isSelectable() )) {
                 node->setData( index.column(), value );
-                set = true;
             }
         }
+
     }
+    emit dataChanged(index, index);
     return set;
 }
 

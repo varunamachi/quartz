@@ -35,7 +35,7 @@ struct TemplateConfigWidget::Data
 
     GenConfigWidget *m_configWidget;
 
-    QVector< ITreeNode *> m_tinsts;
+//    QVector< ITreeNode *> m_tinsts;
 
     QSet< QString > m_names;
 
@@ -57,7 +57,7 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     mainLayout->addLayout( leftLayout );
     mainLayout->addWidget( m_data->m_configWidget );
 
-    m_data->m_tmodel->setRoots( m_data->m_tinsts );
+//    m_data->m_tmodel->setRoots( m_data->m_tinsts );
     m_data->m_view->setModel( m_data->m_tmodel );
 
     mainLayout->setContentsMargins( QMargins{} );
@@ -82,33 +82,31 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
         }
         name = tmpl->name() + "_" + QString::number( index );
     } while( index <= 1000 ); //1000 should be enough
-    auto inst = new TemplateInstance{name, tmpl };
-    m_data->m_tinsts.append( inst );
+    auto inst = new TemplateInstance{ name, tmpl };
+//    m_data->m_tinsts.append( inst );
+    m_data->m_tmodel->addRoot( inst );
     m_data->m_names.insert( name );
 }
 
 int TemplateConfigWidget::numInstances() const
 {
-    return m_data->m_tinsts.size();
+    return m_data->m_tmodel->numItems();
 }
 
 TemplateInstance * TemplateConfigWidget::instanceAt(int index)
 {
     TemplateInstance *tinst = nullptr;
-    if( index < m_data->m_tinsts.size() ) {
-        tinst = static_cast< TemplateInstance *>( m_data->m_tinsts.at( index ));
+    if( index < m_data->m_tmodel->numItems() ) {
+        tinst = static_cast< TemplateInstance * >(
+                    m_data->m_tmodel->itemAt( index ));
     }
     return tinst;
 }
 
-
 void TemplateConfigWidget::clear()
 {
-    m_data->m_tinsts.clear();
     m_data->m_names.clear();
     m_data->m_configWidget->setConfig( nullptr );
 }
-
-
 
 } } }

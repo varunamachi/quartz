@@ -3,6 +3,7 @@
 #include <memory>
 #include <cstdint>
 
+#include "../../QuartzCommon.h"
 
 class QString;
 class QVariant;
@@ -18,7 +19,7 @@ enum class ParamType
 };
 
 
-class Param
+class QUARTZ_COMMON_API Param
 {
 public:
     Param( const QString &id,

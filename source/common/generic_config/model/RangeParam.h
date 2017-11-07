@@ -2,11 +2,13 @@
 
 #include "Param.h"
 
+#include "../../QuartzCommon.h"
+
 class QString;
 
 namespace Quartz {
 
-class RangeParam : public Param
+class QUARTZ_COMMON_API RangeParam : public Param
 {
 public:
     RangeParam( const QString &id,

@@ -2,15 +2,16 @@
 
 #include <memory>
 
-class QString;
+#include "../../QuartzCommon.h"
 
+class QString;
 
 namespace Quartz {
 
 class Param;
 class Group;
 
-class Config
+class QUARTZ_COMMON_API Config
 {
 public:
     Config( const QString &id, const QString &name );

@@ -4,13 +4,14 @@
 
 #include <QString>
 
+#include "../QuartzCommon.h"
 #include "../model_view/ITreeNode.h"
 
 namespace Quartz {
 
 class Config;
 
-class Template : public ITreeNode
+class QUARTZ_COMMON_API Template : public ITreeNode
 {
 public:
     explicit Template( const QString &name,

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "../../model_view/ITreeNode.h"
+#include "../../QuartzCommon.h"
 
 namespace Quartz {
 
 class Param;
 
-class ParamTreeNode : public ITreeNode
+class QUARTZ_COMMON_API ParamTreeNode : public ITreeNode
 {
 public:
     ParamTreeNode( ITreeNode *parent,

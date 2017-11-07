@@ -4,9 +4,8 @@
 
 #include <QHash>
 
+#include "../QuartzCommon.h"
 #include "../model_view/ITreeNode.h"
-
-
 
 namespace Quartz {
 
@@ -14,7 +13,7 @@ class Template;
 
 using GlobalConfig = QHash< QString, QVariant >;
 
-class TemplateInstance : public ITreeNode
+class QUARTZ_COMMON_API TemplateInstance : public ITreeNode
 {
 
 public:
