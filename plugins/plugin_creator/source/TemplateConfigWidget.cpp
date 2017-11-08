@@ -52,6 +52,7 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     mainLayout->addWidget( m_data->m_configWidget );
 
     m_data->m_view->setModel( m_data->m_tmodel );
+    m_data->m_view->setRootIsDecorated( false );
 
     mainLayout->setContentsMargins( QMargins{} );
     leftLayout->setContentsMargins( QMargins{} );

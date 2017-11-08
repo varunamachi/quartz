@@ -147,11 +147,16 @@ std::unique_ptr< Template > TemplateContainerParser::parse(
             if( ! content.isEmpty() ) {
                 tmpl = std::unique_ptr< Template >{
                         new Template{ name, content }};
+                tmpl->setConfig( std::move( config ));
             }
             else {
                 QZ_ERROR( "Qz:Cmn:Tmpl" )
                         << "Found empty template content";
             }
+        }
+        else {
+            QZ_ERROR( "Qz::Cmn:Tmpl" )
+                    << "Could not find valid config in tempalte container";
         }
     } else {
         QZ_ERROR( "Qz:Cmn:Tmpl" )

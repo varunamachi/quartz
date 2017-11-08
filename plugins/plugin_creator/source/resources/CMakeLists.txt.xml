@@ -1,7 +1,40 @@
 <templates>
     <template name="CMakeLists.txt">
         <config id="CMakeLists.txt" name="CMakeList">
-
+            <param
+                type="boolean"
+                id="bp1"
+                name="bool param 1"
+                description="A boolean param"
+                default="true"
+            />
+            <param
+                type="choice"
+                id="ch1"
+                name="choice param one"
+                description="A choice param"
+                default="0">
+                <option name="One" value="1"/>
+                <option name="Two" value="2"/>
+                <option name="Three" value="3"/>
+            </param>
+            <param
+                type="range"
+                id="rp1"
+                name="range param one"
+                description="A range parameter"
+                default="0"
+                min="0"
+                max="100"
+                inc="1"
+            />
+            <param
+                type="text"
+                id="tx1"
+                name="text param one"
+                description="A text param"
+                default=""
+            />
         </config>
         <content>
             <![CDATA[

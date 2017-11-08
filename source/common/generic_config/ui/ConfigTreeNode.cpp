@@ -50,7 +50,7 @@ int ConfigTreeNode::numChildren() const
 
 int ConfigTreeNode::numFields() const
 {
-    return 1;
+    return 3;
 }
 
 bool ConfigTreeNode::isSelectable() const
@@ -61,7 +61,10 @@ bool ConfigTreeNode::isSelectable() const
 ITreeNode * ConfigTreeNode::child( int row ) const
 {
     std::shared_ptr< ITreeNode > child;
-    if( row > m_data->m_children.size() ) {
+    if( row < m_data->m_children.size() ) {
+        child = m_data->m_children.at( row );
+    }
+    else {
         if( row < m_data->m_config->numChildParams() ) {
             auto *param = m_data->m_config->childParamAt( row );
             ///TODO somehow need to remove the const_cast below
@@ -77,9 +80,7 @@ ITreeNode * ConfigTreeNode::child( int row ) const
                         const_cast< ConfigTreeNode *>( this ),
                         group );
         }
-    }
-    else {
-        child = m_data->m_children.at( row );
+        m_data->m_children.append( child );
     }
     return child.get();
 }
