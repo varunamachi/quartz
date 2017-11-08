@@ -8,6 +8,9 @@ namespace Quartz {
 
 class QUARTZ_COMMON_API  GenConfigDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
+
+public:
     explicit GenConfigDelegate( QWidget *parent = nullptr );
 
     QWidget* createEditor( QWidget *parent,

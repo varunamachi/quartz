@@ -25,7 +25,7 @@ QWidget* GenConfigDelegate::createEditor( QWidget* parent,
                                           const QStyleOptionViewItem &/*option*/,
                                           const QModelIndex &index ) const
 {
-    QWidget *widget = nullptr;
+    QWidget *widget = new QLineEdit{ parent };
     auto node = dynamic_cast< ParamTreeNode *>(
                 static_cast< ITreeNode *>( index.internalPointer() ));
     if( node != nullptr ) {
@@ -55,11 +55,12 @@ QWidget* GenConfigDelegate::createEditor( QWidget* parent,
                 auto opt = cparam->option( i );
                 combo->addItem( opt.first, opt.second );
             }
+            widget = combo;
         }
             break;
         }
     }
-    return new QLineEdit{ parent };
+    return widget;
 }
 
 void GenConfigDelegate::setEditorData( QWidget *editor,

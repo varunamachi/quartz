@@ -5,6 +5,7 @@
 #include "../model/Config.h"
 #include "GenConfigWidget.h"
 #include "GenConfigTreeModel.h"
+#include "GenConfigDelegate.h"
 
 namespace Quartz {
 
@@ -27,6 +28,7 @@ GenConfigWidget::GenConfigWidget( Config *config, QWidget *parent )
     auto view = new QTreeView{ this };
     //proxy model
     view->setModel( m_data->m_model );
+//    view->setItemDelegate( new GenConfigDelegate{ this });
     layout->addWidget( view );
     this->setLayout( layout );
 
