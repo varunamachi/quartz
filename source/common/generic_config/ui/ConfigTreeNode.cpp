@@ -50,7 +50,7 @@ int ConfigTreeNode::numChildren() const
 
 int ConfigTreeNode::numFields() const
 {
-    return 3;
+    return 2;
 }
 
 bool ConfigTreeNode::isSelectable() const

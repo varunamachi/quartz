@@ -108,7 +108,8 @@ QVariant AbstractTreeModel::data( const QModelIndex& index,
             }
             if( role == Qt::EditRole
                     && ! (index.column() == 0 && node->isSelectable() )) {
-                data = node->data( index.column() );
+//                data = node->data( index.column() );
+                data = QVariant{};
             }
         }
     }

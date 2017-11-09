@@ -2,6 +2,7 @@
 #include <QVariant>
 
 #include "../model/Param.h"
+#include "../model/ChoiceParam.h"
 #include "ParamTreeNode.h"
 
 namespace Quartz {
@@ -45,7 +46,7 @@ int ParamTreeNode::numChildren() const
 
 int ParamTreeNode::numFields() const
 {
-    return 3;
+    return 2;
 }
 
 bool ParamTreeNode::isSelectable() const
@@ -62,8 +63,16 @@ QVariant ParamTreeNode::data( int column ) const
 {
     switch( column ) {
     case 0: return m_data->m_param->id();
-    case 1: return m_data->m_param->name();
-    case 2: return m_data->m_param->value();
+    case 1: {
+        if( m_data->m_param->type() == ParamType::Choice ) {
+            auto cp = static_cast< ChoiceParam *>( m_data->m_param );
+            return cp->option( cp->index() ).first;
+        }
+        else {
+            return m_data->m_param->value();
+        }
+    }
+    case 2: return m_data->m_param->name();
     }
     return QVariant{};
 }
@@ -91,7 +100,7 @@ int ParamTreeNode::indexOfChild( const ITreeNode */*child*/ ) const
 bool ParamTreeNode::isEditable( int column ) const
 {
     bool editable = false;
-    if( column == 2 ) {
+    if( column == 1 ) {
         editable = true;
     }
     return editable;
@@ -99,7 +108,7 @@ bool ParamTreeNode::isEditable( int column ) const
 
 void ParamTreeNode::setData( int column, const QVariant &data )
 {
-    if( column == 2 ) {
+    if( column == 1 ) {
         m_data->m_param->setValue( data );
     }
 }

@@ -32,6 +32,8 @@ public:
 
     QVariant value() const override;
 
+    int index() const;
+
     void setValue( const QVariant &value ) override;
 
 private:

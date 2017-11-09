@@ -41,20 +41,12 @@ QWidget* GenConfigDelegate::createEditor( QWidget* parent,
         }
             break;
         case ParamType::Range: {
-            auto rparam = static_cast< RangeParam *> ( node->param() );
             auto sl = new QSlider{ parent };
-            sl->setMaximum( rparam->maxVal() );
-            sl->setMinimum( rparam->minVal() );
             widget = sl;
         }
             break;
         case ParamType::Choice: {
-            auto cparam = static_cast< ChoiceParam *> ( node->param() );
             auto combo = new QComboBox{ parent };
-            for( auto i = 0; i < cparam->numOption(); ++ i ) {
-                auto opt = cparam->option( i );
-                combo->addItem( opt.first, opt.second );
-            }
             widget = combo;
         }
             break;
@@ -95,7 +87,9 @@ void GenConfigDelegate::setEditorData( QWidget *editor,
                 auto opt = cparam->option( i );
                 combo->addItem( opt.first, opt.second );
             }
-            combo->setCurrentIndex( cparam->value().toInt() );
+            if( cparam->numOption() > 0 ) {
+                combo->setCurrentIndex( cparam->index() );
+            }
         }
             break;
         }
@@ -129,7 +123,7 @@ void GenConfigDelegate::setModelData( QWidget *editor,
             break;
         case ParamType::Choice: {
             auto combo = static_cast< QComboBox *>( editor );
-            data = combo->currentData();
+            data = combo->currentIndex();
         }
             break;
         }

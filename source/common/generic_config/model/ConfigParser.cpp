@@ -179,6 +179,7 @@ std::shared_ptr< Param > ConfigParser::parseParam(
         auto def = strDef.toInt();
         auto cparam = std::make_shared< ChoiceParam >( id, name, desc );
         cparam->setDefaultIndex( def );
+        parseOptions( cparam.get(), paramNode );
         param = cparam;
     }
     else if( type == ParamType::Range ) {
