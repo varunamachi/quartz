@@ -41,7 +41,7 @@ QWidget* GenConfigDelegate::createEditor( QWidget* parent,
         }
             break;
         case ParamType::Range: {
-            auto sl = new QSlider{ parent };
+            auto sl = new QSlider{ Qt::Horizontal, parent };
             widget = sl;
         }
             break;

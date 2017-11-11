@@ -5,4 +5,5 @@ vq_classes(
     IdButton
     OrientationButton
     StackedSplitContainer
+    RangeWidget
 )
