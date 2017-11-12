@@ -16,7 +16,8 @@ class QUARTZ_COMMON_API Group : public TreeNode
 public:
     Group( const QString &id,
            const QString &name,
-           const QString &description );
+           const QString &description,
+           TreeNode *parent );
 
     ~Group();
 
