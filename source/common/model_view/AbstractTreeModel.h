@@ -6,7 +6,7 @@
 
 namespace Quartz {
 
-class ITreeNode;
+class TreeNode;
 
 class QUARTZ_COMMON_API AbstractTreeModel : public QAbstractItemModel
 {
@@ -39,7 +39,7 @@ public:
 
 
 protected:
-    virtual ITreeNode * rootAt( int rowIndex ) const = 0;
+    virtual TreeNode * rootAt( int rowIndex ) const = 0;
 
     virtual int rootCount() const = 0;
 

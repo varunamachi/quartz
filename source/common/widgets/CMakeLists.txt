@@ -6,4 +6,5 @@ vq_classes(
     OrientationButton
     StackedSplitContainer
     RangeWidget
+    QzTreeView
 )

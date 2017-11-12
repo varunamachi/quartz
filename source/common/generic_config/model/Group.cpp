@@ -1,5 +1,6 @@
 #include <QString>
 #include <QVector>
+#include <QVariant>
 
 #include "Group.h"
 #include "Param.h"
@@ -31,8 +32,10 @@ struct Group::Data
 
 Group::Group( const QString &id,
               const QString &name,
-              const QString &description )
-    : m_data{ new Data{ id, name, description }}
+              const QString &description,
+              TreeNode *parent )
+    : TreeNode{  3, false, parent }
+    , m_data{ new Data{ id, name, description }}
 {
 
 }
@@ -61,6 +64,7 @@ void Group::addParam( std::shared_ptr< Param > param )
 {
     if( param != nullptr ) {
         m_data->m_params.append( param );
+        addChild( param.get() );
     }
 }
 
@@ -96,6 +100,7 @@ void Group::addSubGroup( std::shared_ptr< Group > subGroup )
 {
     if( subGroup != nullptr ) {
         m_data->m_subGroups.append( subGroup );
+        addChild( subGroup.get() );
     }
 }
 
@@ -106,6 +111,16 @@ Group * Group::subGroupAt( int index )
         group = m_data->m_subGroups.at( index ).get();
     }
     return group;
+}
+
+QVariant Group::data( int field ) const
+{
+    switch( column ) {
+    case 0: return m_data->m_group->id();
+    case 1: return m_data->m_group->name();
+
+    }
+    return QVariant{};
 }
 
 }

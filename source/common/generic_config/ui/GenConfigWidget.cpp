@@ -3,6 +3,7 @@
 #include <QVBoxLayout>
 
 #include "../model/Config.h"
+#include "../../widgets/QzTreeView.h"
 #include "GenConfigWidget.h"
 #include "GenConfigTreeModel.h"
 #include "GenConfigDelegate.h"
@@ -25,7 +26,7 @@ GenConfigWidget::GenConfigWidget( Config *config, QWidget *parent )
     , m_data{ new Data{ new GenConfigTreeModel{ config, parent }}}
 {
     auto layout = new QVBoxLayout{ this };
-    auto view = new QTreeView{ this };
+    auto view = new QzTreeView{ this };
     //proxy model
     view->setModel( m_data->m_model );
     view->setItemDelegate( new GenConfigDelegate{ this });

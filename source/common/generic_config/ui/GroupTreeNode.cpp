@@ -12,7 +12,7 @@ namespace Quartz {
 
 struct GroupTreeNode::Data
 {
-    Data( ITreeNode *parent,
+    Data( TreeNode *parent,
           Group *group )
         : m_parent{ parent }
         , m_group{ group }
@@ -21,7 +21,7 @@ struct GroupTreeNode::Data
 
     }
 
-    ITreeNode *m_parent;
+    TreeNode *m_parent;
 
     Group *m_group;
 
@@ -29,10 +29,10 @@ struct GroupTreeNode::Data
 
     bool m_selected;
 
-    QVector< std::shared_ptr< ITreeNode >> m_children;
+    QVector< std::shared_ptr< TreeNode >> m_children;
 };
 
-GroupTreeNode::GroupTreeNode( ITreeNode *parent,
+GroupTreeNode::GroupTreeNode( TreeNode *parent,
                               Group *group )
     : m_data{ new Data{ parent, group }}
 {
@@ -59,9 +59,9 @@ bool GroupTreeNode::isSelectable() const
     return false;
 }
 
-ITreeNode * GroupTreeNode::child( int row ) const
+TreeNode * GroupTreeNode::child( int row ) const
 {
-    std::shared_ptr< ITreeNode > child;
+    std::shared_ptr< TreeNode > child;
     if( row > m_data->m_children.size() ) {
         if( row < m_data->m_group->numParams() ) {
             auto *param = m_data->m_group->paramAt( row );
@@ -104,12 +104,12 @@ bool GroupTreeNode::isSelected() const
     return m_data->m_selected;
 }
 
-ITreeNode * GroupTreeNode::parent() const
+TreeNode * GroupTreeNode::parent() const
 {
     return m_data->m_parent;
 }
 
-int GroupTreeNode::indexOfChild( const ITreeNode *child ) const
+int GroupTreeNode::indexOfChild( const TreeNode *child ) const
 {
     //Should we create all the children??
     auto index = -1;
@@ -133,12 +133,12 @@ void GroupTreeNode::setData( int /*column*/, const QVariant &/*data*/ )
     //nothing here...
 }
 
-void GroupTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
+void GroupTreeNode::addChild( std::shared_ptr< TreeNode > /*child*/ )
 {
     //nothing here...
 }
 
-void GroupTreeNode::removeChild( const ITreeNode */*child*/ )
+void GroupTreeNode::removeChild( const TreeNode */*child*/ )
 {
     //nothing here...
 }

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../../QuartzCommon.h"
+#include "../../model_view/TreeNode.h"
 
 class QString;
 
@@ -10,7 +11,7 @@ namespace Quartz {
 
 class Param;
 
-class QUARTZ_COMMON_API Group
+class QUARTZ_COMMON_API Group : public TreeNode
 {
 public:
     Group( const QString &id,
@@ -38,6 +39,8 @@ public:
     void addSubGroup( std::shared_ptr< Group > subGroup );
 
     Group * subGroupAt( int index );
+
+    QVariant data( int field ) const override;
 
 private:
     struct Data;

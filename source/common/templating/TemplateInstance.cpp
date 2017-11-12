@@ -95,7 +95,7 @@ bool TemplateInstance::isSelectable() const
     return false;
 }
 
-ITreeNode * TemplateInstance::child( int /*row*/ ) const
+TreeNode * TemplateInstance::child( int /*row*/ ) const
 {
     return nullptr;
 }
@@ -118,13 +118,13 @@ bool TemplateInstance::isSelected() const
     return m_data->m_selected;
 }
 
-ITreeNode *TemplateInstance::parent() const
+TreeNode *TemplateInstance::parent() const
 {
 //    return m_data->m_parent;
     return nullptr;
 }
 
-int TemplateInstance::indexOfChild( const ITreeNode */*child*/ ) const
+int TemplateInstance::indexOfChild( const TreeNode */*child*/ ) const
 {
     //There are no children of TemplateInstance, hence -1
     return -1;
@@ -142,12 +142,12 @@ void TemplateInstance::setData( int column, const QVariant &data )
     }
 }
 
-void TemplateInstance::addChild( std::shared_ptr< ITreeNode > /*child*/ )
+void TemplateInstance::addChild( std::shared_ptr< TreeNode > /*child*/ )
 {
     //nothing
 }
 
-void TemplateInstance::removeChild( const ITreeNode */*child*/ )
+void TemplateInstance::removeChild( const TreeNode */*child*/ )
 {
     //nothing
 }

@@ -1,5 +1,6 @@
 #include <QString>
 #include <QVector>
+#include <QVariant>
 
 #include "Param.h"
 
@@ -26,8 +27,10 @@ struct Param::Data
 
 Param::Param( const QString &id,
               const QString &name,
-              const QString &description )
-    : m_data{ new Data{ id, name, description  }}
+              const QString &description,
+              TreeNode *parent )
+    : TreeNode{ 2, false, parent }
+    , m_data{ new Data{ id, name, description  }}
 {
 
 }
@@ -50,6 +53,16 @@ const QString & Param::name() const
 const QString &Param::description() const
 {
     return m_data->m_description;
+}
+
+QVariant Param::data( int /*field*/ ) const
+{
+    return this->value();
+}
+
+void Param::setData( int /*field*/, const QVariant &value )
+{
+    this->setValue( value );
 }
 
 }

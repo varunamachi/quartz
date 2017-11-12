@@ -29,7 +29,7 @@ vq_classes(
 )
 
 #vq_interfaces(
-#    ITreeNode
+#    TreeNode
 #)
 
 add_subdirectory( resources )

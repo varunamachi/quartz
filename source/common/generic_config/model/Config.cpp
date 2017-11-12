@@ -1,6 +1,7 @@
 #include <QVector>
 #include <QHash>
 #include <QString>
+#include <QVariant>
 
 #include "Config.h"
 #include "Param.h"
@@ -30,7 +31,8 @@ struct Config::Data
 };
 
 Config::Config( const QString &id, const QString &name )
-    : m_data{ new Data{ id, name }}
+    : TreeNode{ 3, false, nullptr }
+    , m_data{ new Data{ id, name }}
 {
 
 }
@@ -65,7 +67,10 @@ Param * Config::childParamAt( int index ) const
 
 void Config::addChildParameter( std::shared_ptr< Param > param )
 {
-    m_data->m_params.push_back( param );
+    if( param ) {
+        m_data->m_params.push_back( param );
+        addChild( param.get() );
+    }
 }
 
 int Config::numGroups() const
@@ -86,6 +91,7 @@ void Config::addGroup( std::shared_ptr< Group > group )
 {
     if( group != nullptr ) {
         m_data->m_groups.append( group );
+        addChild( group.get() );
     }
 }
 
@@ -105,6 +111,15 @@ bool Config::registerParam( Param *param )
     }
     return result;
 
+}
+
+QVariant Config::data( int field ) const
+{
+    switch( field ) {
+    case 0: return m_data->m_name;
+    case 1: return m_data->m_groups.size();
+    case 2: return m_data->m_params.size();
+    }
 }
 
 }

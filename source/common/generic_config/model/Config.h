@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "../../QuartzCommon.h"
+#include "../../model_view/TreeNode.h"
 
 class QString;
 
@@ -11,7 +12,7 @@ namespace Quartz {
 class Param;
 class Group;
 
-class QUARTZ_COMMON_API Config
+class QUARTZ_COMMON_API Config : public TreeNode
 {
 public:
     Config( const QString &id, const QString &name );
@@ -37,6 +38,8 @@ public:
     const Param * param( const QString &id ) const;
 
     bool registerParam( Param *param );
+
+    QVariant data( int field ) const override;
 
 private:
     struct Data;

@@ -1,6 +1,6 @@
 
 
-#include "ITreeNode.h"
+#include "TreeNode.h"
 #include "BasicSortFilter.h"
 
 
@@ -28,7 +28,7 @@ bool BasicSortFilter::filterAcceptsRow( int sourceRow,
 {
     auto accept = false;
     auto index = sourceModel()->index( sourceRow, 0, srcParent );
-    auto node = static_cast< ITreeNode *>( index.internalPointer() );
+    auto node = static_cast< TreeNode *>( index.internalPointer() );
     if( node != nullptr ) {
         for( auto i = 0; i < node->numFields(); ++ i ) {
             const auto str = node->data( i ).toString();

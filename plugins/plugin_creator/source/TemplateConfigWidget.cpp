@@ -2,8 +2,8 @@
 #include <QSet>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QTreeView>
 #include <QLineEdit>
+#include <QTreeView>
 
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>

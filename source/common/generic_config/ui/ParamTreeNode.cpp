@@ -9,7 +9,7 @@ namespace Quartz {
 
 struct ParamTreeNode::Data
 {
-    Data( ITreeNode *parent,
+    Data( TreeNode *parent,
           Param *param,
           QVariant value )
         : m_parent{ parent }
@@ -19,14 +19,14 @@ struct ParamTreeNode::Data
 
     }
 
-    ITreeNode *m_parent;
+    TreeNode *m_parent;
 
     Param *m_param;
 
     bool m_selected;
 };
 
-ParamTreeNode::ParamTreeNode( ITreeNode *parent,
+ParamTreeNode::ParamTreeNode( TreeNode *parent,
                               Param *param,
                               QVariant value )
     : m_data{ new Data{ parent, param, value }}
@@ -54,7 +54,7 @@ bool ParamTreeNode::isSelectable() const
     return false;
 }
 
-ITreeNode * ParamTreeNode::child( int /*row*/ ) const
+TreeNode * ParamTreeNode::child( int /*row*/ ) const
 {
     return nullptr;
 }
@@ -87,12 +87,12 @@ bool ParamTreeNode::isSelected() const
     return m_data->m_selected;
 }
 
-ITreeNode * ParamTreeNode::parent() const
+TreeNode * ParamTreeNode::parent() const
 {
     return m_data->m_parent;
 }
 
-int ParamTreeNode::indexOfChild( const ITreeNode */*child*/ ) const
+int ParamTreeNode::indexOfChild( const TreeNode */*child*/ ) const
 {
     return -1;
 }
@@ -113,12 +113,12 @@ void ParamTreeNode::setData( int column, const QVariant &data )
     }
 }
 
-void ParamTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
+void ParamTreeNode::addChild( std::shared_ptr< TreeNode > /*child*/ )
 {
 
 }
 
-void ParamTreeNode::removeChild( const ITreeNode */*child*/ )
+void ParamTreeNode::removeChild( const TreeNode */*child*/ )
 {
 
 }

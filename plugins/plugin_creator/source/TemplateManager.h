@@ -51,7 +51,7 @@ public:
 
 protected:
 
-    ITreeNode *rootAt(int rowIndex) const override;
+    TreeNode *rootAt(int rowIndex) const override;
 
     int rootCount() const override;
 

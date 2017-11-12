@@ -11,7 +11,7 @@ namespace Quartz {
 
 struct ConfigTreeNode::Data
 {
-    Data( ITreeNode *parent,
+    Data( TreeNode *parent,
           Config *config)
         : m_parent{ parent }
         , m_config{ config }
@@ -20,7 +20,7 @@ struct ConfigTreeNode::Data
 
     }
 
-    ITreeNode *m_parent;
+    TreeNode *m_parent;
 
     Config *m_config;
 
@@ -28,10 +28,10 @@ struct ConfigTreeNode::Data
 
     bool m_selected;
 
-    QVector< std::shared_ptr< ITreeNode >> m_children;
+    QVector< std::shared_ptr< TreeNode >> m_children;
 };
 
-ConfigTreeNode::ConfigTreeNode( ITreeNode *parent,
+ConfigTreeNode::ConfigTreeNode( TreeNode *parent,
                                 Config *config)
     : m_data{ new Data{ parent, config }}
 {
@@ -58,9 +58,9 @@ bool ConfigTreeNode::isSelectable() const
     return false;
 }
 
-ITreeNode * ConfigTreeNode::child( int row ) const
+TreeNode * ConfigTreeNode::child( int row ) const
 {
-    std::shared_ptr< ITreeNode > child;
+    std::shared_ptr< TreeNode > child;
     if( row < m_data->m_children.size() ) {
         child = m_data->m_children.at( row );
     }
@@ -103,12 +103,12 @@ bool ConfigTreeNode::isSelected() const
     return m_data->m_selected;
 }
 
-ITreeNode * ConfigTreeNode::parent() const
+TreeNode * ConfigTreeNode::parent() const
 {
     return m_data->m_parent;
 }
 
-int ConfigTreeNode::indexOfChild( const ITreeNode *child ) const
+int ConfigTreeNode::indexOfChild( const TreeNode *child ) const
 {
     //Should we create all the children??
     auto index = -1;
@@ -132,12 +132,12 @@ void ConfigTreeNode::setData( int /*column*/, const QVariant &/*data*/ )
     //nothing here...
 }
 
-void ConfigTreeNode::addChild( std::shared_ptr< ITreeNode > /*child*/ )
+void ConfigTreeNode::addChild( std::shared_ptr< TreeNode > /*child*/ )
 {
     //nothing here...
 }
 
-void ConfigTreeNode::removeChild( const ITreeNode */*child*/ )
+void ConfigTreeNode::removeChild( const TreeNode */*child*/ )
 {
     //nothing here..
 }

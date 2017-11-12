@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../../model_view/ITreeNode.h"
+#include "../../model_view/TreeNode.h"
 #include "../../QuartzCommon.h"
 
 namespace Quartz {
 
 class Group;
 
-class QUARTZ_COMMON_API GroupTreeNode : public ITreeNode
+class QUARTZ_COMMON_API GroupTreeNode : public TreeNode
 {
 public:
-    GroupTreeNode( ITreeNode *parent,
+    GroupTreeNode( TreeNode *parent,
                    Group *group );
 
     ~GroupTreeNode();
@@ -21,7 +21,7 @@ public:
 
     bool isSelectable() const override;
 
-    ITreeNode * child( int row ) const override;
+    TreeNode * child( int row ) const override;
 
     QVariant data( int column ) const override;
 
@@ -29,17 +29,17 @@ public:
 
     bool isSelected() const override;
 
-    ITreeNode * parent() const override;
+    TreeNode * parent() const override;
 
-    int indexOfChild( const ITreeNode *child ) const override;
+    int indexOfChild( const TreeNode *child ) const override;
 
     bool isEditable( int column ) const override;
 
     void setData( int column, const QVariant &data ) override;
 
-    void addChild( std::shared_ptr< ITreeNode > child ) override;
+    void addChild( std::shared_ptr< TreeNode > child ) override;
 
-    void removeChild( const ITreeNode *child ) override;
+    void removeChild( const TreeNode *child ) override;
 
 private:
     struct Data;

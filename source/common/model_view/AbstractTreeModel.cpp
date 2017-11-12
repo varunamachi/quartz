@@ -1,6 +1,6 @@
 
 
-#include "ITreeNode.h"
+#include "TreeNode.h"
 #include "AbstractTreeModel.h"
 
 
@@ -18,7 +18,6 @@ AbstractTreeModel::~AbstractTreeModel()
 
 }
 
-
 QModelIndex AbstractTreeModel::index( int row,
                                       int column,
                                       const QModelIndex &parent ) const
@@ -28,7 +27,7 @@ QModelIndex AbstractTreeModel::index( int row,
         return index;
     }
     if( parent.isValid() ) {
-        auto node = static_cast< ITreeNode * >( parent.internalPointer() );
+        auto node = static_cast< TreeNode * >( parent.internalPointer() );
         auto child = node->child( row );
         if( child != nullptr ) {
             index = createIndex( row, column, child );
@@ -42,14 +41,13 @@ QModelIndex AbstractTreeModel::index( int row,
     return index;
 }
 
-
 QModelIndex AbstractTreeModel::parent( const QModelIndex& childIndex ) const
 {
     if( ! childIndex.isValid() ) {
         return QModelIndex{};
     }
     auto index = QModelIndex{};
-    auto node = static_cast< ITreeNode *>( childIndex.internalPointer() );
+    auto node = static_cast< TreeNode *>( childIndex.internalPointer() );
     if( node != nullptr && node->parent() != nullptr ) {
         auto parent = node->parent();
         auto grandParent = parent->parent();
@@ -63,7 +61,6 @@ QModelIndex AbstractTreeModel::parent( const QModelIndex& childIndex ) const
         }
     }
     return index;
-
 }
 
 int AbstractTreeModel::rowCount( const QModelIndex& parent ) const
@@ -71,7 +68,7 @@ int AbstractTreeModel::rowCount( const QModelIndex& parent ) const
     //default is list of templates
     auto count = rootCount();
     if( parent.isValid() ) {
-        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        auto node = static_cast< TreeNode *>( parent.internalPointer() );
         count = node->numChildren();
     }
     return count;
@@ -82,7 +79,7 @@ int AbstractTreeModel::columnCount( const QModelIndex& parent ) const
     //default is list of templates
     auto count = 0;
     if( parent.isValid() ) {
-        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        auto node = static_cast< TreeNode *>( parent.internalPointer() );
         count = node->numFields();
     } else if( rootCount() != 0 ){
         count = rootAt( 0 )->numFields();
@@ -95,7 +92,7 @@ QVariant AbstractTreeModel::data( const QModelIndex& index,
 {
     QVariant data;
     if( index.isValid() ) {
-        auto node = static_cast< ITreeNode *>( index.internalPointer() );
+        auto node = static_cast< TreeNode *>( index.internalPointer() );
         if( node != nullptr ) {
             if ( role == Qt::CheckStateRole
                       && node->isSelectable()
@@ -108,8 +105,8 @@ QVariant AbstractTreeModel::data( const QModelIndex& index,
             }
             if( role == Qt::EditRole
                     && ! (index.column() == 0 && node->isSelectable() )) {
-//                data = node->data( index.column() );
-                data = QVariant{};
+                data = node->data( index.column() );
+//                data = QVariant{};
             }
         }
     }
@@ -120,7 +117,7 @@ bool AbstractTreeModel::hasChildren( const QModelIndex& parent ) const
 {
     auto has = rootCount() != 0;
     if(  parent.isValid() ) {
-        auto node = static_cast< ITreeNode *>( parent.internalPointer() );
+        auto node = static_cast< TreeNode *>( parent.internalPointer() );
         has = node->numChildren() != 0;
     }
     return has;
@@ -132,7 +129,7 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
 {
     bool set = false;
     if( index.isValid() ) {
-        auto node = static_cast< ITreeNode *>( index.internalPointer() );
+        auto node = static_cast< TreeNode *>( index.internalPointer() );
         if( node != nullptr ) {
             if ( role == Qt::CheckStateRole
                       && node->isSelectable()
@@ -145,7 +142,6 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
                 node->setData( index.column(), value );
             }
         }
-
     }
     emit dataChanged(index, index);
     return set;
@@ -157,7 +153,7 @@ Qt::ItemFlags AbstractTreeModel::flags( const QModelIndex &index ) const
         return 0;
     }
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    auto node = static_cast< ITreeNode *>( index.internalPointer() );
+    auto node = static_cast< TreeNode *>( index.internalPointer() );
     if( node != nullptr && node->isEditable( index.column() )) {
         if( node->isSelectable() && index.column() == 0 ) {
             flags |= Qt::ItemIsUserCheckable;

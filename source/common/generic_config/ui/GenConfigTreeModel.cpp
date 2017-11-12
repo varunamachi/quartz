@@ -42,7 +42,7 @@ void GenConfigTreeModel::setConfig( Config *config )
 
 }
 
-ITreeNode *GenConfigTreeModel::rootAt( int /*rowIndex*/ ) const
+TreeNode *GenConfigTreeModel::rootAt( int /*rowIndex*/ ) const
 {
     return m_data->m_node.get();
 }

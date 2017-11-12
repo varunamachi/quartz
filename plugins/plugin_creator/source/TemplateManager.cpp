@@ -114,7 +114,7 @@ bool TemplateManager::loadCoreTemplates()
     return true;
 }
 
-ITreeNode * TemplateManager::rootAt( int rowIndex ) const
+TreeNode * TemplateManager::rootAt( int rowIndex ) const
 {
     if( rowIndex < m_data->m_templateList.size() ) {
         return m_data->m_templateList.at( rowIndex );

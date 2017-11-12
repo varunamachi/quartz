@@ -1,14 +1,14 @@
 
 #include <QVector>
 
-#include "ITreeNode.h"
+#include "TreeNode.h"
 #include "ArrayModel.h"
 
 namespace Quartz {
 
 struct ArrayModel::Data
 {
-    QVector< ITreeNode *> m_roots;
+    QVector< TreeNode *> m_roots;
 };
 
 ArrayModel::ArrayModel( QObject *parent )
@@ -23,9 +23,9 @@ ArrayModel::~ArrayModel()
 
 }
 
-ITreeNode * ArrayModel::rootAt( int rowIndex ) const
+TreeNode * ArrayModel::rootAt( int rowIndex ) const
 {
-    ITreeNode *root = nullptr;
+    TreeNode *root = nullptr;
     if( rowIndex < m_data->m_roots.size() ) {
         root = m_data->m_roots.at( rowIndex );
     }
@@ -37,21 +37,21 @@ int ArrayModel::rootCount() const
     return m_data->m_roots.size();
 }
 
-void ArrayModel::addRoot( ITreeNode *node )
+void ArrayModel::addRoot( TreeNode *node )
 {
         beginResetModel();
         m_data->m_roots.push_back( node );
         endResetModel();
 }
 
-void ArrayModel::removeRoot( ITreeNode *node )
+void ArrayModel::removeRoot( TreeNode *node )
 {
         beginResetModel();
         m_data->m_roots.removeAll( node );
         endResetModel();
 }
 
-bool ArrayModel::contains( ITreeNode *node )
+bool ArrayModel::contains( TreeNode *node )
 {
     return m_data->m_roots.contains( node );
 }

@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "../../QuartzCommon.h"
+#include "../../model_view/TreeNode.h"
 
 class QString;
 class QVariant;
@@ -19,12 +20,13 @@ enum class ParamType
 };
 
 
-class QUARTZ_COMMON_API Param
+class QUARTZ_COMMON_API Param : public TreeNode
 {
 public:
     Param( const QString &id,
            const QString &name,
-           const QString &description );
+           const QString &description,
+           TreeNode *parent );
 
     virtual ~Param();
 
@@ -34,13 +36,15 @@ public:
 
     const QString & description() const;
 
+    QVariant data( int field ) const override;
+
+    void setData( int field, const QVariant &value ) override;
+
     virtual QVariant value() const = 0;
 
     virtual void setValue( const QVariant &value ) = 0;
 
     virtual ParamType type() const = 0;
-
-
 
 private:
     struct Data;

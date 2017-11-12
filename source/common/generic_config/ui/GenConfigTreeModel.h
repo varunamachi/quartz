@@ -20,7 +20,7 @@ public:
     void setConfig( Config *config );
 
 protected:
-    ITreeNode *rootAt(int rowIndex) const;
+    TreeNode *rootAt(int rowIndex) const;
 
     int rootCount() const;
 

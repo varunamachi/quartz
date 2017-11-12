@@ -73,7 +73,7 @@ TemplateSelectorDialog::TemplateSelectorDialog(
 //    if( ! index.isValid() ) {
 //        return;
 //    }
-//    auto tn = static_cast< ITreeNode *>( index.internalPointer() );
+//    auto tn = static_cast< TreeNode *>( index.internalPointer() );
 //    auto ti = dynamic_cast< TemplateInstance *>( tn );
 //    if( ti != nullptr ) {
 //        VarConfigWidget *vcw = nullptr;

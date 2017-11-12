@@ -5,8 +5,7 @@ vq_classes(
     AbstractTreeModel
     BasicSortFilter
     ArrayModel
+    TreeNode
 )
 
-vq_interfaces(
-    ITreeNode
-)
+

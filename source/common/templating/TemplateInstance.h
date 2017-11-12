@@ -5,7 +5,7 @@
 #include <QHash>
 
 #include "../QuartzCommon.h"
-#include "../model_view/ITreeNode.h"
+#include "../model_view/TreeNode.h"
 
 namespace Quartz {
 
@@ -13,7 +13,7 @@ class Template;
 
 using GlobalConfig = QHash< QString, QVariant >;
 
-class QUARTZ_COMMON_API TemplateInstance : public ITreeNode
+class QUARTZ_COMMON_API TemplateInstance : public TreeNode
 {
 
 public:
@@ -44,7 +44,7 @@ public:
 
     bool isSelectable() const override;
 
-    ITreeNode * child(int row ) const override;
+    TreeNode * child(int row ) const override;
 
     QVariant data( int column ) const override;
 
@@ -52,17 +52,17 @@ public:
 
     bool isSelected() const override;
 
-    ITreeNode * parent() const override;
+    TreeNode * parent() const override;
 
-    int indexOfChild( const ITreeNode *child ) const override;
+    int indexOfChild( const TreeNode *child ) const override;
 
     bool isEditable( int column ) const override;
 
     void setData( int column, const QVariant &data ) override;
 
-    void addChild( std::shared_ptr< ITreeNode > child ) override;
+    void addChild( std::shared_ptr< TreeNode > child ) override;
 
-    void removeChild( const ITreeNode *child ) override;
+    void removeChild( const TreeNode *child ) override;
 
 private:
     struct Data;

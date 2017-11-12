@@ -16,15 +16,15 @@ public:
 
     ~ArrayModel();
 
-    ITreeNode * rootAt( int rowIndex ) const override;
+    TreeNode * rootAt( int rowIndex ) const override;
 
     int rootCount() const override;
 
-    void addRoot( ITreeNode *node );
+    void addRoot( TreeNode *node );
 
-    void removeRoot( ITreeNode *node );
+    void removeRoot( TreeNode *node );
 
-    bool contains( ITreeNode *node );
+    bool contains( TreeNode *node );
 
     void clear();
 

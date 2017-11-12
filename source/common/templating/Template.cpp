@@ -84,7 +84,7 @@ bool Template::isSelectable() const
     return true;
 }
 
-ITreeNode *Template::child( int row ) const
+TreeNode *Template::child( int row ) const
 {
     if( row < m_data->m_instances.size() ) {
         return m_data->m_instances.at( row ).get();
@@ -117,12 +117,12 @@ bool Template::isSelected() const
     return m_data->m_selected;
 }
 
-ITreeNode * Template::parent() const
+TreeNode * Template::parent() const
 {
     return nullptr;
 }
 
-int Template::indexOfChild( const ITreeNode *child ) const
+int Template::indexOfChild( const TreeNode *child ) const
 {
     int index = -1;
     for( int i = 0; i < m_data->m_instances.size(); ++ i ) {
@@ -146,7 +146,7 @@ void Template::setData( int column, const QVariant &data )
     }
 }
 
-void Template::addChild( std::shared_ptr< ITreeNode > child )
+void Template::addChild( std::shared_ptr< TreeNode > child )
 {
     ///@todo Check if already exists
     auto templateInsace = std::dynamic_pointer_cast<
@@ -156,7 +156,7 @@ void Template::addChild( std::shared_ptr< ITreeNode > child )
     }
 }
 
-void Template::removeChild( const ITreeNode *child )
+void Template::removeChild( const TreeNode *child )
 {
     if( child == nullptr ) {
         return;
