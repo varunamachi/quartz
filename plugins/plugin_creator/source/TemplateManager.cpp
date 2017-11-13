@@ -25,7 +25,8 @@ struct TemplateManager::Data {
 };
 
 TemplateManager::TemplateManager()
-    : m_data{ new Data{} }
+    : AbstractTreeModel{ 1, true, nullptr }
+    , m_data{ new Data{} }
 {
 
 }

@@ -12,7 +12,9 @@ class QUARTZ_COMMON_API ArrayModel : public AbstractTreeModel
     Q_OBJECT
 
 public:
-    ArrayModel( QObject *parent = nullptr );
+    ArrayModel( int numFields,
+                bool selectable,
+                QObject *parent = nullptr );
 
     ~ArrayModel();
 

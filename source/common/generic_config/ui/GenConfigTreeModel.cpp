@@ -18,7 +18,7 @@ struct GenConfigTreeModel::Data
 };
 
 GenConfigTreeModel::GenConfigTreeModel( Config *config, QObject *parent )
-    : AbstractTreeModel{ parent }
+    : AbstractTreeModel{ 2, false, parent }
     , m_data{ new Data{ config }}
 {
 

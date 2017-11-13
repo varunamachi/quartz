@@ -16,7 +16,6 @@ struct Template::Data
           const QString &content )
         : m_name{ name }
         , m_content{ content }
-        , m_selected( false )
     {
 
     }
@@ -24,8 +23,6 @@ struct Template::Data
     QString m_name;
 
     QString m_content;
-
-    bool m_selected;
 
     std::unique_ptr< Config > m_config;
 
@@ -36,7 +33,7 @@ struct Template::Data
 
 Template::Template( const QString &name,
                     const QString &content )
-    : TreeNode{ 3, nullptr }
+    : TreeNode{ 2, nullptr }
     , m_data{ new Data{ name, content }}
 {
 
@@ -71,9 +68,8 @@ const QString & Template::content() const
 QVariant Template::data( int column ) const
 {
     switch( column ) {
-    case 0: return m_data->m_selected;
-    case 1: return m_data->m_name;
-    case 2: return numChildren();
+    case 0: return m_data->m_name;
+    case 1: return numChildren();
     }
     return QVariant{};
 }

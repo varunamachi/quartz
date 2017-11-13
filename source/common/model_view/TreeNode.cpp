@@ -8,10 +8,8 @@ namespace Quartz {
 struct TreeNode::Data
 {
     Data( int numFields,
-          bool selectable,
           TreeNode *parent )
         : m_numFields{ numFields }
-        , m_isSelectable{ selectable }
         , m_selected{ false }
         , m_parent{ parent }
     {
@@ -19,8 +17,6 @@ struct TreeNode::Data
     }
 
     int m_numFields;
-
-    bool m_isSelectable;
 
     bool m_selected;
 
@@ -31,9 +27,8 @@ struct TreeNode::Data
 
 TreeNode::TreeNode(
         int numFields,
-        bool isSelectable,
         TreeNode *parent )
-    : m_data{ new Data{ numFields, isSelectable, parent }}
+    : m_data{ new Data{ numFields, parent }}
 {
 
 }
@@ -43,11 +38,6 @@ int TreeNode::numFields() const
     return m_data->m_numFields;
 }
 
-bool TreeNode::isSelectable() const
-{
-    return m_data->m_isSelectable;
-}
-
 void TreeNode::setSelected( bool value )
 {
     m_data->m_selected = value;
@@ -55,7 +45,7 @@ void TreeNode::setSelected( bool value )
 
 bool TreeNode::isSelected() const
 {
-    return m_data->m_isSelectable && m_data->m_selected;
+    return m_data->m_selected;
 }
 
 int TreeNode::numChildren() const

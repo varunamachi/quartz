@@ -43,7 +43,6 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     , m_data{ new Data{ templateManager, this }}
 {
     m_data->m_view->setModel( m_data->m_templateManager );
-//    m_data->m_view->setItemDelegateForColumn( 0, new CheckBoxDelegate{ this });
 
     auto okBtn = new QPushButton{ tr( "Select" ), this };
     auto cancelBtn = new QPushButton{ tr( "Cancel"), this };
@@ -66,26 +65,6 @@ TemplateSelectorDialog::TemplateSelectorDialog(
         this->reject();
     });
 }
-
-
-//void TemplateSelectorWidget::selected( const QModelIndex &index )
-//{
-//    if( ! index.isValid() ) {
-//        return;
-//    }
-//    auto tn = static_cast< TreeNode *>( index.internalPointer() );
-//    auto ti = dynamic_cast< TemplateInstance *>( tn );
-//    if( ti != nullptr ) {
-//        VarConfigWidget *vcw = nullptr;
-//        if( m_data->m_configWidgets.contains( ti )) {
-//            vcw = new VarConfigWidget{ ti, this };
-//            m_data->m_configWidgets.insert( ti, vcw );
-//            m_data->m_varConfigHolder->addWidget( vcw );
-//        }
-//        m_data->m_varConfigHolder->setCurrentWidget( vcw );
-//    }
-//}
-
 
 TemplateSelectorDialog::~TemplateSelectorDialog()
 {

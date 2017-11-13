@@ -11,8 +11,8 @@ struct ArrayModel::Data
     QVector< TreeNode *> m_roots;
 };
 
-ArrayModel::ArrayModel( QObject *parent )
-    : AbstractTreeModel{ parent }
+ArrayModel::ArrayModel( int numFields, bool selectable, QObject *parent )
+    : AbstractTreeModel{ numFields, selectable, parent }
     , m_data{ new Data{} }
 {
 

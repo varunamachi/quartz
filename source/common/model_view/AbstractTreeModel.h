@@ -15,8 +15,8 @@ class QUARTZ_COMMON_API AbstractTreeModel : public QAbstractItemModel
     Q_OBJECT
 public:
     AbstractTreeModel(
-            bool selectable,
             int numFields,
+            bool selectable,
             QObject *parent = nullptr );
 
     virtual ~AbstractTreeModel();

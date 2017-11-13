@@ -22,7 +22,7 @@ struct TemplateConfigWidget::Data
         , m_view{ new QTreeView{ parent }}
         , m_emptyConfig{ "none", "None" }
         , m_configWidget{ new GenConfigWidget{ &m_emptyConfig, parent }}
-        , m_tmodel{ new ArrayModel{ parent }}
+        , m_tmodel{ new ArrayModel{ 2, false, parent }}
     {
 
     }
