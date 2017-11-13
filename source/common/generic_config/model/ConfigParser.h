@@ -29,7 +29,9 @@ public:
 
 
 protected:
-    std::shared_ptr< Param > parseParam( const QDomElement &paramNode );
+    std::shared_ptr< Param > parseParam(
+            Config &config,
+            const QDomElement &paramNode );
 
     std::shared_ptr< Group > parseGroup(
             Config &config,

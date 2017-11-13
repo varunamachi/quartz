@@ -30,7 +30,8 @@ struct TemplateInstance::Data
 
 TemplateInstance::TemplateInstance( const QString &name,
                                     Template *parent  )
-    : m_data{ new Data{ name, parent }}
+    : TreeNode{ 1, parent }
+    , m_data{ new Data{ name, parent }}
 {
 
 }
@@ -80,54 +81,12 @@ QVariant TemplateInstance::paramValue( const QString &paramName,
     return m_data->m_globalConfig->value( paramName );
 }
 
-int TemplateInstance::numChildren() const
-{
-    return 0;
-}
-
-int TemplateInstance::numFields() const
-{
-    return 1;
-}
-
-bool TemplateInstance::isSelectable() const
-{
-    return false;
-}
-
-TreeNode * TemplateInstance::child( int /*row*/ ) const
-{
-    return nullptr;
-}
-
 QVariant TemplateInstance::data( int column ) const
 {
     switch( column ) {
     case 0: return m_data->m_name;
     }
     return "";
-}
-
-void TemplateInstance::setSelected( bool value )
-{
-    m_data->m_selected = value;
-}
-
-bool TemplateInstance::isSelected() const
-{
-    return m_data->m_selected;
-}
-
-TreeNode *TemplateInstance::parent() const
-{
-//    return m_data->m_parent;
-    return nullptr;
-}
-
-int TemplateInstance::indexOfChild( const TreeNode */*child*/ ) const
-{
-    //There are no children of TemplateInstance, hence -1
-    return -1;
 }
 
 bool TemplateInstance::isEditable( int column ) const
@@ -141,16 +100,5 @@ void TemplateInstance::setData( int column, const QVariant &data )
         m_data->m_name= data.toString();
     }
 }
-
-void TemplateInstance::addChild( std::shared_ptr< TreeNode > /*child*/ )
-{
-    //nothing
-}
-
-void TemplateInstance::removeChild( const TreeNode */*child*/ )
-{
-    //nothing
-}
-
 
 }

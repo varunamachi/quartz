@@ -11,7 +11,8 @@ class QUARTZ_COMMON_API BooleanParam : public Param
 public:
     BooleanParam( const QString &id,
                   const QString &name,
-                  const QString &description );
+                  const QString &description,
+                  TreeNode *parent );
 
     ~BooleanParam();
 

@@ -32,8 +32,9 @@ struct RangeParam::Data
 
 RangeParam::RangeParam( const QString &id,
                         const QString &name,
-                        const QString &description )
-    : Param{ id, name, description }
+                        const QString &description,
+                        TreeNode *parent )
+    : Param{ id, name, description, parent }
     , m_data{ new Data{ }}
 {
 

@@ -12,7 +12,8 @@ class QUARTZ_COMMON_API ChoiceParam : public Param
 public:
     explicit ChoiceParam( const QString &id,
                           const QString &name,
-                          const QString &description );
+                          const QString &description,
+                          TreeNode *parent );
 
     ~ChoiceParam();
 

@@ -24,7 +24,8 @@ public:
 
     explicit TextParam( const QString &id,
                         const QString &name,
-                        const QString &description );
+                        const QString &description,
+                        TreeNode *parent );
 
     ~TextParam();
 

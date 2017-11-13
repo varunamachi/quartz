@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <QAbstractItemModel>
 
 #include "../QuartzCommon.h"
@@ -12,7 +14,10 @@ class QUARTZ_COMMON_API AbstractTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    AbstractTreeModel( QObject *parent = nullptr );
+    AbstractTreeModel(
+            bool selectable,
+            int numFields,
+            QObject *parent = nullptr );
 
     virtual ~AbstractTreeModel();
 
@@ -43,7 +48,9 @@ protected:
 
     virtual int rootCount() const = 0;
 
-
+private:
+    struct Data;
+    std::unique_ptr< Data > m_data;
 };
 
 }

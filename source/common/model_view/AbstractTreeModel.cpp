@@ -6,8 +6,28 @@
 
 namespace Quartz {
 
-AbstractTreeModel::AbstractTreeModel( QObject *parent )
+struct AbstractTreeModel::Data
+{
+    Data( bool selectable, int numFields )
+        : m_selectable{ selectable }
+        , m_fields{ numFields }
+    {
+        if( m_selectable ) {
+            ++ m_fields;
+        }
+    }
+
+    bool m_selectable;
+
+    int m_fields;
+};
+
+AbstractTreeModel::AbstractTreeModel(
+        bool selectable,
+        int numFields,
+        QObject *parent )
     : QAbstractItemModel{ parent }
+    , m_data{ new Data{ selectable, numFields }}
 {
 
 }
@@ -77,40 +97,43 @@ int AbstractTreeModel::rowCount( const QModelIndex& parent ) const
 int AbstractTreeModel::columnCount( const QModelIndex& parent ) const
 {
     //default is list of templates
-    auto count = 0;
-    if( parent.isValid() ) {
-        auto node = static_cast< TreeNode *>( parent.internalPointer() );
-        count = node->numFields();
-    } else if( rootCount() != 0 ){
-        count = rootAt( 0 )->numFields();
-    }
-    return count;
+//    auto count = 0;
+//    if( parent.isValid() ) {
+//        auto node = static_cast< TreeNode *>( parent.internalPointer() );
+//        count = node->numFields();
+//    } else if( rootCount() != 0 ){
+//        count = rootAt( 0 )->numFields();
+//    }
+//    return count;
+    return m_data->m_fields;
 }
 
 QVariant AbstractTreeModel::data( const QModelIndex& index,
                                   int role ) const
 {
-    QVariant data;
     if( index.isValid() ) {
         auto node = static_cast< TreeNode *>( index.internalPointer() );
         if( node != nullptr ) {
-            if ( role == Qt::CheckStateRole
-                      && node->isSelectable()
-                      && index.column() == 0 ) {
-                data = node->isSelected() ? Qt::Checked : Qt::Unchecked;
+            if( role == Qt::CheckStateRole
+                    && m_data->m_selectable
+                    && index.column() == 0 ) {
+                return node->isSelected() ? Qt::Checked : Qt::Unchecked;
             }
-            if( role == Qt::DisplayRole
-                      && ! (index.column() == 0 && node->isSelectable() )) {
-                data = node->data( index.column() );
-            }
-            if( role == Qt::EditRole
-                    && ! (index.column() == 0 && node->isSelectable() )) {
-                data = node->data( index.column() );
-//                data = QVariant{};
+            else {
+                auto data = node->data( index.column() );
+                if ( role == Qt::CheckStateRole && data.canConvert< bool >() ) {
+                    return data.toBool() ? Qt::Checked : Qt::Unchecked;
+                }
+                if( role == Qt::DisplayRole || role == Qt::EditRole ) {
+                    return data;
+                }
+                if( role == Qt::ToolTipRole ) {
+                    return "Tool tip";
+                }
             }
         }
     }
-    return data;
+    return QVariant{};
 }
 
 bool AbstractTreeModel::hasChildren( const QModelIndex& parent ) const
@@ -131,19 +154,15 @@ bool AbstractTreeModel::setData( const QModelIndex &index,
     if( index.isValid() ) {
         auto node = static_cast< TreeNode *>( index.internalPointer() );
         if( node != nullptr ) {
-            if ( role == Qt::CheckStateRole
-                      && node->isSelectable()
-                      && index.column() == 0 ) {
+            if ( role == Qt::CheckStateRole && value.canConvert< bool >() ) {
                 auto val = value.toInt();
                 node->setSelected( val == Qt::Checked );
             }
-            if( role == Qt::EditRole
-                      && ! (index.column() == 0 && node->isSelectable() )) {
+            if( role == Qt::EditRole && ! value.canConvert< bool >()) {
                 node->setData( index.column(), value );
             }
         }
     }
-    emit dataChanged(index, index);
     return set;
 }
 
@@ -153,15 +172,17 @@ Qt::ItemFlags AbstractTreeModel::flags( const QModelIndex &index ) const
         return 0;
     }
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    auto node = static_cast< TreeNode *>( index.internalPointer() );
-    if( node != nullptr && node->isEditable( index.column() )) {
-        if( node->isSelectable() && index.column() == 0 ) {
-            flags |= Qt::ItemIsUserCheckable;
-        }
-        else {
-            flags |= Qt::ItemIsEditable;
-        }
-    }
+//    auto node = static_cast< TreeNode *>( index.internalPointer() );
+//    if( node != nullptr ) {
+//        if( data( index ) )
+
+//        if( node->isSelectable() && index.column() == 0 ) {
+//            flags |= Qt::ItemIsUserCheckable;
+//        }
+//        else {
+//            flags |= Qt::ItemIsEditable;
+//        }
+//    }
     return flags;
 }
 

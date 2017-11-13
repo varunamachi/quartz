@@ -29,14 +29,15 @@ struct Template::Data
 
     std::unique_ptr< Config > m_config;
 
-    QVector< std::shared_ptr< TemplateInstance >> m_instances;
+//    QVector< std::shared_ptr< TemplateInstance >> m_instances;
 };
 
 
 
 Template::Template( const QString &name,
                     const QString &content )
-    : m_data{ new Data{ name, content }}
+    : TreeNode{ 3, nullptr }
+    , m_data{ new Data{ name, content }}
 {
 
 }
@@ -66,108 +67,15 @@ const QString & Template::content() const
     return m_data->m_content;
 }
 
-int Template::numChildren() const
-{
-    if( m_data->m_selected ) {
-        return m_data->m_instances.size();
-    }
-    return 0;
-}
-
-int Template::numFields() const
-{
-    return 2;
-}
-
-bool Template::isSelectable() const
-{
-    return true;
-}
-
-TreeNode *Template::child( int row ) const
-{
-    if( row < m_data->m_instances.size() ) {
-        return m_data->m_instances.at( row ).get();
-    }
-    return nullptr;
-}
 
 QVariant Template::data( int column ) const
 {
     switch( column ) {
     case 0: return m_data->m_selected;
     case 1: return m_data->m_name;
-    case 2: return m_data->m_instances.size();
+    case 2: return numChildren();
     }
     return QVariant{};
 }
-
-void Template::setSelected( bool value )
-{
-    m_data->m_selected = value;
-    //Set the value for children
-    for( auto i = 0; i < m_data->m_instances.size(); ++ i ) {
-        auto ins = m_data->m_instances.at( i ).get();
-        ins->setSelected( value );
-    }
-}
-
-bool Template::isSelected() const
-{
-    return m_data->m_selected;
-}
-
-TreeNode * Template::parent() const
-{
-    return nullptr;
-}
-
-int Template::indexOfChild( const TreeNode *child ) const
-{
-    int index = -1;
-    for( int i = 0; i < m_data->m_instances.size(); ++ i ) {
-        if( child == m_data->m_instances.at( i ).get() ) {
-            index = i;
-            break;
-        }
-    }
-    return index;
-}
-
-bool Template::isEditable( int column ) const
-{
-    return column == 0;
-}
-
-void Template::setData( int column, const QVariant &data )
-{
-    if( column == 0 ) {
-         m_data->m_selected = data.toBool();
-    }
-}
-
-void Template::addChild( std::shared_ptr< TreeNode > child )
-{
-    ///@todo Check if already exists
-    auto templateInsace = std::dynamic_pointer_cast<
-            TemplateInstance >( child );
-    if( templateInsace ) {
-        m_data->m_instances.push_back( templateInsace );
-    }
-}
-
-void Template::removeChild( const TreeNode *child )
-{
-    if( child == nullptr ) {
-        return;
-    }
-    for( auto i = m_data->m_instances.size() - 1; i <= 0 ; i -- ) {
-        const auto &ins = m_data->m_instances.at( i );
-        if( ins.get() == child ) {
-            m_data->m_instances.remove( i );
-        }
-    }
-}
-
 
 }

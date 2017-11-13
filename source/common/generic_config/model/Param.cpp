@@ -29,7 +29,7 @@ Param::Param( const QString &id,
               const QString &name,
               const QString &description,
               TreeNode *parent )
-    : TreeNode{ 2, false, parent }
+    : TreeNode{ 2, parent }
     , m_data{ new Data{ id, name, description  }}
 {
 

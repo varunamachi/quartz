@@ -127,7 +127,7 @@ std::unique_ptr< Config > ConfigParser::parse( const QDomElement &configRoot )
         auto paramList = configRoot.elementsByTagName( "param" );
         for( auto i = 0; i < paramList.size(); ++ i ) {
             auto paramNode = paramList.at( i );
-            auto param = parseParam( paramNode.toElement() );
+            auto param = parseParam( *config, paramNode.toElement() );
             if( param != nullptr ) {
                 config->registerParam( param.get() );
                 config->addChildParameter( param );
@@ -159,6 +159,7 @@ std::unique_ptr< Config > ConfigParser::parse( const QDomElement &configRoot )
 }
 
 std::shared_ptr< Param > ConfigParser::parseParam(
+        Config &config,
         const QDomElement &paramNode )
 {
     std::shared_ptr< Param > param;
@@ -171,13 +172,21 @@ std::shared_ptr< Param > ConfigParser::parseParam(
     auto type       = toParamType( strType );
     if( type == ParamType::Boolean ) {
         auto def = QString::compare( strDef, "true", Qt::CaseInsensitive );
-        auto bparam = std::make_shared< BooleanParam >( id, name, desc );
+        auto bparam = std::make_shared< BooleanParam >(
+                    id,
+                    name,
+                    desc,
+                    &config );
         bparam->setDefaultValue( def );
         param = bparam;
     }
     else if( type == ParamType::Choice ) {
         auto def = strDef.toInt();
-        auto cparam = std::make_shared< ChoiceParam >( id, name, desc );
+        auto cparam = std::make_shared< ChoiceParam >(
+                    id,
+                    name,
+                    desc,
+                    &config );
         cparam->setDefaultIndex( def );
         parseOptions( cparam.get(), paramNode );
         param = cparam;
@@ -188,7 +197,11 @@ std::shared_ptr< Param > ConfigParser::parseParam(
         auto max = nodeValue( attr, "max" ).toInt();
         auto inc = nodeValue( attr, "inc" ).toInt();
         if( min < max && inc != 0 ) {
-            auto rparam = std::make_shared< RangeParam >( id, name, desc );
+            auto rparam = std::make_shared< RangeParam >(
+                        id,
+                        name,
+                        desc,
+                        &config );
             rparam->setDefaultValue( def );
             rparam->setMin( min );
             rparam->setMax( max );
@@ -201,7 +214,11 @@ std::shared_ptr< Param > ConfigParser::parseParam(
         }
     }
     else if( type == ParamType::Text ) {
-        auto tparam = std::make_shared< TextParam >( id, name, desc );
+        auto tparam = std::make_shared< TextParam >(
+                    id,
+                    name,
+                    desc,
+                    &config );
         tparam->setDefaultValue( strDef );
         param = tparam;
     }
@@ -217,11 +234,15 @@ std::shared_ptr< Group > ConfigParser::parseGroup(
     auto id     = groupNode.attribute( "id" );
     auto desc   = groupNode.attribute( "description" );
     if( ! id.isEmpty() && ! name.isEmpty() ) {
-        group = std::make_shared< Group >( id, name, desc );
+        group = std::make_shared< Group >(
+                    id,
+                    name,
+                    desc,
+                    &config );
         auto pNodes = groupNode.elementsByTagName( "param" );
         for( auto i = 0; i < pNodes.size(); ++ i ) {
             auto pn = pNodes.at( i );
-            auto param = parseParam( pn.toElement() );
+            auto param = parseParam( config, pn.toElement() );
             if( param != nullptr ) {
                 config.registerParam( param.get() );
                 group->addParam( param );

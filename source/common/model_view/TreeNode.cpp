@@ -118,4 +118,9 @@ void TreeNode::removeChild( TreeNode *child )
     m_data->m_children.removeAll( child );
 }
 
+TreeNode::~TreeNode()
+{
+
+}
+
 }

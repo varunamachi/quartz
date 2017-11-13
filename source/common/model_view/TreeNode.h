@@ -9,13 +9,9 @@ namespace Quartz {
 class TreeNode
 {
 public:
-    TreeNode( int numFields,
-              bool isSelectable = false,
-              TreeNode *parent = nullptr );
+    TreeNode( int numFields, TreeNode *parent = nullptr );
 
     virtual int numFields() const;
-
-    virtual bool isSelectable() const;
 
     virtual void setSelected( bool value );
 
@@ -41,7 +37,7 @@ public:
 
     virtual QVariant data( int column ) const = 0;
 
-    virtual ~TreeNode() {}
+    virtual ~TreeNode();
 
 private:
     struct Data;

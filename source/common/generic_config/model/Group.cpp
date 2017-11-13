@@ -34,7 +34,7 @@ Group::Group( const QString &id,
               const QString &name,
               const QString &description,
               TreeNode *parent )
-    : TreeNode{  3, false, parent }
+    : TreeNode{  3, parent }
     , m_data{ new Data{ id, name, description }}
 {
 
@@ -115,10 +115,11 @@ Group * Group::subGroupAt( int index )
 
 QVariant Group::data( int field ) const
 {
-    switch( column ) {
-    case 0: return m_data->m_group->id();
-    case 1: return m_data->m_group->name();
-
+    switch( field ) {
+    case 0: return m_data->m_id;
+    case 1: return m_data->m_name;
+    case 2: return m_data->m_params.size();
+    case 3: return m_data->m_subGroups.size();
     }
     return QVariant{};
 }

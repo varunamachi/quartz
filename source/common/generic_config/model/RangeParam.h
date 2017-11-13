@@ -13,7 +13,8 @@ class QUARTZ_COMMON_API RangeParam : public Param
 public:
     RangeParam( const QString &id,
                 const QString &name,
-                const QString &description );
+                const QString &description,
+                TreeNode *parent );
 
     ~RangeParam();
 

@@ -31,7 +31,7 @@ struct Config::Data
 };
 
 Config::Config( const QString &id, const QString &name )
-    : TreeNode{ 3, false, nullptr }
+    : TreeNode{ 3, nullptr }
     , m_data{ new Data{ id, name }}
 {
 
@@ -120,6 +120,7 @@ QVariant Config::data( int field ) const
     case 1: return m_data->m_groups.size();
     case 2: return m_data->m_params.size();
     }
+    return QVariant{};
 }
 
 }
