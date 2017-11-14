@@ -1,6 +1,6 @@
 
-#include <QTreeView>
 #include <QVBoxLayout>
+
 
 #include "../model/Config.h"
 #include "../../widgets/QzTreeView.h"

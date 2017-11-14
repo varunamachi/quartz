@@ -14,6 +14,8 @@ class QUARTZ_COMMON_API ArrayModel : public AbstractTreeModel
 public:
     ArrayModel( int numFields,
                 bool selectable,
+                bool isFlat,
+                const QVector< QString > &headers,
                 QObject *parent = nullptr );
 
     ~ArrayModel();

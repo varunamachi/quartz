@@ -36,15 +36,17 @@ public:
 
     const QString & description() const;
 
-    QVariant data( int field ) const override;
+    QVariant fieldValue( int field ) const override;
 
-    void setData( int field, const QVariant &value ) override;
+    bool setData( int field, const QVariant &value ) override;
 
     virtual QVariant value() const = 0;
 
     virtual void setValue( const QVariant &value ) = 0;
 
     virtual ParamType type() const = 0;
+
+    bool isEditable( int field ) const override;
 
 private:
     struct Data;

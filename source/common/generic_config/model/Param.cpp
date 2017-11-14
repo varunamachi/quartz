@@ -50,19 +50,35 @@ const QString & Param::name() const
     return m_data->m_name;
 }
 
-const QString &Param::description() const
+const QString & Param::description() const
 {
     return m_data->m_description;
 }
 
-QVariant Param::data( int /*field*/ ) const
+QVariant Param::fieldValue( int field ) const
 {
-    return this->value();
+    switch( field ) {
+    case 0: return m_data->m_name;
+    case 1: return this->value();
+    }
+    return QVariant{};
 }
 
-void Param::setData( int /*field*/, const QVariant &value )
+bool Param::setData( int field, const QVariant &value )
 {
-    this->setValue( value );
+    if( field < 2 ) {
+        switch( field ) {
+        case 0: m_data->m_name = value.toString(); break;
+        case 1: this->setValue( value ); break;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Param::isEditable( int field ) const
+{
+    return field == 1;
 }
 
 }

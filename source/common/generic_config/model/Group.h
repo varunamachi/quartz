@@ -41,7 +41,7 @@ public:
 
     Group * subGroupAt( int index );
 
-    QVariant data( int field ) const override;
+    QVariant fieldValue( int field ) const override;
 
 private:
     struct Data;

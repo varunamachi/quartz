@@ -5,6 +5,12 @@
 
 namespace Quartz {
 
+
+const QVector< QString > HEADERS{
+    QObject::tr( "Name" ),
+    QObject::tr( "Value" )
+};
+
 struct GenConfigTreeModel::Data
 {
     explicit Data( Config *config )
@@ -18,7 +24,7 @@ struct GenConfigTreeModel::Data
 };
 
 GenConfigTreeModel::GenConfigTreeModel( Config *config, QObject *parent )
-    : AbstractTreeModel{ 2, false, parent }
+    : AbstractTreeModel{ 2, false, false, HEADERS, parent }
     , m_data{ new Data{ config }}
 {
 

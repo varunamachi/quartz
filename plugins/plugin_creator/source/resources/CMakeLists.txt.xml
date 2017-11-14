@@ -4,7 +4,7 @@
             <param
                 type="boolean"
                 id="bp1"
-                name="bool param 1"
+                name="Boolean"
                 description="A boolean param"
                 default="true"
             />
@@ -12,7 +12,7 @@
                 type="choice"
                 id="ch1"
                 name="choice param one"
-                description="A choice param"
+                description="Choice"
                 default="0">
                 <option name="One" value="1"/>
                 <option name="Two" value="2"/>
@@ -21,7 +21,7 @@
             <param
                 type="range"
                 id="rp1"
-                name="range param one"
+                name="Range"
                 description="A range parameter"
                 default="0"
                 min="0"
@@ -31,7 +31,7 @@
             <param
                 type="text"
                 id="tx1"
-                name="text param one"
+                name="Text"
                 description="A text param"
                 default=""
             />

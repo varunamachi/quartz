@@ -39,7 +39,7 @@ public:
 
     bool registerParam( Param *param );
 
-    QVariant data( int field ) const override;
+    QVariant fieldValue( int field ) const override;
 
 private:
     struct Data;

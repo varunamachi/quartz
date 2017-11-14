@@ -81,12 +81,12 @@ QVariant TemplateInstance::paramValue( const QString &paramName,
     return m_data->m_globalConfig->value( paramName );
 }
 
-QVariant TemplateInstance::data( int column ) const
+QVariant TemplateInstance::fieldValue( int column ) const
 {
     switch( column ) {
     case 0: return m_data->m_name;
     }
-    return "";
+    return QVariant{};
 }
 
 bool TemplateInstance::isEditable( int column ) const
@@ -94,11 +94,13 @@ bool TemplateInstance::isEditable( int column ) const
     return column == 0;
 }
 
-void TemplateInstance::setData( int column, const QVariant &data )
+bool TemplateInstance::setData( int column, const QVariant &data )
 {
     if( column == 0 ) {
         m_data->m_name= data.toString();
+        return true;
     }
+    return false;
 }
 
 }

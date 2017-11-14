@@ -64,8 +64,7 @@ const QString & Template::content() const
     return m_data->m_content;
 }
 
-
-QVariant Template::data( int column ) const
+QVariant Template::fieldValue( int column ) const
 {
     switch( column ) {
     case 0: return m_data->m_name;

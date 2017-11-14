@@ -31,7 +31,7 @@ bool BasicSortFilter::filterAcceptsRow( int sourceRow,
     auto node = static_cast< TreeNode *>( index.internalPointer() );
     if( node != nullptr ) {
         for( auto i = 0; i < node->numFields(); ++ i ) {
-            const auto str = node->data( i ).toString();
+            const auto str = node->fieldValue( i ).toString();
             accept = str.contains( m_data->m_expression, Qt::CaseInsensitive );
             if( accept ) {
                 break;

@@ -34,9 +34,6 @@ QWidget* GenConfigDelegate::createEditor(
     if( node != nullptr ) {
         switch( node->type() ) {
         case ParamType::Boolean: {
-//            auto cb = new QCheckBox{ parent };
-//            cb->setGeometry( option.rect );
-//            widget = cb;
             widget = QStyledItemDelegate::createEditor( parent, option, index );
         }
             break;
@@ -69,10 +66,6 @@ void GenConfigDelegate::setEditorData( QWidget *editor,
         switch( node->type() ) {
         case ParamType::Boolean: {
             QStyledItemDelegate::setEditorData( editor, index );
-            auto combo = qobject_cast< QComboBox *>( editor );
-            if( combo != nullptr ) {
-                combo->showPopup();
-            }
         }
             break;
         case ParamType::Text: {

@@ -27,7 +27,7 @@ public:
 
     const QString & content() const;
 
-    QVariant data( int column ) const override;
+    QVariant fieldValue( int field ) const override;
 
 private:
     struct Data;

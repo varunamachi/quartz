@@ -11,6 +11,10 @@
 
 namespace Quartz { namespace Plugin { namespace Creator {
 
+const QVector< QString > HEADERS{
+    QObject::tr( "Templates" )
+};
+
 const QString TemplateManager::ADAPTER_NAME{ "Template Adapter" };
 
 struct TemplateManager::Data {
@@ -25,7 +29,7 @@ struct TemplateManager::Data {
 };
 
 TemplateManager::TemplateManager()
-    : AbstractTreeModel{ 1, true, nullptr }
+    : AbstractTreeModel{ 1, true, true, HEADERS, nullptr }
     , m_data{ new Data{} }
 {
 

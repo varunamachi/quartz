@@ -2,9 +2,11 @@
 
 #include <QTreeView>
 
+#include "../QuartzCommon.h"
+
 namespace Quartz {
 
-class QzTreeView : public QTreeView
+class QUARTZ_COMMON_API QzTreeView : public QTreeView
 {
     Q_OBJECT
 

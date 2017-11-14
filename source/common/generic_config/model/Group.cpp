@@ -113,7 +113,7 @@ Group * Group::subGroupAt( int index )
     return group;
 }
 
-QVariant Group::data( int field ) const
+QVariant Group::fieldValue( int field ) const
 {
     switch( field ) {
     case 0: return m_data->m_id;

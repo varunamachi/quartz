@@ -38,11 +38,11 @@ public:
     QVariant  paramValue( const QString &paramName,
                           const QString &defValue ) const;
 
-    QVariant data( int column ) const override;
+    QVariant fieldValue( int field ) const override;
 
     bool isEditable( int column ) const override;
 
-    void setData( int column, const QVariant &data ) override;
+    bool setData( int column, const QVariant &data ) override;
 
 private:
     struct Data;

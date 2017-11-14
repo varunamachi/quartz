@@ -17,6 +17,8 @@ public:
     AbstractTreeModel(
             int numFields,
             bool selectable,
+            bool flat,
+            const QVector< QString > &headers,
             QObject *parent = nullptr );
 
     virtual ~AbstractTreeModel();
@@ -33,6 +35,11 @@ public:
     int columnCount( const QModelIndex &parent ) const override;
 
     QVariant data( const QModelIndex &index, int role ) const override;
+
+    QVariant headerData(
+            int section,
+            Qt::Orientation o,
+            int role ) const override;
 
     bool hasChildren( const QModelIndex &parent ) const override;
 

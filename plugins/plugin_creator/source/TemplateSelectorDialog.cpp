@@ -1,4 +1,3 @@
-#include <QTreeView>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QLineEdit>
@@ -10,6 +9,7 @@
 #include <common/model_view/EditorDelegate.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/templating/Template.h>
+#include <common/widgets/QzTreeView.h>
 
 #include "TemplateManager.h"
 #include "TemplateSelectorDialog.h"
@@ -22,7 +22,7 @@ struct TemplateSelectorDialog::Data
           TemplateSelectorDialog *parent )
         : m_templateManager{ templateManager }
         , m_filterEdit{ new QLineEdit{ parent }}
-        , m_view{ new QTreeView{ parent }}
+        , m_view{ new QzTreeView{ parent }}
     {
 
     }
@@ -31,7 +31,7 @@ struct TemplateSelectorDialog::Data
 
     QLineEdit *m_filterEdit;
 
-    QTreeView *m_view;
+    QzTreeView *m_view;
 
     //    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };

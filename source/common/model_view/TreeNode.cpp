@@ -91,9 +91,10 @@ bool TreeNode::isEditable( int /*column*/ ) const
     return false;
 }
 
-void TreeNode::setData( int /*column*/, const QVariant &/*data*/ )
+bool TreeNode::setData( int /*column*/, const QVariant &/*data*/ )
 {
     //Default implementation does not do anything...
+    return false;
 }
 
 void TreeNode::addChild( TreeNode *child )
@@ -107,6 +108,7 @@ void TreeNode::removeChild( TreeNode *child )
 {
     m_data->m_children.removeAll( child );
 }
+
 
 TreeNode::~TreeNode()
 {

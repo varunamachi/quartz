@@ -3,6 +3,7 @@
 #include <memory>
 
 class QVariant;
+class QString;
 
 namespace Quartz {
 
@@ -29,13 +30,13 @@ public:
 
     virtual bool isEditable( int column ) const;
 
-    virtual void setData( int column, const QVariant &data );
+    virtual bool setData( int column, const QVariant &data );
 
     virtual void addChild( TreeNode *child );
 
     virtual void removeChild( TreeNode *child );
 
-    virtual QVariant data( int column ) const = 0;
+    virtual QVariant fieldValue( int column ) const = 0;
 
     virtual ~TreeNode();
 
