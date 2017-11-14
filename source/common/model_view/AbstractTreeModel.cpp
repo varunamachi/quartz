@@ -8,14 +8,11 @@ namespace Quartz {
 
 struct AbstractTreeModel::Data
 {
-    Data( bool selectable,
-          int numFields,
-          bool flat,
-          const QVector< QString > &headers )
-        : m_numFields{ numFields }
-        , m_selectable{ selectable }
-        , m_isFlat{ flat }
-        , m_headers{ headers }
+    Data( Options opts )
+        : m_numFields{ opts.numFields }
+        , m_selectable{ opts.selectable }
+        , m_isFlat{ opts.flat }
+        , m_headers{ opts.headers }
     {
         if( m_selectable ) {
             ++ m_numFields;
@@ -31,17 +28,23 @@ struct AbstractTreeModel::Data
     QVector< QString > m_headers;
 };
 
-AbstractTreeModel::AbstractTreeModel(
-        int numFields,
-        bool selectable,
-        bool flat,
-        const QVector< QString > &headers,
-        QObject *parent )
+AbstractTreeModel::AbstractTreeModel( QObject *parent, Options opts )
     : QAbstractItemModel{ parent }
-    , m_data{ new Data{ selectable, numFields, flat, headers }}
+    , m_data{ new Data{ opts }}
 {
 
 }
+//AbstractTreeModel::AbstractTreeModel(
+//        int numFields,
+//        bool selectable,
+//        bool flat,
+//        const QVector< QString > &headers,
+//        QObject *parent )
+//    : QAbstractItemModel{ parent }
+//    , m_data{ new Data{ selectable, numFields, flat, headers }}
+//{
+
+//}
 
 bool isBool( const QVariant &var ) {
     return var.type() == QVariant::Bool;

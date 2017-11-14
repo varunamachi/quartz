@@ -17,7 +17,9 @@ ArrayModel::ArrayModel(
         bool isFlat,
         const QVector< QString > &headers,
         QObject *parent )
-    : AbstractTreeModel{ numFields, selectable, isFlat, headers, parent }
+    : AbstractTreeModel{
+          parent,
+          AbstractTreeModel::Options{ numFields, selectable, isFlat, headers }}
     , m_data{ new Data{} }
 {
 

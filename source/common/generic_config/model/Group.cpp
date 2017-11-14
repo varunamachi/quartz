@@ -104,6 +104,15 @@ void Group::addSubGroup( std::shared_ptr< Group > subGroup )
     }
 }
 
+const Group * Group::subGroupAt( int index ) const
+{
+    Group *group = nullptr;
+    if( index < m_data->m_subGroups.size() ) {
+        group = m_data->m_subGroups.at( index ).get();
+    }
+    return group;
+}
+
 Group * Group::subGroupAt( int index )
 {
     Group *group = nullptr;
@@ -122,6 +131,27 @@ QVariant Group::fieldValue( int field ) const
     case 3: return m_data->m_subGroups.size();
     }
     return QVariant{};
+}
+
+static void copy( const Group *source, Group *dest )
+{
+    for( auto i = 0; i < source->numSubGroups(); ++ i ) {
+        dest->addSubGroup( source->subGroupAt( i )->clone() );
+    }
+    for( auto i = 0; i < source->numParams(); ++ i ) {
+        dest->addParam( source->paramAt( i )->clone() );
+    }
+}
+
+std::unique_ptr< Group > Group::clone() const
+{
+    auto grp = std::unique_ptr< Group >{
+        new Group{ m_data->m_id,
+                   m_data->m_name,
+                   m_data->m_description,
+                   TreeNode::parent() }};
+    copy( this, grp.get() );
+    return grp;
 }
 
 }

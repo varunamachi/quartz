@@ -1,6 +1,9 @@
 #include <QString>
 #include <QVariant>
 
+#include <common/generic_config/model/Config.h>
+#include <common/generic_config/model/Param.h>
+
 #include "Template.h"
 #include "TemplateInstance.h"
 
@@ -9,8 +12,10 @@ namespace Quartz {
 struct TemplateInstance::Data
 {
     Data( const QString &name,
+          std::unique_ptr< Config > config,
           Template *parent )
      : m_name{ name }
+     , m_config{ std::move( config )}
      , m_parent{ parent }
      , m_selected{ false }
     {
@@ -19,19 +24,20 @@ struct TemplateInstance::Data
 
     QString m_name;
 
+    std::unique_ptr< Config > m_config;
+
     Template *m_parent;
 
-    QHash< QString, QVariant > m_paramValues;
+    bool m_selected;
 
     std::shared_ptr< GlobalConfig > m_globalConfig;
-
-    bool m_selected;
 };
 
 TemplateInstance::TemplateInstance( const QString &name,
+                                    std::unique_ptr< Config > config,
                                     Template *parent  )
     : TreeNode{ 1, parent }
-    , m_data{ new Data{ name, parent }}
+    , m_data{ new Data{ name, std::move( config ), parent }}
 {
 
 }
@@ -51,12 +57,6 @@ Template * TemplateInstance::instanceOf() const
     return m_data->m_parent;
 }
 
-void TemplateInstance::setParamValue( const QString &paramName,
-                                      const QVariant &paramValue )
-{
-    m_data->m_paramValues[ paramName ] = paramValue;
-}
-
 void TemplateInstance::setGlobalConfig( std::shared_ptr<GlobalConfig> gconf )
 {
     m_data->m_globalConfig = gconf;
@@ -67,18 +67,27 @@ QVariant TemplateInstance::globalConfig( const QString &key ) const
     return m_data->m_globalConfig->value( key );
 }
 
-QVariant TemplateInstance::paramValue( const QString &paramName ) const
+const Param * TemplateInstance::param( const QString &paramName ) const
 {
-    return m_data->m_paramValues[ paramName ];
+    auto param = m_data->m_config->param( paramName );
+    return param;
+}
+
+Param *TemplateInstance::param( const QString &paramName )
+{
+    auto param = m_data->m_config->param( paramName );
+    return param;
 }
 
 QVariant TemplateInstance::paramValue( const QString &paramName,
-                                       const QString &defValue ) const
+                                       const QString defValue ) const
 {
-    if( m_data->m_paramValues.contains( paramName )) {
-        return m_data->m_paramValues.value( paramName, defValue );
+    auto val = m_data->m_globalConfig->value( paramName );
+    auto param = m_data->m_config->param( paramName );
+    if( param != nullptr ) {
+        return param->value();
     }
-    return m_data->m_globalConfig->value( paramName );
+    return val.isValid() ? val : defValue;
 }
 
 QVariant TemplateInstance::fieldValue( int column ) const

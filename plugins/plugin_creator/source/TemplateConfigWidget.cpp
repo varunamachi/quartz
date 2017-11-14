@@ -102,8 +102,12 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
             break;
         }
         name = tmpl->name() + "_" + QString::number( index );
+        ++ index;
     } while( index <= 1000 ); //1000 should be enough
-    auto inst = std::make_shared< TemplateInstance >( name, tmpl );
+    auto inst = std::make_shared< TemplateInstance >(
+                name,
+                tmpl->config()->clone(),
+                tmpl );
     m_data->m_instances.insert( name, inst );
     m_data->m_tmodel->addRoot( inst.get() );
 }
@@ -138,7 +142,9 @@ const QVector< QString > CONFIG_HEADERS{
 };
 
 ConfigModel::ConfigModel( QObject *parent )
-    : AbstractTreeModel{ 2, false, true, CONFIG_HEADERS, parent }
+    : AbstractTreeModel{
+          parent,
+          AbstractTreeModel::Options{ 2, false, true, CONFIG_HEADERS }}
     , m_config{ nullptr }
 {
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include <QAbstractItemModel>
 
@@ -10,16 +11,42 @@ namespace Quartz {
 
 class TreeNode;
 
+
+
 class QUARTZ_COMMON_API AbstractTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    AbstractTreeModel(
-            int numFields,
-            bool selectable,
-            bool flat,
-            const QVector< QString > &headers,
-            QObject *parent = nullptr );
+    using SetterFunc = std::function< void(TreeNode *node, QVariant value)>;
+
+    struct Options {
+        Options( int nf = 1,
+                 bool sel = false,
+                 bool flat = true,
+                 QVector< QString > headers = {})
+            : numFields{ nf }
+            , selectable{ sel }
+            , flat{ flat}
+            , headers{ headers }
+        {
+
+        }
+
+
+
+        int numFields;
+        bool selectable;
+        bool flat;
+        QVector< QString > headers;
+    };
+
+//    AbstractTreeModel(
+//            int numFields,
+//            bool selectable,
+//            bool flat,
+//            const QVector< QString > &headers,
+//            QObject *parent = nullptr );
+    AbstractTreeModel( QObject *parent = nullptr, Options opts = Options{} );
 
     virtual ~AbstractTreeModel();
 

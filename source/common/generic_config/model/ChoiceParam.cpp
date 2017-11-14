@@ -108,4 +108,17 @@ int ChoiceParam::numOption() const
     return m_data->m_choices.size();
 }
 
+std::unique_ptr< Param > ChoiceParam::clone() const
+{
+    auto param = std::unique_ptr< ChoiceParam >{
+        new ChoiceParam{ id(), name(), description(), parent() }};
+    param->setDefaultIndex( this->defaultIndex() );
+    for( auto it = m_data->m_choices.begin();
+         it != m_data->m_choices.end();
+         ++ it ) {
+        param->addOption( it.key(), it.value() );
+    }
+    return param;
+}
+
 }

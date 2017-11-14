@@ -26,6 +26,8 @@ public:
 
     void setValue( const QVariant &value ) override;
 
+    std::unique_ptr< Param > clone() const;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

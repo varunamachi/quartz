@@ -39,9 +39,13 @@ public:
 
     void addSubGroup( std::shared_ptr< Group > subGroup );
 
-    Group * subGroupAt( int index );
+    const Group * subGroupAt( int index ) const;
+
+    Group * subGroupAt( int index ) ;
 
     QVariant fieldValue( int field ) const override;
+
+    std::unique_ptr< Group > clone() const;
 
 private:
     struct Data;

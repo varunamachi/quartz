@@ -102,6 +102,12 @@ const Param * Config::param( const QString &id ) const
 
 }
 
+Param * Config::param( const QString &id )
+{
+    Param *param = m_data->m_allParams.value( id, nullptr );
+    return param;
+}
+
 bool Config::registerParam( Param *param )
 {
     bool result = false;
@@ -119,6 +125,24 @@ QVariant Config::fieldValue( int field ) const
     case 0: return m_data->m_name;
     }
     return QVariant{};
+}
+
+static void copy( const Config *source, Config *dest )
+{
+    for( auto i = 0; i < source->numGroups(); ++ i ) {
+        dest->addGroup( source->groupAt( i )->clone() );
+    }
+    for( auto i = 0; i < source->numChildParams(); ++ i ) {
+        dest->addChildParameter( source->childParamAt( i )->clone() );
+    }
+}
+
+std::unique_ptr< Config > Config::clone() const
+{
+    auto config = std::unique_ptr< Config >{
+        new Config{ m_data->m_name, m_data->m_id }};
+    copy( this, config.get() );
+    return config;
 }
 
 }

@@ -29,7 +29,9 @@ struct TemplateManager::Data {
 };
 
 TemplateManager::TemplateManager()
-    : AbstractTreeModel{ 1, true, true, HEADERS, nullptr }
+    : AbstractTreeModel{
+          nullptr,
+          AbstractTreeModel::Options{ 1, true, true, HEADERS  }}
     , m_data{ new Data{} }
 {
 

@@ -48,6 +48,8 @@ public:
 
     bool isEditable( int field ) const override;
 
+    virtual std::unique_ptr< Param > clone() const = 0;
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

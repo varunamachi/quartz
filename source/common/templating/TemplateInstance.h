@@ -10,6 +10,8 @@
 namespace Quartz {
 
 class Template;
+class Config;
+class Param;
 
 using GlobalConfig = QHash< QString, QVariant >;
 
@@ -18,6 +20,7 @@ class QUARTZ_COMMON_API TemplateInstance : public TreeNode
 
 public:
     TemplateInstance( const QString &name,
+                      std::unique_ptr< Config > config,
                       Template *parent );
 
     ~TemplateInstance();
@@ -26,17 +29,16 @@ public:
 
     Template * instanceOf() const;
 
-    void setParamValue( const QString &paramName,
-                        const QVariant &paramValue );
-
     void setGlobalConfig( std::shared_ptr< GlobalConfig > gconf );
 
     QVariant globalConfig( const QString &key ) const;
 
-    QVariant paramValue( const QString &paramName ) const;
+    const Param * param( const QString &paramName ) const;
 
-    QVariant  paramValue( const QString &paramName,
-                          const QString &defValue ) const;
+    Param * param( const QString &paramName );
+
+    QVariant paramValue( const QString &paramName,
+                         const QString defValue = "" ) const;
 
     QVariant fieldValue( int field ) const override;
 

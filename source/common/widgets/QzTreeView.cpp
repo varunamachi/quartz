@@ -12,6 +12,7 @@ QzTreeView::QzTreeView( QWidget *parent )
 {
     this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->setAlternatingRowColors( true );
+    this->setStyleSheet( "QTreeView::item{height: 20px;}");
 }
 
 QzTreeView::~QzTreeView()
@@ -21,16 +22,16 @@ QzTreeView::~QzTreeView()
 
 void QzTreeView::mousePressEvent( QMouseEvent *event )
 {
-    QTreeView::mousePressEvent( event );
 //    if( event->button() == Qt::LeftButton ) {
 //        QModelIndex index = indexAt( event->pos() );
 //        auto node = static_cast< TreeNode *>( index.internalPointer() );
 //        if( node != nullptr
 //                && node->isEditable( index.column() )
-//                && node->data( index.column() ) != QVariant::Bool ) {
+//                && node-> != QVariant::) {
 //            edit( index );
 //        }
 //    }
+    QTreeView::mousePressEvent( event );
 }
 
 }

@@ -37,9 +37,14 @@ public:
 
     const Param * param( const QString &id ) const;
 
+    Param * param( const QString &id );
+
     bool registerParam( Param *param );
 
     QVariant fieldValue( int field ) const override;
+
+    std::unique_ptr< Config > clone() const;
+
 
 private:
     struct Data;
