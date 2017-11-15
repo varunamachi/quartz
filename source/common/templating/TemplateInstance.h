@@ -46,6 +46,10 @@ public:
 
     bool setData( int column, const QVariant &data ) override;
 
+    const Config * instanceConfig() const;
+
+    Config * instanceConfig();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

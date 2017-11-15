@@ -143,10 +143,14 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     addLyt->addStretch();
     addLyt->addWidget( addBtn );
 
+    auto btnLyt = new QHBoxLayout{};
+    btnLyt->addStretch();
+    btnLyt->addWidget( m_data->m_createButton );
+
     auto configLyt = new QVBoxLayout{};
     configLyt->addLayout( addLyt );
     configLyt->addWidget( m_data->m_configWidget );
-    configLyt->addWidget( m_data->m_createButton );
+    configLyt->addLayout( btnLyt );
 
     auto gbx = new QGroupBox{ tr( "Confirure Plugins" ), this };
     gbx->setLayout( configLyt );

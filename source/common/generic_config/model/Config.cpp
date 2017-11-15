@@ -19,6 +19,7 @@ struct Config::Data
     {
 
     }
+
     QString m_id;
 
     QString m_name;

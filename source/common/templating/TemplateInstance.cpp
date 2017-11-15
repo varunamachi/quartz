@@ -112,4 +112,14 @@ bool TemplateInstance::setData( int column, const QVariant &data )
     return false;
 }
 
+Config * TemplateInstance::instanceConfig()
+{
+    return m_data->m_config.get();
+}
+
+const Config * TemplateInstance::instanceConfig() const
+{
+    return m_data->m_config.get();
+}
+
 }

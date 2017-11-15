@@ -7,6 +7,7 @@
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/model_view/ArrayModel.h>
+#include <common/model_view/BasicSortFilter.h>
 #include <common/generic_config/ui/GenConfigDelegate.h>
 #include <common/generic_config/model/Config.h>
 #include <common/generic_config/model/Param.h>
@@ -24,17 +25,23 @@ struct TemplateConfigWidget::Data
 {
     explicit Data( TemplateConfigWidget *parent )
         : m_filter{ new QLineEdit{ parent }}
+        , m_configFilter{ new QLineEdit{ parent }}
         , m_view{ new QzTreeView{ parent }}
         , m_emptyConfig{ "none", "None" }
         , m_configView{ new QzTreeView{ parent }}
 //        , m_configWidget{ new GenConfigWidget{ &m_emptyConfig, parent }}
         , m_tmodel{ new ArrayModel{ 2, false, true, TI_HEADERS, parent }}
         , m_configModel{ new ConfigModel{ parent }}
+        , m_configProxy{ new BasicSortFilter{ parent }}
+        , m_instanceProxy{ new BasicSortFilter{ parent }}
     {
 
     }
 
     QLineEdit *m_filter;
+
+    QLineEdit *m_configFilter;
+
 
     QzTreeView *m_view;
 
@@ -46,6 +53,10 @@ struct TemplateConfigWidget::Data
 
     ConfigModel *m_configModel;
 
+    BasicSortFilter *m_configProxy;
+
+    BasicSortFilter *m_instanceProxy;
+
     QHash< QString, std::shared_ptr< TemplateInstance >> m_instances;
 };
 
@@ -53,12 +64,17 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     : QWidget{ parent }
     , m_data{ new Data{ this }}
 {
-    auto mainLayout = new QHBoxLayout{};
     auto leftLayout = new QVBoxLayout{};
     leftLayout->addWidget( m_data->m_filter );
     leftLayout->addWidget( m_data->m_view );
+
+    auto rightLayout = new QVBoxLayout{};
+    rightLayout->addWidget( m_data->m_configFilter );
+    rightLayout->addWidget( m_data->m_configView );
+
+    auto mainLayout = new QHBoxLayout{};
     mainLayout->addLayout( leftLayout );
-    mainLayout->addWidget( m_data->m_configView );
+    mainLayout->addLayout( rightLayout );
 
     m_data->m_view->setModel( m_data->m_tmodel );
     m_data->m_view->setRootIsDecorated( false );
@@ -78,8 +94,7 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
                     current.internalPointer() );
         if( ti != nullptr ) {
             if( ti->instanceOf()->config() != nullptr ) {
-                m_data->m_configModel->setConfig(
-                            ti->instanceOf()->config() );
+                m_data->m_configModel->setConfig( ti->instanceConfig() );
             } else {
                 m_data->m_configModel->setConfig( &m_data->m_emptyConfig );
             }
