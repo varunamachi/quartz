@@ -3,6 +3,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLineEdit>
+#include <QAction>
 
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
@@ -100,6 +101,9 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
             }
         }
     });
+
+    m_data->m_view->addContextAction(
+                new QAction{ tr( "Delete" ), this });
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()
@@ -192,5 +196,6 @@ int ConfigModel::rootCount() const
     }
     return 0;
 }
+
 
 } } }

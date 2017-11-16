@@ -40,12 +40,6 @@ public:
         QVector< QString > headers;
     };
 
-//    AbstractTreeModel(
-//            int numFields,
-//            bool selectable,
-//            bool flat,
-//            const QVector< QString > &headers,
-//            QObject *parent = nullptr );
     AbstractTreeModel( QObject *parent = nullptr, Options opts = Options{} );
 
     virtual ~AbstractTreeModel();
@@ -75,7 +69,6 @@ public:
                   int role ) override;
 
     Qt::ItemFlags flags( const QModelIndex &index ) const override;
-
 
 protected:
     virtual TreeNode * rootAt( int rowIndex ) const = 0;
