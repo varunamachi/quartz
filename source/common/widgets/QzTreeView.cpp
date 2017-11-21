@@ -17,6 +17,8 @@ struct QzTreeView::Data
 
     }
 
+    QHash< QString, ContextMenuItem > m_items;
+
     QMenu *m_contextMenu;
 };
 
@@ -33,7 +35,7 @@ QzTreeView::QzTreeView( QWidget *parent )
             &QTreeView::customContextMenuRequested,
             [ this ]( const QPoint &point ){
         QModelIndex index = this->indexAt(point);
-        if (index.isValid() && index.row() % 2 == 0) {
+        if( index.isValid() ) {
             m_data->m_contextMenu->exec( this->viewport()->mapToGlobal(point) );
         }
     });
@@ -58,8 +60,10 @@ void QzTreeView::mousePressEvent( QMouseEvent *event )
     QTreeView::mousePressEvent( event );
 }
 
-void QzTreeView::addContextAction( QAction *action )
+void QzTreeView::addContextAction( ContextMenuItem cm )
 {
+    auto action = new QAction{ cm.m_name, this };
+    connect( action, &QAction::triggered, cm.m_func );
     m_data->m_contextMenu->addAction( action );
 }
 

@@ -5,6 +5,8 @@
 #include <QLineEdit>
 #include <QAction>
 
+#include <core/logger/Logging.h>
+
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/model_view/ArrayModel.h>
@@ -102,8 +104,11 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
         }
     });
 
-    m_data->m_view->addContextAction(
-                new QAction{ tr( "Delete" ), this });
+//    m_data->m_view->addContextAction(
+//                new QAction{ tr( "Delete" ), this });
+    m_data->m_view->addContextAction({ tr( "Delete" ), []() {
+        QZ_INFO( "TW" ) << "DELLLLLLLETE";
+    }});
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()

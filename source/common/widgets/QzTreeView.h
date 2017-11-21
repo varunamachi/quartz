@@ -10,6 +10,14 @@ class QAction;
 
 namespace Quartz {
 
+struct ContextMenuItem {
+    QString m_name;
+
+    std::function< void() > m_func;
+
+    //Icon
+};
+
 class QUARTZ_COMMON_API QzTreeView : public QTreeView
 {
     Q_OBJECT
@@ -21,7 +29,7 @@ public:
 
     void mousePressEvent( QMouseEvent *event ) override;
 
-    void addContextAction( QAction *action ); //later use QzAction with name...
+    void addContextAction( ContextMenuItem cm );
 
 private:
     struct Data;
