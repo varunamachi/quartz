@@ -104,11 +104,11 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
         }
     });
 
-//    m_data->m_view->addContextAction(
-//                new QAction{ tr( "Delete" ), this });
-    m_data->m_view->addContextAction({ tr( "Delete" ), []() {
-        QZ_INFO( "TW" ) << "DELLLLLLLETE";
-    }});
+    auto action = [ this ]( QModelIndex i ) {
+        m_data->m_tmodel->removeRoot(
+                    static_cast< TreeNode *>( i.internalPointer() ));
+    };
+    m_data->m_view->addContextAction({ tr( "Delete" ), action });
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()

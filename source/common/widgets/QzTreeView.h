@@ -7,15 +7,14 @@
 #include "../QuartzCommon.h"
 
 class QAction;
+class QModelIndex;
 
 namespace Quartz {
 
 struct ContextMenuItem {
     QString m_name;
 
-    std::function< void() > m_func;
-
-    //Icon
+    std::function< void( QModelIndex ) > m_func;
 };
 
 class QUARTZ_COMMON_API QzTreeView : public QTreeView
@@ -30,6 +29,8 @@ public:
     void mousePressEvent( QMouseEvent *event ) override;
 
     void addContextAction( ContextMenuItem cm );
+
+    void removeContextMenu( const QString &name );
 
 private:
     struct Data;
