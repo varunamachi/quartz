@@ -10,6 +10,7 @@
 #include <common/templating/TemplateInstance.h>
 #include <common/templating/Template.h>
 #include <common/widgets/QzTreeView.h>
+#include <common/model_view/BasicSortFilter.h>
 
 #include "TemplateManager.h"
 #include "TemplateSelectorDialog.h"
@@ -42,11 +43,17 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     : QDialog{ parent }
     , m_data{ new Data{ templateManager, this }}
 {
-    m_data->m_view->setModel( m_data->m_templateManager );
+    auto basicFilter = new BasicSortFilter{ this };
+    basicFilter->setSourceModel( m_data->m_templateManager );
+    m_data->m_view->setModel( basicFilter );
 
     auto okBtn = new QPushButton{ tr( "Select" ), this };
     auto cancelBtn = new QPushButton{ tr( "Cancel"), this };
+    auto selectBtn = new QPushButton{ tr("Select All"), this };
+    auto deselectBtn = new QPushButton{ tr("Deelect All"), this };
     auto btnLyt = new QHBoxLayout{};
+    btnLyt->addWidget( selectBtn );
+    btnLyt->addWidget( deselectBtn );
     btnLyt->addStretch();
     btnLyt->addWidget( okBtn );
     btnLyt->addWidget( cancelBtn );
@@ -64,6 +71,16 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     connect( cancelBtn, &QPushButton::released, [ this ](){
         this->reject();
     });
+    connect( selectBtn, &QPushButton::released, [ this ](){
+        m_data->m_templateManager->selectAll();
+    });
+    connect( deselectBtn, &QPushButton::released, [ this ](){
+        m_data->m_templateManager->deselectAll();
+    });
+    connect( m_data->m_filterEdit,
+             &QLineEdit::textChanged,
+             basicFilter,
+             &BasicSortFilter::setExpression );
 }
 
 TemplateSelectorDialog::~TemplateSelectorDialog()

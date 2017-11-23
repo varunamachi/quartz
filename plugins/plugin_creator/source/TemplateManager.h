@@ -47,6 +47,10 @@ public:
 
     bool loadCoreTemplates();
 
+    void selectAll();
+
+    void deselectAll();
+
     static const QString ADAPTER_NAME;
 
 protected:

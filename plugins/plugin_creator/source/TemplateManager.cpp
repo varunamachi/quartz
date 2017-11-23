@@ -121,6 +121,28 @@ bool TemplateManager::loadCoreTemplates()
     return true;
 }
 
+void TemplateManager::selectAll()
+{
+    if( ! m_data->m_templateList.isEmpty() ) {
+        beginResetModel();
+        for( auto t : m_data->m_templateList ) {
+            t->setSelected( true );
+        }
+        endResetModel();
+    }
+}
+
+void TemplateManager::deselectAll()
+{
+    if( ! m_data->m_templateList.isEmpty() ) {
+        beginResetModel();
+        for( auto t : m_data->m_templateList ) {
+            t->setSelected( false );
+        }
+        endResetModel();
+    }
+}
+
 TreeNode * TemplateManager::rootAt( int rowIndex ) const
 {
     if( rowIndex < m_data->m_templateList.size() ) {
