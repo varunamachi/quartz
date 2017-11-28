@@ -57,7 +57,7 @@ Template * TemplateInstance::instanceOf() const
     return m_data->m_parent;
 }
 
-void TemplateInstance::setGlobalConfig( std::shared_ptr<GlobalConfig> gconf )
+void TemplateInstance::setGlobalConfig( std::shared_ptr< GlobalConfig > gconf )
 {
     m_data->m_globalConfig = gconf;
 }

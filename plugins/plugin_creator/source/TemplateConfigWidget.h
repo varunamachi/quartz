@@ -45,7 +45,7 @@ public:
 
     ~TemplateConfigWidget();
 
-    void createInstanceOf( Template *tmpl );
+    TemplateInstance * createInstanceOf( Template *tmpl );
 
     int numInstances() const;
 

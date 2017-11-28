@@ -116,7 +116,7 @@ TemplateConfigWidget::~TemplateConfigWidget()
 
 }
 
-void TemplateConfigWidget::createInstanceOf( Template *tmpl )
+TemplateInstance * TemplateConfigWidget::createInstanceOf( Template *tmpl )
 {
     auto name = tmpl->name();
     auto index = 1;
@@ -134,6 +134,7 @@ void TemplateConfigWidget::createInstanceOf( Template *tmpl )
                 tmpl );
     m_data->m_instances.insert( name, inst );
     m_data->m_tmodel->addRoot( inst.get() );
+    return inst.get();
 }
 
 int TemplateConfigWidget::numInstances() const

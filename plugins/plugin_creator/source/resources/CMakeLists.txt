@@ -8,7 +8,6 @@ vq_headers(
     resources.qrc.xml
 )
 
-add_subdirectory( templates )
 
 
 

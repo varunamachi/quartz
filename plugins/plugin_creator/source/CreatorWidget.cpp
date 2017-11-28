@@ -36,6 +36,14 @@ const QString CreatorWidget::CONTENT_ID{ "qzp.creator.content.main" };
 const QString CreatorWidget::CONTENT_NAME{ "PluginCreator" };
 const QString CreatorWidget::CONTENT_KIND{ "meta" };
 
+static inline bool isSource( const QString &name ) {
+    return name.endsWith( ".cpp" )
+            || name.endsWith( ".cxx" )
+            || name.endsWith( ".cc" )
+            || name.endsWith( "cx" );
+
+}
+
 struct CreatorWidget::Data
 {
     explicit Data( std::shared_ptr< TemplateManager > tman,
@@ -244,6 +252,13 @@ void CreatorWidget::onCreate()
     auto path = m_data->m_dirPath->text();
     auto dirName = "plugin_" + name;
 
+    m_data->m_globalConfig->insert( "BUNDLE_ID", id );
+    m_data->m_globalConfig->insert( "BUNDLE_NAME", name );
+    m_data->m_globalConfig->insert( "BUNDLE_NAMESPACE", ns );
+    m_data->m_globalConfig->insert( "BUNDLE_DISPLAY_NAME", display );
+//    m_data->m_globalConfig->insert( "files", files );
+
+
     if( ! path.endsWith( dirName, Qt::CaseInsensitive )) {
         path = path + "/" + dirName;
     }
@@ -304,6 +319,19 @@ void CreatorWidget::onCreate()
         return;
     }
     GenInfo info{ id, name, display, ns };
+    QStringList sources, headers;
+    for( auto i = 0; i < m_data->m_configWidget->numInstances(); ++ i ) {
+        auto inst = m_data->m_configWidget->instanceAt( i );
+        if( isSource( inst->name() )) {
+            sources.append( inst->name() );
+        }
+        else if( inst->name() != "CMakeLists.txt" ){
+            headers.append( inst->name() );
+        }
+        info.addTemplateInstance( inst );
+    }
+    m_data->m_globalConfig->insert( "sources", sources );
+    m_data->m_globalConfig->insert( "headers", headers );
     CodeGenerator generator{ &info };
     auto result = generator.generate( path );
     if( result ) {
@@ -359,7 +387,8 @@ void CreatorWidget::addTemplates()
 {
     auto selected = m_data->m_templateSelector->selectedTemplates();
     foreach( auto t, selected) {
-        m_data->m_configWidget->createInstanceOf( t );
+        auto inst = m_data->m_configWidget->createInstanceOf( t );
+        inst->setGlobalConfig( m_data->m_globalConfig );
     }
 }
 

@@ -53,20 +53,19 @@ qz_add_resource( $<BUNDLE_NAME>$.qrc )
 
 vq_sources(
     $<BUNDLE_NAMESPACE>$.cpp
-$[FOR file IN files:>
-    $<file>$
+$[FOR src IN sources:>
+    $<src>$
 ]$
 )
 
-vq_classes(
-$[FOR class IN classes:>
-    $<class>$
+vq_headers(
+$[FOR hdr IN headers:>
+    $<hdr>$
 ]$
 )
 
 qz_create_plugin()
 qz_install_plugin()
-</content>
             ]]>
         </content>
     </template>

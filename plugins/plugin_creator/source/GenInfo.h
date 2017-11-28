@@ -36,7 +36,7 @@ public:
 
     const TemplateInstance * templateInstanceAt( int i ) const;
 
-    void addTemplateInstance( std::shared_ptr< TemplateInstance > inst );
+    void addTemplateInstance( TemplateInstance *inst );
 
     void removeTemplateInstance( const QString &instanceName );
 

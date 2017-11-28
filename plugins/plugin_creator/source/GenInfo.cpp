@@ -29,7 +29,7 @@ struct GenInfo::Data
 
     QString m_namespace;
 
-    QVector< std::shared_ptr< TemplateInstance >> m_tmpInstances;
+    QVector< TemplateInstance *> m_tmpInstances;
 
     QStringList m_files;
 
@@ -82,12 +82,12 @@ const TemplateInstance * GenInfo::templateInstanceAt( int i ) const
 {
     TemplateInstance *instance = nullptr;
     if( i < m_data->m_tmpInstances.size() ) {
-        instance = m_data->m_tmpInstances.at( i ).get();
+        instance = m_data->m_tmpInstances.at( i );
     }
     return instance;
 }
 
-void GenInfo::addTemplateInstance( std::shared_ptr< TemplateInstance > inst )
+void GenInfo::addTemplateInstance( TemplateInstance *inst )
 {
     if( inst != nullptr ) {
         m_data->m_tmpInstances.push_back( inst );
