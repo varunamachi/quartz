@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QAction>
+#include <QPushButton>
 
 #include <core/logger/Logging.h>
 
@@ -32,7 +33,6 @@ struct TemplateConfigWidget::Data
         , m_view{ new QzTreeView{ parent }}
         , m_emptyConfig{ "none", "None" }
         , m_configView{ new QzTreeView{ parent }}
-//        , m_configWidget{ new GenConfigWidget{ &m_emptyConfig, parent }}
         , m_tmodel{ new ArrayModel{ 2, false, true, TI_HEADERS, parent }}
         , m_configModel{ new ConfigModel{ parent }}
         , m_configProxy{ new BasicSortFilter{ parent }}
@@ -44,7 +44,6 @@ struct TemplateConfigWidget::Data
     QLineEdit *m_filter;
 
     QLineEdit *m_configFilter;
-
 
     QzTreeView *m_view;
 
@@ -67,9 +66,15 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     : QWidget{ parent }
     , m_data{ new Data{ this }}
 {
+    auto clearBtn = new QPushButton{ tr( "Clear" ), this };
+    auto lblyt = new QHBoxLayout{};
+    lblyt->addStretch();
+    lblyt->addWidget( clearBtn );
+
     auto leftLayout = new QVBoxLayout{};
     leftLayout->addWidget( m_data->m_filter );
     leftLayout->addWidget( m_data->m_view );
+    leftLayout->addLayout( lblyt );
 
     auto rightLayout = new QVBoxLayout{};
     rightLayout->addWidget( m_data->m_configFilter );
@@ -79,22 +84,25 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     mainLayout->addLayout( leftLayout );
     mainLayout->addLayout( rightLayout );
 
-    m_data->m_view->setModel( m_data->m_tmodel );
+    auto proxy = new BasicSortFilter{ this };
+    proxy->setSourceModel( m_data->m_tmodel );
+    auto configProxy = new BasicSortFilter{ this };
+    configProxy->setSourceModel( m_data->m_configModel );
+
+    m_data->m_view->setModel( proxy );
     m_data->m_view->setRootIsDecorated( false );
-    m_data->m_configView->setModel( m_data->m_configModel );
+    m_data->m_configView->setModel( configProxy );
     m_data->m_configView->setRootIsDecorated( false );
     m_data->m_configView->setItemDelegate( new GenConfigDelegate{ this });
 
+    this->setLayout( mainLayout );
     mainLayout->setContentsMargins( QMargins{} );
     leftLayout->setContentsMargins( QMargins{} );
 
-    this->setLayout( mainLayout );
-
     connect( m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
-             [ this ]( const QModelIndex &current, const QModelIndex &){
-        auto ti = static_cast< TemplateInstance *>(
-                    current.internalPointer() );
+             [ this ]( const QModelIndex &current, const QModelIndex & ){
+        auto ti = static_cast< TemplateInstance *>( current.internalPointer() );
         if( ti != nullptr ) {
             if( ti->instanceOf()->config() != nullptr ) {
                 m_data->m_configModel->setConfig( ti->instanceConfig() );
@@ -103,6 +111,18 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
             }
         }
     });
+    connect( clearBtn,
+             &QPushButton::clicked,
+             m_data->m_tmodel,
+             &ArrayModel::clear );
+    connect( m_data->m_filter,
+             &QLineEdit::textChanged,
+             proxy,
+             &BasicSortFilter::setExpression );
+    connect( m_data->m_configFilter,
+             &QLineEdit::textChanged,
+             configProxy,
+             &BasicSortFilter::setExpression );
 
     auto action = [ this ]( QModelIndex i ) {
         m_data->m_tmodel->removeRoot(

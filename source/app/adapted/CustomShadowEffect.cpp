@@ -16,8 +16,8 @@
 
 CustomShadowEffect::CustomShadowEffect(QObject *parent) :
     QGraphicsEffect(parent),
-    _distance(4.0f),
-    _blurRadius(10.0f),
+    _distance( static_cast< qreal >( 4.0f )),
+    _blurRadius( static_cast< qreal >( 10.0f )),
     _color(0, 0, 0, 80)
 {
 }
@@ -51,8 +51,8 @@ void CustomShadowEffect::draw( QPainter* painter )
     painter->setWorldTransform(QTransform());
 
     // Calculate size for the background image
-    QSize szi(px.size().width() + 2 * distance(),
-              px.size().height() + 2 * distance());
+    QSize szi( px.size().width() + 2 * static_cast< int >( distance() ),
+               px.size().height() + 2 * static_cast< int >( distance() ));
 
     QImage tmp(szi, QImage::Format_ARGB32_Premultiplied);
     QPixmap scaled = px.scaled(szi);

@@ -30,9 +30,9 @@ QzTreeView::QzTreeView( QWidget *parent )
     : QTreeView{ parent }
     , m_data{ new Data{ this }}
 {
-    this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
     this->setAlternatingRowColors( true );
-    this->setStyleSheet( "QTreeView::item{height: 20px;}");
+    this->setStyleSheet( "QTreeView::item{ height: 20px; }");
     this->setContextMenuPolicy( Qt::CustomContextMenu );
     //(const QPoint &)
     connect(this,
@@ -40,7 +40,8 @@ QzTreeView::QzTreeView( QWidget *parent )
             [ this ]( const QPoint &point ){
         QModelIndex index = this->indexAt(point);
         if( index.isValid() ) {
-            m_data->m_contextMenu->exec( this->viewport()->mapToGlobal(point) );
+            m_data->m_contextMenu->exec(
+                        this->viewport()->mapToGlobal( point ));
         }
     });
 }

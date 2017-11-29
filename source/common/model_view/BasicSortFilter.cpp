@@ -44,6 +44,7 @@ bool BasicSortFilter::filterAcceptsRow( int sourceRow,
 void BasicSortFilter::setExpression( const QString &expression )
 {
     m_data->m_expression = expression;
+    this->invalidate();
 }
 
 bool BasicSortFilter::lessThan( const QModelIndex &left,

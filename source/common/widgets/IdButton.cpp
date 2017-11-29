@@ -33,11 +33,12 @@ IdButton::IdButton( QString id,
                  "     background-color: #FFA858;"
                  "     color: #202020;"
                  " }"
-//                 "QPushButton:hover {"
-//                 "     background-color: #FFA858;"
-//                 "     color: #202020;"
-//                 " }"
-                 ;
+                 "QPushButton:hover {"
+                 "     background-color: #FFA858;"
+                 "     color: #202020;"
+                 " }"
+                  ;
+    setFlat( true );
     qssStream.flush();
     setStyleSheet( qss );
     setText( text );
@@ -52,12 +53,9 @@ QSize IdButton::originalSizeHint() const
 
 void IdButton::mouseReleaseEvent( QMouseEvent *evt )
 {
-//    if( ! isChecked() ) {
-        QPushButton::mousePressEvent( evt );
-        emit activated( m_id );
-//    }
+    QPushButton::mousePressEvent( evt );
+    emit activated( m_id );
     evt->ignore();
-    //    QPushButton::mousePressEvent( evt );
 }
 
 

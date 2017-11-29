@@ -30,6 +30,7 @@ public:
 
     bool contains( TreeNode *node );
 
+public Q_SLOTS:
     void clear();
 
 private:
