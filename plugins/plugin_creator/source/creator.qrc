@@ -5,5 +5,9 @@
         <file>resources/PluginBundle.cpp.xml</file>
         <file>resources/PluginBundle.h.xml</file>
         <file>resources/resources.qrc.xml</file>
+        <file>resources/ActionProvider.h.xml</file>
+        <file>resources/ActionProvider.cpp.xml</file>
+        <file>resources/ContentProvider.cpp.xml</file>
+        <file>resources/ContentProvider.h.xml</file>
     </qresource>
 </RCC>

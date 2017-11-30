@@ -5,6 +5,8 @@ vq_headers(
     PluginBundle.cpp.xml
     PluginBundle.h.xml
     Plugin.cpp.xml
+    ContentProvider.h.xml
+    ContentProvider.cpp.xml
     resources.qrc.xml
 )
 

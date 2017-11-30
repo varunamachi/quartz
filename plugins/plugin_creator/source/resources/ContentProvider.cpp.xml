@@ -1,0 +1,62 @@
+<templates>
+    <template name="ContentProvider.cpp">
+        <config id="ContentProvider.cpp" name="Content Provider Src">
+
+        </config>
+        <content>
+            <![CDATA[
+#include "ContentProvider.h"
+#include "CreatorWidget.h"
+
+namespace Quartz { namespace Plugin { namespace Creator {
+
+/********************** Provider ************************************/
+const QString ContentProvider::PLUGIN_ID{
+    "qzp.$<BUNDLE_NAME>$.provider.content" };
+const QString ContentProvider::PLUGIN_NAME{
+    "Quartz $<BUNDLE_DISPLAY_NAME>$ Content" };
+
+struct ContentProvider::Data
+{
+    explicit Data()
+    {
+    }
+
+    QVector< ContentWidget *> m_widgets;
+};
+
+ContentProvider::ContentProvider()
+    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    , m_data{ new Data{ }}
+{
+
+}
+
+ContentProvider::~ContentProvider()
+{
+
+}
+
+bool ContentProvider::init()
+{
+    return true;
+}
+
+bool ContentProvider::destroy()
+{
+    return true;
+}
+
+QVector< ContentWidget *> ContentProvider::widgets()
+{
+    return m_data->m_widgets;
+}
+
+
+
+} } }
+
+            ]]>
+        </content>
+    </template>
+</templates>
