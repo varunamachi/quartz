@@ -14,20 +14,20 @@ GeneralNodeTree::GeneralNodeTree( QObject *parent )
 
 }
 
-const QString &GeneralNodeTree::pluginType() const
+const QString &GeneralNodeTree::extensionType() const
 {
-    return  AbstractGeneralNodeProvider::PLUGIN_TYPE;
+    return  AbstractGeneralNodeProvider::EXTENSION_TYPE;
 }
 
-const QString &GeneralNodeTree::pluginAdapterName() const
+const QString &GeneralNodeTree::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool GeneralNodeTree::handlePlugin( AbstractPlugin *plugin )
+bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
 {
     bool result = true;
-    auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>( plugin );
+    auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>( extension );
     if( nodeProvider != nullptr ) {
        auto nodes = nodeProvider->nodes();
        foreach( auto nodeInfo, nodes ) {
@@ -39,15 +39,15 @@ bool GeneralNodeTree::handlePlugin( AbstractPlugin *plugin )
        }
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:NodeSelector" )
-                << "Invalid node plugin provided: " << pluginName;
+                << "Invalid node extension provided: " << extensionName;
     }
     return result;
 }
 
-bool GeneralNodeTree::finalizePlugins()
+bool GeneralNodeTree::finalizeExtension()
 {
     bool result = false;
     return result;

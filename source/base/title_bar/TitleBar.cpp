@@ -141,44 +141,44 @@ void TitleBar::mouseDoubleClickEvent( QMouseEvent */*event*/ )
     emit sigMaxRestoreRequested();
 }
 
-const QString & TitleBar::pluginType() const
+const QString & TitleBar::extensionType() const
 {
-    return  AbstractTitleItemProvider::PLUGIN_TYPE;
+    return  AbstractTitleItemProvider::EXTENSION_TYPE;
 }
 
-const QString & TitleBar::pluginAdapterName() const
+const QString & TitleBar::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool TitleBar::handlePlugin( AbstractPlugin *plugin )
+bool TitleBar::handleExtension( Ext::Extension *extension )
 {
     bool result = false;
-    auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>( plugin );
+    auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>( extension );
     if( itemProvider != nullptr ) {
         auto items = itemProvider->titleItems();
         foreach( auto item, items ) {
             addItem( item );
-            m_pluginItems.push_back( item );
+            m_extensionItems.push_back( item );
         }
         return true;
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:TitleBar" )
-                << "Invalid titlebar plugin provided: " << pluginName;
+                << "Invalid titlebar extension provided: " << extensionName;
     }
     return result;
 }
 
-bool TitleBar::finalizePlugins()
+bool TitleBar::finalizeExtension()
 {
-//    for( int i = 0; i < m_pluginItems.size(); ++ i ) {
-//        auto item = m_pluginItems.at( i );
+//    for( int i = 0; i < m_extensionItems.size(); ++ i ) {
+//        auto item = m_extensionItems.at( i );
 //        removeItem( item );
 //    }
-    m_pluginItems.clear();
+    m_extensionItems.clear();
     return  true;
 }
 

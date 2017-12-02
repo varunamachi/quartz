@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/extension_system/AbstractPlugin.h>
+#include <core/ext/Extension.h>
 
 #include "../QuartzBase.h"
 
@@ -8,7 +8,7 @@ namespace Quartz {
 
 class QuartzView;
 
-class QUARTZ_BASE_API AbstractViewProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractViewProvider : public Ext::Extension
 {
 public:
     AbstractViewProvider( const QString &pluginId,
@@ -16,7 +16,7 @@ public:
 
     virtual QVector< QuartzView *> views() const = 0;
 
-    const static QString PLUGIN_TYPE;
+    const static QString EXTENSION_TYPE;
 };
 
 }

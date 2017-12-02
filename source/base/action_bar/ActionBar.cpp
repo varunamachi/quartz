@@ -96,40 +96,40 @@ void ActionBar::removeCategory( const QString &category )
     }
 }
 
-const QString & ActionBar::pluginType() const
+const QString & ActionBar::extensionType() const
 {
-    return  AbstractActionItemProvider::PLUGIN_TYPE;
+    return  AbstractActionItemProvider::EXTENSION_TYPE;
 }
 
-const QString & ActionBar::pluginAdapterName() const
+const QString & ActionBar::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool ActionBar::handlePlugin( AbstractPlugin *plugin )
+bool ActionBar::handleExtension( Ext::Extension *extension )
 {
-    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( plugin );
+    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( extension );
     if( itemProvider != nullptr ) {
         auto items = itemProvider->actionItems();
         foreach( auto item, items ) {
             addItem( item );
-            m_pluginItems.push_back( item );
+            m_extensionItems.push_back( item );
         }
         return true;
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:ActionBar" )
-                << "Invalid actionbar plugin provided: "
-                << pluginName;
+                << "Invalid actionbar extension provided: "
+                << extensionName;
     }
     return false;
 }
 
-bool ActionBar::finalizePlugins()
+bool ActionBar::finalizeExtension()
 {
-    m_pluginItems.clear();
+    m_extensionItems.clear();
     return  true;
 }
 

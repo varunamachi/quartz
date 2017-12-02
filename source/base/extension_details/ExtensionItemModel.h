@@ -6,25 +6,18 @@
 
 #include "../QuartzBase.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
-class AbstractPluginBundle;
+class Extension;
 
-class QUARTZ_BASE_API BundleItemModel : public QAbstractItemModel
+class QUARTZ_BASE_API ExtensionItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
-    enum class NumCols
-    {
-        One     = 1,
-        Two     = 2,
-        Three   = 3
-    };
+    explicit ExtensionItemModel( QObject *parent );
 
-    explicit BundleItemModel( NumCols numCols, QObject *parent = nullptr );
-
-    ~BundleItemModel();
+    ~ExtensionItemModel();
 
     QModelIndex index( int row,
                        int column,
@@ -44,7 +37,8 @@ public:
                          Qt::Orientation orientation,
                          int role ) const override;
 
-    void setBundleList( const QVector< const AbstractPluginBundle *> *bundles );
+    void setExtensionList(
+            const QVector< std::shared_ptr< Extension >> *exts );
 
     void clear();
 
@@ -53,5 +47,4 @@ private:
     std::unique_ptr< Data > m_data;
 };
 
-
-}
+} }

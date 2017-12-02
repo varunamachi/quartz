@@ -1,11 +1,12 @@
 #include <QStandardPaths>
 
 #include <core/logger/Logger.h>
-#include <base/content_manager/ContentManager.h>
-#include <base/selector/SelectorManager.h>
-#include <base/general_selector/GeneralSelector.h>
-#include <base/settings/ConfigPageManager.h>
-#include <base/theme/ThemeManager.h>
+
+#include "content_manager/ContentManager.h"
+#include "selector/SelectorManager.h"
+#include "general_selector/GeneralSelector.h"
+#include "settings/ConfigPageManager.h"
+#include "theme/ThemeManager.h"
 
 #include "QzAppContext.h"
 

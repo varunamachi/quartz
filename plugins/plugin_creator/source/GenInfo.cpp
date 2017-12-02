@@ -5,7 +5,7 @@
 
 #include "GenInfo.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 struct GenInfo::Data
 {

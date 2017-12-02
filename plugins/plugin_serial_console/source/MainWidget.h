@@ -4,7 +4,7 @@
 
 #include <base/content_manager/ContentWidget.h>
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class MainWidget : public ContentWidget
 {

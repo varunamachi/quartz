@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractConfigPageProvider::PLUGIN_TYPE{ "qz.configNode" };
+const QString AbstractConfigPageProvider::EXTENSION_TYPE{ "qz.configNode" };
 
 AbstractConfigPageProvider::AbstractConfigPageProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

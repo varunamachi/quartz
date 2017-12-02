@@ -1,10 +1,10 @@
 
-#include <core/extension_system/AbstractPluginBundle.h>
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/Plugin.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "AdapterItemModel.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
 const int NUM_COLS = 2;
 
@@ -39,9 +39,9 @@ QModelIndex AdapterItemModel::index( int row,
 {
     auto index = QModelIndex();
     if( hasIndex( row, column, parent )) {
-        const auto &bundle = m_data->m_adapterList->at( row );
-        if( bundle != nullptr ) {
-            index = createIndex( row, column, bundle.get() );
+        const auto &plugin = m_data->m_adapterList->at( row );
+        if( plugin != nullptr ) {
+            index = createIndex( row, column, plugin.get() );
         }
     }
     return index;
@@ -77,8 +77,8 @@ QVariant AdapterItemModel::data( const QModelIndex &index, int role ) const
     else if ( role == Qt::DisplayRole ) {
         const auto &adapter = m_data->m_adapterList->at( index.row() );
         switch( index.column() ) {
-        case 0: return adapter->pluginType();
-        case 1: return adapter->pluginAdapterName();
+        case 0: return adapter->extensionType();
+        case 1: return adapter->extensionAdapterName();
         }
     }
     return QVariant();
@@ -118,12 +118,12 @@ void AdapterItemModel::clear()
 }
 
 void AdapterItemModel::setAdapterList(
-        const QVector< std::shared_ptr< IPluginAdapter >> *adapters )
+        const QVector< std::shared_ptr< IExtensionAdapter >> *adapters )
 {
     beginResetModel();
     m_data->m_adapterList = adapters;
     endResetModel();
 }
 
-}
+} }
 

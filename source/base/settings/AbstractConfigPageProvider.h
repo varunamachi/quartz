@@ -7,7 +7,7 @@ class AbstractConfigPage;
 
 namespace Quartz {
 
-class QUARTZ_BASE_API AbstractConfigPageProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractConfigPageProvider : public Ext::Extension
 {
 public:
     AbstractConfigPageProvider( const QString &pluginId,
@@ -17,7 +17,7 @@ public:
 
     virtual QVector< AbstractConfigPage *> configPages() const = 0;
 
-    static const QString PLUGIN_TYPE;
+    static const QString EXTENSION_TYPE;
 
 private:
 

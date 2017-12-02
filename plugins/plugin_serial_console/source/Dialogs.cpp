@@ -6,7 +6,7 @@
 #include "SettingsDialog.h"
 #include "BaudRateEditDialog.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 std::unique_ptr< Dialogs > Dialogs::s_instance{ nullptr };
 

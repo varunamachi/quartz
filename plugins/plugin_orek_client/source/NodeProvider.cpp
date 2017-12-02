@@ -2,12 +2,12 @@
 
 #include "NodeProvider.h"
 
-namespace Quartz { namespace OrekClient {
+namespace Quartz { namespace Ext { namespace Orek {
 
 using NodeList = QVector< std::shared_ptr< NodeInfo >>;
 
-const QString NodeProvider::PLUGIN_ID{ "qzp.orekclient.provider.node" };
-const QString NodeProvider::PLUGIN_NAME{ "Orek Client" };
+const QString NodeProvider::EXTENSION_ID{ "qzp.orekclient.provider.node" };
+const QString NodeProvider::EXTENSION_NAME{ "Orek Client" };
 
 struct NodeProvider::Data
 {
@@ -25,7 +25,7 @@ struct NodeProvider::Data
 };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
     , m_data( new Data{} )
 {
 
@@ -52,4 +52,4 @@ NodeList NodeProvider::nodes() const
 }
 
 
-} }
+} } }

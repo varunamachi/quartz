@@ -110,20 +110,20 @@ void ContentManager::selectContent( const QString &contentId )
     }
 }
 
-const QString & ContentManager::pluginType() const
+const QString & ContentManager::extensionType() const
 {
-    return AbstractContentProvider::PLUGIN_TYPE;
+    return AbstractContentProvider::EXTENSION_TYPE;
 }
 
-const QString & ContentManager::pluginAdapterName() const
+const QString & ContentManager::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool ContentManager::handlePlugin( AbstractPlugin *plugin )
+bool ContentManager::handleExtension( Ext::Extension *ext )
 {
     bool result = true;
-    auto provider = dynamic_cast< AbstractContentProvider *>( plugin );
+    auto provider = dynamic_cast< AbstractContentProvider *>( ext  );
     if( provider != nullptr ) {
         auto contents = provider->widgets();
         foreach( auto content, contents ) {
@@ -136,8 +136,8 @@ bool ContentManager::handlePlugin( AbstractPlugin *plugin )
         }
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
-                                            : "<null>";
+        auto pluginName = ext != nullptr ? ext->extensionId()
+                                         : "<null>";
         QZ_ERROR( "Qz:ContentManager" )
                 << "Invalid content plugin provided: "
                 << pluginName;
@@ -145,7 +145,7 @@ bool ContentManager::handlePlugin( AbstractPlugin *plugin )
     return result;
 }
 
-bool ContentManager::finalizePlugins()
+bool ContentManager::finalizeExtension()
 {
     auto result = true;
     m_data->m_fromPlugins.clear();

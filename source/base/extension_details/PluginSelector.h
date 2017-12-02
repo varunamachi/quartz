@@ -3,18 +3,19 @@
 #include "../QuartzBase.h"
 #include "../selector/AbstractSelector.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
-class AbstractPluginBundle;
 
-class QUARTZ_BASE_API BundleSelector : public AbstractSelector
+class Plugin;
+
+class QUARTZ_BASE_API PluginSelector : public AbstractSelector
 {
     Q_OBJECT
 
 public:
-    explicit BundleSelector( QWidget *parent = nullptr );
+    explicit PluginSelector( QWidget *parent = nullptr );
 
-    ~BundleSelector();
+    ~PluginSelector();
 
     void selected() override;
 
@@ -25,7 +26,7 @@ public:
     static const QString SELECTOR_NAME;
 
 Q_SIGNALS:
-    void sigBundleSelected( AbstractPluginBundle *bundle );
+    void sigPluginSelected( Plugin *plugin );
 
 private Q_SLOTS:
     void onSelected( const QModelIndex &selcted,
@@ -37,7 +38,4 @@ private:
 
 };
 
-
-
-
-}
+} }

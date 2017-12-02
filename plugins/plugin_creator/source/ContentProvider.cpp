@@ -1,12 +1,12 @@
 #include "ContentProvider.h"
 #include "CreatorWidget.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 /********************** Provider ************************************/
-const QString ContentProvider::PLUGIN_ID{
+const QString ContentProvider::EXTENSION_ID{
     "qzp.creator.provider.content" };
-const QString ContentProvider::PLUGIN_NAME{
+const QString ContentProvider::EXTENSION_NAME{
     "Quartz Creator Content" };
 
 struct ContentProvider::Data
@@ -20,7 +20,7 @@ struct ContentProvider::Data
 };
 
 ContentProvider::ContentProvider( std::shared_ptr< TemplateManager > tman  )
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
     , m_data{ new Data{ tman }}
 {
 

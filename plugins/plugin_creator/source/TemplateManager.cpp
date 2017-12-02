@@ -9,7 +9,7 @@
 #include "AbstractTemplateProvider.h"
 
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 const QVector< QString > HEADERS{
     QObject::tr( "Templates" )
@@ -57,19 +57,19 @@ QList< Template *> TemplateManager::templates() const
     return templates;
 }
 
-const QString &TemplateManager::pluginType() const
+const QString &TemplateManager::extensionType() const
 {
-    return AbstractTemplateProvider::PLUGIN_TYPE;
+    return AbstractTemplateProvider::EXTENSION_TYPE;
 }
 
-const QString &TemplateManager::pluginAdapterName() const
+const QString &TemplateManager::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool TemplateManager::handlePlugin( AbstractPlugin *plugin )
+bool TemplateManager::handleExtension( Extension *extension )
 {
-    auto tmpProvider = dynamic_cast< AbstractTemplateProvider *>( plugin );
+    auto tmpProvider = dynamic_cast< AbstractTemplateProvider *>( extension );
     if( tmpProvider != nullptr ) {
         auto templates = tmpProvider->templates();
         foreach( auto &tmpl, templates ) {
@@ -79,7 +79,7 @@ bool TemplateManager::handlePlugin( AbstractPlugin *plugin )
     return true;
 }
 
-bool TemplateManager::finalizePlugins()
+bool TemplateManager::finalizeExtension()
 {
     m_data->m_templates.clear();
     return true;

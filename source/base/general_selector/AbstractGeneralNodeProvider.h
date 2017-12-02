@@ -2,7 +2,7 @@
 
 #include <QIcon>
 
-#include <core/extension_system/AbstractPlugin.h>
+#include <core/ext/Extension.h>
 
 #include "../QuartzBase.h"
 
@@ -37,7 +37,7 @@ struct NodeInfo
     QIcon m_nodeIcon;
 };
 
-class QUARTZ_BASE_API AbstractGeneralNodeProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractGeneralNodeProvider : public Ext::Extension
 {
 public:
     AbstractGeneralNodeProvider( const QString &pluginId,
@@ -47,7 +47,7 @@ public:
 
     virtual QVector< std::shared_ptr< NodeInfo >> nodes() const = 0;
 
-    static const QString PLUGIN_TYPE;
+    static const QString EXTENSION_TYPE;
 
 private:
 };

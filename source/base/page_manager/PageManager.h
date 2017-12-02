@@ -10,7 +10,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 
@@ -22,7 +22,7 @@ class AbstractContainer;
 
 
 class QUARTZ_BASE_API PageManager : public QWidget
-                                  , public IPluginAdapter
+                                  , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 public:
@@ -54,15 +54,15 @@ public:
 
     void selectPage( QString pageId );
 
-    // IPluginAdapter interface
+    // IExtensionAdapter interface
 public:
-    const QString &pluginType() const override;
+    const QString &extensionType() const override;
 
-    const QString &pluginAdapterName() const override;
+    const QString &extensionAdapterName() const override;
 
-    bool handlePlugin(AbstractPlugin *plugin) override;
+    bool handleExtension( Ext::Extension *plugin ) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 
@@ -77,7 +77,7 @@ private:
 
     QHash< QString, QuartzPage *> m_pages;
 
-    QVector< QuartzPage *> m_pluginPages;
+    QVector< QuartzPage *> m_extensionPages;
 
 
 

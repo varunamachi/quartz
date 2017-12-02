@@ -1,9 +1,9 @@
 
 vq_classes(
-    BundleSelector
-    BundleInfoPage
-    BundleItemModel
+    PluginSelector
+    PluginInfoPage
     PluginItemModel
+    ExtensionItemModel
     AdapterItemModel
 )
 

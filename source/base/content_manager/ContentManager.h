@@ -4,7 +4,7 @@
 
 #include <QWidget>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 
@@ -13,7 +13,7 @@ namespace Quartz {
 class ContentWidget;
 
 class QUARTZ_BASE_API ContentManager : public QWidget
-                                     , public IPluginAdapter
+                                     , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 
@@ -35,13 +35,13 @@ public:
     void selectContent( const QString &contentId );
 
 public:
-    const QString &pluginType() const override;
+    const QString &extensionType() const override;
 
-    const QString &pluginAdapterName() const override;
+    const QString &extensionAdapterName() const override;
 
-    bool handlePlugin(AbstractPlugin *plugin) override;
+    bool handleExtension( Ext::Extension *ext ) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 

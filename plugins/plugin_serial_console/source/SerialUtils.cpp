@@ -3,12 +3,12 @@
 
 #include <core/app_config/ConfigManager.h>
 
-#include <plugin_base/BundleContext.h>
+#include <plugin_base/PluginContext.h>
 
 #include "Constants.h"
 #include "SerialUtils.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 QString SerialUtils::decodeParity( QSerialPort::Parity parity )
 {

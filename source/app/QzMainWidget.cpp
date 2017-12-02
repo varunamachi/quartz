@@ -5,7 +5,7 @@
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
-#include <core/extension_system/PluginManager.h>
+#include <core/ext/PluginManager.h>
 
 #include <common/widgets/StackedSplitContainer.h>
 
@@ -21,7 +21,7 @@
 #include <base/settings/ConfigPageSelector.h>
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
-#include <base/extension_details/BundleSelector.h>
+#include <base/extension_details/PluginSelector.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -51,7 +51,7 @@ struct QzMainWidget::Data
 
     ActionBar *m_actionBar;
 
-    std::unique_ptr< PluginManager > m_pluginManager;
+    std::unique_ptr< Ext::PluginManager > m_pluginManager;
 
 };
 
@@ -129,7 +129,7 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
     QZ_LOGGER()->dispatcher()->addTarget( logView );
 
     m_data->m_pluginManager =
-            std::unique_ptr< PluginManager >{ new PluginManager{} };
+            std::unique_ptr< Ext::PluginManager >{ new Ext::PluginManager{} };
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_titleBar );
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_actionBar );
     m_data->m_pluginManager->registerPluginAdapter( m_data->m_selector );
@@ -146,8 +146,8 @@ QzMainWidget::QzMainWidget( QMainWindow *parent )
         QZ_ERROR( "App" ) << "Failed to load all available plugins";
     }
 
-    auto bundleSelector = new BundleSelector{ this };
-    m_data->m_selector->addSelector( bundleSelector );
+    auto pluginSelector = new Ext::PluginSelector{ this };
+    m_data->m_selector->addSelector( pluginSelector );
 }
 
 QzMainWidget::~QzMainWidget()

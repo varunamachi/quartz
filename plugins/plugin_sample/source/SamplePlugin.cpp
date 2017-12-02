@@ -1,37 +1,59 @@
-
-#include <core/extension_system/BundleEnv.h>
-
 #include <base/QzAppContext.h>
 
-#include <plugin_base/BundleContext.h>
+#include <core/ext/IExtensionAdapter.h>
 
-#include "PluginBundle.h"
+#include "ViewProvider.h"
+#include "ContentProvider.h"
+#include "NodeProvider.h"
+#include "TitleItemProvider.h"
+#include "SamplePlugin.h"
 
-void initResource() {
-    Q_INIT_RESOURCE( sample );
-}
+namespace Quartz { namespace Ext { namespace Sample {
 
-extern "C" {
+const QString SamplePlugin::PLUGIN_ID{ "qzplugin.sample" };
+const QString SamplePlugin::PLUGIN_NAME{ "Sample Plugin" };
 
-Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
-        BundleInputWrapper *input )
+struct SamplePlugin::Data
 {
-    initResource();
-    auto bundle = std::unique_ptr< Quartz::Plugin::Sample::PluginBundle >{
-            new Quartz::Plugin::Sample::PluginBundle{} };
-    auto bundlePtr = bundle.get();
-    Quartz::Plugin::BundleContext::init(
-                std::move( bundle ),
-                std::move( input->env ),
-                dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
-//    return new PluginBundleWrapper{ };
-    return PluginBundleWrapper{ bundlePtr };
-}
+    AdapterList m_adapters;
+    ExtensionList m_plugins;
+    DependencyList m_dependencies;
 
-Q_DECL_EXPORT void destroy()
+};
+
+SamplePlugin::SamplePlugin()
+    : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
+    , m_data{ new Data{} }
 {
-//    Q_CLEANUP_RESOURCE( sample );
-    Quartz::Plugin::BundleContext::destroy();
+
+#ifdef QT_DEBUG
+    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
+    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
+#endif
 }
 
+SamplePlugin::~SamplePlugin()
+{
+
 }
+
+const ExtensionList & SamplePlugin::extensions() const
+{
+    return m_data->m_plugins;
+}
+
+
+const DependencyList & SamplePlugin::dependencies() const
+{
+    return m_data->m_dependencies;
+}
+
+const AdapterList &SamplePlugin::adapters() const
+{
+    return m_data->m_adapters;
+}
+
+
+} } }

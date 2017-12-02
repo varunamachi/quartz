@@ -3,15 +3,15 @@
 
 #include "NodeProvider.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
-const QString NodeProvider::PLUGIN_ID{
+const QString NodeProvider::EXTENSION_ID{
     "qzp.creator.provider.node" };
-const QString NodeProvider::PLUGIN_NAME{
+const QString NodeProvider::EXTENSION_NAME{
     "Quartz Creator Node" };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

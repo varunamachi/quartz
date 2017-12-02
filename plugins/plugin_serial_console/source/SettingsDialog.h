@@ -4,7 +4,7 @@
 
 #include <QDialog>
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class SerialSettings;
 

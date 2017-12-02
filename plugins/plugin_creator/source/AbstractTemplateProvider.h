@@ -3,25 +3,25 @@
 #include <memory>
 
 
-#include <core/extension_system/AbstractPlugin.h>
+#include <core/ext/Extension.h>
 
 namespace Quartz {
 
 class Template;
 
-namespace Plugin { namespace Creator {
+namespace Ext { namespace Creator {
 
-class AbstractTemplateProvider : public AbstractPlugin
+class AbstractTemplateProvider : public Extension
 {
 public:
-    AbstractTemplateProvider( const QString &pluginID,
-                              const QString &pluginName );
+    AbstractTemplateProvider( const QString &extensionID,
+                              const QString &extensionName );
 
     ~AbstractTemplateProvider();
 
     virtual QList< std::shared_ptr< Template >> templates() const = 0;
 
-    static const QString PLUGIN_TYPE;
+    static const QString EXTENSION_TYPE;
 
 
 private:

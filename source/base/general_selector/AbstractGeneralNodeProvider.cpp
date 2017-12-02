@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractGeneralNodeProvider::PLUGIN_TYPE{ "qz.node" };
+const QString AbstractGeneralNodeProvider::EXTENSION_TYPE{ "qz.node" };
 
 AbstractGeneralNodeProvider::AbstractGeneralNodeProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

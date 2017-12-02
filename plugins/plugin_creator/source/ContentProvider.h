@@ -2,7 +2,7 @@
 
 #include <base/content_manager/AbstractContentProvider.h>
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 class TemplateManager;
 
@@ -19,9 +19,9 @@ public:
 
     QVector< ContentWidget *> widgets() override;
 
-    static const QString     PLUGIN_ID;
+    static const QString     EXTENSION_ID;
 
-    static const QString     PLUGIN_NAME;
+    static const QString     EXTENSION_NAME;
 
 private:
     struct Data;

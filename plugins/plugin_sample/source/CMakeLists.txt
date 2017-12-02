@@ -14,15 +14,15 @@ qz_add_core()
 qz_add_resource( sample.qrc )
 
 vq_sources(
-    SamplePlugin.cpp
+    EntryPoint.cpp
 )
 
 vq_classes(
+    SamplePlugin
     TitleItemProvider
     ViewProvider
     NodeProvider
     ContentProvider
-    PluginBundle
 )
 
 #vq_dump_vars()

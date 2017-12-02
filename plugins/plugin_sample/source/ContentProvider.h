@@ -3,7 +3,7 @@
 #include <base/content_manager/AbstractContentProvider.h>
 #include <base/content_manager/ContentWidget.h>
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 class SampleContent : public ContentWidget
 {
@@ -33,9 +33,9 @@ public:
 
     QVector< ContentWidget *> widgets() override;
 
-    static const QString     PLUGIN_ID;
+    static const QString     EXTENSION_ID;
 
-    static const QString     PLUGIN_NAME;
+    static const QString     EXTENSION_NAME;
 };
 
 } } }

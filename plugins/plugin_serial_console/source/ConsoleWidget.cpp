@@ -1,12 +1,12 @@
 #include <QTextBlock>
 
-#include <plugin_base/BundleLoggin.h>
+#include <plugin_base/PluginLogging.h>
 
 #include "ConsoleWidget.h"
 
 //Taken from Qt example
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 enum class HistoryDirection
 {

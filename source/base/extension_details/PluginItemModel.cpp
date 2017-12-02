@@ -1,29 +1,34 @@
 
-#include <core/extension_system/AbstractPluginBundle.h>
-#include <core/extension_system/AbstractPlugin.h>
+#include <QLibrary>
 
+#include <core/ext/PluginManager.h>
+#include <core/ext/Plugin.h>
+
+#include "../QzAppContext.h"
 #include "PluginItemModel.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
-const int NUM_COLS = 3;
 
 struct PluginItemModel::Data
 {
-    Data()
-        : m_pluginList{ nullptr }
+    Data( PluginItemModel::NumCols numCols )
+        : m_numCols{ numCols }
+        , m_pluginList{ nullptr }
     {
 
     }
 
-    const PluginList *m_pluginList;
+    PluginItemModel::NumCols m_numCols;
 
+    const QVector< const Plugin *> *m_pluginList;
 };
 
 
-PluginItemModel::PluginItemModel( QObject *parent )
+PluginItemModel::PluginItemModel( PluginItemModel::NumCols numCols,
+                                  QObject *parent )
     : QAbstractItemModel{ parent }
-    , m_data{ new Data{ }}
+    , m_data{ new Data{ numCols }}
 {
 
 }
@@ -39,9 +44,13 @@ QModelIndex PluginItemModel::index( int row,
 {
     auto index = QModelIndex();
     if( hasIndex( row, column, parent )) {
-        const auto &bundle = m_data->m_pluginList->at( row );
-        if( bundle != nullptr ) {
-            index = createIndex( row, column, bundle.get() );
+        const auto &plugin = m_data->m_pluginList->at( row );
+        if( plugin != nullptr ) {
+            index = createIndex( row,
+                                 column,
+                                 reinterpret_cast< void *>(
+                                     const_cast< Ext::Plugin *>(
+                                         plugin )));
         }
     }
     return index;
@@ -61,7 +70,8 @@ int PluginItemModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int PluginItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return NUM_COLS;
+    auto cnt = static_cast< int >( m_data->m_numCols );
+    return cnt;
 }
 
 QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
@@ -76,21 +86,19 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
     }
     else if ( role == Qt::DisplayRole ) {
         const auto &plugin = m_data->m_pluginList->at( index.row() );
+        auto lib = appContext()->pluginManager()->libraryForPlugin(
+                    plugin->pluginId() );
         switch( index.column() ) {
-        case 0: return plugin->pluginType();
+        case 0: return plugin->pluginName();
         case 1: return plugin->pluginId();
-        case 2: return plugin->pluginName();
+        case 2:
+            if( lib != nullptr ) {
+                return lib->fileName();
+            }
+            break;
         }
     }
     return QVariant();
-}
-
-bool PluginItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    if( parent.isValid() ) {
-        return false;
-    }
-    return true;
 }
 
 QVariant PluginItemModel::headerData(
@@ -103,12 +111,28 @@ QVariant PluginItemModel::headerData(
     }
     else if ( role == Qt::DisplayRole ) {
         switch( section ) {
-        case 0: return tr( "Type" );
+        case 0: return tr( "Name" );
         case 1: return tr( "Id" );
-        case 2: return tr( "Name" );
+        case 2: return tr( "Library" );
         }
     }
     return QVariant();
+}
+
+bool PluginItemModel::hasChildren( const QModelIndex &parent ) const
+{
+    if( parent.isValid() ) {
+        return false;
+    }
+    return  true;
+}
+
+void PluginItemModel::setPluginList(
+        const QVector< const Ext::Plugin *> *plugins)
+{
+    beginResetModel();
+    m_data->m_pluginList = plugins;
+    endResetModel();
 }
 
 void PluginItemModel::clear()
@@ -118,14 +142,4 @@ void PluginItemModel::clear()
     endResetModel();
 }
 
-void PluginItemModel::setPluginList( const PluginList *plugins )
-{
-    beginResetModel();
-    m_data->m_pluginList = plugins;
-    endResetModel();
-}
-
-
-
-
-}
+} }

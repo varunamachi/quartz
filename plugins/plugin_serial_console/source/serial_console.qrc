@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/bundle.txt</file>
+        <file>resources/plugin.txt</file>
     </qresource>
 </RCC>

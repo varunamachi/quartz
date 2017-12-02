@@ -12,13 +12,13 @@ qz_add_core()
 qz_add_resource( creator.qrc )
 
 vq_sources(
-    CreatorPlugin.cpp
+    EntryPoint.cpp
 )
 
 vq_classes(
+    CreatorPlugin
     NodeProvider
     ContentProvider
-    PluginBundle
     CreatorWidget
     TemplateManager
     AbstractTemplateProvider

@@ -12,7 +12,7 @@
 #include "SerialUtils.h"
 #include "BaudRateEditDialog.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 struct BaudRateEditDialog::Data
 {

@@ -2,14 +2,14 @@
 #include "AbstractTemplateProvider.h"
 
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
-const QString AbstractTemplateProvider::PLUGIN_TYPE{ "qz.template" };
+const QString AbstractTemplateProvider::EXTENSION_TYPE{ "qz.template" };
 
 AbstractTemplateProvider::AbstractTemplateProvider(
-        const QString &pluginID,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginID, pluginName, PLUGIN_TYPE }
+        const QString &extID,
+        const QString &extName )
+    : Extension{ extID, extName, EXTENSION_TYPE }
 {
 
 }

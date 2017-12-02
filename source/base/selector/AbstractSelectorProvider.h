@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <core/extension_system/AbstractPlugin.h>
+#include <core/ext/Extension.h>
 
 #include "../QuartzBase.h"
 
@@ -9,7 +9,7 @@ namespace Quartz {
 
 class AbstractSelector;
 
-class QUARTZ_BASE_API AbstractSelectorProvider : public AbstractPlugin
+class QUARTZ_BASE_API AbstractSelectorProvider : public Ext::Extension
 {
 public:
     AbstractSelectorProvider( const QString &pluginId,
@@ -19,7 +19,7 @@ public:
 
     virtual QList< AbstractSelector *> selectors() const = 0;
 
-    static const QString PLUGIN_TYPE;
+    static const QString EXTENSION_TYPE;
 
 private:
 

@@ -8,9 +8,9 @@
 
 #include "../QuartzBase.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
-QZ_INTERFACE IPluginAdapter;
+QZ_INTERFACE IExtensionAdapter;
 
 class QUARTZ_BASE_API AdapterItemModel : public QAbstractItemModel
 {
@@ -40,7 +40,7 @@ public:
                          int role ) const override;
 
     void setAdapterList(
-            const QVector< std::shared_ptr< IPluginAdapter >> *plugins );
+            const QVector< std::shared_ptr< IExtensionAdapter >> *plugins );
 
     void clear();
 
@@ -49,4 +49,4 @@ private:
     std::unique_ptr< Data > m_data;
 };
 
-}
+} }

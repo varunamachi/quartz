@@ -4,7 +4,7 @@
 
 #include <base/view_manager/AbstractViewProvider.h>
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 class SampleView : public QuartzView {
     Q_OBJECT
@@ -36,9 +36,9 @@ public:
 
     QVector< QuartzView *> views() const override;
 
-    static const QString     PLUGIN_ID;
+    static const QString     EXTENSION_ID;
 
-    static const QString     PLUGIN_NAME;
+    static const QString     EXTENSION_NAME;
 
 private:
 

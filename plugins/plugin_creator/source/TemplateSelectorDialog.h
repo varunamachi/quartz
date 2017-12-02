@@ -11,7 +11,7 @@ namespace Quartz {
 class TemplateManager;
 class Template;
 
-namespace Plugin { namespace Creator {
+namespace Ext { namespace Creator {
 
 /**
  * @brief The TemplateSelectorWidget class allows selecting template to be used

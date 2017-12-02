@@ -3,7 +3,7 @@
 #include <QDir>
 #include <QFile>
 
-#include <plugin_base/BundleLoggin.h>
+#include <plugin_base/PluginLogging.h>
 
 #include <common/templating/AdvancedTemplateProcessor.h>
 #include <common/templating/TemplateInstance.h>
@@ -12,7 +12,7 @@
 #include "GenInfo.h"
 #include "CodeGenerator.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 struct CodeGenerator::Data
 {
@@ -40,32 +40,6 @@ CodeGenerator::~CodeGenerator()
 
 bool CodeGenerator::generate( const QString &path )
 {
-//    TemplateProcessor::Variables vars;
-//    vars.insert( "BUNDLE_ID", m_data->m_info->id() );
-//    vars.insert( "BUNDLE_NAME", m_data->m_info->name() );
-//    vars.insert( "BUNDLE_NAMESPACE", m_data->m_info->ns() );
-//    vars.insert( "BUNDLE_DISPLAY_NAME", m_data->m_info->display() );
-//    QStringList classes;
-//    classes << "PluginBundle";
-//    vars.insert( "classes", classes );
-
-//    QStringList files;
-//    files << "#other files go here";
-//    vars.insert( "files", files );
-
-//    result = TemplateUtils::generateForDir(
-//                vars,
-//                QDir{ ":/resources" },
-//                QDir{ path },
-//                [ & ]( const QString &in ) -> QString {
-//        if( in == "Plugin.cpp.template" ) {
-//            return m_data->m_info->ns() + ".cpp";
-//        }
-//        else if( in == "resources.qrc.template" ) {
-//            return m_data->m_info->name() + ".qrc";
-//        }
-//        return "";
-//    });
     bool result = true;
     for( auto i = 0; i < m_data->m_info->numTemplateInstances(); ++ i ) {
         auto tinst = m_data->m_info->templateInstanceAt( i );
@@ -78,7 +52,7 @@ bool CodeGenerator::generate( const QString &path )
             QFile ptxt{ dir.absoluteFilePath( "resources/plugin.txt" )};
             if( ptxt.open( QFile::ReadWrite )) {
                 QTextStream fstream{ &ptxt };
-                fstream << "#Created By Quartz Bundle Creator\n"
+                fstream << "#Created By Quartz Plugin Creator\n"
                         << "id=" << m_data->m_info->id()  << '\n'
                         << "name=" << m_data->m_info->name() << '\n'
                         << "display=" << m_data->m_info->display() << '\n'
@@ -105,18 +79,18 @@ bool CodeGenerator::generate( const QString &path )
         }
     }
     if( result ) {
-        QZP_INFO << "Created bundle with id "
+        QZP_INFO << "Created plugin with id "
                  << m_data->m_info->id()
                  << " at " << path;
         m_data->m_lastError = QObject::tr(
-                    "Bundle %1 created successfully" ).arg(
+                    "Plugin %1 created successfully" ).arg(
                         m_data->m_info->id() );
     }
     else {
         QZP_ERROR << "Could not create plugin with "
                   << m_data->m_info->id() << " at " << path;
         m_data->m_lastError = QObject::tr(
-                    "Could not create bundle %1" ).arg( m_data->m_info->id() );
+                    "Could not create plugin %1" ).arg( m_data->m_info->id() );
 
     }
     return result;

@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractTitleItemProvider::PLUGIN_TYPE{ "qz.title_item" };
+const QString AbstractTitleItemProvider::EXTENSION_TYPE{ "qz.title_item" };
 
 AbstractTitleItemProvider::AbstractTitleItemProvider(
         const QString &pluginId,
         const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+    : Ext::Extension{ pluginId, pluginName, EXTENSION_TYPE }
 {
 
 }

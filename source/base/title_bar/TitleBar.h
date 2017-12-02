@@ -4,7 +4,7 @@
 
 #include "../QuartzBase.h"
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 class QPushButton;
 
@@ -14,7 +14,7 @@ class QuartzItem;
 class QzScroller;
 
 class QUARTZ_BASE_API TitleBar : public QWidget
-                               , public IPluginAdapter
+                               , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 
@@ -34,13 +34,13 @@ public:
     void removeCategory( const QString &category );
 
 public:
-    const QString &pluginType() const;
+    const QString &extensionType() const override;
 
-    const QString &pluginAdapterName() const;
+    const QString &extensionAdapterName() const override;
 
-    bool handlePlugin( AbstractPlugin *plugin );
+    bool handleExtension( Ext::Extension *ext ) override;
 
-    bool finalizePlugins();
+    bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 
@@ -59,7 +59,7 @@ private:
 
     QHash< QString, QuartzItem *> m_items;
 
-    QVector< QuartzItem *> m_pluginItems;
+    QVector< QuartzItem *> m_extensionItems;
 
     QzScroller *m_scroller;
 

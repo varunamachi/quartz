@@ -1,8 +1,8 @@
 #include <QString>
 #include <QVariant>
 
-#include <common/generic_config/model/Config.h>
-#include <common/generic_config/model/Param.h>
+#include "../generic_config/model/Config.h"
+#include "../generic_config/model/Param.h"
 
 #include "Template.h"
 #include "TemplateInstance.h"

@@ -4,7 +4,7 @@
 
 class Template;
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 class TemplateManager;
 

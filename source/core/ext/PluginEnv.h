@@ -8,6 +8,9 @@ class QString;
 
 namespace Quartz { namespace Ext {
 
+//Needs to have information about compiler, architecture etc
+//Also needs a Version class
+
 class QUARTZ_CORE_API PluginEnv
 {
 public:

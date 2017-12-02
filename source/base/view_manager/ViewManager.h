@@ -10,7 +10,7 @@
 #include <QMouseEvent>
 #include <QVBoxLayout>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 
@@ -21,7 +21,7 @@ class AbstractContainer;
 class QzScroller;
 
 class QUARTZ_BASE_API ViewManager : public QWidget
-                                  , public IPluginAdapter
+                                  , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 public:
@@ -51,13 +51,13 @@ public:
     void selectView( QString viewId );
 
 public:
-    const QString & pluginType() const;
+    const QString & extensionType() const override;
 
-    const QString & pluginAdapterName() const;
+    const QString & extensionAdapterName() const override;
 
-    bool handlePlugin( AbstractPlugin *plugin );
+    bool handleExtension( Ext::Extension *extension ) override;
 
-    bool finalizePlugins();
+    bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 
@@ -72,7 +72,7 @@ private:
 
     QMultiHash< QString, QuartzView *> m_categoriesToViews;
 
-    QVector< QuartzView *> m_pluginViews;
+    QVector< QuartzView *> m_extensionViews;
 
 };
 

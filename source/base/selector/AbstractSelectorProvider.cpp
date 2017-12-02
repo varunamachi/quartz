@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractSelectorProvider::PLUGIN_TYPE{ "qz.selector" };
+const QString AbstractSelectorProvider::EXTENSION_TYPE{ "qz.selector" };
 
 AbstractSelectorProvider::AbstractSelectorProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

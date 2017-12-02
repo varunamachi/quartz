@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractActionItemProvider::PLUGIN_TYPE{ "qz.action_item" };
+const QString AbstractActionItemProvider::EXTENSION_TYPE{ "qz.action_item" };
 
 AbstractActionItemProvider::AbstractActionItemProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

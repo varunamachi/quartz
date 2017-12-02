@@ -58,10 +58,8 @@
 
 namespace Quartz {
 
-namespace Logger {
-    class Logger;
-}
-class PluginManager;
+namespace Logger { class Logger; }
+namespace Ext { class PluginManager; }
 class ConfigManager;
 
 class QUARTZ_CORE_API QzCoreContext
@@ -72,7 +70,7 @@ public:
     virtual ~QzCoreContext();
 
     QZCONTEXT_FUNC_DECL_NS( Logger, Logger, logger );
-    QZCONTEXT_FUNC_DECL( PluginManager, pluginManager );
+    QZCONTEXT_FUNC_DECL_NS( Ext, PluginManager, pluginManager );
     QZCONTEXT_FUNC_DECL( ConfigManager, configManager );
 
     static QzCoreContext * get()

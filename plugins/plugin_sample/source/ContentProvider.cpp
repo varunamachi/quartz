@@ -3,7 +3,7 @@
 
 #include "ContentProvider.h"
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 const QString SampleContent::CONTENT_ID{ "qzp.sample.content.one" };
 const QString SampleContent::CONTENT_NAME{ "Sample" };
@@ -20,13 +20,13 @@ SampleContent::SampleContent( QWidget *parent )
 
 
 /********************** Provider ************************************/
-const QString ContentProvider::PLUGIN_ID{
+const QString ContentProvider::EXTENSION_ID{
     "qzp.sample.provider.content" };
-const QString ContentProvider::PLUGIN_NAME{
+const QString ContentProvider::EXTENSION_NAME{
     "Quartz Sample Content" };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

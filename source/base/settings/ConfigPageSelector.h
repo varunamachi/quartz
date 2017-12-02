@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 #include "../selector/AbstractSelector.h"
@@ -13,7 +13,7 @@ class TreeModel;
 class AbstractConfigPage;
 
 class QUARTZ_BASE_API ConfigPageSelector : public AbstractSelector
-                                         , public IPluginAdapter
+                                         , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 
@@ -33,13 +33,13 @@ public:
     static const QString SELECTOR_NAME;
 
 public:
-    const QString &pluginType() const override;
+    const QString &extensionType() const override;
 
-    const QString &pluginAdapterName() const override;
+    const QString &extensionAdapterName() const override;
 
-    bool handlePlugin( AbstractPlugin *plugin) override;
+    bool handleExtension( Ext::Extension *extension) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
     bool addPage( AbstractConfigPage *page );
 

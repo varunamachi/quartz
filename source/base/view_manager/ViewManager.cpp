@@ -157,44 +157,44 @@ void ViewManager::selectView( QString viewId )
     }
 }
 
-const QString & ViewManager::pluginType() const
+const QString & ViewManager::extensionType() const
 {
-    return AbstractViewProvider::PLUGIN_TYPE;
+    return AbstractViewProvider::EXTENSION_TYPE;
 }
 
-const QString & ViewManager::pluginAdapterName() const
+const QString & ViewManager::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool ViewManager::handlePlugin( AbstractPlugin *plugin )
+bool ViewManager::handleExtension( Ext::Extension *extension )
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractViewProvider *>( plugin );
+    auto provider = dynamic_cast< AbstractViewProvider *>( extension );
     if( provider != nullptr ) {
         auto views = provider->views();
         foreach( auto view, views ) {
             addView( view );
-            m_pluginViews.push_back( view );
+            m_extensionViews.push_back( view );
         }
         result = true;
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:ViewManager" )
-                << "Invalid view plugin provided: " << pluginName;
+                << "Invalid view extension provided: " << extensionName;
     }
     return result;
 }
 
-bool ViewManager::finalizePlugins()
+bool ViewManager::finalizeExtension()
 {
-//    for( int i = 0; i < m_pluginViews.size(); ++ i ) {
-//        auto view = m_pluginViews.at( i );
+//    for( int i = 0; i < m_extensionViews.size(); ++ i ) {
+//        auto view = m_extensionViews.at( i );
 //        removeView( view );
 //    }
-    m_pluginViews.clear();
+    m_extensionViews.clear();
     return true;
 }
 

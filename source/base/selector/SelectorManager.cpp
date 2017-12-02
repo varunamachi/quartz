@@ -30,7 +30,7 @@ struct SelectorManager::Data
 
     QHash< QString, AbstractSelector *> m_selectors;
 
-    QVector< AbstractSelector *> m_pluginSelectors;
+    QVector< AbstractSelector *> m_extensionSelectors;
 };
 
 
@@ -142,40 +142,40 @@ void SelectorManager::selectSelector( QString selectorId )
     }
 }
 
-const QString & SelectorManager::pluginType() const
+const QString & SelectorManager::extensionType() const
 {
-    return AbstractSelectorProvider::PLUGIN_TYPE;
+    return AbstractSelectorProvider::EXTENSION_TYPE;
 }
 
-const QString & SelectorManager::pluginAdapterName() const
+const QString & SelectorManager::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool SelectorManager::handlePlugin( AbstractPlugin *plugin )
+bool SelectorManager::handleExtension( Ext::Extension *extension )
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractSelectorProvider *>( plugin );
+    auto provider = dynamic_cast< AbstractSelectorProvider *>( extension );
     if( provider != nullptr ) {
         auto selectors = provider->selectors();
         foreach( auto selector, selectors ) {
             addSelector( selector );
-            m_data->m_pluginSelectors.push_back( selector );
+            m_data->m_extensionSelectors.push_back( selector );
         }
         result = true;
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:SelectorManager" )
-                << "Invalid selector plugin provided: " << pluginName;
+                << "Invalid selector extension provided: " << extensionName;
     }
     return result;
 }
 
-bool SelectorManager::finalizePlugins()
+bool SelectorManager::finalizeExtension()
 {
-    m_data->m_pluginSelectors.clear();
+    m_data->m_extensionSelectors.clear();
     return true;
 }
 

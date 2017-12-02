@@ -13,9 +13,9 @@ namespace Quartz {
 class ContentManager;
 class SelectorManager;
 class GeneralSelector;
-class PlugginManager;
 class ConfigPageManager;
 class ThemeManager;
+namespace Ext { class PlugginManager; }
 
 enum class StdPath
 {

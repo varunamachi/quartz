@@ -1,20 +1,20 @@
 #pragma once
 
-#include <core/extension_system/AbstractPlugin.h>
+#include <core/ext/Extension.h>
 
 namespace Quartz {
 
 class QuartzPage;
 
-class AbstractPageProvider : public AbstractPlugin
+class AbstractPageProvider : public Ext::Extension
 {
 public:
-    AbstractPageProvider( const QString &pluginId,
-                          const QString &pluginName );
+    AbstractPageProvider( const QString &extensionId,
+                          const QString &extensionName );
 
     virtual QVector< QuartzPage *> pages() const = 0;
 
-    const static QString PLUGIN_TYPE;
+    const static QString EXTENSION_TYPE;
 };
 
 }

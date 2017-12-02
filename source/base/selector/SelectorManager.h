@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 
@@ -13,7 +13,7 @@ class QzScroller;
 class AbstractSelector;
 
 class QUARTZ_BASE_API SelectorManager : public QWidget
-                                      , public IPluginAdapter
+                                      , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 public:
@@ -37,13 +37,13 @@ public:
     void selectSelector( QString selectorId );
 
 public:
-    const QString & pluginType() const;
+    const QString & extensionType() const override;
 
-    const QString & pluginAdapterName() const;
+    const QString & extensionAdapterName() const override;
 
-    bool handlePlugin( AbstractPlugin *plugin );
+    bool handleExtension( Ext::Extension *ext ) override;
 
-    bool finalizePlugins();
+    bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 

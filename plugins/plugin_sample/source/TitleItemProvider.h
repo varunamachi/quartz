@@ -5,7 +5,7 @@
 #include <base/title_bar/AbstractTitleItemProvider.h>
 #include <base/title_bar/QuartzItem.h>
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 class TitleBarButton : public QuartzItem
 {
@@ -34,9 +34,9 @@ public:
 
     QVector< QuartzItem *> titleItems() const override;
 
-    static const QString     PLUGIN_ID;
+    static const QString     EXTENSION_ID;
 
-    static const QString     PLUGIN_NAME;
+    static const QString     EXTENSION_NAME;
 
 private:
 

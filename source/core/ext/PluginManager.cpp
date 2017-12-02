@@ -131,7 +131,7 @@ bool PluginManager::Impl::load( const QDir &dir )
                 result = result && lib->unload();
             }
             QZ_DEBUG( "Qz:Core:Ext" )
-                    << "Unloaded library for bundle with id " <<
+                    << "Unloaded library for plugin with id " <<
                        pinfo.m_plugin->pluginId()
                     << " which failed to initialize";
         }
@@ -156,14 +156,14 @@ std::size_t PluginManager::Impl::loadPlugins(
 #endif
 
 #ifdef QT_DEBUG
-    QDir bundleDir{ pluginRoot.absoluteFilePath( "debug" )};
+    QDir pluginDir{ pluginRoot.absoluteFilePath( "debug" )};
 #else
-        QDir bundleDir = bundleRoot;
+        QDir pluginDir = pluginRoot;
 #endif
     std::size_t numLoaded = 0;
     QZ_DEBUG( "Qz:Core:Ext" )
-            << "Searching for plugins at " << bundleDir.absolutePath();
-    auto fileList = bundleDir.entryInfoList( extensions,
+            << "Searching for plugins at " << pluginDir.absolutePath();
+    auto fileList = pluginDir.entryInfoList( extensions,
                                              QDir::Files,
                                              QDir::NoSort );
     foreach( const auto &info, fileList ) {

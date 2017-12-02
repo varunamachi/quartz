@@ -4,15 +4,15 @@
 #include "NodeProvider.h"
 #include "MainWidget.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
-const QString NodeProvider::PLUGIN_ID{
+const QString NodeProvider::EXTENSION_ID{
     "qzp.serial_console.provider.node" };
-const QString NodeProvider::PLUGIN_NAME{
+const QString NodeProvider::EXTENSION_NAME{
     "Serial Console Node" };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

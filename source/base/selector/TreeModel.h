@@ -3,7 +3,7 @@
 #include <QAbstractItemModel>
 #include <QIcon>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 

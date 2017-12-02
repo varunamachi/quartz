@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractViewProvider::PLUGIN_TYPE{ "qz.view" };
+const QString AbstractViewProvider::EXTENSION_TYPE{ "qz.view" };
 
 AbstractViewProvider::AbstractViewProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

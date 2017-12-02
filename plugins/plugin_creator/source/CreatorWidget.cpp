@@ -19,7 +19,7 @@
 
 #include <common/model_view/ArrayModel.h>
 
-#include <plugin_base/BundleLoggin.h>
+#include <plugin_base/PluginLogging.h>
 
 #include "TemplateManager.h"
 #include "CreatorWidget.h"
@@ -28,7 +28,7 @@
 #include "CodeGenerator.h"
 #include "TemplateConfigWidget.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 const QString QUARTZ_ROOT{ "QUARTZ_ROOT" };
 
@@ -106,12 +106,12 @@ void addStandaredTemplates( TemplateManager *tman )
 
 inline void error( CreatorWidget *obj, const QString &msg )
 {
-    QMessageBox::critical( obj, QObject::tr( "Bundle Creator" ), msg );
+    QMessageBox::critical( obj, QObject::tr( "Plugin Creator" ), msg );
 }
 
 inline void info( CreatorWidget *obj, const QString &msg )
 {
-    QMessageBox::information( obj, QObject::tr( "Bundle Creator" ), msg );
+    QMessageBox::information( obj, QObject::tr( "plugin Creator" ), msg );
 }
 
 CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
@@ -125,7 +125,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
 
     auto layout = new QGridLayout{ };
     int row = 0;
-    layout->addWidget( new QLabel{ tr( "Fully Qualified Bundle ID ")}, row, 0 );
+    layout->addWidget( new QLabel{ tr( "Fully Qualified plugin ID ")}, row, 0 );
     layout->addWidget( m_data->m_fqIDEdit, row, 1 );
     ++ row;
 
@@ -137,11 +137,11 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     layout->addWidget( m_data->m_namespaceEdit, row, 1 );
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "Bundle Name" ), this }, row, 0 );
+    layout->addWidget( new QLabel{ tr( "plugin Name" ), this }, row, 0 );
     layout->addWidget( m_data->m_nameEdit, row, 1 );
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "Bundle Project Path" ), this }, row, 0);
+    layout->addWidget( new QLabel{ tr( "plugin Project Path" ), this }, row, 0);
     layout->addLayout( browseLayout , row, 1 );
     ++ row;
 
@@ -199,13 +199,13 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     });
 
 #ifdef QT_DEBUG
-    auto testBundleLoc = QStandardPaths::writableLocation(
-                QStandardPaths::TempLocation ) + "/qz_bundle/";
+    auto testpluginLoc = QStandardPaths::writableLocation(
+                QStandardPaths::TempLocation ) + "/qz_plugin/";
     m_data->m_idEdit->setText( "test" );
     m_data->m_fqIDEdit->setText( "test" );
     m_data->m_namespaceEdit->setText( "Test" );
     m_data->m_nameEdit->setText( "Test" );
-    m_data->m_dirPath->setText( testBundleLoc );
+    m_data->m_dirPath->setText( testpluginLoc );
 #endif
     m_data->m_templateManager->loadCoreTemplates();
 }
@@ -252,10 +252,10 @@ void CreatorWidget::onCreate()
     auto path = m_data->m_dirPath->text();
     auto dirName = "plugin_" + name;
 
-    m_data->m_globalConfig->insert( "BUNDLE_ID", id );
-    m_data->m_globalConfig->insert( "BUNDLE_NAME", name );
-    m_data->m_globalConfig->insert( "BUNDLE_NAMESPACE", ns );
-    m_data->m_globalConfig->insert( "BUNDLE_DISPLAY_NAME", display );
+    m_data->m_globalConfig->insert( "PLUGIN_ID", id );
+    m_data->m_globalConfig->insert( "PLUGIN_NAME", name );
+    m_data->m_globalConfig->insert( "PLUGIN_NAMESPACE", ns );
+    m_data->m_globalConfig->insert( "plugin_DISPLAY_NAME", display );
 //    m_data->m_globalConfig->insert( "files", files );
 
 
@@ -266,10 +266,10 @@ void CreatorWidget::onCreate()
     QFileInfo dirInfo{ path };
     QDir dir{ path };
     if( id.isEmpty() || ns.isEmpty() || display.isEmpty() ) {
-        auto empty = id.isEmpty() ? tr( "bundle ID" )
-                                  : ns.isEmpty() ? tr( "bundle namespace" )
-                                                 : tr( "bundle name" );
-        auto msg = tr( "Invalid %1 given, cannot create bundle" ).arg( empty );
+        auto empty = id.isEmpty() ? tr( "plugin ID" )
+                                  : ns.isEmpty() ? tr( "plugin namespace" )
+                                                 : tr( "plugin name" );
+        auto msg = tr( "Invalid %1 given, cannot create plugin" ).arg( empty );
         error( this, msg );
         return;
 
@@ -277,9 +277,9 @@ void CreatorWidget::onCreate()
     if( dirInfo.exists() ) {
         auto msg = tr( "A file/directory already exists at %1,"
                        "do you want to overwrite it?" ).arg( path );
-        auto ans = QMessageBox::question( this, tr( "Bundle Creator" ), msg );
+        auto ans = QMessageBox::question( this, tr( "plugin Creator" ), msg );
         if( ans != QMessageBox::Yes ) {
-            QZP_DEBUG << "Could not create bundle directory without deleting "
+            QZP_DEBUG << "Could not create plugin directory without deleting "
                          "existing directory at " << path;
             return;
         }
@@ -313,8 +313,8 @@ void CreatorWidget::onCreate()
         }
     }
     if( ! dir.exists() && ! QDir{}.mkpath( path )) {
-        QZP_ERROR << "Could not create bundle directory at " << path;
-        auto msg = tr( "Could not create bundle directory at %1" ).arg( path );
+        QZP_ERROR << "Could not create plugin directory at " << path;
+        auto msg = tr( "Could not create plugin directory at %1" ).arg( path );
         error( this, msg );
         return;
     }
@@ -343,13 +343,13 @@ void CreatorWidget::onCreate()
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
 #endif
-        QZP_INFO << "Created bundle with id " << id << " at " << path;
-        auto msg = tr( "Bundle %1 created successfully" ).arg( id );
-        QMessageBox::information( this, tr( "Bundle Creator"), msg );
+        QZP_INFO << "Created plugin with id " << id << " at " << path;
+        auto msg = tr( "plugin %1 created successfully" ).arg( id );
+        QMessageBox::information( this, tr( "plugin Creator"), msg );
     }
     else {
         QZP_ERROR << "Could not create plugin with " << id << " at " << path;
-        QMessageBox::critical( this, tr( "Bundle Creator"),
+        QMessageBox::critical( this, tr( "plugin Creator"),
                                generator.lastError());
     }
 }

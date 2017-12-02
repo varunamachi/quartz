@@ -13,7 +13,7 @@ class TemplateInstance;
 class Config;
 class TreeNode;
 
-namespace Plugin { namespace Creator {
+namespace Ext { namespace Creator {
 
 class ConfigModel : public AbstractTreeModel
 {

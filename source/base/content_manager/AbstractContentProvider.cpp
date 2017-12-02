@@ -3,13 +3,13 @@
 
 namespace Quartz {
 
-const QString AbstractContentProvider::PLUGIN_TYPE{ "qz.content" };
+const QString AbstractContentProvider::EXTENSION_TYPE{ "qz.content" };
 
 
 AbstractContentProvider::AbstractContentProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

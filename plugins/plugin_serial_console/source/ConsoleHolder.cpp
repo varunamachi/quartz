@@ -18,8 +18,8 @@
 #include <core/app_config/ConfigManager.h>
 #include <core/utils/ScopedOperation.h>
 
-#include <plugin_base/BundleLoggin.h>
-#include <plugin_base/BundleContext.h>
+#include <plugin_base/PluginLogging.h>
+#include <plugin_base/PluginContext.h>
 
 #include "SerialSettings.h"
 #include "SettingsDialog.h"
@@ -28,7 +28,7 @@
 #include "SerialUtils.h"
 #include "Constants.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 using SerialErrorFunc =
     void ( QSerialPort::* )( QSerialPort::SerialPortError );

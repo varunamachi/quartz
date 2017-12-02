@@ -23,10 +23,10 @@ struct PluginEnv::Data
     const QString m_platformVersion;
 };
 
-PluginEnv::PluginEnv( const QString &bundlePath,
-                      const QString &bundleLibName,
+PluginEnv::PluginEnv( const QString &pluginPath,
+                      const QString &pluginLibName,
                       const QString &platformVersion )
-    : m_data{ new Data{ bundlePath, bundleLibName, platformVersion }}
+    : m_data{ new Data{ pluginPath, pluginLibName, platformVersion }}
 {
 
 }

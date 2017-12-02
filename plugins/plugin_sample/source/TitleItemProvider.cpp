@@ -3,12 +3,12 @@
 #include <QDebug>
 #include <QFile>
 
-#include <plugin_base/BundleLoggin.h>
+#include <plugin_base/PluginLogging.h>
 
 #include "TitleItemProvider.h"
 
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 const QString TitleBarButton::ITEM_ID{ "qzp.sample.titlebutton" };
 const QString TitleBarButton::ITEM_CATERGORY{ "sample" };
@@ -44,14 +44,14 @@ TitleBarButton::~TitleBarButton()
 }
 
 /***************** Provider **************************************************/
-const QString TitleItemProvider::PLUGIN_ID{
+const QString TitleItemProvider::EXTENSION_ID{
     "qzp.sample.provider.titlebutton" };
-const QString TitleItemProvider::PLUGIN_NAME{
+const QString TitleItemProvider::EXTENSION_NAME{
     "Quartz Sample TitleBar Button" };
 
 
 TitleItemProvider::TitleItemProvider()
-    : AbstractTitleItemProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractTitleItemProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

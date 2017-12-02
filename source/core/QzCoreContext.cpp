@@ -1,6 +1,6 @@
 
 #include "logger/Logging.h"
-#include "extension_system/PluginManager.h"
+#include "ext/PluginManager.h"
 #include "app_config/ConfigManager.h"
 #include "QzCoreContext.h"
 
@@ -21,13 +21,13 @@ struct QzCoreContext::Data
 
     Logger::Logger *m_logger;
 
-    PluginManager *m_pluginManager;
+    Ext::PluginManager *m_pluginManager;
 
     ConfigManager *m_configManager;
 };
 
 QZCONTEXT_FUNC_DEFINE_NS( QzCoreContext, Logger, Logger, logger );
-QZCONTEXT_FUNC_DEFINE( QzCoreContext, PluginManager, pluginManager );
+QZCONTEXT_FUNC_DEFINE_NS( QzCoreContext, Ext, PluginManager, pluginManager );
 QZCONTEXT_FUNC_DEFINE( QzCoreContext, ConfigManager, configManager );
 
 QzCoreContext::QzCoreContext()

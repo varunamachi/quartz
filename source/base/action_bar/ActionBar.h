@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../QuartzBase.h"
 
@@ -14,7 +14,7 @@ class QuartzItem;
 class AbstractActionItemProvider;
 
 class QUARTZ_BASE_API ActionBar : public QWidget
-                                , public IPluginAdapter
+                                , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 public:
@@ -33,13 +33,13 @@ public:
     void removeCategory( const QString &category );
 
 public:
-    const QString & pluginType() const override;
+    const QString & extensionType() const override;
 
-    const QString & pluginAdapterName() const override;
+    const QString & extensionAdapterName() const override;
 
-    bool handlePlugin(AbstractPlugin *plugin) override;
+    bool handleExtension( Ext::Extension *extension ) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
     const static QString ADAPTER_NAME;
 
@@ -50,11 +50,11 @@ private:
 
     QHash< QString, QuartzItem *> m_items;
 
-    QVector< QuartzItem *> m_pluginItems;
+    QVector< QuartzItem *> m_extensionItems;
 
 //    QVector< AbstractActionItemProvider *> m_itemProviders;
 
-    // IPluginAdapter interface
+    // IExtensionAdapter interface
 
 };
 

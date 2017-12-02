@@ -5,7 +5,7 @@
 #include <QList>
 #include <QAbstractItemModel>
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include <common/model_view/AbstractTreeModel.h>
 
@@ -14,10 +14,10 @@ namespace Quartz {
 
 class Template;
 
-namespace Plugin { namespace Creator {
+namespace Ext { namespace Creator {
 
 class TemplateManager : public AbstractTreeModel
-                      , public IPluginAdapter
+                      , public IExtensionAdapter
 {
     Q_OBJECT
 public:
@@ -29,13 +29,13 @@ public:
 
     QList< Template *> templates() const;
 
-    const QString &pluginType() const override;
+    const QString &extensionType() const override;
 
-    const QString &pluginAdapterName() const override;
+    const QString &extensionAdapterName() const override;
 
-    bool handlePlugin(AbstractPlugin *plugin) override;
+    bool handleExtension( Extension *plugin ) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
     void addVariable( const QString &key, const QString &value );
 

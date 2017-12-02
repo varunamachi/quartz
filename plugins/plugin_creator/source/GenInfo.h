@@ -10,7 +10,7 @@ namespace Quartz {
 
 class TemplateInstance;
 
-namespace Plugin { namespace Creator {
+namespace Ext { namespace Creator {
 
 class GenInfo
 {

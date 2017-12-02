@@ -3,7 +3,7 @@
 #include <base/general_selector/AbstractGeneralNodeProvider.h>
 
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class NodeProvider : public AbstractGeneralNodeProvider
 {
@@ -18,9 +18,9 @@ public:
 
     QVector< std::shared_ptr< NodeInfo >> nodes() const override;
 
-    static const QString PLUGIN_ID;
+    static const QString EXTENSION_ID;
 
-    static const QString PLUGIN_NAME;
+    static const QString EXTENSION_NAME;
 };
 
 

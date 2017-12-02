@@ -2,7 +2,7 @@
 
 class QString;
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 struct Constants
 {

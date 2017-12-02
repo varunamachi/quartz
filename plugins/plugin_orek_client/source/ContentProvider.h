@@ -3,7 +3,7 @@
 #include <base/content_manager/AbstractContentProvider.h>
 #include <base/content_manager/ContentWidget.h>
 
-namespace Quartz { namespace OrekClient {
+namespace Quartz { namespace Ext { namespace Orek {
 
 class OrekContent : public ContentWidget
 {
@@ -31,13 +31,13 @@ public:
 
     QVector< ContentWidget *> widgets() override;
 
-    static const QString     PLUGIN_ID;
+    static const QString     EXTENSION_ID;
 
-    static const QString     PLUGIN_NAME;
+    static const QString     EXTENSION_NAME;
 
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
 };
 
-} }
+} } }

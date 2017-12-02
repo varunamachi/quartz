@@ -5,7 +5,7 @@
 
 #include "ContentProvider.h"
 
-namespace Quartz { namespace OrekClient {
+namespace Quartz { namespace Ext { namespace Orek {
 
 const QString OrekContent::CONTENT_ID{ "qzp.orekclient.content" };
 const QString OrekContent::CONTENT_NAME{ "Orek" };
@@ -51,13 +51,13 @@ struct ContentProvider::Data
 
 
 /********************** Provider ************************************/
-const QString ContentProvider::PLUGIN_ID{
+const QString ContentProvider::EXTENSION_ID{
     "qzp.orekclient.provider.content" };
-const QString ContentProvider::PLUGIN_NAME{
+const QString ContentProvider::EXTENSION_NAME{
     "Orek Content" };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
     , m_data( new Data{} )
 {
 
@@ -83,6 +83,4 @@ QVector< ContentWidget *> ContentProvider::widgets()
     return m_data->m_contents;
 }
 
-
-
-} }
+} } }

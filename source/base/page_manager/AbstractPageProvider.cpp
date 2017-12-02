@@ -3,12 +3,12 @@
 
 namespace Quartz {
 
-const QString AbstractPageProvider::PLUGIN_TYPE{ "qz.page" };
+const QString AbstractPageProvider::EXTENSION_TYPE{ "qz.page" };
 
 AbstractPageProvider::AbstractPageProvider(
-        const QString &pluginId,
-        const QString &pluginName )
-    : AbstractPlugin{ pluginId, pluginName, PLUGIN_TYPE }
+        const QString &extensionId,
+        const QString &extensionName )
+    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
 {
 
 }

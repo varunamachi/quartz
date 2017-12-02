@@ -19,7 +19,7 @@
 
 #include "TemplateConfigWidget.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace Creator {
 
 const QVector< QString > TI_HEADERS{
     QObject::tr( "Instance" )

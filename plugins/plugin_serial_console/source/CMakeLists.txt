@@ -15,11 +15,11 @@ qz_add_resource( serial_console.qrc )
 add_subdirectory( resources )
 
 vq_sources(
-    SerialConsole.cpp
+    EntryPoint.cpp
 )
 
 vq_classes(
-    PluginBundle
+    SerialConsolePlugin
     ContentProvider
     NodeProvider
     ConsoleWidget

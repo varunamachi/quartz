@@ -4,7 +4,7 @@
 
 #include "ViewProvider.h"
 
-namespace Quartz { namespace Plugin { namespace Sample {
+namespace Quartz { namespace Ext { namespace Sample {
 
 const QString SampleView::VIEW_ID{ "qzp.sample.view" };
 const QString SampleView::VIEW_NAME{ "Sample" };
@@ -29,11 +29,11 @@ SampleView::~SampleView()
 }
 
 /***************** Provider **************************************************/
-const QString ViewProvider::PLUGIN_ID{ "qzp.sample.provider.view" };
-const QString ViewProvider::PLUGIN_NAME{ "Quartz Sample View" };
+const QString ViewProvider::EXTENSION_ID{ "qzp.sample.provider.view" };
+const QString ViewProvider::EXTENSION_NAME{ "Quartz Sample View" };
 
 ViewProvider::ViewProvider()
-    : AbstractViewProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractViewProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

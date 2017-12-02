@@ -14,12 +14,12 @@ qz_add_core()
 qz_add_resource( orek_client.qrc )
 
 vq_sources(
-    OrekClient.cpp
+    EntryPoint.cpp
 )
 
 vq_classes(
+    OrekPlugin
     ContentProvider
-    PluginBundle
     NodeProvider
 )
 

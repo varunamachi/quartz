@@ -27,7 +27,7 @@ enum class DependencyType
     Optional
 };
 
-using PluginList = QVector< std::shared_ptr< Extension >>;
+using ExtensionList = QVector< std::shared_ptr< Extension >>;
 using DependencyList = QVector< QPair< QString, DependencyType >>;
 using AdapterList = QVector< std::shared_ptr< IExtensionAdapter >>;
 
@@ -48,7 +48,7 @@ public:
 
     QzCoreContext * coreContext() const;
 
-    virtual const PluginList & extensions() const = 0;
+    virtual const ExtensionList & extensions() const = 0;
 
     virtual const AdapterList & adapters() const = 0;
 
@@ -65,7 +65,7 @@ private:
     std::unique_ptr< Data > m_data;
 };
 
-}
+} } //end of namespaces
 
 extern "C" {
 
@@ -79,5 +79,6 @@ struct PluginInputWrapper {
 
 };
 
-} }
+} //extern C
+
 

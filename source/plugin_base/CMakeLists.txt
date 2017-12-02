@@ -13,11 +13,11 @@ qz_add_qt()
 
 
 vq_classes(
-    BundleContext
+    PluginContext
 )
 
 vq_headers(
-    BundleLoggin.h
+    PluginLogging.h
 )
 
 

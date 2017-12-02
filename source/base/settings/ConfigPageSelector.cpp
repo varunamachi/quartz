@@ -6,8 +6,8 @@
 
 #include <core/logger/Logging.h>
 
-#include <base/QzAppContext.h>
-#include <base/content_manager/ContentManager.h>
+#include "../QzAppContext.h"
+#include "../content_manager/ContentManager.h"
 
 #include "../selector/Node.h"
 #include "../selector/TreeModel.h"
@@ -128,20 +128,20 @@ bool ConfigPageSelector::addPage( AbstractConfigPage *page )
     return result;
 }
 
-const QString & ConfigPageSelector::pluginType() const
+const QString & ConfigPageSelector::extensionType() const
 {
-    return AbstractConfigPageProvider::PLUGIN_TYPE;
+    return AbstractConfigPageProvider::EXTENSION_TYPE;
 }
 
-const QString & ConfigPageSelector::pluginAdapterName() const
+const QString & ConfigPageSelector::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool ConfigPageSelector::handlePlugin( AbstractPlugin *plugin )
+bool ConfigPageSelector::handleExtension( Ext::Extension *extension )
 {
     bool result = true;
-    auto provider = dynamic_cast< AbstractConfigPageProvider *>( plugin );
+    auto provider = dynamic_cast< AbstractConfigPageProvider *>( extension );
     if( provider != nullptr ) {
         auto pages = provider->configPages();
         foreach( auto page, pages ) {
@@ -149,16 +149,16 @@ bool ConfigPageSelector::handlePlugin( AbstractPlugin *plugin )
         }
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:ConfigPageManager" )
-                << "Invalid content plugin provided: "
-                << pluginName;
+                << "Invalid content extension provided: "
+                << extensionName;
     }
     return result;
 }
 
-bool ConfigPageSelector::finalizePlugins()
+bool ConfigPageSelector::finalizeExtension()
 {
     auto result = true;
     return result;

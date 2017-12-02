@@ -12,7 +12,7 @@
 
 #include <core/app_config/ConfigManager.h>
 
-#include <plugin_base/BundleContext.h>
+#include <plugin_base/PluginContext.h>
 
 #include "SettingsDialog.h"
 #include "SerialSettings.h"
@@ -21,7 +21,7 @@
 //Some information is adapted from Qt's serial terminal example
 //Under BSD License - check License.txt in the same directory
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 struct SettingsDialog::Data
 {

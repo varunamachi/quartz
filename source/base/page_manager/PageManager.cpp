@@ -234,44 +234,44 @@ void PageManager::selectPage( QString pageId )
     }
 }
 
-const QString & PageManager::pluginType() const
+const QString & PageManager::extensionType() const
 {
-    return AbstractPageProvider::PLUGIN_TYPE;
+    return AbstractPageProvider::EXTENSION_TYPE;
 }
 
-const QString & PageManager::pluginAdapterName() const
+const QString & PageManager::extensionAdapterName() const
 {
     return ADAPTER_NAME;
 }
 
-bool PageManager::handlePlugin( AbstractPlugin *plugin )
+bool PageManager::handleExtension( Ext::Extension *extension )
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractPageProvider *>( plugin );
+    auto provider = dynamic_cast< AbstractPageProvider *>( extension );
     if( provider != nullptr ) {
         auto pages = provider->pages();
         foreach( auto page, pages ) {
             addPage( page );
-            m_pluginPages.push_back( page );
+            m_extensionPages.push_back( page );
         }
         result = true;
     }
     else {
-        auto pluginName = plugin != nullptr ? plugin->pluginId()
+        auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR( "Qz:PageManager" )
-                << "Invalid page plugin provided: " << pluginName;
+                << "Invalid page extension provided: " << extensionName;
     }
     return result;
 }
 
-bool PageManager::finalizePlugins()
+bool PageManager::finalizeExtension()
 {
-//    for( int i = 0; i < m_pluginPages.size(); ++ i ) {
-//        auto page = m_pluginPages.at( i );
+//    for( int i = 0; i < m_extensionPages.size(); ++ i ) {
+//        auto page = m_extensionPages.at( i );
 //        removePage( page );
 //    }
-    m_pluginPages.clear();
+    m_extensionPages.clear();
     return true;
 }
 

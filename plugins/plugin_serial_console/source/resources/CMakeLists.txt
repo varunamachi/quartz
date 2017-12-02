@@ -1,4 +1,4 @@
 
 vq_sources(
-    bundle.txt
+    plugin.txt
 )

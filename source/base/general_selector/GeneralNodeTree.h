@@ -1,26 +1,26 @@
 #pragma once
 
-#include <core/extension_system/IPluginAdapter.h>
+#include <core/ext/IExtensionAdapter.h>
 
 #include "../selector/TreeModel.h"
 
 namespace Quartz {
 
 class GeneralNodeTree : public TreeModel
-                      , public IPluginAdapter
+                      , public Ext::IExtensionAdapter
 {
     Q_OBJECT
 
 public:
     explicit GeneralNodeTree( QObject *parent = nullptr );
 
-    const QString & pluginType() const override;
+    const QString & extensionType() const override;
 
-    const QString & pluginAdapterName() const override;
+    const QString & extensionAdapterName() const override;
 
-    bool handlePlugin( AbstractPlugin *plugin ) override;
+    bool handleExtension( Ext::Extension *extension ) override;
 
-    bool finalizePlugins() override;
+    bool finalizeExtension() override;
 
 
 };

@@ -5,7 +5,7 @@
 #include <core/utils/Macros.h>
 
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class SerialUtils
 {

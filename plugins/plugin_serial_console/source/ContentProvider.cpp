@@ -4,16 +4,16 @@
 #include "ContentProvider.h"
 #include "MainWidget.h"
 
-namespace Quartz { namespace Plugin { namespace SerialConsole {
+namespace Quartz { namespace Ext { namespace SerialConsole {
 
 /********************** Provider ************************************/
-const QString ContentProvider::PLUGIN_ID{
+const QString ContentProvider::EXTENSION_ID{
     "qzp.serial_console.provider.content" };
-const QString ContentProvider::PLUGIN_NAME{
+const QString ContentProvider::EXTENSION_NAME{
     "Serial Console Content" };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
 {
 
 }

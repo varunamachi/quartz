@@ -3,20 +3,20 @@
 #include "../QuartzBase.h"
 #include "../content_manager/ContentWidget.h"
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
-class AbstractPluginBundle;
+class Plugin;
 
-class QUARTZ_BASE_API BundleInfoPage : public ContentWidget
+class QUARTZ_BASE_API PluginInfoPage : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit BundleInfoPage( QWidget *parent = nullptr );
+    explicit PluginInfoPage( QWidget *parent = nullptr );
 
-    ~BundleInfoPage();
+    ~PluginInfoPage();
 
-    void setBundle( const AbstractPluginBundle *bundle );
+    void setPlugin( const Plugin *plugin );
 
     static const QString CONTENT_ID;
 
@@ -30,5 +30,4 @@ private:
 
 };
 
-
-}
+} }
