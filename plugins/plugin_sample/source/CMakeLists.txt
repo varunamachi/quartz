@@ -18,7 +18,7 @@ vq_sources(
 )
 
 vq_classes(
-    SamplePlugin
+    Plugin
     TitleItemProvider
     ViewProvider
     NodeProvider

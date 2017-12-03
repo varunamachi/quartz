@@ -2,19 +2,19 @@
 
 #include <core/ext/Plugin.h>
 
-namespace Quartz { namespace Ext {
+namespace Quartz {
 
 class QzAppContext;
 
-namespace Orek {
+namespace Ext { namespace Creator {
 
-class OrekPlugin : public Plugin
+class Plugin : public Ext::Plugin
 {
 
 public:
-    OrekPlugin();
+    Plugin();
 
-    ~OrekPlugin();
+    ~Plugin();
 
     const ExtensionList & extensions() const override;
 
@@ -29,7 +29,6 @@ public:
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
-
 };
 
 } } }

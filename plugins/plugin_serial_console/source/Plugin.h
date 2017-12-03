@@ -6,15 +6,15 @@ namespace Quartz {
 
 class QzAppContext;
 
-namespace Ext { namespace Creator {
+namespace Ext { namespace SerialConsole {
 
-class CreatorPlugin : public Plugin
+class Plugin : public Ext::Plugin
 {
 
 public:
-    CreatorPlugin();
+    Plugin();
 
-    ~CreatorPlugin();
+    ~Plugin();
 
     const ExtensionList & extensions() const override;
 

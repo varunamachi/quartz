@@ -6,14 +6,14 @@
 #include "ContentProvider.h"
 #include "NodeProvider.h"
 #include "TitleItemProvider.h"
-#include "SamplePlugin.h"
+#include "Plugin.h"
 
 namespace Quartz { namespace Ext { namespace Sample {
 
-const QString SamplePlugin::PLUGIN_ID{ "qzplugin.sample" };
-const QString SamplePlugin::PLUGIN_NAME{ "Sample Plugin" };
+const QString Plugin::PLUGIN_ID{ "qzplugin.sample" };
+const QString Plugin::PLUGIN_NAME{ "Sample Plugin" };
 
-struct SamplePlugin::Data
+struct Plugin::Data
 {
     AdapterList m_adapters;
     ExtensionList m_plugins;
@@ -21,7 +21,7 @@ struct SamplePlugin::Data
 
 };
 
-SamplePlugin::SamplePlugin()
+Plugin::Plugin()
     : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
     , m_data{ new Data{} }
 {
@@ -34,23 +34,23 @@ SamplePlugin::SamplePlugin()
 #endif
 }
 
-SamplePlugin::~SamplePlugin()
+Plugin::~Plugin()
 {
 
 }
 
-const ExtensionList & SamplePlugin::extensions() const
+const ExtensionList & Plugin::extensions() const
 {
     return m_data->m_plugins;
 }
 
 
-const DependencyList & SamplePlugin::dependencies() const
+const DependencyList & Plugin::dependencies() const
 {
     return m_data->m_dependencies;
 }
 
-const AdapterList &SamplePlugin::adapters() const
+const AdapterList &Plugin::adapters() const
 {
     return m_data->m_adapters;
 }

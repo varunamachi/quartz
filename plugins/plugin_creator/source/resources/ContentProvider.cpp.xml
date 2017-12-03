@@ -8,13 +8,13 @@
 #include "ContentProvider.h"
 #include "CreatorWidget.h"
 
-namespace Quartz { namespace Plugin { namespace Creator {
+namespace Quartz { namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
 
 /********************** Provider ************************************/
-const QString ContentProvider::PLUGIN_ID{
-    "qzp.$<BUNDLE_NAME>$.provider.content" };
-const QString ContentProvider::PLUGIN_NAME{
-    "Quartz $<BUNDLE_DISPLAY_NAME>$ Content" };
+const QString ContentProvider::EXTENSION_ID{
+    "qzp.$<PLUGIN_NAME>$.provider.content" };
+const QString ContentProvider::EXTENSION_NAME{
+    "Quartz $<PLUGIN_DISPLAY_NAME>$ Content" };
 
 struct ContentProvider::Data
 {
@@ -26,7 +26,7 @@ struct ContentProvider::Data
 };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ PLUGIN_ID, PLUGIN_NAME }
+    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
     , m_data{ new Data{ }}
 {
 

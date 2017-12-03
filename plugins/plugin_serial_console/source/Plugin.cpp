@@ -5,21 +5,21 @@
 #include "Constants.h"
 #include "ContentProvider.h"
 #include "NodeProvider.h"
-#include "SerialConsolePlugin.h"
+#include "Plugin.h"
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-const QString SerialConsolePlugin::PLUGIN_ID{ "qzplugin.serial_console" };
-const QString SerialConsolePlugin::PLUGIN_NAME{ "Serial Console " };
+const QString Plugin::PLUGIN_ID{ "qzplugin.serial_console" };
+const QString Plugin::PLUGIN_NAME{ "Serial Console " };
 
-struct SerialConsolePlugin::Data
+struct Plugin::Data
 {
     AdapterList m_adapters;
     ExtensionList m_plugins;
     DependencyList m_dependencies;
 };
 
-SerialConsolePlugin::SerialConsolePlugin()
+Plugin::Plugin()
     : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
     , m_data{ new Data{} }
 {
@@ -27,23 +27,23 @@ SerialConsolePlugin::SerialConsolePlugin()
     m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
 }
 
-SerialConsolePlugin::~SerialConsolePlugin()
+Plugin::~Plugin()
 {
 
 }
 
-const ExtensionList & SerialConsolePlugin::extensions() const
+const ExtensionList & Plugin::extensions() const
 {
     return m_data->m_plugins;
 }
 
 
-const DependencyList & SerialConsolePlugin::dependencies() const
+const DependencyList & Plugin::dependencies() const
 {
     return m_data->m_dependencies;
 }
 
-const AdapterList &SerialConsolePlugin::adapters() const
+const AdapterList &Plugin::adapters() const
 {
     return m_data->m_adapters;
 }

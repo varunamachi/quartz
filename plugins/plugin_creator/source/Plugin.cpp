@@ -4,15 +4,15 @@
 
 #include "ContentProvider.h"
 #include "NodeProvider.h"
-#include "CreatorPlugin.h"
+#include "Plugin.h"
 #include "TemplateManager.h"
 
 namespace Quartz { namespace Ext { namespace Creator {
 
-const QString CreatorPlugin::PLUGIN_ID{ "qzplugin.creator" };
-const QString CreatorPlugin::PLUGIN_NAME{ "Creator" };
+const QString Plugin::PLUGIN_ID{ "qzplugin.creator" };
+const QString Plugin::PLUGIN_NAME{ "Creator" };
 
-struct CreatorPlugin::Data
+struct Plugin::Data
 {
     AdapterList m_adapters;
 
@@ -22,7 +22,7 @@ struct CreatorPlugin::Data
 
 };
 
-CreatorPlugin::CreatorPlugin()
+Plugin::Plugin()
     : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
     , m_data{ new Data{} }
 {
@@ -36,23 +36,23 @@ CreatorPlugin::CreatorPlugin()
     m_data->m_adapters.push_back( tman );
 }
 
-CreatorPlugin::~CreatorPlugin()
+Plugin::~Plugin()
 {
 
 }
 
-const ExtensionList & CreatorPlugin::extensions() const
+const ExtensionList & Plugin::extensions() const
 {
     return m_data->m_plugins;
 }
 
 
-const DependencyList & CreatorPlugin::dependencies() const
+const DependencyList & Plugin::dependencies() const
 {
     return m_data->m_dependencies;
 }
 
-const AdapterList &CreatorPlugin::adapters() const
+const AdapterList &Plugin::adapters() const
 {
     return m_data->m_adapters;
 }

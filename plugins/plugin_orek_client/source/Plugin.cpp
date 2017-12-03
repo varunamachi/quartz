@@ -4,14 +4,14 @@
 
 #include "ContentProvider.h"
 #include "NodeProvider.h"
-#include "OrekPlugin.h"
+#include "Plugin.h"
 
 namespace Quartz { namespace Ext { namespace Orek {
 
-const QString OrekPlugin::PLUGIN_ID{ "qzplugin.orek_client" };
-const QString OrekPlugin::PLUGIN_NAME{ "Orek Client" };
+const QString Plugin::PLUGIN_ID{ "qzplugin.orek_client" };
+const QString Plugin::PLUGIN_NAME{ "Orek Client" };
 
-struct OrekPlugin::Data
+struct Plugin::Data
 {
     AdapterList m_adapters;
     ExtensionList m_plugins;
@@ -19,7 +19,7 @@ struct OrekPlugin::Data
 
 };
 
-OrekPlugin::OrekPlugin()
+Plugin::Plugin()
     : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
     , m_data{ new Data{} }
 {
@@ -28,23 +28,23 @@ OrekPlugin::OrekPlugin()
 
 }
 
-OrekPlugin::~OrekPlugin()
+Plugin::~Plugin()
 {
 
 }
 
-const ExtensionList & OrekPlugin::extensions() const
+const ExtensionList & Plugin::extensions() const
 {
     return m_data->m_plugins;
 }
 
 
-const DependencyList & OrekPlugin::dependencies() const
+const DependencyList & Plugin::dependencies() const
 {
     return m_data->m_dependencies;
 }
 
-const AdapterList &OrekPlugin::adapters() const
+const AdapterList &Plugin::adapters() const
 {
     return m_data->m_adapters;
 }

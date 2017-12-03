@@ -2,19 +2,19 @@
 
 #include <core/ext/Plugin.h>
 
-namespace Quartz {
+namespace Quartz { namespace Ext {
 
 class QzAppContext;
 
-namespace Ext { namespace SerialConsole {
+namespace Orek {
 
-class SerialConsolePlugin : public Plugin
+class Plugin : public Ext::Plugin
 {
 
 public:
-    SerialConsolePlugin();
+    Plugin();
 
-    ~SerialConsolePlugin();
+    ~Plugin();
 
     const ExtensionList & extensions() const override;
 
@@ -29,6 +29,7 @@ public:
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
 };
 
 } } }

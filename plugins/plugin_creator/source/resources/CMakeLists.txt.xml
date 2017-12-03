@@ -1,44 +1,11 @@
 <templates>
     <template name="CMakeLists.txt">
-        <config id="CMakeLists.txt" name="CMakeList">
-            <param
-                type="boolean"
-                id="bp1"
-                name="Boolean"
-                description="A boolean param"
-                default="true"
-            />
-            <param
-                type="choice"
-                id="ch1"
-                name="choice param one"
-                description="Choice"
-                default="0">
-                <option name="One" value="1"/>
-                <option name="Two" value="2"/>
-                <option name="Three" value="3"/>
-            </param>
-            <param
-                type="range"
-                id="rp1"
-                name="Range"
-                description="A range parameter"
-                default="0"
-                min="0"
-                max="100"
-                inc="1"
-            />
-            <param
-                type="text"
-                id="tx1"
-                name="Text"
-                description="A text param"
-                default=""
-            />
+        <config id="CMakeLists.txt" name="CMake List">
+
         </config>
         <content>
             <![CDATA[
-project( plugin_$<BUNDLE_NAME>$ )
+project( plugin_$<PLUGIN_NAME>$ )
 cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
@@ -49,10 +16,10 @@ qz_add_common()
 qz_add_base()
 qz_add_core()
 
-qz_add_resource( $<BUNDLE_NAME>$.qrc )
+qz_add_resource( $<PLUGIN_NAME>$.qrc )
 
 vq_sources(
-    $<BUNDLE_NAMESPACE>$.cpp
+    $<PLUGIN_NAMESPACE>$.cpp
 $[FOR src IN sources:>
     $<src>$
 ]$

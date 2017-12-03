@@ -16,7 +16,7 @@ vq_sources(
 )
 
 vq_classes(
-    CreatorPlugin
+    Plugin
     NodeProvider
     ContentProvider
     CreatorWidget

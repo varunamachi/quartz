@@ -6,7 +6,7 @@
 
 #include <plugin_base/PluginContext.h>
 
-#include "SamplePlugin.h"
+#include "Plugin.h"
 
 void initResource() {
     Q_INIT_RESOURCE( sample );
@@ -18,8 +18,8 @@ Q_DECL_EXPORT PluginWrapper getPluginWrapper(
         PluginInputWrapper *input )
 {
     initResource();
-    auto plugin = std::unique_ptr< Quartz::Ext::Sample::SamplePlugin >{
-            new Quartz::Ext::Sample::SamplePlugin{} };
+    auto plugin = std::unique_ptr< Quartz::Ext::Sample::Plugin >{
+            new Quartz::Ext::Sample::Plugin{} };
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::init(
                 std::move( plugin ),

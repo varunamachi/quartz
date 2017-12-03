@@ -1,5 +1,5 @@
-#Created By Quartz Bundle Creator
-id=qzbundle.serial_console
+#Created By Quartz Creator
+id=qzplugin.serial_console
 name=serial_console
 display=Serial Console 
 ns=SerialConsole

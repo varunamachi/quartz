@@ -6,7 +6,7 @@
 
 #include <plugin_base/PluginContext.h>
 
-#include "SerialConsolePlugin.h"
+#include "Plugin.h"
 
 void initResource() {
     Q_INIT_RESOURCE( serial_console );
@@ -19,8 +19,8 @@ Q_DECL_EXPORT PluginWrapper getPluginWrapper(
 {
     initResource();
     auto plugin =
-        std::unique_ptr< Quartz::Ext::SerialConsole::SerialConsolePlugin >{
-            new Quartz::Ext::SerialConsole::SerialConsolePlugin{} };
+        std::unique_ptr< Quartz::Ext::SerialConsole::Plugin >{
+            new Quartz::Ext::SerialConsole::Plugin{} };
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::init(
                 std::move( plugin ),

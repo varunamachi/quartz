@@ -1,3 +1,10 @@
+<templates>
+    <template name="EntryPoint.cpp">
+        <config id="EntryPoint.cpp" name="Entry Point Src" >
+
+        </config>
+        <content>
+            <![CDATA[
 
 #include <core/ext/PluginEnv.h>
 
@@ -8,7 +15,7 @@
 #include "Plugin.h"
 
 void initResource() {
-    Q_INIT_RESOURCE( orek_client );
+    Q_INIT_RESOURCE( $<PLUGIN_NAME>$ );
 }
 
 extern "C" {
@@ -17,21 +24,25 @@ Q_DECL_EXPORT PluginWrapper getPluginWrapper(
         PluginInputWrapper *input )
 {
     initResource();
-    auto plugin= std::unique_ptr< Quartz::Ext::Orek::Plugin >{
-            new Quartz::Ext::Orek::Plugin{} };
+    auto plugin = std::unique_ptr<
+        Quartz::Ext::$<PLUGIN_NAMESPACE>$::Plugin >{
+            new Quartz::Ext::$<PLUGIN_NAMESPACE>$::Plugin{}
+        };
     auto pluginPtr = plugin.get();
-    Quartz::Ext::PluginContext::init(
+    Quartz::Plugin::PluginContext::init(
                 std::move( plugin ),
                 std::move( input->env ),
                 dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
-//    return new PluginWrapper{ };
     return PluginWrapper{ pluginPtr };
 }
 
 Q_DECL_EXPORT void destroy()
 {
-//    Q_CLEANUP_RESOURCE( sample );
-    Quartz::Ext::PluginContext::destroy();
+    Quartz::Plugin::PluginContext::destroy();
 }
 
 }
+            ]]>
+        </content>
+    </template>
+</templates>

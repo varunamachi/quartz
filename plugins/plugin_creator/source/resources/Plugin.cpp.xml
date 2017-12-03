@@ -1,46 +1,58 @@
 <templates>
     <template name="Plugin.cpp">
-        <config id="Plugin.cpp" name="Plugin Src" >
+        <config id="Plugin.cpp" name="Plugin Src">
 
         </config>
         <content>
             <![CDATA[
-
-#include <core/extension_system/BundleEnv.h>
-
 #include <base/QzAppContext.h>
 
-#include <plugin_base/BundleContext.h>
+#include <core/ext/IExtensionAdapter.h>
 
-#include "PluginBundle.h"
+#include "Plugin.h"
 
-void initResource() {
-    Q_INIT_RESOURCE( $<BUNDLE_NAME>$ );
-}
+namespace Quartz { namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
 
-extern "C" {
+const QString Plugin::PLUGIN_ID{ "$<PLUGIN_ID>$" };
+const QString Plugin::PLUGIN_NAME{ "$<PLUGIN_DISPLAY_NAME>$" };
 
-Q_DECL_EXPORT PluginBundleWrapper getBundleWrapper(
-        BundleInputWrapper *input )
+struct Plugin::Data
 {
-    initResource();
-    auto bundle =
-        std::unique_ptr< Quartz::Plugin::$<BUNDLE_NAMESPACE>$::PluginBundle >{
-            new Quartz::Plugin::$<BUNDLE_NAMESPACE>$::PluginBundle{} };
-    auto bundlePtr = bundle.get();
-    Quartz::Plugin::BundleContext::init(
-                std::move( bundle ),
-                std::move( input->env ),
-                dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
-    return PluginBundleWrapper{ bundlePtr };
-}
+    AdapterList m_adapters;
+    ExtensionList m_extensions;
+    DependencyList m_dependencies;
+};
 
-Q_DECL_EXPORT void destroy()
+Plugin::Plugin()
+    : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
+    , m_data{ new Data{} }
 {
-    Quartz::Plugin::BundleContext::destroy();
-}
 
 }
+
+Plugin::~Plugin()
+{
+
+}
+
+const Plugin & Plugin::extensions() const
+{
+    return m_data->m_extensions;
+}
+
+
+const DependencyList & Plugin::dependencies() const
+{
+    return m_data->m_dependencies;
+}
+
+const AdapterList & Plugin::adapters() const
+{
+    return m_data->m_adapters;
+}
+
+
+} } }
             ]]>
         </content>
     </template>

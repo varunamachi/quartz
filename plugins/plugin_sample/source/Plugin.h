@@ -8,13 +8,13 @@ class QzAppContext;
 
 namespace Ext { namespace Sample {
 
-class SamplePlugin : public Plugin
+class Plugin : public Ext::Plugin
 {
 
 public:
-    SamplePlugin();
+    Plugin();
 
-    ~SamplePlugin();
+    ~Plugin();
 
     const ExtensionList & extensions() const override;
 

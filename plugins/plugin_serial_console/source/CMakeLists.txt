@@ -19,7 +19,7 @@ vq_sources(
 )
 
 vq_classes(
-    SerialConsolePlugin
+    Plugin
     ContentProvider
     NodeProvider
     ConsoleWidget
