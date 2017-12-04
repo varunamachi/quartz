@@ -28,38 +28,32 @@ const QVector< QString > TI_HEADERS{
 struct TemplateConfigWidget::Data
 {
     explicit Data( TemplateConfigWidget *parent )
-        : m_filter{ new QLineEdit{ parent }}
-        , m_configFilter{ new QLineEdit{ parent }}
+        : m_tmodel{ new ArrayModel{ 2, false, true, TI_HEADERS, parent }}
+        , m_instanceProxy{ new BasicSortFilter{ parent }}
         , m_view{ new QzTreeView{ parent }}
-        , m_emptyConfig{ "none", "None" }
-        , m_configView{ new QzTreeView{ parent }}
-        , m_tmodel{ new ArrayModel{ 2, false, true, TI_HEADERS, parent }}
+        , m_filter{ new QLineEdit{ parent }}
         , m_configModel{ new ConfigModel{ parent }}
         , m_configProxy{ new BasicSortFilter{ parent }}
-        , m_instanceProxy{ new BasicSortFilter{ parent }}
+        , m_configView{ new QzTreeView{ parent }}
+        , m_configFilter{ new QLineEdit{ parent }}
+        , m_emptyConfig{ "none", "None" }
     {
-
+        m_instanceProxy->setSourceModel( m_tmodel );
+        m_configProxy->setSourceModel( m_configModel );
     }
 
+    ArrayModel *m_tmodel;
+    BasicSortFilter *m_instanceProxy;
+    QzTreeView *m_view;
     QLineEdit *m_filter;
 
+    ConfigModel *m_configModel;
+    BasicSortFilter *m_configProxy;
+    QzTreeView *m_configView;
     QLineEdit *m_configFilter;
 
-    QzTreeView *m_view;
-
-    Config m_emptyConfig;
-
-    QzTreeView *m_configView;
-
-    ArrayModel *m_tmodel;
-
-    ConfigModel *m_configModel;
-
-    BasicSortFilter *m_configProxy;
-
-    BasicSortFilter *m_instanceProxy;
-
     QHash< QString, std::shared_ptr< TemplateInstance >> m_instances;
+    Config m_emptyConfig;
 };
 
 TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
@@ -84,14 +78,9 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     mainLayout->addLayout( leftLayout );
     mainLayout->addLayout( rightLayout );
 
-    auto proxy = new BasicSortFilter{ this };
-    proxy->setSourceModel( m_data->m_tmodel );
-    auto configProxy = new BasicSortFilter{ this };
-    configProxy->setSourceModel( m_data->m_configModel );
-
-    m_data->m_view->setModel( proxy );
+    m_data->m_view->setModel( m_data->m_instanceProxy );
     m_data->m_view->setRootIsDecorated( false );
-    m_data->m_configView->setModel( configProxy );
+    m_data->m_configView->setModel( m_data->m_configProxy );
     m_data->m_configView->setRootIsDecorated( false );
     m_data->m_configView->setItemDelegate( new GenConfigDelegate{ this });
 
@@ -101,27 +90,19 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
 
     connect( m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
-             [ this ]( const QModelIndex &current, const QModelIndex & ){
-        auto ti = static_cast< TemplateInstance *>( current.internalPointer() );
-        if( ti != nullptr ) {
-            if( ti->instanceOf()->config() != nullptr ) {
-                m_data->m_configModel->setConfig( ti->instanceConfig() );
-            } else {
-                m_data->m_configModel->setConfig( &m_data->m_emptyConfig );
-            }
-        }
-    });
+             this,
+             &TemplateConfigWidget::onSelection );
     connect( clearBtn,
              &QPushButton::clicked,
              m_data->m_tmodel,
              &ArrayModel::clear );
     connect( m_data->m_filter,
              &QLineEdit::textChanged,
-             proxy,
+             m_data->m_instanceProxy,
              &BasicSortFilter::setExpression );
     connect( m_data->m_configFilter,
              &QLineEdit::textChanged,
-             configProxy,
+             m_data->m_configProxy,
              &BasicSortFilter::setExpression );
 
     auto action = [ this ]( QModelIndex i ) {
@@ -177,6 +158,20 @@ void TemplateConfigWidget::clear()
     m_data->m_tmodel->clear();
     m_data->m_instances.clear();
     m_data->m_configModel->setConfig( &m_data->m_emptyConfig );
+}
+
+void TemplateConfigWidget::onSelection( const QModelIndex &current,
+                                        const QModelIndex &/*prev*/ )
+{
+    auto cur = m_data->m_instanceProxy->mapToSource( current );
+    auto ti = static_cast< TemplateInstance *>( cur.internalPointer() );
+    if( ti != nullptr ) {
+        if( ti->instanceOf()->config() != nullptr ) {
+            m_data->m_configModel->setConfig( ti->instanceConfig() );
+        } else {
+            m_data->m_configModel->setConfig( &m_data->m_emptyConfig );
+        }
+    }
 }
 
 //////////////////////// Config Model ///////////////////////////

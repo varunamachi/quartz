@@ -6,6 +6,8 @@
 
 #include <common/model_view/AbstractTreeModel.h>
 
+class QModelIndex;
+
 namespace Quartz {
 
 class Template;
@@ -52,6 +54,9 @@ public:
     TemplateInstance * instanceAt( int index );
 
     void clear();
+
+public Q_SLOTS:
+    void onSelection( const QModelIndex &cur, const QModelIndex &prev );
 
 private:
     struct Data;
