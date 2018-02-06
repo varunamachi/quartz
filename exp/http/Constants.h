@@ -3,7 +3,7 @@
 #include <QHash>
 #include <QString>
 
-namespace Quartz { namespace HTTP {
+namespace Quartz { namespace Http {
 
 enum class StatusCode {
     CONTINUE = 100,

@@ -9,15 +9,19 @@ qz_add_core()
 
 
 vq_classes (
-
+    HttpRequest
+    HttpResponse
+    HttpConnection
+    HttpServer
+    HttpClient
 )
 
 vq_sources(
-    http_parser.cpp
+    http_parser.c
 )
 vq_headers(
-	Constants.h
-	http_parser.h
+    Constants.h
+    http_parser.h
 )
 
 vq_create_app()
