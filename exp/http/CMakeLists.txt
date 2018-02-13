@@ -22,6 +22,7 @@ vq_sources(
 vq_headers(
     Constants.h
     http_parser.h
+    httplib.h
 )
 
 vq_create_app()

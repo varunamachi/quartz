@@ -7,6 +7,7 @@ namespace Quartz { namespace Http {
 class HttpResponse
 {
 public:
+
     HttpResponse();
 
     ~HttpResponse();

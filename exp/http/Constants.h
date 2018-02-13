@@ -1,7 +1,11 @@
 #pragma once
 
+#include <functional>
+#include <cstdint>
+
 #include <QHash>
 #include <QString>
+
 
 namespace Quartz { namespace Http {
 
@@ -451,5 +455,14 @@ const QHash< Method, QString > METHODS = {
     { Method::LINK, "LINK" },
     { Method::UNLINK, "UNLINK" }
 };
+
+const QString HTTP_VERSION_1_0 = QStringLiteral( "HTTP/1.0" );
+const QString HTTP_VERSION_1_1 = QStringLiteral( "HTTP/1.1" );
+
+
+using Headers = QHash< QString, QString >;
+using MultipartFiles = QHash< QString, QString >;
+using ProgFunc = std::function< void( std::size_t prog, std::size_t total )>;
+using Param = QHash< QString, QString >;
 
 } }
