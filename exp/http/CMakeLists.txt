@@ -14,6 +14,7 @@ vq_classes (
     HttpConnection
     HttpServer
     HttpClient
+    MultipartFile
 )
 
 vq_sources(

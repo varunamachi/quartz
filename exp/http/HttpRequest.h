@@ -4,20 +4,40 @@
 
 #include <memory>
 
+#include "Constants.h"
+
 namespace Quartz { namespace Http {
+
+class MultipartFile;
 
 class HttpRequest
 {
 public:
-    HttpRequest( );
+    HttpRequest();
 
     ~HttpRequest();
 
-    void addHeader( const QString &key, const QString &value );
+    const QString & version() const;
+
+    Method method() const;
+
+    const QString & path() const;
+
+    ProgFunc progress() const;
 
     QString header( const QString key ) const;
 
+    bool hasHeader( const QString key ) const;
 
+    QString param( const QString &key ) const;
+
+    bool hasFile( const QString &key ) const;
+
+    const MultipartFile * multipartFile( const QString name ) const;
+
+    QString & body();
+
+    void setHeader( const QString &key, const QString &value );
 
 private:
     struct Data;

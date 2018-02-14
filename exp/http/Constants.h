@@ -459,9 +459,9 @@ const QHash< Method, QString > METHODS = {
 const QString HTTP_VERSION_1_0 = QStringLiteral( "HTTP/1.0" );
 const QString HTTP_VERSION_1_1 = QStringLiteral( "HTTP/1.1" );
 
-
+class MultipartFile;
 using Headers = QHash< QString, QString >;
-using MultipartFiles = QHash< QString, QString >;
+using MultipartFiles = QHash< QString, MultipartFile >;
 using ProgFunc = std::function< void( std::size_t prog, std::size_t total )>;
 using Param = QHash< QString, QString >;
 
