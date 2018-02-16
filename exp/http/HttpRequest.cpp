@@ -7,6 +7,14 @@ namespace Quartz { namespace Http {
 
 struct HttpRequest::Data
 {
+    Data( const QString &version, Method method, const QString &path )
+        : m_version{ version }
+        , m_method{ method }
+        , m_path{ path }
+    {
+
+    }
+
     QString m_version;
 
     Method m_method;
@@ -15,7 +23,7 @@ struct HttpRequest::Data
 
     Headers m_headers;
 
-    QString m_body;
+    QByteArray m_body;
 
     Param m_params;
 
@@ -25,8 +33,11 @@ struct HttpRequest::Data
 
 };
 
-HttpRequest::HttpRequest()
-    : m_data{ new Data{} }
+HttpRequest::HttpRequest(
+        const QString &version,
+        Method method,
+        const QString &path )
+    : m_data{ new Data{ version, method, path }}
 {
 
 }
@@ -85,7 +96,7 @@ const MultipartFile * HttpRequest::multipartFile( const QString name ) const
     return file;
 }
 
-QString & HttpRequest::body()
+QByteArray & HttpRequest::body()
 {
     return m_data->m_body;
 }

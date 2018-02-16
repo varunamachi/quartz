@@ -13,7 +13,7 @@ class MultipartFile;
 class HttpRequest
 {
 public:
-    HttpRequest();
+    HttpRequest( const QString &version, Method method, const QString &path);
 
     ~HttpRequest();
 
@@ -35,7 +35,7 @@ public:
 
     const MultipartFile * multipartFile( const QString name ) const;
 
-    QString & body();
+    QByteArray & body();
 
     void setHeader( const QString &key, const QString &value );
 
