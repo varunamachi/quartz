@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Constants.h"
+#include "Common.h"
 
 namespace Quartz { namespace Http {
 

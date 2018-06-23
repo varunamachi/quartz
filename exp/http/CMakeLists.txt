@@ -18,10 +18,10 @@ vq_classes (
 )
 
 vq_sources(
-    http_parser.c
 )
 vq_headers(
     Constants.h
+    Common.h
     http_parser.h
     httplib.h
 )
