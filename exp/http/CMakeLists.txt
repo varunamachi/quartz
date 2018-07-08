@@ -22,7 +22,6 @@ vq_sources(
 vq_headers(
     Constants.h
     Common.h
-    http_parser.h
     httplib.h
 )
 

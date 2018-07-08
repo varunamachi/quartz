@@ -95,7 +95,7 @@ ConsoleWidget::ConsoleWidget( QWidget *parent )
 #ifdef Q_OS_WIN
     this->setFont( QFont{ "Consolas", 12 });
 #else
-    this->setFont( QFont{ "Monospace", 12 });
+    this->setFont( QFont{ "Ubuntu Mono", 12 });
 #endif
 
 }

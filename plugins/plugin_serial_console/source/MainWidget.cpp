@@ -77,9 +77,11 @@ MainWidget::MainWidget( QWidget *parent )
              [ this ]( int index ) {
         auto widget = m_data->m_tabWidget->widget( index );
         auto holder = qobject_cast< ConsoleHolder *>( widget );
-        if( holder != nullptr ) {
+        if (holder != nullptr && holder->isConnected()) {
             holder->disconnectSerial();
         }
+        auto idx = m_data->m_tabWidget->indexOf( widget );
+        m_data->m_tabWidget->removeTab( idx );
     });
     connect( m_data->m_disconnectAll,
              &QAction::triggered,
@@ -111,7 +113,9 @@ void MainWidget::createNewConnection()
                      &ConsoleHolder::serialDisconnected,
                      [ this ]( ConsoleHolder *obj ) {
                 auto index = m_data->m_tabWidget->indexOf( obj );
-                m_data->m_tabWidget->removeTab( index );
+//                m_data->m_tabWidget->removeTab( index );
+                m_data->m_tabWidget->setTabText(index,
+                                                tr("[DISCONNECTED]"));
             });
             connect( Dialogs::baudRateEditDialog(),
                      &BaudRateEditDialog::baudRateChanged,

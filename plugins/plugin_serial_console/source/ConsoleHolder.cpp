@@ -58,6 +58,8 @@ struct ConsoleHolder::Data
 
     QAction *m_clearConsole;
 
+    QAction *m_lockOutput;
+
     ConsoleWidget *m_console;
 
     QPlainTextEdit *m_outConsole;
@@ -72,6 +74,7 @@ struct ConsoleHolder::Data
 
     QString m_completeInfo;
 
+    bool m_outputLock;
 
 };
 
@@ -82,12 +85,15 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
     , m_connect{ new QAction{ QObject::tr( "Connect" ), parent }}
     , m_disconnect{ new QAction{ QObject::tr( "Disconnect" ), parent }}
     , m_clearConsole{ new QAction{ QObject::tr( "Clear" ), parent }}
+    , m_lockOutput{ new QAction{ QObject::tr( "Lock" ), parent }}
     , m_console{ new ConsoleWidget{ parent }}
     , m_outConsole{ new QPlainTextEdit{ parent }}
     , m_baudCombo{ new QComboBox{ parent }}
     , m_serial{ new QSerialPort{ parent }}
     , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
 {
+    m_lockOutput->setCheckable(true);
+
     m_baudCombo->addItems( SerialUtils::allBaudRates() );
     auto curBaudText = QString::number( m_settings->baudRate() );
     m_baudCombo->setCurrentText( curBaudText );
@@ -95,6 +101,7 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
     m_toolBar->addAction( m_connect );
     m_toolBar->addAction( m_disconnect );
     m_toolBar->addAction( m_clearConsole );
+    m_toolBar->addAction( m_lockOutput );
     m_toolBar->addWidget( m_baudCombo );
 
     QPalette p = m_outConsole->palette();
@@ -105,7 +112,7 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
 #ifdef Q_OS_WIN
     m_outConsole->setFont( QFont{ "Consolas", 12 });
 #else
-    m_outConsole->setFont( QFont{ "Monospace", 12 });
+    m_outConsole->setFont( QFont{ "Ubuntu Mono", 12 });
 #endif
 
     updateDisplayName();
@@ -117,6 +124,7 @@ void ConsoleHolder::Data::setEnabled( bool value )
     m_connect->setEnabled( value );
     m_disconnect->setEnabled( value );
     m_console->setEnabled( value );
+    m_lockOutput->setEnabled( value );
     m_baudCombo->setEnabled( value );
 }
 
@@ -191,7 +199,10 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
                         this,
                         tr(" Serial Port Error"),
                         m_data->m_serial->errorString() );
-            this->disconnect();
+            this->disconnectSerial();
+        }
+        else if (err == QSerialPort::NotOpenError) {
+            m_data->setEnabled(false);
         }
         if( err != QSerialPort::NoError ) {
             QZP_ERROR << "Serial port error occured. Code: " << err
@@ -213,6 +224,11 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
              &QAction::triggered,
              m_data->m_console,
              &ConsoleWidget::clearConsole );
+    connect( m_data->m_lockOutput,
+             &QAction::toggled,
+             [this](bool val) {
+        m_data->m_outputLock = val;
+    });
     connect( m_data->m_baudCombo,
              static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
              this,
@@ -222,8 +238,10 @@ ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
              [ this ]() {
         auto data = m_data->m_serial->readAll();
         m_data->m_outConsole->insertPlainText( QString{ data });
-        m_data->m_outConsole->verticalScrollBar()->setValue(
-                    m_data->m_outConsole->verticalScrollBar()->maximum());
+        if (!m_data->m_outputLock) {
+            m_data->m_outConsole->verticalScrollBar()->setValue(
+                        m_data->m_outConsole->verticalScrollBar()->maximum());
+        }
     });
     connect( m_data->m_console,
              &ConsoleWidget::sigDataEntered,
@@ -254,6 +272,11 @@ const QString ConsoleHolder::displayName() const
 const QString ConsoleHolder::description() const
 {
     return m_data->m_completeInfo;
+}
+
+bool ConsoleHolder::isConnected() const
+{
+    return m_data->m_serial->isOpen();
 }
 
 

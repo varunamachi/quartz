@@ -21,6 +21,8 @@ public:
 
     const QString description() const;
 
+    bool isConnected() const;
+
 public slots:
     bool connectSerial();
 
