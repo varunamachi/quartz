@@ -1,0 +1,1 @@
+vq_classes(MaterialFont)

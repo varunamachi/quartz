@@ -1,0 +1,5 @@
+Adapted from QtAwesome https://github.com/gamecreature/QtAwesome - MIT license
+Copyright 2013-2015 - Reliable Bits Software by Blommers IT. All Rights Reserved.
+ Author Rick Blommers
+
+Uses Google Material Icon Font

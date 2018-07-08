@@ -21,7 +21,7 @@
 #include "bindings/QzBinding.h"
 
 #include "QuartzFramelessWindow.h"
-//#include "QuartzFramedWindow.h"
+#include "QuartzFramedWindow.h"
 
 bool createFileSystem()
 {
@@ -125,7 +125,8 @@ int main( int argc, char **argv )
         context< QzAppContext >()->setConfigManager( confMan.get() );
         QApplication app( argc, argv );
         QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
-            Quartz::QuartzFramelessWindow window;
+//            Quartz::QuartzFramelessWindow window;
+            Quartz::QuartzFramedWindow window;
             window.show();
             returnCode = app.exec();
         }

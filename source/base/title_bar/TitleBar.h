@@ -19,7 +19,10 @@ class QUARTZ_BASE_API TitleBar : public QWidget
     Q_OBJECT
 
 public:
-    explicit TitleBar( int height, QWidget *parent = nullptr );
+    explicit TitleBar(
+            int height,
+            bool showWindowControls,
+            QWidget *parent = nullptr );
 
     void addItem( QuartzItem *item );
 
@@ -63,11 +66,11 @@ private:
 
     QzScroller *m_scroller;
 
-    QPushButton *m_closeBtn;
+//    QPushButton *m_closeBtn;
 
-    QPushButton *m_maxRestoreBtn;
+//    QPushButton *m_maxRestoreBtn;
 
-    QPushButton *m_minimizeBtn;
+//    QPushButton *m_minimizeBtn;
 
 
 };

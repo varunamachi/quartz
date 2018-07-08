@@ -56,11 +56,11 @@ struct QzMainWidget::Data
 };
 
 
-QzMainWidget::QzMainWidget( QMainWindow *parent )
+QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     : QWidget{ parent }
     , m_data{ new Data{}}
 {
-    m_data->m_titleBar  = new TitleBar{ 20, this };
+    m_data->m_titleBar  = new TitleBar{ 20, drawWindowControls, this };
     m_data->m_content   = new ContentManager{ this };
     m_data->m_actionBar = new ActionBar{ 20, this };
     this->setObjectName( "quartz_widget" );

@@ -26,14 +26,14 @@ namespace Quartz {
 struct QuartzFramelessWindow::Data
 {
     Data( QMainWindow *parent )
-        : m_chilliWidget{ new QzMainWidget{ parent }}
+        : m_mainWidget{ new QzMainWidget{ true, parent }}
         , m_moving{ false }
         , m_maximised{ false }
     {
 
     }
 
-    QzMainWidget *m_chilliWidget;
+    QzMainWidget *m_mainWidget;
 
     bool m_moving;
 
@@ -68,7 +68,7 @@ QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
     installEventFilter( new HoverMoveFilter( this ));
 
     m_data->m_layout = new QHBoxLayout( /*m_data->m_containerWidget*/ );
-    m_data->m_layout->addWidget( m_data->m_chilliWidget );
+    m_data->m_layout->addWidget( m_data->m_mainWidget );
     m_data->m_layout->setSpacing( 0 );
     m_data->m_containerWidget->setLayout( m_data->m_layout );
 
@@ -88,7 +88,7 @@ QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
     m_data->m_layout->setContentsMargins( 5, 5, 0, 0 );
 #else
     m_data->m_containerWidget->setContentsMargins( 2, 2, 2, 2 );
-    m_data->m_chilliWidget->setContentsMargins( 2, 2, 2, 2 );
+    m_data->m_mainWidget->setContentsMargins( 2, 2, 2, 2 );
     m_data->m_layout->setContentsMargins( 0, 0, 0, 0 );
     this->setStyleSheet( "QMainWindow{ border: 1px solid #FFA858; }");
 
@@ -103,15 +103,15 @@ QuartzFramelessWindow::QuartzFramelessWindow( QWidget *parent )
     this->setContentsMargins( QMargins() );
     this->setCentralWidget( m_data->m_containerWidget );
 
-    connect( m_data->m_chilliWidget->titleBar(),
+    connect( m_data->m_mainWidget->titleBar(),
              SIGNAL( sigCloseRequested() ),
              this,
              SLOT( close() ));
-    connect( m_data->m_chilliWidget->titleBar(),
+    connect( m_data->m_mainWidget->titleBar(),
              SIGNAL( sigMaxRestoreRequested() ),
              this,
              SLOT( onMaximizeRestore() ));
-    connect( m_data->m_chilliWidget->titleBar() ,
+    connect( m_data->m_mainWidget->titleBar() ,
              SIGNAL( sigMinimizeRequested() ),
              this,
              SLOT( onMinimize() ));
@@ -223,7 +223,7 @@ void QuartzFramelessWindow::maximize()
     m_data->m_layout->setSpacing( 0 );
     m_data->m_layout->setContentsMargins( QMargins() );
     m_data->m_containerWidget->setContentsMargins( QMargins() );
-    m_data->m_chilliWidget->setRoundedRect( false );
+    m_data->m_mainWidget->setRoundedRect( false );
 
     QRect rect = desktop->availableGeometry(
                 desktop->screenNumber(QCursor::pos()));
@@ -237,7 +237,7 @@ void QuartzFramelessWindow::restore()
         m_data->m_layout->setSpacing( 0 );
         m_data->m_layout->setContentsMargins( 5, 5, 0, 0 );
         m_data->m_containerWidget->setContentsMargins( 5, 5, 5, 5 );
-        m_data->m_chilliWidget->setRoundedRect( true );
+        m_data->m_mainWidget->setRoundedRect( true );
         this->restoreGeometry( m_data->m_geometry );
     }
 }
@@ -304,10 +304,10 @@ void QuartzFramelessWindow::mouseMove( QPoint newPos, QPoint oldPos )
         QRect r = rect();
         m_data->m_cursorAtLeft =
                 ( qAbs( newPos.x()- r.left() ) <= WINDOW_MARGIN )
-                && newPos.y() > m_data->m_chilliWidget->titleBar()->height();
+                && newPos.y() > m_data->m_mainWidget->titleBar()->height();
         m_data->m_cursorAtRight =
                 ( qAbs(newPos.x() - r.right()) <= WINDOW_MARGIN )
-                && newPos.y() > m_data->m_chilliWidget->titleBar()->height();
+                && newPos.y() > m_data->m_mainWidget->titleBar()->height();
         m_data->m_cursorAtBottom =
                 ( qAbs( newPos.y() - r.bottom() ) <= WINDOW_MARGIN );
         bool horizontal = m_data->m_cursorAtLeft || m_data->m_cursorAtRight;

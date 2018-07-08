@@ -15,7 +15,7 @@ class QzMainWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit QzMainWidget( QMainWindow *parent = 0 );
+    explicit QzMainWidget( bool drawWindowControls, QMainWindow *parent = 0 );
 
     ~QzMainWidget();
 
