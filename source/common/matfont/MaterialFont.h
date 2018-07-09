@@ -16,6 +16,7 @@ class QIcon;
 class QFont;
 class QPainter;
 class QRect;
+class QFile;
 
 namespace Quartz {
 
@@ -29,8 +30,6 @@ public:
 
     virtual ~MaterialFont();
 
-    bool init();
-
     void setDefaultOption( const QString& name, const QVariant& value  );
 
     QIcon icon(MatIcon character, const QVariantMap& options );
@@ -43,9 +42,15 @@ public:
 
     QColor getColor(QIcon::Mode mode, QIcon::State state, QVariantMap opts);
 
+    static bool init(const QByteArray &fontData);
+
+    static MaterialFont * instance();
+
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
+
+    static std::unique_ptr< MaterialFont > s_instance;
 
 };
 

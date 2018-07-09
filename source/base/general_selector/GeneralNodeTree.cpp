@@ -1,6 +1,8 @@
 
 #include <core/logger/Logging.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "AbstractGeneralNodeProvider.h"
 #include "GeneralNodeTree.h"
 
@@ -32,10 +34,15 @@ bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
     if( nodeProvider != nullptr ) {
        auto nodes = nodeProvider->nodes();
        foreach( auto nodeInfo, nodes ) {
+//           if (nodeInfo->m_nodeIcon.isNull()) {
+
+//           }
+           nodeInfo->m_nodeIcon = MaterialFont::instance()->icon(
+                       MatIcon::Stars);
            auto res = addNode( nodeInfo->m_nodePath,
                                nodeInfo->m_nodeName,
                                nodeInfo->m_nodeId,
-                               nodeInfo->m_nodeIcon );
+                               nodeInfo->m_nodeIcon);
            result = res && result;
        }
     }

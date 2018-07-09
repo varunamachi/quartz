@@ -1,6 +1,8 @@
 #include <QTextStream>
 #include <QMouseEvent>
 
+#include "../matfont/MaterialFont.h"
+
 #include "IdButton.h"
 
 namespace Quartz {
@@ -18,7 +20,6 @@ IdButton::IdButton( QString id,
     , m_dim( width, height )
 {
     this->setStyle(width, height);
-    setText( text );
     this->setOrientation( orientation );
 }
 
@@ -29,12 +30,12 @@ IdButton::IdButton( QString id,
                     const QIcon &icon,
                     QWidget *parent,
                     Qt::Orientation orientation )
-    : OrientationButton( icon, text, parent )
+    : OrientationButton( icon, "", parent )
     , m_id( id )
     , m_dim( width, height )
 {
     this->setStyle(width, height);
-    setText( text );
+//    setText( text );
     this->setOrientation( orientation );
 }
 

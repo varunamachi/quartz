@@ -11,6 +11,7 @@ qz_add_base()
 
 
 
+qz_add_resource( quartz.qrc )
 vq_classes (
     QuartzFramelessWindow
     QuartzFramedWindow
@@ -23,6 +24,7 @@ vq_sources(
     quartz.cpp
 )
 
+add_subdirectory( resources )
 add_subdirectory( adapted )
 add_subdirectory( inbuilt )
 add_subdirectory( bindings )

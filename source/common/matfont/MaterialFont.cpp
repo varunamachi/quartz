@@ -16,6 +16,9 @@
 
 namespace Quartz {
 
+std::unique_ptr<MaterialFont> MaterialFont::s_instance =
+        std::unique_ptr<MaterialFont>(nullptr);
+
 class MaterialCharIconPainter: public IMaterialFontPainter
 {
 public:
@@ -29,11 +32,15 @@ public:
                        const QVariantMap& options)
     {
         painter->save();
-        QString text;
+        QString text = options.value("text").toString();
         QColor color = mat->getColor(mode, state, options);
         painter->setPen(color);
         int drawSize = qRound(rect.height() * 0.9);
         painter->setFont(mat->font(drawSize));
+        painter->drawText(
+                    rect,
+                    text,
+                    { Qt::AlignCenter | Qt::AlignVCenter });
         painter->restore();
     }
 
@@ -82,10 +89,10 @@ public:
     QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state)
     {
         QPixmap pm{size};
-        pm.fill( Qt::transparent ); // we need transparency
+        pm.fill(Qt::transparent);
         {
             QPainter p(&pm);
-            paint(&p, QRect{{ 0,0 },size}, mode, state);
+            paint(&p, QRect{{ 0,0 }, size}, mode, state);
         }
         return pm;
     }
@@ -101,7 +108,7 @@ private:
 
 struct MaterialFont::Data {
 
-    Data() : m_painter{new MaterialCharIconPainter()}
+    Data() : m_painter{std::make_unique<MaterialCharIconPainter>()}
     {
 
     }
@@ -114,8 +121,38 @@ struct MaterialFont::Data {
 
 };
 
+bool MaterialFont::init(const QByteArray &fontData)
+{
+    static int loaded = false;
+    auto index = -1;
+    if (!loaded) {
+        if (!(fontData.isNull() && fontData.isEmpty())) {
+            index = QFontDatabase::addApplicationFontFromData(fontData);
+            if (index != -1) {
+                auto fontFam = QFontDatabase::applicationFontFamilies(index);
+                if (!fontFam.empty()) {
+                    s_instance = std::make_unique<MaterialFont>();
+                    s_instance->m_data->m_fontName = fontFam.at(0);
+                    loaded = true;
+                } else {
+                    QZ_WARN("Cmn:MatFont") << "Material font file is empty";
+                }
+            } else {
+                QZ_ERROR("Cmn:MatFont") << "Material font couldn't be loaded";
+            }
+        } else {
+            QZ_ERROR("Cmn:MatFont") << "Invalid font data provided";
+        }
+    }
+    return loaded;
+}
+
+MaterialFont * MaterialFont::instance() {
+    return s_instance.get();
+}
+
 MaterialFont::MaterialFont()
-    : m_data{}
+    : m_data{std::make_unique<Data>()}
 {
 
 }
@@ -124,33 +161,6 @@ MaterialFont::~MaterialFont()
 {
 
 }
-
-bool MaterialFont::init()
-{
-    static int loaded = false;
-    auto index = -1;
-    if (!loaded) {
-//        Q_INIT_RESOURCE(common);
-        QFile res("://fonts/MaterialIcons-Regular.ttf");
-        if(res.open(QIODevice::ReadOnly)) {
-            QByteArray fontData( res.readAll() );
-            res.close();
-            index = QFontDatabase::addApplicationFontFromData(fontData);
-            if (index != -1) {
-                auto fontFam = QFontDatabase::applicationFontFamilies(index);
-                if (!fontFam.empty()) {
-                    this->m_data->m_fontName = fontFam.at(0);
-                    loaded = true;
-                }
-            }
-        }
-    }
-    if (!loaded) {
-        QZ_ERROR("Cmn:MatFont") << "Material font couldn't be loaded";
-    }
-    return loaded;
-}
-
 
 void MaterialFont::setDefaultOption(const QString &name,
                                     const QVariant &value)
@@ -165,8 +175,10 @@ QIcon MaterialFont::icon(MatIcon character,
 {
     auto opts = options;
     opts["text"] = QString{QChar(static_cast<int>(character))};
+//    opts["text"] = QString{QChar(static_cast<int>(0xe04e))};
+//    opts["text"] = QString{QChar(static_cast<int>(0x0c85))};
     return QIcon{new MaterialIconFontEngine(
-                    this, m_data->m_painter.get(), options)};
+                    this, m_data->m_painter.get(), opts)};
 }
 
 QIcon MaterialFont::icon(MatIcon character)
@@ -193,7 +205,7 @@ QColor MaterialFont::getColor(
     case QIcon::Disabled: modePostfix = "-disabled"; break;
     case QIcon::Active: modePostfix = "-active"; break;
     case QIcon::Selected: modePostfix = "-selected"; break;
-    default: break;
+    case QIcon::Normal: modePostfix = ""; break;
     }
     QString statePostfix = state == QIcon::Off ? "-off" : "";
     auto key = "color" + modePostfix + statePostfix;

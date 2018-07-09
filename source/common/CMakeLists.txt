@@ -8,8 +8,6 @@ qz_add_core()
 
 add_definitions( -DQUARTZ_COMMON )
 
-qz_add_resource( common.qrc )
-
 vq_headers(
     QuartzCommon.h
 )

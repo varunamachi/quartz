@@ -15,6 +15,8 @@
 #include <core/app_config/ConfigManager.h>
 #include <core/app_config/XMLConfigLoader.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include <base/QzAppContext.h>
 
 #include "inbuilt/LogView.h"
@@ -116,6 +118,7 @@ bool uninit()
 int main( int argc, char **argv )
 {
     auto returnCode = -1;
+    Q_INIT_RESOURCE(quartz);
     auto result = createFileSystem()
             && initLogger()
             && initApp( );
@@ -123,8 +126,15 @@ int main( int argc, char **argv )
         using namespace Quartz;
         auto confMan = initConfigManager();
         context< QzAppContext >()->setConfigManager( confMan.get() );
-        QApplication app( argc, argv );
         QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
+            QApplication app( argc, argv );
+            QFile file{"://resources/MaterialIconsRegular.ttf"};
+            if (file.exists() && file.open(QFile::ReadOnly)) {
+                MaterialFont::init(file.readAll());
+                file.close();
+            } else {
+                QZ_ERROR("App") << "Failed to load material font";
+            }
 //            Quartz::QuartzFramelessWindow window;
             Quartz::QuartzFramedWindow window;
             window.show();

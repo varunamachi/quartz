@@ -84,11 +84,11 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     viewContainer->setSizes( 370, 210, 20 );
 
     auto selectorContainer = new StackedSplitContainer{
-                20,
-                60,
+                40,
+                40,
                 AbstractContainer::SelectorPosition::Before,
                 Qt::Vertical,
-                Qt::Vertical };
+                Qt::Horizontal };
     m_data->m_selector = new SelectorManager{  selectorContainer, this };
     appContext()->setSelectorManager( m_data->m_selector );
     selectorContainer->setContentWidget( m_data->m_viewManager );
