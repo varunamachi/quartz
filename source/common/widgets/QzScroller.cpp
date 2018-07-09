@@ -39,7 +39,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         m_scroll->setMaximumWidth( maximumDim );
         m_scroll->setMinimumWidth( minimumDim );
     }
-    m_layout->setContentsMargins( QMargins() );
+//    m_layout->setContentsMargins( QMargins() );
     m_layout->setMargin( 0 );
     m_layout->addStretch( 0 );
     m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );

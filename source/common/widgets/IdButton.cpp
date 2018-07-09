@@ -5,6 +5,8 @@
 
 namespace Quartz {
 
+
+
 IdButton::IdButton( QString id,
                     QString text,
                     int height,
@@ -15,6 +17,28 @@ IdButton::IdButton( QString id,
     , m_id( id )
     , m_dim( width, height )
 {
+    this->setStyle(width, height);
+    setText( text );
+    this->setOrientation( orientation );
+}
+
+IdButton::IdButton( QString id,
+                    QString text,
+                    int height,
+                    int width,
+                    const QIcon &icon,
+                    QWidget *parent,
+                    Qt::Orientation orientation )
+    : OrientationButton( icon, text, parent )
+    , m_id( id )
+    , m_dim( width, height )
+{
+    this->setStyle(width, height);
+    setText( text );
+    this->setOrientation( orientation );
+}
+
+void IdButton::setStyle(int width, int height) {
     setCheckable( true );
     QString qss;
     QTextStream qssStream;
@@ -41,8 +65,6 @@ IdButton::IdButton( QString id,
     setFlat( true );
     qssStream.flush();
     setStyleSheet( qss );
-    setText( text );
-    this->setOrientation( orientation );
 }
 
 QSize IdButton::originalSizeHint() const

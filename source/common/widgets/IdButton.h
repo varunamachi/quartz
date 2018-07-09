@@ -13,9 +13,16 @@ public:
               QString text,
               int height,
               int width,
-              QWidget *parent = 0,
+              QWidget *parent = nullptr,
               Qt::Orientation orientation = Qt::Horizontal );
 
+    IdButton( QString id,
+              QString text,
+              int height,
+              int width,
+              const QIcon &icon,
+              QWidget *parent = nullptr,
+              Qt::Orientation orientation = Qt::Horizontal );
 
 protected:
     void mouseReleaseEvent( QMouseEvent *evt ) override;
@@ -26,6 +33,8 @@ signals:
     void activated( QString id );
 
 private:
+    void setStyle(int width, int height);
+
     QString m_id;
 
     QSize m_dim;
