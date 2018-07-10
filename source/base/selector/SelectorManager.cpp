@@ -68,9 +68,11 @@ SelectorManager::~SelectorManager()
 void SelectorManager::addSelector( AbstractSelector *selector )
 {
     if( selector != nullptr ) {
-        m_data->m_selectorContainer->addWidget( selector->selectorId(),
-                                    selector->selectorName(),
-                                    selector );
+        m_data->m_selectorContainer->addWidget(
+                    selector->selectorId(),
+                    selector->selectorName(),
+                    selector->icon(),
+                    selector );
         m_data->m_selectors.insert( selector->selectorId(), selector );
     }
     else {

@@ -3,18 +3,16 @@
 #include <memory>
 
 #include <QWidget>
-#include <QStackedWidget>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QMouseEvent>
-
 
 #include "../QuartzCommon.h"
-#include "QzScroller.h"
-#include "IdButton.h"
+
+class QStackedWidget;
+
 
 namespace Quartz {
 
+class QzScroller;
+class IdButton;
 
 
 class QUARTZ_COMMON_API AbstractContainer : public QWidget
@@ -31,7 +29,6 @@ public:
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
-                               Qt::Orientation btnOriantation,
                                QWidget *parent = nullptr );
 
     ~AbstractContainer();
@@ -68,7 +65,12 @@ public:
 public Q_SLOTS:
     void addWidget( const QString &id,
                     const QString &displayName,
-                    QWidget *widget );
+                    const QIcon &icon,
+                    QWidget *widget);
+
+    void addWidget( const QString &id,
+                    const QString &displayName,
+                    QWidget *widget);
 
     void removeWidget( const QString &id );
 
@@ -102,7 +104,6 @@ public:
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
-                               Qt::Orientation btnOriantation,
                                QWidget *parent = nullptr );
 
     ~StackedContainer();

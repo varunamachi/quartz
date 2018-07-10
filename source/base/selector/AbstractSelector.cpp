@@ -1,3 +1,5 @@
+#include <QIcon>
+
 #include "AbstractSelector.h"
 
 namespace Quartz {
@@ -5,9 +7,11 @@ namespace Quartz {
 struct AbstractSelector::Data
 {
     Data( const QString &id,
-          const QString &name )
-        : m_id( id )
-        , m_name( name )
+          const QString &name,
+          const QIcon &icon)
+        : m_id(id)
+        , m_name(name)
+        , m_icon(icon)
     {
 
     }
@@ -16,15 +20,17 @@ struct AbstractSelector::Data
 
     QString m_name;
 
+    QIcon m_icon;
+
 };
 
 
 AbstractSelector::AbstractSelector( const QString &id,
                                     const QString &name,
+                                    const QIcon &icon,
                                     QWidget *parent )
     : QWidget( parent )
-//    , m_data( std::make_unique< AbstractSelector::Data >( context, id, name ))
-    , m_data( new AbstractSelector::Data( id, name ))
+    , m_data(std::make_unique< AbstractSelector::Data >( id, name, icon))
 {
 
 }
@@ -42,6 +48,11 @@ const QString & AbstractSelector::selectorId() const
 const QString & AbstractSelector::selectorName() const
 {
     return m_data->m_name;
+}
+
+const QIcon &AbstractSelector::icon() const
+{
+    return m_data->m_icon;
 }
 
 }

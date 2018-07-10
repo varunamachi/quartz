@@ -6,6 +6,8 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 
+#include <common/matfont/MaterialFont.h>
+
 #include <core/logger/LogUtil.h>
 #include <core/logger/ILogFormatter.h>
 #include <core/logger/LogMessage.h>
@@ -174,7 +176,12 @@ const QString LogView::VIEW_DISPLAY_NAME{ "Log" };
 const QString LogView::VIEW_CATEGORY{ "Quartz.Inbuilt" };
 
 LogView::LogView( QWidget *parent )
-    : QuartzView( VIEW_ID, VIEW_CATEGORY, VIEW_DISPLAY_NAME, parent )
+    : QuartzView(
+          VIEW_ID,
+          VIEW_CATEGORY,
+          VIEW_DISPLAY_NAME,
+          matIcon(MatIcon::FormatAlignJustify),
+          parent )
     , Logger::AbstractLogTarget( LOG_TARGET_ID )
     , m_data( new Data{} )
 {

@@ -8,6 +8,7 @@
 #include <core/ext/PluginManager.h>
 
 #include <common/widgets/StackedSplitContainer.h>
+#include <common/matfont/MaterialFont.h>
 
 #include <base/selector/Node.h>
 #include <base/QzAppContext.h>
@@ -65,6 +66,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_actionBar = new ActionBar{ 20, this };
     this->setObjectName( "quartz_widget" );
     m_data->m_titleBar->setContentsMargins( QMargins{} );
+    this->setContentsMargins( QMargins{} );
 
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
@@ -73,9 +75,8 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_content->setSizePolicy( policy );
     auto viewContainer = new StackedSplitContainer{
                 20,
-                60,
+                70,
                 AbstractContainer::SelectorPosition::After,
-                Qt::Horizontal,
                 Qt::Horizontal };
     m_data->m_viewManager = new ViewManager( viewContainer, this );
     viewContainer->setContentWidget(
@@ -87,8 +88,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
                 40,
                 40,
                 AbstractContainer::SelectorPosition::Before,
-                Qt::Vertical,
-                Qt::Horizontal };
+                Qt::Vertical };
     m_data->m_selector = new SelectorManager{  selectorContainer, this };
     appContext()->setSelectorManager( m_data->m_selector );
     selectorContainer->setContentWidget( m_data->m_viewManager );
@@ -100,11 +100,11 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     mainLayout->addWidget( m_data->m_selector );
     mainLayout->addWidget( m_data->m_actionBar);
     mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins( QMargins{ 0, 0, 5, 5 });
+    mainLayout->setContentsMargins( QMargins{ 0, 0, 1, 1 });
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
 
-    m_data->m_actionBar->setStyleSheet( "background: yellow;" );
+//    m_data->m_actionBar->setStyleSheet( "background: yellow;" );
 //    m_data->m_viewManager->setStyleSheet( "background: blue;" );
     this->setMinimumSize({ 800, 600 });
 
@@ -120,7 +120,11 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     configTree->addPage( new BasicConfigPage{ configTree });
 
     QStringList path;
-    auto welcomeNode = nodeSelector->model()->addNode( path, "Welcome" );
+    auto welcomeNode = nodeSelector->model()->addNode(
+                path,
+                tr("Welcome"),
+                "qz.inbuilt.welcome",
+                matIcon(MatIcon::Star));
     path << "Welcome";
     m_data->m_content->addContent( new WelcomePage{ welcomeNode->nodeId(),
                                                     m_data->m_content });

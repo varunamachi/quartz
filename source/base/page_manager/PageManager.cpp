@@ -24,7 +24,6 @@ PageManager::PageManager( int categoryWidth,
                           40,
                           AbstractContainer::SelectorPosition::Before,
                           Qt::Vertical,
-                          Qt::Horizontal,
                           this ))
 {
     QVBoxLayout *layout = new QVBoxLayout();
@@ -45,7 +44,6 @@ void PageManager::addPage( QuartzPage *page )
                         m_holderHeight,
                         150,
                         AbstractContainer::SelectorPosition::Before,
-                        Qt::Horizontal,
                         Qt::Horizontal,
                         this );
             m_catContainer->addWidget( page->pageCategoryId(),

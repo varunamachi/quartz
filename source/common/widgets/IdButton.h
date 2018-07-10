@@ -1,11 +1,11 @@
 #pragma once
 
-#include "OrientationButton.h"
+#include <QToolButton>
 
 namespace Quartz {
 
 
-class IdButton : public OrientationButton
+class IdButton : public QToolButton
 {
     Q_OBJECT
 public:
@@ -13,27 +13,27 @@ public:
               QString text,
               int height,
               int width,
-              QWidget *parent = nullptr,
-              Qt::Orientation orientation = Qt::Horizontal );
+              QWidget *parent = nullptr);
 
     IdButton( QString id,
               QString text,
               int height,
               int width,
               const QIcon &icon,
-              QWidget *parent = nullptr,
-              Qt::Orientation orientation = Qt::Horizontal );
+              bool textBelowIcon,
+              QWidget *parent = nullptr);
 
 protected:
     void mouseReleaseEvent( QMouseEvent *evt ) override;
 
-    QSize originalSizeHint() const override;
+//    QSize originalSizeHint() const override;
+      QSize sizeHint() const override;
 
 signals:
     void activated( QString id );
 
 private:
-    void setStyle(int width, int height);
+    void setStyle(int width, int height, bool big);
 
     QString m_id;
 

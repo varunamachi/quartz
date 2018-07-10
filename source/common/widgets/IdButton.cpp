@@ -1,5 +1,7 @@
 #include <QTextStream>
 #include <QMouseEvent>
+#include <QApplication>
+#include <QDebug>
 
 #include "../matfont/MaterialFont.h"
 
@@ -13,14 +15,13 @@ IdButton::IdButton( QString id,
                     QString text,
                     int height,
                     int width,
-                    QWidget *parent,
-                    Qt::Orientation orientation )
-    : OrientationButton( text, parent )
+                    QWidget *parent)
+    : QToolButton (parent)
     , m_id( id )
     , m_dim( width, height )
 {
-    this->setStyle(width, height);
-    this->setOrientation( orientation );
+    this->setStyle(width, height, false);
+    this->setText(text);
 }
 
 IdButton::IdButton( QString id,
@@ -28,47 +29,62 @@ IdButton::IdButton( QString id,
                     int height,
                     int width,
                     const QIcon &icon,
-                    QWidget *parent,
-                    Qt::Orientation orientation )
-    : OrientationButton( icon, "", parent )
+                    bool textBelowIcon,
+                    QWidget *parent)
+    : QToolButton (parent)
     , m_id( id )
     , m_dim( width, height )
 {
-    this->setStyle(width, height);
-//    setText( text );
-    this->setOrientation( orientation );
+    this->setIcon(icon);
+    this->setText(text);
+    if (textBelowIcon) {
+        this->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        QFontMetrics fm(this->font());
+        auto h = height - fm.height() - 4;
+        this->setIconSize({ h, h});
+    } else {
+        this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
+    this->setStyle(width, height, textBelowIcon);
 }
 
-void IdButton::setStyle(int width, int height) {
+void IdButton::setStyle(int width, int height, bool big) {
     setCheckable( true );
     QString qss;
     QTextStream qssStream;
-    qssStream.setString( &qss );
-    qssStream << " QPushButton {"
+    qssStream.setString(&qss);
+    auto txtColor = QApplication::palette().color(QPalette::Text);
+    auto bgColor = QApplication::palette().color(QPalette::Background);
+    auto selBg = txtColor;
+    auto hvBg = txtColor;
+    selBg.setAlpha(50);
+    hvBg.setAlpha(15);
+    qssStream << " QToolButton {"
                  "     border-radius: 5px;"
-                 "     background-color: regba( 32, 32, 32, 200 );"
+                 "     background-color: " << bgColor.name() << ";"
+                 "     color: " << txtColor.name() << ";"
                  "     max-width: " << width << "px;"
                  "     min-width: " << width << "px;"
                  "     max-height: " << height << "px;"
                  "     min-height: " << height << "px;"
-                 "     font-size: 12px;"
-                 "     color: white;"
+                 "     font-size: " << (big ? 9 : 12) << "px;"
+                 "     padding: 0px;"
                  " }"
-                 " QPushButton:checked {"
-                 "     background-color: #FFA858;"
-                 "     color: #202020;"
+                 " QToolButton:checked {"
+                 "     background-color: " << selBg.name(QColor::HexArgb) << ";"
+                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
                  " }"
-                 "QPushButton:hover {"
-                 "     background-color: #FFA858;"
-                 "     color: #202020;"
+                 "QToolButton:hover {"
+                 "     background-color: " << hvBg.name(QColor::HexArgb) << ";"
+                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
                  " }"
                   ;
-    setFlat( true );
     qssStream.flush();
     setStyleSheet( qss );
+    setContentsMargins(0, 10, 0, 10);
 }
 
-QSize IdButton::originalSizeHint() const
+QSize IdButton::sizeHint() const
 {
     return m_dim;
 }
@@ -76,7 +92,7 @@ QSize IdButton::originalSizeHint() const
 
 void IdButton::mouseReleaseEvent( QMouseEvent *evt )
 {
-    QPushButton::mousePressEvent( evt );
+    QToolButton::mousePressEvent( evt );
     emit activated( m_id );
     evt->ignore();
 }

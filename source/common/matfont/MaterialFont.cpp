@@ -32,15 +32,27 @@ public:
                        const QVariantMap& options)
     {
         painter->save();
+//        painter->setFe
         QString text = options.value("text").toString();
-        QColor color = mat->getColor(mode, state, options);
+        QColor color;
+        if (options.contains("color")) {
+            color = options["color"].value<QColor>();
+        } else {
+            color = mat->getColor(mode, state, options);
+        }
+        auto drawSize = rect.height();
+        if (options.contains("size")) {
+            drawSize = options["size"].toInt();
+        }
+        color.setAlpha(175);
         painter->setPen(color);
-        int drawSize = qRound(rect.height() * 0.9);
-        painter->setFont(mat->font(drawSize));
+        auto font = mat->font(qRound(drawSize * 0.9));
+        painter->setFont(font);
+//        painter->setRenderHint(QPainter::Antialiasing);
         painter->drawText(
                     rect,
                     text,
-                    { Qt::AlignCenter | Qt::AlignVCenter });
+                    { Qt::AlignTop| Qt::AlignVCenter });
         painter->restore();
     }
 
@@ -175,16 +187,27 @@ QIcon MaterialFont::icon(MatIcon character,
 {
     auto opts = options;
     opts["text"] = QString{QChar(static_cast<int>(character))};
-//    opts["text"] = QString{QChar(static_cast<int>(0xe04e))};
-//    opts["text"] = QString{QChar(static_cast<int>(0x0c85))};
     return QIcon{new MaterialIconFontEngine(
                     this, m_data->m_painter.get(), opts)};
 }
 
-QIcon MaterialFont::icon(MatIcon character)
+QIcon MaterialFont::icon(MatIcon character, int size, QColor color)
 {
-    return icon(character, QVariantMap{});
+    QVariantMap opts;
+    opts["text"] = QString{QChar(static_cast<int>(character))};;
+    if (size > 0) {
+        opts["size"] = size;
+    }
+    if (color.isValid()) {
+        opts["color"] = color;
+    }
+    return icon(character, opts);
 }
+
+//QIcon MaterialFont::icon(MatIcon character)
+//{
+//    return icon(character, QVariantMap{});
+//}
 
 
 QFont MaterialFont::font(int size)

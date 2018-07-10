@@ -2,6 +2,8 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "ViewProvider.h"
 
 namespace Quartz { namespace Ext { namespace Sample {
@@ -15,6 +17,7 @@ SampleView::SampleView( QWidget *parent )
           SampleView::VIEW_ID,
           SampleView::VIEW_CATERGORY,
           SampleView::VIEW_NAME,
+          matIcon(MatIcon::Gesture),
           parent )
 {
     auto layout = new QVBoxLayout{ this };

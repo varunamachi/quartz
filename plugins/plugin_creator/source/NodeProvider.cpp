@@ -1,6 +1,8 @@
 
 #include <base/selector/Node.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "NodeProvider.h"
 
 namespace Quartz { namespace Ext { namespace Creator {
@@ -33,10 +35,11 @@ bool NodeProvider::destroy()
 
 QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
 {
-    auto nodeInfo = std::make_shared< NodeInfo >( QStringList{},
-                                                  "Creator",
-                                                  "qzp.creator.content.main",
-                                                  QIcon{} );
+    auto nodeInfo = std::make_shared< NodeInfo >(
+                QStringList{},
+                "Creator",
+                "qzp.creator.content.main",
+                matIcon(MatIcon::AddCircle));
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
     return nodes;

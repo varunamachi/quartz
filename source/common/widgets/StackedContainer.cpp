@@ -1,5 +1,13 @@
 #include <QVariant>
 #include <QMouseEvent>
+#include <QStackedWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include <matfont/MaterialFont.h>
+
+#include "QzScroller.h"
+#include "IdButton.h"
 
 #include "StackedContainer.h"
 
@@ -36,14 +44,12 @@ struct AbstractContainer::Data
           int buttonDimention,
           SelectorPosition selectorPosition,
           Qt::Orientation orientation,
-          Qt::Orientation btnOriantation,
           QzScroller *scroller,
           QStackedWidget *stackedWidget )
         : m_btnHeight( selectorDimention )
         , m_btnWidth( buttonDimention )
         , m_selectorPosition( selectorPosition )
         , m_orientation( orientation )
-        , m_btnOrientation( btnOriantation )
         , m_selector( scroller )
         , m_stackWidget( stackedWidget )
     {
@@ -57,8 +63,6 @@ struct AbstractContainer::Data
     SelectorPosition m_selectorPosition;
 
     Qt::Orientation m_orientation;
-
-    Qt::Orientation m_btnOrientation;
 
     QzScroller *m_selector;
 
@@ -74,7 +78,6 @@ AbstractContainer::AbstractContainer( int selectorDimention,
                                     int buttonDimention,
                                     SelectorPosition selectorPosition,
                                     Qt::Orientation orientation,
-                                    Qt::Orientation btnOrientation,
                                     QWidget *parent )
     : QWidget( parent )
     , m_data( new Data{
@@ -82,36 +85,19 @@ AbstractContainer::AbstractContainer( int selectorDimention,
               buttonDimention,
               selectorPosition,
               orientation,
-              btnOrientation,
               new QzScroller{ orientation,
                               selectorDimention,
                               selectorDimention,
                               this },
               new QStackedWidget{ this }})
 {
-    if( btnOrientation == orientation ) {
-        if( btnOrientation == Qt::Horizontal ) {
-            m_data->m_btnWidth  = buttonDimention;
-            m_data->m_btnHeight = selectorDimention;
-            m_data->m_selector->setMaximumHeight( selectorDimention );
-        }
-        else {
-            m_data->m_btnWidth = selectorDimention;
-            m_data->m_btnHeight = buttonDimention;
-            m_data->m_selector->setMaximumWidth( selectorDimention );
-        }
-    }
-    else {
-        if( btnOrientation == Qt::Horizontal ) {
-            m_data->m_btnWidth = selectorDimention;
-            m_data->m_btnHeight = buttonDimention;
-            m_data->m_selector->setMaximumWidth( selectorDimention );
-        }
-        else {
-            m_data->m_btnWidth  = buttonDimention;
-            m_data->m_btnHeight = selectorDimention;
-            m_data->m_selector->setMaximumHeight( selectorDimention );
-        }
+
+    m_data->m_btnWidth  = buttonDimention;
+    m_data->m_btnHeight = selectorDimention;
+    if (orientation == Qt::Horizontal) {
+        m_data->m_selector->setMaximumHeight( selectorDimention );
+    } else  {
+        m_data->m_selector->setMaximumWidth( selectorDimention );
     }
     m_data->m_selector->setContentsMargins( QMargins() );
     m_data->m_stackWidget->setContentsMargins( QMargins() );
@@ -140,7 +126,6 @@ QWidget *AbstractContainer::selectedWidget() const
     auto item = m_data->m_items.value( m_data->m_selectedId );
     if( item != nullptr ) {
         selected = item->m_widget;
-//        Q_EMIT
     }
     return selected;
 }
@@ -158,17 +143,39 @@ QList< QString > AbstractContainer::allIds() const
 }
 
 
-void AbstractContainer::addWidget( const QString &id,
-                                  const QString &displayName,
-                                  QWidget *widget )
+void AbstractContainer::addWidget(
+        const QString &id,
+        const QString &displayName,
+        QWidget *widget)
+{
+    this->addWidget(id, displayName, QIcon{}, widget);
+}
+
+void AbstractContainer::addWidget(
+        const QString &id,
+        const QString &displayName,
+        const QIcon &icon,
+        QWidget *widget)
 {
     if( widget != nullptr ) {
-        auto *btn = new IdButton( id,
-                                  displayName,
-                                  m_data->m_btnHeight,
-                                  m_data->m_btnWidth,
-                                  this,
-                                  m_data->m_btnOrientation );
+
+        IdButton *btn = nullptr;
+        if (icon.isNull()) {
+            btn = new IdButton( id,
+                                displayName,
+                                m_data->m_btnHeight,
+                                m_data->m_btnWidth,
+                                this);
+        } else {
+            auto btmTxt = this->containerOrientation() == Qt::Vertical;
+            btn = new IdButton( id,
+                                displayName,
+                                m_data->m_btnHeight,
+                                m_data->m_btnWidth,
+                                icon,
+                                btmTxt,
+                                this);
+        }
         btn->setContentsMargins( QMargins{ });
         auto index = m_data->m_stackWidget->addWidget( widget );
         auto item = Item::create( index, btn, widget );
@@ -273,10 +280,6 @@ Qt::Orientation AbstractContainer::containerOrientation() const
     return m_data->m_orientation;
 }
 
-Qt::Orientation AbstractContainer::buttonOrientation() const
-{
-    return  m_data->m_btnOrientation;
-}
 
 int AbstractContainer::buttonWidth() const
 {
@@ -287,7 +290,6 @@ int AbstractContainer::buttonHeight() const
 {
     return m_data->m_btnHeight;
 }
-
 
 void AbstractContainer::updateIndeces()
 {
@@ -324,13 +326,11 @@ StackedContainer::StackedContainer(
         int buttonDimention,
         AbstractContainer::SelectorPosition selectorPosition,
         Qt::Orientation orientation,
-        Qt::Orientation btnOriantation,
         QWidget *parent )
     : AbstractContainer( selectorDimention,
                          buttonDimention,
                          selectorPosition,
                          orientation,
-                         btnOriantation,
                          parent )
 {
     QBoxLayout *layout = nullptr;

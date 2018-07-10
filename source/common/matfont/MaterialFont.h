@@ -8,6 +8,7 @@
 #include <QHash>
 #include <QIcon>
 
+#include "../QuartzCommon.h"
 #include "MatIcon.h"
 
 class QString;
@@ -22,7 +23,7 @@ namespace Quartz {
 
 struct IMaterialFontPainter;
 
-class MaterialFont
+class QUARTZ_COMMON_API MaterialFont
 {
 public:
 
@@ -34,7 +35,9 @@ public:
 
     QIcon icon(MatIcon character, const QVariantMap& options );
 
-    QIcon icon(MatIcon character);
+    QIcon icon(MatIcon character, int size, QColor color);
+
+//    QIcon icon(MatIcon character);
 
     QFont font(int size);
 
@@ -66,6 +69,14 @@ struct IMaterialFontPainter
 
     virtual ~IMaterialFontPainter() {}
 };
+
+inline QIcon matIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
+    return MaterialFont::instance()->icon(code, size, color);
+}
+
+inline QIcon matIcon(MatIcon code, QVariantMap &opts) {
+    return MaterialFont::instance()->icon(code, opts);
+}
 
 }
 

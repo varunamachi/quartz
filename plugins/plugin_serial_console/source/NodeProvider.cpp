@@ -1,4 +1,6 @@
 
+#include <common/matfont/MaterialFont.h>
+
 #include <base/selector/Node.h>
 
 #include "NodeProvider.h"
@@ -38,7 +40,7 @@ QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
                 QStringList{},
                 "Serial Console",
                 MainWidget::CONTENT_ID,
-                QIcon{} );
+                matIcon(MatIcon::Tv));
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
     return nodes;

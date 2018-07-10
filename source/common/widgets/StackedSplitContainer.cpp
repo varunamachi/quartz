@@ -1,8 +1,10 @@
-
-#include "StackedSplitContainer.h"
-
 #include <QSplitter>
 #include <QList>
+#include <QVBoxLayout>
+#include <QStackedWidget>
+
+#include "QzScroller.h"
+#include "StackedSplitContainer.h"
 
 namespace Quartz {
 
@@ -18,13 +20,11 @@ StackedSplitContainer::StackedSplitContainer(
         int buttonDimention,
         AbstractContainer::SelectorPosition selectorPosition,
         Qt::Orientation orientation,
-        Qt::Orientation btnOriantation,
         QWidget *parent )
     : AbstractContainer( selectorDimention,
                          buttonDimention,
                          selectorPosition,
                          orientation,
-                         btnOriantation,
                          parent )
     , m_data( new Data{} )
 {
@@ -46,7 +46,7 @@ StackedSplitContainer::StackedSplitContainer(
         m_data->m_splitter->addWidget( stackedWidget() );
         m_data->m_splitter->addWidget( selector() );
     }
-
+    this->setContentsMargins({});
     auto layout = new QVBoxLayout{ this };
     layout->addWidget( m_data->m_splitter );
     layout->setContentsMargins( QMargins{} );

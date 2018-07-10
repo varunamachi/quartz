@@ -1,6 +1,8 @@
 
 #include <QIcon>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "BasicConfigPage.h"
 
 namespace Quartz {
@@ -17,7 +19,7 @@ BasicConfigPage::BasicConfigPage( QWidget *parent )
     : AbstractConfigPage{ QStringList{ },
                           CONFIG_PAGE_NAME,
                           CONFIG_PAGE_ID,
-                          QIcon{ },
+                          matIcon(MatIcon::SettingsApplications),
                           parent }
     , m_data{ new Data{} }
 {

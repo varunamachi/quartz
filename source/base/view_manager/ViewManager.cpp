@@ -32,6 +32,7 @@ void ViewManager::addView( QuartzView *view )
     if( view != nullptr ) {
         m_viewContainer->addWidget( view->viewId(),
                                     view->viewDisplayName(),
+                                    view->icon(),
                                     view );
         m_views.insert( view->viewId(), view );
         this->setVisible( true );

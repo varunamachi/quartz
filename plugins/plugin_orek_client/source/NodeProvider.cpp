@@ -1,3 +1,6 @@
+
+#include <common/matfont/MaterialFont.h>
+
 #include <base/selector/Node.h>
 
 #include "NodeProvider.h"
@@ -14,10 +17,11 @@ struct NodeProvider::Data
     Data()
     {
 //        auto path = Quartz::Node::toPath( "Orek" );
-        auto nodeInfo = std::make_shared< NodeInfo >( QStringList{},
-                                                      "Orek",
-                                                      "qzp.orekclient.content",
-                                                      QIcon{} );
+        auto nodeInfo = std::make_shared< NodeInfo >(
+                    QStringList{},
+                    "Orek",
+                    "qzp.orekclient.content",
+                    matIcon(MatIcon::GroupWork));
         m_nodes.append( nodeInfo );
     }
 

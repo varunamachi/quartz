@@ -13,7 +13,6 @@ public:
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
-                               Qt::Orientation btnOriantation,
                                QWidget *parent = nullptr );
 
     ~StackedSplitContainer();

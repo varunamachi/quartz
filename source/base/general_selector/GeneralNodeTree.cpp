@@ -34,11 +34,9 @@ bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
     if( nodeProvider != nullptr ) {
        auto nodes = nodeProvider->nodes();
        foreach( auto nodeInfo, nodes ) {
-//           if (nodeInfo->m_nodeIcon.isNull()) {
-
-//           }
-           nodeInfo->m_nodeIcon = MaterialFont::instance()->icon(
-                       MatIcon::Stars);
+           if (nodeInfo->m_nodeIcon.isNull()) {
+               nodeInfo->m_nodeIcon = matIcon(MatIcon::CheckBoxOutlineBlank);
+           }
            auto res = addNode( nodeInfo->m_nodePath,
                                nodeInfo->m_nodeName,
                                nodeInfo->m_nodeId,

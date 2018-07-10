@@ -1,6 +1,8 @@
 
 #include <core/logger/Logging.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "Node.h"
 
 #include "TreeModel.h"
@@ -216,6 +218,14 @@ QVariant TreeModel::data( const QModelIndex &index, int role ) const
         if( role == Qt::DisplayRole ) {
             auto node = static_cast< Node *>( index.internalPointer() );
             data = node->nodeName();
+        } else if (role == Qt::DecorationRole) {
+            auto node = static_cast< Node *>( index.internalPointer() );
+            auto ic = node->icon();
+            if (ic.isNull()) {
+                data = matIcon(MatIcon::Folder);
+            } else {
+                data = ic;
+            }
         }
     }
     return data;

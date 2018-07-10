@@ -4,6 +4,8 @@
 #include <core/ext/PluginManager.h>
 #include <core/ext/Plugin.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "../QzAppContext.h"
 #include "PluginItemModel.h"
 
@@ -83,8 +85,7 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
     }
     if ( role == Qt::TextAlignmentRole ) {
         return int ( Qt::AlignLeft | Qt::AlignVCenter );
-    }
-    else if ( role == Qt::DisplayRole ) {
+    } else if ( role == Qt::DisplayRole ) {
         const auto &plugin = m_data->m_pluginList->at( index.row() );
         auto lib = appContext()->pluginManager()->libraryForPlugin(
                     plugin->pluginId() );
@@ -97,6 +98,8 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
             }
             break;
         }
+    } else if (role == Qt::DecorationRole) {
+        return matIcon(MatIcon::Extension);
     }
     return QVariant();
 }

@@ -7,6 +7,8 @@
 #include <core/ext/Plugin.h>
 #include <core/ext/PluginManager.h>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
 #include "PluginInfoPage.h"
@@ -47,7 +49,11 @@ const QString PluginSelector::SELECTOR_NAME{ "Plugins" };
 
 
 PluginSelector::PluginSelector( QWidget *parent )
-    : AbstractSelector{ SELECTOR_ID, SELECTOR_NAME, parent }
+    : AbstractSelector{
+          SELECTOR_ID,
+          SELECTOR_NAME,
+          matIcon(MatIcon::Extension),
+          parent }
     , m_data{ new Data{ this }}
 {
     auto layout = new QVBoxLayout{ this };

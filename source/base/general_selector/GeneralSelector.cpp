@@ -3,6 +3,8 @@
 #include <QTreeView>
 #include <QHeaderView>
 
+#include <common/matfont/MaterialFont.h>
+
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
 #include "../selector/Node.h"
@@ -33,6 +35,7 @@ struct GeneralSelector::Data
 GeneralSelector::GeneralSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
+                        matIcon(MatIcon::BlurCircular),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new GeneralSelector::Data( new QTreeView( this ),
@@ -77,7 +80,7 @@ void GeneralSelector::selected()
             auto index = m_data->m_model->index( 0, 0, QModelIndex{} );
             selectionModel->setCurrentIndex(
                         index,
-                        QItemSelectionModel::SelectCurrent );
+                        QItemSelectionModel::SelectCurrent);
         }
     }
 }
@@ -90,7 +93,7 @@ void GeneralSelector::unselected()
 void GeneralSelector::onSelected( const QModelIndex &current,
                                   const QModelIndex &/*previous*/ )
 {
-    if( ! ( current.isValid() && current.internalPointer() != 0 )) {
+    if( ! ( current.isValid() && current.internalPointer() != nullptr )) {
         return;
     }
     auto node = static_cast< Node *>( current.internalPointer() );

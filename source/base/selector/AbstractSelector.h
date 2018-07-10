@@ -16,6 +16,7 @@ class QUARTZ_BASE_API AbstractSelector : public QWidget
 public:
     AbstractSelector( const QString &selectorId,
                       const QString &selectorName,
+                      const QIcon &icon,
                       QWidget *parent = nullptr );
 
     virtual ~AbstractSelector();
@@ -23,6 +24,8 @@ public:
     const QString & selectorId() const;
 
     const QString & selectorName() const;
+
+    const QIcon & icon() const;
 
     virtual void selected() = 0;
 

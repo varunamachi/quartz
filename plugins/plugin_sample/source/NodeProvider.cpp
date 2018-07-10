@@ -1,4 +1,6 @@
 
+#include <common/matfont/MaterialFont.h>
+
 #include <base/selector/Node.h>
 
 #include "NodeProvider.h"
@@ -34,10 +36,11 @@ bool NodeProvider::destroy()
 QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
 {
     auto path = Node::toPath( "Plugin>Sample" );
-    auto nodeInfo = std::make_shared< NodeInfo >( path,
-                                                  "Sample Node",
-                                                  "qzp.sample.content.one",
-                                                  QIcon{} );
+    auto nodeInfo = std::make_shared< NodeInfo >(
+                path,
+                "Sample Node",
+                "qzp.sample.content.one",
+                matIcon(MatIcon::Gesture));
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
     return nodes;

@@ -16,6 +16,7 @@ public:
     QuartzView( const QString &viewId,
                 const QString &category,
                 const QString &displayName,
+                const QIcon &icon,
                 QWidget *parent = nullptr );
 
     ~QuartzView();
@@ -27,6 +28,8 @@ public:
     const QString & viewDisplayName() const;
 
     const QString & viewCategoryName() const;
+
+    const QIcon & icon() const;
 
 private:
     struct Data;
