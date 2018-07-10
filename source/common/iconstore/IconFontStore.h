@@ -21,15 +21,15 @@ class QFile;
 
 namespace Quartz {
 
-struct IMaterialFontPainter;
+struct IIconFontPainter;
 
-class QUARTZ_COMMON_API MaterialFont
+class QUARTZ_COMMON_API IconFontStore
 {
 public:
 
-    explicit MaterialFont();
+    explicit IconFontStore();
 
-    virtual ~MaterialFont();
+    virtual ~IconFontStore();
 
     void setDefaultOption( const QString& name, const QVariant& value  );
 
@@ -41,43 +41,43 @@ public:
 
     QFont font(int size);
 
-    void give(const QString& name, IMaterialFontPainter* painter);
+    void give(const QString& name, IIconFontPainter* painter);
 
     QColor getColor(QIcon::Mode mode, QIcon::State state, QVariantMap opts);
 
     static bool init(const QByteArray &fontData);
 
-    static MaterialFont * instance();
+    static IconFontStore * instance();
 
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
 
-    static std::unique_ptr< MaterialFont > s_instance;
+    static std::unique_ptr< IconFontStore > s_instance;
 
 };
 
 
-struct IMaterialFontPainter
+struct IIconFontPainter
 {
-    virtual void paint(MaterialFont* awesome,
+    virtual void paint(IconFontStore* awesome,
                        QPainter* painter,
                        const QRect& rect,
                        QIcon::Mode mode,
                        QIcon::State state,
                        const QVariantMap& options ) = 0;
 
-    virtual ~IMaterialFontPainter() {}
+    virtual ~IIconFontPainter() {}
 };
 
 inline QIcon matIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
-    return MaterialFont::instance()->icon(code, size, color);
+    return IconFontStore::instance()->icon(code, size, color);
 }
 
 inline QIcon matIcon(MatIcon code, QVariantMap &opts) {
-    return MaterialFont::instance()->icon(code, opts);
+    return IconFontStore::instance()->icon(code, opts);
 }
 
 }
 
-Q_DECLARE_METATYPE(Quartz::IMaterialFontPainter*)
+Q_DECLARE_METATYPE(Quartz::IIconFontPainter*)

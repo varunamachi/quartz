@@ -4,7 +4,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "QzScroller.h"
 #include "IdButton.h"

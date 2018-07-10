@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "../matfont/MaterialFont.h"
+#include "../iconstore/IconFontStore.h"
 
 #include "IdButton.h"
 

@@ -74,6 +74,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         mainLayout->addWidget( m_scroll );
         mainLayout->addWidget( m_fwdButton );
         mainLayout->setAlignment( m_fwdButton, Qt::AlignRight );
+        this->setContentsMargins(5, 0, 5, 0);
     }
     else {
         mainLayout = new QVBoxLayout();
@@ -82,6 +83,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         mainLayout->addWidget( m_scroll );
         mainLayout->addWidget( m_fwdButton );
         mainLayout->setAlignment( m_fwdButton, Qt::AlignBottom );
+        this->setContentsMargins(0, 5, 0, 5);
     }
     mainLayout->setContentsMargins( QMargins() );
     this->setLayout( mainLayout );

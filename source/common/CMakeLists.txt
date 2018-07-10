@@ -16,7 +16,7 @@ add_subdirectory( generic_config )
 add_subdirectory( widgets )
 add_subdirectory( templating )
 add_subdirectory( model_view )
-add_subdirectory( matfont )
+add_subdirectory( iconstore )
 
 vq_create_sharedlib()
 vq_install()

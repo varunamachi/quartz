@@ -1,5 +1,5 @@
 vq_classes(
-    MaterialFont
+    IconFontStore
 )
 
 vq_headers(
