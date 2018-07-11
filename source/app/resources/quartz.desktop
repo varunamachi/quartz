@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Version=0.1
+Name=Quartz
+GenericName="Development"
+Exec=quartz
+Icon=quartz.png

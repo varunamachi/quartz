@@ -25,6 +25,45 @@
 #include "QuartzFramelessWindow.h"
 #include "QuartzFramedWindow.h"
 
+
+QByteArray readAll(QString path) {
+    QFile file(path);
+    if (file.open(QFile::ReadOnly)) {
+        return file.readAll();
+    }
+    return QByteArray();
+}
+
+void installAppIcon() {
+    auto home = QDir::homePath();
+    auto iconPath= home + "/.local/share/icons/quartz.png";
+    auto configPath = home + "/.local/share/applications/quartz.desktop";
+    auto icon = readAll("://resources/quartz.png");
+    auto config = readAll("://resources/quartz.desktop");
+    QFileInfo iconInfo(iconPath);
+    if (!iconInfo.exists() || iconInfo.size() != icon.size()) {
+        QFile iFile(iconPath);
+        if (!icon.isNull() && iFile.open(QFile::WriteOnly | QFile::Text)) {
+            iFile.write(icon);
+        } else {
+            QZ_ERROR("App") << "Failed to create icon file";
+        }
+    } else {
+        QZ_DEBUG("App") << "No need to install icon";
+    }
+    QFileInfo configInfo(configPath);
+    if (!configInfo.exists() || configInfo.size() != config.size()) {
+        QFile cFile(configPath);
+        if (!config.isNull() && cFile.open(QFile::WriteOnly | QFile::Text)) {
+            cFile.write(config);
+        } else {
+            QZ_ERROR("App") << "Failed to create desktop file";
+        }
+    } else {
+        QZ_DEBUG("App") << "No need to install desktop file";
+    }
+}
+
 bool createFileSystem()
 {
     using namespace Quartz;
@@ -121,7 +160,7 @@ void loadFonts() {
         {"://resources/MaterialIconsRegular.ttf"},
         {"://resources/FABrands.ttf"},
         {"://resources/FASolid.ttf"},
-        {"://resources/FARegular.ttf"}
+//        {"://resources/FARegular.ttf"}
     };
     for (auto &f : files) {
         if (f.exists() && f.open(QFile::ReadOnly)) {
@@ -153,7 +192,9 @@ int main( int argc, char **argv )
         QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
             QApplication app( argc, argv );
             loadFonts();
-//            Quartz::QuartzFramelessWindow window;
+#ifdef Q_OS_LINUX
+            installAppIcon();
+#endif
             Quartz::QuartzFramedWindow window;
             window.show();
             returnCode = app.exec();

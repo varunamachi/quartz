@@ -93,8 +93,8 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
                         QObject::tr( "Disconnect" ),
                         parent )}
     , m_clearConsole{ new QAction(
-                          getIcon(MatIcon::FormatPaint),
-                          QObject::tr( "Clear" ),
+                          getIcon(FAIcon::Broom),
+                          QObject::tr( "Clear Input" ),
                           parent)}
     , m_lockOutput{ new QAction(
                         getIcon(MatIcon::Lock),
@@ -116,6 +116,9 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
     m_toolBar->addAction( m_disconnect );
     m_toolBar->addAction( m_clearConsole );
     m_toolBar->addAction( m_lockOutput );
+    m_toolBar->addSeparator();
+    m_toolBar->addWidget(new QLabel(tr("    Baud Rate: ")));
+    m_baudCombo->setMinimumWidth(200);
     m_toolBar->addWidget( m_baudCombo );
 
     QPalette p = m_outConsole->palette();

@@ -3,4 +3,6 @@ vq_headers(
     FABrands.ttf
     FASolid.ttf
     FARegular.ttf
+    quartz.png
+    quartz.desktop
 )

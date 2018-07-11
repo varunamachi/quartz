@@ -4,5 +4,7 @@
         <file>resources/FABrands.ttf</file>
         <file>resources/FARegular.ttf</file>
         <file>resources/FASolid.ttf</file>
+        <file>resources/quartz.desktop</file>
+        <file>resources/quartz.png</file>
     </qresource>
 </RCC>
