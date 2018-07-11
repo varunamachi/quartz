@@ -7,7 +7,7 @@
 #include <core/ext/Plugin.h>
 #include <core/ext/PluginManager.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
@@ -52,7 +52,7 @@ PluginSelector::PluginSelector( QWidget *parent )
     : AbstractSelector{
           SELECTOR_ID,
           SELECTOR_NAME,
-          matIcon(MatIcon::Extension),
+          getIcon(MatIcon::Extension),
           parent }
     , m_data{ new Data{ this }}
 {

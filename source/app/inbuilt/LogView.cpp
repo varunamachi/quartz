@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include <core/logger/LogUtil.h>
 #include <core/logger/ILogFormatter.h>
@@ -180,7 +180,7 @@ LogView::LogView( QWidget *parent )
           VIEW_ID,
           VIEW_CATEGORY,
           VIEW_DISPLAY_NAME,
-          matIcon(MatIcon::FormatAlignJustify),
+          getIcon(FAIcon::FileAlt),
           parent )
     , Logger::AbstractLogTarget( LOG_TARGET_ID )
     , m_data( new Data{} )

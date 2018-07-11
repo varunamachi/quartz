@@ -22,6 +22,7 @@ vq_classes (
 
 vq_sources(
     quartz.cpp
+    quartz.rc
 )
 
 add_subdirectory( resources )

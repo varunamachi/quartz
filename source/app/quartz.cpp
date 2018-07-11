@@ -15,7 +15,7 @@
 #include <core/app_config/ConfigManager.h>
 #include <core/app_config/XMLConfigLoader.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include <base/QzAppContext.h>
 
@@ -115,6 +115,30 @@ bool uninit()
     return true;
 }
 
+void loadFonts() {
+    QByteArrayList fonts;
+    QFile files[] = {
+        {"://resources/MaterialIconsRegular.ttf"},
+        {"://resources/FABrands.ttf"},
+        {"://resources/FASolid.ttf"},
+        {"://resources/FARegular.ttf"}
+    };
+    for (auto &f : files) {
+        if (f.exists() && f.open(QFile::ReadOnly)) {
+            auto ba = f.readAll();
+            if (!ba.isNull()) {
+                fonts.append(ba);
+            } else {
+                QZ_ERROR("App") << f.fileName() << " is empty";
+            }
+            f.close();
+        } else {
+            QZ_ERROR("App") << "Failed to open: " << f.fileName();
+        }
+    }
+    Quartz::IconFontStore::init(fonts);
+}
+
 int main( int argc, char **argv )
 {
     auto returnCode = -1;
@@ -128,13 +152,7 @@ int main( int argc, char **argv )
         context< QzAppContext >()->setConfigManager( confMan.get() );
         QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
             QApplication app( argc, argv );
-            QFile file{"://resources/MaterialIconsRegular.ttf"};
-            if (file.exists() && file.open(QFile::ReadOnly)) {
-                MaterialFont::init(file.readAll());
-                file.close();
-            } else {
-                QZ_ERROR("App") << "Failed to load material font";
-            }
+            loadFonts();
 //            Quartz::QuartzFramelessWindow window;
             Quartz::QuartzFramedWindow window;
             window.show();

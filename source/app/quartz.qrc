@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/MaterialIconsRegular.ttf</file>
+        <file>resources/FABrands.ttf</file>
+        <file>resources/FARegular.ttf</file>
+        <file>resources/FASolid.ttf</file>
     </qresource>
 </RCC>

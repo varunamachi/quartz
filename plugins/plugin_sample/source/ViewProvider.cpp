@@ -2,7 +2,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "ViewProvider.h"
 
@@ -17,7 +17,7 @@ SampleView::SampleView( QWidget *parent )
           SampleView::VIEW_ID,
           SampleView::VIEW_CATERGORY,
           SampleView::VIEW_NAME,
-          matIcon(MatIcon::Gesture),
+          getIcon(MatIcon::Gesture),
           parent )
 {
     auto layout = new QVBoxLayout{ this };

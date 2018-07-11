@@ -71,6 +71,7 @@ extern "C" {
 
 struct PluginWrapper {
     Quartz::Ext::Plugin *plugin;
+    bool enabled;
 };
 
 struct PluginInputWrapper {

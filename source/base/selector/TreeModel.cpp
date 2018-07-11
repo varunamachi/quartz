@@ -1,7 +1,7 @@
 
 #include <core/logger/Logging.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "Node.h"
 
@@ -222,7 +222,7 @@ QVariant TreeModel::data( const QModelIndex &index, int role ) const
             auto node = static_cast< Node *>( index.internalPointer() );
             auto ic = node->icon();
             if (ic.isNull()) {
-                data = matIcon(MatIcon::Folder);
+                data = getIcon(MatIcon::Folder);
             } else {
                 data = ic;
             }

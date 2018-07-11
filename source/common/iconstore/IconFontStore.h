@@ -10,6 +10,7 @@
 
 #include "../QuartzCommon.h"
 #include "MatIcon.h"
+#include "FAIcon.h"
 
 class QString;
 class QVariant;
@@ -26,36 +27,45 @@ struct IIconFontPainter;
 class QUARTZ_COMMON_API IconFontStore
 {
 public:
-
     explicit IconFontStore();
 
     virtual ~IconFontStore();
 
     void setDefaultOption( const QString& name, const QVariant& value  );
 
-    QIcon icon(MatIcon character, const QVariantMap& options );
+    QIcon icon(const QString &fontName,
+               int character,
+               const QVariantMap &options );
 
-    QIcon icon(MatIcon character, int size, QColor color);
+    QIcon icon(const QString &fontName,
+               int character,
+               int size,
+               QColor color);
 
-//    QIcon icon(MatIcon character);
-
-    QFont font(int size);
+    QFont font(const QString &fontName, int size);
 
     void give(const QString& name, IIconFontPainter* painter);
 
     QColor getColor(QIcon::Mode mode, QIcon::State state, QVariantMap opts);
 
-    static bool init(const QByteArray &fontData);
+    static bool init(const QByteArrayList &fontData);
 
     static IconFontStore * instance();
+
+    static const QString FONT_MATERIAL;
+
+    static const QString FONT_FA_BRANDS;
+
+    static const QString FONT_FA_SOLID;
 
 private:
     struct Data;
     std::unique_ptr< Data > m_data;
 
     static std::unique_ptr< IconFontStore > s_instance;
-
 };
+
+
 
 
 struct IIconFontPainter
@@ -70,12 +80,45 @@ struct IIconFontPainter
     virtual ~IIconFontPainter() {}
 };
 
-inline QIcon matIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
-    return IconFontStore::instance()->icon(code, size, color);
+inline QIcon getIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_MATERIAL,
+                static_cast<int>(code),
+                size,
+                color);
 }
 
-inline QIcon matIcon(MatIcon code, QVariantMap &opts) {
-    return IconFontStore::instance()->icon(code, opts);
+inline QIcon getIcon(MatIcon code, QVariantMap &opts) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_MATERIAL,
+                static_cast<int>(code),
+                opts);
+}
+inline QIcon getIcon(FAIcon code, QVariantMap &opts) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_FA_SOLID,
+                static_cast<int>(code),
+                opts);
+}
+inline QIcon getIcon(FAIcon code, int size = -1, QColor color = QColor{}) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_FA_SOLID,
+                static_cast<int>(code),
+                size,
+                color);
+}
+inline QIcon getIcon(FABrandIcon code, int size = -1, QColor color = QColor{}) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_FA_BRANDS,
+                static_cast<int>(code),
+                size,
+                color);
+}
+inline QIcon getIcon(FABrandIcon code, QVariantMap &opts) {
+    return IconFontStore::instance()->icon(
+                IconFontStore::FONT_FA_BRANDS,
+                static_cast<int>(code),
+                opts);
 }
 
 }

@@ -8,7 +8,7 @@
 #include <core/ext/PluginManager.h>
 
 #include <common/widgets/StackedSplitContainer.h>
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include <base/selector/Node.h>
 #include <base/QzAppContext.h>
@@ -124,7 +124,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
                 path,
                 tr("Welcome"),
                 "qz.inbuilt.welcome",
-                matIcon(MatIcon::Star));
+                getIcon(MatIcon::Star));
     path << "Welcome";
     m_data->m_content->addContent( new WelcomePage{ welcomeNode->nodeId(),
                                                     m_data->m_content });

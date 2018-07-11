@@ -6,7 +6,7 @@
 
 #include <core/logger/Logging.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
@@ -46,7 +46,7 @@ struct ConfigPageSelector::Data
 ConfigPageSelector::ConfigPageSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
-                        matIcon(MatIcon::Settings),
+                        getIcon(MatIcon::Settings),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new ConfigPageSelector::Data{ new QTreeView{ this },

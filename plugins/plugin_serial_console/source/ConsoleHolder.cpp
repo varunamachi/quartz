@@ -18,6 +18,8 @@
 #include <core/app_config/ConfigManager.h>
 #include <core/utils/ScopedOperation.h>
 
+#include <common/iconstore/IconFontStore.h>
+
 #include <plugin_base/PluginLogging.h>
 #include <plugin_base/PluginContext.h>
 
@@ -82,10 +84,22 @@ ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
                            QWidget *parent )
     : m_settings{ std::move( settings )}
     , m_toolBar{ new QToolBar{ parent }}
-    , m_connect{ new QAction{ QObject::tr( "Connect" ), parent }}
-    , m_disconnect{ new QAction{ QObject::tr( "Disconnect" ), parent }}
-    , m_clearConsole{ new QAction{ QObject::tr( "Clear" ), parent }}
-    , m_lockOutput{ new QAction{ QObject::tr( "Lock" ), parent }}
+    , m_connect{ new QAction(
+                     getIcon(FAIcon::Plug),
+                     QObject::tr("Connect"),
+                     parent)}
+    , m_disconnect{ new QAction(
+                        getIcon(MatIcon::Block),
+                        QObject::tr( "Disconnect" ),
+                        parent )}
+    , m_clearConsole{ new QAction(
+                          getIcon(MatIcon::FormatPaint),
+                          QObject::tr( "Clear" ),
+                          parent)}
+    , m_lockOutput{ new QAction(
+                        getIcon(MatIcon::Lock),
+                        QObject::tr( "Lock" ),
+                        parent )}
     , m_console{ new ConsoleWidget{ parent }}
     , m_outConsole{ new QPlainTextEdit{ parent }}
     , m_baudCombo{ new QComboBox{ parent }}

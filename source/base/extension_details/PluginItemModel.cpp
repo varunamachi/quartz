@@ -4,7 +4,7 @@
 #include <core/ext/PluginManager.h>
 #include <core/ext/Plugin.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "PluginItemModel.h"
@@ -99,7 +99,7 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
             break;
         }
     } else if (role == Qt::DecorationRole) {
-        return matIcon(MatIcon::Extension);
+        return getIcon(MatIcon::Extension);
     }
     return QVariant();
 }

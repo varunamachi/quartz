@@ -5,6 +5,8 @@
 #include <QToolBar>
 #include <QTabWidget>
 
+#include <common/iconstore/IconFontStore.h>
+
 #include "ConsoleHolder.h"
 #include "MainWidget.h"
 #include "SettingsDialog.h"
@@ -23,16 +25,23 @@ struct MainWidget::Data
     Data( QWidget *parent )
         : m_toolBar{ new QToolBar{ parent }}
         , m_tabWidget{ new QTabWidget{ parent }}
-        , m_newConnection{ new QAction{ QObject::tr( "New Connection" ),
-                           parent }}
-        , m_editBaudRates{ new QAction{ QObject::tr( "Edit Baud Rates" ),
-                           parent }}
-        , m_disconnectAll{ new QAction{ QObject::tr( "Disconnect All" ),
-                           parent }}
+        , m_newConnection{new QAction(
+                              getIcon(FAIcon::Plug),
+                              QObject::tr("New Connection"),
+                              parent )}
+        , m_editBaudRates{new QAction(
+                              getIcon(MatIcon::Edit),
+                              QObject::tr( "Edit Baud Rates" ),
+                              parent)}
+        , m_disconnectAll{new QAction(
+                              getIcon(MatIcon::Clear),
+                              QObject::tr( "Disconnect All" ),
+                              parent)}
     {
         m_toolBar->addAction( m_newConnection );
         m_toolBar->addAction( m_disconnectAll );
         m_toolBar->addAction( m_editBaudRates );
+        m_toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         m_tabWidget->setTabsClosable( true );
     }
 

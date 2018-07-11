@@ -1,7 +1,7 @@
 
 #include <core/logger/Logging.h>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "AbstractGeneralNodeProvider.h"
 #include "GeneralNodeTree.h"
@@ -35,7 +35,7 @@ bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
        auto nodes = nodeProvider->nodes();
        foreach( auto nodeInfo, nodes ) {
            if (nodeInfo->m_nodeIcon.isNull()) {
-               nodeInfo->m_nodeIcon = matIcon(MatIcon::CheckBoxOutlineBlank);
+               nodeInfo->m_nodeIcon = getIcon(MatIcon::CheckBoxOutlineBlank);
            }
            auto res = addNode( nodeInfo->m_nodePath,
                                nodeInfo->m_nodeName,

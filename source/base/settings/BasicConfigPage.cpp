@@ -1,7 +1,7 @@
 
 #include <QIcon>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "BasicConfigPage.h"
 
@@ -19,7 +19,7 @@ BasicConfigPage::BasicConfigPage( QWidget *parent )
     : AbstractConfigPage{ QStringList{ },
                           CONFIG_PAGE_NAME,
                           CONFIG_PAGE_ID,
-                          matIcon(MatIcon::SettingsApplications),
+                          getIcon(MatIcon::SettingsApplications),
                           parent }
     , m_data{ new Data{} }
 {

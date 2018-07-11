@@ -4,4 +4,5 @@ vq_classes(
 
 vq_headers(
     MatIcon.h
+    FAIcon.h
 )

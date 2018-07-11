@@ -195,11 +195,11 @@ PluginInfo PluginManager::Impl::getPlugin( const QString &pluginRoot,
                 new PluginEnv{ pluginRoot, lib->fileName(), "0.1.0000" }};
             PluginInputWrapper input{ std::move( pluginEnv ),
                                       QzCoreContext::get() };
-            auto plugin = func( &input ).plugin;
-            if( plugin != nullptr ) {
-                pinfo = PluginInfo{ plugin, lib };
+            auto wrapper = func( &input );
+            if( wrapper.enabled && wrapper.plugin != nullptr ) {
+                pinfo = PluginInfo{ wrapper.plugin, lib };
             }
-            else {
+            else if (wrapper.plugin == nullptr){
                 QZ_WARN( "Qz:Core:Ext" )
                         << "Library at " << pluginFilePath << " does not "
                            "contain any plugin, unloading...";

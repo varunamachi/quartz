@@ -16,6 +16,10 @@
 
 namespace Quartz {
 
+const QString IconFontStore::FONT_MATERIAL  = "Material Icons";
+const QString IconFontStore::FONT_FA_BRANDS = "Font Awesome 5 Brands";
+const QString IconFontStore::FONT_FA_SOLID  = "Font Awesome 5 Free";
+
 std::unique_ptr<IconFontStore> IconFontStore::s_instance =
         std::unique_ptr<IconFontStore>(nullptr);
 
@@ -32,7 +36,6 @@ public:
                        const QVariantMap& options)
     {
         painter->save();
-//        painter->setFe
         QString text = options.value("text").toString();
         QColor color;
         if (options.contains("color")) {
@@ -44,9 +47,14 @@ public:
         if (options.contains("size")) {
             drawSize = options["size"].toInt();
         }
+        auto fontName = options.value("fontName").toString();
+        if (fontName != IconFontStore::FONT_MATERIAL) {
+            drawSize = qRound(drawSize * 0.9);
+        }
+
         color.setAlpha(175);
         painter->setPen(color);
-        auto font = mat->font(qRound(drawSize * 0.9));
+        auto font = mat->font(fontName, drawSize);
         painter->setFont(font);
         painter->setRenderHint(QPainter::Antialiasing);
         painter->drawText(
@@ -75,7 +83,7 @@ public:
     {
     }
 
-    virtual ~IconFontEngine() {}
+    virtual ~IconFontEngine();
 
     IconFontEngine* clone() const
     {
@@ -116,6 +124,7 @@ private:
 
     QVariantMap m_opts;
 };
+IconFontEngine::~IconFontEngine() {} //to shut the compiler up
 
 
 struct IconFontStore::Data {
@@ -129,32 +138,35 @@ struct IconFontStore::Data {
 
     std::unique_ptr<CharIconPainter> m_painter;
 
-    QString m_fontName;
+    QStringList m_loadedFonts;
 
 };
 
-bool IconFontStore::init(const QByteArray &fontData)
+bool IconFontStore::init(const QByteArrayList &fonts)
 {
     static int loaded = false;
     auto index = -1;
     if (!loaded) {
-        if (!(fontData.isNull() && fontData.isEmpty())) {
-            index = QFontDatabase::addApplicationFontFromData(fontData);
-            if (index != -1) {
-                auto fontFam = QFontDatabase::applicationFontFamilies(index);
-                if (!fontFam.empty()) {
-                    s_instance = std::make_unique<IconFontStore>();
-                    s_instance->m_data->m_fontName = fontFam.at(0);
-                    loaded = true;
+        for (auto &fontData : fonts) {
+            if (!(fontData.isNull() && fontData.isEmpty())) {
+                index = QFontDatabase::addApplicationFontFromData(fontData);
+                if (index != -1) {
+                    auto ff = QFontDatabase::applicationFontFamilies(index);
+                    if (!ff.empty()) {
+                        QZ_INFO("Cmn:Font")
+                                << "Loaded font: " << ff.at(0);
+                        loaded = true;
+                    } else {
+                        QZ_WARN("Cmn:Font") << "Material font file is empty";
+                    }
                 } else {
-                    QZ_WARN("Cmn:MatFont") << "Material font file is empty";
+                    QZ_ERROR("Cmn:Font") << "Material font couldn't be loaded";
                 }
             } else {
-                QZ_ERROR("Cmn:MatFont") << "Material font couldn't be loaded";
+                QZ_ERROR("Cmn:Font") << "Invalid font data provided";
             }
-        } else {
-            QZ_ERROR("Cmn:MatFont") << "Invalid font data provided";
         }
+        s_instance = std::make_unique<IconFontStore>();
     }
     return loaded;
 }
@@ -182,37 +194,35 @@ void IconFontStore::setDefaultOption(const QString &name,
     }
 }
 
-QIcon IconFontStore::icon(MatIcon character,
-                         const QVariantMap &options)
+QIcon IconFontStore::icon(const QString &fontName,
+                          int character,
+                          const QVariantMap &options)
 {
     auto opts = options;
     opts["text"] = QString{QChar(static_cast<int>(character))};
+    opts["fontName"] = fontName;
     return QIcon{new IconFontEngine(
                     this, m_data->m_painter.get(), opts)};
 }
 
-QIcon IconFontStore::icon(MatIcon character, int size, QColor color)
+QIcon IconFontStore::icon(const QString &fontName,
+                          int character,
+                          int size,
+                          QColor color)
 {
     QVariantMap opts;
-    opts["text"] = QString{QChar(static_cast<int>(character))};;
     if (size > 0) {
         opts["size"] = size;
     }
     if (color.isValid()) {
         opts["color"] = color;
     }
-    return icon(character, opts);
+    return icon(fontName, character, opts);
 }
 
-//QIcon MaterialFont::icon(MatIcon character)
-//{
-//    return icon(character, QVariantMap{});
-//}
-
-
-QFont IconFontStore::font(int size)
+QFont IconFontStore::font(const QString &fontName, int size)
 {
-    QFont font{m_data->m_fontName};
+    QFont font{fontName};
     font.setPixelSize(size);
     return font;
 }

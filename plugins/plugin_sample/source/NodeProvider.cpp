@@ -1,5 +1,5 @@
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include <base/selector/Node.h>
 
@@ -40,7 +40,7 @@ QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
                 path,
                 "Sample Node",
                 "qzp.sample.content.one",
-                matIcon(MatIcon::Gesture));
+                getIcon(MatIcon::Gesture));
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
     return nodes;

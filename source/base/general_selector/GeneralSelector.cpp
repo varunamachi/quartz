@@ -3,7 +3,7 @@
 #include <QTreeView>
 #include <QHeaderView>
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
@@ -35,7 +35,7 @@ struct GeneralSelector::Data
 GeneralSelector::GeneralSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
-                        matIcon(MatIcon::BlurCircular),
+                        getIcon(MatIcon::BlurCircular),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new GeneralSelector::Data( new QTreeView( this ),

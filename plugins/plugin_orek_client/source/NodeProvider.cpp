@@ -1,5 +1,5 @@
 
-#include <common/matfont/MaterialFont.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include <base/selector/Node.h>
 
@@ -21,7 +21,7 @@ struct NodeProvider::Data
                     QStringList{},
                     "Orek",
                     "qzp.orekclient.content",
-                    matIcon(MatIcon::GroupWork));
+                    getIcon(MatIcon::GroupWork));
         m_nodes.append( nodeInfo );
     }
 

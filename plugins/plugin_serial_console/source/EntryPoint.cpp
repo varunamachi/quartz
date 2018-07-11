@@ -26,7 +26,7 @@ Q_DECL_EXPORT PluginWrapper getPluginWrapper(
                 std::move( plugin ),
                 std::move( input->env ),
                 dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
-    return PluginWrapper{ pluginPtr };
+    return PluginWrapper{ pluginPtr, true };
 }
 
 Q_DECL_EXPORT void destroy()
