@@ -39,7 +39,7 @@ QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
                 QStringList{},
                 "Creator",
                 "qzp.creator.content.main",
-                getIcon(MatIcon::AddCircle));
+                getIcon(FAIcon::Magic));
     QVector< std::shared_ptr< NodeInfo >> nodes;
     nodes.push_back( nodeInfo );
     return nodes;

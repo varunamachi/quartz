@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QMainWindow>
 #include <QCoreApplication>
+#include <QToolButton>
+#include <QMenu>
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
@@ -23,6 +25,7 @@
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
 #include <base/extension_details/PluginSelector.h>
+#include <base/title_bar/QuartzItem.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -65,7 +68,12 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_content   = new ContentManager{ this };
     m_data->m_actionBar = new ActionBar{ 20, this };
     this->setObjectName( "quartz_widget" );
-    m_data->m_titleBar->setContentsMargins( QMargins{} );
+//    m_data->m_titleBar->setContentsMargins(0, 10, 0, 5);
+//    auto mainMenu = new QToolButton(this);
+//    mainMenu->setIcon(getIcon(MatIcon::Menu));
+//    mainMenu->setMenu(new QMenu());
+//    m_data->m_titleBar->addItem(new QuartzItem("mainmenu", "menu", mainMenu));
+
     this->setContentsMargins( QMargins{} );
 
     QSizePolicy policy;
@@ -78,6 +86,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
                 70,
                 AbstractContainer::SelectorPosition::After,
                 Qt::Horizontal };
+    viewContainer->setAutoSelectionPolicy(AutoSelectionPolicy::DoNotSelectAny);
     m_data->m_viewManager = new ViewManager( viewContainer, this );
     viewContainer->setContentWidget(
                 m_data->m_content,

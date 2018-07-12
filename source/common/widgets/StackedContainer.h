@@ -14,6 +14,11 @@ namespace Quartz {
 class QzScroller;
 class IdButton;
 
+enum class AutoSelectionPolicy {
+    SelectFirstAdded,
+    SelectLastAdded,
+    DoNotSelectAny,
+};
 
 class QUARTZ_COMMON_API AbstractContainer : public QWidget
 {
@@ -25,7 +30,7 @@ public:
         After
     };
 
-    explicit AbstractContainer( int selectorDimention,
+    explicit AbstractContainer(int selectorDimention,
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
@@ -60,6 +65,8 @@ public:
 
     int buttonHeight() const;
 
+    AutoSelectionPolicy autoSelectionPolicy() const;
+
     virtual QString containerType() const = 0;
 
 public Q_SLOTS:
@@ -77,6 +84,10 @@ public Q_SLOTS:
     void removeWidget( QWidget *widget );
 
     void select( const QString &id );
+
+    void hideAll();
+
+    void setAutoSelectionPolicy(AutoSelectionPolicy policy);
 
 Q_SIGNALS:
     void sigSelected( const QString &id, QWidget *widget );

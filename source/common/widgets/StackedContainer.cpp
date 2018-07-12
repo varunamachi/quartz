@@ -52,6 +52,8 @@ struct AbstractContainer::Data
         , m_orientation( orientation )
         , m_selector( scroller )
         , m_stackWidget( stackedWidget )
+        , m_autoSelPolicy(AutoSelectionPolicy::SelectFirstAdded)
+        , m_selectedId("")
     {
 
     }
@@ -67,6 +69,8 @@ struct AbstractContainer::Data
     QzScroller *m_selector;
 
     QStackedWidget *m_stackWidget;
+
+    AutoSelectionPolicy m_autoSelPolicy;
 
     QString m_selectedId;
 
@@ -187,8 +191,15 @@ void AbstractContainer::addWidget(
                  this,
                  SLOT( select( QString )));
         widget->setProperty( "item_id", id );
-        if( m_data->m_selectedId.isEmpty() ) {
-            select( id );
+        if (m_data->m_autoSelPolicy == AutoSelectionPolicy::SelectFirstAdded) {
+            if( m_data->m_selectedId.isEmpty() ) {
+                this->select( id );
+            }
+        } else if (m_data->m_autoSelPolicy ==
+                   AutoSelectionPolicy::SelectLastAdded) {
+            this->select(id);
+        } else {
+            m_data->m_stackWidget->setVisible(false);
         }
         emit sigAdded( id, widget );
     }
@@ -233,7 +244,6 @@ void AbstractContainer::removeWidget( QWidget *widget )
     }
 }
 
-
 void AbstractContainer::select( const QString &id )
 {
     auto item = m_data->m_items.value( id );
@@ -258,6 +268,21 @@ void AbstractContainer::select( const QString &id )
         }
         emit sigSelected( id, item->m_widget );
     }
+}
+
+void AbstractContainer::hideAll()
+{
+    auto item = m_data->m_items.value(m_data->m_selectedId);
+    if (item) {
+        m_data->m_stackWidget->setVisible( false );
+        item->m_btn->setChecked( false );
+        m_data->m_selectedId = "";
+    }
+}
+
+void AbstractContainer::setAutoSelectionPolicy(AutoSelectionPolicy policy)
+{
+    m_data->m_autoSelPolicy = policy;
 }
 
 QStackedWidget *AbstractContainer::stackedWidget() const
@@ -289,6 +314,11 @@ int AbstractContainer::buttonWidth() const
 int AbstractContainer::buttonHeight() const
 {
     return m_data->m_btnHeight;
+}
+
+AutoSelectionPolicy AbstractContainer::autoSelectionPolicy() const
+{
+    return m_data->m_autoSelPolicy;
 }
 
 void AbstractContainer::updateIndeces()
