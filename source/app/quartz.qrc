@@ -5,6 +5,7 @@
         <file>resources/FARegular.ttf</file>
         <file>resources/FASolid.ttf</file>
         <file>resources/quartz.desktop</file>
-        <file>resources/quartz.png</file>
+        <file>resources/quartz.svg</file>
+        <file>resources/quartz32.png</file>
     </qresource>
 </RCC>
