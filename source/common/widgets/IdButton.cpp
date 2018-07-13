@@ -38,6 +38,7 @@ IdButton::IdButton( QString id,
     this->setIcon(icon);
     this->setText(text);
     if (textBelowIcon) {
+//        this->setToolButtonStyle(Qt::ToolButtonIconOnly);
         this->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         QFontMetrics fm(this->font());
         auto h = height - fm.height() - 4;
@@ -57,12 +58,13 @@ void IdButton::setStyle(int width, int height, bool big) {
     auto bgColor = QApplication::palette().color(QPalette::Background);
     auto selBg = txtColor;
     auto hvBg = txtColor;
-    selBg.setAlpha(50);
-    hvBg.setAlpha(15);
+    txtColor.setAlpha(200);
+    selBg.setAlpha(80);
+    hvBg.setAlpha(30);
     qssStream << " QToolButton {"
                  "     border-radius: 5px;"
                  "     background-color: " << bgColor.name() << ";"
-                 "     color: " << txtColor.name() << ";"
+                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
                  "     max-width: " << width << "px;"
                  "     min-width: " << width << "px;"
                  "     max-height: " << height << "px;"
@@ -73,6 +75,8 @@ void IdButton::setStyle(int width, int height, bool big) {
                  " QToolButton:checked {"
                  "     background-color: " << selBg.name(QColor::HexArgb) << ";"
                  "     color: " << txtColor.name(QColor::HexArgb) << ";"
+                 "     border-color: balck;"
+                 "     border-width: 1px;"
                  " }"
                  "QToolButton:hover {"
                  "     background-color: " << hvBg.name(QColor::HexArgb) << ";"

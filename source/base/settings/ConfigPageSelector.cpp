@@ -24,8 +24,8 @@ namespace Quartz {
 
 
 const QString ConfigPageSelector::SELECTOR_ID{ "qz.config_selector" };
-const QString ConfigPageSelector::SELECTOR_NAME{ "Settings" };
-const QString ConfigPageSelector::ADAPTER_NAME{ "qz.confi_page" };
+const QString ConfigPageSelector::SELECTOR_NAME{ "SETTINGS" };
+const QString ConfigPageSelector::ADAPTER_NAME{ "qz.config_page" };
 
 
 struct ConfigPageSelector::Data

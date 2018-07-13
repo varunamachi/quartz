@@ -56,7 +56,7 @@ public:
         painter->setPen(color);
         auto font = mat->font(fontName, drawSize);
         painter->setFont(font);
-        painter->setRenderHint(QPainter::Antialiasing);
+        painter->setRenderHint(QPainter::TextAntialiasing);
         painter->drawText(
                     rect,
                     text,
@@ -112,6 +112,7 @@ public:
         pm.fill(Qt::transparent);
         {
             QPainter p(&pm);
+            p.setRenderHint(QPainter::Antialiasing);
             paint(&p, QRect{{ 0,0 }, size}, mode, state);
         }
         return pm;

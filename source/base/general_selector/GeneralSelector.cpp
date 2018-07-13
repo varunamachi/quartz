@@ -14,7 +14,7 @@
 namespace Quartz {
 
 const QString GeneralSelector::SELECTOR_ID{ "qz.node_selector" };
-const QString GeneralSelector::SELECTOR_NAME{ "Pages" };
+const QString GeneralSelector::SELECTOR_NAME{ "PAGES" };
 
 
 struct GeneralSelector::Data
@@ -35,7 +35,7 @@ struct GeneralSelector::Data
 GeneralSelector::GeneralSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
-                        getIcon(MatIcon::BlurCircular),
+                        getIcon(FAIcon::Th),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new GeneralSelector::Data( new QTreeView( this ),
