@@ -22,16 +22,6 @@ public:
 
     ~TreeModel();
 
-    Node * addNode( const QStringList &parentPath,
-                    const QString &nodeName,
-                    const QString &nodeId = QString{ },
-                    QIcon icon = QIcon{ } );
-
-
-    bool removeNode( const QStringList &path );
-
-    bool selectNode( const QStringList &path ) const;
-
     const Node * node( const QStringList &path ) const;
 
     static const QString ADAPTER_NAME;
@@ -50,6 +40,17 @@ public:
     QVariant data( const QModelIndex &index, int role ) const override;
 
     bool hasChildren( const QModelIndex &parent ) const override;
+
+public Q_SLOTS:
+    Node * addNode( const QStringList &parentPath,
+                    const QString &nodeName,
+                    const QString &nodeId = QString{ },
+                    QIcon icon = QIcon{ } );
+
+
+    bool removeNode( const QStringList &path );
+
+    bool selectNode( const QStringList &path ) const;
 
 private:
     struct Data;

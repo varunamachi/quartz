@@ -16,24 +16,12 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="quartz.svg"
-   inkscape:export-filename="/data/kode/github/quartz/source/app/resources/quartz.png"
+   sodipodi:docname="quartz_dull.svg"
+   inkscape:export-filename="/data/kode/github/quartz/source/app/resources/quartz_dull.png"
    inkscape:export-xdpi="5.7620687"
    inkscape:export-ydpi="5.7620687">
   <defs
      id="defs4">
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient4274">
-      <stop
-         style="stop-color:#ff6600;stop-opacity:1;"
-         offset="0"
-         id="stop4276" />
-      <stop
-         style="stop-color:#ff6600;stop-opacity:0;"
-         offset="1"
-         id="stop4278" />
-    </linearGradient>
     <inkscape:perspective
        sodipodi:type="inkscape:persp3d"
        inkscape:vp_x="0 : 526.1811 : 1"
@@ -64,17 +52,6 @@
        r="249.97646"
        gradientTransform="matrix(0.70791205,0.78613658,-0.64917084,0.5845657,441.52347,-371.82914)"
        gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4274"
-       id="radialGradient4282"
-       cx="381.98407"
-       cy="496.86777"
-       fx="381.98407"
-       fy="496.86777"
-       r="357.64508"
-       gradientTransform="matrix(4.1189108,-0.02796946,0.02416088,3.558015,-1203.379,-1260.3113)"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -83,9 +60,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="-823.4432"
-     inkscape:cy="657.67139"
+     inkscape:zoom="0.49497474"
+     inkscape:cx="435.41508"
+     inkscape:cy="520.16292"
      inkscape:document-units="px"
      inkscape:current-layer="g4200"
      showgrid="false"
@@ -130,12 +107,14 @@
              transform="matrix(1.4410697,0,0,1.6069945,-409.11117,-617.46382)"
              id="g4200">
             <path
-               style="fill:url(#radialGradient4282);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.41999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               style="fill:#b3b3b3;fill-opacity:0.08426967;fill-rule:evenodd;stroke:none;stroke-width:1.41999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.31460679"
                d="m 363.26758,140.17188 c -2.67157,0.23057 -5.31638,0.48833 -7.94922,0.75976 -5.79191,0.39575 -11.24157,0.95664 -16.26953,1.67969 0.18508,0.0708 0.366,0.14393 0.55078,0.21484 C 80.794442,178.47729 16.321983,415.30883 25.959821,518.50781 l -0.03209,0.01 C 53.798682,803.09212 311.03152,868.10519 410.08789,851.11914 l 0.0117,0.62891 C 694.49073,821.49334 748.30378,566.06081 737.68555,462.41211 l 0.72656,-0.0273 C 704.85029,195.35693 476.35534,136.14808 363.26758,140.51367 Z m -0.0234,12.42578 c 185.69107,82.51451 196.73511,231.5193 221.13867,315.62695 l 149.4668,-5.66602 C 627.31194,598.35428 524.90246,684.92551 407.22852,697.50391 l 2.78906,149.8789 C 251.25843,769.92618 223.19472,653.6406 180.0625,517.27734 L 36.105469,518.43555 C 146.18489,401.78595 227.4373,303.35128 362.97852,294.44141 Z m -76.6543,245.04687 61.57422,226.125 164.19532,-161.54492 C 429.37542,440.6957 445.55271,442.02103 286.58984,397.64453 Z"
                transform="matrix(0.69392896,0,0,0.62227967,623.75243,320.3202)"
                id="path4138"
                inkscape:connector-curvature="0"
-               sodipodi:nodetypes="ccccccccccccccccccccccccc" />
+               sodipodi:nodetypes="ccccccccccccccccccccccccc"
+               inkscape:export-xdpi="136.16"
+               inkscape:export-ydpi="136.16" />
           </g>
         </g>
       </g>

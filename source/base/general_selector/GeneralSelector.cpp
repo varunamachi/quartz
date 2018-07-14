@@ -93,14 +93,30 @@ void GeneralSelector::unselected()
 void GeneralSelector::onSelected( const QModelIndex &current,
                                   const QModelIndex &/*previous*/ )
 {
-    if( ! ( current.isValid() && current.internalPointer() != nullptr )) {
+    if (!current.isValid() || current.internalPointer() == nullptr) {
         return;
     }
     auto node = static_cast< Node *>( current.internalPointer() );
-    if( appContext()->hasContentManager() ) {
+    if (appContext()->hasContentManager()) {
         appContext()->contentManager()->selectContent( node->nodeId() );
     }
-    emit sigNodeSelected( node );
+    emit sigNodeSelected(node);
+}
+
+void GeneralSelector::setSelected(const QString &nodeID)
+{
+    auto root = m_data->m_model->index(0, 0, {});
+    auto matches = m_data->m_model->match(
+                root,
+                Qt::UserRole,
+                nodeID,
+                1);
+    if (! matches.empty()) {
+        auto index = matches[0];
+        m_data->m_view->selectionModel()->setCurrentIndex(
+                    index,
+                    QItemSelectionModel::SelectCurrent);
+    }
 }
 
 }

@@ -30,12 +30,16 @@ public:
 
     static const QString SELECTOR_NAME;
 
-signals:
+public Q_SLOTS:
+    void setSelected(const QString &nodeID);
+
+Q_SIGNALS:
     void sigNodeSelected( const Node *node );
 
-private slots:
+private Q_SLOTS:
     void onSelected( const QModelIndex &current,
                      const QModelIndex &previous );
+
 
 private:
     struct Data;

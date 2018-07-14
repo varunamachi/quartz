@@ -7,5 +7,7 @@
         <file>resources/quartz.desktop</file>
         <file>resources/quartz.svg</file>
         <file>resources/quartz32.png</file>
+        <file>resources/quartz_dull.svg</file>
+        <file>resources/quartz_dull.png</file>
     </qresource>
 </RCC>

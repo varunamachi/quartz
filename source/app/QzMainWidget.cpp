@@ -128,18 +128,16 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_selector->addSelector( configTree );
     configTree->addPage( new BasicConfigPage{ configTree });
 
-    QStringList path;
     auto welcomeNode = nodeSelector->model()->addNode(
-                path,
+                QStringList(),
                 tr("Welcome"),
                 "qz.inbuilt.welcome",
                 getIcon(MatIcon::Star));
-    path << "Welcome";
-    m_data->m_content->addContent( new WelcomePage{ welcomeNode->nodeId(),
-                                                    m_data->m_content });
-    auto logView = new LogView{ this };
-    m_data->m_viewManager->addView( logView );
-    QZ_LOGGER()->dispatcher()->addTarget( logView );
+    m_data->m_content->addContent(new WelcomePage(welcomeNode->nodeId(),
+                                                  m_data->m_content));
+    auto logView = new LogView(this);
+    m_data->m_viewManager->addView(logView);
+    QZ_LOGGER()->dispatcher()->addTarget(logView);
 
     m_data->m_pluginManager =
             std::unique_ptr< Ext::PluginManager >{ new Ext::PluginManager{} };
@@ -161,6 +159,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
 
     auto pluginSelector = new Ext::PluginSelector{ this };
     m_data->m_selector->addSelector( pluginSelector );
+    nodeSelector->setSelected(welcomeNode->nodeId());
 }
 
 QzMainWidget::~QzMainWidget()

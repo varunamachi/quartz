@@ -26,7 +26,7 @@ const QString &GeneralNodeTree::extensionAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
+bool GeneralNodeTree::handleExtension(Ext::Extension *extension)
 {
     bool result = true;
     auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>(
@@ -46,7 +46,7 @@ bool GeneralNodeTree::handleExtension( Ext::Extension *extension )
     }
     else {
         auto extensionName = extension != nullptr ? extension->extensionId()
-                                            : "<null>";
+                                                  : "<null>";
         QZ_ERROR( "Qz:NodeSelector" )
                 << "Invalid node extension provided: " << extensionName;
     }

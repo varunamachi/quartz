@@ -215,17 +215,18 @@ QVariant TreeModel::data( const QModelIndex &index, int role ) const
 {
     QVariant data { };
     if( index.isValid() ) {
+        auto node = static_cast<Node *>( index.internalPointer() );
         if( role == Qt::DisplayRole ) {
-            auto node = static_cast< Node *>( index.internalPointer() );
             data = node->nodeName();
         } else if (role == Qt::DecorationRole) {
-            auto node = static_cast< Node *>( index.internalPointer() );
             auto ic = node->icon();
             if (ic.isNull()) {
                 data = getIcon(MatIcon::Folder);
             } else {
                 data = ic;
             }
+        } else if (role == Qt::UserRole) {
+            data = node->nodeId();
         }
     }
     return data;

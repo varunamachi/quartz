@@ -45,6 +45,7 @@ macro( qz_add_qt )
         Xml
         Quick
         QuickWidgets
+        Svg
         Network )
 endmacro( qz_add_qt )
 
