@@ -89,10 +89,10 @@ AbstractContainer::AbstractContainer( int selectorDimention,
               buttonDimention,
               selectorPosition,
               orientation,
-              new QzScroller{ orientation,
-                              selectorDimention,
-                              selectorDimention,
-                              this },
+              new QzScroller(orientation,
+                             selectorDimention,
+                             selectorDimention,
+                             this),
               new QStackedWidget{ this }})
 {
 
@@ -103,9 +103,9 @@ AbstractContainer::AbstractContainer( int selectorDimention,
     } else  {
         m_data->m_selector->setMaximumWidth( selectorDimention );
     }
-    m_data->m_selector->setContentsMargins( QMargins() );
-    m_data->m_stackWidget->setContentsMargins( QMargins() );
-    this->setContentsMargins( QMargins{ });
+    m_data->m_selector->setContentsMargins(QMargins());
+    m_data->m_stackWidget->setContentsMargins(QMargins());
+    this->setContentsMargins(QMargins());
 }
 
 AbstractContainer::~AbstractContainer()

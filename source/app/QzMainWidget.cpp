@@ -98,7 +98,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
                 45,
                 AbstractContainer::SelectorPosition::Before,
                 Qt::Vertical };
-    m_data->m_selector = new SelectorManager{  selectorContainer, this };
+    m_data->m_selector = new SelectorManager(selectorContainer, this);
     appContext()->setSelectorManager( m_data->m_selector );
     selectorContainer->setContentWidget( m_data->m_viewManager );
     selectorContainer->setSizes( 20, 180, 600 );

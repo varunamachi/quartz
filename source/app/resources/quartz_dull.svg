@@ -17,9 +17,9 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="quartz_dull.svg"
-   inkscape:export-filename="/data/kode/github/quartz/source/app/resources/quartz_dull.png"
-   inkscape:export-xdpi="5.7620687"
-   inkscape:export-ydpi="5.7620687">
+   inkscape:export-filename="/data/kode/github/quartz/source/app/resources/quartz.png"
+   inkscape:export-xdpi="136.01794"
+   inkscape:export-ydpi="136.01794">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -61,8 +61,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497474"
-     inkscape:cx="435.41508"
-     inkscape:cy="520.16292"
+     inkscape:cx="611.11548"
+     inkscape:cy="804.56042"
      inkscape:document-units="px"
      inkscape:current-layer="g4200"
      showgrid="false"
@@ -107,14 +107,13 @@
              transform="matrix(1.4410697,0,0,1.6069945,-409.11117,-617.46382)"
              id="g4200">
             <path
-               style="fill:#b3b3b3;fill-opacity:0.08426967;fill-rule:evenodd;stroke:none;stroke-width:1.41999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.31460679"
-               d="m 363.26758,140.17188 c -2.67157,0.23057 -5.31638,0.48833 -7.94922,0.75976 -5.79191,0.39575 -11.24157,0.95664 -16.26953,1.67969 0.18508,0.0708 0.366,0.14393 0.55078,0.21484 C 80.794442,178.47729 16.321983,415.30883 25.959821,518.50781 l -0.03209,0.01 C 53.798682,803.09212 311.03152,868.10519 410.08789,851.11914 l 0.0117,0.62891 C 694.49073,821.49334 748.30378,566.06081 737.68555,462.41211 l 0.72656,-0.0273 C 704.85029,195.35693 476.35534,136.14808 363.26758,140.51367 Z m -0.0234,12.42578 c 185.69107,82.51451 196.73511,231.5193 221.13867,315.62695 l 149.4668,-5.66602 C 627.31194,598.35428 524.90246,684.92551 407.22852,697.50391 l 2.78906,149.8789 C 251.25843,769.92618 223.19472,653.6406 180.0625,517.27734 L 36.105469,518.43555 C 146.18489,401.78595 227.4373,303.35128 362.97852,294.44141 Z m -76.6543,245.04687 61.57422,226.125 164.19532,-161.54492 C 429.37542,440.6957 445.55271,442.02103 286.58984,397.64453 Z"
-               transform="matrix(0.69392896,0,0,0.62227967,623.75243,320.3202)"
+               style="fill:#999999;fill-opacity:0.07865169;fill-rule:evenodd;stroke:none;stroke-width:1.41999996;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               d="m 875.83421,406.82349 c -1.85388,0.14372 -3.68919,0.30438 -5.51619,0.47356 -4.01917,0.24666 -7.80085,0.59626 -11.28989,1.04693 0.12843,0.0441 0.25398,0.0897 0.3822,0.13391 -179.59232,22.22109 -224.3316,169.83648 -217.64363,234.15966 l -0.0223,0.006 c 19.34045,177.37312 197.84168,217.89529 266.57974,207.30801 l 0.008,0.392 C 1105.6794,831.48625 1143.5476,672.19829 1136.1793,607.59481 l -0.022,0.0617 C 1112.8682,441.21994 954.30905,404.31549 875.83421,407.03653 Z m -0.0162,7.7449 c 128.85633,51.4307 136.52013,144.30431 153.45443,196.72801 l 99.163,-3.21678 C 1054.5058,692.7201 987.99728,746.36451 906.33997,754.20453 l 3.68784,90.89996 C 799.86029,796.82633 778.63364,726.86485 748.70296,641.87061 l -99.8959,0.72191 C 725.19432,569.88566 781.57769,508.53204 875.63362,502.97858 Z m -53.19261,152.73595 c 29.69315,45.86152 41.98102,92.98382 42.72811,140.94209 26.91899,-39.48944 60.53764,-75.38936 113.93984,-100.68979 -82.55781,1.99518 -119.18044,-19.34828 -156.66798,-40.2523 z"
                id="path4138"
                inkscape:connector-curvature="0"
-               sodipodi:nodetypes="ccccccccccccccccccccccccc"
-               inkscape:export-xdpi="136.16"
-               inkscape:export-ydpi="136.16" />
+               sodipodi:nodetypes="cccccccccccccccccccccccccc"
+               inkscape:export-xdpi="136.02"
+               inkscape:export-ydpi="136.02" />
           </g>
         </g>
       </g>

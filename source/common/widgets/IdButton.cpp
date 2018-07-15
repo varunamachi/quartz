@@ -55,7 +55,7 @@ void IdButton::setStyle(int width, int height, bool big) {
     QTextStream qssStream;
     qssStream.setString(&qss);
     auto txtColor = QApplication::palette().color(QPalette::Text);
-    auto bgColor = QApplication::palette().color(QPalette::Background);
+//    auto bgColor = QApplication::palette().color(QPalette::Window);
     auto selBg = txtColor;
     auto hvBg = txtColor;
     txtColor.setAlpha(200);
@@ -63,7 +63,7 @@ void IdButton::setStyle(int width, int height, bool big) {
     hvBg.setAlpha(30);
     qssStream << " QToolButton {"
                  "     border-radius: 5px;"
-                 "     background-color: " << bgColor.name() << ";"
+//                 "     background-color: " << bgColor.name() << ";"
                  "     color: " << txtColor.name(QColor::HexArgb) << ";"
                  "     max-width: " << width << "px;"
                  "     min-width: " << width << "px;"

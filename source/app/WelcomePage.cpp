@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 #include <QPixmap>
+#include <QApplication>
 
 #include "WelcomePage.h"
 
@@ -28,14 +29,17 @@ WelcomePage::WelcomePage(const QString &id, QWidget *parent)
     , m_data(std::make_unique<Data>())
 {
     QVBoxLayout *layout = new QVBoxLayout();
+    auto color = QApplication::palette().text().color();
+    color.setAlpha(100);
     QLabel *label = new QLabel(tr("W E L C O M E   T O   Q U A R T Z"));
     layout->addWidget(label, Qt::AlignCenter);
     label->setStyleSheet(
                 "border-radius: 3px;"
                 "qproperty-alignment: AlignCenter;"
-                "color: argb(25, 192, 192, 192);"
                 "font-size: 32px;"
-                "qproperty-wordWrap: true;");
+                "qproperty-wordWrap: true;"
+                "color: " + color.name(QColor::HexArgb)
+    );
     auto p = this->palette();
     this->setAutoFillBackground(true);
     this->setPalette(p);
@@ -47,11 +51,13 @@ WelcomePage::~WelcomePage()
 
 }
 
-void WelcomePage::paintEvent(QPaintEvent */*evt*/)
+void WelcomePage::paintEvent(QPaintEvent *evt)
 {
 
     QPainter painter(this);
-    painter.drawImage(this->rect(), m_data->m_image);
+    auto rect = this->rect() - QMargins(15, 15, 15, 15);
+    painter.drawImage(rect, m_data->m_image);
+    QWidget::paintEvent(evt);
 }
 
 }

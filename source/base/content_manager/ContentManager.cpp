@@ -1,5 +1,7 @@
 #include <QHash>
-#include <QStackedLayout>
+#include <QStackedWidget>
+#include <QVBoxLayout>
+#include <QApplication>
 
 #include <core/logger/Logging.h>
 
@@ -12,7 +14,7 @@ namespace Quartz {
 struct ContentManager::Data
 {
     explicit Data( QWidget *parent )
-        : m_layout( new QStackedLayout{ parent })
+        : m_stk( new QStackedWidget{ parent })
     {
 
     }
@@ -21,7 +23,7 @@ struct ContentManager::Data
 
     QVector< ContentWidget *> m_fromPlugins;
 
-    QStackedLayout *m_layout;
+    QStackedWidget *m_stk;
 };
 
 const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
@@ -31,7 +33,28 @@ ContentManager::ContentManager( QWidget *parent )
 //    , m_data( std::make_unique< Data >() )
     , m_data( new Data{ this } )
 {
-
+    auto layout = new QVBoxLayout();
+    layout->addWidget(m_data->m_stk);
+    layout->setContentsMargins({});
+    m_data->m_stk->setContentsMargins({});
+    auto bgColor = QApplication::palette().color(QPalette::Text);
+    bgColor.setAlpha(30);
+//    this->setStyleSheet("border: 1px solid red;");
+//    QString style =
+//    ""
+//        "border-style: raised;"
+//        "border-width: 5px;"
+//        "border-radius: 4px;"
+//        "border-color: red; "
+//    "";
+    m_data->m_stk->setObjectName("container");
+    m_data->m_stk->setStyleSheet(
+                "QWidget#container{"
+                    "border: 1px solid " + bgColor.name(QColor::HexArgb) + ";"
+                    "border-radius: 2px;"
+                 "}");
+//    m_data->m_stk->setContentsMargins({});
+    this->setLayout(layout);
 }
 
 ContentManager::~ContentManager()
@@ -44,7 +67,7 @@ bool ContentManager::addContent( ContentWidget *content )
     bool result = false;
     if( content != nullptr ) {
         m_data->m_widgets.insert( content->id(), content );
-        m_data->m_layout->addWidget( content );
+        m_data->m_stk->addWidget( content );
         emit sigContentAdded( content );
         result = true;
     }
@@ -56,12 +79,12 @@ bool ContentManager::removeContent( const QString &contentId )
     bool result = false;
     auto content = m_data->m_widgets.value( contentId );
     if( content != nullptr ) {
-        if( m_data->m_layout->currentWidget() == content
-                && m_data->m_layout->count() > 0 ) {
-                m_data->m_layout->setCurrentIndex( 0 );
+        if( m_data->m_stk->currentWidget() == content
+                && m_data->m_stk->count() > 0 ) {
+                m_data->m_stk->setCurrentIndex( 0 );
         }
         m_data->m_widgets.remove( contentId );
-        m_data->m_layout->removeWidget( content );
+        m_data->m_stk->removeWidget( content );
         emit sigContentRemoved( contentId );
         result = true;
     }
@@ -105,7 +128,7 @@ void ContentManager::selectContent( const QString &contentId )
 {
     auto widget = m_data->m_widgets.value( contentId );
     if( widget != nullptr ) {
-        m_data->m_layout->setCurrentWidget( widget );
+        m_data->m_stk->setCurrentWidget( widget );
         emit sigContentSelected( widget );
     }
 }
@@ -151,15 +174,5 @@ bool ContentManager::finalizeExtension()
     m_data->m_fromPlugins.clear();
     return result;
 }
-
-void ContentManager::setupLayout()
-{
-    auto layout = new QVBoxLayout();
-    layout->addLayout( m_data->m_layout );
-    layout->setContentsMargins( QMargins{ });
-    m_data->m_layout->setContentsMargins( QMargins{ });
-    this->setLayout( layout );
-}
-
 
 }

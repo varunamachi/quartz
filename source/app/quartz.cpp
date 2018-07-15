@@ -36,15 +36,14 @@ QByteArray readAll(QString path) {
 
 void installAppIcon() {
     auto home = QDir::homePath();
-    auto iconPath= home + "/.local/share/icons/quartz.svg";
+    auto iconPath= home + "/.local/share/icons/quartz.png";
     auto configPath = home + "/.local/share/applications/quartz.desktop";
-    auto icon = readAll("://resources/quartz.svg");
+    auto icon = readAll("://resources/quartz.png");
     auto config = readAll("://resources/quartz.desktop");
     QFileInfo iconInfo(iconPath);
     if (!iconInfo.exists() || iconInfo.size() != icon.size()) {
         QFile iFile(iconPath);
         if (!icon.isNull() && iFile.open(QFile::WriteOnly | QFile::Text)) {
-
             iFile.write(icon);
         } else {
             QZ_ERROR("App") << "Failed to create icon file";

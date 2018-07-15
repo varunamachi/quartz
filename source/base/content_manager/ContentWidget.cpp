@@ -1,4 +1,4 @@
-
+#include <QApplication>
 
 #include "ContentWidget.h"
 
@@ -31,7 +31,6 @@ ContentWidget::ContentWidget( const QString &id,
 //    , m_data( std::make_unique< Data >( id, name, kind ))
     , m_data( new Data( id, name, kind ))
 {
-
 }
 
 ContentWidget::~ContentWidget()

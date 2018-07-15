@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include <QDebug>
+#include <QApplication>
 
 #include "QzScroller.h"
 
@@ -28,6 +29,9 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     m_scroll->setWidgetResizable( true );
     m_scroll->setContentsMargins( QMargins() );
     m_scroll->setStyleSheet( "QScrollArea{ border: 0px; }");
+//    auto bgc = QApplication::palette().color(QPalette::Window);
+//    bgc.setRed(bgc.red() + 10);
+//    this->setStyleSheet("background-color: " + bgc.name(QColor::HexArgb));
     QWidget *innerWidget = new QWidget( this );
     if( orientation == Qt::Horizontal ) {
         m_layout = new QHBoxLayout();
