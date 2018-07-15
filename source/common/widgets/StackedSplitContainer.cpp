@@ -46,6 +46,7 @@ StackedSplitContainer::StackedSplitContainer(
         m_data->m_splitter->addWidget(stackedWidget());
         m_data->m_splitter->addWidget(selector());
     }
+    m_data->m_splitter->setChildrenCollapsible(false);
     this->setContentsMargins({});
     auto layout = new QVBoxLayout(this);
     layout->addWidget(m_data->m_splitter);

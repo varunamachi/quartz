@@ -9,5 +9,6 @@
         <file>resources/quartz_dull.svg</file>
         <file>resources/quartz_dull.png</file>
         <file>resources/quartz.png</file>
+        <file>resources/quartz_bw32.png</file>
     </qresource>
 </RCC>

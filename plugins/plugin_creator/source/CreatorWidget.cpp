@@ -116,33 +116,33 @@ inline void info( CreatorWidget *obj, const QString &msg )
 
 CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
                               QWidget *parent)
-    : ContentWidget( CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent )
-    , m_data{ new Data{ tman, this }}
+    : ContentWidget(CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent)
+    , m_data(new Data(tman, this))
 {
-    auto browseLayout = new QHBoxLayout{};
-    browseLayout->addWidget( m_data->m_dirPath );
-    browseLayout->addWidget( m_data->m_browseButton );
+    auto browseLayout = new QHBoxLayout();
+    browseLayout->addWidget(m_data->m_dirPath);
+    browseLayout->addWidget(m_data->m_browseButton);
 
     auto layout = new QGridLayout{ };
     int row = 0;
-    layout->addWidget( new QLabel{ tr( "Fully Qualified plugin ID ")}, row, 0 );
-    layout->addWidget( m_data->m_fqIDEdit, row, 1 );
+    layout->addWidget(new QLabel(tr( "Fully Qualified plugin ID ")), row, 0);
+    layout->addWidget(m_data->m_fqIDEdit, row, 1 );
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "Unique Name" ), this }, row, 0 );
-    layout->addWidget( m_data->m_idEdit, row, 1 );
+    layout->addWidget(new QLabel(tr("Unique Name"), this), row, 0 );
+    layout->addWidget(m_data->m_idEdit, row, 1 );
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "Code Namespace" ), this }, row, 0 );
-    layout->addWidget( m_data->m_namespaceEdit, row, 1 );
+    layout->addWidget(new QLabel(tr( "Code Namespace" ), this), row, 0 );
+    layout->addWidget(m_data->m_namespaceEdit, row, 1);
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "plugin Name" ), this }, row, 0 );
-    layout->addWidget( m_data->m_nameEdit, row, 1 );
+    layout->addWidget(new QLabel(tr( "plugin Name" ), this), row, 0 );
+    layout->addWidget(m_data->m_nameEdit, row, 1);
     ++ row;
 
-    layout->addWidget( new QLabel{ tr( "plugin Project Path" ), this }, row, 0);
-    layout->addLayout( browseLayout , row, 1 );
+    layout->addWidget(new QLabel(tr( "plugin Project Path" ), this), row, 0);
+    layout->addLayout(browseLayout , row, 1);
     ++ row;
 
     //Configuration part
@@ -160,7 +160,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     configLyt->addWidget( m_data->m_configWidget );
     configLyt->addLayout( btnLyt );
 
-    auto gbx = new QGroupBox{ tr( "Confirure Plugins" ), this };
+    auto gbx = new QGroupBox(tr( "Confirure Plugins" ), this);
     gbx->setLayout( configLyt );
 
 
@@ -170,6 +170,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     mainLayout->addLayout( layout );
     mainLayout->addWidget( gbx );
     this->setLayout( mainLayout );
+    mainLayout->setContentsMargins(5, 5, 5, 5);
 
     //Setup initial state and validators
     m_data->m_fqIDEdit->setValidator(

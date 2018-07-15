@@ -30,8 +30,7 @@ const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
 
 ContentManager::ContentManager( QWidget *parent )
     : QWidget( parent )
-//    , m_data( std::make_unique< Data >() )
-    , m_data( new Data{ this } )
+    , m_data(std::make_unique<Data>(parent))
 {
     auto layout = new QVBoxLayout();
     layout->addWidget(m_data->m_stk);
@@ -39,21 +38,12 @@ ContentManager::ContentManager( QWidget *parent )
     m_data->m_stk->setContentsMargins({});
     auto bgColor = QApplication::palette().color(QPalette::Text);
     bgColor.setAlpha(30);
-//    this->setStyleSheet("border: 1px solid red;");
-//    QString style =
-//    ""
-//        "border-style: raised;"
-//        "border-width: 5px;"
-//        "border-radius: 4px;"
-//        "border-color: red; "
-//    "";
     m_data->m_stk->setObjectName("container");
     m_data->m_stk->setStyleSheet(
                 "QWidget#container{"
                     "border: 1px solid " + bgColor.name(QColor::HexArgb) + ";"
                     "border-radius: 2px;"
                  "}");
-//    m_data->m_stk->setContentsMargins({});
     this->setLayout(layout);
 }
 

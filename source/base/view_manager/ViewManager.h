@@ -28,6 +28,8 @@ public:
     explicit ViewManager( AbstractContainer *container,
                           QWidget *parent = 0 );
 
+    ~ViewManager();
+
     void addView( QuartzView *view );
 
     void removeView( const QString &viewId );
@@ -62,17 +64,8 @@ public:
     static const QString ADAPTER_NAME;
 
 private:
-    int m_height;
-
-    int m_btnWidth;
-
-    AbstractContainer *m_viewContainer;
-
-    QHash< QString, QuartzView *> m_views;
-
-    QMultiHash< QString, QuartzView *> m_categoriesToViews;
-
-    QVector< QuartzView *> m_extensionViews;
+    struct Data;
+    std::unique_ptr<Data> m_data;
 
 };
 

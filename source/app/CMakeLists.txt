@@ -18,6 +18,7 @@ vq_classes (
     WelcomePage
     HoverMoveFilter
     QzMainWidget
+    AboutDialog
 )
 
 vq_sources(
@@ -29,8 +30,6 @@ add_subdirectory( resources )
 add_subdirectory( adapted )
 add_subdirectory( inbuilt )
 add_subdirectory( bindings )
-
-#vq_dump_vars()
 
 vq_create_app()
 qz_install()

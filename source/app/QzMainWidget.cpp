@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QToolButton>
 #include <QMenu>
+#include <QApplication>
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
@@ -26,17 +27,20 @@
 #include <base/settings/BasicConfigPage.h>
 #include <base/extension_details/PluginSelector.h>
 #include <base/title_bar/QuartzItem.h>
+#include <base/main_menu/MainMenuButton.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
 #include "QzMainWidget.h"
+#include "AboutDialog.h"
 
 namespace Quartz {
 
 struct QzMainWidget::Data
 {
-    explicit Data()
-        : m_roundedRect{ true }
+    explicit Data(QWidget *parent)
+        : m_roundedRect(true)
+        , m_aboutDialog(new AboutDialog(parent))
     {
 
     }
@@ -44,6 +48,8 @@ struct QzMainWidget::Data
     QString createStyleSheet();
 
     bool m_roundedRect;
+
+    AboutDialog *m_aboutDialog;
 
     TitleBar *m_titleBar;
 
@@ -55,6 +61,8 @@ struct QzMainWidget::Data
 
     ActionBar *m_actionBar;
 
+    QMenu *m_menu;
+
     std::unique_ptr< Ext::PluginManager > m_pluginManager;
 
 };
@@ -62,17 +70,14 @@ struct QzMainWidget::Data
 
 QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     : QWidget{ parent }
-    , m_data{ new Data{}}
+    , m_data(std::make_unique<Data>(this))
 {
-    m_data->m_titleBar  = new TitleBar{ 20, drawWindowControls, this };
+    m_data->m_titleBar  = new TitleBar(20, drawWindowControls, this);
+//    m_data->m_titleBar->setContentsMargins(0, 10, 0, 5);
     m_data->m_content   = new ContentManager{ this };
     m_data->m_actionBar = new ActionBar{ 20, this };
+    m_data->m_menu = new QMenu(this);
     this->setObjectName( "quartz_widget" );
-//    m_data->m_titleBar->setContentsMargins(0, 10, 0, 5);
-//    auto mainMenu = new QToolButton(this);
-//    mainMenu->setIcon(getIcon(MatIcon::Menu));
-//    mainMenu->setMenu(new QMenu());
-//    m_data->m_titleBar->addItem(new QuartzItem("mainmenu", "menu", mainMenu));
 
     this->setContentsMargins( QMargins{} );
 
@@ -101,22 +106,30 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_selector = new SelectorManager(selectorContainer, this);
     appContext()->setSelectorManager( m_data->m_selector );
     selectorContainer->setContentWidget( m_data->m_viewManager );
-    selectorContainer->setSizes( 20, 180, 600 );
+    selectorContainer->setSizes(20, 180, 600);
+
+    auto vlyt = new QHBoxLayout();
+    vlyt->addWidget(m_data->m_titleBar);
+    auto mainMenu = new MainMenuButton(this);
+    vlyt->addWidget(mainMenu);
+
+    auto about = new QAction(QIcon("://resources/quartz_bw32.png"),
+                             "About",
+                             this);
+    connect(about, &QAction::triggered, [this]() {
+       m_data->m_aboutDialog->exec();
+    });
+    mainMenu->addAction(about);
 
     auto mainLayout = new QVBoxLayout();
-    mainLayout->addWidget( m_data->m_titleBar );
-    mainLayout->setAlignment( m_data->m_titleBar, Qt::AlignTop );
+    mainLayout->addLayout(vlyt);
     mainLayout->addWidget( m_data->m_selector );
     mainLayout->addWidget( m_data->m_actionBar);
     mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins( QMargins{ 0, 0, 1, 1 });
+    mainLayout->setContentsMargins({ 0, 0, 1, 1 });
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
-
-//    m_data->m_actionBar->setStyleSheet( "background: yellow;" );
-//    m_data->m_viewManager->setStyleSheet( "background: blue;" );
     this->setMinimumSize({ 800, 600 });
-
 
     auto configPageManager = new ConfigPageManager{ this };
     appContext()->setConfigPageManager( configPageManager );
@@ -139,21 +152,19 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     m_data->m_viewManager->addView(logView);
     QZ_LOGGER()->dispatcher()->addTarget(logView);
 
-    m_data->m_pluginManager =
-            std::unique_ptr< Ext::PluginManager >{ new Ext::PluginManager{} };
-    m_data->m_pluginManager->registerPluginAdapter( m_data->m_titleBar );
-    m_data->m_pluginManager->registerPluginAdapter( m_data->m_actionBar );
-    m_data->m_pluginManager->registerPluginAdapter( m_data->m_selector );
-    m_data->m_pluginManager->registerPluginAdapter( nodeSelector->model() );
-    m_data->m_pluginManager->registerPluginAdapter( m_data->m_content );
-    m_data->m_pluginManager->registerPluginAdapter( m_data->m_viewManager );
-    m_data->m_pluginManager->registerPluginAdapter( configTree );
-
-    appContext()->setPluginManager( m_data->m_pluginManager.get() );
-
-    appContext()->setContentManager( m_data->m_content );
+    m_data->m_pluginManager = std::make_unique<Ext::PluginManager>();
+    m_data->m_pluginManager->registerPluginAdapter(m_data->m_titleBar);
+    m_data->m_pluginManager->registerPluginAdapter(m_data->m_actionBar);
+    m_data->m_pluginManager->registerPluginAdapter(m_data->m_selector);
+    m_data->m_pluginManager->registerPluginAdapter(nodeSelector->model());
+    m_data->m_pluginManager->registerPluginAdapter(m_data->m_content);
+    m_data->m_pluginManager->registerPluginAdapter(m_data->m_viewManager);
+    m_data->m_pluginManager->registerPluginAdapter(configTree);
+    m_data->m_pluginManager->registerPluginAdapter(mainMenu);
+    appContext()->setPluginManager(m_data->m_pluginManager.get());
+    appContext()->setContentManager(m_data->m_content);
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
-    if( ! m_data->m_pluginManager->loadFrom( execDir )) {
+    if (!m_data->m_pluginManager->loadFrom(execDir)) {
         QZ_ERROR( "App" ) << "Failed to load all available plugins";
     }
 
@@ -192,7 +203,7 @@ void QzMainWidget::paintEvent( QPaintEvent * /*event*/ )
     auto color = this->palette().color( QPalette::Background );
     if( m_data->m_roundedRect ) {
         QPainterPath path;
-        path.addRoundedRect( this->rect(), 5, 5 );
+        path.addRoundedRect(this->rect(), 5, 5);
         QBrush brush( color );
         painter.setRenderHint( QPainter::Antialiasing );
         painter.setRenderHint( QPainter::HighQualityAntialiasing );

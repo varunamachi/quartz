@@ -34,11 +34,11 @@ WelcomePage::WelcomePage(const QString &id, QWidget *parent)
     QLabel *label = new QLabel(tr("W E L C O M E   T O   Q U A R T Z"));
     layout->addWidget(label, Qt::AlignCenter);
     label->setStyleSheet(
-                "border-radius: 3px;"
-                "qproperty-alignment: AlignCenter;"
-                "font-size: 32px;"
-                "qproperty-wordWrap: true;"
-                "color: " + color.name(QColor::HexArgb)
+        "border-radius: 3px;"
+        "qproperty-alignment: AlignCenter;"
+        "font-size: 32px;"
+        "qproperty-wordWrap: true;"
+        "color: " + color.name(QColor::HexArgb)
     );
     auto p = this->palette();
     this->setAutoFillBackground(true);
@@ -53,7 +53,6 @@ WelcomePage::~WelcomePage()
 
 void WelcomePage::paintEvent(QPaintEvent *evt)
 {
-
     QPainter painter(this);
     auto rect = this->rect() - QMargins(15, 15, 15, 15);
     painter.drawImage(rect, m_data->m_image);
