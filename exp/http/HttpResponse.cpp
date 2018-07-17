@@ -1,5 +1,6 @@
 
 #include "HttpResponse.h"
+#include "Common.h"
 
 namespace Quartz { namespace Http {
 

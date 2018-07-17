@@ -420,6 +420,15 @@ enum class Method {
     UNLINK
 };
 
+inline uint qHash(Method key, uint seed)
+{
+    return ::qHash(static_cast<uint>(key), seed);
+}
+inline uint qHash(StatusCode key, uint seed)
+{
+    return ::qHash(static_cast<uint>(key), seed);
+}
+
 const QHash< Method, QString > METHODS = {
     { Method::DELETE, "DELETE" },
     { Method::GET, "GET" },
@@ -455,6 +464,8 @@ const QHash< Method, QString > METHODS = {
     { Method::LINK, "LINK" },
     { Method::UNLINK, "UNLINK" }
 };
+
+
 
 const QString HTTP_VERSION_1_0 = QStringLiteral( "HTTP/1.0" );
 const QString HTTP_VERSION_1_1 = QStringLiteral( "HTTP/1.1" );
