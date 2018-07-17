@@ -10,7 +10,8 @@ AboutDialog::AboutDialog(QWidget *parent)
 {
     auto layout = new QHBoxLayout();
     auto img = new QLabel(this);
-    img->setPixmap(QPixmap("://resources/quartz_bw32.png"));
+    img->setPixmap(QPixmap("://resources/quartz32.png"));
+//    img->setMaximumSize()
     auto desc = new QLabel(this);
     desc->setText(tr("This is quartz!"));
     layout->addWidget(img);

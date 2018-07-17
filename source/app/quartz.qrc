@@ -10,5 +10,7 @@
         <file>resources/quartz_dull.png</file>
         <file>resources/quartz.png</file>
         <file>resources/quartz_bw32.png</file>
+        <file>resources/quartz.ico</file>
+        <file>resources/quartz32.png</file>
     </qresource>
 </RCC>

@@ -99,8 +99,8 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     viewContainer->setSizes( 370, 210, 20 );
 
     auto selectorContainer = new StackedSplitContainer{
-                45,
-                45,
+                40,
+                40,
                 AbstractContainer::SelectorPosition::Before,
                 Qt::Vertical };
     m_data->m_selector = new SelectorManager(selectorContainer, this);
@@ -113,7 +113,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     auto mainMenu = new MainMenuButton(this);
     vlyt->addWidget(mainMenu);
 
-    auto about = new QAction(QIcon("://resources/quartz_bw32.png"),
+    auto about = new QAction(QIcon("://resources/quartz32.png"),
                              "About",
                              this);
     connect(about, &QAction::triggered, [this]() {

@@ -65,8 +65,7 @@ MainWidget::MainWidget( QWidget *parent )
     layout->addWidget( m_data->m_tabWidget );
     this->setLayout( layout );
 
-    this->setContentsMargins( QMargins{} );
-    layout->setContentsMargins( QMargins{} );
+    layout->setContentsMargins({} );
 
     connect( m_data->m_newConnection,
              &QAction::triggered,
@@ -97,9 +96,10 @@ MainWidget::MainWidget( QWidget *parent )
              this,
              &MainWidget::disconnectAll );
 
-    layout->setContentsMargins( QMargins{} );
-    m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
-    m_data->m_tabWidget->setContentsMargins( 0, 0, 0, 4 );
+    this->setContentsMargins(5, 5, 5, 5);
+//    layout->setContentsMargins( QMargins{} );
+//    m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
+//    m_data->m_tabWidget->setContentsMargins( 0, 0, 0, 4 );
 
     Dialogs::init( this );
 }

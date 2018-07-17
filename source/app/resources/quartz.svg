@@ -15,7 +15,7 @@
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="quartz.svg"
    inkscape:export-filename="/data/kode/github/quartz/source/app/resources/quartz.png"
    inkscape:export-xdpi="136.01794"
@@ -89,10 +89,10 @@
      inkscape:document-units="px"
      inkscape:current-layer="g4200"
      showgrid="false"
-     inkscape:window-width="1874"
-     inkscape:window-height="1046"
-     inkscape:window-x="46"
-     inkscape:window-y="0"
+     inkscape:window-width="1858"
+     inkscape:window-height="1058"
+     inkscape:window-x="1420"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -135,8 +135,8 @@
                id="path4138"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cccccccccccccccccccccccccc"
-               inkscape:export-xdpi="5.7620687"
-               inkscape:export-ydpi="5.7620687" />
+               inkscape:export-xdpi="4.0301614"
+               inkscape:export-ydpi="4.0301614" />
           </g>
         </g>
       </g>

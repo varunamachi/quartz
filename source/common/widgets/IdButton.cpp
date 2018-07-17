@@ -61,6 +61,12 @@ void IdButton::setStyle(int width, int height, bool big) {
     txtColor.setAlpha(200);
     selBg.setAlpha(80);
     hvBg.setAlpha(30);
+#ifdef Q_OS_WIN
+    auto fontSize = (big ? 8 : 11);
+#else
+    auto fontSize = (big ? 9 : 12);
+#endif
+
     qssStream << " QToolButton {"
                  "     border-radius: 5px;"
 //                 "     background-color: " << bgColor.name() << ";"
@@ -69,7 +75,7 @@ void IdButton::setStyle(int width, int height, bool big) {
                  "     min-width: " << width << "px;"
                  "     max-height: " << height << "px;"
                  "     min-height: " << height << "px;"
-                 "     font-size: " << (big ? 9 : 12) << "px;"
+                 "     font-size: " << fontSize << "px;"
                  "     padding: 0px;"
                  " }"
                  " QToolButton:checked {"

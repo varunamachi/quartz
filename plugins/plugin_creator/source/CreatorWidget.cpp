@@ -171,6 +171,7 @@ CreatorWidget::CreatorWidget( std::shared_ptr< TemplateManager > tman,
     mainLayout->addWidget( gbx );
     this->setLayout( mainLayout );
     mainLayout->setContentsMargins(5, 5, 5, 5);
+    this->setContentsMargins(5, 5, 5, 5);
 
     //Setup initial state and validators
     m_data->m_fqIDEdit->setValidator(
