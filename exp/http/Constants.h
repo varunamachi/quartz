@@ -420,6 +420,7 @@ enum class Method {
     UNLINK
 };
 
+
 inline uint qHash(Method key, uint seed)
 {
     return ::qHash(static_cast<uint>(key), seed);

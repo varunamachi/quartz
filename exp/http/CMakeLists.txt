@@ -16,6 +16,7 @@ vq_classes (
     HttpClient
     MultipartFile
     Router
+    HttpParser
 )
 
 vq_sources(

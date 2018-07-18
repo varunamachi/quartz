@@ -1,5 +1,4 @@
 
-
 #include "HttpClient.h"
 
 namespace Quartz { namespace Http {
