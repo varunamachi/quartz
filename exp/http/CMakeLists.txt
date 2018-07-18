@@ -15,14 +15,19 @@ vq_classes (
     HttpServer
     HttpClient
     MultipartFile
+    Router
 )
 
 vq_sources(
+    http_parser.c
 )
+
 vq_headers(
     Constants.h
     Common.h
     httplib.h
+    tmpinclude.h
+    http_parser.h
 )
 
 vq_create_app()

@@ -4,20 +4,18 @@
 
 #include <QObject>
 
+#include "Common.h"
+
 class QString;
 class QDir;
 
 namespace Quartz { namespace Http {
 
-class HttpResponse;
-class HttpRequest;
 
 class HttpServer : public QObject {
     Q_OBJECT
 
 public:
-    using Handler = std::function<void(const HttpRequest &, HttpResponse & )>;
-
     explicit HttpServer(QObject *parent = nullptr);
 
     HttpServer & get(const QString &pattern, Handler handler);

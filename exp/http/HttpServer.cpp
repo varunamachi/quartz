@@ -1,11 +1,12 @@
 
 
+#include "tmpinclude.h"
 #include "HttpServer.h"
 
 namespace Quartz { namespace Http {
 
 struct HttpServer::Data {
-
+    socket_t *m_socket;
 };
 
 HttpServer::HttpServer( QObject *parent )
@@ -55,12 +56,13 @@ void HttpServer::setStaticDir(const QDir &/*dir*/)
 
 }
 
-void HttpServer::addMiddleware(const QString &patter, HttpServer::Handler handler)
+void HttpServer::addMiddleware(const QString &/*patter*/,
+                               HttpServer::Handler /*handler*/)
 {
 
 }
 
-void HttpServer::setErrorHandler(HttpServer::Handler handler)
+void HttpServer::setErrorHandler(HttpServer::Handler /*handler*/)
 {
 
 }
