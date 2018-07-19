@@ -12,23 +12,15 @@ class HttpResponse;
 class HttpParser
 {
 public:
-    enum Type {
-        ParseRequest,
-        ParseResponse,
-        ParseBoth,
-    };
+    HttpParser() = delete;
 
-    explicit HttpParser(Type type);
+    ~HttpParser() = delete;
 
-    ~HttpParser();
+    static std::unique_ptr<HttpRequest> parseAsRequest(QByteArray &data);
 
-    std::unique_ptr<HttpRequest> parseRequest(QByteArray &data);
-
-    std::unique_ptr<HttpResponse> parserResponse(QByteArray &data);
+    static std::unique_ptr<HttpResponse> parseAsResponse(QByteArray &data);
 
 private:
-    struct Data;
-    std::unique_ptr<Data> m_data;
 };
 
 } }
