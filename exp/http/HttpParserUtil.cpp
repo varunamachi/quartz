@@ -5,50 +5,69 @@
 
 #include <core/logger/Logging.h>
 
-#include "HttpParser.h"
+#include "HttpRequest.h"
+#include "HttpResponse.h"
 #include "http_parser.h"
+#include "HttpParserUtil.h"
+
 
 namespace Quartz { namespace Http {
+
+struct Accumulator {
+    QByteArray m_headerName;
+
+    QByteArray m_headerValue;
+
+    QByteArray m_url;
+
+    QByteArray m_body;
+};
 
 static int onMessageBegin(http_parser* /*parser*/) {
     return 0;
 }
 
-static int onUrl(http_parser* /*parser*/,
-                 const char* /*at*/,
-                 size_t /*length*/) {
-    return 0;
+static int onUrl(http_parser* parser,
+                 const char* at,
+                 std::size_t length) {
+    auto acc = static_cast<Accumulator *>(parser->data);
 }
 
-static int onStatus(http_parser* /*parser*/,
+static int onStatus(http_parser* parser,
                     const char* /*at*/,
                     size_t /*length*/) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
-static int onHeaderField(http_parser* /*parser*/,
+static int onHeaderField(http_parser* parser,
                          const char* /*at*/,
                          size_t /*length*/) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
-static int onHeaderValue(http_parser* /*parser*/,
+static int onHeaderValue(http_parser* parser,
                          const char* /*at*/,
                          size_t /*length*/) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
-static int onHeadersComplete(http_parser* /*parser*/) {
+static int onHeadersComplete(http_parser* parser) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
-static int onBody(http_parser* /*parser*/,
+static int onBody(http_parser* parser,
                   const char* /*at*/,
                   size_t /*length*/) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
-static int onMessageComplete(http_parser* /*parser*/) {
+static int onMessageComplete(http_parser* parser) {
+    auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
 
@@ -80,24 +99,30 @@ bool parse(QByteArray &packet,
 }
 
 
-std::unique_ptr<HttpRequest> HttpParser::parseAsRequest(QByteArray &data)
+std::unique_ptr<HttpRequest> HttpParserUtil::parseRequest(QByteArray &data)
 {
-    auto req = std::make_unique<HttpRequest>();
-    if (!parse(data, HTTP_REQUEST, req.get())) {
+    std::unique_ptr<HttpRequest> req;
+    Accumulator acc;
+    if (parse(data, HTTP_REQUEST, &acc)) {
+        req = std::make_unique<HttpRequest>();
+        //populate request from accumulator
+    } else {
         QZ_ERROR("Qz:Http") << "Failed to parse request";
-        return req;
     }
-    return nullptr;
+    return req;
 }
 
-std::unique_ptr<HttpResponse> HttpParser::parseAsResponse(QByteArray &data)
+std::unique_ptr<HttpResponse> HttpParserUtil::parseResponse(QByteArray &data)
 {
-    auto resp = std::make_unique<HttpResponse>();
-    if (!parse(data, HTTP_REQUEST, resp.get())) {
+    std::unique_ptr<HttpResponse> resp;
+    Accumulator acc;
+    if (parse(data, HTTP_REQUEST, &acc)) {
+        resp = std::make_unique<HttpResponse>();
+        //populate response from accumulator
+    } else {
         QZ_ERROR("Qz:Http") << "Failed to parse response";
-        return resp;
     }
-    return nullptr;
+    return resp;
 }
 
 } }

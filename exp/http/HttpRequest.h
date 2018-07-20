@@ -14,13 +14,21 @@ class MultipartFile;
 class HttpRequest
 {
 public:
-    HttpRequest( const QString &version, Method method, const QString &path);
+    HttpRequest();
 
     ~HttpRequest();
+
+//    const QString &version, Method method, const QString &path
+
+    void setVersion(const QString &version);
 
     const QString & version() const;
 
     Method method() const;
+
+    void setMethod(Method method);
+
+    void setPath(const QString &path);
 
     const QString & path() const;
 
