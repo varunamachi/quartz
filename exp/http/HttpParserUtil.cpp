@@ -18,6 +18,8 @@ struct Accumulator {
 
     QByteArray m_headerValue;
 
+    QHash<QByteArray, QByteArray> m_headers;
+
     QByteArray m_url;
 
     QByteArray m_body;
@@ -31,11 +33,13 @@ static int onUrl(http_parser* parser,
                  const char* at,
                  std::size_t length) {
     auto acc = static_cast<Accumulator *>(parser->data);
+    acc->m_url.append(at, static_cast<int>(length));
+    return 0;
 }
 
 static int onStatus(http_parser* parser,
-                    const char* /*at*/,
-                    size_t /*length*/) {
+                    const char* at,
+                    size_t length) {
     auto acc = static_cast<Accumulator *>(parser->data);
     return 0;
 }
@@ -44,13 +48,21 @@ static int onHeaderField(http_parser* parser,
                          const char* /*at*/,
                          size_t /*length*/) {
     auto acc = static_cast<Accumulator *>(parser->data);
+    if ( !acc->m_headerName.isEmpty() && !acc->m_headerValue.isEmpty() ) {
+        // header names are always lower-cased
+        acc->m_headers.insert(acc->m_headerName.toLower(),
+                              acc->m_headerValue.toLower());
+        acc->m_headerName.clear();
+        acc->m_headerValue.clear();
+    }
     return 0;
 }
 
 static int onHeaderValue(http_parser* parser,
-                         const char* /*at*/,
-                         size_t /*length*/) {
+                         const char* at,
+                         size_t length) {
     auto acc = static_cast<Accumulator *>(parser->data);
+    acc->m_headerValue.append(at, static_cast<int>(length));
     return 0;
 }
 
