@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "Constants.h"
+
 class QByteArray;
 
 namespace Quartz { namespace Http {
@@ -19,6 +21,8 @@ public:
     static std::unique_ptr<HttpRequest> parseRequest(QByteArray &data);
 
     static std::unique_ptr<HttpResponse> parseResponse(QByteArray &data);
+
+    static Method toMethod(const QString &meth);
 
 private:
 };

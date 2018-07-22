@@ -23,6 +23,14 @@ struct Accumulator {
     QByteArray m_url;
 
     QByteArray m_body;
+
+    Method m_method;
+
+    QString m_version;
+
+    QString m_remoteAddr;
+
+    QString m_remotePort;
 };
 
 static int onMessageBegin(http_parser* /*parser*/) {
