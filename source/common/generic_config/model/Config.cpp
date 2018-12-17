@@ -146,4 +146,9 @@ std::unique_ptr< Config > Config::clone() const
     return config;
 }
 
+const QHash<QString, Param *> &Config::allParams() const
+{
+    return m_data->m_allParams;
+}
+
 }

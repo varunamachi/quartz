@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <QHash>
+
 #include "../../QuartzCommon.h"
 #include "../../model_view/TreeNode.h"
 
@@ -45,7 +47,7 @@ public:
 
     std::unique_ptr< Config > clone() const;
 
-
+    const QHash<QString, Param *> & allParams() const;
 private:
     struct Data;
     std::unique_ptr< Data > m_data;

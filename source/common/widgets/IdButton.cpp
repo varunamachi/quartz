@@ -61,11 +61,11 @@ void IdButton::setStyle(int width, int height, bool big) {
     txtColor.setAlpha(200);
     selBg.setAlpha(80);
     hvBg.setAlpha(30);
-#ifdef Q_OS_WIN
-    auto fontSize = (big ? 8 : 11);
-#else
-    auto fontSize = (big ? 9 : 12);
-#endif
+//#ifdef Q_OS_WIN
+    auto fontSize = (big ? 10 : 12);
+//#else
+//    auto fontSize = (big ? 9 : 12);
+//#endif
 
     qssStream << " QToolButton {"
                  "     border-radius: 5px;"

@@ -17,7 +17,7 @@ public:
     explicit Template( const QString &name,
                        const QString &content );
 
-    ~Template();
+    ~Template() override;
 
     QString name() const;
 

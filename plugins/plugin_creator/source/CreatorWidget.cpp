@@ -13,7 +13,6 @@
 #include <QGroupBox>
 
 #include <common/templating/TemplateUtils.h>
-#include <common/templating/TemplateProcessor.h>
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
 

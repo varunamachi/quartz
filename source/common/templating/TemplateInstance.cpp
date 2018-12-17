@@ -117,6 +117,22 @@ Config * TemplateInstance::instanceConfig()
     return m_data->m_config.get();
 }
 
+QVariantHash TemplateInstance::allParams()
+{
+    QVariantHash out;
+    for(auto it = m_data->m_globalConfig->begin();
+        it != m_data->m_globalConfig->end();
+        ++ it) {
+        out[it.key()] = it.value();
+    }
+    for(auto it = m_data->m_config->allParams().begin();
+        it != m_data->m_config->allParams().begin();
+        ++ it) {
+        out[it.key()] = it.value()->value();
+    }
+    return out;
+}
+
 const Config * TemplateInstance::instanceConfig() const
 {
     return m_data->m_config.get();

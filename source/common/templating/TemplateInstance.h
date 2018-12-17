@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <QHash>
+#include <QVariantHash>
 
 #include "../QuartzCommon.h"
 #include "../model_view/TreeNode.h"
@@ -23,7 +24,7 @@ public:
                       std::unique_ptr< Config > config,
                       Template *parent );
 
-    ~TemplateInstance();
+    ~TemplateInstance() override;
 
     const QString & name() const;
 
@@ -49,6 +50,8 @@ public:
     const Config * instanceConfig() const;
 
     Config * instanceConfig();
+
+    QVariantHash allParams() const;
 
 private:
     struct Data;
