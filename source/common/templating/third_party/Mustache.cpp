@@ -12,7 +12,7 @@
     and/or other materials provided with the distribution.
 */
 
-#include "mustache.h"
+#include "Mustache.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

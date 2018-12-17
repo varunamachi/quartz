@@ -117,7 +117,7 @@ Config * TemplateInstance::instanceConfig()
     return m_data->m_config.get();
 }
 
-QVariantHash TemplateInstance::allParams()
+QVariantHash TemplateInstance::allParams() const
 {
     QVariantHash out;
     for(auto it = m_data->m_globalConfig->begin();
