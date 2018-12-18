@@ -55,7 +55,6 @@ void IdButton::setStyle(int width, int height, bool big) {
     QTextStream qssStream;
     qssStream.setString(&qss);
     auto txtColor = QApplication::palette().color(QPalette::Text);
-//    auto bgColor = QApplication::palette().color(QPalette::Window);
     auto selBg = txtColor;
     auto hvBg = txtColor;
     txtColor.setAlpha(200);
@@ -70,7 +69,7 @@ void IdButton::setStyle(int width, int height, bool big) {
     qssStream << " QToolButton {"
                  "     border-radius: 5px;"
 //                 "     background-color: " << bgColor.name() << ";"
-                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
+//                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
                  "     max-width: " << width << "px;"
                  "     min-width: " << width << "px;"
                  "     max-height: " << height << "px;"
@@ -79,8 +78,9 @@ void IdButton::setStyle(int width, int height, bool big) {
                  "     padding: 0px;"
                  " }"
                  " QToolButton:checked {"
-                 "     background-color: " << selBg.name(QColor::HexArgb) << ";"
-                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
+//                 "     background-color: " << selBg.name(QColor::HexArgb) << ";"
+//                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
+                 "     color: white;"
                  "     border-color: balck;"
                  "     border-width: 1px;"
                  " }"

@@ -48,7 +48,7 @@ bool MustacheTemplateProcessor::process(QTextStream &stream)
     return true;
 }
 
-const QString &MustacheTemplateProcessor::lastError() const
+const QString & MustacheTemplateProcessor::lastError() const
 {
     return m_data->m_lastError;
 }
