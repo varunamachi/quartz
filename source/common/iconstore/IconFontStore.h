@@ -84,6 +84,9 @@ struct IIconFontPainter
 
 
 inline QIcon getIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
+    if (!color.isValid()) {
+        color = IconFontStore::instance()->getColor(QIcon::Normal);
+    }
     return IconFontStore::instance()->icon(
                 IconFontStore::FONT_MATERIAL,
                 static_cast<int>(code),
@@ -104,6 +107,9 @@ inline QIcon getIcon(FAIcon code, QVariantMap &opts) {
                 opts);
 }
 inline QIcon getIcon(FAIcon code, int size = -1, QColor color = QColor{}) {
+    if (!color.isValid()) {
+        color = IconFontStore::instance()->getColor(QIcon::Normal);
+    }
     return IconFontStore::instance()->icon(
                 IconFontStore::FONT_FA_SOLID,
                 static_cast<int>(code),
@@ -111,6 +117,9 @@ inline QIcon getIcon(FAIcon code, int size = -1, QColor color = QColor{}) {
                 color);
 }
 inline QIcon getIcon(FABrandIcon code, int size = -1, QColor color = QColor{}) {
+    if (!color.isValid()) {
+        color = IconFontStore::instance()->getColor(QIcon::Normal);
+    }
     return IconFontStore::instance()->icon(
                 IconFontStore::FONT_FA_BRANDS,
                 static_cast<int>(code),

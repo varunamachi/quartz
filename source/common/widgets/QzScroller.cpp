@@ -43,8 +43,8 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         m_scroll->setMaximumWidth( maximumDim );
         m_scroll->setMinimumWidth( minimumDim );
     }
-//    m_layout->setContentsMargins( QMargins() );
-    m_layout->setMargin( 0 );
+    m_layout->setContentsMargins( QMargins() );
+//    m_layout->setMargin( 0 );
     m_layout->addStretch( 0 );
     m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     innerWidget->setLayout( m_layout );
@@ -78,7 +78,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         mainLayout->addWidget( m_scroll );
         mainLayout->addWidget( m_fwdButton );
         mainLayout->setAlignment( m_fwdButton, Qt::AlignRight );
-        this->setContentsMargins(5, 0, 5, 0);
+//        this->setContentsMargins(5, 0, 5, 0);
     }
     else {
         mainLayout = new QVBoxLayout();
@@ -87,8 +87,9 @@ QzScroller::QzScroller( Qt::Orientation orientation,
         mainLayout->addWidget( m_scroll );
         mainLayout->addWidget( m_fwdButton );
         mainLayout->setAlignment( m_fwdButton, Qt::AlignBottom );
-        this->setContentsMargins(0, 5, 0, 5);
+//        this->setContentsMargins(0, 5, 0, 5);
     }
+    this->setContentsMargins(QMargins{});
     mainLayout->setContentsMargins( QMargins() );
     this->setLayout( mainLayout );
 
