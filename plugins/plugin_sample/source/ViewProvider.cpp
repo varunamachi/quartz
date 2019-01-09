@@ -17,7 +17,8 @@ SampleView::SampleView( QWidget *parent )
           SampleView::VIEW_ID,
           SampleView::VIEW_CATERGORY,
           SampleView::VIEW_NAME,
-          getIcon(MatIcon::Gesture),
+          getNormalIcon(MatIcon::Gesture),
+          getActiveIcon(MatIcon::Gesture),
           parent )
 {
     auto layout = new QVBoxLayout{ this };

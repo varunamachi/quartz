@@ -52,7 +52,8 @@ PluginSelector::PluginSelector( QWidget *parent )
     : AbstractSelector{
           SELECTOR_ID,
           SELECTOR_NAME,
-          getIcon(MatIcon::Extension),
+          getNormalIcon(MatIcon::Extension),
+          getActiveIcon(MatIcon::Extension),
           parent }
     , m_data{ new Data{ this }}
 {
@@ -61,7 +62,7 @@ PluginSelector::PluginSelector( QWidget *parent )
     this->setLayout( layout );
 
     layout->setContentsMargins( QMargins{} );
-    m_data->m_pluginView->setContentsMargins( QMargins{} );
+//    m_data->m_pluginView->setContentsMargins( QMargins{} );
     this->setContentsMargins( QMargins{} );
 
     appContext()->contentManager()->addContent( m_data->m_content );

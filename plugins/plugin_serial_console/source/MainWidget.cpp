@@ -101,6 +101,7 @@ MainWidget::MainWidget( QWidget *parent )
 //    m_data->m_toolBar->setContentsMargins( 0, 0, 0, 4 );
 //    m_data->m_tabWidget->setContentsMargins( 0, 0, 0, 4 );
 
+
     Dialogs::init( this );
 }
 

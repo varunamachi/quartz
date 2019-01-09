@@ -233,7 +233,7 @@ QColor IconFontStore::getColor(
         QIcon::State state,
         QVariantMap opts)
 {
-    QColor res = QApplication::palette().text().color();
+    QColor res;
     QString modePostfix;
     switch(mode) {
     case QIcon::Disabled: modePostfix = "-disabled"; break;
@@ -250,6 +250,17 @@ QColor IconFontStore::getColor(
         res = m_data->m_defaultOpts[key].value<QColor>();
     }
     return res;
+}
+
+QColor IconFontStore::getColor(QIcon::Mode mode) {
+    auto palette = QApplication::palette();
+    auto color = palette.color(QPalette::Text);
+    if (mode == QIcon::Disabled) {
+        color = palette.color(QPalette::AlternateBase);
+    } else if (mode == QIcon::Selected) {
+        color = palette.color(QPalette::Highlight);
+    }
+    return color;
 }
 
 

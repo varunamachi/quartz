@@ -152,13 +152,14 @@ void AbstractContainer::addWidget(
         const QString &displayName,
         QWidget *widget)
 {
-    this->addWidget(id, displayName, QIcon{}, widget);
+    this->addWidget(id, displayName, QIcon{}, QIcon{}, widget);
 }
 
 void AbstractContainer::addWidget(
         const QString &id,
         const QString &displayName,
         const QIcon &icon,
+        const QIcon &activeIcon,
         QWidget *widget)
 {
     if( widget != nullptr ) {
@@ -177,6 +178,7 @@ void AbstractContainer::addWidget(
                                 m_data->m_btnHeight,
                                 m_data->m_btnWidth,
                                 icon,
+                                activeIcon,
                                 btmTxt,
                                 this);
         }
@@ -386,6 +388,9 @@ StackedContainer::StackedContainer(
                                                   : Qt::AlignRight );
     }
     layout->setContentsMargins( QMargins{} );
+    auto margins = this->contentsMargins();
+    margins.setLeft(0);
+    this->setContentsMargins(margins);
     this->setLayout( layout );
 }
 

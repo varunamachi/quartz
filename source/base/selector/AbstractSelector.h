@@ -17,6 +17,7 @@ public:
     AbstractSelector( const QString &selectorId,
                       const QString &selectorName,
                       const QIcon &icon,
+                      const QIcon &activeIcon,
                       QWidget *parent = nullptr );
 
     virtual ~AbstractSelector();
@@ -26,6 +27,8 @@ public:
     const QString & selectorName() const;
 
     const QIcon & icon() const;
+
+    const QIcon & activeIcon() const;
 
     virtual void selected() = 0;
 

@@ -46,7 +46,8 @@ struct ConfigPageSelector::Data
 ConfigPageSelector::ConfigPageSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
-                        getIcon(MatIcon::Settings),
+                        getNormalIcon(MatIcon::Settings),
+                        getActiveIcon(MatIcon::Settings),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new ConfigPageSelector::Data{ new QTreeView{ this },

@@ -28,7 +28,7 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     : QToolButton(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    this->setIcon(getIcon(MatIcon::Menu));
+    this->setIcon(getIcon(FAIcon::ArrowDown));
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);

@@ -7,6 +7,7 @@ qz_add_qt()
 qz_add_core()
 
 add_definitions( -DQUARTZ_COMMON )
+#SET(CMAKE_CXX_STANDARD 14)
 
 vq_headers(
     QuartzCommon.h

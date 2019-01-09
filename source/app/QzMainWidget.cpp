@@ -126,7 +126,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     mainLayout->addWidget( m_data->m_selector );
     mainLayout->addWidget( m_data->m_actionBar);
     mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins({ 0, 0, 1, 1 });
+    mainLayout->setContentsMargins({ 0, 0, 0, 0 });
     mainLayout->setSpacing( 0 );
     this->setLayout( mainLayout );
     this->setMinimumSize({ 800, 600 });

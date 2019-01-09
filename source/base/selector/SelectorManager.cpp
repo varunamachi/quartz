@@ -45,7 +45,7 @@ SelectorManager::SelectorManager( AbstractContainer *container,
 {
     auto layout = new QHBoxLayout{ this };
     layout->addWidget( m_data->m_selectorContainer );
-    layout->setContentsMargins( 4, 1, 4, 1 );
+    layout->setContentsMargins( 0, 1, 0, 1 );
     this->setLayout( layout );
     //Only string style connect works on Windows
     connect( m_data->m_selectorContainer,
@@ -72,6 +72,7 @@ void SelectorManager::addSelector( AbstractSelector *selector )
                     selector->selectorId(),
                     selector->selectorName(),
                     selector->icon(),
+                    selector->activeIcon(),
                     selector );
         m_data->m_selectors.insert( selector->selectorId(), selector );
     }

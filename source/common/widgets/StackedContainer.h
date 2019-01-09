@@ -73,6 +73,7 @@ public Q_SLOTS:
     void addWidget( const QString &id,
                     const QString &displayName,
                     const QIcon &icon,
+                    const QIcon &activeIcon,
                     QWidget *widget);
 
     void addWidget( const QString &id,

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <QToolButton>
 
 namespace Quartz {
@@ -20,8 +22,11 @@ public:
               int height,
               int width,
               const QIcon &icon,
+              const QIcon &activeIcon,
               bool textBelowIcon,
               QWidget *parent = nullptr);
+
+    ~IdButton();
 
 protected:
     void mouseReleaseEvent( QMouseEvent *evt ) override;
@@ -35,8 +40,8 @@ signals:
 private:
     void setStyle(int width, int height, bool big);
 
-    QString m_id;
-
-    QSize m_dim;
+private:
+    struct Data;
+    std::unique_ptr<Data> m_data;
 };
 }

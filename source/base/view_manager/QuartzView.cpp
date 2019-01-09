@@ -11,11 +11,13 @@ public:
     Data( const QString &viewId,
           const QString &category,
           const QString &displayName,
-          const QIcon &icon)
+          const QIcon &icon,
+          const QIcon &activeIcon)
         : m_viewId( viewId )
         , m_categoryId( category )
         , m_displayName( displayName )
         , m_icon(icon)
+        , m_activeIcon(activeIcon)
     {
 
     }
@@ -29,15 +31,22 @@ public:
     QString m_displayName;
 
     QIcon m_icon;
+
+    QIcon m_activeIcon;
 };
 
 QuartzView::QuartzView(const QString &viewId,
                        const QString &category,
                        const QString &displayName,
                        const QIcon &icon,
+                       const QIcon &activeIcon,
                        QWidget *parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(viewId, category, displayName, icon))
+    , m_data(std::make_unique<Data>(viewId,
+                                    category,
+                                    displayName,
+                                    icon,
+                                    activeIcon))
 {
 
 }
@@ -70,6 +79,11 @@ const QString & QuartzView::viewCategoryName() const
 const QIcon &QuartzView::icon() const
 {
     return m_data->m_icon;
+}
+
+const QIcon &QuartzView::activeIcon() const
+{
+    return m_data->m_activeIcon;
 }
 
 }

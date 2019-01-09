@@ -48,6 +48,8 @@ public:
 
     QColor getColor(QIcon::Mode mode, QIcon::State state, QVariantMap opts);
 
+    QColor getColor(QIcon::Mode mode);
+
     static bool init(const QByteArrayList &fontData);
 
     static IconFontStore * instance();
@@ -79,6 +81,7 @@ struct IIconFontPainter
 
     virtual ~IIconFontPainter() {}
 };
+
 
 inline QIcon getIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
     return IconFontStore::instance()->icon(
@@ -119,6 +122,20 @@ inline QIcon getIcon(FABrandIcon code, QVariantMap &opts) {
                 IconFontStore::FONT_FA_BRANDS,
                 static_cast<int>(code),
                 opts);
+}
+
+template<typename IconType>
+inline QIcon getNormalIcon(IconType code) {
+    return getIcon(code,
+                   -1,
+                   IconFontStore::instance()->getColor(QIcon::Normal));
+}
+
+template<typename IconType>
+inline QIcon getActiveIcon(IconType code) {
+    return getIcon(code,
+                   -1,
+                   IconFontStore::instance()->getColor(QIcon::Selected));
 }
 
 }

@@ -180,7 +180,8 @@ LogView::LogView( QWidget *parent )
           VIEW_ID,
           VIEW_CATEGORY,
           VIEW_DISPLAY_NAME,
-          getIcon(FAIcon::FileAlt),
+          getNormalIcon(FAIcon::FileAlt),
+          getActiveIcon(FAIcon::FileAlt),
           parent )
     , Logger::AbstractLogTarget( LOG_TARGET_ID )
     , m_data( new Data{} )
