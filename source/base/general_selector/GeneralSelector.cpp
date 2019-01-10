@@ -35,8 +35,10 @@ struct GeneralSelector::Data
 GeneralSelector::GeneralSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
-                        getNormalIcon(FAIcon::Th),
-                        getActiveIcon(FAIcon::Th),
+                        getNormalIcon(MatIcon::Pages),
+//                        getNormalIcon(FAIcon::Th),
+//                        getActiveIcon(FAIcon::Th),
+                        getActiveIcon(MatIcon::Pages),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))
     , m_data( new GeneralSelector::Data( new QTreeView( this ),

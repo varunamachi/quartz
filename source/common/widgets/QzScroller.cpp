@@ -45,7 +45,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     }
     m_layout->setContentsMargins( QMargins() );
 //    m_layout->setMargin( 0 );
-    m_layout->addStretch( 0 );
+    m_layout->setSpacing(0);
     m_layout->setSizeConstraint( QLayout::SetMinAndMaxSize );
     innerWidget->setLayout( m_layout );
     innerWidget->setContentsMargins( QMargins() );

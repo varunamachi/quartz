@@ -52,7 +52,8 @@ StackedSplitContainer::StackedSplitContainer(
     this->setContentsMargins({});
     m_data->m_splitter->setContentsMargins( QMargins{} );
     layout->setContentsMargins({});
-    layout->setSpacing(0);
+    m_data->m_splitter->setObjectName("selector-splitter");
+    m_data->m_splitter->setStyleSheet("QSplitter#selector-splitter::handle {width: 2px; }");
 }
 
 StackedSplitContainer::~StackedSplitContainer()
