@@ -67,7 +67,10 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     m_fwdButton->setMaximumWidth( 20 );
     m_bckButton->setMaximumHeight( 20 );
     m_fwdButton->setMaximumHeight( 20 );
-
+    m_bckButton->setContentsMargins({});
+    m_fwdButton->setContentsMargins({});
+    m_bckButton->setContentsMargins({});
+    m_fwdButton->setContentsMargins({});
 
     m_scroll->setWidget( innerWidget );
     QBoxLayout *mainLayout = nullptr;
@@ -113,6 +116,7 @@ QzScroller::QzScroller( Qt::Orientation orientation,
              &QTimer::timeout,
              this,
              &QzScroller::onTimeout );
+//    this->setStyleSheet("background-color: red");
 
 }
 

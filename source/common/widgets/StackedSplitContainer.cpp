@@ -37,7 +37,6 @@ StackedSplitContainer::StackedSplitContainer(
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
     policy.setVerticalPolicy( QSizePolicy::Expanding );
     m_data->m_splitter->setSizePolicy( policy );
-    m_data->m_splitter->setContentsMargins( QMargins{} );
     if( selectorPosition == AbstractContainer::SelectorPosition::Before ) {
         m_data->m_splitter->addWidget(selector());
         m_data->m_splitter->addWidget(stackedWidget());
@@ -47,11 +46,13 @@ StackedSplitContainer::StackedSplitContainer(
         m_data->m_splitter->addWidget(selector());
     }
     m_data->m_splitter->setChildrenCollapsible(false);
-    this->setContentsMargins({});
     auto layout = new QVBoxLayout(this);
     layout->addWidget(m_data->m_splitter);
-    layout->setContentsMargins({});
     this->setLayout(layout);
+    this->setContentsMargins({});
+    m_data->m_splitter->setContentsMargins( QMargins{} );
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
 }
 
 StackedSplitContainer::~StackedSplitContainer()

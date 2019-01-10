@@ -183,6 +183,7 @@ void AbstractContainer::addWidget(
                                 this);
         }
         btn->setContentsMargins( QMargins{ });
+        widget->setContentsMargins( QMargins{ });
         auto index = m_data->m_stackWidget->addWidget( widget );
         auto item = Item::create( index, btn, widget );
         m_data->m_items.insert( id, item );

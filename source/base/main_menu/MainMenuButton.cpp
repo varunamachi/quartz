@@ -32,6 +32,7 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);
+    this->setStyleSheet("QToolButton::menu-indicator{width:0px;}");
 }
 
 MainMenuButton::~MainMenuButton()

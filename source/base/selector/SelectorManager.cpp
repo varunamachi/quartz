@@ -47,6 +47,8 @@ SelectorManager::SelectorManager( AbstractContainer *container,
     layout->addWidget( m_data->m_selectorContainer );
     layout->setContentsMargins( 0, 1, 0, 1 );
     this->setLayout( layout );
+    this->setContentsMargins({});
+    m_data->m_selectorContainer->setContentsMargins({});
     //Only string style connect works on Windows
     connect( m_data->m_selectorContainer,
              SIGNAL( sigSelected( const QString &, QWidget *) ),
