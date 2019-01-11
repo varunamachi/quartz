@@ -196,9 +196,6 @@ int main( int argc, char **argv )
             installAppIcon();
 #endif
             Quartz::QuartzFramedWindow window;
-            app.setStyleSheet("QWidget{"
-                              " border: solid 1px red;"
-                              "}");
             window.show();
             returnCode = app.exec();
         }

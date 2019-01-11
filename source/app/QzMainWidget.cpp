@@ -86,26 +86,28 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
 //    policy.setVerticalPolicy( QSizePolicy::Expanding );
 
     m_data->m_content->setSizePolicy( policy );
-    auto viewContainer = new StackedSplitContainer{
+    auto viewContainer = new StackedSplitContainer(
                 20,
                 70,
                 AbstractContainer::SelectorPosition::After,
-                Qt::Horizontal };
+                Qt::Horizontal,
+                this);
     viewContainer->setAutoSelectionPolicy(AutoSelectionPolicy::DoNotSelectAny);
-    m_data->m_viewManager = new ViewManager( viewContainer, this );
+    m_data->m_viewManager = new ViewManager(viewContainer, this);
     viewContainer->setContentWidget(
                 m_data->m_content,
-                AbstractContainer::SelectorPosition::Before );
+                AbstractContainer::SelectorPosition::Before);
     viewContainer->setSizes( 370, 210, 20 );
 
-    auto selectorContainer = new StackedSplitContainer{
+    auto selectorContainer = new StackedSplitContainer(
                 50,
                 50,
                 AbstractContainer::SelectorPosition::Before,
-                Qt::Vertical };
+                Qt::Vertical,
+                this);
     m_data->m_selector = new SelectorManager(selectorContainer, this);
-    appContext()->setSelectorManager( m_data->m_selector );
-    selectorContainer->setContentWidget( m_data->m_viewManager );
+    appContext()->setSelectorManager(m_data->m_selector);
+    selectorContainer->setContentWidget(m_data->m_viewManager);
     selectorContainer->setSizes(20, 180, 600);
 
     auto vlyt = new QHBoxLayout();
@@ -123,23 +125,22 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addLayout(vlyt);
-    mainLayout->addWidget( m_data->m_selector );
-    mainLayout->addWidget( m_data->m_actionBar);
+    mainLayout->addWidget(m_data->m_selector);
+    mainLayout->addWidget(m_data->m_actionBar);
     mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
-    mainLayout->setContentsMargins({ 0, 0, 0, 0 });
-    mainLayout->setSpacing( 0 );
+    mainLayout->setContentsMargins({});
     this->setLayout( mainLayout );
     this->setMinimumSize({ 800, 600 });
 
-    auto configPageManager = new ConfigPageManager{ this };
-    appContext()->setConfigPageManager( configPageManager );
-    m_data->m_content->addContent( configPageManager );
+    auto configPageManager = new ConfigPageManager(this);
+    appContext()->setConfigPageManager(configPageManager);
+    m_data->m_content->addContent(configPageManager);
 
-    auto nodeSelector = new GeneralSelector{ this };
-    m_data->m_selector->addSelector( nodeSelector );
-    auto configTree = new ConfigPageSelector{ this };
-    m_data->m_selector->addSelector( configTree );
-    configTree->addPage( new BasicConfigPage{ configTree });
+    auto nodeSelector = new GeneralSelector(this);
+    m_data->m_selector->addSelector(nodeSelector);
+    auto configTree = new ConfigPageSelector(this);
+    m_data->m_selector->addSelector(configTree);
+    configTree->addPage( new BasicConfigPage(configTree));
 
     auto welcomeNode = nodeSelector->model()->addNode(
                 QStringList(),

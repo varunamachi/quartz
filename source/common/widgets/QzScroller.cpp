@@ -28,7 +28,8 @@ QzScroller::QzScroller( Qt::Orientation orientation,
     m_scroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_scroll->setWidgetResizable( true );
     m_scroll->setContentsMargins( QMargins() );
-    m_scroll->setStyleSheet( "QScrollArea{ border: 0px; }");
+    m_scroll->setObjectName("qzscroller");
+    m_scroll->setStyleSheet( "QScrollArea#qzscroller{ border: 0px; }");
 //    auto bgc = QApplication::palette().color(QPalette::Window);
 //    bgc.setRed(bgc.red() + 10);
 //    this->setStyleSheet("background-color: " + bgc.name(QColor::HexArgb));

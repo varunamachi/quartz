@@ -73,6 +73,7 @@ BaudRateEditDialog::BaudRateEditDialog( QWidget *parent )
     layout->addLayout( btnLayout );
 
     this->setLayout( layout );
+    this->setMinimumSize({300, 400});
 
 
     m_data->m_customRates->addItems( SerialUtils::customBaudRates() );

@@ -25,8 +25,8 @@ TitleBarButton::TitleBarButton( QWidget *parent )
     pushButton->setFlat( true );
 //    QFile file{ ":/chilli" };
 //    QZP_INFO << ( file.exists() ? "Exists" : "Does not exist" );
-    layout->addWidget( pushButton );
-    layout->setContentsMargins( QMargins{} );
+//    layout->addWidget( pushButton );
+//    layout->setContentsMargins( QMargins{} );
     this->setLayout( layout );
     this->setContentsMargins( QMargins{} );
 

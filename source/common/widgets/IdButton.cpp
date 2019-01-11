@@ -106,34 +106,31 @@ void IdButton::setStyle(int width, int height, bool big) {
     txtColor.setAlpha(200);
     selBg.setAlpha(80);
     hvBg.setAlpha(30);
-    hlBg.setAlpha(60);
-    hlBd.setAlpha(150);
+    hlBg.setAlpha(30);
+//    hlBd.setAlpha(150);
     setContentsMargins({0, 5, 0, 5});
+    this->setObjectName("idButton");
 
     auto fontSize = (big ? 10 : 12);
-    qssStream << " QToolButton {"
-//                 "     border-radius: 5px;"
-                 "     max-width: " << width << "px;"
-                 "     min-width: " << width << "px;"
-                 "     max-height: " << height << "px;"
-                 "     min-height: " << height << "px;"
-                 "     font-size: " << fontSize << "px;"
-//                 "     padding-bottom: 5px;"
-//                 "     padding-top: 5px;"
-                 "     border: none;"
-                 " }"
-                 " QToolButton:checked {"
-                 "     background-color: " << hlBg.name(QColor::HexArgb) << ";"
-                 "     border-color: " << hlBg.name(QColor::HexArgb) << ";"
-                 "     color: " << hlTxtColor.name(QColor::HexArgb) << ";"
-                 "     border-width: 2px;"
-                 "     border: solid;"
-                 " }"
-                 "QToolButton:hover {"
-                 "     background-color: " << hvBg.name(QColor::HexArgb) << ";"
-//                 "     color: " << txtColor.name(QColor::HexArgb) << ";"
-                 " }"
-                  ;
+    qssStream <<
+            "QToolButton#idButton {"
+            "   max-width: " << width << "px;"
+            "   min-width: " << width << "px;"
+            "   max-height: " << height << "px;"
+            "   min-height: " << height << "px;"
+            "   font-size: " << fontSize << "px;"
+            "   padding-bottom: 5px;"
+            "   border: none;"
+            "}"
+            "QToolButton#idButton:checked {"
+            "   background-color: " << hvBg.name(QColor::HexArgb) << ";"
+            "   color: " << hlTxtColor.name(QColor::HexArgb) << ";"
+            "   border: solid 5px " << hlBd.name(QColor::HexArgb) << ";"
+            "}"
+            "QToolButton#idButton:hover {"
+            "   background-color: " << hlBg.name(QColor::HexArgb) << ";"
+            "}"
+             ;
     qssStream.flush();
     setStyleSheet( qss );
     setContentsMargins(0, 10, 0, 10);

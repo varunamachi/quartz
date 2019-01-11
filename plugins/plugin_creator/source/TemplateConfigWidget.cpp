@@ -85,8 +85,8 @@ TemplateConfigWidget::TemplateConfigWidget(  QWidget *parent )
     m_data->m_configView->setItemDelegate( new GenConfigDelegate{ this });
 
     this->setLayout( mainLayout );
-    mainLayout->setContentsMargins( QMargins{} );
-    leftLayout->setContentsMargins( QMargins{} );
+//    mainLayout->setContentsMargins( QMargins{} );
+//    leftLayout->setContentsMargins( QMargins{} );
 
     connect( m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
