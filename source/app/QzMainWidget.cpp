@@ -74,16 +74,13 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
 {
     m_data->m_titleBar  = new TitleBar(20, drawWindowControls, this);
 //    m_data->m_titleBar->setContentsMargins(0, 10, 0, 5);
-    m_data->m_content   = new ContentManager{ this };
-    m_data->m_actionBar = new ActionBar{ 20, this };
+    m_data->m_content   = new ContentManager(this);
+    m_data->m_actionBar = new ActionBar(20, this);
     m_data->m_menu = new QMenu(this);
-    this->setObjectName( "quartz_widget" );
-
-    this->setContentsMargins( QMargins{} );
-
+    this->setObjectName("quartz_widget");
+    this->setContentsMargins({});
     QSizePolicy policy;
     policy.setHorizontalPolicy( QSizePolicy::Expanding );
-//    policy.setVerticalPolicy( QSizePolicy::Expanding );
 
     m_data->m_content->setSizePolicy( policy );
     auto viewContainer = new StackedSplitContainer(
@@ -130,25 +127,24 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
     mainLayout->setContentsMargins({});
     this->setLayout( mainLayout );
-    this->setMinimumSize({ 800, 600 });
+    this->setMinimumSize({800, 600});
 
     auto configPageManager = new ConfigPageManager(this);
     appContext()->setConfigPageManager(configPageManager);
     m_data->m_content->addContent(configPageManager);
 
     auto nodeSelector = new GeneralSelector(this);
-    m_data->m_selector->addSelector(nodeSelector);
-    auto configTree = new ConfigPageSelector(this);
-    m_data->m_selector->addSelector(configTree);
-    configTree->addPage( new BasicConfigPage(configTree));
-
     auto welcomeNode = nodeSelector->model()->addNode(
                 QStringList(),
                 tr("Welcome"),
                 "qz.inbuilt.welcome",
                 getIcon(MatIcon::Star));
-    m_data->m_content->addContent(new WelcomePage(welcomeNode->nodeId(),
-                                                  m_data->m_content));
+    m_data->m_content->addContent(
+                new WelcomePage(welcomeNode->nodeId(),
+                                m_data->m_content));
+    auto configTree = new ConfigPageSelector(this);
+    configTree->addPage( new BasicConfigPage(configTree));
+
     auto logView = new LogView(this);
     m_data->m_viewManager->addView(logView);
     QZ_LOGGER()->dispatcher()->addTarget(logView);
@@ -169,8 +165,10 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
         QZ_ERROR( "App" ) << "Failed to load all available plugins";
     }
 
-    auto pluginSelector = new Ext::PluginSelector{ this };
-    m_data->m_selector->addSelector( pluginSelector );
+    auto pluginSelector = new Ext::PluginSelector(this);
+    m_data->m_selector->addSelector(nodeSelector);
+    m_data->m_selector->addSelector(pluginSelector);
+    m_data->m_selector->addSelector(configTree);
     nodeSelector->setSelected(welcomeNode->nodeId());
 }
 

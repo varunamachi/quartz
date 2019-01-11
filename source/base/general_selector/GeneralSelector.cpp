@@ -36,8 +36,6 @@ GeneralSelector::GeneralSelector( QWidget *parent )
     : AbstractSelector( SELECTOR_ID,
                         SELECTOR_NAME,
                         getNormalIcon(MatIcon::Pages),
-//                        getNormalIcon(FAIcon::Th),
-//                        getActiveIcon(FAIcon::Th),
                         getActiveIcon(MatIcon::Pages),
                         parent )
 //    , m_data( std::make_unique< Data >( new QTreeView( this )))

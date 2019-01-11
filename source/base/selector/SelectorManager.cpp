@@ -75,11 +75,11 @@ void SelectorManager::addSelector( AbstractSelector *selector )
                     selector->selectorName(),
                     selector->icon(),
                     selector->activeIcon(),
-                    selector );
-        m_data->m_selectors.insert( selector->selectorId(), selector );
+                    selector);
+        m_data->m_selectors.insert(selector->selectorId(), selector);
     }
     else {
-        QZ_ERROR( "Qz:SelectorManager" ) << "Invalid selector given";
+        QZ_ERROR("Qz:SelectorManager") << "Invalid selector given";
     }
 }
 

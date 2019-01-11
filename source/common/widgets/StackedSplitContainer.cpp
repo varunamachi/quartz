@@ -30,12 +30,10 @@ StackedSplitContainer::StackedSplitContainer(
 {
     auto spor = orientation == Qt::Vertical ? Qt::Horizontal
                                             : Qt::Vertical;
-    m_data->m_splitter = new QSplitter{ spor, this };
-//    m_data->m_splitter->setStyleSheet(
-//                "QSplitter::handle{ height: 1px; background: gray; }" );
+    m_data->m_splitter = new QSplitter(spor, this);
     QSizePolicy policy;
-    policy.setHorizontalPolicy( QSizePolicy::Expanding );
-    policy.setVerticalPolicy( QSizePolicy::Expanding );
+    policy.setHorizontalPolicy(QSizePolicy::Expanding);
+    policy.setVerticalPolicy(QSizePolicy::Expanding);
     m_data->m_splitter->setSizePolicy( policy );
     if( selectorPosition == AbstractContainer::SelectorPosition::Before ) {
         m_data->m_splitter->addWidget(selector());
@@ -53,7 +51,8 @@ StackedSplitContainer::StackedSplitContainer(
     m_data->m_splitter->setContentsMargins( QMargins{} );
     layout->setContentsMargins({});
     m_data->m_splitter->setObjectName("selector-splitter");
-    m_data->m_splitter->setStyleSheet("QSplitter#selector-splitter::handle {width: 2px; }");
+    m_data->m_splitter->setStyleSheet(
+                "QSplitter#selector-splitter::handle {width: 2px; }");
 }
 
 StackedSplitContainer::~StackedSplitContainer()

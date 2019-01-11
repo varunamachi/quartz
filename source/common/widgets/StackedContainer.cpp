@@ -166,29 +166,29 @@ void AbstractContainer::addWidget(
 
         IdButton *btn = nullptr;
         if (icon.isNull()) {
-            btn = new IdButton( id,
-                                displayName,
-                                m_data->m_btnHeight,
-                                m_data->m_btnWidth,
-                                this);
+            btn = new IdButton(id,
+                               displayName,
+                               m_data->m_btnHeight,
+                               m_data->m_btnWidth,
+                               this);
         } else {
             auto btmTxt = this->containerOrientation() == Qt::Vertical;
-            btn = new IdButton( id,
-                                displayName,
-                                m_data->m_btnHeight,
-                                m_data->m_btnWidth,
-                                icon,
-                                activeIcon,
-                                btmTxt,
-                                this);
+            btn = new IdButton(id,
+                               displayName,
+                               m_data->m_btnHeight,
+                               m_data->m_btnWidth,
+                               icon,
+                               activeIcon,
+                               btmTxt,
+                               this);
         }
-        btn->setContentsMargins( QMargins{ });
-        widget->setContentsMargins( QMargins{ });
-        auto index = m_data->m_stackWidget->addWidget( widget );
-        auto item = Item::create( index, btn, widget );
-        m_data->m_items.insert( id, item );
-        m_data->m_selector->addWidget( btn );
-        m_data->m_stackWidget->addWidget( widget );
+        btn->setContentsMargins({});
+        widget->setContentsMargins({});
+        auto index = m_data->m_stackWidget->addWidget(widget);
+        auto item = Item::create(index, btn, widget);
+        m_data->m_items.insert(id, item);
+        m_data->m_selector->addWidget(btn);
+        m_data->m_stackWidget->addWidget(widget);
         connect( btn,
                  SIGNAL( activated( QString )),
                  this,
