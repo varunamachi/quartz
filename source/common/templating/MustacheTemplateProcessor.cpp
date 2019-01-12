@@ -36,12 +36,24 @@ MustacheTemplateProcessor::~MustacheTemplateProcessor()
 
 bool MustacheTemplateProcessor::process(QTextStream &stream)
 {
+//    auto origHash = m_data->m_templateInst->allParams();
+//    for (auto it = origHash.begin(); it != origHash.end(); ++it) {
+//        auto list  = it.value().toList();
+//        if (list.isEmpty()) {
+
+//            //normal variable
+//        }
+//        else {
+//            //a list
+//        }
+//    }
+//    QVariantHash hash;
     auto hash = m_data->m_templateInst->allParams();
     auto content = m_data->m_templateInst->instanceOf()->content();
     Mustache::Renderer renderer;
     Mustache::QtVariantContext context(hash);
     stream << renderer.render(content, &context);
-    if (renderer.errorPos() == -1) {
+    if (renderer.errorPos() != -1) {
         m_data->m_lastError = renderer.error();
         return false;
     }

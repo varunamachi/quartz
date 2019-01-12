@@ -1,4 +1,4 @@
-<templates>
+<templates type="mustache">
     <template name="Plugin.cpp">
         <config id="Plugin.cpp" name="Plugin Src">
 
@@ -11,10 +11,10 @@
 
 #include "Plugin.h"
 
-namespace Quartz { namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
-const QString Plugin::PLUGIN_ID{ "$<PLUGIN_ID>$" };
-const QString Plugin::PLUGIN_NAME{ "$<PLUGIN_DISPLAY_NAME>$" };
+const QString Plugin::PLUGIN_ID{ "{{PLUGIN_ID}}" };
+const QString Plugin::PLUGIN_NAME{ "{{PLUGIN_DISPLAY_NAME}}" };
 
 struct Plugin::Data
 {
@@ -24,8 +24,8 @@ struct Plugin::Data
 };
 
 Plugin::Plugin()
-    : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
-    , m_data{ new Data{} }
+    : Quartz::Ext::Plugin(PLUGIN_ID, PLUGIN_NAME)
+    , m_data(std::make_unique<Data>())
 {
 
 }
@@ -35,7 +35,7 @@ Plugin::~Plugin()
 
 }
 
-const Plugin & Plugin::extensions() const
+const ExtensionList & Plugin::extensions() const
 {
     return m_data->m_extensions;
 }

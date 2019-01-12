@@ -20,6 +20,4 @@ AbstractContentProvider::~AbstractContentProvider()
 
 }
 
-
-
 }

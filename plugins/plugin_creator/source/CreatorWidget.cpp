@@ -255,9 +255,8 @@ void CreatorWidget::onCreate()
     m_data->m_globalConfig->insert("PLUGIN_ID", id);
     m_data->m_globalConfig->insert("PLUGIN_NAME", name);
     m_data->m_globalConfig->insert("PLUGIN_NAMESPACE", ns);
-    m_data->m_globalConfig->insert("plugin_DISPLAY_NAME", display);
+    m_data->m_globalConfig->insert("PLUGIN_DISPLAY_NAME", display);
 //    m_data->m_globalConfig->insert("files", files);
-
 
     if (! path.endsWith(dirName, Qt::CaseInsensitive)) {
         path = path + "/" + dirName;

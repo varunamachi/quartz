@@ -1,11 +1,15 @@
-<templates>
+<templates type="mustache">
     <template name="ActionProvider.h">
         <config id="ActionProvider.h" name="Action Provider Hdr">
 
         </config>
         <content>
             <![CDATA[
+#pragma once
 
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+} } }
             ]]>
         </content>
     </template>

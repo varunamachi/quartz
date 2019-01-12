@@ -1,11 +1,11 @@
-<templates>
+<templates type="mustache">
     <template name="CMakeLists.txt">
         <config id="CMakeLists.txt" name="CMake List">
 
         </config>
         <content>
             <![CDATA[
-project( plugin_$<PLUGIN_NAME>$ )
+project( plugin_{{PLUGIN_NAME}} )
 cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
@@ -16,19 +16,17 @@ qz_add_common()
 qz_add_base()
 qz_add_core()
 
-qz_add_resource( $<PLUGIN_NAME>$.qrc )
-
-vq_sources(
-    $<PLUGIN_NAMESPACE>$.cpp
-$[FOR src IN sources:>
-    $<src>$
-]$
-)
+qz_add_resource( resources.qrc )
 
 vq_headers(
-$[FOR hdr IN headers:>
-    $<hdr>$
-]$
+    {{#sources}}
+    {{.}}
+    {{/sources}}
+)
+vq_headers(
+    {{#headers}}
+    {{.}}
+    {{/headers}}
 )
 
 qz_create_plugin()

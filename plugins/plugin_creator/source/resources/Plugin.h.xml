@@ -1,4 +1,4 @@
-<templates>
+<templates type="mustache">
     <template name="Plugin.h">
         <config id="Plugin.h" name="Plugin Hdr">
 
@@ -13,7 +13,7 @@ namespace Quartz {
 
 class QzAppContext;
 
-namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 class Plugin : public Ext::Plugin
 {
@@ -23,7 +23,7 @@ public:
 
     ~Plugin();
 
-    const PluginList & extensions() const override;
+    const ExtensionList & extensions() const override;
 
     const DependencyList & dependencies() const override;
 
@@ -35,7 +35,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } } }

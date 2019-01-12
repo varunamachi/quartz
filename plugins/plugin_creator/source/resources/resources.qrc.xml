@@ -1,5 +1,5 @@
-<templates>
-    <template name="resources.qrt">
+<templates type="mustache">
+    <template name="resources.qrc">
         <config id="resources" name="Resources">
         </config>
         <content>

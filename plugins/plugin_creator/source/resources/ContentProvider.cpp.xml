@@ -1,4 +1,4 @@
-<templates>
+<templates type="mustache">
     <template name="ContentProvider.cpp">
         <config id="ContentProvider.cpp" name="Content Provider Src">
 
@@ -6,15 +6,14 @@
         <content>
             <![CDATA[
 #include "ContentProvider.h"
-#include "CreatorWidget.h"
 
-namespace Quartz { namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 /********************** Provider ************************************/
-const QString ContentProvider::EXTENSION_ID{
-    "qzp.$<PLUGIN_NAME>$.provider.content" };
-const QString ContentProvider::EXTENSION_NAME{
-    "Quartz $<PLUGIN_DISPLAY_NAME>$ Content" };
+const QString ContentProvider::EXTENSION_ID(
+    "qzp.{{PLUGIN_NAME}}.provider.content");
+const QString ContentProvider::EXTENSION_NAME(
+    "Quartz {{PLUGIN_DISPLAY_NAME}} Content");
 
 struct ContentProvider::Data
 {
@@ -22,12 +21,12 @@ struct ContentProvider::Data
     {
     }
 
-    QVector< ContentWidget *> m_widgets;
+    QVector<ContentWidget *> m_widgets;
 };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
-    , m_data{ new Data{ }}
+    : AbstractContentProvider(EXTENSION_ID, EXTENSION_NAME)
+    , m_data(std::make_unique<Data>())
 {
 
 }
@@ -47,12 +46,10 @@ bool ContentProvider::destroy()
     return true;
 }
 
-QVector< ContentWidget *> ContentProvider::widgets()
+QVector<ContentWidget *> ContentProvider::widgets()
 {
     return m_data->m_widgets;
 }
-
-
 
 } } }
 

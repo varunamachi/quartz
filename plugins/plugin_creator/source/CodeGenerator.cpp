@@ -6,6 +6,7 @@
 #include <plugin_base/PluginLogging.h>
 
 #include <common/templating/AdvancedTemplateProcessor.h>
+#include <common/templating/MustacheTemplateProcessor.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/templating/Template.h>
 
@@ -123,7 +124,8 @@ bool CodeGenerator::generateForInstance(const QString &path,
         return false;
     }
     QTextStream stream{ &genFile };
-    AdvancedTemplateProcessor tproc(instance);
+//    AdvancedTemplateProcessor tproc(instance);
+    MustacheTemplateProcessor tproc(instance);
     auto result = tproc.process(stream);
     if (! result) {
         m_data->m_lastError = tproc.lastError();

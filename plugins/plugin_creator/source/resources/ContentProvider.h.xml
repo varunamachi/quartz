@@ -1,4 +1,4 @@
-<templates>
+<templates type="mustache">
     <template name="ContentProvider.h">
         <config id="ContentProvider.h" name="Content Provider Hdr">
 
@@ -9,7 +9,7 @@
 
 #include <base/content_manager/AbstractContentProvider.h>
 
-namespace Quartz { namespace Ext { namespace $<PLUGIN_NAMESPACE>$ {
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 class TemplateManager;
 
@@ -28,11 +28,11 @@ public:
 
     static const QString     EXTENSION_ID;
 
-    static const QString     EXTENSIOn_NAME;
+    static const QString     EXTENSION_NAME;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } } }
