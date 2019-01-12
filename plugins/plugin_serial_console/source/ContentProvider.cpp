@@ -13,7 +13,7 @@ const QString ContentProvider::EXTENSION_NAME{
     "Serial Console Content" };
 
 ContentProvider::ContentProvider()
-    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
+    : AbstractContentProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
@@ -36,7 +36,7 @@ bool ContentProvider::destroy()
 QVector< ContentWidget *> ContentProvider::widgets()
 {
     QVector< ContentWidget *> widgets;
-    widgets.push_back( new MainWidget{ });
+    widgets.push_back(new MainWidget());
     return widgets;
 }
 

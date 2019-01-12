@@ -34,11 +34,11 @@ namespace Quartz {
 class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
 {
 public:
-    FileTarget( const QString &fileSuffix );
+    FileTarget(const QString &fileSuffix);
 
 //    ~FileTarget() {
 
-    void write( const QString message );
+    void write(const QString message);
 
     void flush();
 

@@ -6,12 +6,12 @@ namespace Quartz { namespace Ext {
 
 struct PluginEnv::Data
 {
-    Data( const QString &pluginPath,
+    Data(const QString &pluginPath,
           const QString &pluginLibName,
-          const QString &platformVersion )
-        : m_pluginPath( pluginPath )
-        , m_pluginLibName( pluginLibName )
-        , m_platformVersion( platformVersion )
+          const QString &platformVersion)
+        : m_pluginPath(pluginPath)
+        , m_pluginLibName(pluginLibName)
+        , m_platformVersion(platformVersion)
     {
 
     }
@@ -23,10 +23,10 @@ struct PluginEnv::Data
     const QString m_platformVersion;
 };
 
-PluginEnv::PluginEnv( const QString &pluginPath,
+PluginEnv::PluginEnv(const QString &pluginPath,
                       const QString &pluginLibName,
-                      const QString &platformVersion )
-    : m_data{ new Data{ pluginPath, pluginLibName, platformVersion }}
+                      const QString &platformVersion)
+    : m_data(std::make_unique<Data>(pluginPath, pluginLibName, platformVersion))
 {
 
 }

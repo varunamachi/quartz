@@ -22,10 +22,10 @@ class QUARTZ_COMMON_API  TextParam : public Param
 {
 public:
 
-    explicit TextParam( const QString &id,
+    explicit TextParam(const QString &id,
                         const QString &name,
                         const QString &description,
-                        TreeNode *parent );
+                        TreeNode *parent);
 
     ~TextParam();
 
@@ -33,21 +33,21 @@ public:
 
     TextType textType() const;
 
-    void setTextType( TextType textType );
+    void setTextType(TextType textType);
 
     const QString & defaultValue() const;
 
-    void setDefaultValue( const QString &defaultValue );
+    void setDefaultValue(const QString &defaultValue);
 
     QVariant value() const override;
 
-    void setValue( const QVariant &value ) override;
+    void setValue(const QVariant &value) override;
 
-    std::unique_ptr< Param > clone() const;
+    std::unique_ptr<Param> clone() const;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 

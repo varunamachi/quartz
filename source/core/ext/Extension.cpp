@@ -5,12 +5,12 @@ namespace Quartz { namespace Ext {
 
 struct Extension::Data
 {
-    Data( const QString &extensionId,
+    Data(const QString &extensionId,
           const QString &extensionName,
-          const QString &extensionType )
-        : m_extensionId( extensionId )
-        , m_extensionName( extensionName )
-        , m_extensionType( extensionType )
+          const QString &extensionType)
+        : m_extensionId(extensionId)
+        , m_extensionName(extensionName)
+        , m_extensionType(extensionType)
     {
 
     }
@@ -24,10 +24,10 @@ struct Extension::Data
 };
 
 
-Extension::Extension( const QString &extensionId,
+Extension::Extension(const QString &extensionId,
                                 const QString &extensionName,
-                                const QString &extensionType )
-    : m_data( new Data{ extensionId, extensionName, extensionType })
+                                const QString &extensionType)
+    : m_data(std::make_unique<Data>(extensionId, extensionName, extensionType))
 {
 
 }

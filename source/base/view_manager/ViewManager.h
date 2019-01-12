@@ -25,39 +25,39 @@ class QUARTZ_BASE_API ViewManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ViewManager( AbstractContainer *container,
-                          QWidget *parent = 0 );
+    explicit ViewManager(AbstractContainer *container,
+                          QWidget *parent = 0);
 
     ~ViewManager();
 
-    void addView( QuartzView *view );
+    void addView(QuartzView *view);
 
-    void removeView( const QString &viewId );
+    void removeView(const QString &viewId);
 
-    void removeView( QuartzView *view );
+    void removeView(QuartzView *view);
 
-    void removeViewCategory( const QString &categoryId );
+    void removeViewCategory(const QString &categoryId);
 
-    QuartzView * view( const QString &viewId ) const;
+    QuartzView * view(const QString &viewId) const;
 
     QList< QuartzView *> views() const;
 
-    QList< QuartzView *> views( const QString &categoryId ) const;
+    QList< QuartzView *> views(const QString &categoryId) const;
 
     QuartzView * currentView() const;
 
     const QString currentCategory() const;
 
-    QList< QString > categories() const;
+    QList<QString> categories() const;
 
-    void selectView( QString viewId );
+    void selectView(QString viewId);
 
 public:
     const QString & extensionType() const override;
 
     const QString & extensionAdapterName() const override;
 
-    bool handleExtension( Ext::Extension *extension ) override;
+    bool handleExtension(Ext::Extension *extension) override;
 
     bool finalizeExtension() override;
 

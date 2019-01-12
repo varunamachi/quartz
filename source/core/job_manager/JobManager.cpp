@@ -34,14 +34,14 @@ namespace {
 class StdJob : public IJob
 {
 public:
-    StdJob( QString name,
+    StdJob(QString name,
             JobFunc job,
             bool guiDispatch,
-            QString category )
-        : m_name( name )
-        , m_jobFunc( job )
-        , m_isGuiDispatch( guiDispatch )
-        , m_category( category )
+            QString category)
+        : m_name(name)
+        , m_jobFunc(job)
+        , m_isGuiDispatch(guiDispatch)
+        , m_category(category)
     {
 
     }
@@ -80,21 +80,21 @@ private:
 class CallbackEvent : public QEvent
 {
 public:
-    CallbackEvent( RespFunc callback )
-        : QEvent( CallbackEvent::type() )
-        , m_callback( callback )
+    CallbackEvent(RespFunc callback)
+        : QEvent(CallbackEvent::type())
+        , m_callback(callback)
     {
 
     }
 
     void invokeCallback()
     {
-        if( m_callback ) m_callback();
+        if (m_callback) m_callback();
     }
 
     static QEvent::Type type()
     {
-        QEvent::registerEventType( CallbackEvent::EVENT_TYPE );
+        QEvent::registerEventType(CallbackEvent::EVENT_TYPE);
         return CallbackEvent::EVENT_TYPE;
     }
 
@@ -108,11 +108,11 @@ private:
 } //end of anonymous namespace
 
 const QEvent::Type CallbackEvent::EVENT_TYPE
-                                          = static_cast< QEvent::Type >( 2334 );
+                                          = static_cast<QEvent::Type>(2334);
 
 
-JobManager::JobManager( QObject *parent )
-    : QThread( parent )
+JobManager::JobManager(QObject *parent)
+    : QThread(parent)
 {
 
 }
@@ -120,51 +120,51 @@ JobManager::JobManager( QObject *parent )
 
 bool JobManager::hasPendingJobs()
 {
-    SCOPE_LIMIT( m_lock.lockForRead(), m_lock.unlock() );
+    SCOPE_LIMIT(m_lock.lockForRead(), m_lock.unlock());
     return ! m_jobs.empty();
 }
 
 
 
-void JobManager::addJob( IJob *job )
+void JobManager::addJob(IJob *job)
 {
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    m_jobs.append( job );
-    if( ! this->isRunning() ) {
+    SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
+    m_jobs.append(job);
+    if (! this->isRunning()) {
         this->start();
     }
     qDebug() << "Added Job: " << job->name();
 }
 
 
-void JobManager::addJob( QString name,
+void JobManager::addJob(QString name,
                          JobFunc job,
                          QString category,
-                         bool postResponseToEventQueue )
+                         bool postResponseToEventQueue)
 {
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    m_jobs.append( new StdJob( name,
+    SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
+    m_jobs.append(new StdJob(name,
                                job,
                                postResponseToEventQueue,
-                               category ));
-    if( ! this->isRunning() ) {
+                               category));
+    if (! this->isRunning()) {
         this->start();
     }
     qDebug() << "Added Job: " << name;
 }
 
 
-bool JobManager::cancelJob( QString name )
+bool JobManager::cancelJob(QString name)
 {
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    return m_cancelledJobs.insert( name ) != m_cancelledJobs.end();
+    SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
+    return m_cancelledJobs.insert(name) != m_cancelledJobs.end();
 }
 
 
-bool JobManager::cancelJobCategory( QString category )
+bool JobManager::cancelJobCategory(QString category)
 {
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    return m_cancelledCategories.insert( category )
+    SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
+    return m_cancelledCategories.insert(category)
                                                 != m_cancelledCategories.end();
 }
 
@@ -175,8 +175,8 @@ void JobManager::cancelAll()
     m_stopProcessing = true;
     m_lock.unlock();
     this->wait();
-    SCOPE_LIMIT( m_lock.lockForWrite(), m_lock.unlock() );
-    foreach( IJob *job, m_jobs ) {
+    SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
+    foreach(IJob *job, m_jobs) {
         delete job;
     }
     m_cancelledCategories.clear();
@@ -190,31 +190,31 @@ void JobManager::run()
     bool hasPendingTasks = true;
     IJob *job = nullptr;
 
-    while( ! shouldExit ){
+    while (! shouldExit){
         m_lock.lockForRead();
         shouldExit = m_stopProcessing;
         hasPendingTasks = m_jobs.size() != 0;
         m_lock.unlock();
-        if( hasPendingTasks ) {
+        if (hasPendingTasks) {
             m_lock.lockForWrite();
             qDebug() << "Jobs_1: " <<  m_jobs.size();
             job = m_jobs.last();
             m_jobs.removeLast();
-            bool isCancelled = m_cancelledJobs.remove( job->name() );
+            bool isCancelled = m_cancelledJobs.remove(job->name());
             qDebug() << "Jobs_2: " <<  m_jobs.size();
             m_lock.unlock();
             qDebug() << "Got Job: " << job->name();
 
-            if( ! isCancelled ) {
-                emit executionStarted( job->name(), job->category() );
+            if (! isCancelled) {
+                emit executionStarted(job->name(), job->category());
                 RespFunc func = job->execute();
-                emit executionFinished( job->name(), job->category() );
-                if( func ) {
-                    if( job->shouldPostResponse() ) {
+                emit executionFinished(job->name(), job->category());
+                if (func) {
+                    if (job->shouldPostResponse()) {
                         QCoreApplication::postEvent(
                                     this,
-                                    new CallbackEvent( func ),
-                                    100 );
+                                    new CallbackEvent(func),
+                                    100);
                     }
                     else {
                         func();
@@ -222,24 +222,24 @@ void JobManager::run()
                 }
             }
             else {
-                emit jobDescarded( job->name(), job->category() );
+                emit jobDescarded(job->name(), job->category());
             }
             qDebug() << "Finished Job: " << job->name();
             delete job;
         }
         else {
-            this->sleep( 1 );
+            this->sleep(1);
         }
     }
 }
 
-bool JobManager::event( QEvent *event )
+bool JobManager::event(QEvent *event)
 {
-    if( event->type() == CallbackEvent::EVENT_TYPE ) {
-        CallbackEvent *callbackEvt = static_cast< CallbackEvent *>( event );
+    if (event->type() == CallbackEvent::EVENT_TYPE) {
+        CallbackEvent *callbackEvt = static_cast< CallbackEvent *>(event);
         callbackEvt->invokeCallback();
     }
-    return QThread::event( event );
+    return QThread::event(event);
 }
 
 }

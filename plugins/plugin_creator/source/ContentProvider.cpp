@@ -11,17 +11,17 @@ const QString ContentProvider::EXTENSION_NAME{
 
 struct ContentProvider::Data
 {
-    explicit Data( std::shared_ptr< TemplateManager > tman )
+    explicit Data(std::shared_ptr<TemplateManager> tman)
     {
-        m_widgets.push_back( new CreatorWidget{ tman });
+        m_widgets.push_back(new CreatorWidget(tman));
     }
 
     QVector< ContentWidget *> m_widgets;
 };
 
-ContentProvider::ContentProvider( std::shared_ptr< TemplateManager > tman  )
-    : AbstractContentProvider{ EXTENSION_ID, EXTENSION_NAME }
-    , m_data{ new Data{ tman }}
+ContentProvider::ContentProvider(std::shared_ptr<TemplateManager> tman)
+    : AbstractContentProvider(EXTENSION_ID, EXTENSION_NAME)
+    , m_data(std::make_unique<Data>(tman))
 {
 
 }

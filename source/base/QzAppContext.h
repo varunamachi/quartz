@@ -30,22 +30,22 @@ public:
 
     ~QzAppContext();
 
-    QZCONTEXT_FUNC_DECL( ContentManager, contentManager );
-    QZCONTEXT_FUNC_DECL( SelectorManager, selectorManager );
-    QZCONTEXT_FUNC_DECL( GeneralSelector, nodeSelector );
-    QZCONTEXT_FUNC_DECL( ConfigPageManager, configPageManager );
-    QZCONTEXT_FUNC_DECL( ThemeManager, themeManager );
+    QZCONTEXT_FUNC_DECL(ContentManager, contentManager);
+    QZCONTEXT_FUNC_DECL(SelectorManager, selectorManager);
+    QZCONTEXT_FUNC_DECL(GeneralSelector, nodeSelector);
+    QZCONTEXT_FUNC_DECL(ConfigPageManager, configPageManager);
+    QZCONTEXT_FUNC_DECL(ThemeManager, themeManager);
 
-    static QString expand( StdPath pathID );
+    static QString expand(StdPath pathID);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 inline QzAppContext * appContext()
 {
-    return context< QzAppContext >();
+    return context<QzAppContext>();
 }
 
 }

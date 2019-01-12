@@ -13,12 +13,12 @@ class QUARTZ_BASE_API QuartzView : public QWidget
     Q_OBJECT
 
 public:
-    QuartzView( const QString &viewId,
+    QuartzView(const QString &viewId,
                 const QString &category,
                 const QString &displayName,
                 const QIcon &icon,
                 const QIcon &activeIcon,
-                QWidget *parent = nullptr );
+                QWidget *parent = nullptr);
 
     ~QuartzView();
 
@@ -36,7 +36,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

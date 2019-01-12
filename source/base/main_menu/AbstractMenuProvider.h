@@ -10,8 +10,8 @@ namespace Quartz {
 class AbstractMenuProvider : public Ext::Extension
 {
 public:
-    AbstractMenuProvider( const QString &pluginId,
-                          const QString &pluginName );
+    AbstractMenuProvider(const QString &pluginId,
+                          const QString &pluginName);
 
     virtual QVector<QAction *> actions() const = 0;
 

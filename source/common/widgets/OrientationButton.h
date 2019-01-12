@@ -25,11 +25,11 @@ namespace Quartz {
 class QUARTZ_COMMON_API OrientationButton : public QPushButton
 {
 public:
-    OrientationButton( QWidget* parent = 0 );
+    OrientationButton(QWidget* parent = 0);
 
-    OrientationButton( const QString& text, QWidget* parent = 0 );
+    OrientationButton(const QString& text, QWidget* parent = 0);
 
-    OrientationButton( const QIcon& icon,
+    OrientationButton(const QIcon& icon,
                        const QString& text,
                        QWidget* parent = 0);
 
@@ -37,11 +37,11 @@ public:
 
     Qt::Orientation orientation() const;
 
-    void setOrientation( Qt::Orientation orientation );
+    void setOrientation(Qt::Orientation orientation);
 
     bool mirrored() const;
 
-    void setMirrored( bool mirrored );
+    void setMirrored(bool mirrored);
 
     QSize sizeHint() const;
 

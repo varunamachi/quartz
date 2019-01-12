@@ -12,8 +12,8 @@ class ConsoleHolder : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConsoleHolder( std::unique_ptr< SerialSettings > settings,
-                            QWidget *parent = nullptr );
+    explicit ConsoleHolder(std::unique_ptr<SerialSettings> settings,
+                            QWidget *parent = nullptr);
 
     ~ConsoleHolder();
 
@@ -33,14 +33,14 @@ public slots:
     void updateBaudRates();
 
 private slots:
-    void setBaudRate( int index );
+    void setBaudRate(int index);
 
 signals:
-    void serialDisconnected( ConsoleHolder *holder );
+    void serialDisconnected(ConsoleHolder *holder);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

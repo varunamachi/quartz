@@ -33,14 +33,14 @@ struct IdButton::Data {
 
 
 
-IdButton::IdButton( QString id,
+IdButton::IdButton(QString id,
                     QString text,
                     int height,
                     int width,
                     QWidget *parent)
     : m_data(std::make_unique<Data>(
                  id,
-                 QSize{width, height},
+                 QSize(width, height),
                  QIcon{},
                  QIcon{}))
     , QToolButton (parent)
@@ -51,7 +51,7 @@ IdButton::IdButton( QString id,
     this->setText(text);
 }
 
-IdButton::IdButton( QString id,
+IdButton::IdButton(QString id,
                     QString text,
                     int height,
                     int width,
@@ -61,7 +61,7 @@ IdButton::IdButton( QString id,
                     QWidget *parent)
     : m_data(std::make_unique<Data>(
                  id,
-                 QSize{width, height},
+                 QSize(width, height),
                  icon,
                  activeIcon))
     , QToolButton (parent)
@@ -93,7 +93,7 @@ IdButton::~IdButton()
 }
 
 void IdButton::setStyle(int width, int height, bool big) {
-    setCheckable( true );
+    setCheckable(true);
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
@@ -132,7 +132,7 @@ void IdButton::setStyle(int width, int height, bool big) {
             "}"
              ;
     qssStream.flush();
-    setStyleSheet( qss );
+    setStyleSheet(qss);
     setContentsMargins(0, 10, 0, 10);
 }
 

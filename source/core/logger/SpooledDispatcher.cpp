@@ -18,7 +18,7 @@ struct SpooledDispatcher::Data
 {
     Data()
         : m_thread()
-        , m_stop( false )
+        , m_stop(false)
     {
 
     }
@@ -42,10 +42,10 @@ void SpooledDispatcher::stopDispatch()
 
 
 SpooledDispatcher::SpooledDispatcher()
-//    : m_data( std::make_unique< Data >() )
-    : m_data( new Data( ))
+//    : m_data(std::make_unique<Data>())
+    : m_data(std::make_unique<Data>())
 {
-    m_data->m_thread = std::thread( &SpooledDispatcher::run, this );
+    m_data->m_thread = std::thread(&SpooledDispatcher::run, this);
 }
 
 
@@ -57,41 +57,41 @@ SpooledDispatcher::~SpooledDispatcher()
 
 void SpooledDispatcher::write(LogMessage *message)
 {
-    if( m_data->m_stop ) {
+    if (m_data->m_stop) {
         m_data->m_stop = false;
-        m_data->m_thread = std::thread( &SpooledDispatcher::run, this );
+        m_data->m_thread = std::thread(&SpooledDispatcher::run, this);
     }
-    VQ_LOCK( m_data->m_logIoMutex );
-    m_data->m_logQueue.emplace( message );
+    VQ_LOCK(m_data->m_logIoMutex);
+    m_data->m_logQueue.emplace(message);
 }
 
 
 void SpooledDispatcher::run()
 {
-    while( ! m_data->m_stop ) {
-        if( !  m_data->m_logQueue.empty() ) {
-            VQ_LOCK( m_data->m_logIoMutex );
-            if( ! m_data->m_logQueue.empty() ) {
+    while (! m_data->m_stop) {
+        if (!  m_data->m_logQueue.empty()) {
+            VQ_LOCK(m_data->m_logIoMutex);
+            if (! m_data->m_logQueue.empty()) {
                 auto msg = m_data->m_logQueue.front();
-                AT_SCOPE_EXIT( delete msg );
+                AT_SCOPE_EXIT(delete msg);
                 m_data->m_logQueue.pop();
-                writeToTargets( msg );
+                writeToTargets(msg);
             }
         }
         else {
-            std::this_thread::sleep_for( std::chrono::milliseconds{ 100 });
+            std::this_thread::sleep_for (std::chrono::milliseconds(100));
         }
     }
 }
 
 void SpooledDispatcher::flushQueue()
 {
-    VQ_LOCK( m_data->m_logIoMutex );
-    while( !  m_data->m_logQueue.empty() ) {
+    VQ_LOCK(m_data->m_logIoMutex);
+    while (!  m_data->m_logQueue.empty()) {
         auto msg = m_data->m_logQueue.front();
-        AT_SCOPE_EXIT( delete msg );
+        AT_SCOPE_EXIT(delete msg);
         m_data->m_logQueue.pop();
-        writeToTargets( msg );
+        writeToTargets(msg);
     }
 }
 

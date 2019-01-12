@@ -28,7 +28,7 @@ namespace Quartz
 {
 class QUARTZ_CORE_API Utils
 {
-    QZ_MAKE_STATIC( Utils );
+    QZ_MAKE_STATIC(Utils);
 public:
 
 

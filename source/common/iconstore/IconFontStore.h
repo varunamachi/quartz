@@ -31,11 +31,11 @@ public:
 
     virtual ~IconFontStore();
 
-    void setDefaultOption( const QString& name, const QVariant& value  );
+    void setDefaultOption(const QString& name, const QVariant& value);
 
     QIcon icon(const QString &fontName,
                int character,
-               const QVariantMap &options );
+               const QVariantMap &options);
 
     QIcon icon(const QString &fontName,
                int character,
@@ -62,9 +62,9 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
-    static std::unique_ptr< IconFontStore > s_instance;
+    static std::unique_ptr<IconFontStore> s_instance;
 };
 
 
@@ -77,7 +77,7 @@ struct IIconFontPainter
                        const QRect& rect,
                        QIcon::Mode mode,
                        QIcon::State state,
-                       const QVariantMap& options ) = 0;
+                       const QVariantMap& options) = 0;
 
     virtual ~IIconFontPainter() {}
 };

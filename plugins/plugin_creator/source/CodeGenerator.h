@@ -16,22 +16,22 @@ class CodeGenerator
 {
 public:
 
-    CodeGenerator( const GenInfo *info );
+    CodeGenerator(const GenInfo *info);
 
     virtual ~CodeGenerator();
 
-    virtual bool generate( const QString &path );
+    virtual bool generate(const QString &path);
 
     const QString & lastError() const;
 
 protected:
     virtual bool generateForInstance(
             const QString &path,
-            const TemplateInstance *instance );
+            const TemplateInstance *instance);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

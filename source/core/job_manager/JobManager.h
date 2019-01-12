@@ -55,46 +55,46 @@ class QUARTZ_CORE_API JobManager : public QThread
     Q_OBJECT
 
 public:
-    explicit JobManager( QObject *parent = nullptr );
+    explicit JobManager(QObject *parent = nullptr);
 
     bool hasPendingJobs();
 
 signals:
-    void executionFinished( QString name, QString category );
+    void executionFinished(QString name, QString category);
 
-    void executionStarted( QString name, QString category );
+    void executionStarted(QString name, QString category);
 
     void allJobsFinished();
 
-    void jobDescarded( const QString name, const QString category );
+    void jobDescarded(const QString name, const QString category);
 
 public slots:
-    void addJob( IJob *job );
+    void addJob(IJob *job);
 
-    void addJob( QString name,
+    void addJob(QString name,
                  JobFunc job,
                  QString category = "general",
-                 bool postResponseToEventQueue = true );
+                 bool postResponseToEventQueue = true);
 
-    bool cancelJob( QString name );
+    bool cancelJob(QString name);
 
-    bool cancelJobCategory( QString category );
+    bool cancelJobCategory(QString category);
 
     void cancelAll();
 
 protected:
     void run();
 
-    bool event( QEvent *event );
+    bool event(QEvent *event);
 
 private:
     QReadWriteLock m_lock;
 
     QQueue< IJob * > m_jobs;
 
-    QSet< QString > m_cancelledJobs;
+    QSet<QString> m_cancelledJobs;
 
-    QSet< QString > m_cancelledCategories;
+    QSet<QString> m_cancelledCategories;
 
     bool m_stopProcessing;
 };

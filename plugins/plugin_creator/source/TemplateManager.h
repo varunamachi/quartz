@@ -25,7 +25,7 @@ public:
 
     ~TemplateManager();
 
-    void addTemplate( std::shared_ptr< Template> tmplt );
+    void addTemplate(std::shared_ptr<Template> tmplt);
 
     QList< Template *> templates() const;
 
@@ -33,15 +33,15 @@ public:
 
     const QString &extensionAdapterName() const override;
 
-    bool handleExtension( Extension *plugin ) override;
+    bool handleExtension(Extension *plugin) override;
 
     bool finalizeExtension() override;
 
-    void addVariable( const QString &key, const QString &value );
+    void addVariable(const QString &key, const QString &value);
 
-    QString variable( const QString &key );
+    QString variable(const QString &key);
 
-    Template * templateAt( int index ) const;
+    Template * templateAt(int index) const;
 
     int numTemplates() const;
 
@@ -61,7 +61,7 @@ protected:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 
 };

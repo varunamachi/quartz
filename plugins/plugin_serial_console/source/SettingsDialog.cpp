@@ -25,22 +25,22 @@ namespace Quartz { namespace Ext { namespace SerialConsole {
 
 struct SettingsDialog::Data
 {
-    explicit Data( QWidget *parent )
-        : m_nameCombo{ new QComboBox{ parent }}
-        , m_baudRateCombo{ new QComboBox{ parent }}
-        , m_dataBitsCombo{ new QComboBox{ parent }}
-        , m_parityCombo{ new QComboBox{ parent }}
-        , m_stopBitsCombo{ new QComboBox{ parent }}
-        , m_flowControlCombo{ new QComboBox{ parent }}
-        , m_desc{ new QLineEdit{ parent }}
-        , m_manufacturer{ new QLineEdit{ parent }}
-        , m_serialNum{ new QLineEdit{ parent }}
-        , m_location{ new QLineEdit{ parent }}
-        , m_vid{ new QLineEdit{ parent }}
-        , m_pid{ new QLineEdit{ parent }}
-        , m_okButton{ new QPushButton{ tr( "Ok" ), parent }}
-        , m_cancelButton{ new QPushButton{ tr( "Cancel" ), parent }}
-        , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
+    explicit Data(QWidget *parent)
+        : m_nameCombo(new QComboBox(parent))
+        , m_baudRateCombo(new QComboBox(parent))
+        , m_dataBitsCombo(new QComboBox(parent))
+        , m_parityCombo(new QComboBox(parent))
+        , m_stopBitsCombo(new QComboBox(parent))
+        , m_flowControlCombo(new QComboBox(parent))
+        , m_desc(new QLineEdit(parent))
+        , m_manufacturer(new QLineEdit(parent))
+        , m_serialNum(new QLineEdit(parent))
+        , m_location(new QLineEdit(parent))
+        , m_vid(new QLineEdit(parent))
+        , m_pid(new QLineEdit(parent))
+        , m_okButton(new QPushButton(tr("Ok"), parent))
+        , m_cancelButton(new QPushButton(tr("Cancel"), parent))
+        , m_intValidator(new QIntValidator(0, 40000000, parent))
     {
 
     }
@@ -81,104 +81,104 @@ struct SettingsDialog::Data
 };
 
 
-SettingsDialog::SettingsDialog( QWidget *parent )
-    : QDialog{ parent }
-    , m_data{ new Data{ this }}
+SettingsDialog::SettingsDialog(QWidget *parent)
+    : QDialog(parent)
+    , m_data(std::make_unique<Data>(this))
 {
     auto paramLayout = new QGridLayout{};
     auto row = 0;
 
-    paramLayout->addWidget( new QLabel{ tr( "Baud Rate" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_baudRateCombo, row, 1 );
+    paramLayout->addWidget(new QLabel(tr("Baud Rate"), this), row, 0);
+    paramLayout->addWidget(m_data->m_baudRateCombo, row, 1);
     ++ row;
 
-    paramLayout->addWidget( new QLabel{ tr( "Data Bits" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_dataBitsCombo, row, 1 );
+    paramLayout->addWidget(new QLabel(tr("Data Bits"), this), row, 0);
+    paramLayout->addWidget(m_data->m_dataBitsCombo, row, 1);
     ++ row;
 
-    paramLayout->addWidget( new QLabel{ tr( "Parity" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_parityCombo, row, 1 );
+    paramLayout->addWidget(new QLabel(tr("Parity"), this), row, 0);
+    paramLayout->addWidget(m_data->m_parityCombo, row, 1);
     ++ row;
 
-    paramLayout->addWidget( new QLabel{ tr( "Stop Bits" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_stopBitsCombo, row, 1 );
+    paramLayout->addWidget(new QLabel(tr("Stop Bits"), this), row, 0);
+    paramLayout->addWidget(m_data->m_stopBitsCombo, row, 1);
     ++ row;
 
-    paramLayout->addWidget( new QLabel{ tr( "Flow Control" ), this }, row, 0 );
-    paramLayout->addWidget( m_data->m_flowControlCombo, row, 1 );
+    paramLayout->addWidget(new QLabel(tr("Flow Control"), this), row, 0);
+    paramLayout->addWidget(m_data->m_flowControlCombo, row, 1);
     ++ row;
 
     auto infoLayout = new QGridLayout{};
     row = 0;
 
-    infoLayout->addWidget( new QLabel{ tr( "Description" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_desc, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Description"), this), row, 0);
+    infoLayout->addWidget(m_data->m_desc, row, 1);
     ++ row;
 
-    infoLayout->addWidget( new QLabel{ tr( "Manufacturer" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_manufacturer, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Manufacturer"), this), row, 0);
+    infoLayout->addWidget(m_data->m_manufacturer, row, 1);
     ++ row;
 
-    infoLayout->addWidget( new QLabel{ tr( "Serial Number" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_serialNum, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Serial Number"), this), row, 0);
+    infoLayout->addWidget(m_data->m_serialNum, row, 1);
     ++ row;
 
-    infoLayout->addWidget( new QLabel{ tr( "Location" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_location, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Location"), this), row, 0);
+    infoLayout->addWidget(m_data->m_location, row, 1);
     ++ row;
 
-    infoLayout->addWidget( new QLabel{ tr( "Vendor ID" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_vid, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Vendor ID"), this), row, 0);
+    infoLayout->addWidget(m_data->m_vid, row, 1);
     ++ row;
 
-    infoLayout->addWidget( new QLabel{ tr( "Product ID" ), this }, row, 0 );
-    infoLayout->addWidget( m_data->m_pid, row, 1 );
+    infoLayout->addWidget(new QLabel(tr("Product ID"), this), row, 0);
+    infoLayout->addWidget(m_data->m_pid, row, 1);
     ++ row;
 
-    auto infoGroup = new QGroupBox{ tr( "Device Information"), this };
-    infoGroup->setLayout( infoLayout );
-    auto paramGroup = new QGroupBox{ tr( "Configuration" ), this };
-    paramGroup->setLayout( paramLayout );
+    auto infoGroup = new QGroupBox(tr("Device Information"), this);
+    infoGroup->setLayout(infoLayout);
+    auto paramGroup = new QGroupBox(tr("Configuration"), this);
+    paramGroup->setLayout(paramLayout);
 
-    auto groupLayout = new QHBoxLayout{ };
-    groupLayout->addWidget( infoGroup );
-    groupLayout->addWidget( paramGroup );
+    auto groupLayout = new QHBoxLayout();
+    groupLayout->addWidget(infoGroup);
+    groupLayout->addWidget(paramGroup);
 
-    auto btnLayout = new QHBoxLayout{ };
+    auto btnLayout = new QHBoxLayout();
     btnLayout->addStretch();
-    btnLayout->addWidget( m_data->m_cancelButton );
-    btnLayout->addWidget( m_data->m_okButton );
-    m_data->m_okButton->setDefault( true );
+    btnLayout->addWidget(m_data->m_cancelButton);
+    btnLayout->addWidget(m_data->m_okButton);
+    m_data->m_okButton->setDefault(true);
 
-    auto mainLayout = new QVBoxLayout{ };
-    mainLayout->addWidget( m_data->m_nameCombo );
-    mainLayout->addLayout( groupLayout );
-    mainLayout->addLayout( btnLayout );
+    auto mainLayout = new QVBoxLayout();
+    mainLayout->addWidget(m_data->m_nameCombo);
+    mainLayout->addLayout(groupLayout);
+    mainLayout->addLayout(btnLayout);
 
-    this->setLayout( mainLayout );
+    this->setLayout(mainLayout);
     m_data->setupUI();
     this->setMinimumSize({300, 400});
 
-    using ComboIdxFunc = void ( QComboBox::* )( int );
-    connect( m_data->m_nameCombo,
-             SIGNAL( currentIndexChanged( int ) ),
+    using ComboIdxFunc = void (QComboBox::*)(int);
+    connect(m_data->m_nameCombo,
+             SIGNAL(currentIndexChanged(int)),
              this,
-             SLOT( showPortDetails()));
-    connect( m_data->m_okButton,
+             SLOT(showPortDetails()));
+    connect(m_data->m_okButton,
              &QPushButton::released,
              this,
-             &QDialog::accept );
-    connect( m_data->m_cancelButton,
+             &QDialog::accept);
+    connect(m_data->m_cancelButton,
              &QPushButton::released,
              this,
-             &QDialog::reject );
+             &QDialog::reject);
 
-    connect( m_data->m_nameCombo,
-            static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
-             [ this ]( int /*index*/ ) {
-        auto custom = ( m_data->m_nameCombo->currentText() == "Custom" );
-        m_data->m_nameCombo->setEditable( custom );
-        if( custom ) {
+    connect(m_data->m_nameCombo,
+            static_cast<ComboIdxFunc>(&QComboBox::currentIndexChanged),
+             [ this ](int /*index*/) {
+        auto custom = (m_data->m_nameCombo->currentText() == "Custom");
+        m_data->m_nameCombo->setEditable(custom);
+        if (custom) {
             m_data->m_nameCombo->clearEditText();
         }
     });
@@ -190,30 +190,30 @@ SettingsDialog::~SettingsDialog()
 }
 
 template< typename T >
-T param( QComboBox *box )
+T param(QComboBox *box)
 {
-    return static_cast< T >(
-        box->itemData( box->currentIndex() ).toInt() );
+    return static_cast<T>(
+        box->itemData(box->currentIndex()).toInt());
 }
 
-std::unique_ptr< SerialSettings > SettingsDialog::settings() const
+std::unique_ptr<SerialSettings> SettingsDialog::settings() const
 {
-    auto brate = param< qint32 >( m_data->m_baudRateCombo );
-    if( brate == 0 ) {
+    auto brate = param<qint32>(m_data->m_baudRateCombo);
+    if (brate == 0) {
         brate = m_data->m_baudRateCombo->currentText().toInt();
     }
-    return std::unique_ptr< SerialSettings >( new SerialSettings {
+    return std::unique_ptr<SerialSettings>(new SerialSettings {
         m_data->m_nameCombo->currentText(),
         brate,
-        param< QSerialPort::DataBits >( m_data->m_dataBitsCombo ),
-        param< QSerialPort::Parity >( m_data->m_parityCombo ),
-        param< QSerialPort::StopBits >( m_data->m_stopBitsCombo ),
-        param< QSerialPort::FlowControl >( m_data->m_flowControlCombo ),
-        m_data->m_available.value( m_data->m_nameCombo->currentText() )
+        param<QSerialPort::DataBits>(m_data->m_dataBitsCombo),
+        param<QSerialPort::Parity>(m_data->m_parityCombo),
+        param<QSerialPort::StopBits>(m_data->m_stopBitsCombo),
+        param<QSerialPort::FlowControl>(m_data->m_flowControlCombo),
+        m_data->m_available.value(m_data->m_nameCombo->currentText())
     });
 }
 
-void SettingsDialog::setSettings( const SerialSettings & /*settings*/ )
+void SettingsDialog::setSettings(const SerialSettings & /*settings*/)
 {
 
 }
@@ -234,20 +234,20 @@ void SettingsDialog::updateBaudRates()
 {
     m_data->m_baudRateCombo->clear();
     m_data->m_baudRateCombo->addItems(
-                SerialUtils::allBaudRates() );
+                SerialUtils::allBaudRates());
 }
 
 void SettingsDialog::showPortDetails()
 {
     auto selected = m_data->m_nameCombo->currentText();
-    if( m_data->m_available.contains( selected )) {
-        const auto &info = m_data->m_available.value( selected );
-        m_data->m_desc->setText( info.description() );
-        m_data->m_manufacturer->setText( info.manufacturer() );
-        m_data->m_serialNum->setText( info.serialNumber() );
-        m_data->m_location->setText( info.systemLocation() );
-        m_data->m_vid->setText( QString::number( info.vendorIdentifier() ));
-        m_data->m_pid->setText( QString::number( info.productIdentifier() ));
+    if (m_data->m_available.contains(selected)) {
+        const auto &info = m_data->m_available.value(selected);
+        m_data->m_desc->setText(info.description());
+        m_data->m_manufacturer->setText(info.manufacturer());
+        m_data->m_serialNum->setText(info.serialNumber());
+        m_data->m_location->setText(info.systemLocation());
+        m_data->m_vid->setText(QString::number(info.vendorIdentifier()));
+        m_data->m_pid->setText(QString::number(info.productIdentifier()));
     }
 }
 
@@ -258,55 +258,55 @@ void SettingsDialog::refresh()
     m_data->m_available.clear();
     m_data->m_nameCombo->clear();
     const auto ports = QSerialPortInfo::availablePorts();
-    for( int i = 0; i < ports.size(); ++ i ) {
-        const auto &port = ports.at( i );
-        if( ! port.isBusy() ) {
-            m_data->m_nameCombo->addItem( port.portName() );
-            m_data->m_available.insert( port.portName(), port );
-            if( port.portName() == selected) {
+    for (int i = 0; i < ports.size(); ++ i) {
+        const auto &port = ports.at(i);
+        if (! port.isBusy()) {
+            m_data->m_nameCombo->addItem(port.portName());
+            m_data->m_available.insert(port.portName(), port);
+            if (port.portName() == selected) {
                 selectedIndex = i;
             }
         }
     }
-    m_data->m_nameCombo->addItem( "Custom" );
-    if( m_data->m_nameCombo->count() != 0 ) {
-        m_data->m_nameCombo->setCurrentIndex( selectedIndex );
+    m_data->m_nameCombo->addItem("Custom");
+    if (m_data->m_nameCombo->count() != 0) {
+        m_data->m_nameCombo->setCurrentIndex(selectedIndex);
         showPortDetails();
     }
 }
 
 void SettingsDialog::Data::setupUI()
 {
-    m_baudRateCombo->addItems( SerialUtils::allBaudRates() );
+    m_baudRateCombo->addItems(SerialUtils::allBaudRates());
 
-    m_dataBitsCombo->addItem( QStringLiteral( "5" ), QSerialPort::Data5 );
-    m_dataBitsCombo->addItem( QStringLiteral( "6" ), QSerialPort::Data6 );
-    m_dataBitsCombo->addItem( QStringLiteral( "7" ), QSerialPort::Data7 );
-    m_dataBitsCombo->addItem( QStringLiteral( "8" ), QSerialPort::Data8 );
+    m_dataBitsCombo->addItem(QStringLiteral("5"), QSerialPort::Data5);
+    m_dataBitsCombo->addItem(QStringLiteral("6"), QSerialPort::Data6);
+    m_dataBitsCombo->addItem(QStringLiteral("7"), QSerialPort::Data7);
+    m_dataBitsCombo->addItem(QStringLiteral("8"), QSerialPort::Data8);
     m_dataBitsCombo->setCurrentIndex(3);
 
-    m_parityCombo->addItem( tr( "None" ), QSerialPort::NoParity );
-    m_parityCombo->addItem( tr( "Even" ), QSerialPort::EvenParity );
-    m_parityCombo->addItem( tr( "Odd" ), QSerialPort::OddParity );
-    m_parityCombo->addItem( tr( "Mark" ), QSerialPort::MarkParity );
-    m_parityCombo->addItem( tr( "Space" ), QSerialPort::SpaceParity );
+    m_parityCombo->addItem(tr("None"), QSerialPort::NoParity);
+    m_parityCombo->addItem(tr("Even"), QSerialPort::EvenParity);
+    m_parityCombo->addItem(tr("Odd"), QSerialPort::OddParity);
+    m_parityCombo->addItem(tr("Mark"), QSerialPort::MarkParity);
+    m_parityCombo->addItem(tr("Space"), QSerialPort::SpaceParity);
 
-    m_stopBitsCombo->addItem( QStringLiteral( "1" ), QSerialPort::OneStop );
+    m_stopBitsCombo->addItem(QStringLiteral("1"), QSerialPort::OneStop);
 #ifdef Q_OS_WIN
-    m_stopBitsCombo->addItem( tr( "1.5" ), QSerialPort::OneAndHalfStop );
+    m_stopBitsCombo->addItem(tr("1.5"), QSerialPort::OneAndHalfStop);
 #endif
-    m_stopBitsCombo->addItem(QStringLiteral("2"), QSerialPort::TwoStop );
+    m_stopBitsCombo->addItem(QStringLiteral("2"), QSerialPort::TwoStop);
 
-    m_flowControlCombo->addItem( tr("None"), QSerialPort::NoFlowControl );
-    m_flowControlCombo->addItem( tr("RTS/CTS"), QSerialPort::HardwareControl );
-    m_flowControlCombo->addItem( tr("XON/XOFF"), QSerialPort::SoftwareControl );
+    m_flowControlCombo->addItem(tr("None"), QSerialPort::NoFlowControl);
+    m_flowControlCombo->addItem(tr("RTS/CTS"), QSerialPort::HardwareControl);
+    m_flowControlCombo->addItem(tr("XON/XOFF"), QSerialPort::SoftwareControl);
 
-    m_desc->setEnabled( false );
-    m_manufacturer->setEnabled( false );
-    m_serialNum->setEnabled( false );
-    m_location->setEnabled( false );
-    m_vid->setEnabled( false );
-    m_pid->setEnabled( false );
+    m_desc->setEnabled(false);
+    m_manufacturer->setEnabled(false);
+    m_serialNum->setEnabled(false);
+    m_location->setEnabled(false);
+    m_vid->setEnabled(false);
+    m_pid->setEnabled(false);
 }
 
 

@@ -9,24 +9,21 @@
 #include "Plugin.h"
 
 void initResource() {
-    Q_INIT_RESOURCE( serial_console );
+    Q_INIT_RESOURCE(serial_console);
 }
 
 extern "C" {
 
-Q_DECL_EXPORT PluginWrapper getPluginWrapper(
-        PluginInputWrapper *input )
+Q_DECL_EXPORT PluginWrapper getPluginWrapper(PluginInputWrapper *input)
 {
     initResource();
-    auto plugin =
-        std::unique_ptr< Quartz::Ext::SerialConsole::Plugin >{
-            new Quartz::Ext::SerialConsole::Plugin{} };
+    auto plugin = std::make_unique<Quartz::Ext::SerialConsole::Plugin>();
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::init(
-                std::move( plugin ),
-                std::move( input->env ),
-                dynamic_cast< Quartz::QzAppContext *>( input->appContext ));
-    return PluginWrapper{ pluginPtr, true };
+                std::move(plugin),
+                std::move(input->env),
+                dynamic_cast< Quartz::QzAppContext *>(input->appContext));
+    return PluginWrapper{pluginPtr, true};
 }
 
 Q_DECL_EXPORT void destroy()

@@ -14,17 +14,17 @@ class QUARTZ_BASE_API ConfigPageManager : public ContentWidget
     Q_OBJECT
 
 public:
-    ConfigPageManager( QWidget *parent = nullptr );
+    ConfigPageManager(QWidget *parent = nullptr);
 
     ~ConfigPageManager();
 
-    bool addPage( AbstractConfigPage *page );
+    bool addPage(AbstractConfigPage *page);
 
-    bool removePage( const QString &pageId );
+    bool removePage(const QString &pageId);
 
-    AbstractConfigPage * page( const QString &pageId );
+    AbstractConfigPage * page(const QString &pageId);
 
-    void selectPage( const QString &pageId );
+    void selectPage(const QString &pageId);
 
     static const QString CONTENT_ID;
 
@@ -34,7 +34,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

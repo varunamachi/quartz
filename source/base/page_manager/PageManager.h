@@ -26,23 +26,23 @@ class QUARTZ_BASE_API PageManager : public QWidget
 {
     Q_OBJECT
 public:
-    explicit PageManager( int categoryWidth,
+    explicit PageManager(int categoryWidth,
                           int pagerHeight,
-                          QWidget *parent = 0 );
+                          QWidget *parent = 0);
 
-    void addPage( QuartzPage *page );
+    void addPage(QuartzPage *page);
 
-    void removePage( const QString &pageId );
+    void removePage(const QString &pageId);
 
-    void removePage( QuartzPage *page );
+    void removePage(QuartzPage *page);
 
-    void removePageCategory( const QString &categoryId );
+    void removePageCategory(const QString &categoryId);
 
-    QuartzPage * page( const QString &pageId ) const;
+    QuartzPage * page(const QString &pageId) const;
 
     QList< QuartzPage *> pages() const ;
 
-    QList< QuartzPage *> pages( const QString &categoryId ) const;
+    QList< QuartzPage *> pages(const QString &categoryId) const;
 
     QuartzPage * currentPage() const;
 
@@ -50,9 +50,9 @@ public:
 
     QStringList categories() const;
 
-    void selectCategory( QString categoryId );
+    void selectCategory(QString categoryId);
 
-    void selectPage( QString pageId );
+    void selectPage(QString pageId);
 
     // IExtensionAdapter interface
 public:
@@ -60,7 +60,7 @@ public:
 
     const QString &extensionAdapterName() const override;
 
-    bool handleExtension( Ext::Extension *plugin ) override;
+    bool handleExtension(Ext::Extension *plugin) override;
 
     bool finalizeExtension() override;
 

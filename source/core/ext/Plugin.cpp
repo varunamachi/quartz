@@ -8,10 +8,10 @@ namespace Quartz { namespace Ext {
 
 struct Plugin::Data
 {
-    Data( const QString & pluginId,
-          const QString & pluginName )
-        : m_pluginId( pluginId )
-        , m_pluginName( pluginName )
+    Data(const QString & pluginId,
+          const QString & pluginName)
+        : m_pluginId(pluginId)
+        , m_pluginName(pluginName)
     {
 
     }
@@ -25,8 +25,8 @@ struct Plugin::Data
 
 Plugin::Plugin(
         const QString &pluginId,
-        const QString &pluginName )
-    : m_data( new Plugin::Data{ pluginId, pluginName })
+        const QString &pluginName)
+    : m_data(new Plugin::Data(pluginId, pluginName))
 {
 
 }
@@ -46,7 +46,7 @@ const QString &Plugin::pluginName() const
     return m_data->m_pluginName;
 }
 
-void Plugin::setContext( QzCoreContext *context )
+void Plugin::setContext(QzCoreContext *context)
 {
     m_data->m_context = context;
 }

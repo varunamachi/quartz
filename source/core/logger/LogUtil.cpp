@@ -33,9 +33,9 @@ namespace Quartz { namespace Logger {
 
 
 
-QString LogUtil::getSeverityString( LogLevel level )
+QString LogUtil::getSeverityString(LogLevel level)
 {
-    switch( level ) {
+    switch(level) {
     case LogLevel::Trace  : return "[ TRACE ]";
     case LogLevel::Debug  : return "[ DEBUG ]";
     case LogLevel::Info   : return "[ INFO  ]";
@@ -49,31 +49,31 @@ QString LogUtil::getSeverityString( LogLevel level )
 }
 
 
-QString LogUtil::format( const LogMessage *msg )
+QString LogUtil::format(const LogMessage *msg)
 {
 
 
-//    QString strMsg{ msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
+//    QString strMsg{ msg->time().toString("yyyy-MM-dd hh:mm:ss")
 //            + " "
-//            + getSeverityString( msg->logLevel() )
+//            + getSeverityString(msg->logLevel())
 //            + "  "
 //            + msg->message()
 //  /*          + " ["
 //            + msg->moduleName() + " | "
-//            + QString::number( msg->lineNum()  ) + " | "
-//            + QString::number( msg->threadId() ) + " | "
+//            + QString::number(msg->lineNum()) + " | "
+//            + QString::number(msg->threadId()) + " | "
 //            + msg->methodName() + " ] "*/
 //            + "@"
-//            + QString::number( msg->lineNum() )
+//            + QString::number(msg->lineNum())
 //    };
 //    return strMsg;
 //}
     QString str;
     QTextStream stream{ &str };
-    stream << msg->time().toString( "yyyy-MM-dd hh:mm:ss" )
-           << " " << getSeverityString( msg->logLevel() )
+    stream << msg->time().toString("yyyy-MM-dd hh:mm:ss")
+           << " " << getSeverityString(msg->logLevel())
            << " " << msg->message();
-    if( msg->logLevel() >= LogLevel::Error ) {
+    if (msg->logLevel() >= LogLevel::Error) {
            stream << " @ " << msg->fileName() << ":" << msg->lineNum();
     }
     return str;

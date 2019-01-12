@@ -13,8 +13,8 @@ namespace Quartz {
 
 struct ContentManager::Data
 {
-    explicit Data( QWidget *parent )
-        : m_stk( new QStackedWidget{ parent })
+    explicit Data(QWidget *parent)
+        : m_stk(new QStackedWidget(parent))
     {
 
     }
@@ -26,10 +26,10 @@ struct ContentManager::Data
     QStackedWidget *m_stk;
 };
 
-const QString ContentManager::ADAPTER_NAME{ "Content Manager" };
+const QString ContentManager::ADAPTER_NAME("Content Manager");
 
-ContentManager::ContentManager( QWidget *parent )
-    : QWidget( parent )
+ContentManager::ContentManager(QWidget *parent)
+    : QWidget(parent)
     , m_data(std::make_unique<Data>(parent))
 {
     auto layout = new QVBoxLayout();
@@ -52,74 +52,74 @@ ContentManager::~ContentManager()
 
 }
 
-bool ContentManager::addContent( ContentWidget *content )
+bool ContentManager::addContent(ContentWidget *content)
 {
     bool result = false;
-    if( content != nullptr ) {
-        m_data->m_widgets.insert( content->id(), content );
-        m_data->m_stk->addWidget( content );
-        emit sigContentAdded( content );
+    if (content != nullptr) {
+        m_data->m_widgets.insert(content->id(), content);
+        m_data->m_stk->addWidget(content);
+        emit sigContentAdded(content);
         result = true;
     }
     return result;
 }
 
-bool ContentManager::removeContent( const QString &contentId )
+bool ContentManager::removeContent(const QString &contentId)
 {
     bool result = false;
-    auto content = m_data->m_widgets.value( contentId );
-    if( content != nullptr ) {
-        if( m_data->m_stk->currentWidget() == content
-                && m_data->m_stk->count() > 0 ) {
-                m_data->m_stk->setCurrentIndex( 0 );
+    auto content = m_data->m_widgets.value(contentId);
+    if (content != nullptr) {
+        if (m_data->m_stk->currentWidget() == content
+                && m_data->m_stk->count() > 0) {
+                m_data->m_stk->setCurrentIndex(0);
         }
-        m_data->m_widgets.remove( contentId );
-        m_data->m_stk->removeWidget( content );
-        emit sigContentRemoved( contentId );
+        m_data->m_widgets.remove(contentId);
+        m_data->m_stk->removeWidget(content);
+        emit sigContentRemoved(contentId);
         result = true;
     }
     return result;
 }
 
-ContentWidget * ContentManager::content( const QString &contentId )
+ContentWidget * ContentManager::content(const QString &contentId)
 {
-    ContentWidget * widget = m_data->m_widgets.value( contentId, nullptr );
+    ContentWidget * widget = m_data->m_widgets.value(contentId, nullptr);
     return widget;
 }
 
-QVector< ContentWidget *> ContentManager::contentsOfKind( const QString &kind )
+QVector< ContentWidget *> ContentManager::contentsOfKind(const QString &kind)
 {
     QVector< ContentWidget *> content;
     auto it = m_data->m_widgets.begin();
-    for( ; it != m_data->m_widgets.end(); ++ it ) {
-        if( it.value()->kind() == kind ) {
-            content.push_back( it.value() );
+    for (; it != m_data->m_widgets.end(); ++ it) {
+        if (it.value()->kind() == kind) {
+            content.push_back(it.value());
         }
     }
     return content;
 }
 
-int ContentManager::removeKind( const QString &kind )
+int ContentManager::removeKind(const QString &kind)
 {
     int removed = 0;
     auto it = m_data->m_widgets.begin();
-    for( ; it != m_data->m_widgets.end(); ++ it ) {
-        if( it.value()->kind() == kind ) {
+    for (; it != m_data->m_widgets.end(); ++ it) {
+        if (it.value()->kind() == kind) {
             auto id = it.value()->id();
-            m_data->m_widgets.erase( it );
-            emit sigContentRemoved( id );
+            m_data->m_widgets.erase(it);
+            emit sigContentRemoved(id);
             ++ removed;
         }
     }
     return removed;
 }
 
-void ContentManager::selectContent( const QString &contentId )
+void ContentManager::selectContent(const QString &contentId)
 {
-    auto widget = m_data->m_widgets.value( contentId );
-    if( widget != nullptr ) {
-        m_data->m_stk->setCurrentWidget( widget );
-        emit sigContentSelected( widget );
+    auto widget = m_data->m_widgets.value(contentId);
+    if (widget != nullptr) {
+        m_data->m_stk->setCurrentWidget(widget);
+        emit sigContentSelected(widget);
     }
 }
 
@@ -133,15 +133,15 @@ const QString & ContentManager::extensionAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool ContentManager::handleExtension( Ext::Extension *ext )
+bool ContentManager::handleExtension(Ext::Extension *ext)
 {
     bool result = true;
-    auto provider = dynamic_cast< AbstractContentProvider *>( ext  );
-    if( provider != nullptr ) {
+    auto provider = dynamic_cast< AbstractContentProvider *>(ext);
+    if (provider != nullptr) {
         auto contents = provider->widgets();
-        foreach( auto content, contents ) {
-            if( addContent( content )) {
-                m_data->m_fromPlugins.push_back( content );
+        foreach(auto content, contents) {
+            if (addContent(content)) {
+                m_data->m_fromPlugins.push_back(content);
             }
             else {
                 result = false;
@@ -151,7 +151,7 @@ bool ContentManager::handleExtension( Ext::Extension *ext )
     else {
         auto pluginName = ext != nullptr ? ext->extensionId()
                                          : "<null>";
-        QZ_ERROR( "Qz:ContentManager" )
+        QZ_ERROR("Qz:ContentManager")
                 << "Invalid content plugin provided: "
                 << pluginName;
     }

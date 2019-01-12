@@ -6,12 +6,12 @@ namespace Quartz {
 
 struct ContentWidget::Data
 {
-    Data( const QString &id,
+    Data(const QString &id,
           const QString &name,
-          const QString &kind )
-        : m_id( id )
-        , m_name( name )
-        , m_kind( kind )
+          const QString &kind)
+        : m_id(id)
+        , m_name(name)
+        , m_kind(kind)
     {
 
     }
@@ -23,13 +23,13 @@ struct ContentWidget::Data
     const QString m_kind;
 };
 
-ContentWidget::ContentWidget( const QString &id,
+ContentWidget::ContentWidget(const QString &id,
                               const QString &name,
                               const QString &kind,
-                              QWidget *parent )
-    : QWidget( parent )
-//    , m_data( std::make_unique< Data >( id, name, kind ))
-    , m_data( new Data( id, name, kind ))
+                              QWidget *parent)
+    : QWidget(parent)
+//    , m_data(std::make_unique<Data>(id, name, kind))
+    , m_data(std::make_unique<Data>(id, name, kind))
 {
 }
 

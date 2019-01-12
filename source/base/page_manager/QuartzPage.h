@@ -12,11 +12,11 @@ class QUARTZ_BASE_API QuartzPage : public QWidget
 {
     Q_OBJECT
 public:
-    QuartzPage( const QString &pageId,
+    QuartzPage(const QString &pageId,
                 const QString &category,
                 const QString &categoryName,
                 const QString &displayName,
-                QWidget *parent = nullptr );
+                QWidget *parent = nullptr);
 
     ~QuartzPage();
 
@@ -30,7 +30,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

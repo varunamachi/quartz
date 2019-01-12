@@ -20,9 +20,9 @@ class QUARTZ_COMMON_API TemplateInstance : public TreeNode
 {
 
 public:
-    TemplateInstance( const QString &name,
-                      std::unique_ptr< Config > config,
-                      Template *parent );
+    TemplateInstance(const QString &name,
+                      std::unique_ptr<Config> config,
+                      Template *parent);
 
     ~TemplateInstance() override;
 
@@ -30,22 +30,22 @@ public:
 
     Template * instanceOf() const;
 
-    void setGlobalConfig( std::shared_ptr< GlobalConfig > gconf );
+    void setGlobalConfig(std::shared_ptr<GlobalConfig> gconf);
 
-    QVariant globalConfig( const QString &key ) const;
+    QVariant globalConfig(const QString &key) const;
 
-    const Param * param( const QString &paramName ) const;
+    const Param * param(const QString &paramName) const;
 
-    Param * param( const QString &paramName );
+    Param * param(const QString &paramName);
 
-    QVariant paramValue( const QString &paramName,
-                         const QString defValue = "" ) const;
+    QVariant paramValue(const QString &paramName,
+                         const QString defValue = "") const;
 
-    QVariant fieldValue( int field ) const override;
+    QVariant fieldValue(int field) const override;
 
-    bool isEditable( int column ) const override;
+    bool isEditable(int column) const override;
 
-    bool setData( int column, const QVariant &data ) override;
+    bool setData(int column, const QVariant &data) override;
 
     const Config * instanceConfig() const;
 
@@ -55,7 +55,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

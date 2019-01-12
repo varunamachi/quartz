@@ -6,14 +6,14 @@ namespace Quartz {
 struct QuartzPage::Data
 {
 public:
-    Data( const QString &pageId,
+    Data(const QString &pageId,
           const QString &category,
           const QString &categoryName,
-          const QString &displayName )
-        : m_pageId( pageId )
-        , m_categoryId( category )
-        , m_categoryName( categoryName )
-        , m_displayName( displayName )
+          const QString &displayName)
+        : m_pageId(pageId)
+        , m_categoryId(category)
+        , m_categoryName(categoryName)
+        , m_displayName(displayName)
     {
 
     }
@@ -28,17 +28,17 @@ public:
 };
 
 
-QuartzPage::QuartzPage( const QString &pageId,
+QuartzPage::QuartzPage(const QString &pageId,
                         const QString &category,
                         const QString &categoryName,
                         const QString &displayName,
-                        QWidget *parent )
-    : QWidget( parent )
-    //        , m_data( std::make_unique< Data > ( pageId,
+                        QWidget *parent)
+    : QWidget(parent)
+    //        , m_data(std::make_unique<Data> (pageId,
     //                                             category,
     //                                             categoryName,
-    //                                             displayName ))
-    , m_data( new Data( pageId, category, categoryName, displayName ))
+    //                                             displayName))
+    , m_data(std::make_unique<Data>(pageId, category, categoryName, displayName))
 {
 
 }

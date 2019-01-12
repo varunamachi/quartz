@@ -14,11 +14,11 @@ class QUARTZ_BASE_API AbstractSelector : public QWidget
 {
     Q_OBJECT
 public:
-    AbstractSelector( const QString &selectorId,
+    AbstractSelector(const QString &selectorId,
                       const QString &selectorName,
                       const QIcon &icon,
                       const QIcon &activeIcon,
-                      QWidget *parent = nullptr );
+                      QWidget *parent = nullptr);
 
     virtual ~AbstractSelector();
 
@@ -36,7 +36,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

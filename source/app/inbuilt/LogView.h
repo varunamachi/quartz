@@ -18,35 +18,35 @@ class LogModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    explicit LogModel( QObject *parent = nullptr );
+    explicit LogModel(QObject *parent = nullptr);
 
     ~LogModel();
 
-    QModelIndex index( int row,
+    QModelIndex index(int row,
                        int column,
-                       const QModelIndex &parent ) const override;
+                       const QModelIndex &parent) const override;
 
-    QModelIndex parent( const QModelIndex &child ) const override;
+    QModelIndex parent(const QModelIndex &child) const override;
 
-    int rowCount( const QModelIndex &parent ) const override;
+    int rowCount(const QModelIndex &parent) const override;
 
-    int columnCount( const QModelIndex &parent ) const override;
+    int columnCount(const QModelIndex &parent) const override;
 
-    QVariant data( const QModelIndex &index, int role ) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    bool hasChildren( const QModelIndex &parent ) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
 
-    QVariant headerData( int section,
+    QVariant headerData(int section,
                          Qt::Orientation orientation,
-                         int role ) const override;
+                         int role) const override;
 
 public slots:
-    void add( std::shared_ptr< Quartz::LogData > msg );
+    void add(std::shared_ptr<Quartz::LogData> msg);
 
     void clear();
 
 private:
-    QVector< std::shared_ptr< LogData >> m_msgs;
+    QVector<std::shared_ptr<LogData>> m_msgs;
 
 };
 
@@ -56,13 +56,13 @@ class LogView : public QuartzView
 {
     Q_OBJECT
 public:
-    explicit LogView( QWidget *parent );
+    explicit LogView(QWidget *parent);
 
     ~LogView();
 
     void flush() override;
 
-    void write( const Logger::LogMessage *message ) override;
+    void write(const Logger::LogMessage *message) override;
 
     static const QString LOG_TARGET_ID;
 
@@ -76,14 +76,14 @@ public slots:
     void clear();
 
 signals:
-    void sigLogMessage( std::shared_ptr< Quartz::LogData > message );
+    void sigLogMessage(std::shared_ptr<Quartz::LogData> message);
 
 protected:
-    void write( QString &&logString ) override;
+    void write(QString &&logString) override;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

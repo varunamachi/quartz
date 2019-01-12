@@ -16,7 +16,7 @@ class QUARTZ_BASE_API GeneralSelector : public AbstractSelector
     Q_OBJECT
 
 public:
-    GeneralSelector( QWidget *parent = nullptr );
+    GeneralSelector(QWidget *parent = nullptr);
 
     ~GeneralSelector();
 
@@ -34,16 +34,16 @@ public Q_SLOTS:
     void setSelected(const QString &nodeID);
 
 Q_SIGNALS:
-    void sigNodeSelected( const Node *node );
+    void sigNodeSelected(const Node *node);
 
 private Q_SLOTS:
-    void onSelected( const QModelIndex &current,
-                     const QModelIndex &previous );
+    void onSelected(const QModelIndex &current,
+                     const QModelIndex &previous);
 
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

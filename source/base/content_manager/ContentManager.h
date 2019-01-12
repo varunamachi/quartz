@@ -18,45 +18,45 @@ class QUARTZ_BASE_API ContentManager : public QWidget
     Q_OBJECT
 
 public:
-    explicit ContentManager( QWidget *parent = nullptr );
+    explicit ContentManager(QWidget *parent = nullptr);
 
     ~ContentManager();
 
-    bool addContent( ContentWidget *content );
+    bool addContent(ContentWidget *content);
 
-    bool removeContent( const QString &contentId );
+    bool removeContent(const QString &contentId);
 
-    ContentWidget * content( const QString &contentId );
+    ContentWidget * content(const QString &contentId);
 
-    QVector< ContentWidget *> contentsOfKind( const QString &kind );
+    QVector< ContentWidget *> contentsOfKind(const QString &kind);
 
-    int removeKind( const QString &kind );
+    int removeKind(const QString &kind);
 
-    void selectContent( const QString &contentId );
+    void selectContent(const QString &contentId);
 
 public:
     const QString &extensionType() const override;
 
     const QString &extensionAdapterName() const override;
 
-    bool handleExtension( Ext::Extension *ext ) override;
+    bool handleExtension(Ext::Extension *ext) override;
 
     bool finalizeExtension() override;
 
     static const QString ADAPTER_NAME;
 
 signals:
-    void sigContentSelected( ContentWidget *widget );
+    void sigContentSelected(ContentWidget *widget);
 
-    void sigContentAdded( ContentWidget *widget );
+    void sigContentAdded(ContentWidget *widget);
 
-    void sigContentRemoved( const QString &contentId );
+    void sigContentRemoved(const QString &contentId);
 
 private:
     void setupLayout();
 
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 
 

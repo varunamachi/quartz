@@ -15,20 +15,20 @@ class QUARTZ_COMMON_API QzScroller : public QWidget
 {
     Q_OBJECT
 public:
-    explicit QzScroller( Qt::Orientation orientation,
+    explicit QzScroller(Qt::Orientation orientation,
                          int minimumDim,
                          int maximumDim,
-                         QWidget *parent = nullptr );
+                         QWidget *parent = nullptr);
 
     QWidgetList widgets() const;
 
 public slots:
-    void addWidget( QWidget *widget );
+    void addWidget(QWidget *widget);
 
-    void removeWidget( QWidget *widget );
+    void removeWidget(QWidget *widget);
 
 protected:
-    void resizeEvent( QResizeEvent *event ) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     void start();

@@ -23,25 +23,25 @@
 namespace Quartz {
 
 
-OrientationButton::OrientationButton( QWidget* parent )
+OrientationButton::OrientationButton(QWidget* parent)
         : QPushButton(parent)
 {
     init();
 }
 
 
-OrientationButton::OrientationButton( const QString& text,
+OrientationButton::OrientationButton(const QString& text,
                                       QWidget* parent)
-    : QPushButton( text, parent )
+    : QPushButton(text, parent)
 {
     init();
 }
 
 
-OrientationButton::OrientationButton( const QIcon &icon,
+OrientationButton::OrientationButton(const QIcon &icon,
                                       const QString &text,
-                                      QWidget *parent )
-    : QPushButton( icon, text, parent )
+                                      QWidget *parent)
+    : QPushButton(icon, text, parent)
 {
     init();
 }
@@ -65,16 +65,16 @@ Qt::Orientation OrientationButton::orientation() const
 }
 
 
-void OrientationButton::setOrientation( Qt::Orientation orientation )
+void OrientationButton::setOrientation(Qt::Orientation orientation)
 {
     m_orientation = orientation;
-    switch ( orientation ) {
+    switch (orientation) {
     case Qt::Horizontal:
-        setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Fixed );
+        setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         break;
 
     case Qt::Vertical:
-        setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
         break;
     }
 }
@@ -86,7 +86,7 @@ bool OrientationButton::mirrored() const
 }
 
 
-void OrientationButton::setMirrored( bool mirrored )
+void OrientationButton::setMirrored(bool mirrored)
 {
     m_mirrored = mirrored;
 }
@@ -95,7 +95,7 @@ void OrientationButton::setMirrored( bool mirrored )
 QSize OrientationButton::sizeHint() const
 {
     QSize size = QPushButton::sizeHint();
-    if ( m_orientation == Qt::Vertical ) {
+    if (m_orientation == Qt::Vertical) {
         size.transpose();
     }
     return size;
@@ -105,37 +105,37 @@ QSize OrientationButton::sizeHint() const
 QSize OrientationButton::minimumSizeHint() const
 {
     QSize size = originalSizeHint();
-    if ( m_orientation == Qt::Vertical ) {
+    if (m_orientation == Qt::Vertical) {
         size.transpose();
     }
     return size;
 }
 
 
-void OrientationButton::paintEvent( QPaintEvent* event )
+void OrientationButton::paintEvent(QPaintEvent* event)
 {
-    Q_UNUSED( event );
-    QStylePainter p( this );
-    switch( m_orientation )
+    Q_UNUSED(event);
+    QStylePainter p(this);
+    switch(m_orientation)
     {
     case Qt::Horizontal:
-        if( m_mirrored ) {
+        if (m_mirrored) {
             p.rotate(180);
-            p.translate( - width(), - height() );
+            p.translate(- width(), - height());
         }
         break;
     case Qt::Vertical:
-        if( m_mirrored ) {
-            p.rotate( -90 );
-            p.translate( -height(), 0 );
+        if (m_mirrored) {
+            p.rotate(-90);
+            p.translate(-height(), 0);
         }
         else {
-            p.rotate( 90 );
-            p.translate( 0, -width() );
+            p.rotate(90);
+            p.translate(0, -width());
         }
         break;
     }
-    p.drawControl( QStyle::CE_PushButton, getStyleOption() );
+    p.drawControl(QStyle::CE_PushButton, getStyleOption());
 }
 
 QSize OrientationButton::originalSizeHint() const
@@ -148,31 +148,31 @@ QStyleOptionButton OrientationButton::getStyleOption() const
 {
     QStyleOptionButton opt;
     opt.initFrom(this);
-    if( m_orientation == Qt::Vertical ) {
+    if (m_orientation == Qt::Vertical) {
         QSize size = opt.rect.size();
         size.transpose();
         opt.rect.setSize(size);
     }
     opt.features = QStyleOptionButton::None;
-    if( isFlat() ) {
+    if (isFlat()) {
         opt.features |= QStyleOptionButton::Flat;
     }
-    if( menu() ) {
+    if (menu()) {
         opt.features |= QStyleOptionButton::HasMenu;
     }
-    if( autoDefault() || isDefault() ) {
+    if (autoDefault() || isDefault()) {
         opt.features |= QStyleOptionButton::AutoDefaultButton;
     }
-    if( isDefault() ) {
+    if (isDefault()) {
         opt.features |= QStyleOptionButton::DefaultButton;
     }
-    if( isDown() || (menu() && menu()->isVisible() )) {
+    if (isDown() || (menu() && menu()->isVisible())) {
         opt.state |= QStyle::State_Sunken;
     }
-    if( isChecked() ) {
+    if (isChecked()) {
         opt.state |= QStyle::State_On;
     }
-    if( ! isFlat() && ! isDown() ) {
+    if (! isFlat() && ! isDown()) {
         opt.state |= QStyle::State_Raised;
     }
     opt.text = text();

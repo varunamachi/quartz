@@ -8,9 +8,9 @@ namespace Quartz {
 
 struct RangeWidget::Data
 {
-    Data( QWidget *parent )
-        : m_slider{ new QSlider{ Qt::Horizontal, parent  }}
-        , m_spinBox{ new QSpinBox{ parent }}
+    Data(QWidget *parent)
+        : m_slider(new QSlider(Qt::Horizontal, parent))
+        , m_spinBox(new QSpinBox(parent))
     {
 
     }
@@ -20,9 +20,9 @@ struct RangeWidget::Data
     QSpinBox *m_spinBox;
 };
 
-RangeWidget::RangeWidget( QWidget *parent )
-    : QWidget{ parent }
-    , m_data{ new Data{ this }}
+RangeWidget::RangeWidget(QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(this))
 {
 
 }
@@ -32,28 +32,28 @@ RangeWidget::~RangeWidget()
 
 }
 
-void RangeWidget::setMax( int max )
+void RangeWidget::setMax(int max)
 {
-    if( max >= m_data->m_spinBox->minimum() ) {
-        m_data->m_spinBox->setMaximum( max );
-        m_data->m_slider->setMaximum( max );
+    if (max >= m_data->m_spinBox->minimum()) {
+        m_data->m_spinBox->setMaximum(max);
+        m_data->m_slider->setMaximum(max);
     }
 }
 
-void RangeWidget::setMin( int min )
+void RangeWidget::setMin(int min)
 {
-    if( min <= m_data->m_spinBox->maximum() ) {
-        m_data->m_spinBox->setMinimum( min );
-        m_data->m_slider->setMinimum( min );
+    if (min <= m_data->m_spinBox->maximum()) {
+        m_data->m_spinBox->setMinimum(min);
+        m_data->m_slider->setMinimum(min);
     }
 }
 
-void RangeWidget::setValue( int value )
+void RangeWidget::setValue(int value)
 {
-    if( value >= m_data->m_spinBox->minimum()
-            && value <= m_data->m_spinBox->maximum() ) {
-        m_data->m_spinBox->setValue( value );
-        m_data->m_slider->setValue( value );
+    if (value >= m_data->m_spinBox->minimum()
+            && value <= m_data->m_spinBox->maximum()) {
+        m_data->m_spinBox->setValue(value);
+        m_data->m_slider->setValue(value);
     }
 }
 

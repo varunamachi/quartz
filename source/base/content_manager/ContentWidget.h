@@ -12,10 +12,10 @@ class QUARTZ_BASE_API ContentWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ContentWidget( const QString &id,
+    ContentWidget(const QString &id,
                    const QString &name,
                    const QString &kind,
-                   QWidget *parent = nullptr );
+                   QWidget *parent = nullptr);
 
     ~ContentWidget();
 
@@ -27,7 +27,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

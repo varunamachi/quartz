@@ -16,31 +16,31 @@
 
 CustomShadowEffect::CustomShadowEffect(QObject *parent) :
     QGraphicsEffect(parent),
-    _distance( static_cast< qreal >( 4.0f )),
-    _blurRadius( static_cast< qreal >( 10.0f )),
+    _distance(static_cast<qreal>(4.0f)),
+    _blurRadius(static_cast<qreal>(10.0f)),
     _color(0, 0, 0, 80)
 {
 }
 
 QT_BEGIN_NAMESPACE
-  extern Q_WIDGETS_EXPORT void qt_blurImage( QPainter *p,
+  extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p,
                                              QImage &blurImage,
                                              qreal radius, bool quality,
                                              bool alphaOnly,
-                                             int transposed = 0 );
+                                             int transposed = 0);
 QT_END_NAMESPACE
 
 
-void CustomShadowEffect::draw( QPainter* painter )
+void CustomShadowEffect::draw(QPainter* painter)
 {
     // if nothing to show outside the item, just draw source
-    if (( blurRadius() + distance() ) <= 0 ) {
+    if ((blurRadius() + distance()) <= 0) {
         drawSource(painter);
         return;
     }
     PixmapPadMode mode = QGraphicsEffect::PadToEffectiveBoundingRect;
     QPoint offset;
-    const QPixmap px = sourcePixmap( Qt::DeviceCoordinates, &offset, mode );
+    const QPixmap px = sourcePixmap(Qt::DeviceCoordinates, &offset, mode);
 
     // return if no source
     if (px.isNull())
@@ -51,8 +51,8 @@ void CustomShadowEffect::draw( QPainter* painter )
     painter->setWorldTransform(QTransform());
 
     // Calculate size for the background image
-    QSize szi( px.size().width() + 2 * static_cast< int >( distance() ),
-               px.size().height() + 2 * static_cast< int >( distance() ));
+    QSize szi(px.size().width() + 2 * static_cast<int>(distance()),
+               px.size().height() + 2 * static_cast<int>(distance()));
 
     QImage tmp(szi, QImage::Format_ARGB32_Premultiplied);
     QPixmap scaled = px.scaled(szi);
@@ -88,7 +88,7 @@ void CustomShadowEffect::draw( QPainter* painter )
 }
 
 
-QRectF CustomShadowEffect::boundingRectFor(const QRectF& rect) const
+QRectF CustomShadowEffect::boundingRectfor (const QRectF& rect) const
 {
     qreal delta = blurRadius() + distance();
     return rect.united(rect.adjusted(-delta, -delta, delta, delta));

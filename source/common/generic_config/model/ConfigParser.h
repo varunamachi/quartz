@@ -23,19 +23,19 @@ public:
 
     virtual ~ConfigParser();
 
-    QVector< std::shared_ptr< Config >> parse( const QByteArray &content );
+    QVector<std::shared_ptr<Config>> parse(const QByteArray &content);
 
-    std::unique_ptr< Config > parse( const QDomElement &configRoot );
+    std::unique_ptr<Config> parse(const QDomElement &configRoot);
 
 
 protected:
-    std::shared_ptr< Param > parseParam(
+    std::shared_ptr<Param> parseParam(
             Config &config,
-            const QDomElement &paramNode );
+            const QDomElement &paramNode);
 
-    std::shared_ptr< Group > parseGroup(
+    std::shared_ptr<Group> parseGroup(
             Config &config,
-            const QDomElement &groupNode );
+            const QDomElement &groupNode);
 
 };
 

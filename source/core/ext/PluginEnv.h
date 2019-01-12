@@ -14,9 +14,9 @@ namespace Quartz { namespace Ext {
 class QUARTZ_CORE_API PluginEnv
 {
 public:
-    PluginEnv( const QString &pluginPath,
+    PluginEnv(const QString &pluginPath,
                const QString &pluginLibName,
-               const QString &platformVersion );
+               const QString &platformVersion);
 
     ~PluginEnv();
 
@@ -28,7 +28,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } }

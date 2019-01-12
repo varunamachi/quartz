@@ -6,7 +6,7 @@ namespace Quartz {
 
 struct AbstractSelector::Data
 {
-    Data( const QString &id,
+    Data(const QString &id,
           const QString &name,
           const QIcon &icon,
           const QIcon &activeIcon)
@@ -29,13 +29,13 @@ struct AbstractSelector::Data
 };
 
 
-AbstractSelector::AbstractSelector( const QString &id,
+AbstractSelector::AbstractSelector(const QString &id,
                                     const QString &name,
                                     const QIcon &icon,
                                     const QIcon &activeIcon,
-                                    QWidget *parent )
-    : QWidget( parent )
-    , m_data(std::make_unique< AbstractSelector::Data >(
+                                    QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<AbstractSelector::Data>(
                  id,
                  name,
                  icon,

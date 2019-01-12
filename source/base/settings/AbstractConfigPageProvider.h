@@ -10,8 +10,8 @@ namespace Quartz {
 class QUARTZ_BASE_API AbstractConfigPageProvider : public Ext::Extension
 {
 public:
-    AbstractConfigPageProvider( const QString &pluginId,
-                                const QString &pluginName );
+    AbstractConfigPageProvider(const QString &pluginId,
+                                const QString &pluginName);
 
     ~AbstractConfigPageProvider();
 

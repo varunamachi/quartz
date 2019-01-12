@@ -33,24 +33,24 @@
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
 using SerialErrorFunc =
-    void ( QSerialPort::* )( QSerialPort::SerialPortError );
+    void (QSerialPort::*)(QSerialPort::SerialPortError);
 
-using ComboIdxFunc = void ( QComboBox::* )( int );
+using ComboIdxFunc = void (QComboBox::*)(int);
 
 struct ConsoleHolder::Data
 {
-    explicit Data( std::unique_ptr< SerialSettings > settings,
-                   QWidget *parent );
+    explicit Data(std::unique_ptr<SerialSettings> settings,
+                   QWidget *parent);
 
-    void setEnabled( bool value );
+    void setEnabled(bool value);
 
     void updateDisplayName();
 
     void updateCompleteInfo();
 
-    void setBaudRate( int index );
+    void setBaudRate(int index);
 
-    std::unique_ptr< SerialSettings > m_settings;
+    std::unique_ptr<SerialSettings> m_settings;
 
     QToolBar *m_toolBar;
 
@@ -80,76 +80,76 @@ struct ConsoleHolder::Data
 
 };
 
-ConsoleHolder::Data::Data( std::unique_ptr< SerialSettings > settings,
-                           QWidget *parent )
-    : m_settings{ std::move( settings )}
-    , m_toolBar{ new QToolBar{ parent }}
+ConsoleHolder::Data::Data(std::unique_ptr<SerialSettings> settings,
+                           QWidget *parent)
+    : m_settings(std::move(settings))
+    , m_toolBar(new QToolBar(parent))
     , m_connect{ new QAction(
                      getIcon(FAIcon::Plug),
                      QObject::tr("Connect"),
                      parent)}
     , m_disconnect{ new QAction(
                         getIcon(MatIcon::Block),
-                        QObject::tr( "Disconnect" ),
-                        parent )}
+                        QObject::tr("Disconnect"),
+                        parent)}
     , m_clearConsole{ new QAction(
                           getIcon(FAIcon::Broom),
-                          QObject::tr( "Clear Input" ),
+                          QObject::tr("Clear Input"),
                           parent)}
     , m_lockOutput{ new QAction(
                         getIcon(MatIcon::Lock),
-                        QObject::tr( "Lock" ),
-                        parent )}
-    , m_console{ new ConsoleWidget{ parent }}
-    , m_outConsole{ new QPlainTextEdit{ parent }}
-    , m_baudCombo{ new QComboBox{ parent }}
-    , m_serial{ new QSerialPort{ parent }}
-    , m_intValidator{ new QIntValidator{ 0, 40000000, parent }}
+                        QObject::tr("Lock"),
+                        parent)}
+    , m_console(new ConsoleWidget(parent))
+    , m_outConsole(new QPlainTextEdit(parent))
+    , m_baudCombo(new QComboBox(parent))
+    , m_serial(new QSerialPort(parent))
+    , m_intValidator(new QIntValidator(0, 40000000, parent))
 {
     m_lockOutput->setCheckable(true);
 
-    m_baudCombo->addItems( SerialUtils::allBaudRates() );
-    auto curBaudText = QString::number( m_settings->baudRate() );
-    m_baudCombo->setCurrentText( curBaudText );
+    m_baudCombo->addItems(SerialUtils::allBaudRates());
+    auto curBaudText = QString::number(m_settings->baudRate());
+    m_baudCombo->setCurrentText(curBaudText);
 
-    m_toolBar->addAction( m_connect );
-    m_toolBar->addAction( m_disconnect );
-    m_toolBar->addAction( m_clearConsole );
-    m_toolBar->addAction( m_lockOutput );
+    m_toolBar->addAction(m_connect);
+    m_toolBar->addAction(m_disconnect);
+    m_toolBar->addAction(m_clearConsole);
+    m_toolBar->addAction(m_lockOutput);
     m_toolBar->addSeparator();
     m_toolBar->addWidget(new QLabel(tr("    Baud Rate: ")));
     m_baudCombo->setMinimumWidth(200);
-    m_toolBar->addWidget( m_baudCombo );
+    m_toolBar->addWidget(m_baudCombo);
 
     QPalette p = m_outConsole->palette();
-    p.setColor( QPalette::Base, Qt::black );
-    p.setColor( QPalette::Text, Qt::green );
-    m_outConsole->setPalette( p );
-    m_outConsole->setReadOnly( true );
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::green);
+    m_outConsole->setPalette(p);
+    m_outConsole->setReadOnly(true);
 #ifdef Q_OS_WIN
-    m_outConsole->setFont( QFont{ "Consolas", 12 });
+    m_outConsole->setFont(QFont("Consolas", 12));
 #else
-    m_outConsole->setFont( QFont{ "Ubuntu Mono", 12 });
+    m_outConsole->setFont(QFont("Ubuntu Mono", 12));
 #endif
 
     updateDisplayName();
     updateCompleteInfo();
 }
 
-void ConsoleHolder::Data::setEnabled( bool value )
+void ConsoleHolder::Data::setEnabled(bool value)
 {
-    m_connect->setEnabled( value );
-    m_disconnect->setEnabled( value );
-    m_console->setEnabled( value );
-    m_lockOutput->setEnabled( value );
-    m_baudCombo->setEnabled( value );
+    m_connect->setEnabled(value);
+    m_disconnect->setEnabled(value);
+    m_console->setEnabled(value);
+    m_lockOutput->setEnabled(value);
+    m_baudCombo->setEnabled(value);
 }
 
 void ConsoleHolder::Data::updateDisplayName()
 {
     QTextStream dpnStream{ &m_displayName };
     dpnStream << m_settings->name();
-    if( ! m_settings->info().description().isEmpty() ) {
+    if (! m_settings->info().description().isEmpty()) {
         dpnStream << " : " << m_settings->info().description();
     }
     dpnStream.flush();
@@ -161,31 +161,31 @@ void ConsoleHolder::Data::updateCompleteInfo()
     QTextStream infoStream{ &m_completeInfo };
     const auto &info = m_settings->info();
     infoStream << "<b>Information:</b><br>"
-               << I << tr( "Port Name" ) << ": <b>"
+               << I << tr("Port Name") << ": <b>"
                << info.portName() << "</b><br>"
-               << I << tr( "Description" ) << ": <b>"
+               << I << tr("Description") << ": <b>"
                << info.description() << "</b><br>"
-               << I << tr( "Serial Number" ) << ": <b>"
+               << I << tr("Serial Number") << ": <b>"
                << info.serialNumber() << "</b><br>"
-               << I << tr( "Location" ) << ": <b>"
+               << I << tr("Location") << ": <b>"
                << info.systemLocation() << "</b><br>"
-               << I << tr( "VID" ) << ": <b>"
-               << int( info.vendorIdentifier() ) << "</b><br>"
-               << I << tr( "PID" ) << ": <b>"
-               << int( info.productIdentifier() ) << "</b><br>"
+               << I << tr("VID") << ": <b>"
+               << int(info.vendorIdentifier()) << "</b><br>"
+               << I << tr("PID") << ": <b>"
+               << int(info.productIdentifier()) << "</b><br>"
                << "<br><b>Settings:</b><br>"
-               << I << tr( "Baud Rate" ) << ": <b>"
+               << I << tr("Baud Rate") << ": <b>"
                << m_settings->baudRate() << "</b><br>"
-               << I << tr( "Data Bits" ) << ": <b>"
+               << I << tr("Data Bits") << ": <b>"
                << m_settings->dataBits() << "</b><br>"
-               << I << tr( "Parity" ) << ": <b>"
-               << SerialUtils::decodeParity( m_settings->parity() )
+               << I << tr("Parity") << ": <b>"
+               << SerialUtils::decodeParity(m_settings->parity())
                << "</b><br>"
-               << I << tr( "Stop Bits" ) << ": <b>"
-               << SerialUtils::decodeStopBits( m_settings->stopBits() )
+               << I << tr("Stop Bits") << ": <b>"
+               << SerialUtils::decodeStopBits(m_settings->stopBits())
                << "</b><br>"
-               << I << tr( "Flow Control" ) << ": <b>"
-               << SerialUtils::decodeFlowControl( m_settings->flowControl())
+               << I << tr("Flow Control") << ": <b>"
+               << SerialUtils::decodeFlowControl(m_settings->flowControl())
                << "</b><br>";
     infoStream.flush();
 }
@@ -196,84 +196,84 @@ void ConsoleHolder::Data::updateCompleteInfo()
 //-----------------------real ConsoleHolder----------------------------------
 
 
-ConsoleHolder::ConsoleHolder( std::unique_ptr< SerialSettings > settings,
-                              QWidget *parent )
-    : QWidget{ parent }
-    , m_data{ new Data{ std::move( settings ), this }}
+ConsoleHolder::ConsoleHolder(std::unique_ptr<SerialSettings> settings,
+                              QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(std::move(settings), this))
 {
     auto layout = new QVBoxLayout{};
-    layout->addWidget( m_data->m_toolBar );
+    layout->addWidget(m_data->m_toolBar);
 
-    auto splitter = new QSplitter{ Qt::Horizontal, this };
-    splitter->addWidget( m_data->m_console );
-    splitter->addWidget( m_data->m_outConsole );
-    layout->addWidget( splitter );
-    this->setLayout( layout );
+    auto splitter = new QSplitter(Qt::Horizontal, this);
+    splitter->addWidget(m_data->m_console);
+    splitter->addWidget(m_data->m_outConsole);
+    layout->addWidget(splitter);
+    this->setLayout(layout);
 
-    auto errorFunc = [ this ]( QSerialPort::SerialPortError err ) {
-        if( err == QSerialPort::ResourceError ) {
+    auto errorFunc = [ this ](QSerialPort::SerialPortError err) {
+        if (err == QSerialPort::ResourceError) {
             QMessageBox::critical(
                         this,
                         tr(" Serial Port Error"),
-                        m_data->m_serial->errorString() );
+                        m_data->m_serial->errorString());
             this->disconnectSerial();
         }
         else if (err == QSerialPort::NotOpenError) {
             m_data->setEnabled(false);
         }
-        if( err != QSerialPort::NoError ) {
+        if (err != QSerialPort::NoError) {
             QZP_ERROR << "Serial port error occured. Code: " << err
                       <<". " << m_data->m_serial->errorString();
         }
     };
-    connect( m_data->m_serial,
-             static_cast< SerialErrorFunc >( &QSerialPort::error ),
-             errorFunc );
-    connect( m_data->m_connect,
+    connect(m_data->m_serial,
+             static_cast<SerialErrorFunc>(&QSerialPort::error),
+             errorFunc);
+    connect(m_data->m_connect,
              &QAction::triggered,
              this,
-             &ConsoleHolder::connectSerial );
-    connect( m_data->m_disconnect,
+             &ConsoleHolder::connectSerial);
+    connect(m_data->m_disconnect,
              &QAction::triggered,
              this,
-             &ConsoleHolder::disconnectSerial );
-    connect( m_data->m_clearConsole,
+             &ConsoleHolder::disconnectSerial);
+    connect(m_data->m_clearConsole,
              &QAction::triggered,
              m_data->m_console,
-             &ConsoleWidget::clearConsole );
-    connect( m_data->m_lockOutput,
+             &ConsoleWidget::clearConsole);
+    connect(m_data->m_lockOutput,
              &QAction::toggled,
              [this](bool val) {
         m_data->m_outputLock = val;
     });
-    connect( m_data->m_baudCombo,
-             static_cast< ComboIdxFunc >( &QComboBox::currentIndexChanged ),
+    connect(m_data->m_baudCombo,
+             static_cast<ComboIdxFunc>(&QComboBox::currentIndexChanged),
              this,
-             &ConsoleHolder::setBaudRate );
-    connect( m_data->m_serial,
+             &ConsoleHolder::setBaudRate);
+    connect(m_data->m_serial,
              &QSerialPort::readyRead,
              [ this ]() {
         auto data = m_data->m_serial->readAll();
-        m_data->m_outConsole->insertPlainText( QString{ data });
+        m_data->m_outConsole->insertPlainText(QString(data));
         if (!m_data->m_outputLock) {
             m_data->m_outConsole->verticalScrollBar()->setValue(
                         m_data->m_outConsole->verticalScrollBar()->maximum());
         }
     });
-    connect( m_data->m_console,
+    connect(m_data->m_console,
              &ConsoleWidget::sigDataEntered,
-             [ this ]( const QByteArray &data ) {
+             [ this ](const QByteArray &data) {
         auto html = "<br>Command: <font color=red><b>"
-                    + QString{ data }
+                    + QString(data)
                     + "</b></font><br>"
                     + "---------------------------------------------------<br>";
-        m_data->m_serial->write( data );
-        m_data->m_outConsole->textCursor().insertHtml( html );
+        m_data->m_serial->write(data);
+        m_data->m_outConsole->textCursor().insertHtml(html);
         m_data->m_outConsole->verticalScrollBar()->setValue(
                     m_data->m_outConsole->verticalScrollBar()->maximum());
     });
 
-    m_data->setEnabled( false );
+    m_data->setEnabled(false);
 }
 
 ConsoleHolder::~ConsoleHolder()
@@ -301,22 +301,22 @@ bool ConsoleHolder::isConnected() const
 bool ConsoleHolder::connectSerial()
 {
     bool result = false;
-    m_data->m_serial->setPortName( m_data->m_settings->name() );
-    m_data->m_serial->setBaudRate( m_data->m_settings->baudRate() );
-    m_data->m_serial->setDataBits( m_data->m_settings->dataBits() );
-    m_data->m_serial->setParity( m_data->m_settings->parity() );
-    m_data->m_serial->setStopBits( m_data->m_settings->stopBits() );
-    m_data->m_serial->setFlowControl( m_data->m_settings->flowControl() );
-    if( ! m_data->m_serial->open( QIODevice::ReadWrite )) {
+    m_data->m_serial->setPortName(m_data->m_settings->name());
+    m_data->m_serial->setBaudRate(m_data->m_settings->baudRate());
+    m_data->m_serial->setDataBits(m_data->m_settings->dataBits());
+    m_data->m_serial->setParity(m_data->m_settings->parity());
+    m_data->m_serial->setStopBits(m_data->m_settings->stopBits());
+    m_data->m_serial->setFlowControl(m_data->m_settings->flowControl());
+    if (! m_data->m_serial->open(QIODevice::ReadWrite)) {
         QZP_ERROR << "Failed to open serial port " << m_data->m_settings->name()
                   << ": " << m_data->m_serial->errorString();
-        m_data->setEnabled( m_data->m_serial->isOpen() );
-        QMessageBox::critical( this,
+        m_data->setEnabled(m_data->m_serial->isOpen());
+        QMessageBox::critical(this,
                                tr(" Serial Port Error"),
-                               m_data->m_serial->errorString() );
+                               m_data->m_serial->errorString());
     }
     else {
-        m_data->setEnabled( true );
+        m_data->setEnabled(true);
         QZP_INFO << "Connecteed to " << m_data->m_serial->portName()
                  << " successfully";
         result = true;
@@ -328,11 +328,11 @@ bool ConsoleHolder::disconnectSerial()
 {
     m_data->m_serial->close();
     bool result = ! m_data->m_serial->isOpen();
-    if( result ) {
-        m_data->setEnabled( false );
+    if (result) {
+        m_data->setEnabled(false);
         QZP_INFO << "Disconnected " << m_data->m_serial->portName()
                  << " successfully";
-        emit serialDisconnected( this );
+        emit serialDisconnected(this);
     }
     return result;
 }
@@ -348,37 +348,37 @@ void ConsoleHolder::updateBaudRates()
     auto newCurIndex = -1;
     m_data->m_baudCombo->clear();
     auto baudRates = SerialUtils::allBaudRates();
-    for( auto i = 0; i < baudRates.size(); ++ i ) {
-        const auto &rate = baudRates.at( i );
-        if( rate == curRate ) {
+    for (auto i = 0; i < baudRates.size(); ++ i) {
+        const auto &rate = baudRates.at(i);
+        if (rate == curRate) {
             newCurIndex = i;
         }
-//        m_data->m_baudCombo->blockSignals( true );
-        m_data->m_baudCombo->addItem( rate );
-//        m_data->m_baudCombo->blockSignals( false );
+//        m_data->m_baudCombo->blockSignals(true);
+        m_data->m_baudCombo->addItem(rate);
+//        m_data->m_baudCombo->blockSignals(false);
     }
-    if( newCurIndex == -1 || curRate.isEmpty() ) {
-        m_data->m_baudCombo->setCurrentIndex( 0 );
+    if (newCurIndex == -1 || curRate.isEmpty()) {
+        m_data->m_baudCombo->setCurrentIndex(0);
     }
-    else if( ! curRate.isEmpty() ){
-        m_data->m_baudCombo->setCurrentIndex( newCurIndex );
+    else if (! curRate.isEmpty()){
+        m_data->m_baudCombo->setCurrentIndex(newCurIndex);
     }
 }
 
-void ConsoleHolder::setBaudRate( int index )
+void ConsoleHolder::setBaudRate(int index)
 {
-    if( index != -1 ) {
+    if (index != -1) {
         auto txt = m_data->m_baudCombo->currentText();
-        auto baud = static_cast< qint32 >( txt.toLong() );
-        if( baud == m_data->m_serial->baudRate() ) {
+        auto baud = static_cast<qint32>(txt.toLong());
+        if (baud == m_data->m_serial->baudRate()) {
             return;
         }
-        if( ! m_data->m_serial->setBaudRate( baud )) {
-            SCOPE_LIMIT( m_data->m_baudCombo->blockSignals( true ),
-                         m_data->m_baudCombo->blockSignals( false ));
+        if (! m_data->m_serial->setBaudRate(baud)) {
+            SCOPE_LIMIT(m_data->m_baudCombo->blockSignals(true),
+                         m_data->m_baudCombo->blockSignals(false));
             auto oldRate = m_data->m_serial->baudRate();
-            auto rateStr = QString::number( oldRate );
-            m_data->m_baudCombo->setCurrentText( rateStr );
+            auto rateStr = QString::number(oldRate);
+            m_data->m_baudCombo->setCurrentText(rateStr);
             QZP_ERROR << "Failed to set baud rate of " << baud << " to "
                       << m_data->m_serial->portName() << ". Reverting to "
                       << oldRate;

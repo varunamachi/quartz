@@ -14,7 +14,7 @@
 namespace Quartz {
 
 struct Item {
-    using Ptr = std::shared_ptr< Item >;
+    using Ptr = std::shared_ptr<Item>;
 
     IdButton *m_btn;
 
@@ -22,36 +22,36 @@ struct Item {
 
     int m_index;
 
-    inline Item( int index, IdButton *btn, QWidget *widget )
-        : m_index( index )
-        , m_btn( btn )
-        , m_widget( widget )
+    inline Item(int index, IdButton *btn, QWidget *widget)
+        : m_index(index)
+        , m_btn(btn)
+        , m_widget(widget)
     {
 
     }
 
-    static inline Item::Ptr create( int index,
+    static inline Item::Ptr create(int index,
                                     IdButton *btn,
-                                    QWidget *widget )
+                                    QWidget *widget)
     {
-        return std::make_shared< Item >( index, btn, widget );
+        return std::make_shared<Item>(index, btn, widget);
     }
 };
 
 struct AbstractContainer::Data
 {
-    Data( int selectorDimention,
+    Data(int selectorDimention,
           int buttonDimention,
           SelectorPosition selectorPosition,
           Qt::Orientation orientation,
           QzScroller *scroller,
-          QStackedWidget *stackedWidget )
-        : m_btnHeight( selectorDimention )
-        , m_btnWidth( buttonDimention )
-        , m_selectorPosition( selectorPosition )
-        , m_orientation( orientation )
-        , m_selector( scroller )
-        , m_stackWidget( stackedWidget )
+          QStackedWidget *stackedWidget)
+        : m_btnHeight(selectorDimention)
+        , m_btnWidth(buttonDimention)
+        , m_selectorPosition(selectorPosition)
+        , m_orientation(orientation)
+        , m_selector(scroller)
+        , m_stackWidget(stackedWidget)
         , m_autoSelPolicy(AutoSelectionPolicy::SelectFirstAdded)
         , m_selectedId("")
     {
@@ -78,13 +78,13 @@ struct AbstractContainer::Data
 };
 
 
-AbstractContainer::AbstractContainer( int selectorDimention,
+AbstractContainer::AbstractContainer(int selectorDimention,
                                     int buttonDimention,
                                     SelectorPosition selectorPosition,
                                     Qt::Orientation orientation,
-                                    QWidget *parent )
-    : QWidget( parent )
-    , m_data( new Data{
+                                    QWidget *parent)
+    : QWidget(parent)
+    , m_data(new Data{
               selectorDimention,
               buttonDimention,
               selectorPosition,
@@ -93,15 +93,15 @@ AbstractContainer::AbstractContainer( int selectorDimention,
                              selectorDimention,
                              selectorDimention,
                              this),
-              new QStackedWidget{ this }})
+              new QStackedWidget(this)})
 {
 
     m_data->m_btnWidth  = buttonDimention;
     m_data->m_btnHeight = selectorDimention;
     if (orientation == Qt::Horizontal) {
-        m_data->m_selector->setMaximumHeight( selectorDimention );
+        m_data->m_selector->setMaximumHeight(selectorDimention);
     } else  {
-        m_data->m_selector->setMaximumWidth( selectorDimention );
+        m_data->m_selector->setMaximumWidth(selectorDimention);
     }
     m_data->m_selector->setContentsMargins(QMargins());
     m_data->m_stackWidget->setContentsMargins(QMargins());
@@ -114,11 +114,11 @@ AbstractContainer::~AbstractContainer()
 }
 
 
-QWidget * AbstractContainer::widget( const QString &id ) const
+QWidget * AbstractContainer::widget(const QString &id) const
 {
     QWidget *widget = nullptr;
-    auto item = m_data->m_items.value( id );
-    if( item ) {
+    auto item = m_data->m_items.value(id);
+    if (item) {
         widget = item->m_widget;
     }
     return widget;
@@ -127,8 +127,8 @@ QWidget * AbstractContainer::widget( const QString &id ) const
 QWidget *AbstractContainer::selectedWidget() const
 {
     QWidget *selected = nullptr;
-    auto item = m_data->m_items.value( m_data->m_selectedId );
-    if( item != nullptr ) {
+    auto item = m_data->m_items.value(m_data->m_selectedId);
+    if (item != nullptr) {
         selected = item->m_widget;
     }
     return selected;
@@ -141,7 +141,7 @@ QString AbstractContainer::currentId() const
 }
 
 
-QList< QString > AbstractContainer::allIds() const
+QList<QString> AbstractContainer::allIds() const
 {
     return m_data->m_items.keys();
 }
@@ -162,7 +162,7 @@ void AbstractContainer::addWidget(
         const QIcon &activeIcon,
         QWidget *widget)
 {
-    if( widget != nullptr ) {
+    if (widget != nullptr) {
 
         IdButton *btn = nullptr;
         if (icon.isNull()) {
@@ -189,14 +189,14 @@ void AbstractContainer::addWidget(
         m_data->m_items.insert(id, item);
         m_data->m_selector->addWidget(btn);
         m_data->m_stackWidget->addWidget(widget);
-        connect( btn,
-                 SIGNAL( activated( QString )),
+        connect(btn,
+                 SIGNAL(activated(QString)),
                  this,
-                 SLOT( select( QString )));
-        widget->setProperty( "item_id", id );
+                 SLOT(select(QString)));
+        widget->setProperty("item_id", id);
         if (m_data->m_autoSelPolicy == AutoSelectionPolicy::SelectFirstAdded) {
-            if( m_data->m_selectedId.isEmpty() ) {
-                this->select( id );
+            if (m_data->m_selectedId.isEmpty()) {
+                this->select(id);
             }
         } else if (m_data->m_autoSelPolicy ==
                    AutoSelectionPolicy::SelectLastAdded) {
@@ -204,41 +204,41 @@ void AbstractContainer::addWidget(
         } else {
             m_data->m_stackWidget->setVisible(false);
         }
-        emit sigAdded( id, widget );
+        emit sigAdded(id, widget);
     }
 }
 
 
-void AbstractContainer::removeWidget( const QString &id )
+void AbstractContainer::removeWidget(const QString &id)
 {
-    auto item = m_data->m_items.value( id );
-    if( item ) {
-        auto theWidget = widget( id );
-        m_data->m_selector->removeWidget( item->m_btn );
-        m_data->m_stackWidget->removeWidget( item->m_widget );
-        m_data->m_items.remove( id );
-        if( m_data->m_selectedId == id ) {
+    auto item = m_data->m_items.value(id);
+    if (item) {
+        auto theWidget = widget(id);
+        m_data->m_selector->removeWidget(item->m_btn);
+        m_data->m_stackWidget->removeWidget(item->m_widget);
+        m_data->m_items.remove(id);
+        if (m_data->m_selectedId == id) {
             m_data->m_selectedId = m_data->m_items.isEmpty()
                     ? ""
                     : m_data->m_items.begin().key();
-            emit sigSelected( m_data->m_selectedId,
-                              selectedWidget() );
+            emit sigSelected(m_data->m_selectedId,
+                              selectedWidget());
         }
         updateIndeces();
-        theWidget->setProperty( "item_id", QVariant() );
-        emit sigRemoved( id );
+        theWidget->setProperty("item_id", QVariant());
+        emit sigRemoved(id);
     }
 }
 
 
-void AbstractContainer::removeWidget( QWidget *widget )
+void AbstractContainer::removeWidget(QWidget *widget)
 {
-    for( auto it = m_data->m_items.begin();
+    for (auto it = m_data->m_items.begin();
          it != m_data->m_items.end();
-         ++ it ) {
+         ++ it) {
         auto item = it.value();
-        if( item->m_widget == widget ) {
-            removeWidget( it.key() );
+        if (item->m_widget == widget) {
+            removeWidget(it.key());
             /* I am not breaking here because same widget might have been added
              * multiple times. If later if we find it not important we can break
              * here.
@@ -247,29 +247,29 @@ void AbstractContainer::removeWidget( QWidget *widget )
     }
 }
 
-void AbstractContainer::select( const QString &id )
+void AbstractContainer::select(const QString &id)
 {
-    auto item = m_data->m_items.value( id );
-    if( item ) {
-        if( m_data->m_selectedId != ""
-                && item->m_index == m_data->m_stackWidget->currentIndex() ) {
-            m_data->m_stackWidget->setVisible( false );
-            item->m_btn->setChecked( false );
+    auto item = m_data->m_items.value(id);
+    if (item) {
+        if (m_data->m_selectedId != ""
+                && item->m_index == m_data->m_stackWidget->currentIndex()) {
+            m_data->m_stackWidget->setVisible(false);
+            item->m_btn->setChecked(false);
             m_data->m_selectedId = "";
         }
         else {
-            auto prev = m_data->m_items.value( m_data->m_selectedId );
-            item->m_btn->setChecked( true );
-            m_data->m_stackWidget->setCurrentIndex( item->m_index );
+            auto prev = m_data->m_items.value(m_data->m_selectedId);
+            item->m_btn->setChecked(true);
+            m_data->m_stackWidget->setCurrentIndex(item->m_index);
             m_data->m_selectedId = id;
-            if( prev != nullptr ) {
-                prev->m_btn->setChecked( false );
+            if (prev != nullptr) {
+                prev->m_btn->setChecked(false);
             }
             else {
-                m_data->m_stackWidget->setVisible( true );
+                m_data->m_stackWidget->setVisible(true);
             }
         }
-        emit sigSelected( id, item->m_widget );
+        emit sigSelected(id, item->m_widget);
     }
 }
 
@@ -277,8 +277,8 @@ void AbstractContainer::hideAll()
 {
     auto item = m_data->m_items.value(m_data->m_selectedId);
     if (item) {
-        m_data->m_stackWidget->setVisible( false );
-        item->m_btn->setChecked( false );
+        m_data->m_stackWidget->setVisible(false);
+        item->m_btn->setChecked(false);
         m_data->m_selectedId = "";
     }
 }
@@ -326,14 +326,14 @@ AutoSelectionPolicy AbstractContainer::autoSelectionPolicy() const
 
 void AbstractContainer::updateIndeces()
 {
-    for( int i = 0;
+    for (int i = 0;
          i < m_data->m_stackWidget->count() && i < m_data->m_items.size()
-         ; ++ i ) {
-        auto widget = m_data->m_stackWidget->widget( i );
-        auto itemId = widget->property( "item_id" );
-        if( itemId.isValid() ) {
+         ; ++ i) {
+        auto widget = m_data->m_stackWidget->widget(i);
+        auto itemId = widget->property("item_id");
+        if (itemId.isValid()) {
             auto id = itemId.toString();
-            auto item = m_data->m_items.value( id );
+            auto item = m_data->m_items.value(id);
             item->m_index = i;
         }
     }
@@ -359,40 +359,40 @@ StackedContainer::StackedContainer(
         int buttonDimention,
         AbstractContainer::SelectorPosition selectorPosition,
         Qt::Orientation orientation,
-        QWidget *parent )
-    : AbstractContainer( selectorDimention,
+        QWidget *parent)
+    : AbstractContainer(selectorDimention,
                          buttonDimention,
                          selectorPosition,
                          orientation,
-                         parent )
+                         parent)
 {
     QBoxLayout *layout = nullptr;
-    if( orientation == Qt::Vertical ) {
+    if (orientation == Qt::Vertical) {
         layout = new QHBoxLayout();
     } else {
         layout = new QVBoxLayout();
     }
-    if( selectorPosition == SelectorPosition::Before ) {
-        layout->addWidget( selector() );
-        layout->addWidget( stackedWidget() );
+    if (selectorPosition == SelectorPosition::Before) {
+        layout->addWidget(selector());
+        layout->addWidget(stackedWidget());
         layout->setAlignment(
                     selector(),
                     orientation == Qt::Horizontal ? Qt::AlignTop
-                                                  : Qt::AlignLeft );
+                                                  : Qt::AlignLeft);
     }
     else {
-        layout->addWidget( stackedWidget() );
-        layout->addWidget( selector() );
+        layout->addWidget(stackedWidget());
+        layout->addWidget(selector());
         layout->setAlignment(
                     selector(),
                     orientation == Qt::Horizontal ? Qt::AlignBottom
-                                                  : Qt::AlignRight );
+                                                  : Qt::AlignRight);
     }
-    layout->setContentsMargins( QMargins{} );
+    layout->setContentsMargins(QMargins{});
     auto margins = this->contentsMargins();
     margins.setLeft(0);
     this->setContentsMargins(margins);
-    this->setLayout( layout );
+    this->setLayout(layout);
 }
 
 StackedContainer::~StackedContainer()

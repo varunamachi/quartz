@@ -10,15 +10,15 @@ class ConsoleWidget : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit ConsoleWidget( QWidget *parent = nullptr );
+    explicit ConsoleWidget(QWidget *parent = nullptr);
 
     ~ConsoleWidget();
 
 signals:
-    void sigDataEntered( const QByteArray &data );
+    void sigDataEntered(const QByteArray &data);
 
 public:
-    void putData( const QByteArray &data );
+    void putData(const QByteArray &data);
 
     QString currentCommand();
 
@@ -28,24 +28,24 @@ public slots:
     void clearHistory();
 
 protected:
-    void keyPressEvent( QKeyEvent *evt ) override;
+    void keyPressEvent(QKeyEvent *evt) override;
 
-    void mousePressEvent( QMouseEvent *evt ) override;
+    void mousePressEvent(QMouseEvent *evt) override;
 
-    void mouseDoubleClickEvent( QMouseEvent *evt ) override;
+    void mouseDoubleClickEvent(QMouseEvent *evt) override;
 
-    void contextMenuEvent( QContextMenuEvent *evt ) override;
+    void contextMenuEvent(QContextMenuEvent *evt) override;
 
 private:
     QString currentLine();
 
-    void insertCommand( const QString &cmd );
+    void insertCommand(const QString &cmd);
 
 private:
     void printPrompt();
 
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

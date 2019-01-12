@@ -34,8 +34,8 @@ StackedSplitContainer::StackedSplitContainer(
     QSizePolicy policy;
     policy.setHorizontalPolicy(QSizePolicy::Expanding);
     policy.setVerticalPolicy(QSizePolicy::Expanding);
-    m_data->m_splitter->setSizePolicy( policy );
-    if( selectorPosition == AbstractContainer::SelectorPosition::Before ) {
+    m_data->m_splitter->setSizePolicy(policy);
+    if (selectorPosition == AbstractContainer::SelectorPosition::Before) {
         m_data->m_splitter->addWidget(selector());
         m_data->m_splitter->addWidget(stackedWidget());
     }
@@ -48,7 +48,7 @@ StackedSplitContainer::StackedSplitContainer(
     layout->addWidget(m_data->m_splitter);
     this->setLayout(layout);
     this->setContentsMargins({});
-    m_data->m_splitter->setContentsMargins( QMargins{} );
+    m_data->m_splitter->setContentsMargins(QMargins{});
     layout->setContentsMargins({});
     m_data->m_splitter->setObjectName("selector-splitter");
     m_data->m_splitter->setStyleSheet(
@@ -62,7 +62,7 @@ StackedSplitContainer::~StackedSplitContainer()
 
 void StackedSplitContainer::setContentWidget(
         QWidget *widget,
-        AbstractContainer::SelectorPosition position )
+        AbstractContainer::SelectorPosition position)
 {
     if (position == AbstractContainer::SelectorPosition::Before) {
         m_data->m_splitter->insertWidget(0, widget);
@@ -72,11 +72,11 @@ void StackedSplitContainer::setContentWidget(
     m_data->m_contentWidget = widget;
 }
 
-void StackedSplitContainer::setSizes( int selector, int stacked, int content )
+void StackedSplitContainer::setSizes(int selector, int stacked, int content)
 {
-    QList< int > sizes;
+    QList<int> sizes;
     sizes << selector << stacked << content;
-    m_data->m_splitter->setSizes( sizes );
+    m_data->m_splitter->setSizes(sizes);
 }
 
 QString StackedSplitContainer::containerType() const

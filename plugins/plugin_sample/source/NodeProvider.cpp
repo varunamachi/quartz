@@ -13,7 +13,7 @@ const QString NodeProvider::EXTENSION_NAME{
     "Quartz Sample Node" };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
@@ -33,16 +33,16 @@ bool NodeProvider::destroy()
     return true;
 }
 
-QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
 {
-    auto path = Node::toPath( "Plugin>Sample" );
-    auto nodeInfo = std::make_shared< NodeInfo >(
+    auto path = Node::toPath("Plugin>Sample");
+    auto nodeInfo = std::make_shared<NodeInfo>(
                 path,
                 "Sample Node",
                 "qzp.sample.content.one",
                 getIcon(MatIcon::Gesture));
-    QVector< std::shared_ptr< NodeInfo >> nodes;
-    nodes.push_back( nodeInfo );
+    QVector<std::shared_ptr<NodeInfo>> nodes;
+    nodes.push_back(nodeInfo);
     return nodes;
 }
 

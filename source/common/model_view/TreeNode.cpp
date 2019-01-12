@@ -7,11 +7,11 @@ namespace Quartz {
 
 struct TreeNode::Data
 {
-    Data( int numFields,
-          TreeNode *parent )
-        : m_numFields{ numFields }
-        , m_selected{ false }
-        , m_parent{ parent }
+    Data(int numFields,
+          TreeNode *parent)
+        : m_numFields(numFields)
+        , m_selected(false)
+        , m_parent(parent)
     {
 
     }
@@ -27,8 +27,8 @@ struct TreeNode::Data
 
 TreeNode::TreeNode(
         int numFields,
-        TreeNode *parent )
-    : m_data{ new Data{ numFields, parent }}
+        TreeNode *parent)
+    : m_data(std::make_unique<Data>(numFields, parent))
 {
 
 }
@@ -38,7 +38,7 @@ int TreeNode::numFields() const
     return m_data->m_numFields;
 }
 
-void TreeNode::setSelected( bool value )
+void TreeNode::setSelected(bool value)
 {
     m_data->m_selected = value;
 }
@@ -53,11 +53,11 @@ int TreeNode::numChildren() const
     return m_data->m_children.size();
 }
 
-TreeNode * TreeNode::child( int row ) const
+TreeNode * TreeNode::child(int row) const
 {
     TreeNode *child = nullptr;
-    if( row < m_data->m_children.size() ) {
-        child = m_data->m_children.at( row );
+    if (row < m_data->m_children.size()) {
+        child = m_data->m_children.at(row);
     }
     return child;
 }
@@ -67,17 +67,17 @@ TreeNode * TreeNode::parent() const
     return m_data->m_parent;
 }
 
-void TreeNode::setParent( TreeNode *parent )
+void TreeNode::setParent(TreeNode *parent)
 {
     m_data->m_parent = parent;
 }
 
-int TreeNode::indexOfChild( const TreeNode *child ) const
+int TreeNode::indexOfChild(const TreeNode *child) const
 {
     auto index = -1;
-    for( auto i = 0; i < m_data->m_children.size(); ++ i  ) {
-        auto ch = m_data->m_children.at( i );
-        if( ch == child ) {
+    for (auto i = 0; i < m_data->m_children.size(); ++ i) {
+        auto ch = m_data->m_children.at(i);
+        if (ch == child) {
             index = i;
             break;
         }
@@ -85,28 +85,28 @@ int TreeNode::indexOfChild( const TreeNode *child ) const
     return index;
 }
 
-bool TreeNode::isEditable( int /*column*/ ) const
+bool TreeNode::isEditable(int /*column*/) const
 {
     //Default impl, nothing is editable
     return false;
 }
 
-bool TreeNode::setData( int /*column*/, const QVariant &/*data*/ )
+bool TreeNode::setData(int /*column*/, const QVariant &/*data*/)
 {
     //Default implementation does not do anything...
     return false;
 }
 
-void TreeNode::addChild( TreeNode *child )
+void TreeNode::addChild(TreeNode *child)
 {
-    if( child != nullptr ) {
-        m_data->m_children.append( child );
+    if (child != nullptr) {
+        m_data->m_children.append(child);
     }
 }
 
-void TreeNode::removeChild( TreeNode *child )
+void TreeNode::removeChild(TreeNode *child)
 {
-    m_data->m_children.removeAll( child );
+    m_data->m_children.removeAll(child);
 }
 
 

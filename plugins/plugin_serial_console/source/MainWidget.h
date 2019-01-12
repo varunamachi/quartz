@@ -10,7 +10,7 @@ class MainWidget : public ContentWidget
 {
     Q_OBJECT
 public:
-    explicit MainWidget( QWidget *parent = nullptr );
+    explicit MainWidget(QWidget *parent = nullptr);
 
     ~MainWidget();
 
@@ -27,7 +27,7 @@ public slots:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } } }

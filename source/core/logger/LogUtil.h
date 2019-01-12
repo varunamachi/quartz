@@ -35,9 +35,9 @@ class LogMessage;
 class QUARTZ_CORE_API  LogUtil
 {
 public:
-    static QString format( const LogMessage *message );
+    static QString format(const LogMessage *message);
 
-    static QString getSeverityString( LogLevel level );
+    static QString getSeverityString(LogLevel level);
 
 private:
     LogUtil() { }

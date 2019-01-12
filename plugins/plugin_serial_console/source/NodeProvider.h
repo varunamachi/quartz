@@ -16,7 +16,7 @@ public:
 
     bool destroy() override;
 
-    QVector< std::shared_ptr< NodeInfo >> nodes() const override;
+    QVector<std::shared_ptr<NodeInfo>> nodes() const override;
 
     static const QString EXTENSION_ID;
 

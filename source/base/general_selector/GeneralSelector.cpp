@@ -14,15 +14,15 @@
 namespace Quartz {
 
 const QString GeneralSelector::SELECTOR_ID{ "qz.node_selector" };
-const QString GeneralSelector::SELECTOR_NAME{ "PAGES" };
+const QString GeneralSelector::SELECTOR_NAME("PAGES");
 
 
 struct GeneralSelector::Data
 {
-    explicit Data( QTreeView *treeView,
-                   GeneralNodeTree *model )
-        : m_view( treeView )
-        , m_model( model )
+    explicit Data(QTreeView *treeView,
+                   GeneralNodeTree *model)
+        : m_view(treeView)
+        , m_model(model)
     {
 
     }
@@ -32,31 +32,31 @@ struct GeneralSelector::Data
     GeneralNodeTree *m_model;
 };
 
-GeneralSelector::GeneralSelector( QWidget *parent )
-    : AbstractSelector( SELECTOR_ID,
+GeneralSelector::GeneralSelector(QWidget *parent)
+    : AbstractSelector(SELECTOR_ID,
                         SELECTOR_NAME,
                         getNormalIcon(MatIcon::Pages),
                         getActiveIcon(MatIcon::Pages),
-                        parent )
-//    , m_data( std::make_unique< Data >( new QTreeView( this )))
-    , m_data( new GeneralSelector::Data( new QTreeView( this ),
-                                         new GeneralNodeTree( this )))
+                        parent)
+//    , m_data(std::make_unique<Data>(new QTreeView(this)))
+    , m_data(new GeneralSelector::Data(new QTreeView(this),
+                                         new GeneralNodeTree(this)))
 {
     auto layout = new QVBoxLayout();
     //deligate
-    m_data->m_view->setModel( m_data->m_model );
-    m_data->m_view->header()->setVisible( false );
-    m_data->m_view->setSelectionMode( QAbstractItemView::SingleSelection );
-    m_data->m_view->setSelectionBehavior( QAbstractItemView::SelectRows );
-    layout->addWidget( m_data->m_view );
-    this->setLayout( layout );
-    connect( m_data->m_view->selectionModel(),
+    m_data->m_view->setModel(m_data->m_model);
+    m_data->m_view->header()->setVisible(false);
+    m_data->m_view->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_data->m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
+    layout->addWidget(m_data->m_view);
+    this->setLayout(layout);
+    connect(m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
              this,
-             &GeneralSelector::onSelected );
-    this->setContentsMargins( QMargins{ });
-    m_data->m_view->setContentsMargins( QMargins{ });
-    layout->setContentsMargins( QMargins{ });
+             &GeneralSelector::onSelected);
+    this->setContentsMargins(QMargins());
+    m_data->m_view->setContentsMargins(QMargins());
+    layout->setContentsMargins(QMargins());
 }
 
 GeneralSelector::~GeneralSelector()
@@ -72,13 +72,13 @@ GeneralNodeTree *GeneralSelector::model()
 void GeneralSelector::selected()
 {
     const auto &selectionModel = m_data->m_view->selectionModel();
-    if( selectionModel->hasSelection() ) {
+    if (selectionModel->hasSelection()) {
         auto index = selectionModel->currentIndex();
-        onSelected( index, QModelIndex{} );
+        onSelected(index, QModelIndex{});
     }
     else {
-        if( m_data->m_model->rowCount( QModelIndex{} ) != 0 ) {
-            auto index = m_data->m_model->index( 0, 0, QModelIndex{} );
+        if (m_data->m_model->rowCount(QModelIndex{}) != 0) {
+            auto index = m_data->m_model->index(0, 0, QModelIndex{});
             selectionModel->setCurrentIndex(
                         index,
                         QItemSelectionModel::SelectCurrent);
@@ -91,15 +91,15 @@ void GeneralSelector::unselected()
 
 }
 
-void GeneralSelector::onSelected( const QModelIndex &current,
-                                  const QModelIndex &/*previous*/ )
+void GeneralSelector::onSelected(const QModelIndex &current,
+                                  const QModelIndex &/*previous*/)
 {
     if (!current.isValid() || current.internalPointer() == nullptr) {
         return;
     }
-    auto node = static_cast< Node *>( current.internalPointer() );
+    auto node = static_cast< Node *>(current.internalPointer());
     if (appContext()->hasContentManager()) {
-        appContext()->contentManager()->selectContent( node->nodeId() );
+        appContext()->contentManager()->selectContent(node->nodeId());
     }
     emit sigNodeSelected(node);
 }

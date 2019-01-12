@@ -6,15 +6,15 @@
 namespace Quartz {
 
 
-const QVector< QString > HEADERS{
-    QObject::tr( "Name" ),
-    QObject::tr( "Value" )
+const QVector<QString> HEADERS{
+    QObject::tr("Name"),
+    QObject::tr("Value")
 };
 
 struct GenConfigTreeModel::Data
 {
-    explicit Data( Config *config )
-        : m_config{ config }
+    explicit Data(Config *config)
+        : m_config(config)
     {
 
     }
@@ -23,11 +23,11 @@ struct GenConfigTreeModel::Data
 
 };
 
-GenConfigTreeModel::GenConfigTreeModel( Config *config, QObject *parent )
+GenConfigTreeModel::GenConfigTreeModel(Config *config, QObject *parent)
     : AbstractTreeModel{
           parent,
-          AbstractTreeModel::Options{ 2, false, false, HEADERS }}
-    , m_data{ new Data{ config }}
+          AbstractTreeModel::Options(2, false, false, HEADERS)}
+    , m_data(std::make_unique<Data>(config))
 {
 
 }
@@ -37,7 +37,7 @@ GenConfigTreeModel::~GenConfigTreeModel()
 
 }
 
-void GenConfigTreeModel::setConfig( Config *config )
+void GenConfigTreeModel::setConfig(Config *config)
 {
     beginResetModel();
     m_data->m_config = config;
@@ -45,7 +45,7 @@ void GenConfigTreeModel::setConfig( Config *config )
 
 }
 
-TreeNode *GenConfigTreeModel::rootAt( int /*rowIndex*/ ) const
+TreeNode *GenConfigTreeModel::rootAt(int /*rowIndex*/) const
 {
     return m_data->m_config;
 }

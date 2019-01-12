@@ -11,7 +11,7 @@ class BaudRateEditDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BaudRateEditDialog( QWidget *parent );
+    explicit BaudRateEditDialog(QWidget *parent);
 
     ~BaudRateEditDialog();
 
@@ -26,7 +26,7 @@ signals:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } } }

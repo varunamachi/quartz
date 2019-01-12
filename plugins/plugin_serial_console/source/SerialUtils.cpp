@@ -10,9 +10,9 @@
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-QString SerialUtils::decodeParity( QSerialPort::Parity parity )
+QString SerialUtils::decodeParity(QSerialPort::Parity parity)
 {
-    switch( parity ) {
+    switch(parity) {
         case QSerialPort::NoParity:     return "No Parity";
         case QSerialPort::EvenParity:   return "Even";
         case QSerialPort::OddParity:    return "Odd";
@@ -25,7 +25,7 @@ QString SerialUtils::decodeParity( QSerialPort::Parity parity )
 
 QString SerialUtils::decodeStopBits(QSerialPort::StopBits stopBits)
 {
-    switch( stopBits ) {
+    switch(stopBits) {
     case QSerialPort::OneStop:         return "One" ;
     case QSerialPort::OneAndHalfStop:  return "One And Half";
     case QSerialPort::TwoStop:         return "Two";
@@ -36,7 +36,7 @@ QString SerialUtils::decodeStopBits(QSerialPort::StopBits stopBits)
 
 QString SerialUtils::decodeFlowControl(QSerialPort::FlowControl flowControl)
 {
-    switch( flowControl ) {
+    switch(flowControl) {
         case QSerialPort::NoFlowControl:      return "No Flow Control";
         case QSerialPort::HardwareControl:    return "Hardware";
         case QSerialPort::SoftwareControl:    return "Software";
@@ -48,42 +48,42 @@ QString SerialUtils::decodeFlowControl(QSerialPort::FlowControl flowControl)
 QStringList SerialUtils::standardBaudRates()
 {
     QStringList stdRates;
-    stdRates << QStringLiteral( "9600" )
-             << QStringLiteral( "19200" )
-             << QStringLiteral( "38400" )
-             << QStringLiteral( "115200" );
+    stdRates << QStringLiteral("9600")
+             << QStringLiteral("19200")
+             << QStringLiteral("38400")
+             << QStringLiteral("115200");
     return stdRates;
 }
 
 QStringList SerialUtils::customBaudRates()
 {
-    auto var = confman()->retrieve( Constants::KEY_BAUD_RATES,
-                                    Constants::CONFIG_DOMAIN );
+    auto var = confman()->retrieve(Constants::KEY_BAUD_RATES,
+                                    Constants::CONFIG_DOMAIN);
     return var.toStringList();
 }
 
 QStringList SerialUtils::allBaudRates()
 {
     auto rates = standardBaudRates();
-    auto var = confman()->retrieve( Constants::KEY_BAUD_RATES,
-                                    Constants::CONFIG_DOMAIN );
+    auto var = confman()->retrieve(Constants::KEY_BAUD_RATES,
+                                    Constants::CONFIG_DOMAIN);
     QStringList nonStd = var.toStringList();
-    rates.append( nonStd );
+    rates.append(nonStd);
     return rates;
 }
 
-void SerialUtils::storeBaudRates( const QStringList &rates )
+void SerialUtils::storeBaudRates(const QStringList &rates)
 {
     auto stdRates = standardBaudRates();
     QStringList nonStandard;
-    foreach( auto &rate, rates ) {
-        if( ! stdRates.contains( rate )) {
+    foreach(auto &rate, rates) {
+        if (! stdRates.contains(rate)) {
             nonStandard << rate;
         }
     }
-    confman()->store( Constants::KEY_BAUD_RATES,
+    confman()->store(Constants::KEY_BAUD_RATES,
                       nonStandard,
-                      Constants::CONFIG_DOMAIN );
+                      Constants::CONFIG_DOMAIN);
 }
 
 } } }

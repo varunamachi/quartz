@@ -39,11 +39,11 @@ WelcomePage::WelcomePage(const QString &id, QWidget *parent)
         "font-size: 32px;"
         "qproperty-wordWrap: true;"
         "color: " + color.name(QColor::HexArgb)
-    );
+  );
     auto p = this->palette();
     this->setAutoFillBackground(true);
     this->setPalette(p);
-    this->setLayout( layout );
+    this->setLayout(layout);
 }
 
 WelcomePage::~WelcomePage()

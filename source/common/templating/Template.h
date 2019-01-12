@@ -14,24 +14,24 @@ class Config;
 class QUARTZ_COMMON_API Template : public TreeNode
 {
 public:
-    explicit Template( const QString &name,
-                       const QString &content );
+    explicit Template(const QString &name,
+                       const QString &content);
 
     ~Template() override;
 
     QString name() const;
 
-    void setConfig( std::unique_ptr< Config > config );
+    void setConfig(std::unique_ptr<Config> config);
 
     Config * config() const;
 
     const QString & content() const;
 
-    QVariant fieldValue( int field ) const override;
+    QVariant fieldValue(int field) const override;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

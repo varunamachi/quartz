@@ -13,7 +13,7 @@ const QString NodeProvider::EXTENSION_NAME{
     "Quartz Creator Node" };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
@@ -33,15 +33,15 @@ bool NodeProvider::destroy()
     return true;
 }
 
-QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
 {
-    auto nodeInfo = std::make_shared< NodeInfo >(
+    auto nodeInfo = std::make_shared<NodeInfo>(
                 QStringList{},
                 "Creator",
                 "qzp.creator.content.main",
                 getIcon(FAIcon::Magic));
-    QVector< std::shared_ptr< NodeInfo >> nodes;
-    nodes.push_back( nodeInfo );
+    QVector<std::shared_ptr<NodeInfo>> nodes;
+    nodes.push_back(nodeInfo);
     return nodes;
 }
 

@@ -34,9 +34,9 @@ public:
 
     void flush() { /* Nothing here... */ }
 
-    void write( const LogMessage *message );
+    void write(const LogMessage *message);
 
-    void write( const QString message );
+    void write(const QString message);
 
     static const QString TARGET_ID;
 

@@ -6,9 +6,9 @@ namespace Quartz {
 struct QuartzItem::Data
 {
 public:
-    Data( const QString &itemId, const QString &category )
-        : m_itemId( itemId )
-        , m_category( category )
+    Data(const QString &itemId, const QString &category)
+        : m_itemId(itemId)
+        , m_category(category)
     {
 
     }
@@ -20,12 +20,12 @@ public:
 };
 
 
-QuartzItem::QuartzItem( const QString &itemId,
+QuartzItem::QuartzItem(const QString &itemId,
                         const QString &category,
-                        QWidget *parent )
-    : QWidget( parent )
-//    , m_data( std::make_unique< Data >( itemId, category ))
-    , m_data( new Data( itemId, category ))
+                        QWidget *parent)
+    : QWidget(parent)
+//    , m_data(std::make_unique<Data>(itemId, category))
+    , m_data(std::make_unique<Data>(itemId, category))
 {
 
 }

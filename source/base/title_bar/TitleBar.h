@@ -22,26 +22,26 @@ public:
     explicit TitleBar(
             int height,
             bool showWindowControls,
-            QWidget *parent = nullptr );
+            QWidget *parent = nullptr);
 
-    void addItem( QuartzItem *item );
+    void addItem(QuartzItem *item);
 
-    void removeItem( QuartzItem *item );
+    void removeItem(QuartzItem *item);
 
-    void removeItem( const QString &item );
+    void removeItem(const QString &item);
 
     QList< QuartzItem * > items() const;
 
     QList< QuartzItem * > items(const QString category);
 
-    void removeCategory( const QString &category );
+    void removeCategory(const QString &category);
 
 public:
     const QString &extensionType() const override;
 
     const QString &extensionAdapterName() const override;
 
-    bool handleExtension( Ext::Extension *ext ) override;
+    bool handleExtension(Ext::Extension *ext) override;
 
     bool finalizeExtension() override;
 
@@ -55,7 +55,7 @@ signals:
     void sigCloseRequested();
 
 protected:
-    void mouseDoubleClickEvent( QMouseEvent *event );
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     int m_height;

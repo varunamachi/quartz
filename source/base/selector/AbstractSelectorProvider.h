@@ -12,8 +12,8 @@ class AbstractSelector;
 class QUARTZ_BASE_API AbstractSelectorProvider : public Ext::Extension
 {
 public:
-    AbstractSelectorProvider( const QString &pluginId,
-                              const QString &pluginName );
+    AbstractSelectorProvider(const QString &pluginId,
+                              const QString &pluginName);
 
     virtual ~AbstractSelectorProvider();
 

@@ -12,11 +12,11 @@ class QUARTZ_BASE_API PluginInfoPage : public ContentWidget
     Q_OBJECT
 
 public:
-    explicit PluginInfoPage( QWidget *parent = nullptr );
+    explicit PluginInfoPage(QWidget *parent = nullptr);
 
     ~PluginInfoPage();
 
-    void setPlugin( const Plugin *plugin );
+    void setPlugin(const Plugin *plugin);
 
     static const QString CONTENT_ID;
 
@@ -26,7 +26,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

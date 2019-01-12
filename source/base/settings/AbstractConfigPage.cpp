@@ -7,14 +7,14 @@ namespace Quartz {
 
 struct AbstractConfigPage::Data
 {
-    Data( const QStringList &parentPath ,
+    Data(const QStringList &parentPath ,
           const QString &name,
           const QString &id,
-          const QIcon &icon )
-        : m_id( id )
-        , m_name( name )
-        , m_parentPath( parentPath )
-        , m_icon( icon )
+          const QIcon &icon)
+        : m_id(id)
+        , m_name(name)
+        , m_parentPath(parentPath)
+        , m_icon(icon)
     {
 
     }
@@ -29,13 +29,13 @@ struct AbstractConfigPage::Data
 
 };
 
-AbstractConfigPage::AbstractConfigPage( const QStringList &parentPath,
+AbstractConfigPage::AbstractConfigPage(const QStringList &parentPath,
                                         const QString &name,
                                         const QString &id,
                                         const QIcon &icon,
-                                        QWidget *parent )
-    : QWidget{ parent }
-    , m_data{ new Data{ parentPath, name, id, icon }}
+                                        QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(parentPath, name, id, icon))
 {
 
 }

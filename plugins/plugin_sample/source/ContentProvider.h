@@ -10,7 +10,7 @@ class SampleContent : public ContentWidget
     Q_OBJECT
 
 public:
-    explicit SampleContent( QWidget *parent = nullptr );
+    explicit SampleContent(QWidget *parent = nullptr);
 
     static const QString CONTENT_ID;
 

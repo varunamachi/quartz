@@ -10,7 +10,7 @@
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
 const QString Plugin::PLUGIN_ID{ "qzplugin.serial_console" };
-const QString Plugin::PLUGIN_NAME{ "Serial Console " };
+const QString Plugin::PLUGIN_NAME("Serial Console ");
 
 struct Plugin::Data
 {
@@ -20,11 +20,11 @@ struct Plugin::Data
 };
 
 Plugin::Plugin()
-    : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
+    : Quartz::Ext::Plugin(PLUGIN_ID, PLUGIN_NAME)
     , m_data{ new Data{} }
 {
-    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
+    m_data->m_plugins.push_back(std::make_shared<ContentProvider>());
+    m_data->m_plugins.push_back(std::make_shared<NodeProvider>());
 }
 
 Plugin::~Plugin()

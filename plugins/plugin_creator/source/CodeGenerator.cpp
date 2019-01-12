@@ -16,8 +16,8 @@ namespace Quartz { namespace Ext { namespace Creator {
 
 struct CodeGenerator::Data
 {
-    Data( const GenInfo *info )
-        : m_info{ info }
+    Data(const GenInfo *info)
+        : m_info(info)
     {
 
     }
@@ -27,8 +27,8 @@ struct CodeGenerator::Data
     QString m_lastError;
 };
 
-CodeGenerator::CodeGenerator( const GenInfo *info )
-    : m_data{ new Data{ info }}
+CodeGenerator::CodeGenerator(const GenInfo *info)
+    : m_data(std::make_unique<Data>(info))
 {
 
 }
@@ -38,19 +38,19 @@ CodeGenerator::~CodeGenerator()
 
 }
 
-bool CodeGenerator::generate( const QString &path )
+bool CodeGenerator::generate(const QString &path)
 {
     bool result = true;
-    for( auto i = 0; i < m_data->m_info->numTemplateInstances(); ++ i ) {
-        auto tinst = m_data->m_info->templateInstanceAt( i );
-        result = this->generateForInstance( path, tinst ) && result;
+    for (auto i = 0; i < m_data->m_info->numTemplateInstances(); ++ i) {
+        auto tinst = m_data->m_info->templateInstanceAt(i);
+        result = this->generateForInstance(path, tinst) && result;
     }
-    if( result ) {
-        QDir dir{ path };
+    if (result) {
+        QDir dir(path);
         QString msg;
-        if( dir.mkdir( "resources" )) {
-            QFile ptxt{ dir.absoluteFilePath( "resources/plugin.txt" )};
-            if( ptxt.open( QFile::ReadWrite )) {
+        if (dir.mkdir("resources")) {
+            QFile ptxt{ dir.absoluteFilePath("resources/plugin.txt")};
+            if (ptxt.open(QFile::ReadWrite)) {
                 QTextStream fstream{ &ptxt };
                 fstream << "#Created By Quartz Plugin Creator\n"
                         << "id=" << m_data->m_info->id()  << '\n'
@@ -63,34 +63,34 @@ bool CodeGenerator::generate( const QString &path )
                 QZP_ERROR << "Failed to create plugin.txt at " <<
                              path << "/resources";
                 m_data->m_lastError = QObject::tr(
-                            "Failed to create plugin.txt in resource dir" );
+                            "Failed to create plugin.txt in resource dir");
                 result = false;
             }
         }
         else {
             QZP_ERROR << "Failed to create resource directory at " << path;
             m_data->m_lastError =
-                    QObject::tr( "Failed to create resource dir at %1" )
-                        .arg( path );
+                    QObject::tr("Failed to create resource dir at %1")
+                        .arg(path);
             result = false;
         }
-        if( ! result ) {
+        if (! result) {
             this->m_data->m_lastError = msg;
         }
     }
-    if( result ) {
+    if (result) {
         QZP_INFO << "Created plugin with id "
                  << m_data->m_info->id()
                  << " at " << path;
         m_data->m_lastError = QObject::tr(
-                    "Plugin %1 created successfully" ).arg(
-                        m_data->m_info->id() );
+                    "Plugin %1 created successfully").arg(
+                        m_data->m_info->id());
     }
     else {
         QZP_ERROR << "Could not create plugin with "
                   << m_data->m_info->id() << " at " << path;
         m_data->m_lastError = QObject::tr(
-                    "Could not create plugin %1" ).arg( m_data->m_info->id() );
+                    "Could not create plugin %1").arg(m_data->m_info->id());
 
     }
     return result;
@@ -101,31 +101,31 @@ const QString & CodeGenerator::lastError() const
     return m_data->m_lastError;
 }
 
-bool CodeGenerator::generateForInstance( const QString &path,
-                                         const TemplateInstance *instance )
+bool CodeGenerator::generateForInstance(const QString &path,
+                                         const TemplateInstance *instance)
 {
     auto filePath = path + "/" + instance->name();
-    QFile genFile{ filePath };
-    if(  genFile.exists() ) {
+    QFile genFile(filePath);
+    if (genFile.exists()) {
         QZP_ERROR << "Could not generate file " << instance->name()
                   << ", target already exists at: " << filePath;
         m_data->m_lastError = QObject::tr(
                     "Template Generation: output file %1 already exist, cannot "
-                    "overwrite").arg( path );
+                    "overwrite").arg(path);
         return false;
     }
-    if( ! genFile.open( QFile::ReadWrite )) {
+    if (! genFile.open(QFile::ReadWrite)) {
         QZP_ERROR << "Could not generate file " << instance->name()
                   << ", failed to create" << filePath;
         m_data->m_lastError = QObject::tr(
                     "Template Generation: Failed to create file at %1")
-                .arg( path );
+                .arg(path);
         return false;
     }
     QTextStream stream{ &genFile };
-    AdvancedTemplateProcessor tproc{ instance };
-    auto result = tproc.process( stream );
-    if( ! result ) {
+    AdvancedTemplateProcessor tproc(instance);
+    auto result = tproc.process(stream);
+    if (! result) {
         m_data->m_lastError = tproc.lastError();
     }
     return result;

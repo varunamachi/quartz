@@ -30,21 +30,21 @@ public:
 
     static void destroy();
 
-    static void init( std::unique_ptr< Plugin > plugin,
-                      std::unique_ptr< PluginEnv > env,
-                      QzAppContext *appContext );
+    static void init(std::unique_ptr<Plugin> plugin,
+                      std::unique_ptr<PluginEnv> env,
+                      QzAppContext *appContext);
 
     static PluginContext * instance();
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
-    static std::unique_ptr< PluginContext > s_instance;
+    static std::unique_ptr<PluginContext> s_instance;
 
-    PluginContext( std::unique_ptr< Plugin > plugin,
-                   std::unique_ptr< PluginEnv > env,
-                   QzAppContext *appContext );
+    PluginContext(std::unique_ptr<Plugin> plugin,
+                   std::unique_ptr<PluginEnv> env,
+                   QzAppContext *appContext);
 };
 
 } }

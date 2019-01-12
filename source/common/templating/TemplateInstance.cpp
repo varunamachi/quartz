@@ -11,33 +11,33 @@ namespace Quartz {
 
 struct TemplateInstance::Data
 {
-    Data( const QString &name,
-          std::unique_ptr< Config > config,
-          Template *parent )
-     : m_name{ name }
-     , m_config{ std::move( config )}
-     , m_parent{ parent }
-     , m_selected{ false }
+    Data(const QString &name,
+          std::unique_ptr<Config> config,
+          Template *parent)
+     : m_name(name)
+     , m_config(std::move(config))
+     , m_parent(parent)
+     , m_selected(false)
     {
 
     }
 
     QString m_name;
 
-    std::unique_ptr< Config > m_config;
+    std::unique_ptr<Config> m_config;
 
     Template *m_parent;
 
     bool m_selected;
 
-    std::shared_ptr< GlobalConfig > m_globalConfig;
+    std::shared_ptr<GlobalConfig> m_globalConfig;
 };
 
-TemplateInstance::TemplateInstance( const QString &name,
-                                    std::unique_ptr< Config > config,
-                                    Template *parent  )
-    : TreeNode{ 1, parent }
-    , m_data{ new Data{ name, std::move( config ), parent }}
+TemplateInstance::TemplateInstance(const QString &name,
+                                    std::unique_ptr<Config> config,
+                                    Template *parent)
+    : TreeNode(1, parent)
+    , m_data(std::make_unique<Data>(name, std::move(config), parent))
 {
 
 }
@@ -57,55 +57,55 @@ Template * TemplateInstance::instanceOf() const
     return m_data->m_parent;
 }
 
-void TemplateInstance::setGlobalConfig( std::shared_ptr< GlobalConfig > gconf )
+void TemplateInstance::setGlobalConfig(std::shared_ptr<GlobalConfig> gconf)
 {
     m_data->m_globalConfig = gconf;
 }
 
-QVariant TemplateInstance::globalConfig( const QString &key ) const
+QVariant TemplateInstance::globalConfig(const QString &key) const
 {
-    return m_data->m_globalConfig->value( key );
+    return m_data->m_globalConfig->value(key);
 }
 
-const Param * TemplateInstance::param( const QString &paramName ) const
+const Param * TemplateInstance::param(const QString &paramName) const
 {
-    auto param = m_data->m_config->param( paramName );
+    auto param = m_data->m_config->param(paramName);
     return param;
 }
 
-Param *TemplateInstance::param( const QString &paramName )
+Param *TemplateInstance::param(const QString &paramName)
 {
-    auto param = m_data->m_config->param( paramName );
+    auto param = m_data->m_config->param(paramName);
     return param;
 }
 
-QVariant TemplateInstance::paramValue( const QString &paramName,
-                                       const QString defValue ) const
+QVariant TemplateInstance::paramValue(const QString &paramName,
+                                       const QString defValue) const
 {
-    auto val = m_data->m_globalConfig->value( paramName );
-    auto param = m_data->m_config->param( paramName );
-    if( param != nullptr ) {
+    auto val = m_data->m_globalConfig->value(paramName);
+    auto param = m_data->m_config->param(paramName);
+    if (param != nullptr) {
         return param->value();
     }
     return val.isValid() ? val : defValue;
 }
 
-QVariant TemplateInstance::fieldValue( int column ) const
+QVariant TemplateInstance::fieldValue(int column) const
 {
-    switch( column ) {
+    switch(column) {
     case 0: return m_data->m_name;
     }
     return QVariant{};
 }
 
-bool TemplateInstance::isEditable( int column ) const
+bool TemplateInstance::isEditable(int column) const
 {
     return column == 0;
 }
 
-bool TemplateInstance::setData( int column, const QVariant &data )
+bool TemplateInstance::setData(int column, const QVariant &data)
 {
-    if( column == 0 ) {
+    if (column == 0) {
         m_data->m_name= data.toString();
         return true;
     }
@@ -120,12 +120,12 @@ Config * TemplateInstance::instanceConfig()
 QVariantHash TemplateInstance::allParams() const
 {
     QVariantHash out;
-    for(auto it = m_data->m_globalConfig->begin();
+    for (auto it = m_data->m_globalConfig->begin();
         it != m_data->m_globalConfig->end();
         ++ it) {
         out[it.key()] = it.value();
     }
-    for(auto it = m_data->m_config->allParams().begin();
+    for (auto it = m_data->m_config->allParams().begin();
         it != m_data->m_config->allParams().begin();
         ++ it) {
         out[it.key()] = it.value()->value();

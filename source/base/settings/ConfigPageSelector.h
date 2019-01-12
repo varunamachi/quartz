@@ -18,7 +18,7 @@ class QUARTZ_BASE_API ConfigPageSelector : public AbstractSelector
     Q_OBJECT
 
 public:
-    explicit ConfigPageSelector( QWidget *parent = nullptr );
+    explicit ConfigPageSelector(QWidget *parent = nullptr);
 
     ~ConfigPageSelector();
 
@@ -37,24 +37,24 @@ public:
 
     const QString &extensionAdapterName() const override;
 
-    bool handleExtension( Ext::Extension *extension) override;
+    bool handleExtension(Ext::Extension *extension) override;
 
     bool finalizeExtension() override;
 
-    bool addPage( AbstractConfigPage *page );
+    bool addPage(AbstractConfigPage *page);
 
     static const QString ADAPTER_NAME;
 
 signals:
-    void sigConfigNodeSelected( const Node *node );
+    void sigConfigNodeSelected(const Node *node);
 
 private slots:
-    void onSelected( const QModelIndex &current,
-                     const QModelIndex &previous );
+    void onSelected(const QModelIndex &current,
+                     const QModelIndex &previous);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

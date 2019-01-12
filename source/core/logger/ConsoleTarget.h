@@ -33,9 +33,9 @@ public:
 
     void flush() override;
 
-    void write( const LogMessage *message ) override;
+    void write(const LogMessage *message) override;
 
-    void write( QString &&message ) override;
+    void write(QString &&message) override;
 
     static const QString TARGET_ID;
 

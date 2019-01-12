@@ -5,36 +5,36 @@
 
 namespace Quartz {
 
-EditorDelegate::EditorDelegate( QWidget *parent )
-    : QStyledItemDelegate{ parent }
+EditorDelegate::EditorDelegate(QWidget *parent)
+    : QStyledItemDelegate(parent)
 {
 
 }
 
-QWidget* EditorDelegate::createEditor( QWidget* parent,
+QWidget* EditorDelegate::createEditor(QWidget* parent,
                                        const QStyleOptionViewItem &/*option*/,
-                                       const QModelIndex &/*index*/ ) const
+                                       const QModelIndex &/*index*/) const
 {
-    return new QLineEdit{ parent };
+    return new QLineEdit(parent);
 }
 
-void EditorDelegate::setEditorData( QWidget *editor,
+void EditorDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    auto txt = qobject_cast< QLineEdit *>( editor );
-    if( txt != nullptr ) {
-        txt->setText( index.data().toString() );
+    auto txt = qobject_cast< QLineEdit *>(editor);
+    if (txt != nullptr) {
+        txt->setText(index.data().toString());
     }
 }
 
 
-void EditorDelegate::setModelData( QWidget *editor,
+void EditorDelegate::setModelData(QWidget *editor,
                                    QAbstractItemModel *model,
-                                   const  QModelIndex &index ) const
+                                   const  QModelIndex &index) const
 {
-    auto txt = qobject_cast< QLineEdit *>( editor );
-    if( txt != nullptr ) {
-        model->setData( index, txt->text() );
+    auto txt = qobject_cast< QLineEdit *>(editor);
+    if (txt != nullptr) {
+        model->setData(index, txt->text());
     }
 }
 

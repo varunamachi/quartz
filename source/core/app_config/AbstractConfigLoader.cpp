@@ -5,8 +5,8 @@ namespace Quartz {
 
 struct AbstractConfigLoader::Data
 {
-    explicit Data( StoreFunc func )
-        : m_func( func )
+    explicit Data(StoreFunc func)
+        : m_func(func)
     {
 
     }
@@ -25,8 +25,8 @@ AbstractConfigLoader::StoreFunc AbstractConfigLoader::storeFunc() const
 }
 
 AbstractConfigLoader::AbstractConfigLoader(
-        AbstractConfigLoader::StoreFunc storeFunc )
-    : m_data{ new Data{ storeFunc }}
+        AbstractConfigLoader::StoreFunc storeFunc)
+    : m_data(std::make_unique<Data>(storeFunc))
 {
 
 }

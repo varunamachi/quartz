@@ -16,37 +16,37 @@ namespace Quartz {
 class QUARTZ_BASE_API Theme
 {
 public:
-    Theme( const QString &name );
+    Theme(const QString &name);
 
     ~Theme();
 
     QString name() const;
 
-    void setApplicationCSS( const QString &appCss );
+    void setApplicationCSS(const QString &appCss);
 
     const QString & applicationCSS() const;
 
-    void setColorPalette( const QPalette &palette );
+    void setColorPalette(const QPalette &palette);
 
     const QPalette & colorPalette() const;
 
-    void setImage( const QString &key, const QImage &image );
+    void setImage(const QString &key, const QImage &image);
 
-    const QImage & image( const QString &key ) const;
+    const QImage & image(const QString &key) const;
 
-    const QImage & image( const QString &key,
-                          QZ_IN_OUT const QImage &defaultImage ) const;
+    const QImage & image(const QString &key,
+                          QZ_IN_OUT const QImage &defaultImage) const;
 
-    void setCss( const QString &key, const QString &css );
+    void setCss(const QString &key, const QString &css);
 
-    const QString  & css( const QString &key ) const;
+    const QString  & css(const QString &key) const;
 
-    const QString  & css( const QString &key,
-                          QZ_IN_OUT const QString &defaultImage ) const;
+    const QString  & css(const QString &key,
+                          QZ_IN_OUT const QString &defaultImage) const;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

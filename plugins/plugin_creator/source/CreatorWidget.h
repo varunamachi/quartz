@@ -13,9 +13,8 @@ class CreatorWidget : public ContentWidget
     Q_OBJECT
 
 public:
-    explicit CreatorWidget(
-            std::shared_ptr< TemplateManager > tman,
-            QWidget *parent = nullptr );
+    explicit CreatorWidget(std::shared_ptr<TemplateManager> tman,
+                           QWidget *parent = nullptr);
 
     ~CreatorWidget();
 
@@ -30,14 +29,14 @@ public slots:
 
     void onCreate();
 
-    void autoPopulate( const QString &fqid );
+    void autoPopulate(const QString &fqid);
 
     void addTemplates() ;
 
 private:
 
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

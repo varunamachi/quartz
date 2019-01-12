@@ -8,7 +8,7 @@ namespace Quartz {
 
 struct Constants
 {
-    QZ_MAKE_STATIC( Constants );
+    QZ_MAKE_STATIC(Constants);
 
     static const QString EMPTY_STRING;
 };

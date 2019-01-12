@@ -11,7 +11,7 @@ class TitleBarButton : public QuartzItem
 {
     Q_OBJECT
 public:
-    explicit TitleBarButton( QWidget *parent = nullptr );
+    explicit TitleBarButton(QWidget *parent = nullptr);
 
     ~TitleBarButton();
 

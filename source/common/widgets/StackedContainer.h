@@ -34,18 +34,18 @@ public:
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
-                               QWidget *parent = nullptr );
+                               QWidget *parent = nullptr);
 
     ~AbstractContainer();
 
 public:
-    QWidget * widget( const QString &id ) const;
+    QWidget * widget(const QString &id) const;
 
     QWidget * selectedWidget() const;
 
     QString currentId() const;
 
-    QList< QString > allIds() const;
+    QList<QString> allIds() const;
 
     int numWidgets() const;
 
@@ -70,32 +70,32 @@ public:
     virtual QString containerType() const = 0;
 
 public Q_SLOTS:
-    void addWidget( const QString &id,
+    void addWidget(const QString &id,
                     const QString &displayName,
                     const QIcon &icon,
                     const QIcon &activeIcon,
                     QWidget *widget);
 
-    void addWidget( const QString &id,
+    void addWidget(const QString &id,
                     const QString &displayName,
                     QWidget *widget);
 
-    void removeWidget( const QString &id );
+    void removeWidget(const QString &id);
 
-    void removeWidget( QWidget *widget );
+    void removeWidget(QWidget *widget);
 
-    void select( const QString &id );
+    void select(const QString &id);
 
     void hideAll();
 
     void setAutoSelectionPolicy(AutoSelectionPolicy policy);
 
 Q_SIGNALS:
-    void sigSelected( const QString &id, QWidget *widget );
+    void sigSelected(const QString &id, QWidget *widget);
 
-    void sigAdded( const QString &id, QWidget *widget );
+    void sigAdded(const QString &id, QWidget *widget);
 
-    void sigRemoved( const QString &id );
+    void sigRemoved(const QString &id);
 
 
 private Q_SLOTS:
@@ -103,7 +103,7 @@ private Q_SLOTS:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 
@@ -112,11 +112,11 @@ class QUARTZ_COMMON_API StackedContainer : public AbstractContainer
     Q_OBJECT
 
 public:
-    explicit StackedContainer( int selectorDimention,
+    explicit StackedContainer(int selectorDimention,
                                int buttonDimention,
                                SelectorPosition selectorPosition,
                                Qt::Orientation orientation,
-                               QWidget *parent = nullptr );
+                               QWidget *parent = nullptr);
 
     ~StackedContainer();
 

@@ -12,59 +12,59 @@
 
 namespace Quartz {
 
-const QString ActionBar::ADAPTER_NAME { "action_bar" };
+const QString ActionBar::ADAPTER_NAME("action_bar");
 
 
-ActionBar::ActionBar( int height, QWidget *parent )
-    : QWidget( parent )
-    , m_height( height )
+ActionBar::ActionBar(int height, QWidget *parent)
+    : QWidget(parent)
+    , m_height(height)
 
 {
-    m_scroller = new QzScroller( Qt::Horizontal, height, height, this );
-    m_scroller->setContentsMargins( QMargins() );
+    m_scroller = new QzScroller(Qt::Horizontal, height, height, this);
+    m_scroller->setContentsMargins(QMargins());
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->setContentsMargins( QMargins() );
+    layout->setContentsMargins(QMargins());
 //    layout->addStretch();
-    layout->addWidget( m_scroller );
-    this->setContentsMargins( QMargins() );
-    this->setLayout( layout );
+    layout->addWidget(m_scroller);
+    this->setContentsMargins(QMargins());
+    this->setLayout(layout);
 //    this->setStyleSheet("QWidget{background-color:red;}");
-    this->setVisible( false );
+    this->setVisible(false);
 }
 
 
-void ActionBar::addItem( QuartzItem *item )
+void ActionBar::addItem(QuartzItem *item)
 {
-    if( item != nullptr ) {
-        m_items.insert( item->itemId(), item );
-        m_scroller->addWidget( item );
-        this->setVisible( true );
+    if (item != nullptr) {
+        m_items.insert(item->itemId(), item);
+        m_scroller->addWidget(item);
+        this->setVisible(true);
     }
 }
 
 
-void ActionBar::removeItem( QuartzItem *item )
+void ActionBar::removeItem(QuartzItem *item)
 {
-    if( item != nullptr && m_items.contains( item->itemId() )) {
-        m_items.remove( item->itemId() );
-        m_scroller->removeWidget( item );
+    if (item != nullptr && m_items.contains(item->itemId())) {
+        m_items.remove(item->itemId());
+        m_scroller->removeWidget(item);
         delete item;
-        if( m_items.empty() ) {
-            this->setVisible( false );
+        if (m_items.empty()) {
+            this->setVisible(false);
         }
     }
 }
 
 
-void ActionBar::removeItem( const QString &itemId )
+void ActionBar::removeItem(const QString &itemId)
 {
-    QuartzItem *item = m_items.value( itemId );
-    if( item != nullptr ) {
-        m_items.remove( itemId );
-        m_scroller->removeWidget( item );
+    QuartzItem *item = m_items.value(itemId);
+    if (item != nullptr) {
+        m_items.remove(itemId);
+        m_scroller->removeWidget(item);
         delete item;
-        if( m_items.empty() ) {
-            this->setVisible( false );
+        if (m_items.empty()) {
+            this->setVisible(false);
         }
     }
 }
@@ -76,23 +76,23 @@ QList< QuartzItem * > ActionBar::items() const
 }
 
 
-QList< QuartzItem * > ActionBar::items( const QString category )
+QList< QuartzItem * > ActionBar::items(const QString category)
 {
     QList< QuartzItem *> filteredItems;
-    for( QuartzItem *item : m_items.values() ) {
-        if( item->itemCategory() == category ) {
-            filteredItems.append( item );
+    for (QuartzItem *item : m_items.values()) {
+        if (item->itemCategory() == category) {
+            filteredItems.append(item);
         }
     }
     return filteredItems;
 }
 
 
-void ActionBar::removeCategory( const QString &category )
+void ActionBar::removeCategory(const QString &category)
 {
-    QList< QuartzItem * > itemList = items( category );
-    for( QuartzItem *item : itemList ) {
-        removeItem( item );
+    QList< QuartzItem * > itemList = items(category);
+    for (QuartzItem *item : itemList) {
+        removeItem(item);
     }
 }
 
@@ -106,21 +106,21 @@ const QString & ActionBar::extensionAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool ActionBar::handleExtension( Ext::Extension *extension )
+bool ActionBar::handleExtension(Ext::Extension *extension)
 {
-    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>( extension );
-    if( itemProvider != nullptr ) {
+    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>(extension);
+    if (itemProvider != nullptr) {
         auto items = itemProvider->actionItems();
-        foreach( auto item, items ) {
-            addItem( item );
-            m_extensionItems.push_back( item );
+        foreach(auto item, items) {
+            addItem(item);
+            m_extensionItems.push_back(item);
         }
         return true;
     }
     else {
         auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
-        QZ_ERROR( "Qz:ActionBar" )
+        QZ_ERROR("Qz:ActionBar")
                 << "Invalid actionbar extension provided: "
                 << extensionName;
     }

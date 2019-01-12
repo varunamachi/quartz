@@ -16,32 +16,32 @@ enum class LogLevel : int;
 class QUARTZ_CORE_API LogMessage final
 {
 public:
-    LogMessage( QDateTime &&time,
+    LogMessage(QDateTime &&time,
                 LogLevel level,
                 std::uint64_t threadId,
                 const QString &module,
                 QString &&method,
                 QString &&fileName,
                 int lineNum,
-                const QString &message );
+                const QString &message);
 
-    LogMessage( QDateTime &&time,
+    LogMessage(QDateTime &&time,
                 LogLevel level,
                 std::uint64_t threadId,
                 const QString &module,
                 QString &&method,
                 QString &&fileName,
                 int lineNum,
-                QString &&message );
+                QString &&message);
 
-    LogMessage( QDateTime &&time,
+    LogMessage(QDateTime &&time,
                 LogLevel level,
                 std::uint64_t threadId,
                 QString &&module,
                 QString &&method,
                 QString &&fileName,
                 int lineNum,
-                QString &&message );
+                QString &&message);
 
     const LogLevel & logLevel() const;
 
@@ -61,15 +61,15 @@ public:
 
     QString & message();
 
-    void setMessage( const QString &message );
+    void setMessage(const QString &message);
 
-    void setMessage( QString &&message );
+    void setMessage(QString &&message);
 
     ~LogMessage();
 
 private:
     class Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } }

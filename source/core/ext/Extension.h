@@ -16,9 +16,9 @@ class QUARTZ_CORE_API Extension
 {
 
 public:
-    Extension( const QString &extensionId,
+    Extension(const QString &extensionId,
                const QString &extensionName,
-               const QString &extensionType );
+               const QString &extensionType);
 
     virtual ~Extension();
 
@@ -34,7 +34,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } }

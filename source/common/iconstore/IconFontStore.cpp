@@ -108,7 +108,7 @@ public:
 
     QPixmap pixmap(const QSize& size, QIcon::Mode mode, QIcon::State state)
     {
-        QPixmap pm{size};
+        QPixmap pm(size);
         pm.fill(Qt::transparent);
         {
             QPainter p(&pm);
@@ -130,7 +130,7 @@ IconFontEngine::~IconFontEngine() {} //to shut the compiler up
 
 struct IconFontStore::Data {
 
-    Data() : m_painter{std::make_unique<CharIconPainter>()}
+    Data() : m_painter(std::make_unique<CharIconPainter>())
     {
 
     }
@@ -177,7 +177,7 @@ IconFontStore * IconFontStore::instance() {
 }
 
 IconFontStore::IconFontStore()
-    : m_data{std::make_unique<Data>()}
+    : m_data(std::make_unique<Data>())
 {
 
 }
@@ -200,7 +200,7 @@ QIcon IconFontStore::icon(const QString &fontName,
                           const QVariantMap &options)
 {
     auto opts = options;
-    opts["text"] = QString{QChar(static_cast<int>(character))};
+    opts["text"] = QString(QChar(static_cast<int>(character)));
     opts["fontName"] = fontName;
     return QIcon{new IconFontEngine(
                     this, m_data->m_painter.get(), opts)};
@@ -223,7 +223,7 @@ QIcon IconFontStore::icon(const QString &fontName,
 
 QFont IconFontStore::font(const QString &fontName, int size)
 {
-    QFont font{fontName};
+    QFont font(fontName);
     font.setPixelSize(size);
     return font;
 }

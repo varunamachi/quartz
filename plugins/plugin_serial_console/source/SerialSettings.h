@@ -9,13 +9,13 @@ namespace Quartz { namespace Ext { namespace SerialConsole {
 class SerialSettings
 {
 public:
-    SerialSettings( const QString &name,
+    SerialSettings(const QString &name,
                     const qint32 baudRate,
                     const QSerialPort::DataBits dataBits,
                     const QSerialPort::Parity parity,
                     const QSerialPort::StopBits stopBits,
                     const QSerialPort::FlowControl flowControl,
-                    const QSerialPortInfo &info );
+                    const QSerialPortInfo &info);
 
     ~SerialSettings();
 
@@ -35,7 +35,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

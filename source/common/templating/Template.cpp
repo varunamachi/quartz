@@ -12,10 +12,10 @@ namespace Quartz {
 
 struct Template::Data
 {
-    Data( const QString &name,
-          const QString &content )
-        : m_name{ name }
-        , m_content{ content }
+    Data(const QString &name,
+          const QString &content)
+        : m_name(name)
+        , m_content(content)
     {
 
     }
@@ -24,17 +24,17 @@ struct Template::Data
 
     QString m_content;
 
-    std::unique_ptr< Config > m_config;
+    std::unique_ptr<Config> m_config;
 
-//    QVector< std::shared_ptr< TemplateInstance >> m_instances;
+//    QVector<std::shared_ptr<TemplateInstance>> m_instances;
 };
 
 
 
-Template::Template( const QString &name,
-                    const QString &content )
-    : TreeNode{ 2, nullptr }
-    , m_data{ new Data{ name, content }}
+Template::Template(const QString &name,
+                    const QString &content)
+    : TreeNode(2, nullptr)
+    , m_data(std::make_unique<Data>(name, content))
 {
 
 }
@@ -49,9 +49,9 @@ QString Template::name() const
     return m_data->m_name;
 }
 
-void Template::setConfig( std::unique_ptr<Config> config )
+void Template::setConfig(std::unique_ptr<Config> config)
 {
-    m_data->m_config = std::move( config );
+    m_data->m_config = std::move(config);
 }
 
 Config * Template::config() const
@@ -64,9 +64,9 @@ const QString & Template::content() const
     return m_data->m_content;
 }
 
-QVariant Template::fieldValue( int column ) const
+QVariant Template::fieldValue(int column) const
 {
-    switch( column ) {
+    switch(column) {
     case 0: return m_data->m_name;
     case 1: return numChildren();
     }

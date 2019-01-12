@@ -12,8 +12,8 @@ namespace Quartz {
 
 struct GenConfigWidget::Data
 {
-    explicit Data( GenConfigTreeModel *model )
-        : m_model{ model }
+    explicit Data(GenConfigTreeModel *model)
+        : m_model(model)
     {
 
     }
@@ -21,20 +21,20 @@ struct GenConfigWidget::Data
     GenConfigTreeModel *m_model;
 };
 
-GenConfigWidget::GenConfigWidget( Config *config, QWidget *parent )
-    : QWidget{ parent }
-    , m_data{ new Data{ new GenConfigTreeModel{ config, parent }}}
+GenConfigWidget::GenConfigWidget(Config *config, QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(new GenConfigTreeModel(config, parent)))
 {
-    auto layout = new QVBoxLayout{ this };
-    auto view = new QzTreeView{ this };
+    auto layout = new QVBoxLayout(this);
+    auto view = new QzTreeView(this);
     //proxy model
-    view->setModel( m_data->m_model );
-    view->setItemDelegate( new GenConfigDelegate{ this });
-    layout->addWidget( view );
-    this->setLayout( layout );
+    view->setModel(m_data->m_model);
+    view->setItemDelegate(new GenConfigDelegate(this));
+    layout->addWidget(view);
+    this->setLayout(layout);
 
-    view->setContentsMargins( QMargins{} );
-    layout->setContentsMargins( QMargins{} );
+    view->setContentsMargins(QMargins{});
+    layout->setContentsMargins(QMargins{});
 }
 
 GenConfigWidget::~GenConfigWidget()
@@ -42,9 +42,9 @@ GenConfigWidget::~GenConfigWidget()
 
 }
 
-void GenConfigWidget::setConfig( Config *config )
+void GenConfigWidget::setConfig(Config *config)
 {
-    m_data->m_model->setConfig( config );
+    m_data->m_model->setConfig(config);
 }
 
 

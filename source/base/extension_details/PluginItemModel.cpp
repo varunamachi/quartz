@@ -14,9 +14,9 @@ namespace Quartz { namespace Ext {
 
 struct PluginItemModel::Data
 {
-    Data( PluginItemModel::NumCols numCols )
-        : m_numCols{ numCols }
-        , m_pluginList{ nullptr }
+    Data(PluginItemModel::NumCols numCols)
+        : m_numCols(numCols)
+        , m_pluginList(nullptr)
     {
 
     }
@@ -27,10 +27,10 @@ struct PluginItemModel::Data
 };
 
 
-PluginItemModel::PluginItemModel( PluginItemModel::NumCols numCols,
-                                  QObject *parent )
-    : QAbstractItemModel{ parent }
-    , m_data{ new Data{ numCols }}
+PluginItemModel::PluginItemModel(PluginItemModel::NumCols numCols,
+                                  QObject *parent)
+    : QAbstractItemModel(parent)
+    , m_data(std::make_unique<Data>(numCols))
 {
 
 }
@@ -40,60 +40,60 @@ PluginItemModel::~PluginItemModel()
 
 }
 
-QModelIndex PluginItemModel::index( int row,
+QModelIndex PluginItemModel::index(int row,
                                     int column,
-                                    const QModelIndex &parent ) const
+                                    const QModelIndex &parent) const
 {
     auto index = QModelIndex();
-    if( hasIndex( row, column, parent )) {
-        const auto &plugin = m_data->m_pluginList->at( row );
-        if( plugin != nullptr ) {
-            index = createIndex( row,
+    if (hasIndex(row, column, parent)) {
+        const auto &plugin = m_data->m_pluginList->at(row);
+        if (plugin != nullptr) {
+            index = createIndex(row,
                                  column,
                                  reinterpret_cast< void *>(
                                      const_cast< Ext::Plugin *>(
-                                         plugin )));
+                                         plugin)));
         }
     }
     return index;
 }
 
-QModelIndex PluginItemModel::parent( const QModelIndex &/*child*/ ) const
+QModelIndex PluginItemModel::parent(const QModelIndex &/*child*/) const
 {
-    return QModelIndex{ };
+    return QModelIndex();
 }
 
-int PluginItemModel::rowCount( const QModelIndex &/*parent*/ ) const
+int PluginItemModel::rowCount(const QModelIndex &/*parent*/) const
 {
     auto size = m_data->m_pluginList != nullptr ? m_data->m_pluginList->size()
                                                 : 0;
     return size;
 }
 
-int PluginItemModel::columnCount( const QModelIndex &/*parent*/ ) const
+int PluginItemModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    auto cnt = static_cast< int >( m_data->m_numCols );
+    auto cnt = static_cast<int>(m_data->m_numCols);
     return cnt;
 }
 
-QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
+QVariant PluginItemModel::data(const QModelIndex &index, int role) const
 {
-    if( ! index.isValid()
+    if (! index.isValid()
             || m_data->m_pluginList == nullptr
-            || index.row() >= m_data->m_pluginList->size() ) {
+            || index.row() >= m_data->m_pluginList->size()) {
         return QVariant();
     }
-    if ( role == Qt::TextAlignmentRole ) {
-        return int ( Qt::AlignLeft | Qt::AlignVCenter );
-    } else if ( role == Qt::DisplayRole ) {
-        const auto &plugin = m_data->m_pluginList->at( index.row() );
+    if (role == Qt::TextAlignmentRole) {
+        return int (Qt::AlignLeft | Qt::AlignVCenter);
+    } else if (role == Qt::DisplayRole) {
+        const auto &plugin = m_data->m_pluginList->at(index.row());
         auto lib = appContext()->pluginManager()->libraryForPlugin(
-                    plugin->pluginId() );
-        switch( index.column() ) {
+                    plugin->pluginId());
+        switch(index.column()) {
         case 0: return plugin->pluginName();
         case 1: return plugin->pluginId();
         case 2:
-            if( lib != nullptr ) {
+            if (lib != nullptr) {
                 return lib->fileName();
             }
             break;
@@ -107,24 +107,24 @@ QVariant PluginItemModel::data( const QModelIndex &index, int role ) const
 QVariant PluginItemModel::headerData(
         int section,
         Qt::Orientation /*orientation*/,
-        int role ) const
+        int role) const
 {
-    if ( role == Qt::TextAlignmentRole ) {
-        return int( Qt::AlignLeft | Qt::AlignVCenter );
+    if (role == Qt::TextAlignmentRole) {
+        return int(Qt::AlignLeft | Qt::AlignVCenter);
     }
-    else if ( role == Qt::DisplayRole ) {
-        switch( section ) {
-        case 0: return tr( "Name" );
-        case 1: return tr( "Id" );
-        case 2: return tr( "Library" );
+    else if (role == Qt::DisplayRole) {
+        switch(section) {
+        case 0: return tr("Name");
+        case 1: return tr("Id");
+        case 2: return tr("Library");
         }
     }
     return QVariant();
 }
 
-bool PluginItemModel::hasChildren( const QModelIndex &parent ) const
+bool PluginItemModel::hasChildren(const QModelIndex &parent) const
 {
-    if( parent.isValid() ) {
+    if (parent.isValid()) {
         return false;
     }
     return  true;

@@ -8,15 +8,15 @@
 namespace Quartz {
 
 const QString BasicConfigPage::CONFIG_PAGE_ID{ "qz.configpage.basic" };
-const QString BasicConfigPage::CONFIG_PAGE_NAME{ "Basic Settings" };
+const QString BasicConfigPage::CONFIG_PAGE_NAME("Basic Settings");
 
 struct BasicConfigPage::Data
 {
 
 };
 
-BasicConfigPage::BasicConfigPage( QWidget *parent )
-    : AbstractConfigPage{ QStringList{ },
+BasicConfigPage::BasicConfigPage(QWidget *parent)
+    : AbstractConfigPage{ QStringList(),
                           CONFIG_PAGE_NAME,
                           CONFIG_PAGE_ID,
                           getIcon(MatIcon::SettingsApplications),

@@ -8,7 +8,7 @@ class WelcomePage : public ContentWidget
 {
     Q_OBJECT
 public:
-    explicit WelcomePage(const QString &id, QWidget *parent = nullptr );
+    explicit WelcomePage(const QString &id, QWidget *parent = nullptr);
 
     virtual ~WelcomePage();
 

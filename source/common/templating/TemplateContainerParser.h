@@ -19,9 +19,9 @@ public:
 
     ~TemplateContainerParser();
 
-    QVector< std::shared_ptr< Template >> parse( const QString &content );
+    QVector<std::shared_ptr<Template>> parse(const QString &content);
 
-    std::unique_ptr< Template > parse( const QDomElement &root );
+    std::unique_ptr<Template> parse(const QDomElement &root);
 
 private:
 };

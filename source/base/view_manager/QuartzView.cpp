@@ -8,14 +8,14 @@ namespace  Quartz {
 class QuartzView::Data
 {
 public:
-    Data( const QString &viewId,
+    Data(const QString &viewId,
           const QString &category,
           const QString &displayName,
           const QIcon &icon,
           const QIcon &activeIcon)
-        : m_viewId( viewId )
-        , m_categoryId( category )
-        , m_displayName( displayName )
+        : m_viewId(viewId)
+        , m_categoryId(category)
+        , m_displayName(displayName)
         , m_icon(icon)
         , m_activeIcon(activeIcon)
     {

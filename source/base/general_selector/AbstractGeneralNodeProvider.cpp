@@ -7,8 +7,8 @@ const QString AbstractGeneralNodeProvider::EXTENSION_TYPE{ "qz.node" };
 
 AbstractGeneralNodeProvider::AbstractGeneralNodeProvider(
         const QString &extensionId,
-        const QString &extensionName )
-    : Ext::Extension{ extensionId, extensionName, EXTENSION_TYPE }
+        const QString &extensionName)
+    : Ext::Extension(extensionId, extensionName, EXTENSION_TYPE)
 {
 
 }

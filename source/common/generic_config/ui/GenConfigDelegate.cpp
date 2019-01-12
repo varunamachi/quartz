@@ -17,8 +17,8 @@
 
 namespace Quartz {
 
-GenConfigDelegate::GenConfigDelegate( QWidget *parent )
-    : QStyledItemDelegate{ parent }
+GenConfigDelegate::GenConfigDelegate(QWidget *parent)
+    : QStyledItemDelegate(parent)
 {
 
 }
@@ -26,29 +26,29 @@ GenConfigDelegate::GenConfigDelegate( QWidget *parent )
 QWidget* GenConfigDelegate::createEditor(
         QWidget* parent,
         const QStyleOptionViewItem &option,
-        const QModelIndex &index ) const
+        const QModelIndex &index) const
 {
-    QWidget *widget = new QLineEdit{ parent };
+    QWidget *widget = new QLineEdit(parent);
     auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>( index.internalPointer() ));
-    if( node != nullptr ) {
-        switch( node->type() ) {
+                static_cast< TreeNode *>(index.internalPointer()));
+    if (node != nullptr) {
+        switch(node->type()) {
         case ParamType::Boolean: {
-            widget = QStyledItemDelegate::createEditor( parent, option, index );
+            widget = QStyledItemDelegate::createEditor(parent, option, index);
         }
             break;
         case ParamType::Text: {
-            auto le = new QLineEdit{ parent };
+            auto le = new QLineEdit(parent);
             widget = le;
         }
             break;
         case ParamType::Range: {
-            auto sl = new QSpinBox{ parent };
+            auto sl = new QSpinBox(parent);
             widget = sl;
         }
             break;
         case ParamType::Choice: {
-            auto combo = new QComboBox{ parent };
+            auto combo = new QComboBox(parent);
             widget = combo;
         }
             break;
@@ -57,38 +57,38 @@ QWidget* GenConfigDelegate::createEditor(
     return widget;
 }
 
-void GenConfigDelegate::setEditorData( QWidget *editor,
+void GenConfigDelegate::setEditorData(QWidget *editor,
                                        const QModelIndex &index) const
 {
     auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>( index.internalPointer() ));
-    if( node != nullptr ) {
-        switch( node->type() ) {
+                static_cast< TreeNode *>(index.internalPointer()));
+    if (node != nullptr) {
+        switch(node->type()) {
         case ParamType::Boolean: {
-            QStyledItemDelegate::setEditorData( editor, index );
+            QStyledItemDelegate::setEditorData(editor, index);
         }
             break;
         case ParamType::Text: {
-            auto tparam = static_cast< TextParam *> ( node );
-            auto le = static_cast< QLineEdit *>( editor );
-            le->setText( tparam->value().toString() );
+            auto tparam = static_cast< TextParam *> (node);
+            auto le = static_cast< QLineEdit *>(editor);
+            le->setText(tparam->value().toString());
         }
             break;
         case ParamType::Range: {
-            auto rparam = static_cast< RangeParam *> ( node );
-            auto sl = static_cast< QSpinBox *>( editor );
-            sl->setValue( rparam->value().toInt() );
+            auto rparam = static_cast< RangeParam *> (node);
+            auto sl = static_cast< QSpinBox *>(editor);
+            sl->setValue(rparam->value().toInt());
         }
             break;
         case ParamType::Choice: {
-            auto cparam = static_cast< ChoiceParam *> ( node );
-            auto combo = static_cast< QComboBox *>( editor );
-            for( auto i = 0; i < cparam->numOption(); ++ i ) {
-                auto opt = cparam->option( i );
-                combo->addItem( opt.first, opt.second );
+            auto cparam = static_cast< ChoiceParam *> (node);
+            auto combo = static_cast< QComboBox *>(editor);
+            for (auto i = 0; i < cparam->numOption(); ++ i) {
+                auto opt = cparam->option(i);
+                combo->addItem(opt.first, opt.second);
             }
-            if( cparam->numOption() > 0 ) {
-                combo->setCurrentIndex( cparam->index() );
+            if (cparam->numOption() > 0) {
+                combo->setCurrentIndex(cparam->index());
             }
             combo->showPopup();
         }
@@ -98,45 +98,45 @@ void GenConfigDelegate::setEditorData( QWidget *editor,
 }
 
 
-void GenConfigDelegate::setModelData( QWidget *editor,
+void GenConfigDelegate::setModelData(QWidget *editor,
                                       QAbstractItemModel *model,
-                                      const  QModelIndex &index ) const
+                                      const  QModelIndex &index) const
 {
     auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>( index.internalPointer() ));
-    if( node != nullptr ) {
+                static_cast< TreeNode *>(index.internalPointer()));
+    if (node != nullptr) {
         QVariant data;
-        switch( node->type() ) {
+        switch(node->type()) {
         case ParamType::Boolean: {
-            QStyledItemDelegate::setModelData( editor, model, index );
+            QStyledItemDelegate::setModelData(editor, model, index);
         }
             break;
         case ParamType::Text: {
-            auto le = static_cast< QLineEdit *>( editor );
+            auto le = static_cast< QLineEdit *>(editor);
             data = le->text();
         }
             break;
         case ParamType::Range: {
-            auto sl = static_cast< QSpinBox *>( editor );
+            auto sl = static_cast< QSpinBox *>(editor);
             data = sl->value();
         }
             break;
         case ParamType::Choice: {
-            auto combo = static_cast< QComboBox *>( editor );
+            auto combo = static_cast< QComboBox *>(editor);
             data = combo->currentIndex();
         }
             break;
         }
-        node->setValue( data );
+        node->setValue(data);
     }
 }
 
 void GenConfigDelegate::updateEditorGeometry(
         QWidget *editor,
         const QStyleOptionViewItem &option,
-        const QModelIndex &/*index*/ ) const
+        const QModelIndex &/*index*/) const
 {
-    editor->setGeometry( option.rect );
+    editor->setGeometry(option.rect);
 }
 
 }

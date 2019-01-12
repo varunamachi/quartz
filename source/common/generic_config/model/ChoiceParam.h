@@ -10,22 +10,22 @@ namespace Quartz {
 class QUARTZ_COMMON_API ChoiceParam : public Param
 {
 public:
-    explicit ChoiceParam( const QString &id,
+    explicit ChoiceParam(const QString &id,
                           const QString &name,
                           const QString &description,
-                          TreeNode *parent );
+                          TreeNode *parent);
 
     ~ChoiceParam();
 
-    void addOption( const QString &name, const QString &value );
+    void addOption(const QString &name, const QString &value);
 
-    QString optionValue( const QString &name ) const;
+    QString optionValue(const QString &name) const;
 
-    QPair< QString, QString > option( int index ) const;
+    QPair< QString, QString > option(int index) const;
 
     int defaultIndex() const;
 
-    void setDefaultIndex( int defaultIndex );
+    void setDefaultIndex(int defaultIndex);
 
     int numOption() const;
 
@@ -35,13 +35,13 @@ public:
 
     int index() const;
 
-    void setValue( const QVariant &value ) override;
+    void setValue(const QVariant &value) override;
 
-    std::unique_ptr< Param > clone() const;
+    std::unique_ptr<Param> clone() const;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

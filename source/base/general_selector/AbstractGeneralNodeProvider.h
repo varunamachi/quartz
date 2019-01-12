@@ -12,18 +12,18 @@ namespace Quartz {
 
 class AbstractSelector;
 class Node;
-using NodePtr = std::shared_ptr< Node >;
+using NodePtr = std::shared_ptr<Node>;
 
 struct NodeInfo
 {
-    NodeInfo( const QStringList &nodePath,
+    NodeInfo(const QStringList &nodePath,
               const QString &nodeName,
               const QString &nodeId,
-              const QIcon &icon )
-        : m_nodePath( nodePath )
-        , m_nodeName( nodeName )
-        , m_nodeId( nodeId )
-        , m_nodeIcon( icon )
+              const QIcon &icon)
+        : m_nodePath(nodePath)
+        , m_nodeName(nodeName)
+        , m_nodeId(nodeId)
+        , m_nodeIcon(icon)
     {
 
     }
@@ -40,12 +40,12 @@ struct NodeInfo
 class QUARTZ_BASE_API AbstractGeneralNodeProvider : public Ext::Extension
 {
 public:
-    AbstractGeneralNodeProvider( const QString &pluginId,
-                                 const QString &pluginName );
+    AbstractGeneralNodeProvider(const QString &pluginId,
+                                 const QString &pluginName);
 
     ~AbstractGeneralNodeProvider();
 
-    virtual QVector< std::shared_ptr< NodeInfo >> nodes() const = 0;
+    virtual QVector<std::shared_ptr<NodeInfo>> nodes() const = 0;
 
     static const QString EXTENSION_TYPE;
 

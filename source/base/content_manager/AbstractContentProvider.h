@@ -10,8 +10,8 @@ class ContentWidget;
 class QUARTZ_BASE_API AbstractContentProvider : public Ext::Extension
 {
 public:
-    AbstractContentProvider( const QString &pluginId,
-                             const QString &pluginName );
+    AbstractContentProvider(const QString &pluginId,
+                             const QString &pluginName);
 
     virtual ~AbstractContentProvider();
 

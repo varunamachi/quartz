@@ -21,14 +21,14 @@ class ConfigModel : public AbstractTreeModel
 {
     Q_OBJECT
 public:
-    explicit ConfigModel( QObject *parent );
+    explicit ConfigModel(QObject *parent);
 
     ~ConfigModel();
 
-    void setConfig( Config *config );
+    void setConfig(Config *config);
 
 protected:
-    TreeNode *rootAt( int index ) const override;
+    TreeNode *rootAt(int index) const override;
 
     int rootCount() const override;
 
@@ -43,24 +43,24 @@ class TemplateConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    TemplateConfigWidget( QWidget *parent = nullptr );
+    TemplateConfigWidget(QWidget *parent = nullptr);
 
     ~TemplateConfigWidget();
 
-    TemplateInstance * createInstanceOf( Template *tmpl );
+    TemplateInstance * createInstanceOf(Template *tmpl);
 
     int numInstances() const;
 
-    TemplateInstance * instanceAt( int index );
+    TemplateInstance * instanceAt(int index);
 
     void clear();
 
 public Q_SLOTS:
-    void onSelection( const QModelIndex &cur, const QModelIndex &prev );
+    void onSelection(const QModelIndex &cur, const QModelIndex &prev);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

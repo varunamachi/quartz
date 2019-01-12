@@ -19,31 +19,31 @@ class QUARTZ_CORE_API ConfigManager
 {
 public:
     explicit ConfigManager(
-            std::unique_ptr< IConfigStorageStrategy > storageStragy,
-            std::unique_ptr< AbstractConfigLoader > configLoader = nullptr );
+            std::unique_ptr<IConfigStorageStrategy> storageStragy,
+            std::unique_ptr<AbstractConfigLoader> configLoader = nullptr);
 
     ~ConfigManager();
 
     void clearCache();
 
-    void store( const QString &key,
+    void store(const QString &key,
                 const QVariant &variant,
-                const QString &domain = QString{ } );
+                const QString &domain = QString());
 
-    const QVariant retrieve( const QString &key,
-                             const QString &domain = QString{} ) const;
+    const QVariant retrieve(const QString &key,
+                             const QString &domain = QString{}) const;
 
-    bool has( const QString &key,
-              const QString &domain = QString{} ) const;
+    bool has(const QString &key,
+              const QString &domain = QString{}) const;
 
-    void remove( const QString &key,
-                 const QString &domain = QString{} );
+    void remove(const QString &key,
+                 const QString &domain = QString{});
 
-    void batchLoad(  const QByteArray &content  );
+    void batchLoad(const QByteArray &content);
 
 private:
     class Impl;
-    std::unique_ptr< Impl > m_impl;
+    std::unique_ptr<Impl> m_impl;
 };
 
 

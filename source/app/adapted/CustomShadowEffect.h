@@ -27,11 +27,11 @@ class CustomShadowEffect : public QGraphicsEffect
 public:
     explicit CustomShadowEffect(QObject *parent = 0);
 
-    void draw( QPainter* painter );
+    void draw(QPainter* painter);
 
-    QRectF boundingRectFor( const QRectF& rect ) const;
+    QRectF boundingRectfor (const QRectF& rect) const;
 
-    inline void setDistance( qreal distance )
+    inline void setDistance(qreal distance)
     {
         _distance = distance; updateBoundingRect();
     }
@@ -41,7 +41,7 @@ public:
         return _distance;
     }
 
-    inline void setBlurRadius( qreal blurRadius )
+    inline void setBlurRadius(qreal blurRadius)
     {
         _blurRadius = blurRadius; updateBoundingRect();
     }
@@ -51,7 +51,7 @@ public:
         return _blurRadius;
     }
 
-    inline void setColor( const QColor& color )
+    inline void setColor(const QColor& color)
     {
         _color = color;
     }

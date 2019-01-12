@@ -21,29 +21,29 @@ QZ_INTERFACE IExtensionAdapter;
 class QUARTZ_CORE_API PluginManager
 {
 public:
-    QZ_NO_COPY( PluginManager );
+    QZ_NO_COPY(PluginManager);
 
     PluginManager();
 
     ~PluginManager();
 
-    bool loadFrom( const QString &location );
+    bool loadFrom(const QString &location);
 
     bool destroy();
 
-    void registerPluginAdapter( std::shared_ptr< IExtensionAdapter > adapter );
+    void registerPluginAdapter(std::shared_ptr<IExtensionAdapter> adapter);
 
-    void registerPluginAdapter( IExtensionAdapter *adapter );
+    void registerPluginAdapter(IExtensionAdapter *adapter);
 
     const QVector< const Plugin *> plugins() const;
 
-    const Plugin * plugin( const QString &pluginId ) const;
+    const Plugin * plugin(const QString &pluginId) const;
 
-    const QLibrary * libraryForPlugin( const QString &pluginId ) const;
+    const QLibrary * libraryForPlugin(const QString &pluginId) const;
 
 private:
     class Impl;
-    std::unique_ptr< Impl > m_impl;
+    std::unique_ptr<Impl> m_impl;
 
 };
 

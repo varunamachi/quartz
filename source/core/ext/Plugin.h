@@ -27,16 +27,16 @@ enum class DependencyType
     Optional
 };
 
-using ExtensionList = QVector< std::shared_ptr< Extension >>;
+using ExtensionList = QVector<std::shared_ptr<Extension>>;
 using DependencyList = QVector< QPair< QString, DependencyType >>;
-using AdapterList = QVector< std::shared_ptr< IExtensionAdapter >>;
+using AdapterList = QVector<std::shared_ptr<IExtensionAdapter>>;
 
 class QUARTZ_CORE_API Plugin
 {
 public:
 
-    Plugin( const QString &pluginId,
-            const QString &pluginName );
+    Plugin(const QString &pluginId,
+            const QString &pluginName);
 
     virtual ~Plugin();
 
@@ -44,7 +44,7 @@ public:
 
     const QString & pluginName() const;
 
-    void setContext( QzCoreContext *context );
+    void setContext(QzCoreContext *context);
 
     QzCoreContext * coreContext() const;
 
@@ -57,12 +57,12 @@ public:
     template< typename Context >
     Context * context() const
     {
-        return static_cast< Context *>( coreContext() );
+        return static_cast< Context *>(coreContext());
     }
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 } } //end of namespaces
@@ -75,7 +75,7 @@ struct PluginWrapper {
 };
 
 struct PluginInputWrapper {
-    std::unique_ptr< Quartz::Ext::PluginEnv > env;
+    std::unique_ptr<Quartz::Ext::PluginEnv> env;
     Quartz::QzCoreContext *appContext;
 
 };

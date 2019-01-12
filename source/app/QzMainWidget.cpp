@@ -63,13 +63,13 @@ struct QzMainWidget::Data
 
     QMenu *m_menu;
 
-    std::unique_ptr< Ext::PluginManager > m_pluginManager;
+    std::unique_ptr<Ext::PluginManager> m_pluginManager;
 
 };
 
 
-QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
-    : QWidget{ parent }
+QzMainWidget::QzMainWidget(bool drawWindowControls, QMainWindow *parent)
+    : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
     m_data->m_titleBar  = new TitleBar(20, drawWindowControls, this);
@@ -80,9 +80,9 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     this->setObjectName("quartz_widget");
     this->setContentsMargins({});
     QSizePolicy policy;
-    policy.setHorizontalPolicy( QSizePolicy::Expanding );
+    policy.setHorizontalPolicy(QSizePolicy::Expanding);
 
-    m_data->m_content->setSizePolicy( policy );
+    m_data->m_content->setSizePolicy(policy);
     auto viewContainer = new StackedSplitContainer(
                 20,
                 70,
@@ -94,7 +94,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     viewContainer->setContentWidget(
                 m_data->m_content,
                 AbstractContainer::SelectorPosition::Before);
-    viewContainer->setSizes( 370, 210, 20 );
+    viewContainer->setSizes(370, 210, 100);
 
     auto selectorContainer = new StackedSplitContainer(
                 50,
@@ -112,9 +112,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     auto mainMenu = new MainMenuButton(this);
     vlyt->addWidget(mainMenu);
 
-    auto about = new QAction(QIcon("://resources/quartz32.png"),
-                             "About",
-                             this);
+    auto about = new QAction(QIcon("://resources/quartz32.png"), "About", this);
     connect(about, &QAction::triggered, [this]() {
        m_data->m_aboutDialog->exec();
     });
@@ -124,9 +122,9 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     mainLayout->addLayout(vlyt);
     mainLayout->addWidget(m_data->m_selector);
     mainLayout->addWidget(m_data->m_actionBar);
-    mainLayout->setAlignment( m_data->m_actionBar, Qt::AlignBottom );
+    mainLayout->setAlignment(m_data->m_actionBar, Qt::AlignBottom);
     mainLayout->setContentsMargins({});
-    this->setLayout( mainLayout );
+    this->setLayout(mainLayout);
     this->setMinimumSize({800, 600});
 
     auto configPageManager = new ConfigPageManager(this);
@@ -143,7 +141,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
                 new WelcomePage(welcomeNode->nodeId(),
                                 m_data->m_content));
     auto configTree = new ConfigPageSelector(this);
-    configTree->addPage( new BasicConfigPage(configTree));
+    configTree->addPage(new BasicConfigPage(configTree));
 
     auto logView = new LogView(this);
     m_data->m_viewManager->addView(logView);
@@ -162,7 +160,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
     appContext()->setContentManager(m_data->m_content);
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
     if (!m_data->m_pluginManager->loadFrom(execDir)) {
-        QZ_ERROR( "App" ) << "Failed to load all available plugins";
+        QZ_ERROR("App") << "Failed to load all available plugins";
     }
 
     auto pluginSelector = new Ext::PluginSelector(this);
@@ -175,7 +173,7 @@ QzMainWidget::QzMainWidget( bool drawWindowControls, QMainWindow *parent )
 QzMainWidget::~QzMainWidget()
 {
     m_data->m_pluginManager->destroy();
-    QZ_LOGGER()->dispatcher()->removeTarget( LogView::LOG_TARGET_ID );
+    QZ_LOGGER()->dispatcher()->removeTarget(LogView::LOG_TARGET_ID);
 }
 
 
@@ -190,26 +188,26 @@ void QzMainWidget::onAboutToQuit()
 
 }
 
-void QzMainWidget::setRoundedRect( bool useRoundedRect )
+void QzMainWidget::setRoundedRect(bool useRoundedRect)
 {
     m_data->m_roundedRect = useRoundedRect;
 }
 
 
-void QzMainWidget::paintEvent( QPaintEvent * /*event*/ )
+void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
 {
-    QPainter painter( this );
-    auto color = this->palette().color( QPalette::Background );
-    if( m_data->m_roundedRect ) {
+    QPainter painter(this);
+    auto color = this->palette().color(QPalette::Background);
+    if (m_data->m_roundedRect) {
         QPainterPath path;
         path.addRoundedRect(this->rect(), 5, 5);
-        QBrush brush( color );
-        painter.setRenderHint( QPainter::Antialiasing );
-        painter.setRenderHint( QPainter::HighQualityAntialiasing );
-        painter.fillPath( path, brush );
+        QBrush brush(color);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setRenderHint(QPainter::HighQualityAntialiasing);
+        painter.fillPath(path, brush);
     }
     else {
-        painter.fillRect( this->rect(), QBrush( color ));
+        painter.fillRect(this->rect(), QBrush(color));
     }
 }
 

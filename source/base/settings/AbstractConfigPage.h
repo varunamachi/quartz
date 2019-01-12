@@ -13,11 +13,11 @@ class QUARTZ_BASE_API AbstractConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    AbstractConfigPage( const QStringList &parentPath,
+    AbstractConfigPage(const QStringList &parentPath,
                         const QString &name,
                         const QString &id,
                         const QIcon &icon,
-                        QWidget *parent = nullptr );
+                        QWidget *parent = nullptr);
 
     ~AbstractConfigPage();
 
@@ -35,7 +35,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

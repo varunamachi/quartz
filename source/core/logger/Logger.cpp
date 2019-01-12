@@ -36,9 +36,9 @@ class Logger::Impl
 public:
 
     inline void setDispatcher(
-            std::unique_ptr< AbstractLogDispatcher > &&dispatcher )
+            std::unique_ptr<AbstractLogDispatcher> &&dispatcher)
     {
-        m_dispatcher = std::move( dispatcher );
+        m_dispatcher = std::move(dispatcher);
     }
 
     inline AbstractLogDispatcher * dispatcher() const
@@ -46,7 +46,7 @@ public:
         return m_dispatcher.get();
     }
 
-    inline void setFilterLevel( LogLevel level )
+    inline void setFilterLevel(LogLevel level)
     {
         m_globalSevLevel = level;
     }
@@ -56,7 +56,7 @@ public:
         return m_logMethods;
     }
 
-    inline void setMethodLogState( bool value )
+    inline void setMethodLogState(bool value)
     {
         m_logMethods = value;
     }
@@ -71,25 +71,25 @@ public:
         return m_enabled;
     }
 
-    inline void setEnabled( bool val )
+    inline void setEnabled(bool val)
     {
         m_enabled = val;
     }
 
-    void log( LogMessage *msg );
+    void log(LogMessage *msg);
 
-    Impl( std::unique_ptr< AbstractLogDispatcher > dispatcher,
-          LogLevel level )
-        : m_dispatcher( std::move( dispatcher ))
-        , m_globalSevLevel( level )
-        , m_logMethods( false )
-        , m_enabled( true )
+    Impl(std::unique_ptr<AbstractLogDispatcher> dispatcher,
+          LogLevel level)
+        : m_dispatcher(std::move(dispatcher))
+        , m_globalSevLevel(level)
+        , m_logMethods(false)
+        , m_enabled(true)
     {
 
     }
 
 private:
-    std::unique_ptr< AbstractLogDispatcher > m_dispatcher;
+    std::unique_ptr<AbstractLogDispatcher> m_dispatcher;
 
     LogLevel m_globalSevLevel;
 
@@ -100,26 +100,26 @@ private:
 };
 
 
-void Logger::Impl::log( LogMessage *msg )
+void Logger::Impl::log(LogMessage *msg)
 {
-    if( m_enabled
+    if (m_enabled
         && m_dispatcher != nullptr
-        && msg->logLevel() >= m_globalSevLevel ) {
-        m_dispatcher->write( msg );
+        && msg->logLevel() >= m_globalSevLevel) {
+        m_dispatcher->write(msg);
     }
 }
 
 
 //=================================VQLogger ===================================
 
-std::unique_ptr< Logger > Logger::s_instance = nullptr;
+std::unique_ptr<Logger> Logger::s_instance = nullptr;
 
 
 
 void Logger::setDispatcher(
-        std::unique_ptr< AbstractLogDispatcher > &&dispatcher )
+        std::unique_ptr<AbstractLogDispatcher> &&dispatcher)
 {
-    m_impl->setDispatcher( std::move( dispatcher ));
+    m_impl->setDispatcher(std::move(dispatcher));
 }
 
 
@@ -135,9 +135,9 @@ LogLevel Logger::filterLevel() const
 }
 
 
-void Logger::setFilterLevel( LogLevel level )
+void Logger::setFilterLevel(LogLevel level)
 {
-    m_impl->setFilterLevel( level );
+    m_impl->setFilterLevel(level);
 }
 
 
@@ -146,9 +146,9 @@ bool Logger::isMethodLoggingEnabled() const
     return m_impl->isMethodLoggingEnabled();
 }
 
-void Logger::setMethodLogState( bool value )
+void Logger::setMethodLogState(bool value)
 {
-    m_impl->setMethodLogState( value );
+    m_impl->setMethodLogState(value);
 }
 
 
@@ -159,22 +159,22 @@ bool Logger::isEnabled() const
 }
 
 
-void Logger::setEnabled( bool val )
+void Logger::setEnabled(bool val)
 {
-    m_impl->setEnabled( val );
+    m_impl->setEnabled(val);
 }
 
 
 
-bool Logger::init( std::unique_ptr < AbstractLogDispatcher > &&dispatcher,
-                     LogLevel level )
+bool Logger::init(std::unique_ptr <AbstractLogDispatcher> &&dispatcher,
+                     LogLevel level)
 {
     bool result = false;
-    if( s_instance == nullptr ) {
-//        s_instance = std::make_unique< VqLogger >( std::move( dispatcher ),
-//                                                   level );
-        s_instance = std::unique_ptr< Logger >{
-                new Logger( std::move( dispatcher ), level )};
+    if (s_instance == nullptr) {
+//        s_instance = std::make_unique<VqLogger>(std::move(dispatcher),
+//                                                   level);
+        s_instance = std::unique_ptr<Logger>{
+                new Logger(std::move(dispatcher), level)};
         result = true;
     }
     return result;
@@ -187,16 +187,16 @@ void Logger::destroy()
 }
 
 
-void Logger::log( LogMessage *msg )
+void Logger::log(LogMessage *msg)
 {
-    m_impl->log( msg );
+    m_impl->log(msg);
 }
 
 
-Logger::Logger( std::unique_ptr< AbstractLogDispatcher > dispatcher,
-                    LogLevel level )
-//    : m_impl( std::make_unique< Impl >( std::move( dispatcher ), level ))
-    : m_impl( new Impl( std::move( dispatcher ), level ))
+Logger::Logger(std::unique_ptr<AbstractLogDispatcher> dispatcher,
+                    LogLevel level)
+//    : m_impl(std::make_unique<Impl>(std::move(dispatcher), level))
+    : m_impl(new Impl(std::move(dispatcher), level))
 {
 
 }

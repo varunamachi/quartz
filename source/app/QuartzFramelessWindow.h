@@ -13,11 +13,11 @@ class QuartzFramelessWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QuartzFramelessWindow( QWidget *parent = 0 );
+    explicit QuartzFramelessWindow(QWidget *parent = 0);
 
     ~QuartzFramelessWindow();
 
-    void mouseMove( QPoint newPos, QPoint oldPos );
+    void mouseMove(QPoint newPos, QPoint oldPos);
 
 private slots:
     void onMaximizeRestore();
@@ -25,19 +25,19 @@ private slots:
     void onMinimize();
 
 protected:
-    void mouseMoveEvent( QMouseEvent* event );
+    void mouseMoveEvent(QMouseEvent* event);
 
-    void mousePressEvent( QMouseEvent* event );
+    void mousePressEvent(QMouseEvent* event);
 
-    void mouseReleaseEvent( QMouseEvent* event );
+    void mouseReleaseEvent(QMouseEvent* event);
 
-    void showEvent( QShowEvent *evt );
+    void showEvent(QShowEvent *evt);
 
-    void resizeEvent( QResizeEvent *evt );
+    void resizeEvent(QResizeEvent *evt);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
     void maximize();
 

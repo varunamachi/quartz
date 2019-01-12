@@ -10,8 +10,8 @@
 namespace Quartz {
 
 
-GeneralNodeTree::GeneralNodeTree( QObject *parent )
-    : TreeModel{ parent }
+GeneralNodeTree::GeneralNodeTree(QObject *parent)
+    : TreeModel(parent)
 {
 
 }
@@ -30,14 +30,14 @@ bool GeneralNodeTree::handleExtension(Ext::Extension *extension)
 {
     bool result = true;
     auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>(
-                extension );
-    if( nodeProvider != nullptr ) {
+                extension);
+    if (nodeProvider != nullptr) {
        auto nodes = nodeProvider->nodes();
-       foreach( auto nodeInfo, nodes ) {
+       foreach(auto nodeInfo, nodes) {
            if (nodeInfo->m_nodeIcon.isNull()) {
                nodeInfo->m_nodeIcon = getIcon(MatIcon::CheckBoxOutlineBlank);
            }
-           auto res = addNode( nodeInfo->m_nodePath,
+           auto res = addNode(nodeInfo->m_nodePath,
                                nodeInfo->m_nodeName,
                                nodeInfo->m_nodeId,
                                nodeInfo->m_nodeIcon);
@@ -47,7 +47,7 @@ bool GeneralNodeTree::handleExtension(Ext::Extension *extension)
     else {
         auto extensionName = extension != nullptr ? extension->extensionId()
                                                   : "<null>";
-        QZ_ERROR( "Qz:NodeSelector" )
+        QZ_ERROR("Qz:NodeSelector")
                 << "Invalid node extension provided: " << extensionName;
     }
     return result;

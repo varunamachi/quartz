@@ -12,23 +12,23 @@ class QUARTZ_COMMON_API BasicSortFilter : public QSortFilterProxyModel
 {
     Q_OBJECT
 public:
-    explicit BasicSortFilter( QObject *parent );
+    explicit BasicSortFilter(QObject *parent);
 
     ~BasicSortFilter();
 
-    bool filterAcceptsRow( int sourceRow,
-                           const QModelIndex &srcParent ) const override;
+    bool filterAcceptsRow(int sourceRow,
+                           const QModelIndex &srcParent) const override;
 
 public slots:
-    void setExpression( const QString &expression );
+    void setExpression(const QString &expression);
 
 protected:
-    bool lessThan( const QModelIndex &left,
-                   const QModelIndex &right ) const override;
+    bool lessThan(const QModelIndex &left,
+                   const QModelIndex &right) const override;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

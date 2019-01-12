@@ -9,10 +9,10 @@ namespace Quartz {
 
 struct TextParam::Data
 {
-    Data( TextType type, const QString &defValue )
-        : m_textType{ type }
-        , m_defaultValue{ defValue }
-        , m_value{ defValue }
+    Data(TextType type, const QString &defValue)
+        : m_textType(type)
+        , m_defaultValue(defValue)
+        , m_value(defValue)
     {
 
     }
@@ -24,12 +24,12 @@ struct TextParam::Data
     QString m_value;
 };
 
-TextParam::TextParam( const QString &id,
+TextParam::TextParam(const QString &id,
                     const QString &name,
                     const QString &description,
-                    TreeNode *parent )
-    : Param{ id, name, description, parent }
-    , m_data{ new Data{ TextType::Any, "" }}
+                    TreeNode *parent)
+    : Param(id, name, description, parent)
+    , m_data(std::make_unique<Data>(TextType::Any, ""))
 {
 
 }
@@ -49,7 +49,7 @@ QVariant TextParam::value() const
     return QVariant{ m_data->m_value };
 }
 
-void TextParam::setValue( const QVariant &value )
+void TextParam::setValue(const QVariant &value)
 {
     m_data->m_value = value.toString();
 }
@@ -59,7 +59,7 @@ TextType TextParam::textType() const
     return m_data->m_textType;
 }
 
-void TextParam::setTextType( TextType textType )
+void TextParam::setTextType(TextType textType)
 {
     m_data->m_textType = textType;
 }
@@ -69,17 +69,17 @@ const QString & TextParam::defaultValue() const
     return m_data->m_defaultValue;
 }
 
-void TextParam::setDefaultValue( const QString &defaultValue )
+void TextParam::setDefaultValue(const QString &defaultValue)
 {
     m_data->m_defaultValue = defaultValue;
 }
 
 std::unique_ptr<Param> TextParam::clone() const
 {
-    auto param = std::unique_ptr< TextParam >{
-        new TextParam{ id(), name(), description(), parent() }};
-    param->setDefaultValue( this->defaultValue() );
-    param->setTextType( this->textType() );
+    auto param = std::unique_ptr<TextParam>{
+        new TextParam(id(), name(), description(), parent())};
+    param->setDefaultValue(this->defaultValue());
+    param->setTextType(this->textType());
     return param;
 }
 

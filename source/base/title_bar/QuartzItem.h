@@ -13,9 +13,9 @@ class QUARTZ_BASE_API QuartzItem : public QWidget
     Q_OBJECT
 public:
 
-    QuartzItem( const QString &itemId,
+    QuartzItem(const QString &itemId,
                 const QString &category,
-                QWidget *widget = nullptr );
+                QWidget *widget = nullptr);
 
     ~QuartzItem();
 
@@ -25,7 +25,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

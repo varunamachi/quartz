@@ -14,15 +14,15 @@ class QUARTZ_COMMON_API GenConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GenConfigWidget( Config *config, QWidget *parent = nullptr );
+    explicit GenConfigWidget(Config *config, QWidget *parent = nullptr);
 
     ~GenConfigWidget();
 
-    void setConfig( Config *config );
+    void setConfig(Config *config);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

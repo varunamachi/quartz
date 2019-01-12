@@ -68,13 +68,13 @@ bool createFileSystem()
 {
     using namespace Quartz;
     bool result = true;
-    auto path = QzAppContext::expand( StdPath::LogDirectory );
-    QFileInfo info{ path };
-    if( ! ( info.exists() && info.isDir() )) {
-        QDir dir{ "" };
-        result = dir.mkpath( path );
+    auto path = QzAppContext::expand(StdPath::LogDirectory);
+    QFileInfo info(path);
+    if (! (info.exists() && info.isDir())) {
+        QDir dir("");
+        result = dir.mkpath(path);
     }
-    if( ! result ) {
+    if (! result) {
         qDebug() << "Failed to create Quartz file system";
     }
     return result;
@@ -88,24 +88,24 @@ bool initLogger()
 #else
     const auto llevel = Logger::LogLevel::Info;
 #endif
-    std::unique_ptr< Logger::SpooledDispatcher >
+    std::unique_ptr<Logger::SpooledDispatcher>
             dispatcher{ new Logger::SpooledDispatcher{} };
-    auto result = Logger::Logger::init( std::move( dispatcher ), llevel );
-    if( result ) {
-        std::unique_ptr< Logger::ConsoleTarget > consoleTarget{
+    auto result = Logger::Logger::init(std::move(dispatcher), llevel);
+    if (result) {
+        std::unique_ptr<Logger::ConsoleTarget> consoleTarget{
             new Logger::ConsoleTarget{} };
-        auto path = QzAppContext::expand( StdPath::LogDirectory );
-        std::unique_ptr< Logger::FileTarget > fileTarget{
-            new Logger::FileTarget{ path, "quartz" }};
+        auto path = QzAppContext::expand(StdPath::LogDirectory);
+        std::unique_ptr<Logger::FileTarget> fileTarget{
+            new Logger::FileTarget(path, "quartz")};
         Logger::Logger::get()->dispatcher()->addTarget(
-                    std::move( fileTarget ));
+                    std::move(fileTarget));
         //We need below messages only on log file to distinguish between
         //launches, hence these are logged before console logger is registered
-        QZ_INFO( "Qz:App" ) << "---------------------------------------------";
-        QZ_INFO( "Qz:App" ) << "Starting Quartz!!!!";
+        QZ_INFO("Qz:App") << "---------------------------------------------";
+        QZ_INFO("Qz:App") << "Starting Quartz!!!!";
         Logger::Logger::get()->dispatcher()->flush();
         Logger::Logger::get()->dispatcher()->addTarget(
-                    std::move( consoleTarget ));
+                    std::move(consoleTarget));
 
     }
     else {
@@ -114,36 +114,36 @@ bool initLogger()
     return result;
 }
 
-std::unique_ptr< Quartz::ConfigManager > initConfigManager()
+std::unique_ptr<Quartz::ConfigManager> initConfigManager()
 {
     using namespace Quartz;
-    auto storeFunc = []( const QString &key,
+    auto storeFunc = [](const QString &key,
                          const QString &domain,
-                         const QVariant &val ) {
-        QzAppContext::get()->configManager()->store( key, val, domain );
+                         const QVariant &val) {
+        QzAppContext::get()->configManager()->store(key, val, domain);
     };
-    auto path = QzAppContext::expand( StdPath::DataDirectory ) + "/quartz.db";
-    std::unique_ptr< DefaultStorageStrategy > storageStrategy{
-        new DefaultStorageStrategy{ path }};
-    std::unique_ptr< XMLConfigLoader > loader{
-        new XMLConfigLoader{ storeFunc }};
-    std::unique_ptr< ConfigManager > confMan{
-        new ConfigManager{ std::move( storageStrategy ),
-                           std::move( loader )}};
+    auto path = QzAppContext::expand(StdPath::DataDirectory) + "/quartz.db";
+    std::unique_ptr<DefaultStorageStrategy> storageStrategy{
+        new DefaultStorageStrategy(path)};
+    std::unique_ptr<XMLConfigLoader> loader{
+        new XMLConfigLoader(storeFunc)};
+    std::unique_ptr<ConfigManager> confMan{
+        new ConfigManager{ std::move(storageStrategy),
+                           std::move(loader)}};
     return confMan;
 }
 
 bool initApp()
 {
     using namespace Quartz;
-    std::unique_ptr< QzAppContext > context{ new QzAppContext{} };
-    context->setLogger( Logger::Logger::get() );
-    QzCoreContext::setInstance( std::move( context ));
-    qmlRegisterSingletonType< QzBinding >( "qz.app",
+    std::unique_ptr<QzAppContext> context{ new QzAppContext{} };
+    context->setLogger(Logger::Logger::get());
+    QzCoreContext::setInstance(std::move(context));
+    qmlRegisterSingletonType<QzBinding>("qz.app",
                                            1,
                                            0,
                                            "Service",
-                                           &QzBinding::qmlInstance );
+                                           &QzBinding::qmlInstance);
     return true;
 }
 
@@ -178,19 +178,19 @@ void loadFonts() {
     Quartz::IconFontStore::init(fonts);
 }
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
     auto returnCode = -1;
     Q_INIT_RESOURCE(quartz);
     auto result = createFileSystem()
             && initLogger()
-            && initApp( );
-    if( result ) {
+            && initApp();
+    if (result) {
         using namespace Quartz;
         auto confMan = initConfigManager();
-        context< QzAppContext >()->setConfigManager( confMan.get() );
-        QZ_SCOPE( "Make sure that QzMainWidget destroyed before uninit" ) {
-            QApplication app( argc, argv );
+        context<QzAppContext>()->setConfigManager(confMan.get());
+        QZ_SCOPE("Make sure that QzMainWidget destroyed before uninit") {
+            QApplication app(argc, argv);
             loadFonts();
 #ifdef Q_OS_LINUX
             installAppIcon();

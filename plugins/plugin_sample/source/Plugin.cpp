@@ -11,7 +11,7 @@
 namespace Quartz { namespace Ext { namespace Sample {
 
 const QString Plugin::PLUGIN_ID{ "qzplugin.sample" };
-const QString Plugin::PLUGIN_NAME{ "Sample Plugin" };
+const QString Plugin::PLUGIN_NAME("Sample Plugin");
 
 struct Plugin::Data
 {
@@ -22,15 +22,15 @@ struct Plugin::Data
 };
 
 Plugin::Plugin()
-    : Quartz::Ext::Plugin{ PLUGIN_ID, PLUGIN_NAME }
+    : Quartz::Ext::Plugin(PLUGIN_ID, PLUGIN_NAME)
     , m_data{ new Data{} }
 {
 
 #ifdef QT_DEBUG
-    m_data->m_plugins.push_back( std::make_shared< ViewProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< ContentProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< NodeProvider >() );
-    m_data->m_plugins.push_back( std::make_shared< TitleItemProvider >() );
+    m_data->m_plugins.push_back(std::make_shared<ViewProvider>());
+    m_data->m_plugins.push_back(std::make_shared<ContentProvider>());
+    m_data->m_plugins.push_back(std::make_shared<NodeProvider>());
+    m_data->m_plugins.push_back(std::make_shared<TitleItemProvider>());
 #endif
 }
 

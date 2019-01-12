@@ -14,10 +14,10 @@ class Param;
 class QUARTZ_COMMON_API Group : public TreeNode
 {
 public:
-    Group( const QString &id,
+    Group(const QString &id,
            const QString &name,
            const QString &description,
-           TreeNode *parent );
+           TreeNode *parent);
 
     ~Group();
 
@@ -27,29 +27,29 @@ public:
 
     const QString & description() const;
 
-    void addParam( std::shared_ptr< Param > param );
+    void addParam(std::shared_ptr<Param> param);
 
     int numParams() const;
 
-    Param * paramAt( int index ) const;
+    Param * paramAt(int index) const;
 
-    Param * paramAt( int index );
+    Param * paramAt(int index);
 
     int numSubGroups() const;
 
-    void addSubGroup( std::shared_ptr< Group > subGroup );
+    void addSubGroup(std::shared_ptr<Group> subGroup);
 
-    const Group * subGroupAt( int index ) const;
+    const Group * subGroupAt(int index) const;
 
-    Group * subGroupAt( int index ) ;
+    Group * subGroupAt(int index) ;
 
-    QVariant fieldValue( int field ) const override;
+    QVariant fieldValue(int field) const override;
 
-    std::unique_ptr< Group > clone() const;
+    std::unique_ptr<Group> clone() const;
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
 }

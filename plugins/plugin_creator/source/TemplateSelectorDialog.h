@@ -24,7 +24,7 @@ class TemplateSelectorDialog : public QDialog
 public:
     explicit TemplateSelectorDialog(
             TemplateManager *templateManager,
-            QWidget *parent = nullptr );
+            QWidget *parent = nullptr);
 
     ~TemplateSelectorDialog();
 
@@ -34,7 +34,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 };
 

@@ -15,10 +15,10 @@ namespace Ext { namespace Creator {
 class GenInfo
 {
 public:
-    GenInfo( const QString &id,
-             const QString &name,
-             const QString &display,
-             const QString &nmspace );
+    GenInfo(const QString &id,
+            const QString &name,
+            const QString &display,
+            const QString &nmspace);
 
     ~GenInfo();
 
@@ -34,15 +34,15 @@ public:
 
     int numTemplateInstances() const;
 
-    const TemplateInstance * templateInstanceAt( int i ) const;
+    const TemplateInstance * templateInstanceAt(int i) const;
 
-    void addTemplateInstance( TemplateInstance *inst );
+    void addTemplateInstance(TemplateInstance *inst);
 
-    void removeTemplateInstance( const QString &instanceName );
+    void removeTemplateInstance(const QString &instanceName);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 
 
 };

@@ -13,7 +13,7 @@
 #include "LogStructures.h"
 
 
-#define CUR_THREAD_ID quint64( 0 )
+#define CUR_THREAD_ID quint64(0)
 
 namespace Quartz {
 
@@ -21,7 +21,7 @@ class TntLogger;
 
 QZ_INTERFACE ILogFormatter
 {
-    virtual QString format( const LogMessage *message ) = 0;
+    virtual QString format(const LogMessage *message) = 0;
 
     virtual ~ILogFormatter() { }
 };
@@ -31,9 +31,9 @@ QZ_INTERFACE ILogFormatter
 class AbstractLogTarget
 {
 public:
-    AbstractLogTarget( QString uniqueId )
-        : m_uniqueId( uniqueId )
-        , m_formatter( nullptr )
+    AbstractLogTarget(QString uniqueId)
+        : m_uniqueId(uniqueId)
+        , m_formatter(nullptr)
     {
 
     }
@@ -43,23 +43,23 @@ public:
         return m_uniqueId;
     }
 
-    void setFormatterOwned( ILogFormatter *formatter )
+    void setFormatterOwned(ILogFormatter *formatter)
     {
-        if( m_formatter != nullptr ) {
+        if (m_formatter != nullptr) {
             delete m_formatter;
         }
         m_formatter = formatter;
     }
 
-    virtual void write( const LogMessage *message )
+    virtual void write(const LogMessage *message)
     {
-        this->write(( m_formatter != nullptr ? m_formatter->format( message )
-                                             : LogUtil::format( message )));
+        this->write((m_formatter != nullptr ? m_formatter->format(message)
+                                            : LogUtil::format(message)));
     }
 
     virtual ~AbstractLogTarget()
     {
-        if( m_formatter != nullptr ) {
+        if (m_formatter != nullptr) {
             delete m_formatter;
         }
     }

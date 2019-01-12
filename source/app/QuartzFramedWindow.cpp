@@ -6,10 +6,10 @@
 
 namespace Quartz {
 
-QuartzFramedWindow::QuartzFramedWindow( QWidget *parent )
-    : QMainWindow{ parent }
+QuartzFramedWindow::QuartzFramedWindow(QWidget *parent)
+    : QMainWindow(parent)
 {
-    this->setCentralWidget( new QzMainWidget{ false, this });
+    this->setCentralWidget(new QzMainWidget(false, this));
 
 }
 

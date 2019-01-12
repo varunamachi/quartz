@@ -9,7 +9,7 @@ namespace Quartz { namespace Ext { namespace Sample {
 class SampleView : public QuartzView {
     Q_OBJECT
 public:
-    SampleView( QWidget *parent = nullptr );
+    SampleView(QWidget *parent = nullptr);
 
     ~SampleView();
 

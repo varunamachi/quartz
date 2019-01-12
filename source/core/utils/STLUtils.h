@@ -22,19 +22,19 @@ struct IsStdContainer
               typename  = typename EvalHelper<
                   typename U::value_type,
                   typename U::iterator,
-                  decltype( std::declval< U >().begin() ),
-                  decltype( std::declval< U >().end() ) >::type >
-    static constexpr bool test( int /*unused*/ )
+                  decltype(std::declval<U>().begin()),
+                  decltype(std::declval<U>().end()) >::type >
+    static constexpr bool test(int /*unused*/)
     {
         return true;
     }
 
-    template< typename U > static constexpr bool test( ... )
+    template< typename U > static constexpr bool test(...)
     {
         return false;
     }
 
-    static constexpr bool value = test< ContainerType >( int() );
+    static constexpr bool value = test<ContainerType>(int());
 };
 
 
@@ -45,81 +45,81 @@ struct IsAssociativeContainer
               typename = typename EvalHelper <
                   typename U::key_type,
                   typename U::value_type >::type >
-    static constexpr bool test( int /*unused*/ )
+    static constexpr bool test(int /*unused*/)
     {
-        return IsStdContainer< U >::value;
+        return IsStdContainer<U>::value;
     }
 
-    template< typename U > static constexpr bool test( ... )
+    template< typename U > static constexpr bool test(...)
     {
         return false;
     }
 
-    static constexpr bool value = test< ContainerType >( int () );
+    static constexpr bool value = test<ContainerType>(int ());
 };
 
 
 template< typename ContainerType >
 struct IsSequentialContainer
 {
-    static constexpr bool value = IsStdContainer< ContainerType >::value
-            && ( ! IsAssociativeContainer< ContainerType >::value );
+    static constexpr bool value = IsStdContainer<ContainerType>::value
+            && (! IsAssociativeContainer<ContainerType>::value);
 
 };
 
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsAssociativeContainer< ContainerType >::value >::type >
-bool contains( const ContainerType &container,
-               const typename ContainerType::key_type &key )
+              IsAssociativeContainer<ContainerType>::value >::type >
+bool contains(const ContainerType &container,
+               const typename ContainerType::key_type &key)
 {
-    auto it = container.find( key );
-    return it != std::end( container );
+    auto it = container.find(key);
+    return it != std::end(container);
 }
 
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsSequentialContainer< ContainerType >::value >::type >
-bool contains( const ContainerType &container,
-               const typename ContainerType::value_type &elem )
+              IsSequentialContainer<ContainerType>::value >::type >
+bool contains(const ContainerType &container,
+               const typename ContainerType::value_type &elem)
 {
-    auto it = std::find( std::begin( container ),
-                         std::end( container ),
-                         elem );
-    bool result = it != std::end( container );
+    auto it = std::find(std::begin(container),
+                         std::end(container),
+                         elem);
+    bool result = it != std::end(container);
     return result;
 }
 
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsSequentialContainer< ContainerType >::value >::type >
-void eraseIf(
+              IsSequentialContainer<ContainerType>::value >::type >
+void eraseif (
         ContainerType &container,
         std::function< bool(
-            const typename ContainerType::value_type & )> condition )
+            const typename ContainerType::value_type &)> condition)
 {
-    auto it = std::remove_if( std::begin( container ),
-                              std::end( container ),
-                              condition );
-    container.erase( it, std::end( container ));
+    auto it = std::remove_if (std::begin(container),
+                              std::end(container),
+                              condition);
+    container.erase(it, std::end(container));
 }
 
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsAssociativeContainer< ContainerType >::value >::type >
-void eraseIf(
+              IsAssociativeContainer<ContainerType>::value >::type >
+void eraseif (
         ContainerType &container,
         std::function< bool(
-            const typename ContainerType::mapped_type & )> condition )
+            const typename ContainerType::mapped_type &)> condition)
 {
-    for( auto it = std::begin( container ); it != std::end( container );  ) {
+    for (auto it = std::begin(container); it != std::end(container);) {
         auto eit = it ++;
-        if( condition( eit->second )) {
-            container.erase( eit );
+        if (condition(eit->second)) {
+            container.erase(eit);
         }
     }
 }
@@ -128,43 +128,43 @@ void eraseIf(
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsSequentialContainer< ContainerType >::value >::type >
-void remove( ContainerType &container,
-             const typename ContainerType::value_type &item )
+              IsSequentialContainer<ContainerType>::value >::type >
+void remove(ContainerType &container,
+             const typename ContainerType::value_type &item)
 {
-    auto it = std::remove( std::begin( container ),
-                           std::end( container ),
-                           item );
-    container.erase( it, std::end( container ));
+    auto it = std::remove(std::begin(container),
+                           std::end(container),
+                           item);
+    container.erase(it, std::end(container));
 }
 
 
 template< typename ContainerType >
-void remove( ContainerType &container,
-             const typename ContainerType::mapped_type &item )
+void remove(ContainerType &container,
+             const typename ContainerType::mapped_type &item)
 {
-    auto it = std::remove_if(
-                std::begin( container ),
-                std::end( container ),
-                [ &item ]( typename ContainerType::value_type &pair ) {
+    auto it = std::remove_if (
+                std::begin(container),
+                std::end(container),
+                [ &item ](typename ContainerType::value_type &pair) {
         return pair->second == item;
     });
-    container.erase( it, std::end( container ));
+    container.erase(it, std::end(container));
 }
 
 
 template< typename ContainerType >
-void remove( ContainerType &container,
-             const typename ContainerType::key_type &key )
+void remove(ContainerType &container,
+             const typename ContainerType::key_type &key)
 {
-    container.erase( key );
+    container.erase(key);
 }
 
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsStdContainer< ContainerType >::value >::type>
-ContainerType & largestOf( ContainerType &cntOne, ContainerType &cntTwo )
+              IsStdContainer<ContainerType>::value >::type>
+ContainerType & largestOf(ContainerType &cntOne, ContainerType &cntTwo)
 {
     auto &largest = cntOne.size() >= cntTwo.size() ? cntOne : cntTwo;
     return largest;
@@ -173,8 +173,8 @@ ContainerType & largestOf( ContainerType &cntOne, ContainerType &cntTwo )
 
 template< typename ContainerType,
           typename = typename std::enable_if<
-              IsStdContainer< ContainerType >::value >::type>
-ContainerType & smallestOf( ContainerType &cntOne, ContainerType &cntTwo )
+              IsStdContainer<ContainerType>::value >::type>
+ContainerType & smallestOf(ContainerType &cntOne, ContainerType &cntTwo)
 {
     auto &largest = cntOne.size() <= cntTwo.size() ? cntOne : cntTwo;
     return largest;
@@ -182,11 +182,11 @@ ContainerType & smallestOf( ContainerType &cntOne, ContainerType &cntTwo )
 
 
 //template< typename ContainerType >
-//void multiRemove( ContainerType &/*container*/,
+//void multiRemove(ContainerType &/*container*/,
 //                  const typename ContainerType::key_type &/*key*/,
-//                  const typename ContainerType::value_type &/*value*/ )
+//                  const typename ContainerType::value_type &/*value*/)
 //{
-//          //        auto rangeIt = container.equal_range( key );
+//          //        auto rangeIt = container.equal_range(key);
 
 //}
 

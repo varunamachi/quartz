@@ -48,20 +48,20 @@ enum class TntLogLevel
 struct LogMessage
 {
 public:
-    LogMessage( TntLogLevel level,
-                QDateTime time,
-                quint64 threadId,
-                QString module,
-                QString method,
-                int lineNum,
-                QString message = "" )
-        : m_logLevel( level )
-        , m_time( time )
-        , m_threadId( threadId )
-        , m_moduleName( module )
-        , m_methodName( method )
-        , m_lineNumber( lineNum )
-        , m_logMessage( message )
+    LogMessage(TntLogLevel level,
+               QDateTime time,
+               quint64 threadId,
+               QString module,
+               QString method,
+               int lineNum,
+               QString message = "")
+        : m_logLevel(level)
+        , m_time(time)
+        , m_threadId(threadId)
+        , m_moduleName(module)
+        , m_methodName(method)
+        , m_lineNumber(lineNum)
+        , m_logMessage(message)
     {
 
     }

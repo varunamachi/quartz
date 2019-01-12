@@ -27,8 +27,8 @@ struct QzAppContext::Data
 };
 
 QzAppContext::QzAppContext()
-//    : m_data( std::make_unique< Data >{ })
-    : m_data( new Data{ })
+//    : m_data(std::make_unique<Data>())
+    : m_data(std::make_unique<Data>())
 {
 
 }
@@ -38,27 +38,27 @@ QzAppContext::~QzAppContext()
 
 }
 
-QString QzAppContext::expand( StdPath pathID )
+QString QzAppContext::expand(StdPath pathID)
 {
     //version?
-    switch( pathID ) {
+    switch(pathID) {
     case StdPath::DataDirectory: {
         return QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation ) + "/.quartz/";
+                    QStandardPaths::AppDataLocation) + "/.quartz/";
     }
     case StdPath::LogDirectory: {
         auto path = QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation );
+                    QStandardPaths::AppDataLocation);
         return path + "/.quartz/logs";
     }
     }
-    return QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
+    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 }
 
-QZCONTEXT_FUNC_DEFINE( QzAppContext, ContentManager, contentManager );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, SelectorManager, selectorManager );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, GeneralSelector, nodeSelector );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, ConfigPageManager, configPageManager );
-QZCONTEXT_FUNC_DEFINE( QzAppContext, ThemeManager, themeManager );
+QZCONTEXT_FUNC_DEFINE(QzAppContext, ContentManager, contentManager);
+QZCONTEXT_FUNC_DEFINE(QzAppContext, SelectorManager, selectorManager);
+QZCONTEXT_FUNC_DEFINE(QzAppContext, GeneralSelector, nodeSelector);
+QZCONTEXT_FUNC_DEFINE(QzAppContext, ConfigPageManager, configPageManager);
+QZCONTEXT_FUNC_DEFINE(QzAppContext, ThemeManager, themeManager);
 
 }

@@ -20,8 +20,8 @@ namespace Quartz {
 
 struct SelectorManager::Data
 {
-    Data( AbstractContainer *container )
-        : m_selectorContainer( container )
+    Data(AbstractContainer *container)
+        : m_selectorContainer(container)
     {
 
     }
@@ -37,29 +37,29 @@ struct SelectorManager::Data
 const QString SelectorManager::ADAPTER_NAME{ "qz.title_bar" };
 
 
-SelectorManager::SelectorManager( AbstractContainer *container,
-                                  QWidget *parent )
-    : QWidget( parent )
-    , m_data( new Data( container ))
+SelectorManager::SelectorManager(AbstractContainer *container,
+                                  QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(container))
 
 {
-    auto layout = new QHBoxLayout{ this };
-    layout->addWidget( m_data->m_selectorContainer );
-    layout->setContentsMargins( 0, 1, 0, 1 );
-    this->setLayout( layout );
+    auto layout = new QHBoxLayout(this);
+    layout->addWidget(m_data->m_selectorContainer);
+    layout->setContentsMargins(0, 1, 0, 1);
+    this->setLayout(layout);
     this->setContentsMargins({});
     m_data->m_selectorContainer->setContentsMargins({});
     //Only string style connect works on Windows
-    connect( m_data->m_selectorContainer,
-             SIGNAL( sigSelected( const QString &, QWidget *) ),
+    connect(m_data->m_selectorContainer,
+             SIGNAL(sigSelected(const QString &, QWidget *)),
              this,
-             SLOT( onSelectorSelected( const QString &, QWidget * )));
-//    using SigFunc = void ( AbstractContainer::*)( const QString &, QWidget *);
-//    auto sig = static_cast< SigFunc >( &AbstractContainer::sigSelected );
-//    connect( m_data->m_selectorContainer,
+             SLOT(onSelectorSelected(const QString &, QWidget *)));
+//    using SigFunc = void (AbstractContainer::*)(const QString &, QWidget *);
+//    auto sig = static_cast<SigFunc>(&AbstractContainer::sigSelected);
+//    connect(m_data->m_selectorContainer,
 //             sig,
 //             this,
-//             &SelectorManager::onSelectorSelected );
+//             &SelectorManager::onSelectorSelected);
 }
 
 SelectorManager::~SelectorManager()
@@ -67,9 +67,9 @@ SelectorManager::~SelectorManager()
 
 }
 
-void SelectorManager::addSelector( AbstractSelector *selector )
+void SelectorManager::addSelector(AbstractSelector *selector)
 {
-    if( selector != nullptr ) {
+    if (selector != nullptr) {
         m_data->m_selectorContainer->addWidget(
                     selector->selectorId(),
                     selector->selectorName(),
@@ -83,38 +83,38 @@ void SelectorManager::addSelector( AbstractSelector *selector )
     }
 }
 
-void SelectorManager::removeSelector( const QString &selectorId )
+void SelectorManager::removeSelector(const QString &selectorId)
 {
-    AbstractSelector *selector = m_data->m_selectors.value( selectorId );
-    if( selector != nullptr ) {
-        removeSelector( selectorId );
+    AbstractSelector *selector = m_data->m_selectors.value(selectorId);
+    if (selector != nullptr) {
+        removeSelector(selectorId);
     }
     else {
-        QZ_ERROR( "QzApp:SelectorManager" )
+        QZ_ERROR("QzApp:SelectorManager")
                 << "Could not remove selector with id " << selectorId
                 << ". No selector with given ID found";
     }
 }
 
-void SelectorManager::removeSelector( AbstractSelector *selector )
+void SelectorManager::removeSelector(AbstractSelector *selector)
 {
-    if( selector != nullptr ) {
-            m_data->m_selectorContainer->removeWidget( selector->selectorId() );
-            m_data->m_selectors.remove( selector->selectorId() );
-            QZ_INFO( "Qz:SelectorManager" )
+    if (selector != nullptr) {
+            m_data->m_selectorContainer->removeWidget(selector->selectorId());
+            m_data->m_selectors.remove(selector->selectorId());
+            QZ_INFO("Qz:SelectorManager")
                     << "succesfully removed selector with id "
                     << selector->selectorId();
     }
     else {
-        QZ_ERROR( "Qz:SelectorManager" )
+        QZ_ERROR("Qz:SelectorManager")
                 << "Could not remove selector with id "
                    ". Invalid selector given";
     }
 }
 
-AbstractSelector * SelectorManager::selector( const QString &selectorId ) const
+AbstractSelector * SelectorManager::selector(const QString &selectorId) const
 {
-    AbstractSelector *selector = m_data->m_selectors.value( selectorId );
+    AbstractSelector *selector = m_data->m_selectors.value(selectorId);
     return selector;
 }
 
@@ -122,8 +122,8 @@ QList< AbstractSelector * > SelectorManager::selectors() const
 {
     QList< AbstractSelector *> selectors;
     auto it = m_data->m_selectors.begin();
-    for( ; it != m_data->m_selectors.end(); ++ it ) {
-        selectors.append( it.value() );
+    for (; it != m_data->m_selectors.end(); ++ it) {
+        selectors.append(it.value());
     }
     return selectors;
 }
@@ -131,18 +131,18 @@ QList< AbstractSelector * > SelectorManager::selectors() const
 AbstractSelector * SelectorManager::currentSelector() const
 {
     QString selectorId = m_data->m_selectorContainer->currentId();
-    AbstractSelector *selector = m_data->m_selectors.value( selectorId );
+    AbstractSelector *selector = m_data->m_selectors.value(selectorId);
     return selector;
 }
 
-void SelectorManager::selectSelector( QString selectorId )
+void SelectorManager::selectSelector(QString selectorId)
 {
-    if( m_data->m_selectors.contains( selectorId ) ) {
-//        auto selector = m_data->m_selectors.value( selectorId );
-        m_data->m_selectorContainer->select( selectorId );
+    if (m_data->m_selectors.contains(selectorId)) {
+//        auto selector = m_data->m_selectors.value(selectorId);
+        m_data->m_selectorContainer->select(selectorId);
     }
     else {
-        QZ_ERROR( "Qz:SelectorManager" )
+        QZ_ERROR("Qz:SelectorManager")
                 << "Could not find a selector with id " << selectorId;
     }
 }
@@ -157,22 +157,22 @@ const QString & SelectorManager::extensionAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool SelectorManager::handleExtension( Ext::Extension *extension )
+bool SelectorManager::handleExtension(Ext::Extension *extension)
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractSelectorProvider *>( extension );
-    if( provider != nullptr ) {
+    auto provider = dynamic_cast< AbstractSelectorProvider *>(extension);
+    if (provider != nullptr) {
         auto selectors = provider->selectors();
-        foreach( auto selector, selectors ) {
-            addSelector( selector );
-            m_data->m_extensionSelectors.push_back( selector );
+        foreach(auto selector, selectors) {
+            addSelector(selector);
+            m_data->m_extensionSelectors.push_back(selector);
         }
         result = true;
     }
     else {
         auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
-        QZ_ERROR( "Qz:SelectorManager" )
+        QZ_ERROR("Qz:SelectorManager")
                 << "Invalid selector extension provided: " << extensionName;
     }
     return result;
@@ -184,12 +184,12 @@ bool SelectorManager::finalizeExtension()
     return true;
 }
 
-void SelectorManager::onSelectorSelected( const QString &selectorId,
-                                          QWidget */*widget*/ )
+void SelectorManager::onSelectorSelected(const QString &selectorId,
+                                          QWidget */*widget*/)
 {
-    auto selector = m_data->m_selectors.value( selectorId,
-                                               nullptr );
-    if( selector != nullptr ) {
+    auto selector = m_data->m_selectors.value(selectorId,
+                                               nullptr);
+    if (selector != nullptr) {
         selector->selected();
     }
 }

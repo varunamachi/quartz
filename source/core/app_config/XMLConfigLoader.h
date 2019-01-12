@@ -10,11 +10,11 @@ namespace Quartz {
 class QUARTZ_CORE_API XMLConfigLoader : public AbstractConfigLoader
 {
 public:
-    explicit XMLConfigLoader( StoreFunc storeFunc );
+    explicit XMLConfigLoader(StoreFunc storeFunc);
 
     ~XMLConfigLoader();
 
-    bool load( const QByteArray content ) const override;
+    bool load(const QByteArray content) const override;
 
 };
 

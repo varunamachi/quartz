@@ -14,7 +14,7 @@ const QString NodeProvider::EXTENSION_NAME{
     "Serial Console Node" };
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider{ EXTENSION_ID, EXTENSION_NAME }
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
@@ -34,15 +34,15 @@ bool NodeProvider::destroy()
     return true;
 }
 
-QVector< std::shared_ptr< NodeInfo >> NodeProvider::nodes() const
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
 {
-    auto nodeInfo = std::make_shared< NodeInfo >(
+    auto nodeInfo = std::make_shared<NodeInfo>(
                 QStringList{},
                 "Serial Console",
                 MainWidget::CONTENT_ID,
                 getIcon(MatIcon::Tv));
-    QVector< std::shared_ptr< NodeInfo >> nodes;
-    nodes.push_back( nodeInfo );
+    QVector<std::shared_ptr<NodeInfo>> nodes;
+    nodes.push_back(nodeInfo);
     return nodes;
 }
 

@@ -11,26 +11,26 @@
 namespace Quartz { namespace Ext { namespace Sample {
 
 const QString TitleBarButton::ITEM_ID{ "qzp.sample.titlebutton" };
-const QString TitleBarButton::ITEM_CATERGORY{ "sample" };
+const QString TitleBarButton::ITEM_CATERGORY("sample");
 
-TitleBarButton::TitleBarButton( QWidget *parent )
+TitleBarButton::TitleBarButton(QWidget *parent)
     : Quartz::QuartzItem(
           TitleBarButton::ITEM_ID,
           TitleBarButton::ITEM_CATERGORY,
-          parent )
+          parent)
 {
-    auto layout = new QVBoxLayout{ this };
-    auto pushButton = new QPushButton{ /*tr( "sample" ),*/ this };
-    pushButton->setIcon( QIcon{ ":chilli" });
-    pushButton->setFlat( true );
+    auto layout = new QVBoxLayout(this);
+    auto pushButton = new QPushButton{ /*tr("sample"),*/ this };
+    pushButton->setIcon(QIcon(":chilli"));
+    pushButton->setFlat(true);
 //    QFile file{ ":/chilli" };
-//    QZP_INFO << ( file.exists() ? "Exists" : "Does not exist" );
-//    layout->addWidget( pushButton );
-//    layout->setContentsMargins( QMargins{} );
-    this->setLayout( layout );
-    this->setContentsMargins( QMargins{} );
+//    QZP_INFO << (file.exists() ? "Exists" : "Does not exist");
+//    layout->addWidget(pushButton);
+//    layout->setContentsMargins(QMargins{});
+    this->setLayout(layout);
+    this->setContentsMargins(QMargins{});
 
-    connect( pushButton,
+    connect(pushButton,
              &QPushButton::clicked,
              []() {
 //       qDebug() << "Hello!!";
@@ -51,7 +51,7 @@ const QString TitleItemProvider::EXTENSION_NAME{
 
 
 TitleItemProvider::TitleItemProvider()
-    : AbstractTitleItemProvider{ EXTENSION_ID, EXTENSION_NAME }
+    : AbstractTitleItemProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
@@ -74,7 +74,7 @@ bool TitleItemProvider::destroy()
 QVector< QuartzItem *> TitleItemProvider::titleItems() const
 {
     QVector< QuartzItem *> items;
-    items.push_back( new TitleBarButton{} );
+    items.push_back(new TitleBarButton{});
     return items;
 }
 
