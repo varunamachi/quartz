@@ -1,5 +1,6 @@
 
 #include <QMenu>
+#include <QApplication>
 
 #include <core/logger/Logging.h>
 
@@ -28,11 +29,26 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     : QToolButton(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    this->setIcon(getIcon(MatIcon::Menu));
+//    this->setIcon(getIcon(MatIcon::ArrowDropDown));
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);
-    this->setStyleSheet("QToolButton::menu-indicator{width:0px;}");
+    this->setObjectName("menu_button");
+    this->setText(tr("MENU"));
+//    this->setStyleSheet("QToolButton#menu_button{background: transperant}");
+
+    auto hlTxtColor = QApplication::palette().color(QPalette::Highlight);
+    hlTxtColor.setAlpha(80);
+    QString qss;
+    QTextStream qssStream;
+    qssStream.setString(&qss);
+    qssStream << "QToolButton#menu_button {"
+                     "border: solid 2px" << hlTxtColor.name(QColor::HexArgb) <<
+
+                 ";}";
+    qssStream.flush();
+    this->setStyleSheet(qss);
+    this->setContentsMargins({});
 }
 
 MainMenuButton::~MainMenuButton()

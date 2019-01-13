@@ -3,6 +3,7 @@
 #include <QStackedWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 #include <common/iconstore/IconFontStore.h>
 

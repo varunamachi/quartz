@@ -99,7 +99,7 @@ void IdButton::setStyle(int width, int height, bool big) {
     qssStream.setString(&qss);
     auto txtColor = QApplication::palette().color(QPalette::Text);
     auto hlTxtColor = QApplication::palette().color(QPalette::Highlight);
-    auto hlBg = QApplication::palette().color(QPalette::Highlight);
+    auto hlBg = hlTxtColor;
     auto hlBd = hlTxtColor;
     auto selBg = txtColor;
     auto hvBg = txtColor;

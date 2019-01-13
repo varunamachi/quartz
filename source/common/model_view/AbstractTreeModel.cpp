@@ -213,7 +213,7 @@ Qt::ItemFlags AbstractTreeModel::flags(const QModelIndex &index) const
 {
     auto node = static_cast< TreeNode *>(index.internalPointer());
     if (! index.isValid() || node == nullptr) {
-        return 0;
+        return Qt::NoItemFlags;
     }
     auto col = m_data->m_selectable ? index.column() - 1 : index.column();
     auto flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;

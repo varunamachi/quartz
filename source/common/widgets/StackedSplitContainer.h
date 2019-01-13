@@ -25,6 +25,8 @@ public:
 
     QString containerType() const override;
 
+    void addFixedWidget(QWidget *widget);
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;

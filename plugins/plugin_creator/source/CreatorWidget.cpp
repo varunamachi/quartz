@@ -54,6 +54,7 @@ struct CreatorWidget::Data
         , m_dirPath(new QLineEdit(parent))
         , m_browseButton(new QPushButton(tr("Browse "), parent))
         , m_createButton(new QPushButton(tr("Create"), parent))
+        , m_clearButton(new QPushButton(tr("Clear"), parent))
         , m_templateManager(tman)
         , m_templateSelector(new TemplateSelectorDialog(tman.get(), parent))
         , m_configWidget(new TemplateConfigWidget(parent))
@@ -75,6 +76,8 @@ struct CreatorWidget::Data
 
     QPushButton *m_createButton;
 
+    QPushButton *m_clearButton;
+
 //    ArrayModel *m_tmodel;
 
     std::shared_ptr<TemplateManager> m_templateManager;
@@ -95,8 +98,8 @@ void addStandaredTemplates(TemplateManager *tman)
         auto entry = list.at(i);
         if (entry.suffix() == "template") {
             auto key = entry.baseName();
-            QFile file{ entry.absoluteFilePath() };
-            auto content = QString{ file.readAll() };
+            QFile file{entry.absoluteFilePath()};
+            auto content = QString{file.readAll()};
             auto tmpl = std::make_shared<Template>(key, content);
             tman->addTemplate(tmpl);
         }
@@ -145,13 +148,14 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
     ++ row;
 
     //Configuration part
-    auto addBtn = new QPushButton(tr("Add Plugin"), this);
+    auto addBtn = new QPushButton(tr("Add Extension"), this);
     auto addLyt = new QHBoxLayout();
     addLyt->addStretch();
     addLyt->addWidget(addBtn);
 
     auto btnLyt = new QHBoxLayout();
     btnLyt->addStretch();
+    btnLyt->addWidget(m_data->m_clearButton);
     btnLyt->addWidget(m_data->m_createButton);
 
     auto configLyt = new QVBoxLayout();
@@ -159,7 +163,7 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
     configLyt->addWidget(m_data->m_configWidget);
     configLyt->addLayout(btnLyt);
 
-    auto gbx = new QGroupBox(tr("Confirure Plugins"), this);
+    auto gbx = new QGroupBox(tr("Confirure Extensions"), this);
     gbx->setLayout(configLyt);
 
     //Main layout
@@ -197,6 +201,10 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
         }
         m_data->m_templateSelector->clearSelection();
     });
+    connect(m_data->m_clearButton,
+            &QPushButton::clicked,
+            m_data->m_configWidget,
+            &TemplateConfigWidget::clear);
 
 #ifdef QT_DEBUG
     auto testpluginLoc = QStandardPaths::writableLocation(

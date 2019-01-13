@@ -21,9 +21,9 @@ public:
 
     struct Options {
         Options(int nf = 1,
-                 bool sel = false,
-                 bool flat = true,
-                 QVector<QString> headers = {})
+                bool sel = false,
+                bool flat = true,
+                QVector<QString> headers = {})
             : numFields(nf)
             , selectable(sel)
             , flat(flat)
@@ -31,8 +31,6 @@ public:
         {
 
         }
-
-
 
         int numFields;
         bool selectable;
@@ -65,8 +63,8 @@ public:
     bool hasChildren(const QModelIndex &parent) const override;
 
     bool setData(const QModelIndex &index,
-                  const QVariant &value,
-                  int role) override;
+                 const QVariant &value,
+                 int role) override;
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 

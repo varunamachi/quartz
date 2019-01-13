@@ -60,21 +60,21 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    auto clearBtn = new QPushButton(tr("Clear"), this);
-    auto lblyt = new QHBoxLayout{};
-    lblyt->addStretch();
-    lblyt->addWidget(clearBtn);
+//    auto clearBtn = new QPushButton(tr("Clear"), this);
+//    auto lblyt = new QHBoxLayout();
+//    lblyt->addStretch();
+//    lblyt->addWidget(clearBtn);
 
-    auto leftLayout = new QVBoxLayout{};
+    auto leftLayout = new QVBoxLayout();
     leftLayout->addWidget(m_data->m_filter);
     leftLayout->addWidget(m_data->m_view);
-    leftLayout->addLayout(lblyt);
+//    leftLayout->addLayout(lblyt);
 
-    auto rightLayout = new QVBoxLayout{};
+    auto rightLayout = new QVBoxLayout();
     rightLayout->addWidget(m_data->m_configFilter);
     rightLayout->addWidget(m_data->m_configView);
 
-    auto mainLayout = new QHBoxLayout{};
+    auto mainLayout = new QHBoxLayout();
     mainLayout->addLayout(leftLayout);
     mainLayout->addLayout(rightLayout);
 
@@ -85,17 +85,15 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
     m_data->m_configView->setItemDelegate(new GenConfigDelegate(this));
 
     this->setLayout(mainLayout);
-//    mainLayout->setContentsMargins(QMargins{});
-//    leftLayout->setContentsMargins(QMargins{});
 
     connect(m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
              this,
              &TemplateConfigWidget::onSelection);
-    connect(clearBtn,
-             &QPushButton::clicked,
-             m_data->m_tmodel,
-             &ArrayModel::clear);
+//    connect(clearBtn,
+//             &QPushButton::clicked,
+//             m_data->m_tmodel,
+//             &ArrayModel::clear);
     connect(m_data->m_filter,
              &QLineEdit::textChanged,
              m_data->m_instanceProxy,
@@ -105,11 +103,11 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
              m_data->m_configProxy,
              &BasicSortFilter::setExpression);
 
-    auto action = [ this ](QModelIndex i) {
+    auto action = [this](QModelIndex i) {
         m_data->m_tmodel->removeRoot(
-                    static_cast< TreeNode *>(i.internalPointer()));
+                    static_cast<TreeNode *>(i.internalPointer()));
     };
-    m_data->m_view->addContextAction({ tr("Delete"), action });
+    m_data->m_view->addContextAction({tr("Delete"), action});
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()

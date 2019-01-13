@@ -68,12 +68,10 @@ struct QzMainWidget::Data
 };
 
 
-QzMainWidget::QzMainWidget(bool drawWindowControls, QMainWindow *parent)
+QzMainWidget::QzMainWidget(QMainWindow *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    m_data->m_titleBar  = new TitleBar(20, drawWindowControls, this);
-//    m_data->m_titleBar->setContentsMargins(0, 10, 0, 5);
     m_data->m_content   = new ContentManager(this);
     m_data->m_actionBar = new ActionBar(20, this);
     m_data->m_menu = new QMenu(this);
@@ -94,7 +92,7 @@ QzMainWidget::QzMainWidget(bool drawWindowControls, QMainWindow *parent)
     viewContainer->setContentWidget(
                 m_data->m_content,
                 AbstractContainer::SelectorPosition::Before);
-    viewContainer->setSizes(370, 210, 100);
+    viewContainer->setSizes(370, 210, 20);
 
     auto selectorContainer = new StackedSplitContainer(
                 50,
@@ -107,19 +105,18 @@ QzMainWidget::QzMainWidget(bool drawWindowControls, QMainWindow *parent)
     selectorContainer->setContentWidget(m_data->m_viewManager);
     selectorContainer->setSizes(20, 180, 600);
 
-    auto vlyt = new QHBoxLayout();
-    vlyt->addWidget(m_data->m_titleBar);
     auto mainMenu = new MainMenuButton(this);
-    vlyt->addWidget(mainMenu);
-
     auto about = new QAction(QIcon("://resources/quartz32.png"), "About", this);
     connect(about, &QAction::triggered, [this]() {
        m_data->m_aboutDialog->exec();
     });
     mainMenu->addAction(about);
+    mainMenu->setMaximumSize({50, 20});
+    selectorContainer->addFixedWidget(mainMenu);
+
 
     auto mainLayout = new QVBoxLayout();
-    mainLayout->addLayout(vlyt);
+//    mainLayout->addLayout(vlyt);
     mainLayout->addWidget(m_data->m_selector);
     mainLayout->addWidget(m_data->m_actionBar);
     mainLayout->setAlignment(m_data->m_actionBar, Qt::AlignBottom);
@@ -148,7 +145,6 @@ QzMainWidget::QzMainWidget(bool drawWindowControls, QMainWindow *parent)
     QZ_LOGGER()->dispatcher()->addTarget(logView);
 
     m_data->m_pluginManager = std::make_unique<Ext::PluginManager>();
-    m_data->m_pluginManager->registerPluginAdapter(m_data->m_titleBar);
     m_data->m_pluginManager->registerPluginAdapter(m_data->m_actionBar);
     m_data->m_pluginManager->registerPluginAdapter(m_data->m_selector);
     m_data->m_pluginManager->registerPluginAdapter(nodeSelector->model());
@@ -176,13 +172,6 @@ QzMainWidget::~QzMainWidget()
     QZ_LOGGER()->dispatcher()->removeTarget(LogView::LOG_TARGET_ID);
 }
 
-
-TitleBar * QzMainWidget::titleBar()
-{
-    return m_data->m_titleBar;
-}
-
-
 void QzMainWidget::onAboutToQuit()
 {
 
@@ -191,6 +180,11 @@ void QzMainWidget::onAboutToQuit()
 void QzMainWidget::setRoundedRect(bool useRoundedRect)
 {
     m_data->m_roundedRect = useRoundedRect;
+}
+
+const TitleBar *QzMainWidget::titleBar() const
+{
+    return m_data->m_titleBar;
 }
 
 

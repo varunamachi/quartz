@@ -26,7 +26,7 @@ namespace Quartz {
 struct QuartzFramelessWindow::Data
 {
     Data(QMainWindow *parent)
-        : m_mainWidget(new QzMainWidget(true, parent))
+        : m_mainWidget(new QzMainWidget(parent))
         , m_moving(false)
         , m_maximised(false)
     {
