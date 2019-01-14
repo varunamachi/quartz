@@ -94,21 +94,18 @@ IdButton::~IdButton()
 
 void IdButton::setStyle(int width, int height, bool big) {
     setCheckable(true);
+    auto fontSize = (big ? 10 : 12);
+
+    auto selBg = QApplication::palette().color(QPalette::Text);
+    auto hlTxtColor = QApplication::palette().color(QPalette::Base);
+    auto txtColor = QApplication::palette().color(QPalette::Text);
+    auto hlBd = txtColor;
+    selBg.setAlpha(200);
+
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
-    auto txtColor = QApplication::palette().color(QPalette::Text);
-    auto hlTxtColor = QApplication::palette().color(QPalette::Highlight);
-    auto selBg = QApplication::palette().color(QPalette::Text);;
-    auto hlBg = selBg;
-    auto hlBd = txtColor;
-    txtColor.setAlpha(200);
-    hlBg.setAlpha(160);
-    selBg.setAlpha(210);
-    setContentsMargins({0, 5, 0, 5});
     this->setObjectName("idButton");
-
-    auto fontSize = (big ? 10 : 12);
     qssStream <<
             "QToolButton#idButton {"
             "   max-width: " << width << "px;"
@@ -116,6 +113,7 @@ void IdButton::setStyle(int width, int height, bool big) {
             "   max-height: " << height << "px;"
             "   min-height: " << height << "px;"
             "   font-size: " << fontSize << "px;"
+            "   color: " << txtColor.name(QColor::HexArgb) << ";"
             "   padding-bottom: 5px;"
             "   border: none;"
             "}"
@@ -132,6 +130,7 @@ void IdButton::setStyle(int width, int height, bool big) {
              ;
     qssStream.flush();
     setStyleSheet(qss);
+
     setContentsMargins(0, 10, 0, 10);
 }
 

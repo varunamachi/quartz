@@ -35,17 +35,18 @@ StackedSplitContainer::StackedSplitContainer(
 //                                            : Qt::Vertical;
 //    if
     auto spor = Qt::Horizontal;
+    auto wrapper = new QWidget(this);
     if (orientation == Qt::Vertical) {
         m_data->m_qzLayout = new QVBoxLayout();
         spor = Qt::Horizontal;
+        wrapper->setMaximumWidth(selectorDimention);
     } else  {
+        wrapper->setMaximumHeight(selectorDimention);
         m_data->m_qzLayout = new QHBoxLayout();
         spor = Qt::Vertical;
     }
+
     m_data->m_qzLayout->addWidget(selector());
-    auto wrapper = new QWidget(this);
-    m_data->m_qzLayout->setContentsMargins({});
-    wrapper->setContentsMargins({});
     wrapper->setLayout(m_data->m_qzLayout);
     m_data->m_qzLayout->setSpacing(10);
 
@@ -54,6 +55,7 @@ StackedSplitContainer::StackedSplitContainer(
     policy.setHorizontalPolicy(QSizePolicy::Expanding);
     policy.setVerticalPolicy(QSizePolicy::Expanding);
     m_data->m_splitter->setSizePolicy(policy);
+
     if (selectorPosition == AbstractContainer::SelectorPosition::Before) {
         m_data->m_splitter->addWidget(wrapper);
         m_data->m_splitter->addWidget(stackedWidget());
@@ -73,6 +75,8 @@ StackedSplitContainer::StackedSplitContainer(
     this->setContentsMargins({});
     m_data->m_splitter->setContentsMargins({});
     layout->setContentsMargins({});
+    m_data->m_qzLayout->setContentsMargins({});
+    wrapper->setContentsMargins({});
 }
 
 StackedSplitContainer::~StackedSplitContainer()

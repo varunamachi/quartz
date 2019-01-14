@@ -111,7 +111,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
        m_data->m_aboutDialog->exec();
     });
     mainMenu->addAction(about);
-    mainMenu->setMaximumSize({50, 20});
+    mainMenu->setMaximumSize({50, 16});
     selectorContainer->addFixedWidget(mainMenu);
 
 

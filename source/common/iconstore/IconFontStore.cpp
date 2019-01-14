@@ -52,7 +52,7 @@ public:
             drawSize = qRound(drawSize * 0.9);
         }
 
-        color.setAlpha(175);
+        color.setAlpha(185);
         painter->setPen(color);
         auto font = mat->font(fontName, drawSize);
         painter->setFont(font);
@@ -258,7 +258,7 @@ QColor IconFontStore::getColor(QIcon::Mode mode) {
     if (mode == QIcon::Disabled) {
         color = palette.color(QPalette::AlternateBase);
     } else if (mode == QIcon::Selected) {
-        color = palette.color(QPalette::Highlight);
+        color = palette.color(QPalette::Base);
     }
     return color;
 }
