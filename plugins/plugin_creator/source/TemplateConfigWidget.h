@@ -17,6 +17,8 @@ class TreeNode;
 
 namespace Ext { namespace Creator {
 
+class TemplateManager;
+
 class ConfigModel : public AbstractTreeModel
 {
     Q_OBJECT
@@ -43,7 +45,9 @@ class TemplateConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    TemplateConfigWidget(QWidget *parent = nullptr);
+    TemplateConfigWidget(
+            TemplateManager *tman,
+            QWidget *parent = nullptr);
 
     ~TemplateConfigWidget();
 

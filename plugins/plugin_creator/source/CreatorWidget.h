@@ -31,7 +31,7 @@ public slots:
 
     void autoPopulate(const QString &fqid);
 
-    void addTemplates() ;
+//    void addTemplates() ;
 
 private:
 

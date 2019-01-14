@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QAction>
 #include <QPushButton>
+#include <QSpacerItem>
 
 #include <core/logger/Logging.h>
 
@@ -16,8 +17,11 @@
 #include <common/generic_config/model/Config.h>
 #include <common/generic_config/model/Param.h>
 #include <common/widgets/QzTreeView.h>
+#include <common/iconstore/IconFontStore.h>
 
 #include "TemplateConfigWidget.h"
+#include "TemplateManager.h"
+#include "TemplateSelectorDialog.h"
 
 namespace Quartz { namespace Ext { namespace Creator {
 
@@ -27,8 +31,8 @@ const QVector<QString> TI_HEADERS{
 
 struct TemplateConfigWidget::Data
 {
-    explicit Data(TemplateConfigWidget *parent)
-        : m_tmodel(new ArrayModel(2, false, true, TI_HEADERS, parent))
+    explicit Data(TemplateManager *tman, TemplateConfigWidget *parent)
+        : m_tmodel(new ArrayModel(1, true, true, TI_HEADERS, parent))
         , m_instanceProxy(new BasicSortFilter(parent))
         , m_view(new QzTreeView(parent))
         , m_filter(new QLineEdit(parent))
@@ -36,10 +40,16 @@ struct TemplateConfigWidget::Data
         , m_configProxy(new BasicSortFilter(parent))
         , m_configView(new QzTreeView(parent))
         , m_configFilter(new QLineEdit(parent))
+        , m_addBtn(new QPushButton(getIcon(MatIcon::Add), "", parent))
+        , m_removeBtn(new QPushButton(getIcon(MatIcon::Remove), "", parent))
+        , m_tman(tman)
+        , m_selector(new TemplateSelectorDialog(tman, parent))
         , m_emptyConfig("none", "None")
     {
         m_instanceProxy->setSourceModel(m_tmodel);
         m_configProxy->setSourceModel(m_configModel);
+        m_filter->setPlaceholderText(tr("Filter Templates"));
+        m_configFilter->setPlaceholderText(tr("Filter Vars"));
     }
 
     ArrayModel *m_tmodel;
@@ -52,13 +62,21 @@ struct TemplateConfigWidget::Data
     QzTreeView *m_configView;
     QLineEdit *m_configFilter;
 
+    QPushButton *m_addBtn;
+    QPushButton *m_removeBtn;
+
+    TemplateManager *m_tman;
+    TemplateSelectorDialog *m_selector;
+
     QHash< QString, std::shared_ptr<TemplateInstance>> m_instances;
     Config m_emptyConfig;
 };
 
-TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
+TemplateConfigWidget::TemplateConfigWidget(
+        TemplateManager *tman,
+        QWidget *parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(this))
+    , m_data(std::make_unique<Data>(tman, this))
 {
 //    auto clearBtn = new QPushButton(tr("Clear"), this);
 //    auto lblyt = new QHBoxLayout();
@@ -66,7 +84,12 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
 //    lblyt->addWidget(clearBtn);
 
     auto leftLayout = new QVBoxLayout();
-    leftLayout->addWidget(m_data->m_filter);
+    auto leftTopLayout = new QHBoxLayout();
+    leftTopLayout->addWidget(m_data->m_filter);
+    leftTopLayout->addSpacerItem(new QSpacerItem(1, 1));
+    leftTopLayout->addWidget(m_data->m_addBtn);
+    leftTopLayout->addWidget(m_data->m_removeBtn);
+    leftLayout->addLayout(leftTopLayout);
     leftLayout->addWidget(m_data->m_view);
 //    leftLayout->addLayout(lblyt);
 
@@ -90,10 +113,6 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
              &QItemSelectionModel::currentChanged,
              this,
              &TemplateConfigWidget::onSelection);
-//    connect(clearBtn,
-//             &QPushButton::clicked,
-//             m_data->m_tmodel,
-//             &ArrayModel::clear);
     connect(m_data->m_filter,
              &QLineEdit::textChanged,
              m_data->m_instanceProxy,
@@ -102,6 +121,14 @@ TemplateConfigWidget::TemplateConfigWidget(QWidget *parent)
              &QLineEdit::textChanged,
              m_data->m_configProxy,
              &BasicSortFilter::setExpression);
+    connect(m_data->m_addBtn, &QPushButton::clicked, [this](){
+        m_data->m_selector->exec();
+        const auto selected = m_data->m_selector->selectedTemplates();
+            foreach(auto t, selected) {
+                this->createInstanceOf(t);
+            }
+        m_data->m_selector->clearSelection();
+    });
 
     auto action = [this](QModelIndex i) {
         m_data->m_tmodel->removeRoot(

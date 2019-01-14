@@ -99,15 +99,12 @@ void IdButton::setStyle(int width, int height, bool big) {
     qssStream.setString(&qss);
     auto txtColor = QApplication::palette().color(QPalette::Text);
     auto hlTxtColor = QApplication::palette().color(QPalette::Highlight);
-    auto hlBg = hlTxtColor;
-    auto hlBd = hlTxtColor;
-    auto selBg = txtColor;
-    auto hvBg = txtColor;
+    auto selBg = QApplication::palette().color(QPalette::Text);;
+    auto hlBg = selBg;
+    auto hlBd = txtColor;
     txtColor.setAlpha(200);
-    selBg.setAlpha(80);
-    hvBg.setAlpha(30);
-    hlBg.setAlpha(30);
-//    hlBd.setAlpha(150);
+    hlBg.setAlpha(160);
+    selBg.setAlpha(210);
     setContentsMargins({0, 5, 0, 5});
     this->setObjectName("idButton");
 
@@ -123,13 +120,15 @@ void IdButton::setStyle(int width, int height, bool big) {
             "   border: none;"
             "}"
             "QToolButton#idButton:checked {"
-            "   background-color: " << hvBg.name(QColor::HexArgb) << ";"
+            "   background-color: " << selBg.name(QColor::HexArgb) << ";"
             "   color: " << hlTxtColor.name(QColor::HexArgb) << ";"
             "   border: solid 5px " << hlBd.name(QColor::HexArgb) << ";"
             "}"
-            "QToolButton#idButton:hover {"
-            "   background-color: " << hlBg.name(QColor::HexArgb) << ";"
-            "}"
+//            "QToolButton#idButton:hover {"
+//            "   border-color: " << hlBg.name(QColor::HexArgb) << ";"
+//            "   border-style: solid;"
+//            "   border-width: 1px;"
+//            "}"
              ;
     qssStream.flush();
     setStyleSheet(qss);

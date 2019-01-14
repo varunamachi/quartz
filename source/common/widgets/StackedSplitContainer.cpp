@@ -47,7 +47,7 @@ StackedSplitContainer::StackedSplitContainer(
     m_data->m_qzLayout->setContentsMargins({});
     wrapper->setContentsMargins({});
     wrapper->setLayout(m_data->m_qzLayout);
-    m_data->m_qzLayout->setSpacing(0);
+    m_data->m_qzLayout->setSpacing(10);
 
     m_data->m_splitter = new QSplitter(spor, this);
     QSizePolicy policy;
@@ -55,8 +55,6 @@ StackedSplitContainer::StackedSplitContainer(
     policy.setVerticalPolicy(QSizePolicy::Expanding);
     m_data->m_splitter->setSizePolicy(policy);
     if (selectorPosition == AbstractContainer::SelectorPosition::Before) {
-
-
         m_data->m_splitter->addWidget(wrapper);
         m_data->m_splitter->addWidget(stackedWidget());
     }

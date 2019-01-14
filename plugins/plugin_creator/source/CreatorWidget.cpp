@@ -56,8 +56,8 @@ struct CreatorWidget::Data
         , m_createButton(new QPushButton(tr("Create"), parent))
         , m_clearButton(new QPushButton(tr("Clear"), parent))
         , m_templateManager(tman)
-        , m_templateSelector(new TemplateSelectorDialog(tman.get(), parent))
-        , m_configWidget(new TemplateConfigWidget(parent))
+//        , m_templateSelector(new TemplateSelectorDialog(tman.get(), parent))
+        , m_configWidget(new TemplateConfigWidget(tman.get(), parent))
         , m_globalConfig(std::make_shared<GlobalConfig>())
     {
     }
@@ -81,8 +81,6 @@ struct CreatorWidget::Data
 //    ArrayModel *m_tmodel;
 
     std::shared_ptr<TemplateManager> m_templateManager;
-
-    TemplateSelectorDialog *m_templateSelector;
 
     TemplateConfigWidget *m_configWidget;
 
@@ -147,11 +145,6 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
     layout->addLayout(browseLayout , row, 1);
     ++ row;
 
-    //Configuration part
-    auto addBtn = new QPushButton(tr("Add Extension"), this);
-    auto addLyt = new QHBoxLayout();
-    addLyt->addStretch();
-    addLyt->addWidget(addBtn);
 
     auto btnLyt = new QHBoxLayout();
     btnLyt->addStretch();
@@ -159,7 +152,6 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
     btnLyt->addWidget(m_data->m_createButton);
 
     auto configLyt = new QVBoxLayout();
-    configLyt->addLayout(addLyt);
     configLyt->addWidget(m_data->m_configWidget);
     configLyt->addLayout(btnLyt);
 
@@ -194,13 +186,6 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
              &QLineEdit::textChanged,
              this,
              &CreatorWidget::autoPopulate);
-    connect(addBtn, &QPushButton::clicked, [ this ](){
-        m_data->m_templateSelector->exec();
-        if (m_data->m_templateSelector->result() == QDialog::Accepted) {
-            this->addTemplates();
-        }
-        m_data->m_templateSelector->clearSelection();
-    });
     connect(m_data->m_clearButton,
             &QPushButton::clicked,
             m_data->m_configWidget,
@@ -329,6 +314,7 @@ void CreatorWidget::onCreate()
     QStringList sources, headers;
     for (auto i = 0; i < m_data->m_configWidget->numInstances(); ++ i) {
         auto inst = m_data->m_configWidget->instanceAt(i);
+        inst->setGlobalConfig(m_data->m_globalConfig);
         if (isSource(inst->name())) {
             sources.append(inst->name());
         }
@@ -390,16 +376,6 @@ void CreatorWidget::autoPopulate(const QString &fqid)
     m_data->m_namespaceEdit->setText(ns);
     m_data->m_nameEdit->setText(display);
 }
-
-void CreatorWidget::addTemplates()
-{
-    auto selected = m_data->m_templateSelector->selectedTemplates();
-    foreach(auto t, selected) {
-        auto inst = m_data->m_configWidget->createInstanceOf(t);
-        inst->setGlobalConfig(m_data->m_globalConfig);
-    }
-}
-
 
 } } }
 

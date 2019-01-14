@@ -29,23 +29,25 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     : QToolButton(parent)
     , m_data(std::make_unique<Data>(this))
 {
-//    this->setIcon(getIcon(MatIcon::ArrowDropDown));
+    this->setIcon(getActiveIcon(MatIcon::Menu));
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);
     this->setObjectName("menu_button");
-    this->setText(tr("MENU"));
+//    this->setText(tr("MENU"));
 //    this->setStyleSheet("QToolButton#menu_button{background: transperant}");
 
-    auto hlTxtColor = QApplication::palette().color(QPalette::Highlight);
-    hlTxtColor.setAlpha(80);
+    auto bgColor = QApplication::palette().color(QPalette::Text);
+//    bgColor.setAlpha(100);
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
     qssStream << "QToolButton#menu_button {"
-                     "border: solid 2px" << hlTxtColor.name(QColor::HexArgb) <<
-
-                 ";}";
+                     "background-color: " << bgColor.name(QColor::HexArgb) <<
+                 ";}"
+                 "QToolButton#menu_button:menu-indicator{"
+                    "width: 0px;"
+                 "}";
     qssStream.flush();
     this->setStyleSheet(qss);
     this->setContentsMargins({});

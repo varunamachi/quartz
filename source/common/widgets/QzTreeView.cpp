@@ -30,7 +30,8 @@ QzTreeView::QzTreeView(QWidget *parent)
     : QTreeView(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//    this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    this->header()->setSectionResizeMode(QHeaderView::Stretch);
     this->setAlternatingRowColors(true);
     this->setStyleSheet("QTreeView::item{ height: 20px; }");
     this->setContextMenuPolicy(Qt::CustomContextMenu);
