@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include <QTreeView>
 
@@ -14,7 +15,7 @@ namespace Quartz {
 struct ContextMenuItem {
     QString m_name;
 
-    std::function< void(QModelIndex) > m_func;
+    std::function<void(QModelIndex)> m_func;
 };
 
 class QUARTZ_COMMON_API QzTreeView : public QTreeView
