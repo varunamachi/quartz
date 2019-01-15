@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QPushButton>
 #include <QSpacerItem>
+#include <QLabel>
 
 #include <core/logger/Logging.h>
 
@@ -32,7 +33,7 @@ const QVector<QString> TI_HEADERS{
 struct TemplateConfigWidget::Data
 {
     explicit Data(TemplateManager *tman, TemplateConfigWidget *parent)
-        : m_tmodel(new ArrayModel(1, true, true, TI_HEADERS, parent))
+        : m_tmodel(new ArrayModel(1, false, true, TI_HEADERS, parent))
         , m_instanceProxy(new BasicSortFilter(parent))
         , m_view(new QzTreeView(parent))
         , m_filter(new QLineEdit(parent))
@@ -42,6 +43,7 @@ struct TemplateConfigWidget::Data
         , m_configFilter(new QLineEdit(parent))
         , m_addBtn(new QPushButton(getIcon(MatIcon::Add), "", parent))
         , m_removeBtn(new QPushButton(getIcon(MatIcon::Remove), "", parent))
+        , m_clearBtn(new QPushButton(getIcon(MatIcon::Clear), "", parent))
         , m_tman(tman)
         , m_selector(new TemplateSelectorDialog(tman, parent))
         , m_emptyConfig("none", "None")
@@ -50,6 +52,9 @@ struct TemplateConfigWidget::Data
         m_configProxy->setSourceModel(m_configModel);
         m_filter->setPlaceholderText(tr("Filter Templates"));
         m_configFilter->setPlaceholderText(tr("Filter Vars"));
+        m_addBtn->setToolTip(tr("Add template"));
+        m_removeBtn->setToolTip(tr("Remove selected template"));
+        m_clearBtn->setToolTip(tr("Clear all templates"));
     }
 
     ArrayModel *m_tmodel;
@@ -64,6 +69,7 @@ struct TemplateConfigWidget::Data
 
     QPushButton *m_addBtn;
     QPushButton *m_removeBtn;
+    QPushButton *m_clearBtn;
 
     TemplateManager *m_tman;
     TemplateSelectorDialog *m_selector;
@@ -78,36 +84,42 @@ TemplateConfigWidget::TemplateConfigWidget(
     : QWidget(parent)
     , m_data(std::make_unique<Data>(tman, this))
 {
-//    auto clearBtn = new QPushButton(tr("Clear"), this);
-//    auto lblyt = new QHBoxLayout();
-//    lblyt->addStretch();
-//    lblyt->addWidget(clearBtn);
+    auto leftRightLayout = new QVBoxLayout();
+    leftRightLayout->addStretch();
+    leftRightLayout->addWidget(m_data->m_addBtn);
+    leftRightLayout->addWidget(m_data->m_removeBtn);
+    leftRightLayout->addWidget(m_data->m_clearBtn);
+    leftRightLayout->addStretch();
 
-    auto leftLayout = new QVBoxLayout();
-    auto leftTopLayout = new QHBoxLayout();
-    leftTopLayout->addWidget(m_data->m_filter);
-    leftTopLayout->addSpacerItem(new QSpacerItem(1, 1));
-    leftTopLayout->addWidget(m_data->m_addBtn);
-    leftTopLayout->addWidget(m_data->m_removeBtn);
-    leftLayout->addLayout(leftTopLayout);
-    leftLayout->addWidget(m_data->m_view);
-//    leftLayout->addLayout(lblyt);
+    auto leftLeftLayout = new QVBoxLayout();
+    leftLeftLayout->addWidget(new QLabel(tr("Selected Templates:"), this));
+    leftLeftLayout->addWidget(m_data->m_filter);
+    leftLeftLayout->addWidget(m_data->m_view);
+
+    auto leftLayout = new QHBoxLayout();
+    leftLayout->addLayout(leftLeftLayout);
+    leftLayout->addLayout(leftRightLayout);
 
     auto rightLayout = new QVBoxLayout();
+    rightLayout->addWidget(new QLabel(tr("Parameters:"), this));
     rightLayout->addWidget(m_data->m_configFilter);
     rightLayout->addWidget(m_data->m_configView);
 
+    auto spacer = new QWidget();
+    spacer->setMaximumWidth(40);
+    spacer->setMinimumWidth(40);
     auto mainLayout = new QHBoxLayout();
     mainLayout->addLayout(leftLayout);
+    mainLayout->addWidget(spacer);
     mainLayout->addLayout(rightLayout);
+    this->setLayout(mainLayout);
 
     m_data->m_view->setModel(m_data->m_instanceProxy);
     m_data->m_view->setRootIsDecorated(false);
-    m_data->m_configView->setModel(m_data->m_configProxy);
+//    m_data->m_configView->setModel(m_data->m_configProxy);
+    m_data->m_configView->setModel(m_data->m_configModel);
     m_data->m_configView->setRootIsDecorated(false);
     m_data->m_configView->setItemDelegate(new GenConfigDelegate(this));
-
-    this->setLayout(mainLayout);
 
     connect(m_data->m_view->selectionModel(),
              &QItemSelectionModel::currentChanged,
@@ -121,20 +133,28 @@ TemplateConfigWidget::TemplateConfigWidget(
              &QLineEdit::textChanged,
              m_data->m_configProxy,
              &BasicSortFilter::setExpression);
+    connect(m_data->m_removeBtn,
+            &QPushButton::clicked,
+            this,
+            &TemplateConfigWidget::clear);
     connect(m_data->m_addBtn, &QPushButton::clicked, [this](){
         m_data->m_selector->exec();
-        const auto selected = m_data->m_selector->selectedTemplates();
+        if (m_data->m_selector->result() == QDialog::Accepted) {
+            const auto selected = m_data->m_selector->selectedTemplates();
             foreach(auto t, selected) {
                 this->createInstanceOf(t);
             }
+        }
         m_data->m_selector->clearSelection();
     });
-
-    auto action = [this](QModelIndex i) {
-        m_data->m_tmodel->removeRoot(
-                    static_cast<TreeNode *>(i.internalPointer()));
-    };
-    m_data->m_view->addContextAction({tr("Delete"), action});
+    connect(m_data->m_removeBtn, &QPushButton::clicked, [this](){
+        auto selected = m_data->m_view->selectionModel()->selectedRows();
+        for (auto index : selected) {
+            auto node = m_data->m_tmodel->rootAt(index.row());
+            m_data->m_tmodel->removeRoot(node);
+        }
+        m_data->m_selector->clearSelection();
+    });
 }
 
 TemplateConfigWidget::~TemplateConfigWidget()
@@ -154,10 +174,9 @@ TemplateInstance * TemplateConfigWidget::createInstanceOf(Template *tmpl)
         name = tmpl->name() + "_" + QString::number(index);
         ++ index;
     } while (index <= 1000); //1000 should be enough
-    auto inst = std::make_shared<TemplateInstance>(
-                name,
-                tmpl->config()->clone(),
-                tmpl);
+    auto inst = std::make_shared<TemplateInstance>(name,
+                                                   tmpl->config()->clone(),
+                                                   tmpl);
     m_data->m_instances.insert(name, inst);
     m_data->m_tmodel->addRoot(inst.get());
     return inst.get();
@@ -188,8 +207,8 @@ void TemplateConfigWidget::clear()
 void TemplateConfigWidget::onSelection(const QModelIndex &current,
                                         const QModelIndex &/*prev*/)
 {
-    auto cur = m_data->m_instanceProxy->mapToSource(current);
-    auto ti = static_cast< TemplateInstance *>(cur.internalPointer());
+    auto node = current.data(Qt::UserRole).value<TreeNode *>();
+    auto ti = dynamic_cast<TemplateInstance *>(node);
     if (ti != nullptr) {
         if (ti->instanceOf()->config() != nullptr) {
             m_data->m_configModel->setConfig(ti->instanceConfig());

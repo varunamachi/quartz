@@ -29,10 +29,10 @@ QWidget* GenConfigDelegate::createEditor(
         const QModelIndex &index) const
 {
     QWidget *widget = new QLineEdit(parent);
-    auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>(index.internalPointer()));
-    if (node != nullptr) {
-        switch(node->type()) {
+    auto node = index.data(Qt::UserRole).value<TreeNode*>();
+    auto param = dynamic_cast<Param *>(node);
+    if (param != nullptr) {
+        switch(param->type()) {
         case ParamType::Boolean: {
             widget = QStyledItemDelegate::createEditor(parent, option, index);
         }
@@ -60,8 +60,7 @@ QWidget* GenConfigDelegate::createEditor(
 void GenConfigDelegate::setEditorData(QWidget *editor,
                                        const QModelIndex &index) const
 {
-    auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>(index.internalPointer()));
+    auto node = treenode_cast<Param *>(index.data(Qt::UserRole));
     if (node != nullptr) {
         switch(node->type()) {
         case ParamType::Boolean: {
@@ -102,8 +101,7 @@ void GenConfigDelegate::setModelData(QWidget *editor,
                                       QAbstractItemModel *model,
                                       const  QModelIndex &index) const
 {
-    auto node = dynamic_cast< Param *>(
-                static_cast< TreeNode *>(index.internalPointer()));
+    auto node = treenode_cast<Param *>(index.data(Qt::UserRole));
     if (node != nullptr) {
         QVariant data;
         switch(node->type()) {

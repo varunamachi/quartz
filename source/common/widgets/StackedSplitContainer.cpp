@@ -99,7 +99,11 @@ void StackedSplitContainer::setContentWidget(
 void StackedSplitContainer::setSizes(int selector, int stacked, int content)
 {
     QList<int> sizes;
-    sizes << selector << stacked << content;
+    if (this->selectorPosition() == AbstractContainer::SelectorPosition::Before) {
+        sizes << selector << stacked << content;
+    } else {
+        sizes << content << stacked << selector;
+    }
     m_data->m_splitter->setSizes(sizes);
 }
 

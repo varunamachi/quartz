@@ -56,7 +56,7 @@ void QzTreeView::mousePressEvent(QMouseEvent *event)
 {
 //    if (event->button() == Qt::LeftButton) {
 //        QModelIndex index = indexAt(event->pos());
-//        auto node = static_cast< TreeNode *>(index.internalPointer());
+//        auto node = index.data(Qt::UserRole).value<TreeNode *>();
 //        if (node != nullptrl
 //                && node->isEditable(index.column())
 //                && node-> != QVariant::) {

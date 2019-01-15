@@ -107,10 +107,10 @@ void ConfigPageSelector::unselected()
 void ConfigPageSelector::onSelected(const QModelIndex &current,
                                      const QModelIndex &/*previous*/)
 {
-    if (! (current.isValid() && current.internalPointer() != 0)) {
+    if (! current.isValid()) {
         return;
     }
-    auto node = static_cast< Node *>(current.internalPointer());
+    auto node = current.data(Qt::UserRole).value<Node *>();
     if (appContext()->hasContentManager()
             && appContext()->hasConfigPageManager()) {
         appContext()->contentManager()->selectContent(

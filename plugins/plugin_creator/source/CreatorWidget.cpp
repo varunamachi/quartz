@@ -54,9 +54,7 @@ struct CreatorWidget::Data
         , m_dirPath(new QLineEdit(parent))
         , m_browseButton(new QPushButton(tr("Browse "), parent))
         , m_createButton(new QPushButton(tr("Create"), parent))
-        , m_clearButton(new QPushButton(tr("Clear"), parent))
         , m_templateManager(tman)
-//        , m_templateSelector(new TemplateSelectorDialog(tman.get(), parent))
         , m_configWidget(new TemplateConfigWidget(tman.get(), parent))
         , m_globalConfig(std::make_shared<GlobalConfig>())
     {
@@ -75,10 +73,6 @@ struct CreatorWidget::Data
     QPushButton *m_browseButton;
 
     QPushButton *m_createButton;
-
-    QPushButton *m_clearButton;
-
-//    ArrayModel *m_tmodel;
 
     std::shared_ptr<TemplateManager> m_templateManager;
 
@@ -148,14 +142,13 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
 
     auto btnLyt = new QHBoxLayout();
     btnLyt->addStretch();
-    btnLyt->addWidget(m_data->m_clearButton);
     btnLyt->addWidget(m_data->m_createButton);
 
     auto configLyt = new QVBoxLayout();
     configLyt->addWidget(m_data->m_configWidget);
     configLyt->addLayout(btnLyt);
 
-    auto gbx = new QGroupBox(tr("Confirure Extensions"), this);
+    auto gbx = new QGroupBox(this);
     gbx->setLayout(configLyt);
 
     //Main layout
@@ -186,10 +179,6 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
              &QLineEdit::textChanged,
              this,
              &CreatorWidget::autoPopulate);
-    connect(m_data->m_clearButton,
-            &QPushButton::clicked,
-            m_data->m_configWidget,
-            &TemplateConfigWidget::clear);
 
 #ifdef QT_DEBUG
     auto testpluginLoc = QStandardPaths::writableLocation(

@@ -7,6 +7,8 @@ vq_headers(
     EntryPoint.cpp.xml
     ContentProvider.h.xml
     ContentProvider.cpp.xml
+    NodeProvider.h.xml
+    NodeProvider.cpp.xml
     resources.qrc.xml
 )
 

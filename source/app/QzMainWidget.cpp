@@ -77,10 +77,8 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_menu = new QMenu(this);
     this->setObjectName("quartz_widget");
     this->setContentsMargins({});
-    QSizePolicy policy;
-    policy.setHorizontalPolicy(QSizePolicy::Expanding);
 
-    m_data->m_content->setSizePolicy(policy);
+
     auto viewContainer = new StackedSplitContainer(
                 20,
                 70,
@@ -92,7 +90,11 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     viewContainer->setContentWidget(
                 m_data->m_content,
                 AbstractContainer::SelectorPosition::Before);
-    viewContainer->setSizes(370, 210, 20);
+    viewContainer->setSizes(70, 300, 600);
+
+    QSizePolicy policy;
+    policy.setHorizontalPolicy(QSizePolicy::Expanding);
+    m_data->m_content->setSizePolicy(policy);
 
     auto selectorContainer = new StackedSplitContainer(
                 50,
@@ -114,9 +116,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     mainMenu->setMaximumSize({50, 16});
     selectorContainer->addFixedWidget(mainMenu);
 
-
     auto mainLayout = new QVBoxLayout();
-//    mainLayout->addLayout(vlyt);
     mainLayout->addWidget(m_data->m_selector);
     mainLayout->addWidget(m_data->m_actionBar);
     mainLayout->setAlignment(m_data->m_actionBar, Qt::AlignBottom);

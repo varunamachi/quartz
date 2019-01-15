@@ -29,17 +29,18 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     : QToolButton(parent)
     , m_data(std::make_unique<Data>(this))
 {
-//    this->setIcon(getActiveIcon(MatIcon::Menu));
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);
     this->setObjectName("menu_button");
     this->setCheckable(true);
     this->setText(tr("MENU"));
-//    this->setStyleSheet("QToolButton#menu_button{background: transperant}");
+    this->setAutoRaise(true);
 
+    //    this->setIcon(getActiveIcon(MatIcon::Menu));
+    //    this->setStyleSheet("QToolButton#menu_button{background: transperant}");
+    //    auto bgColor = QApplication::palette().color(QPalette::Highlight);
 
-//    auto bgColor = QApplication::palette().color(QPalette::Highlight);
     auto bgColor = QColor::fromRgb(0x85, 0x1a, 0x03);
     QString qss;
     QTextStream qssStream;

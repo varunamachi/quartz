@@ -1,5 +1,6 @@
 
 #include <QVector>
+#include <QVariant>
 
 #include "TreeNode.h"
 
@@ -31,6 +32,13 @@ TreeNode::TreeNode(
     : m_data(std::make_unique<Data>(numFields, parent))
 {
 
+}
+
+TreeNode::TreeNode(const TreeNode &other)
+{
+    m_data = std::make_unique<Data>(
+                other.m_data->m_numFields,
+                other.m_data->m_parent);
 }
 
 int TreeNode::numFields() const
@@ -108,7 +116,6 @@ void TreeNode::removeChild(TreeNode *child)
 {
     m_data->m_children.removeAll(child);
 }
-
 
 TreeNode::~TreeNode()
 {

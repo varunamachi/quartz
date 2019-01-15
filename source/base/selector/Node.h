@@ -5,6 +5,8 @@
 #include <QString>
 #include <QVector>
 #include <QIcon>
+#include <QMetaType>
+#include <QVariant>
 
 #include "../QuartzBase.h"
 
@@ -69,5 +71,12 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
+template<typename T> T node_cast(QVariant &var) {
+    auto tn = var.value<Node *>();
+    return dynamic_cast<T>(tn);
+}
 
 }
+
+Q_DECLARE_METATYPE(Quartz::Node*)
+

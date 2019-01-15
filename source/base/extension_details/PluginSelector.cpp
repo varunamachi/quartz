@@ -106,7 +106,7 @@ void PluginSelector::onSelected(const QModelIndex &index,
                                  const QModelIndex &/*previous*/)
 {
     appContext()->contentManager()->selectContent(PluginInfoPage::CONTENT_ID);
-    auto plugin = static_cast< Plugin *>(index.internalPointer());
+    auto plugin = static_cast<Plugin *>(index.internalPointer());
     if (plugin != nullptr) {
         m_data->m_content->setPlugin(plugin);
     }

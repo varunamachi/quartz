@@ -9,5 +9,7 @@
         <file>resources/ContentProvider.h.xml</file>
         <file>resources/Plugin.h.xml</file>
         <file>resources/EntryPoint.cpp.xml</file>
+        <file>resources/NodeProvider.h.xml</file>
+        <file>resources/NodeProvider.cpp.xml</file>
     </qresource>
 </RCC>

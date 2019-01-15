@@ -105,7 +105,7 @@ int AbstractTreeModel::rowCount(const QModelIndex& parent) const
 {
     auto count = rootCount();
     if (! m_data->m_isFlat && parent.isValid()) {
-        auto node = static_cast< TreeNode *>(parent.internalPointer());
+        auto node = static_cast<TreeNode *>(parent.internalPointer());
         count = node->numChildren();
     }
     return count;
@@ -119,7 +119,7 @@ int AbstractTreeModel::columnCount(const QModelIndex& /*parent*/) const
 QVariant AbstractTreeModel::data(const QModelIndex& index,
                                   int role) const
 {
-    auto node = static_cast< TreeNode *>(index.internalPointer());
+    auto node = static_cast<TreeNode *>(index.internalPointer());
     if (index.isValid() && node != nullptr) {
         auto col = m_data->m_selectable ? index.column() - 1 : index.column();
         if (m_data->m_selectable && index.column() == 0){
@@ -145,6 +145,9 @@ QVariant AbstractTreeModel::data(const QModelIndex& index,
         }
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             return data;
+        }
+        if (role == Qt::UserRole) {
+            return QVariant::fromValue(node);
         }
     }
     return QVariant{};

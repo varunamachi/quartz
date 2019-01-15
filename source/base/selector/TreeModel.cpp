@@ -164,7 +164,7 @@ QModelIndex TreeModel::index(int row,
     QModelIndex index{};
     auto node = m_data->m_root.get();
     if (parent.isValid()) {
-        node = static_cast< Node * >(parent.internalPointer());
+        node = static_cast<Node * >(parent.internalPointer());
     }
     auto child = node->childAt(row);
     if (child != nullptr) {
@@ -226,7 +226,10 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
                 data = ic;
             }
         } else if (role == Qt::UserRole) {
-            data = node->nodeId();
+            data = QVariant::fromValue(node);
+        } else if (role == Qt::UserRole + 1) {
+            //This is the ID role - 2nd user role
+            return node->nodeId();
         }
     }
     return data;

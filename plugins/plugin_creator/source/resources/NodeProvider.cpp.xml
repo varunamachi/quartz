@@ -1,0 +1,72 @@
+<templates type="mustache">
+    <template name="NodeProvider.cpp">
+        <config id="NodeProvider.cpp" name="Node Provider Src">
+            <param
+                type="text"
+                id="NODE_NAME"
+                name="Node Name"
+                description="Name of selection tree node"
+                default=""/>
+            <param
+                type="text"
+                id="NODE_ID"
+                name="Node ID"
+                description="Unique ID of selection tree node"
+                default=""/>
+        </config>
+        <content>
+            <![CDATA[
+
+#include <common/iconstore/IconFontStore.h>
+
+#include <base/selector/Node.h>
+
+#include "NodeProvider.h"
+
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+const QString NodeProvider::EXTENSION_ID{
+    "qzp.{{PLUGIN_NAME}}.provider.node" };
+const QString NodeProvider::EXTENSION_NAME{
+    "Quartz {{PLUGIN_DISPLAY_NAME}} Node" };
+
+NodeProvider::NodeProvider()
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
+{
+
+}
+
+NodeProvider::~NodeProvider()
+{
+
+}
+
+bool NodeProvider::init()
+{
+    return true;
+}
+
+bool NodeProvider::destroy()
+{
+    return true;
+}
+
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
+{
+    auto nodeInfo = std::make_shared<NodeInfo>(
+                QStringList{},
+                "{{NODE_NAME}}",
+                "{{NODE_ID}}",
+                getIcon(FAIcon::Circle));
+    QVector<std::shared_ptr<NodeInfo>> nodes;
+    nodes.push_back(nodeInfo);
+    return nodes;
+}
+
+} } }
+
+
+            ]]>
+        </content>
+    </template>
+</templates>

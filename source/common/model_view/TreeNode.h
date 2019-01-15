@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include <QMetaType>
+#include <QVariant>
+
 class QVariant;
 class QString;
 
@@ -11,6 +14,10 @@ class TreeNode
 {
 public:
     TreeNode(int numFields, TreeNode *parent = nullptr);
+
+    TreeNode(const TreeNode & other);
+
+    virtual ~TreeNode();
 
     virtual int numFields() const;
 
@@ -38,12 +45,18 @@ public:
 
     virtual QVariant fieldValue(int column) const = 0;
 
-    virtual ~TreeNode();
-
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
+template<typename T>
+T treenode_cast(const QVariant &var) {
+    auto tn = var.value<TreeNode *>();
+    return dynamic_cast<T>(tn);
 }
+
+}
+
+
+Q_DECLARE_METATYPE(Quartz::TreeNode*)

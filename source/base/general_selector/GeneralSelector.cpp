@@ -94,10 +94,10 @@ void GeneralSelector::unselected()
 void GeneralSelector::onSelected(const QModelIndex &current,
                                   const QModelIndex &/*previous*/)
 {
-    if (!current.isValid() || current.internalPointer() == nullptr) {
+    if (!current.isValid()) {
         return;
     }
-    auto node = static_cast< Node *>(current.internalPointer());
+    auto node = current.data(Qt::UserRole).value<Node *>();
     if (appContext()->hasContentManager()) {
         appContext()->contentManager()->selectContent(node->nodeId());
     }
@@ -109,7 +109,7 @@ void GeneralSelector::setSelected(const QString &nodeID)
     auto root = m_data->m_model->index(0, 0, {});
     auto matches = m_data->m_model->match(
                 root,
-                Qt::UserRole,
+                (Qt::UserRole + 1),
                 nodeID,
                 1);
     if (! matches.empty()) {
