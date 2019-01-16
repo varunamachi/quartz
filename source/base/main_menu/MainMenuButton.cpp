@@ -42,21 +42,25 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     //    auto bgColor = QApplication::palette().color(QPalette::Highlight);
 
 //    auto bgColor = QColor::fromRgb(0x85, 0x1a, 0x03);
-    auto bgColor = QApplication::palette().color(QPalette::Highlight);
-    auto color = QApplication::palette().color(QPalette::HighlightedText);
+//    auto color = QColor{Qt::white};
+//    auto bgColor = QApplication::palette().color(QPalette::Highlight);
+//    auto color = QApplication::palette().color(QPalette::HighlightedText);
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
-    qssStream << "QToolButton#menu_button {"
-                    "background-color: " << bgColor.name(QColor::HexArgb) << ";"
-                    "color: " << color.name(QColor::HexArgb) << ";"
-                 ";}"
+    qssStream <<
+//               "QToolButton#menu_button{"
+//                  "background-color: " << bgColor.name(QColor::HexArgb) << ";"
+//                  "color: " << color.name(QColor::HexArgb) << ";"
+//                  "border-width: 1px"
+//               ";}"
                  "QToolButton#menu_button:menu-indicator{"
                     "width: 0px;"
                  "}"
                  ;
     qssStream.flush();
     this->setStyleSheet(qss);
+    this->setIcon(QIcon("://resources/quartz32.png"));
     this->setContentsMargins({});
 }
 

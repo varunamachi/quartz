@@ -45,7 +45,7 @@ struct PluginSelector::Data
 };
 
 const QString PluginSelector::SELECTOR_ID{ "qz.plugin_selector" };
-const QString PluginSelector::SELECTOR_NAME("PLUGINS");
+const QString PluginSelector::SELECTOR_NAME("Plugins");
 
 
 PluginSelector::PluginSelector(QWidget *parent)

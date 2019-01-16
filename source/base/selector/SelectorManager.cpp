@@ -45,7 +45,7 @@ SelectorManager::SelectorManager(AbstractContainer *container,
 {
     auto layout = new QHBoxLayout(this);
     layout->addWidget(m_data->m_selectorContainer);
-    layout->setContentsMargins(0, 1, 0, 1);
+    layout->setContentsMargins({});
     this->setLayout(layout);
     this->setContentsMargins({});
     m_data->m_selectorContainer->setContentsMargins({});

@@ -132,7 +132,8 @@ void StackedSplitContainer::setContentWidget(
 void StackedSplitContainer::setSizes(int selector, int stacked, int content)
 {
     QList<int> sizes;
-    if (this->selectorPosition() == AbstractContainer::SelectorPosition::Before) {
+    if (this->selectorPosition()
+            == AbstractContainer::SelectorPosition::Before) {
         sizes << selector << stacked << content;
     } else {
         sizes << content << stacked << selector;
@@ -148,6 +149,7 @@ QString StackedSplitContainer::containerType() const
 void StackedSplitContainer::addFixedWidget(QWidget *widget)
 {
     this->m_data->m_qzLayout->insertWidget(0, widget);
+//    this->m_data->m_qzLayout->addWidget(widget);
 }
 
 }

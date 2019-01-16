@@ -41,7 +41,7 @@ ViewManager::ViewManager(AbstractContainer *container, QWidget *parent)
     layout->addWidget(m_data->m_viewContainer);
     layout->setContentsMargins(QMargins{});
     m_data->m_viewContainer->setContentsMargins(QMargins{});
-    this->setContentsMargins(QMargins(2, 2, 2, 2)) ;
+    this->setContentsMargins({}) ;
     this->setLayout(layout);
 }
 

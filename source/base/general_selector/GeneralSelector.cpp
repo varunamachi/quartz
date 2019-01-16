@@ -14,7 +14,7 @@
 namespace Quartz {
 
 const QString GeneralSelector::SELECTOR_ID{ "qz.node_selector" };
-const QString GeneralSelector::SELECTOR_NAME("PAGES");
+const QString GeneralSelector::SELECTOR_NAME("Pages");
 
 
 struct GeneralSelector::Data

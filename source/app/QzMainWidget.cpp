@@ -108,13 +108,13 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     selectorContainer->setSizes(20, 180, 600);
 
     auto mainMenu = new MainMenuButton(this);
-    auto about = new QAction(QIcon("://resources/quartz32.png"), "About", this);
+    auto about = new QAction("About", this);
     connect(about, &QAction::triggered, [this]() {
        m_data->m_aboutDialog->exec();
     });
     mainMenu->addAction(about);
     mainMenu->setMaximumSize({50, 16});
-    selectorContainer->addFixedWidget(mainMenu);
+    viewContainer->addFixedWidget(mainMenu);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);
