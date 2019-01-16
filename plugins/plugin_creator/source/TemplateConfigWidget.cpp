@@ -106,8 +106,8 @@ TemplateConfigWidget::TemplateConfigWidget(
     rightLayout->addWidget(m_data->m_configView);
 
     auto spacer = new QWidget();
-    spacer->setMaximumWidth(40);
-    spacer->setMinimumWidth(40);
+    spacer->setMaximumWidth(20);
+    spacer->setMinimumWidth(20);
     auto mainLayout = new QHBoxLayout();
     mainLayout->addLayout(leftLayout);
     mainLayout->addWidget(spacer);
@@ -116,8 +116,8 @@ TemplateConfigWidget::TemplateConfigWidget(
 
     m_data->m_view->setModel(m_data->m_instanceProxy);
     m_data->m_view->setRootIsDecorated(false);
-//    m_data->m_configView->setModel(m_data->m_configProxy);
-    m_data->m_configView->setModel(m_data->m_configModel);
+    m_data->m_configView->setModel(m_data->m_configProxy);
+//    m_data->m_configView->setModel(m_data->m_configModel);
     m_data->m_configView->setRootIsDecorated(false);
     m_data->m_configView->setItemDelegate(new GenConfigDelegate(this));
 

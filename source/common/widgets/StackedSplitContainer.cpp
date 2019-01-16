@@ -3,6 +3,9 @@
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QPushButton>
+#include <QApplication>
+#include <QTextStream>
+#include <QSizePolicy>
 
 #include "QzScroller.h"
 #include "StackedSplitContainer.h"
@@ -34,20 +37,50 @@ StackedSplitContainer::StackedSplitContainer(
 //    auto spor = orientation == Qt::Vertical ? Qt::Horizontal
 //                                            : Qt::Vertical;
 //    if
+    selector()->setObjectName("selector");
+    QString qss;
+    QTextStream qssStream;
+    qssStream.setString(&qss);
+    auto col = QApplication::palette().text().color();
+    auto col2 = QApplication::palette().color(QPalette::Midlight);
+    col.setAlpha(30);
+    qssStream << "border: none;"
+                 "border-style: solid;"
+                 "background-color: " << col2.name(QColor::HexArgb) << ";"
+                 ;
+
     auto spor = Qt::Horizontal;
     auto wrapper = new QWidget(this);
     if (orientation == Qt::Vertical) {
         m_data->m_qzLayout = new QVBoxLayout();
         spor = Qt::Horizontal;
         wrapper->setMaximumWidth(selectorDimention);
+        auto bpos = selectorPosition
+                == AbstractContainer::SelectorPosition::Before
+                ? "border-right-width: "
+                : "border-left-width: ";
+//            qssStream << bpos << "5px;";
     } else  {
+        auto bpos = selectorPosition
+                == AbstractContainer::SelectorPosition::Before
+                ? "border-bottom-width: "
+                : "border-top-width: ";
         wrapper->setMaximumHeight(selectorDimention);
         m_data->m_qzLayout = new QHBoxLayout();
         spor = Qt::Vertical;
+//            qssStream << bpos << "1px;";
     }
+    qssStream.flush();
+    wrapper->setStyleSheet(qss);
 
     m_data->m_qzLayout->addWidget(selector());
+    m_data->m_qzLayout->addStretch();
     wrapper->setLayout(m_data->m_qzLayout);
+
+//    wrapper->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+    auto color = QApplication::palette().color(QPalette::Text);
+    color.setAlpha(20);
     m_data->m_qzLayout->setSpacing(10);
 
     m_data->m_splitter = new QSplitter(spor, this);

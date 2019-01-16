@@ -41,16 +41,20 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     //    this->setStyleSheet("QToolButton#menu_button{background: transperant}");
     //    auto bgColor = QApplication::palette().color(QPalette::Highlight);
 
-    auto bgColor = QColor::fromRgb(0x85, 0x1a, 0x03);
+//    auto bgColor = QColor::fromRgb(0x85, 0x1a, 0x03);
+    auto bgColor = QApplication::palette().color(QPalette::Highlight);
+    auto color = QApplication::palette().color(QPalette::HighlightedText);
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
     qssStream << "QToolButton#menu_button {"
-                    "background-color: " << bgColor.name(QColor::HexArgb) <<
+                    "background-color: " << bgColor.name(QColor::HexArgb) << ";"
+                    "color: " << color.name(QColor::HexArgb) << ";"
                  ";}"
                  "QToolButton#menu_button:menu-indicator{"
                     "width: 0px;"
-                 "}";
+                 "}"
+                 ;
     qssStream.flush();
     this->setStyleSheet(qss);
     this->setContentsMargins({});

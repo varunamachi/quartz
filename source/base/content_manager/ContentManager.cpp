@@ -39,11 +39,14 @@ ContentManager::ContentManager(QWidget *parent)
     auto bgColor = QApplication::palette().color(QPalette::Text);
     bgColor.setAlpha(30);
     m_data->m_stk->setObjectName("container");
-    m_data->m_stk->setStyleSheet(
-                "QWidget#container{"
-                    "border: 1px solid " + bgColor.name(QColor::HexArgb) + ";"
-                    "border-radius: 2px;"
-                 "}");
+//    m_data->m_stk->setStyleSheet(
+//                "QWidget#container{"
+//                    "border: none;"
+//                    "border-left-width: 1px;"
+//                    "border-style: solid;"
+//                    "border-color: " + bgColor.name(QColor::HexArgb) + ";"
+//                    "border-radius: 2px;"
+//                 "}");
     this->setLayout(layout);
 }
 

@@ -80,7 +80,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
 
 
     auto viewContainer = new StackedSplitContainer(
-                20,
+                25,
                 70,
                 AbstractContainer::SelectorPosition::After,
                 Qt::Horizontal,

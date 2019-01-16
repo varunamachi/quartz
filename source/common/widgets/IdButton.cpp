@@ -94,12 +94,13 @@ IdButton::~IdButton()
 
 void IdButton::setStyle(int width, int height, bool big) {
     setCheckable(true);
-    auto fontSize = (big ? 10 : 12);
+    auto fontSize = (big ? 9 : 12);
 
     auto selBg = QApplication::palette().color(QPalette::Text);
     auto hlTxtColor = QApplication::palette().color(QPalette::Base);
     auto txtColor = QApplication::palette().color(QPalette::Text);
-    auto hlBd = txtColor;
+    auto hlBd = QApplication::palette().color(QPalette::Highlight);
+    auto bg = QApplication::palette().color(QPalette::Window);
     selBg.setAlpha(200);
 
     QString qss;
@@ -113,20 +114,24 @@ void IdButton::setStyle(int width, int height, bool big) {
             "   max-height: " << height << "px;"
             "   min-height: " << height << "px;"
             "   font-size: " << fontSize << "px;"
+            "   font-family: monospace;"
             "   color: " << txtColor.name(QColor::HexArgb) << ";"
             "   padding-bottom: 5px;"
-            "   border: none;"
+            "   border-left-width: 2px;"
+            "   border-color: " << bg.name(QColor::HexArgb) << ";"
             "}"
             "QToolButton#idButton:checked {"
             "   background-color: " << selBg.name(QColor::HexArgb) << ";"
             "   color: " << hlTxtColor.name(QColor::HexArgb) << ";"
-            "   border: solid 5px " << hlBd.name(QColor::HexArgb) << ";"
+            "   border-left-width: 2px;"
+            "   border-color: " << hlBd.name(QColor::HexArgb) << ";"
+            "   border-style: solid;"
             "}"
-//            "QToolButton#idButton:hover {"
-//            "   border-color: " << hlBg.name(QColor::HexArgb) << ";"
-//            "   border-style: solid;"
-//            "   border-width: 1px;"
-//            "}"
+            "QToolButton#idButton:hover {"
+            "   border-color: " << hlBd.name(QColor::HexArgb) << ";"
+            "   border-style: solid;"
+            "   border-left-width: 2px;"
+            "}"
              ;
     qssStream.flush();
     setStyleSheet(qss);
