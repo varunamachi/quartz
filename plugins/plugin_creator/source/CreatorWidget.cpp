@@ -131,11 +131,11 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
     layout->addWidget(m_data->m_namespaceEdit, row, 1);
     ++ row;
 
-    layout->addWidget(new QLabel(tr("plugin Name"), this), row, 0);
+    layout->addWidget(new QLabel(tr("Plugin Name"), this), row, 0);
     layout->addWidget(m_data->m_nameEdit, row, 1);
     ++ row;
 
-    layout->addWidget(new QLabel(tr("plugin Project Path"), this), row, 0);
+    layout->addWidget(new QLabel(tr("Plugin Project Path"), this), row, 0);
     layout->addLayout(browseLayout , row, 1);
     ++ row;
 

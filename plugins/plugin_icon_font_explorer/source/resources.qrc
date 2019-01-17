@@ -1,0 +1,7 @@
+
+<RCC>
+    <qresource prefix="/">
+        <file alias="plugin.txt">resources/plugin.txt</file>
+    </qresource>
+</RCC>
+            

@@ -1,0 +1,6 @@
+#Created By Quartz Plugin Creator
+id=qzplugin.icon_font_explorer
+name=icon_font_explorer
+display=icon_font_explorer
+ns=IconFontExplorer
+version=0.0.0.0

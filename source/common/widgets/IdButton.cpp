@@ -73,8 +73,8 @@ IdButton::IdButton(QString id,
 //        this->setToolButtonStyle(Qt::ToolButtonIconOnly);
         this->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         QFontMetrics fm(this->font());
-        auto h = height - fm.height() - 4;
-        this->setIconSize({ h, h});
+        auto h = height - fm.height() - 6;
+        this->setIconSize({h, h});
     } else {
         this->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     }
@@ -135,7 +135,7 @@ void IdButton::setStyle(int width, int height, bool big) {
     qssStream.flush();
     setStyleSheet(qss);
 
-    setContentsMargins(0, 10, 0, 10);
+//    setContentsMargins(0, 10, 0, 10);
 }
 
 QSize IdButton::sizeHint() const

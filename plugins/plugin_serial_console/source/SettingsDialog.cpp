@@ -157,7 +157,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     this->setLayout(mainLayout);
     m_data->setupUI();
-    this->setMinimumSize({300, 400});
+    this->setMinimumSize({300, 300});
 
     using ComboIdxFunc = void (QComboBox::*)(int);
     connect(m_data->m_nameCombo,

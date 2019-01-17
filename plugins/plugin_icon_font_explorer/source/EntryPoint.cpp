@@ -1,10 +1,4 @@
-<templates type="mustache">
-    <template name="EntryPoint.cpp">
-        <config id="EntryPoint.cpp" name="Entry Point Src" >
 
-        </config>
-        <content>
-            <![CDATA[
 
 #include <core/ext/PluginEnv.h>
 
@@ -14,22 +8,24 @@
 
 #include "Plugin.h"
 
+
 void initResource() {
     Q_INIT_RESOURCE(resources);
 }
 
 extern "C" {
 
+
 Q_DECL_EXPORT PluginWrapper getPluginWrapper(PluginInputWrapper *input)
 {
     initResource();
-    auto plugin = std::make_unique<Quartz::Ext::{{PLUGIN_NAMESPACE}}::Plugin>();
+    auto plugin = std::make_unique<Quartz::Ext::IconFontExplorer::Plugin>();
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::init(
                 std::move(plugin),
                 std::move(input->env),
                 dynamic_cast<Quartz::QzAppContext *>(input->appContext));
-    return PluginWrapper{pluginPtr};
+    return PluginWrapper{pluginPtr, true};
 }
 
 Q_DECL_EXPORT void destroy()
@@ -38,7 +34,4 @@ Q_DECL_EXPORT void destroy()
 }
 
 }
-            ]]>
-        </content>
-    </template>
-</templates>
+            

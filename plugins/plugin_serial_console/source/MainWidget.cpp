@@ -16,7 +16,7 @@
 
 namespace Quartz { namespace Ext { namespace  SerialConsole {
 
-const QString MainWidget::CONTENT_ID{ "qzp.serial_console.content.main" };
+const QString MainWidget::CONTENT_ID("qzp.serial_console.content.main");
 const QString MainWidget::CONTENT_NAME("SerialConsoleMain");
 const QString MainWidget::CONTENT_KIND("hw");
 
