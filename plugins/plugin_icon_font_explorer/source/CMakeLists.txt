@@ -15,6 +15,8 @@ qz_add_resource( resources.qrc )
 vq_classes(
     MainWidget
     IconView
+    IconDelegate
+    IconDetails
 )
 
 vq_headers(
