@@ -18,7 +18,7 @@ public:
                 const QVector<QString> &headers,
                 QObject *parent = nullptr);
 
-    ~ArrayModel();
+    ~ArrayModel() override;
 
     TreeNode * rootAt(int rowIndex) const override;
 
