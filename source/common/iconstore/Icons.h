@@ -3,12 +3,13 @@
 #include <QString>
 #include <QVector>
 
+#include "IconFontStore.h"
 
 namespace Quartz {
 struct IconInfo {
     int m_code;
-    QString m_name;
     QString m_font;
+    QString m_name;
 };
 
 const QVector<IconInfo> ICON_INFO = {
@@ -2059,4 +2060,13 @@ const QVector<IconInfo> ICON_INFO = {
     { 0xF497, "Font Awesome", "XRay" },
     { 0xF157, "Font Awesome", "YenSign" }
 };
+
+inline QIcon getIcon(const IconInfo *iconInfo) {
+    if (iconInfo->m_font == "Material") {
+        return getIcon(static_cast<MatIcon>(iconInfo->m_code));
+    }  else if (iconInfo->m_font == "Font Awesome") {
+        return getIcon(static_cast<MatIcon>(iconInfo->m_code));
+    }
+    return getIcon(static_cast<MatIcon>(iconInfo->m_code));
+}
 }

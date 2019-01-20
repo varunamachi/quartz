@@ -149,6 +149,9 @@ QVariant AbstractTreeModel::data(const QModelIndex& index,
         if (role == Qt::UserRole) {
             return QVariant::fromValue(node);
         }
+        if (role == Qt::DecorationRole) {
+            return node->decoration(col);
+        }
     }
     return QVariant{};
 }

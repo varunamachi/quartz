@@ -17,6 +17,7 @@ vq_classes(
     IconView
     IconDelegate
     IconDetails
+    IconNode
 )
 
 vq_headers(

@@ -43,6 +43,8 @@ public:
 
     virtual void removeChild(TreeNode *child);
 
+    virtual QVariant decoration(int column) const;
+
     virtual QVariant fieldValue(int column) const = 0;
 
 private:
