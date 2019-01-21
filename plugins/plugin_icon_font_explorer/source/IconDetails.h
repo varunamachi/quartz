@@ -4,7 +4,11 @@
 
 #include <QWidget>
 
-namespace Quartz { namespace Ext { namespace IconFontExplorer {
+namespace Quartz {
+
+struct IconInfo;
+
+namespace Ext { namespace IconFontExplorer {
 
 class IconDetails : public QWidget
 {
@@ -13,6 +17,9 @@ public:
     IconDetails(QWidget *parent = nullptr);
 
     ~IconDetails();
+
+public slots:
+    void setIconInfo(const IconInfo *info);
 
 private:
     struct Data;

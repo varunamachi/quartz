@@ -5,12 +5,14 @@
 #include <QMetaType>
 #include <QVariant>
 
+#include "../QuartzCommon.h"
+
 class QVariant;
 class QString;
 
 namespace Quartz {
 
-class TreeNode
+class QUARTZ_COMMON_API TreeNode
 {
 public:
     TreeNode(int numFields, TreeNode *parent = nullptr);

@@ -28,7 +28,7 @@ bool BasicSortFilter::filterAcceptsRow(int sourceRow,
 {
     auto accept = false;
     auto index = sourceModel()->index(sourceRow, 0, srcParent);
-    auto node = static_cast< TreeNode *>(index.internalPointer());
+    auto node = static_cast<TreeNode *>(index.internalPointer());
     if (node != nullptr) {
         for (auto i = 0; i < node->numFields(); ++ i) {
             const auto str = node->fieldValue(i).toString();
@@ -58,10 +58,8 @@ bool BasicSortFilter::lessThan(const QModelIndex &left,
     if (ok) {
         return leftInt < rightInt;
     }
-    else {
-        return QString::localeAwareCompare(lData.toString(),
-                                            rData.toString()) < 0;
-    }
+    return QString::localeAwareCompare(lData.toString(),
+                                       rData.toString()) < 0;
 }
 
 

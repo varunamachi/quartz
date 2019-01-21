@@ -1,14 +1,15 @@
 
 #include <QVBoxLayout>
-#include <QTreeView>
 #include <QLabel>
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLibrary>
+#include <QHeaderView>
 
 #include <core/ext/Plugin.h>
 #include <core/ext/PluginManager.h>
+#include <common/widgets/QzTreeView.h>
 
 
 #include "../QzAppContext.h"
@@ -27,9 +28,9 @@ struct PluginInfoPage::Data
         , m_adapterModel(new AdapterItemModel(parent))
         , m_pluginModel{ new PluginItemModel{ PluginItemModel::NumCols::Two,
                                               parent }}
-        , m_extView(new QTreeView(parent))
-        , m_adapterView(new QTreeView(parent))
-        , m_dependencyView(new QTreeView(parent))
+        , m_extView(new QzTreeView(parent))
+        , m_adapterView(new QzTreeView(parent))
+        , m_dependencyView(new QzTreeView(parent))
         , m_pluginId(new QLineEdit(parent))
         , m_pluginName(new QLineEdit(parent))
         , m_libName(new QLineEdit(parent))
@@ -42,6 +43,8 @@ struct PluginInfoPage::Data
         m_dependencyView->setRootIsDecorated(false);
         m_extView->setContentsMargins(QMargins{});
         m_dependencyView->setContentsMargins(QMargins{});
+        m_extView->header()->setSectionResizeMode(
+                    1, QHeaderView::ResizeToContents);
 
         m_pluginName->setEnabled(false);
         m_pluginId->setEnabled(false);
@@ -56,11 +59,11 @@ struct PluginInfoPage::Data
 
     PluginItemModel *m_pluginModel;
 
-    QTreeView *m_extView;
+    QzTreeView *m_extView;
 
-    QTreeView *m_adapterView;
+    QzTreeView *m_adapterView;
 
-    QTreeView *m_dependencyView;
+    QzTreeView *m_dependencyView;
 
     QLineEdit *m_pluginId;
 
@@ -90,23 +93,19 @@ PluginInfoPage::PluginInfoPage(QWidget *parent)
     infoLayout->addWidget(m_data->m_pluginId, 1, 1);
     infoLayout->addWidget(new QLabel(tr("Plugin Library"), this), 2, 0);
     infoLayout->addWidget(m_data->m_libName, 2, 1);
-//    infoLayout->setContentsMargins(QMargins(0, 0, 0, 10));
 
     auto hlyt = new QGridLayout{};
     hlyt->addWidget(new QLabel(tr("Exported Adapters: ")), 0, 0);
     hlyt->addWidget(m_data->m_adapterView, 1, 0);
     hlyt->addWidget(new QLabel(tr("Plugin Dependencies: ")), 0, 1);
     hlyt->addWidget(m_data->m_dependencyView, 1, 1);
-//    hlyt->setContentsMargins(QMargins(0, 10, 0, 0));
 
     auto layout = new QVBoxLayout{};
     layout->addLayout(infoLayout);
     layout->addWidget(new QLabel(tr("Exported Extensions")));
     layout->addWidget(m_data->m_extView);
     layout->addLayout(hlyt);
-//    layout->setContentsMargins(QMargins{});
     this->setLayout(layout);
-//    this->setContentsMargins(QMargins{});
 }
 
 PluginInfoPage::~PluginInfoPage()

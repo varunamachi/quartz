@@ -18,6 +18,7 @@ vq_classes(
     IconDelegate
     IconDetails
     IconNode
+    IconProxyModel
 )
 
 vq_headers(
