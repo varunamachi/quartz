@@ -31,8 +31,8 @@ void IconDelegate::paint(QPainter *painter,
     }
 }
 
-QSize IconDelegate::sizeHint(const QStyleOptionViewItem &option,
-                             const QModelIndex &index) const
+QSize IconDelegate::sizeHint(const QStyleOptionViewItem &/*option*/,
+                             const QModelIndex &/*index*/) const
 {
     return {64, 64};
 }

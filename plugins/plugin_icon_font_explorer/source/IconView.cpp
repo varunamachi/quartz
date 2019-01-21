@@ -3,10 +3,12 @@
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QItemSelection>
+#include <QComboBox>
 
 #include <common/model_view/ArrayModel.h>
 #include <common/model_view/BasicSortFilter.h>
 #include <common/widgets/QzTreeView.h>
+#include <common/iconstore/Icons.h>
 
 #include "IconProxyModel.h"
 #include "IconDelegate.h"
@@ -63,13 +65,29 @@ IconView::IconView(QWidget *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    auto bottomLayout = new QHBoxLayout();
-    bottomLayout->addWidget(m_data->m_view);
-    bottomLayout->addWidget(m_data->m_details);
+    auto familySelector = new QComboBox(this);
+    familySelector->addItem(
+                "All",
+                static_cast<int>(IconFontFamily::Any));
+    familySelector->addItem(
+                "Material",
+                static_cast<int>(IconFontFamily::Material));
+    familySelector->addItem(
+                "Font Awesome",
+                static_cast<int>(IconFontFamily::FontAwesome));
+    familySelector->addItem(
+                "Font Awesome Brands",
+                static_cast<int>(IconFontFamily::FontAwesomeBrands));
+    familySelector->setCurrentIndex(0);
+
+    auto topLayout = new QHBoxLayout();
+    topLayout->addWidget(m_data->m_searchBox);
+    topLayout->addWidget(familySelector);
 
     auto mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(m_data->m_searchBox);
-    mainLayout->addLayout(bottomLayout);
+    mainLayout->addLayout(topLayout);
+    mainLayout->addWidget(m_data->m_view);
+    mainLayout->addWidget(m_data->m_details);
 
     this->setLayout(mainLayout);
 
@@ -85,6 +103,12 @@ IconView::IconView(QWidget *parent)
             auto tn = treenode_cast<IconNode *>(indices[0].data(Qt::UserRole));
             m_data->m_details->setIconInfo(tn->iconInfo());
         }
+    });
+    connect(familySelector,
+            qOverload<int>(&QComboBox::currentIndexChanged),
+            [this, familySelector](int index) {
+        auto data = familySelector->itemData(index);
+        m_data->m_proxy->setFont(static_cast<IconFontFamily>(data.toInt()));
     });
 }
 
