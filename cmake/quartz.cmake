@@ -46,7 +46,9 @@ macro( qz_add_qt )
         Quick
         QuickWidgets
         Svg
-        Network )
+        Network
+        WebEngineCore
+        WebEngineWidgets )
 endmacro( qz_add_qt )
 
 macro( qz_install )

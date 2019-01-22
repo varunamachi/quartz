@@ -4,6 +4,7 @@
 #include <QSvgRenderer>
 #include <QPixmap>
 #include <QApplication>
+#include <QtWebEngineWidgets/QWebEngineView>
 
 #include "WelcomePage.h"
 
@@ -29,17 +30,23 @@ WelcomePage::WelcomePage(const QString &id, QWidget *parent)
     , m_data(std::make_unique<Data>())
 {
     QVBoxLayout *layout = new QVBoxLayout();
+
+//    auto view = new QWebEngineView(this);
+//    layout->addWidget(view);
+//    view->setUrl(QUrl::fromLocalFile("/data/kode/monaco_exp/index.html"));
+
     auto color = QApplication::palette().text().color();
     color.setAlpha(100);
     QLabel *label = new QLabel(tr("W E L C O M E   T O   Q U A R T Z"));
     layout->addWidget(label, Qt::AlignCenter);
+
     label->setStyleSheet(
-        "border-radius: 3px;"
-        "qproperty-alignment: AlignCenter;"
-        "font-size: 32px;"
-        "qproperty-wordWrap: true;"
-        "color: " + color.name(QColor::HexArgb)
-  );
+                "border-radius: 3px;"
+                "qproperty-alignment: AlignCenter;"
+                "font-size: 32px;"
+                "qproperty-wordWrap: true;"
+                "color: " + color.name(QColor::HexArgb)
+                );
     auto p = this->palette();
     this->setAutoFillBackground(true);
     this->setPalette(p);
