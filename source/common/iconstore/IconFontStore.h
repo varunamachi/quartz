@@ -83,7 +83,7 @@ struct IIconFontPainter
 };
 
 
-inline QIcon getIcon(MatIcon code, int size = -1, QColor color = QColor{}) {
+inline QIcon getIcon(MatIcon code, QColor color = QColor{}, int size = -1) {
     if (!color.isValid()) {
         color = IconFontStore::instance()->getColor(QIcon::Normal);
     }
@@ -106,7 +106,7 @@ inline QIcon getIcon(FAIcon code, QVariantMap &opts) {
                 static_cast<int>(code),
                 opts);
 }
-inline QIcon getIcon(FAIcon code, int size = -1, QColor color = QColor{}) {
+inline QIcon getIcon(FAIcon code, QColor color = QColor{}, int size = -1) {
     if (!color.isValid()) {
         color = IconFontStore::instance()->getColor(QIcon::Normal);
     }
@@ -116,7 +116,7 @@ inline QIcon getIcon(FAIcon code, int size = -1, QColor color = QColor{}) {
                 size,
                 color);
 }
-inline QIcon getIcon(FABrandIcon code, int size = -1, QColor color = QColor{}) {
+inline QIcon getIcon(FABrandIcon code, QColor color = QColor{}, int size = -1) {
     if (!color.isValid()) {
         color = IconFontStore::instance()->getColor(QIcon::Normal);
     }
@@ -136,14 +136,12 @@ inline QIcon getIcon(FABrandIcon code, QVariantMap &opts) {
 template<typename IconType>
 inline QIcon getNormalIcon(IconType code) {
     return getIcon(code,
-                   -1,
                    IconFontStore::instance()->getColor(QIcon::Normal));
 }
 
 template<typename IconType>
 inline QIcon getActiveIcon(IconType code) {
     return getIcon(code,
-                   -1,
                    IconFontStore::instance()->getColor(QIcon::Selected));
 }
 

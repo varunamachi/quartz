@@ -16379,12 +16379,14 @@ const QVector<IconInfo> ICON_INFO = {
     }
 };
 
-inline QIcon getIcon(const IconInfo *iconInfo, const QColor &col = {}) {
+inline QIcon getIcon(const IconInfo *iconInfo,
+                     const QColor &col = {},
+                     const int size = -1) {
     if (iconInfo->m_font == IconFontFamily::Material) {
-        return getIcon(static_cast<MatIcon>(iconInfo->m_code), -1, col);
+        return getIcon(static_cast<MatIcon>(iconInfo->m_code), col, size);
     }  else if (iconInfo->m_font == IconFontFamily::FontAwesome) {
-        return getIcon(static_cast<FAIcon>(iconInfo->m_code), -1, col);
+        return getIcon(static_cast<FAIcon>(iconInfo->m_code), col, size);
     }
-    return getIcon(static_cast<FABrandIcon>(iconInfo->m_code), -1, col);
+    return getIcon(static_cast<FABrandIcon>(iconInfo->m_code), col, size);
 }
 }

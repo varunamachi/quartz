@@ -4,6 +4,7 @@
 #include <QItemSelectionModel>
 #include <QItemSelection>
 #include <QComboBox>
+#include <QPushButton>
 
 #include <common/model_view/ArrayModel.h>
 #include <common/model_view/BasicSortFilter.h>
@@ -20,7 +21,6 @@ namespace Quartz { namespace Ext { namespace IconFontExplorer {
 
 const QVector<QString> HEADERS = {
     QObject::tr("Icon"),
-    QObject::tr("Code"),
     QObject::tr("Name"),
     QObject::tr("Font"),
 };
@@ -65,6 +65,9 @@ IconView::IconView(QWidget *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
+    auto searchClearBtn = new QPushButton(getIcon(FAIcon::Broom), "", this);
+
+
     auto familySelector = new QComboBox(this);
     familySelector->addItem(
                 "All",
@@ -82,6 +85,7 @@ IconView::IconView(QWidget *parent)
 
     auto topLayout = new QHBoxLayout();
     topLayout->addWidget(m_data->m_searchBox);
+    topLayout->addWidget(searchClearBtn);
     topLayout->addWidget(familySelector);
 
     auto mainLayout = new QVBoxLayout();
@@ -92,7 +96,7 @@ IconView::IconView(QWidget *parent)
     this->setLayout(mainLayout);
 
     connect(m_data->m_searchBox,
-            &QLineEdit::textEdited,
+            &QLineEdit::textChanged,
             m_data->m_proxy,
             &IconProxyModel::setExpression);
     connect(m_data->m_view->selectionModel(),
@@ -110,6 +114,10 @@ IconView::IconView(QWidget *parent)
         auto data = familySelector->itemData(index);
         m_data->m_proxy->setFont(static_cast<IconFontFamily>(data.toInt()));
     });
+    connect(searchClearBtn,
+            &QPushButton::released,
+            m_data->m_searchBox,
+            &QLineEdit::clear);
 }
 
 IconView::~IconView()

@@ -21,6 +21,8 @@ public:
 public slots:
     void setIconInfo(const IconInfo *info);
 
+    void update();
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
