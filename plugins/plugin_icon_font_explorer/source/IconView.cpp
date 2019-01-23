@@ -9,6 +9,7 @@
 #include <common/model_view/ArrayModel.h>
 #include <common/model_view/BasicSortFilter.h>
 #include <common/widgets/QzTreeView.h>
+#include <common/widgets/SearchBox.h>
 #include <common/iconstore/Icons.h>
 
 #include "IconProxyModel.h"
@@ -29,7 +30,7 @@ struct IconView::Data
 {
     explicit Data(QWidget *parent)
         : m_view(new QzTreeView(parent))
-        , m_searchBox(new QLineEdit(parent))
+        , m_searchBox(new SearchBox(parent))
         , m_details(new IconDetails(parent))
         , m_model(new ArrayModel(3, false, true, HEADERS, parent))
     {
@@ -50,7 +51,7 @@ struct IconView::Data
 
     QzTreeView *m_view;
 
-    QLineEdit *m_searchBox;
+    SearchBox *m_searchBox;
 
     IconDetails *m_details;
 
@@ -65,9 +66,6 @@ IconView::IconView(QWidget *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    auto searchClearBtn = new QPushButton(getIcon(FAIcon::Broom), "", this);
-
-
     auto familySelector = new QComboBox(this);
     familySelector->addItem(
                 "All",
@@ -85,7 +83,6 @@ IconView::IconView(QWidget *parent)
 
     auto topLayout = new QHBoxLayout();
     topLayout->addWidget(m_data->m_searchBox);
-    topLayout->addWidget(searchClearBtn);
     topLayout->addWidget(familySelector);
 
     auto mainLayout = new QVBoxLayout();
@@ -114,10 +111,6 @@ IconView::IconView(QWidget *parent)
         auto data = familySelector->itemData(index);
         m_data->m_proxy->setFont(static_cast<IconFontFamily>(data.toInt()));
     });
-    connect(searchClearBtn,
-            &QPushButton::released,
-            m_data->m_searchBox,
-            &QLineEdit::clear);
 }
 
 IconView::~IconView()

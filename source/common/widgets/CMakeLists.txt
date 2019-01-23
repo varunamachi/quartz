@@ -7,4 +7,5 @@ vq_classes(
     StackedSplitContainer
     RangeWidget
     QzTreeView
+    SearchBox
 )

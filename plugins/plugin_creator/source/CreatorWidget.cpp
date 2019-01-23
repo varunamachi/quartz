@@ -15,8 +15,8 @@
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
-
 #include <common/model_view/ArrayModel.h>
+
 
 #include <plugin_base/PluginLogging.h>
 

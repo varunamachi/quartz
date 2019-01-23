@@ -4,7 +4,7 @@
 #include <QSvgRenderer>
 #include <QPixmap>
 #include <QApplication>
-#include <QtWebEngineWidgets/QWebEngineView>
+//#include <QtWebEngineWidgets/QWebEngineView>
 
 #include "WelcomePage.h"
 
@@ -61,7 +61,7 @@ WelcomePage::~WelcomePage()
 void WelcomePage::paintEvent(QPaintEvent *evt)
 {
     QPainter painter(this);
-    auto rect = this->rect() - QMargins(15, 15, 15, 15);
+    auto rect = this->rect() - QMargins{15, 15, 15, 15};
     painter.drawImage(rect, m_data->m_image);
     QWidget::paintEvent(evt);
 }

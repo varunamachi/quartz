@@ -39,16 +39,27 @@ macro( qz_add_qt )
     set( CMAKE_AUTOUIC ON )
     set( CMAKE_AUTORCC ON )
     set( CMAKE_INCLUDE_CURRENT_DIR ON )
-    qz_add_qt_modules(
-        Widgets
-        Sql
-        Xml
-        Quick
-        QuickWidgets
-        Svg
-        Network
-        WebEngineCore
-        WebEngineWidgets )
+    if (WIN32 AND CMAKE_COMPILER_IS_GNUCXX)
+        qz_add_qt_modules(
+            Widgets
+            Sql
+            Xml
+            Quick
+            QuickWidgets
+            Svg
+            Network)
+    else()
+        qz_add_qt_modules(
+            Widgets
+            Sql
+            Xml
+            Quick
+            QuickWidgets
+            Svg
+            Network
+            WebEngineCore
+            WebEngineWidgets)
+    endif()
 endmacro( qz_add_qt )
 
 macro( qz_install )

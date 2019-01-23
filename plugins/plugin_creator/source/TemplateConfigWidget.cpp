@@ -18,6 +18,7 @@
 #include <common/generic_config/model/Config.h>
 #include <common/generic_config/model/Param.h>
 #include <common/widgets/QzTreeView.h>
+#include <common/widgets/SearchBox.h>
 #include <common/iconstore/IconFontStore.h>
 
 #include "TemplateConfigWidget.h"
@@ -36,7 +37,7 @@ struct TemplateConfigWidget::Data
         : m_tmodel(new ArrayModel(1, false, true, TI_HEADERS, parent))
         , m_instanceProxy(new BasicSortFilter(parent))
         , m_view(new QzTreeView(parent))
-        , m_filter(new QLineEdit(parent))
+        , m_filter(new SearchBox(parent))
         , m_configModel(new ConfigModel(parent))
         , m_configProxy(new BasicSortFilter(parent))
         , m_configView(new QzTreeView(parent))
@@ -60,7 +61,7 @@ struct TemplateConfigWidget::Data
     ArrayModel *m_tmodel;
     BasicSortFilter *m_instanceProxy;
     QzTreeView *m_view;
-    QLineEdit *m_filter;
+    SearchBox *m_filter;
 
     ConfigModel *m_configModel;
     BasicSortFilter *m_configProxy;
