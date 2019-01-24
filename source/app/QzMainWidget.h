@@ -31,6 +31,7 @@ protected:
     std::unique_ptr<Data> m_data;
 
     void paintEvent(QPaintEvent *event);
+
 };
 
 }

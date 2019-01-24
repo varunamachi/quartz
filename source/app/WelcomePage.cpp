@@ -31,10 +31,6 @@ WelcomePage::WelcomePage(const QString &id, QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
 
-//    auto view = new QWebEngineView(this);
-//    layout->addWidget(view);
-//    view->setUrl(QUrl::fromLocalFile("/data/kode/monaco_exp/index.html"));
-
     auto color = QApplication::palette().text().color();
     color.setAlpha(100);
     QLabel *label = new QLabel(tr("W E L C O M E   T O   Q U A R T Z"));

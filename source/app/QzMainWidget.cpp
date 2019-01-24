@@ -30,6 +30,7 @@
 #include <base/main_menu/MainMenuButton.h>
 
 #include "inbuilt/LogView.h"
+#include "inbuilt/EditorPage.h"
 #include "WelcomePage.h"
 #include "QzMainWidget.h"
 #include "AboutDialog.h"
@@ -137,6 +138,12 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_content->addContent(
                 new WelcomePage(welcomeNode->nodeId(),
                                 m_data->m_content));
+    nodeSelector->model()->addNode(
+                QStringList(),
+                EditorPage::CONTENT_NAME,
+                EditorPage::CONTENT_ID,
+                getIcon(MatIcon::Edit));
+    m_data->m_content->addContent(new EditorPage(this));
     auto configTree = new ConfigPageSelector(this);
     configTree->addPage(new BasicConfigPage(configTree));
 

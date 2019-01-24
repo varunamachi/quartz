@@ -56,7 +56,6 @@ SearchBox::SearchBox( QWidget *parent)
             &QPushButton::released,
             m_data->m_editor,
             &QLineEdit::clear);
-
     m_data->m_editor->setContentsMargins({});
     m_data->m_clrBtn->setContentsMargins({});
     layout->setContentsMargins({});

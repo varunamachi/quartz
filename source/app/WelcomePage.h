@@ -10,7 +10,7 @@ class WelcomePage : public ContentWidget
 public:
     explicit WelcomePage(const QString &id, QWidget *parent = nullptr);
 
-    virtual ~WelcomePage();
+    virtual ~WelcomePage() override;
 
 protected:
     void paintEvent(QPaintEvent *evt) override;
