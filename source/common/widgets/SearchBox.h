@@ -2,17 +2,16 @@
 
 #include <memory>
 
-#include <QLineEdit>
+#include <QWidget>
 
 #include "../QuartzCommon.h"
 
-class QResizeEvent;
 class QString;
 class QIcon;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API SearchBox : public QLineEdit
+class QUARTZ_COMMON_API SearchBox : public QWidget
 {
     Q_OBJECT
 
@@ -21,14 +20,13 @@ public:
 
     ~SearchBox();
 
-public slots:
-    void setClearImage(const QIcon &icon);
+public Q_SLOTS:
+    void setButtonIcon(const QIcon &icon);
 
-protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void setPlaceholderText(const QString &text);
 
-private slots:
-    void updateCloseButton(const QString &text);
+Q_SIGNALS:
+    void textChanged(const QString &text);
 
 private:
     struct Data;

@@ -5,7 +5,7 @@
 
 namespace  Quartz {
 
-class QuartzView::Data
+struct QuartzView::Data
 {
 public:
     Data(const QString &viewId,

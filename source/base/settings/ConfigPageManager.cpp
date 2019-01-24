@@ -15,7 +15,7 @@ const QString ConfigPageManager::CONTENT_KIND{ "qz.config" };
 
 struct ConfigPageManager::Data
 {
-    explicit Data(QWidget */*parent*/)
+    explicit Data(QWidget * /*parent*/)
         : m_layout(new QStackedLayout())
     {
 

@@ -93,7 +93,7 @@ IconView::IconView(QWidget *parent)
     this->setLayout(mainLayout);
 
     connect(m_data->m_searchBox,
-            &QLineEdit::textChanged,
+            &SearchBox::textChanged,
             m_data->m_proxy,
             &IconProxyModel::setExpression);
     connect(m_data->m_view->selectionModel(),

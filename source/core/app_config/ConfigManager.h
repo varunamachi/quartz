@@ -13,7 +13,7 @@ class QString;
 namespace Quartz {
 
 QZ_INTERFACE IConfigStorageStrategy;
-QZ_INTERFACE AbstractConfigLoader;
+class AbstractConfigLoader;
 
 class QUARTZ_CORE_API ConfigManager
 {

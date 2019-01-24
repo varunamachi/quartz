@@ -185,7 +185,7 @@ bool SelectorManager::finalizeExtension()
 }
 
 void SelectorManager::onSelectorSelected(const QString &selectorId,
-                                          QWidget */*widget*/)
+                                          QWidget * /*widget*/)
 {
     auto selector = m_data->m_selectors.value(selectorId,
                                                nullptr);

@@ -1,5 +1,7 @@
 #include <QStyle>
 #include <QPushButton>
+#include <QLineEdit>
+#include <QHBoxLayout>
 
 #include "../iconstore/IconFontStore.h"
 
@@ -11,67 +13,70 @@ namespace Quartz {
 struct SearchBox::Data
 {
     explicit Data(QWidget *parent)
-        : m_clrBtn(new QPushButton(parent))
+        : m_editor(new QLineEdit(parent))
+        , m_clrBtn(new QPushButton(parent))
     {
-        auto pixmap = getIcon(FAIcon::Broom).pixmap({32, 32});
+        auto pixmap = getIcon(FAIcon::Broom).pixmap({20, 20});
         m_clrBtn->setIcon(pixmap);
-        m_clrBtn->setFixedSize({32, 32});
+        m_clrBtn->setFixedSize({20, 20});
+        m_clrBtn->setObjectName("sbclrbtn");
+        m_editor->setObjectName("scbox");
+        m_clrBtn->setStyleSheet(
+                    "QPushButton#sbclrbtn{"
+                        "border: none;"
+                        "padding: none;"
+                        "margin: none;"
+                    "}");
+
     }
+
+    QLineEdit *m_editor;
 
     QPushButton *m_clrBtn;
 };
 
 
 SearchBox::SearchBox( QWidget *parent)
-    : QLineEdit(parent)
+    : QWidget(parent)
     , m_data(std::make_unique<Data>(parent))
 {
+    auto layout = new QHBoxLayout();
+    layout->addWidget(m_data->m_editor);
+    layout->addWidget(m_data->m_clrBtn);
 
-    m_data->m_clrBtn->setCursor(Qt::ArrowCursor);
-    m_data->m_clrBtn->setStyleSheet(
-                "QPushButton { "
-                    "border: none; "
-                "}");
-//    m_data->m_clrBtn->hide();
+    this->setLayout(layout);
 
-    connect( m_data->m_clrBtn,
-             &QPushButton::clicked,
-             this,
-             &QLineEdit::clear);
-    connect(this,
+    connect(m_data->m_editor,
             &QLineEdit::textChanged,
             this,
-            &SearchBox::updateCloseButton);
+            [this](const QString &text) {
+        emit this->textChanged(text);
+    });
+    connect(m_data->m_clrBtn,
+            &QPushButton::released,
+            m_data->m_editor,
+            &QLineEdit::clear);
+
+    m_data->m_editor->setContentsMargins({});
+    m_data->m_clrBtn->setContentsMargins({});
+    layout->setContentsMargins({});
+    layout->setSpacing(0);
+    this->setContentsMargins({});
 }
 
 SearchBox::~SearchBox()
 {
-
 }
 
-
-void SearchBox::setClearImage(const QIcon &icon)
+void SearchBox::setButtonIcon(const QIcon &icon)
 {
     m_data->m_clrBtn->setIcon(icon);
 }
 
-
-void SearchBox::resizeEvent(QResizeEvent *)
+void SearchBox::setPlaceholderText(const QString &text)
 {
-//    int frameWidth = style()->pixelMetric( QStyle::PM_DefaultFrameWidth );
-    QSize sz = m_data->m_clrBtn->size();
-    auto rect = this->contentsRect();
-//    mapToGlobal({rect.right()})
-    m_data->m_clrBtn->move(rect.right() - sz.width(),
-                           rect.bottom() - sz.height());
-//    m_data->m_clrBtn->move((rect().right() - sz.width() / 2 + frameWidth),
-//                           (rect().bottom()) - sz.height() + frameWidth);
+    m_data->m_editor->setPlaceholderText(text);
 }
 
-
-void SearchBox::updateCloseButton(const QString& text)
-{
-//    m_data->m_clrBtn->setVisible(!text.isEmpty());
-}
 
 }

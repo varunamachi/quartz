@@ -41,7 +41,7 @@ struct TemplateConfigWidget::Data
         , m_configModel(new ConfigModel(parent))
         , m_configProxy(new BasicSortFilter(parent))
         , m_configView(new QzTreeView(parent))
-        , m_configFilter(new QLineEdit(parent))
+        , m_configFilter(new SearchBox(parent))
         , m_addBtn(new QPushButton(getIcon(MatIcon::Add), "", parent))
         , m_removeBtn(new QPushButton(getIcon(MatIcon::Remove), "", parent))
         , m_clearBtn(new QPushButton(getIcon(MatIcon::Clear), "", parent))
@@ -66,7 +66,7 @@ struct TemplateConfigWidget::Data
     ConfigModel *m_configModel;
     BasicSortFilter *m_configProxy;
     QzTreeView *m_configView;
-    QLineEdit *m_configFilter;
+    SearchBox *m_configFilter;
 
     QPushButton *m_addBtn;
     QPushButton *m_removeBtn;
@@ -127,11 +127,11 @@ TemplateConfigWidget::TemplateConfigWidget(
              this,
              &TemplateConfigWidget::onSelection);
     connect(m_data->m_filter,
-             &QLineEdit::textChanged,
+             &SearchBox::textChanged,
              m_data->m_instanceProxy,
              &BasicSortFilter::setExpression);
     connect(m_data->m_configFilter,
-             &QLineEdit::textChanged,
+             &SearchBox::textChanged,
              m_data->m_configProxy,
              &BasicSortFilter::setExpression);
     connect(m_data->m_removeBtn,

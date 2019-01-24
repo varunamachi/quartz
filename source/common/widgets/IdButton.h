@@ -26,7 +26,7 @@ public:
               bool textBelowIcon,
               QWidget *parent = nullptr);
 
-    ~IdButton();
+    ~IdButton() override;
 
 protected:
     void mouseReleaseEvent(QMouseEvent *evt) override;

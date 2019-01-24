@@ -201,6 +201,11 @@ Logger::Logger(std::unique_ptr<AbstractLogDispatcher> dispatcher,
 
 }
 
+Logger::~Logger()
+{
+
+}
+
 
 Logger * Logger::get()
 {

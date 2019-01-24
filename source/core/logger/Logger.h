@@ -42,6 +42,8 @@ public:
     Logger(std::unique_ptr<AbstractLogDispatcher> dispatcher,
               LogLevel level);
 
+    ~Logger();
+
     static Logger * get();
 
     static bool init(std::unique_ptr<AbstractLogDispatcher> &&dispatcher,

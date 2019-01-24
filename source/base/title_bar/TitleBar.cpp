@@ -143,7 +143,7 @@ void TitleBar::removeCategory(const QString &category)
 }
 
 
-void TitleBar::mouseDoubleClickEvent(QMouseEvent */*event*/)
+void TitleBar::mouseDoubleClickEvent(QMouseEvent * /*event*/)
 {
     emit sigMaxRestoreRequested();
 }

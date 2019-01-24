@@ -17,7 +17,7 @@ enum class HistoryDirection
 
 struct ConsoleWidget::Data
 {
-    explicit Data(QWidget */*parent*/)
+    explicit Data(QWidget * /*parent*/)
         : m_historyIndex(0)
         , m_historyDirection(HistoryDirection::None)
     {
@@ -229,17 +229,17 @@ void ConsoleWidget::keyPressEvent(QKeyEvent *evt)
     }
 }
 
-void ConsoleWidget::mousePressEvent(QMouseEvent */*evt*/)
+void ConsoleWidget::mousePressEvent(QMouseEvent * /*evt*/)
 {
     setFocus();
 }
 
-void ConsoleWidget::mouseDoubleClickEvent(QMouseEvent */*evt*/)
+void ConsoleWidget::mouseDoubleClickEvent(QMouseEvent * /*evt*/)
 {
 
 }
 
-void ConsoleWidget::contextMenuEvent(QContextMenuEvent */*evt*/)
+void ConsoleWidget::contextMenuEvent(QContextMenuEvent * /*evt*/)
 {
 
 }
