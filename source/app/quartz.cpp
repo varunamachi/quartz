@@ -89,7 +89,7 @@ bool initLogger()
     const auto llevel = Logger::LogLevel::Info;
 #endif
     std::unique_ptr<Logger::SpooledDispatcher>
-            dispatcher{ new Logger::SpooledDispatcher{} };
+            dispatcher(new Logger::SpooledDispatcher());
     auto result = Logger::Logger::init(std::move(dispatcher), llevel);
     if (result) {
         std::unique_ptr<Logger::ConsoleTarget> consoleTarget{
@@ -107,8 +107,7 @@ bool initLogger()
         Logger::Logger::get()->dispatcher()->addTarget(
                     std::move(consoleTarget));
 
-    }
-    else {
+    } else {
         qDebug() << "Logger initialization failed";
     }
     return result;
@@ -123,13 +122,11 @@ std::unique_ptr<Quartz::ConfigManager> initConfigManager()
         QzAppContext::get()->configManager()->store(key, val, domain);
     };
     auto path = QzAppContext::expand(StdPath::DataDirectory) + "/quartz.db";
-    std::unique_ptr<DefaultStorageStrategy> storageStrategy{
-        new DefaultStorageStrategy(path)};
-    std::unique_ptr<XMLConfigLoader> loader{
-        new XMLConfigLoader(storeFunc)};
-    std::unique_ptr<ConfigManager> confMan{
-        new ConfigManager{ std::move(storageStrategy),
-                           std::move(loader)}};
+    auto storageStrategy = std::make_unique<DefaultStorageStrategy>(path);
+    auto loader = std::make_unique<XMLConfigLoader>(storeFunc);
+    auto confMan = std::make_unique<ConfigManager>(
+                std::move(storageStrategy),
+                std::move(loader));
     return confMan;
 }
 

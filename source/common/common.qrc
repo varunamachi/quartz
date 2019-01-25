@@ -72,5 +72,6 @@
         <file>resources/vs/language/typescript/tsMode.js</file>
         <file>resources/vs/language/typescript/tsWorker.js</file>
         <file>resources/index.html</file>
+        <file>resources/wrap.js</file>
     </qresource>
 </RCC>

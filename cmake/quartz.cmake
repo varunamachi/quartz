@@ -58,7 +58,8 @@ macro( qz_add_qt )
             Svg
             Network
             WebEngineCore
-            WebEngineWidgets)
+            WebEngineWidgets
+            WebChannel)
     endif()
 endmacro( qz_add_qt )
 
