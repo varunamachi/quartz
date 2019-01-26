@@ -43,17 +43,15 @@
 <script src="vs/loader.js"></script>
 <script src="vs/editor/editor.main.nls.js"></script>
 <script src="vs/editor/editor.main.js"></script>
-<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-<script src="wrap.js"></script>
-
 <script>
         var editor = monaco.editor.create(
             document.getElementById('container'), {
-                language: 'typescript',
                 automaticLayout: true,
-	});
+        });
         window.editor = editor;
 </script>
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script src="wrap.js"></script>
 
 </body>
 </html>

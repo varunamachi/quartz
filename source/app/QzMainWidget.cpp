@@ -28,9 +28,10 @@
 #include <base/extension_details/PluginSelector.h>
 #include <base/title_bar/QuartzItem.h>
 #include <base/main_menu/MainMenuButton.h>
+#include <base/explorer/FileSystemSelector.h>
+#include <base/explorer/EditorPage.h>
 
 #include "inbuilt/LogView.h"
-#include "inbuilt/EditorPage.h"
 #include "WelcomePage.h"
 #include "QzMainWidget.h"
 #include "AboutDialog.h"
@@ -170,6 +171,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_selector->addSelector(nodeSelector);
     m_data->m_selector->addSelector(pluginSelector);
     m_data->m_selector->addSelector(configTree);
+    m_data->m_selector->addSelector(new FileSystemSelector(this));
     nodeSelector->setSelected(welcomeNode->nodeId());
 }
 
