@@ -51,7 +51,7 @@ void FileHandlerManager::addHandler(
 void FileHandlerManager::handle(const QString &path)
 {
     QFileInfo info{path};
-//    auto handler = m_data->m_defaultHandlers[info.]
+//    auto handler = m_data->m_defaultHandlers[info.d]
 //    auto handler = m_data->m_defaultHandlers[]
 }
 

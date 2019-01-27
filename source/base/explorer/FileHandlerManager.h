@@ -20,6 +20,8 @@ public:
 
     void addHandler(std::shared_ptr<AbstractFileHandler> handler);
 
+    void handle(const QString &path);
+
     static const QString CONTENT_ID;
     static const QString CONTENT_NAME;
     static const QString CONTENT_KIND;
