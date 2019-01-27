@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QWebChannel>
 #include <QThread>
+#include <QFileInfo>
 
 #include <core/logger/Logging.h>
 
@@ -82,7 +83,7 @@ void MonacoEditor::setContentFile(const QString &path)
 {
     CHECK_INIT()
     QFile file{path};
-    if (file.open(QFile::ReadOnly)) {
+    if (QFileInfo(file).isFile() && file.open(QFile::ReadOnly)) {
         auto content = file.readAll();
         this->setContent(content);
         file.close();
@@ -108,7 +109,7 @@ void MonacoEditor::setTheme(const QString &theme)
                 "'" + theme + "');");
 }
 
-void MonacoEditor::set(const QString &method, const QString &value)
+void MonacoEditor::set(const QString &/*method*/, const QString &/*value*/)
 {
 
 }

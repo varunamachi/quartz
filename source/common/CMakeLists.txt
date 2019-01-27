@@ -20,6 +20,7 @@ add_subdirectory( widgets )
 add_subdirectory( templating )
 add_subdirectory( model_view )
 add_subdirectory( iconstore )
+add_subdirectory( editor )
 
 vq_create_sharedlib()
 vq_install()

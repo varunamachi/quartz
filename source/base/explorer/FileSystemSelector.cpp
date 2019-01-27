@@ -4,13 +4,13 @@
 #include <QStandardPaths>
 
 
-#include <common/widgets/MonacoEditor.h>
+#include <common/editor/MonacoEditor.h>
 #include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
 #include "FileSystemSelector.h"
-#include "EditorPage.h"
+#include "FileHandlerManager.h"
 
 namespace Quartz {
 
@@ -64,12 +64,12 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
             [this](const QModelIndex &index) {
         auto path = m_data->m_fsModel->filePath(index);
         appContext()->contentManager()->selectContent(
-                    EditorPage::CONTENT_ID);
+                    FileHandlerManager::CONTENT_ID);
         auto page = appContext()->contentManager()->content(
-                    EditorPage::CONTENT_ID);
-        auto editorPage = qobject_cast<EditorPage *>(page);
-        if (editorPage != nullptr) {
-            editorPage->editor()->setContentFile(path);
+                    FileHandlerManager::CONTENT_ID);
+        auto fhMan = qobject_cast<FileHandlerManager *>(page);
+        if (fhMan != nullptr) {
+            fhMan->handle(path);
         }
     });
 }

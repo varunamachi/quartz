@@ -1,6 +1,6 @@
 #include <QVBoxLayout>
 
-#include <common/widgets/MonacoEditor.h>
+#include <common/editor/MonacoEditor.h>
 
 #include "EditorPage.h"
 

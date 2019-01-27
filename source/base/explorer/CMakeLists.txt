@@ -1,5 +1,5 @@
 vq_classes(
-    EditorManager
+    AbstractFileHandler
     FileSystemSelector
-    EditorPage
+    FileHandlerManager
 )
