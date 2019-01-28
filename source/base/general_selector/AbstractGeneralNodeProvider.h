@@ -40,8 +40,8 @@ struct NodeInfo
 class QUARTZ_BASE_API AbstractGeneralNodeProvider : public Ext::Extension
 {
 public:
-    AbstractGeneralNodeProvider(const QString &pluginId,
-                                 const QString &pluginName);
+    AbstractGeneralNodeProvider(const QString &extensionId,
+                                 const QString &extensionName);
 
     ~AbstractGeneralNodeProvider();
 

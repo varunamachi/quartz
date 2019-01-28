@@ -5,6 +5,7 @@
 
 #include "AbstractFileHandler.h"
 #include "FileHandlerManager.h"
+#include "AbstractFileHandlerProvider.h"
 
 namespace Quartz {
 
@@ -19,9 +20,10 @@ struct FileHandlerManager::Data
     QHash<QString, AbstractFileHandler *> m_defaultHandlers;
 };
 
-const QString FileHandlerManager::CONTENT_ID("qz.editor_manager");
-const QString FileHandlerManager::CONTENT_NAME("Editor");
-const QString FileHandlerManager::CONTENT_KIND("editor");
+const QString FileHandlerManager::CONTENT_ID("qz.file_contet_manager");
+const QString FileHandlerManager::CONTENT_NAME("Files");
+const QString FileHandlerManager::CONTENT_KIND("viewer_editor");
+const QString FileHandlerManager::ADAPTER_NAME("File View/Editor Manager");
 
 FileHandlerManager::FileHandlerManager(QWidget *parent)
     : ContentWidget(CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent)
@@ -36,7 +38,7 @@ FileHandlerManager::~FileHandlerManager()
 
 }
 
-void FileHandlerManager::addHandler(
+void FileHandlerManager::registerFileHandler(
         std::shared_ptr<AbstractFileHandler> handler)
 {
     m_data->m_handlers.append(handler);
@@ -52,7 +54,27 @@ void FileHandlerManager::handle(const QString &path)
 {
     QFileInfo info{path};
 //    auto handler = m_data->m_defaultHandlers[info.d]
-//    auto handler = m_data->m_defaultHandlers[]
+    //    auto handler = m_data->m_defaultHandlers[]
+}
+
+const QString &FileHandlerManager::extensionType() const
+{
+    return AbstractFileHandlerProvider::EXTENSION_TYPE;
+}
+
+const QString &FileHandlerManager::extensionAdapterName() const
+{
+    return ADAPTER_NAME;
+}
+
+bool FileHandlerManager::handleExtension(Ext::Extension *extension)
+{
+    return true;
+}
+
+bool FileHandlerManager::finalizeExtension()
+{
+    return true;
 }
 
 }

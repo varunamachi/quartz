@@ -25,8 +25,10 @@ struct AbstractFileHandler::Data
 
 AbstractFileHandler::AbstractFileHandler(const QString &name,
                                          FileHandlerType type,
-                                         const QStringList &extensions)
-    : m_data(std::make_unique<Data>(name, type, extensions))
+                                         const QStringList &extensions,
+                                         QWidget *parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(name, type, extensions))
 {
 
 }

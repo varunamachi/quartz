@@ -6,12 +6,16 @@ namespace Quartz {
 
 class AbstractFileHandler;
 
-class FileHandlerProvider : public Ext::Extension
+class AbstractFileHandlerProvider : public Ext::Extension
 {
 public:
-    FileHandlerProvider();
+    AbstractFileHandlerProvider(const QString &extID, const QString &extName);
+
+    ~AbstractFileHandlerProvider();
 
     virtual std::shared_ptr<AbstractFileHandler> createHandler() = 0;
+
+    static const QString EXTENSION_TYPE;
 };
 
 }

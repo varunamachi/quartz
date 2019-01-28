@@ -18,13 +18,16 @@ enum class FileHandlerType {
 };
 
 
-class QUARTZ_BASE_API AbstractFileHandler
+class QUARTZ_BASE_API AbstractFileHandler : public QWidget
 {
+    Q_OBJECT
+
 public:
     AbstractFileHandler(
             const QString &name,
             FileHandlerType type,
-            const QStringList &extensions);
+            const QStringList &extensions,
+            QWidget *parent = nullptr);
 
     virtual ~AbstractFileHandler();
 
@@ -35,8 +38,6 @@ public:
     FileHandlerType type() const;
 
     virtual bool handle(const QFile &file) = 0;
-
-
 
 private:
     struct Data;

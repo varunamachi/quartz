@@ -39,7 +39,6 @@ struct FileSystemSelector::Data
     QTreeView *m_fsView;
 
     MonacoEditor *m_editor;
-
 };
 
 FileSystemSelector::FileSystemSelector(QWidget *parent)
