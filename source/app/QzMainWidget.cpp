@@ -29,7 +29,7 @@
 #include <base/title_bar/QuartzItem.h>
 #include <base/main_menu/MainMenuButton.h>
 #include <base/explorer/FileSystemSelector.h>
-#include <base/explorer/EditorPage.h>
+#include <base/explorer/FileHandlerManager.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -139,12 +139,12 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_content->addContent(
                 new WelcomePage(welcomeNode->nodeId(),
                                 m_data->m_content));
-    nodeSelector->model()->addNode(
-                QStringList(),
-                EditorPage::CONTENT_NAME,
-                EditorPage::CONTENT_ID,
-                getIcon(MatIcon::Edit));
-    m_data->m_content->addContent(new EditorPage(this));
+//    nodeSelector->model()->addNode(
+//                QStringList(),
+//                EditorPage::CONTENT_NAME,
+//                EditorPage::CONTENT_ID,
+//                getIcon(MatIcon::Edit));
+//    m_data->m_content->addContent(new EditorPage(this));
     auto configTree = new ConfigPageSelector(this);
     configTree->addPage(new BasicConfigPage(configTree));
 

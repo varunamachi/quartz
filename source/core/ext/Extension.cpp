@@ -52,4 +52,14 @@ const QString &Extension::extensionType() const
     return m_data->m_extensionType;
 }
 
+bool Extension::init()
+{
+    return true;
+}
+
+bool Extension::destroy()
+{
+    return true;
+}
+
 } }

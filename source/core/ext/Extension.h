@@ -28,9 +28,9 @@ public:
 
     const QString & extensionType() const;
 
-    virtual bool init() = 0;
+    virtual bool init();
 
-    virtual bool destroy() = 0;
+    virtual bool destroy();
 
 private:
     struct Data;
