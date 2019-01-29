@@ -7,11 +7,9 @@ namespace Quartz {
 struct AbstractFileHandler::Data
 {
     explicit Data(const QString &name,
-                  const FileHandlerType type,
-                  const QStringList &extns)
+                  const FileHandlerType type)
         : m_name(name)
         , m_type(type)
-        , m_extensions(extns)
     {
 
     }
@@ -19,16 +17,13 @@ struct AbstractFileHandler::Data
     QString m_name;
 
     FileHandlerType m_type;
-
-    QStringList m_extensions;
 };
 
 AbstractFileHandler::AbstractFileHandler(const QString &name,
                                          FileHandlerType type,
-                                         const QStringList &extensions,
                                          QWidget *parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(name, type, extensions))
+    , m_data(std::make_unique<Data>(name, type))
 {
 
 }
@@ -46,11 +41,6 @@ const QString &AbstractFileHandler::name() const
 FileHandlerType AbstractFileHandler::type() const
 {
     return m_data->m_type;
-}
-
-const QStringList &AbstractFileHandler::supportedExtensions() const
-{
-    return m_data->m_extensions;
 }
 
 }

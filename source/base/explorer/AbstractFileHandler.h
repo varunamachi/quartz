@@ -23,15 +23,11 @@ class QUARTZ_BASE_API AbstractFileHandler : public QWidget
     Q_OBJECT
 
 public:
-    AbstractFileHandler(
-            const QString &name,
-            FileHandlerType type,
-            const QStringList &extensions,
-            QWidget *parent = nullptr);
+    AbstractFileHandler(const QString &name,
+                        FileHandlerType type,
+                        QWidget *parent = nullptr);
 
     virtual ~AbstractFileHandler();
-
-    const QStringList & supportedExtensions() const;
 
     const QString & name() const;
 

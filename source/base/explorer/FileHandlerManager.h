@@ -1,15 +1,19 @@
 #pragma once
 
 #include <memory>
+#include <functional>
 
 #include <core/ext/IExtensionAdapter.h>
 
 #include "../content_manager/ContentWidget.h"
 #include "../QuartzBase.h"
 
+class QWidget;
+
 namespace Quartz {
 
 class AbstractFileHandler;
+struct FileHandlerCreator;
 
 class QUARTZ_BASE_API FileHandlerManager
         : public ContentWidget
@@ -22,7 +26,7 @@ public:
 
     ~FileHandlerManager();
 
-    void registerFileHandler(std::shared_ptr<AbstractFileHandler> handler);
+    void registerFileHandler(const FileHandlerCreator &creator);
 
     void handle(const QString &path);
 
