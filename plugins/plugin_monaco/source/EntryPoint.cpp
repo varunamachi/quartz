@@ -1,4 +1,4 @@
-
+#include <QtWebEngine/QtWebEngine>
 
 #include <core/ext/PluginEnv.h>
 

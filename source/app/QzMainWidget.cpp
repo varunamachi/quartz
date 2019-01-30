@@ -75,7 +75,6 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
-    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     m_data->m_content   = new ContentManager(this);
     m_data->m_actionBar = new ActionBar(20, this);
     m_data->m_menu = new QMenu(this);

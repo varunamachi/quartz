@@ -19,14 +19,20 @@ const QString FileHandlerProvider::EXTENSION_ID{"qzp.editor.monaco"};
 const QString FileHandlerProvider::EXTENSION_NAME{"Monaco Editor"};
 
 FileHandlerProvider::FileHandlerProvider()
-    : Quartz::FileHandlerProvider(EXTENSION_ID, EXTENSION_NAME)
+    : AbstractFileHandlerProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
 
 QVector<std::shared_ptr<FileHandlerInfo>> FileHandlerProvider::handlerInfos()
 {
-    auto extns = QStringList{".txt", ".ts", ".js", ".cpp"};
+    auto extns = QStringList{
+            "txt",
+            "ts",
+            "js",
+            "cpp",
+            "dart",
+    };
     QVector<std::shared_ptr<FileHandlerInfo>> infos;
     auto fhi = std::make_shared<FileHandlerInfo>(
                     QObject::tr("Monaco Editor"),

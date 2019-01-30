@@ -17,13 +17,13 @@ namespace Quartz {
 class AbstractFileHandler;
 class FileHandlerInfo;
 
-class QUARTZ_BASE_API FileHandlerProvider : public Ext::Extension
+class QUARTZ_BASE_API AbstractFileHandlerProvider : public Ext::Extension
 {
 public:
-    FileHandlerProvider(const QString &extID,
+    AbstractFileHandlerProvider(const QString &extID,
                         const QString &extName);
 
-    ~FileHandlerProvider() override;
+    ~AbstractFileHandlerProvider() override;
 
     virtual QVector<std::shared_ptr<FileHandlerInfo>> handlerInfos() = 0;
 

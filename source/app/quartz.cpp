@@ -177,6 +177,7 @@ void loadFonts() {
 
 int main(int argc, char **argv)
 {
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     auto returnCode = -1;
     Q_INIT_RESOURCE(quartz);
     auto result = createFileSystem()

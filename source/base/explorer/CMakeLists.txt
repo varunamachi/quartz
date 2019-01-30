@@ -1,7 +1,7 @@
 vq_classes(
-    FileHandlerProvider
-    FileSystemSelector
     AbstractFileHandler
+    AbstractFileHandlerProvider
+    FileSystemSelector
     FileHandlerManager
     FileHandlerInfo
 )

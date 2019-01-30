@@ -1,8 +1,8 @@
-#include <base/explorer/FileHandlerProvider.h>
+#include <base/explorer/AbstractFileHandlerProvider.h>
 
 namespace Quartz { namespace Ext { namespace Monaco {
 
-class FileHandlerProvider : public Quartz::FileHandlerProvider
+class FileHandlerProvider : public AbstractFileHandlerProvider
 {
 public:
     FileHandlerProvider();

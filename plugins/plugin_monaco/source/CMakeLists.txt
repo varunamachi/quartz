@@ -5,6 +5,7 @@ include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
 
 qz_add_qt()
+qz_add_qt_modules("WebEngineCore" "WebEngineWidgets" "WebChannel")
 qz_add_plugin_base()
 qz_add_common()
 qz_add_base()

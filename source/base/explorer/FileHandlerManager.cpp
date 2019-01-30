@@ -8,7 +8,7 @@
 
 #include "AbstractFileHandler.h"
 #include "FileHandlerManager.h"
-#include "FileHandlerProvider.h"
+#include "AbstractFileHandlerProvider.h"
 #include "FileHandlerInfo.h"
 
 namespace Quartz {
@@ -74,8 +74,15 @@ void FileHandlerManager::handle(const QString &path)
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
         auto hndlr = creator->creator()(m_data->m_stacker);
         m_data->m_cache[path] = hndlr;
-        m_data->m_stacker->addTab(hndlr, creator->icon(), info.fileName());
-    } else {
+        QFile file{path};
+        if (hndlr->handle(file)) {
+            m_data->m_stacker->addTab(hndlr, creator->icon(), info.fileName());
+        } else {
+            QZ_ERROR("Qz:Explorer")
+                    << "Handler " << creator->name() << " failed to handle - "
+                    << path;
+        }
+    } else if(info.isFile()){
         QZ_ERROR("Qz:Explorer") << "Could not find default handler for file "
                                 << info.fileName();
         //show error message / toast??
@@ -84,7 +91,7 @@ void FileHandlerManager::handle(const QString &path)
 
 const QString &FileHandlerManager::extensionType() const
 {
-    return FileHandlerProvider::EXTENSION_TYPE;
+    return AbstractFileHandlerProvider::EXTENSION_TYPE;
 }
 
 const QString &FileHandlerManager::extensionAdapterName() const
@@ -94,7 +101,7 @@ const QString &FileHandlerManager::extensionAdapterName() const
 
 bool FileHandlerManager::handleExtension(Ext::Extension *extension)
 {
-    auto handlerProvider = dynamic_cast<FileHandlerProvider *>(extension);
+    auto handlerProvider = dynamic_cast<AbstractFileHandlerProvider *>(extension);
     if (handlerProvider != nullptr) {
         for(auto & info : handlerProvider->handlerInfos()) {
             registerFileHandler(info);

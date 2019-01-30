@@ -4,17 +4,20 @@
 #include <QWebChannel>
 #include <QThread>
 #include <QFileInfo>
+#include <QQueue>
 
 #include <core/logger/Logging.h>
 
 #include "MonacoEditor.h"
 
-#define CHECK_INIT() \
-    if (! m_data->m_initialized) { \
-        QZ_ERROR("Cmn:Monaco") << "Attempt to use Editor before it " \
-            "is initialized"; \
-    }
 
+#define EXEC(statement)                                 \
+    if (!m_data->m_initialized) {                       \
+        m_data->m_pendingCommands.append([=]() {        \
+            statement                                   \
+        });                                             \
+    }                                                   \
+    statement
 
 namespace Quartz {
 
@@ -37,6 +40,8 @@ struct MonacoEditor::Data
     bool m_initialized;
 
     QFile m_file;
+
+    QQueue<std::function<void()>> m_pendingCommands;
 };
 
 
@@ -61,6 +66,10 @@ MonacoEditor::MonacoEditor(QWidget *parent)
             &QWebEngineView::loadFinished,
             [this]() {
         m_data->m_initialized = true;
+        while (!m_data->m_pendingCommands.empty()) {
+            auto func = m_data->m_pendingCommands.takeFirst();
+            func();
+        }
     });
 }
 
@@ -76,14 +85,14 @@ SharedObject *MonacoEditor::controller() const
 
 void MonacoEditor::setContent(const QString &content)
 {
-    CHECK_INIT()
-    m_data->m_monaco->page()->runJavaScript(
+    EXEC(
+        m_data->m_monaco->page()->runJavaScript(
                 "window.editor.setValue(`"+content+"`)");
+    );
 }
 
 bool MonacoEditor::handle(QFile &file)
 {
-    CHECK_INIT()
     auto result = false;
     if (QFileInfo(file).isFile() && file.open(QFile::ReadOnly)) {
         auto content = file.readAll();
@@ -98,19 +107,20 @@ bool MonacoEditor::handle(QFile &file)
 
 void MonacoEditor::setLanguage(const QString &language)
 {
-    CHECK_INIT()
-    m_data->m_monaco->page()->runJavaScript(
-                "monaco.editor.setModelLanguage("
-                    "window.editor.getModel(), "
-                "'" + language + "');");
+    EXEC(m_data->m_monaco->page()->runJavaScript(
+             "monaco.editor.setModelLanguage("
+             "window.editor.getModel(), "
+             "'" + language + "');");
+    );
 }
 
 void MonacoEditor::setTheme(const QString &theme)
 {
-    m_data->m_monaco->page()->runJavaScript(
-                "monaco.editor.setTheme("
-                    "window.editor.getModel(), "
-                "'" + theme + "');");
+    EXEC(m_data->m_monaco->page()->runJavaScript(
+             "monaco.editor.setTheme("
+             "window.editor.getModel(), "
+             "'" + theme + "');");
+    );
 }
 
 bool MonacoEditor::close()
