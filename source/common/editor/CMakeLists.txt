@@ -1,3 +1,0 @@
-vq_classes(
-    MonacoEditor
-)

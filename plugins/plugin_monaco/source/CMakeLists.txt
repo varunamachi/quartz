@@ -1,0 +1,32 @@
+
+project( plugin_monaco )
+cmake_minimum_required( VERSION 3.1 )
+include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
+include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
+
+qz_add_qt()
+qz_add_plugin_base()
+qz_add_common()
+qz_add_base()
+qz_add_core()
+
+qz_add_resource( resources.qrc )
+
+vq_headers(
+    EntryPoint.cpp
+    Plugin.cpp
+)
+vq_headers(
+    Plugin.h
+    resources.qrc
+)
+
+vq_classes(
+    MonacoEditor
+    FileHandlerProvider
+)
+
+
+qz_create_plugin()
+qz_install_plugin()
+            

@@ -1,0 +1,6 @@
+#Created By Quartz Plugin Creator
+id=qz.editor.monaco
+name=monaco
+display=monaco
+ns=Monaco
+version=0.0.0.0

@@ -4,7 +4,6 @@
 #include <QStandardPaths>
 
 
-#include <common/editor/MonacoEditor.h>
 #include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
@@ -22,7 +21,6 @@ struct FileSystemSelector::Data
     explicit Data(QWidget *parent)
         : m_fsModel(new QFileSystemModel(parent))
         , m_fsView(new QTreeView(parent))
-        //        , m_editor(new MonacoEditor(parent))
     {
         auto home =
                 QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -38,7 +36,6 @@ struct FileSystemSelector::Data
 
     QTreeView *m_fsView;
 
-    MonacoEditor *m_editor;
 };
 
 FileSystemSelector::FileSystemSelector(QWidget *parent)

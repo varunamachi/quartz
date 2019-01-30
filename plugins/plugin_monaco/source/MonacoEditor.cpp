@@ -35,11 +35,13 @@ struct MonacoEditor::Data
     SharedObject *m_qzwrapper;
 
     bool m_initialized;
+
+    QFile m_file;
 };
 
 
 MonacoEditor::MonacoEditor(QWidget *parent)
-    : QWidget(parent)
+    : AbstractFileHandler(parent)
     , m_data(std::make_unique<Data>(this))
 {
     auto layout = new QVBoxLayout();
@@ -79,17 +81,19 @@ void MonacoEditor::setContent(const QString &content)
                 "window.editor.setValue(`"+content+"`)");
 }
 
-void MonacoEditor::setContentFile(const QString &path)
+bool MonacoEditor::handle(QFile &file)
 {
     CHECK_INIT()
-    QFile file{path};
+    auto result = false;
     if (QFileInfo(file).isFile() && file.open(QFile::ReadOnly)) {
         auto content = file.readAll();
         this->setContent(content);
         file.close();
+        result = true;
     } else {
-        QZ_ERROR("Cmn:Monaco") << "Could not load file at " << path;
+        QZ_ERROR("Cmn:Monaco") << "Could not load file at " << file.fileName();
     }
+    return result;
 }
 
 void MonacoEditor::setLanguage(const QString &language)
@@ -107,6 +111,20 @@ void MonacoEditor::setTheme(const QString &theme)
                 "monaco.editor.setTheme("
                     "window.editor.getModel(), "
                 "'" + theme + "');");
+}
+
+bool MonacoEditor::close()
+{
+    if (m_data->m_file.isOpen()) {
+        m_data->m_file.close();
+        return true;
+    }
+    return false;
+}
+
+bool MonacoEditor::save()
+{
+    return false;
 }
 
 void MonacoEditor::set(const QString &/*method*/, const QString &/*value*/)

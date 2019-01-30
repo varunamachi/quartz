@@ -116,8 +116,7 @@ bool ActionBar::handleExtension(Ext::Extension *extension)
             m_extensionItems.push_back(item);
         }
         return true;
-    }
-    else {
+    } else {
         auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR("Qz:ActionBar")

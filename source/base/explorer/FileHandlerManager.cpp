@@ -9,6 +9,7 @@
 #include "AbstractFileHandler.h"
 #include "FileHandlerManager.h"
 #include "FileHandlerProvider.h"
+#include "FileHandlerInfo.h"
 
 namespace Quartz {
 
@@ -20,16 +21,13 @@ struct FileHandlerManager::Data
 
     }
 
-
     QTabWidget *m_stacker;
 
-    QMultiHash<QString, FileHandlerCreator> m_handlerMapping;
+    QMultiHash<QString, std::shared_ptr<FileHandlerInfo>> m_handlerMapping;
 
-    QHash<QString, FileHandlerCreator> m_defaultHandlers;
+    QHash<QString, FileHandlerInfo *> m_defaultHandlers;
 
     QHash<QString, AbstractFileHandler *> m_cache;
-
-
 };
 
 const QString FileHandlerManager::CONTENT_ID("qz.file_contet_manager");
@@ -51,13 +49,14 @@ FileHandlerManager::~FileHandlerManager()
 
 }
 
-void FileHandlerManager::registerFileHandler(const FileHandlerCreator &creator)
+void FileHandlerManager::registerFileHandler(
+        std::shared_ptr<FileHandlerInfo> fhinfo)
 {
-    for (auto ext : creator.m_extensions) {
-        m_data->m_handlerMapping.insert(ext, creator);
+    for (auto ext : fhinfo->extensions()) {
         if (!m_data->m_defaultHandlers.contains(ext)) {
-            m_data->m_defaultHandlers[ext] = creator;
+            m_data->m_defaultHandlers[ext] = fhinfo.get();
         }
+        m_data->m_handlerMapping.insert(ext, std::move(fhinfo));
     }
 }
 
@@ -73,9 +72,9 @@ void FileHandlerManager::handle(const QString &path)
     QFileInfo info{path};
     if (m_data->m_defaultHandlers.contains(info.suffix())) {
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
-        auto hndlr = creator.m_creatorFunc(m_data->m_stacker);
+        auto hndlr = creator->creator()(m_data->m_stacker);
         m_data->m_cache[path] = hndlr;
-        m_data->m_stacker->addTab(hndlr, creator.m_icon, info.fileName());
+        m_data->m_stacker->addTab(hndlr, creator->icon(), info.fileName());
     } else {
         QZ_ERROR("Qz:Explorer") << "Could not find default handler for file "
                                 << info.fileName();
@@ -93,9 +92,19 @@ const QString &FileHandlerManager::extensionAdapterName() const
     return ADAPTER_NAME;
 }
 
-bool FileHandlerManager::handleExtension(Ext::Extension */*extension*/)
+bool FileHandlerManager::handleExtension(Ext::Extension *extension)
 {
-    return true;
+    auto handlerProvider = dynamic_cast<FileHandlerProvider *>(extension);
+    if (handlerProvider != nullptr) {
+        for(auto & info : handlerProvider->handlerInfos()) {
+            registerFileHandler(info);
+        }
+    } else {
+        QZ_ERROR("Qz:Explorer")
+                << "Invalid actionbar extension provided: "
+                << (extension != nullptr ? extension->extensionId() : "<null>");
+    }
+    return false;
 }
 
 bool FileHandlerManager::finalizeExtension()

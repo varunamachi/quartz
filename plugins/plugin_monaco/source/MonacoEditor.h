@@ -2,13 +2,11 @@
 
 #include <memory>
 
-#include <QWidget>
-
-#include "../QuartzCommon.h"
+#include <base/explorer/AbstractFileHandler.h>
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API SharedObject : public QObject
+class SharedObject : public QObject
 {
     Q_OBJECT
 public:
@@ -23,23 +21,27 @@ public Q_SLOTS:
 Q_SIGNALS:
 };
 
-class QUARTZ_COMMON_API MonacoEditor : public QWidget
+class MonacoEditor : public AbstractFileHandler
 {
     Q_OBJECT
 public:
     explicit MonacoEditor(QWidget *parent = nullptr);
 
-    ~MonacoEditor();
+    ~MonacoEditor() override;
 
     SharedObject * controller() const;
 
     void setContent(const QString &content);
 
-    void setContentFile(const QString &path);
-
     void setLanguage(const QString &language);
 
     void setTheme(const QString &theme);
+
+    bool handle(QFile &file) override;
+
+    bool close() override;
+
+    bool save() override;
 
 signals:
 
@@ -50,6 +52,8 @@ private:
 
     struct Data;
     std::unique_ptr<Data> m_data;
+
+
 };
 
 }

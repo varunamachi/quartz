@@ -5,6 +5,7 @@
 #include <QToolButton>
 #include <QMenu>
 #include <QApplication>
+#include <QCoreApplication>
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
@@ -74,6 +75,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     : QWidget(parent)
     , m_data(std::make_unique<Data>(this))
 {
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     m_data->m_content   = new ContentManager(this);
     m_data->m_actionBar = new ActionBar(20, this);
     m_data->m_menu = new QMenu(this);
@@ -139,12 +141,11 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_content->addContent(
                 new WelcomePage(welcomeNode->nodeId(),
                                 m_data->m_content));
-//    nodeSelector->model()->addNode(
-//                QStringList(),
-//                EditorPage::CONTENT_NAME,
-//                EditorPage::CONTENT_ID,
-//                getIcon(MatIcon::Edit));
-//    m_data->m_content->addContent(new EditorPage(this));
+    auto fhman = new FileHandlerManager(this);
+    m_data->m_content->addContent(fhman);
+
+
+
     auto configTree = new ConfigPageSelector(this);
     configTree->addPage(new BasicConfigPage(configTree));
 
@@ -160,6 +161,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_pluginManager->registerPluginAdapter(m_data->m_viewManager);
     m_data->m_pluginManager->registerPluginAdapter(configTree);
     m_data->m_pluginManager->registerPluginAdapter(mainMenu);
+    m_data->m_pluginManager->registerPluginAdapter(fhman);
     appContext()->setPluginManager(m_data->m_pluginManager.get());
     appContext()->setContentManager(m_data->m_content);
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";

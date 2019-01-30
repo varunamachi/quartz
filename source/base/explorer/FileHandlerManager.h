@@ -13,7 +13,7 @@ class QWidget;
 namespace Quartz {
 
 class AbstractFileHandler;
-struct FileHandlerCreator;
+class FileHandlerInfo;
 
 class QUARTZ_BASE_API FileHandlerManager
         : public ContentWidget
@@ -26,7 +26,8 @@ public:
 
     ~FileHandlerManager();
 
-    void registerFileHandler(const FileHandlerCreator &creator);
+    void registerFileHandler(
+            std::shared_ptr<FileHandlerInfo> creator);
 
     void handle(const QString &path);
 

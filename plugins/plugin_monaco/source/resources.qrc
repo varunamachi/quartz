@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+		<file alias="plugin.txt">resources/plugin.txt</file>
         <file>resources/vs/loader.js</file>
         <file>resources/vs/base/worker/workerMain.js</file>
         <file>resources/vs/basic-languages/apex/apex.js</file>

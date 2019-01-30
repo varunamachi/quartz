@@ -3,9 +3,11 @@
 #include <functional>
 #include <memory>
 
-#include <QIcon>
+#include <QVector>
 
 #include <core/ext/Extension.h>
+
+#include "../QuartzBase.h"
 
 class QWidget;
 class QIcon;
@@ -13,32 +15,20 @@ class QIcon;
 namespace Quartz {
 
 class AbstractFileHandler;
-using FHCreator = std::function<AbstractFileHandler *(QWidget *parent)>;
+class FileHandlerInfo;
 
-struct FileHandlerCreator
-{
-    QString m_name;
-    QStringList m_extensions;
-    FHCreator m_creatorFunc;
-    QIcon m_icon;
-};
-
-class FileHandlerProvider : public Ext::Extension
+class QUARTZ_BASE_API FileHandlerProvider : public Ext::Extension
 {
 public:
     FileHandlerProvider(const QString &extID,
-                        const QString &extName,
-                        const FileHandlerCreator &creator);
+                        const QString &extName);
 
     ~FileHandlerProvider() override;
 
-    const FileHandlerCreator & creator() const;
+    virtual QVector<std::shared_ptr<FileHandlerInfo>> handlerInfos() = 0;
 
     static const QString EXTENSION_TYPE;
 
-private:
-    struct Data;
-    std::unique_ptr<Data> m_data;
 };
 
 }

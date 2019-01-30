@@ -11,33 +11,25 @@ class QFile;
 
 namespace Quartz {
 
-enum class FileHandlerType {
-    Editor,
-    Viewer,
-    Transformer,
-};
-
-
 class QUARTZ_BASE_API AbstractFileHandler : public QWidget
 {
     Q_OBJECT
 
 public:
-    AbstractFileHandler(const QString &name,
-                        FileHandlerType type,
-                        QWidget *parent = nullptr);
+    AbstractFileHandler(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
 
-    virtual ~AbstractFileHandler();
+    }
 
-    const QString & name() const;
+    virtual ~AbstractFileHandler() {}
 
-    FileHandlerType type() const;
+    virtual bool handle(QFile &file) = 0;
 
-    virtual bool handle(const QFile &file) = 0;
+    virtual bool close() = 0;
 
-private:
-    struct Data;
-    std::unique_ptr<Data> m_data;
+    virtual bool save() = 0;
+
 };
 
 }
