@@ -18,7 +18,7 @@ struct FileHandlerManager::Data
     explicit Data(QWidget *parent)
         : m_stacker(new QTabWidget(parent))
     {
-
+        m_stacker->setTabsClosable(true);
     }
 
     QTabWidget *m_stacker;
@@ -27,7 +27,7 @@ struct FileHandlerManager::Data
 
     QHash<QString, FileHandlerInfo *> m_defaultHandlers;
 
-    QHash<QString, AbstractFileHandler *> m_cache;
+//    QHash<QString, AbstractFileHandler *> m_cache;
 };
 
 const QString FileHandlerManager::CONTENT_ID("qz.file_contet_manager");
@@ -42,6 +42,16 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
     auto layout = new QVBoxLayout();
     layout->addWidget(m_data->m_stacker);
     this->setLayout(layout);
+
+    connect(m_data->m_stacker,
+            &QTabWidget::tabCloseRequested,
+            [this](int index) {
+        auto handler = qobject_cast<AbstractFileHandler *>(
+                    m_data->m_stacker->widget(index));
+        if (handler->close()) {
+            m_data->m_stacker->removeTab(index);
+        }
+    });
 }
 
 FileHandlerManager::~FileHandlerManager()
@@ -62,18 +72,18 @@ void FileHandlerManager::registerFileHandler(
 
 void FileHandlerManager::handle(const QString &path)
 {
-    auto hndlr = m_data->m_cache[path];
-    //see if it is already opened, if so set it as current widget
-    if (hndlr != nullptr) {
-        m_data->m_stacker->setCurrentWidget(hndlr);
-        return;
-    }
+//    auto hndlr = m_data->m_cache[path];
+//    //see if it is already opened, if so set it as current widget
+//    if (hndlr != nullptr) {
+//        m_data->m_stacker->setCurrentWidget(hndlr);
+//        return;
+//    }
 
     QFileInfo info{path};
     if (m_data->m_defaultHandlers.contains(info.suffix())) {
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
         auto hndlr = creator->creator()(m_data->m_stacker);
-        m_data->m_cache[path] = hndlr;
+//        m_data->m_cache[path] = hndlr;
         QFile file{path};
         if (hndlr->handle(file)) {
             m_data->m_stacker->addTab(hndlr, creator->icon(), info.fileName());
@@ -101,7 +111,8 @@ const QString &FileHandlerManager::extensionAdapterName() const
 
 bool FileHandlerManager::handleExtension(Ext::Extension *extension)
 {
-    auto handlerProvider = dynamic_cast<AbstractFileHandlerProvider *>(extension);
+    auto handlerProvider = dynamic_cast<AbstractFileHandlerProvider *>(
+                extension);
     if (handlerProvider != nullptr) {
         for(auto & info : handlerProvider->handlerInfos()) {
             registerFileHandler(info);

@@ -132,11 +132,16 @@ bool MonacoEditor::handle(QFile &file)
 
 bool MonacoEditor::close()
 {
+    auto result = true;
     if (m_data->m_file.isOpen()) {
         m_data->m_file.close();
-        return true;
+        result = !m_data->m_file.isOpen();
+        if (!result) {
+            QFileInfo info{m_data->m_file};
+            QZP_ERROR << "Failed to close file " << info.path();
+        }
     }
-    return false;
+    return result;
 }
 
 bool MonacoEditor::save()

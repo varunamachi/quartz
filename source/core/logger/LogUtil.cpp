@@ -72,7 +72,8 @@ QString LogUtil::format(const LogMessage *msg)
     QTextStream stream{ &str };
     stream << msg->time().toString("yyyy-MM-dd hh:mm:ss")
            << " " << getSeverityString(msg->logLevel())
-           << " " << msg->message();
+           << " - " << msg->moduleName()
+           << " - " << msg->message();
     if (msg->logLevel() >= LogLevel::Error) {
            stream << " @ " << msg->fileName() << ":" << msg->lineNum();
     }

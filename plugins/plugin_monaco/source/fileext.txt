@@ -1,0 +1,498 @@
+.4DB                   Dimension Database Structure File                 
+.4TH                   Language File                 
+.A                     Library           
+.A2W                   World                 
+.ABC                   Byte Code File                 
+.ACD                   5000 Program                 
+.ADDIN                 Studio Add-in Definition File               
+.ADS                   Specification File                 
+.AGI                   Gateway Interface File                 
+.AIA                   App Inventor Source Code File                 
+.AIDL                  Interface Definition Language File                
+.ALB                   Five Library                 
+.AM4                   Media Studio 4 Project File                 
+.AM5                   Media Studio 5 Project File                 
+.AM6                   Media Studio 6 Project                 
+.AM7                   Media Studio 7 Project                 
+.ANE                   AIR Native Extension                 
+.AP_                   Android Developer Package                 
+.APA                   Development Project Archive                 
+.APPX                  8 App Package                
+.APPXUPLOAD            8 App Upload Package                  
+.APS                   C++ Resource File                 
+.ARSC                  Package Resource File                
+.ARTPROJ               Project                     
+.AS                    File          
+.AS2PROJ               ActionScript 2 Project File                     
+.AS3PROJ               ActionScript 3 Project File                     
+.ASC                   Communication File                 
+.ASI                   Five Variable File                 
+.ASM                   Language Source Code File                 
+.ASM                   Studio Assembler Source Code File                 
+.ASVF                  Sphinx Archive File                
+.AU3                   v3 Script                 
+.AUTOPLAY              Media Studio Project File                    
+.AWK                   Script                 
+.B                     Source File           
+.BAS                   Source Code File                 
+.BB                    Source Code File          
+.BBC                   BASIC Data File                 
+.BBPROJECT             Project File                   
+.BBPROJECTD            Project Document                  
+.BCP                   C++ Makefile                 
+.BDSPROJ               Developer Studio Project                     
+.BET                   Source File                 
+.BLUEJ                 Package File               
+.BPG                   Project Group                 
+.BPL                   Package Library                 
+.BRX                   Application Resource File                 
+.BS2                   Stamp 2 Code File                 
+.BSC                   Studio Source Browser Information File                 
+.C                     C++ Source Code File           
+.C                     C Script           
+.CAF                   Character Animation File                 
+.CAPROJ                Project File              
+.CAPX                  Compressed Project File                
+.CBL                   Source Code File                 
+.CBP                   :Blocks Project File                 
+.CC                    + Source Code File          
+.CCGAME                Creators Club Game Package              
+.CCN                   Multimedia Fusion File                 
+.CCP                   Studio Page File                 
+.CCS                   Studio Project File                 
+.CD                    Studio Class Diagram          
+.CDF                   Character Definition File                 
+.CFC                   Component File                 
+.CLASS                 Class File               
+.CLIPS                 Clips File               
+.CLS                   Class File                 
+.CLW                   C++ ClassWizard File                 
+.COB                   Source Code File                 
+.COD                   Source Code                 
+.CONFIG                File              
+.CP                    C++ Source File          
+.CP                    Source File          
+.CPP                   + Source Code File                 
+.CS                     Source Code File          
+.CSI                   Include File                 
+.CSI                   Program Data File                 
+.CSN                   Code Snippet Document                 
+.CSP                   Server Page                 
+.CSPROJ                Studio C# Project              
+.CSX                   C# Script                 
+.CTL                   Basic UserControl Object File                 
+.CTP                   Template                 
+.CTXT                  Context File                
+.CU                    Source Code File          
+.CVSRC                 Command File               
+.CXP                   Programmer Project File                 
+.CXX                   + Source Code File                 
+.D                     Source Code File           
+.DBA                   Animation Database File                 
+.DBA                   Source Code File                 
+.DBML                  Studio OR Design File                
+.DBO                   Object                 
+.DBPRO                 Professional Project File               
+.DBPROJ                Studio Database Project File              
+.DCP                   Compiled Package                 
+.DCPROJ                Project              
+.DCU                   Compiled Unit                 
+.DCUIL                 .NET Compiled Unit File               
+.DEC                   File                 
+.DEF                   Definition File                 
+.DEVICEIDS             Identification FIle                   
+.DEX                   Executable File                 
+.DF1                   Native Datafile                 
+.DFM                   Form                 
+.DGML                  Studio Directed Graph Document                
+.DGSL                  Shader Graph File                
+.DIFF                  File                
+.DM1                   Studio Data Model File                 
+.DMD                   Developer Data Modeler File                 
+.DOB                   Basic UserDocument                 
+.DOX                   Basic Binary UserDocument                 
+.DPK                   Package                 
+.DPKW                  Package                
+.DPL                   Package Library                 
+.DPR                   Project                 
+.DPROJ                 Project               
+.DSGM                  Game Maker Project                
+.DSP                   C++ 6 Project                 
+.DTD                   Type Definition File                 
+.EDML                  Extension Data Markup Language Document                
+.EDMX                  NET Entity Data Model Designer File                
+.ENT                   Entity                 
+.ENTITLEMENTS          App Sandboxing Entitlements File                        
+.EQL                   SQL File                 
+.ERB                   ERB Script                 
+.ERL                   Source Code File                 
+.EX                    Source Code          
+.EXP                   Export File                 
+.EXW                   Source code File                 
+.F                     Source Code           
+.F90                   90 Source Code File                 
+.FBP                   Project                 
+.FBZ7                  FinalBuilder 7 Project                
+.FGL                   Generation Language Source File                 
+.FLA                   Animate Animation                 
+.FOR                   77 Source File                 
+.FORTH                 Language File               
+.FPM                   Creator Map File                 
+.FRAMEWORK             OS X Application Framework                   
+.FRX                   Basic Binary Form File                 
+.FS                    F# Source File          
+.FSI                   F# Signature File                 
+.FSPROJ                F# Project File              
+.FSPROJ                Project File              
+.FSSCRIPT              F# Script                    
+.FSX                   F# Script File                 
+.FTL                   Template File                 
+.FTN                   Source Code File                 
+.FXC                   Configuration                 
+.FXCPROJ               Composer Project File                     
+.FXL                   Language File                 
+.FXML                  Source Code File                
+.FXPL                  Flash FXP Library                
+.GAMEPROJ              Project File                    
+.GCH                   Header File                 
+.GED                   Editor Project File                 
+.GEM                   Package                 
+.GEMSPEC               Specification File                     
+.GFAR                  Archive                
+.GITATTRIBUTES         Attributes File                       
+.GITIGNORE             Ignore File                   
+.GLD                   C Compiler Linker Script File                 
+.GM6                   6 Project File                 
+.GM81                  Maker 8.1 Project File                
+.GMD                   Maker Program Code                 
+.GMK                   Maker Project File                 
+.GMO                   Machine Object File                 
+.GMX                   File                 
+.GORM                  Interface Resource File                
+.GREENFOOT             Project Archive                   
+.GROOVY                Source Code File              
+.GROUPPROJ             Project Group File                   
+.GS                    Apps Script          
+.GS3                   File                 
+.GSZIP                 Marketplace Asset File               
+.H                     C++/Objective-C Header File           
+.HAL                   Application Language File                 
+.HAML                  Source Code File                
+.HAS                   Script                 
+.HBS                   Template                 
+.HH                    + Header File          
+.HPF                   Performance Fortran File                 
+.HPP                   + Header File                 
+.HS                    Script          
+.HXX                   + Source Code Header File                 
+.I                     Studio Intermediate File           
+.ICONSET               OS X Icon Set Folder                     
+.IDB                   Studio Intermediate Debug File                 
+.IDL                   Definition Language File                 
+.IDT                   Installer Database Text Archive File                 
+.ILK                   Linking File                 
+.IML                   IDEA Module                 
+.INC                   File                 
+.INL                   + Inline File                 
+.INO                   Sketch File                 
+.IPCH                  Precompiled Header File                
+.IPR                   Professional Project File                 
+.IPR                   IDEA Project File                 
+.ISE                   Express Project File                 
+.ISM                   Project File                 
+.IST                   Project Template File                 
+.IWB                   Source Code File                 
+.IWS                   IDEA Web Page                 
+.JAVA                  Source Code File                
+.JCP                   Project File                 
+.JIC                   Indirect Configuration File                 
+.JPR                   Project                 
+.JPX                   Project                 
+.JSFL                  JSFL Script File                
+.JSPF                  Server Page Fragment                
+.KDEVELOP              Project Data File                    
+.KDEVPRJ               Project File                     
+.KPL                   Programming Language File                 
+.L                     Source File           
+.LBI                   Library Item                 
+.LBS                   Library                 
+.LDS                   LD Linker Script                 
+.LGO                   Instructions File                 
+.LHS                   Haskell Script                 
+.LICENSES              Studio Licensed Classes File                    
+.LICX                  Studio License File                
+.LISP                  Source Code File                
+.LIT                   Haskell Script                 
+.LIVECODE              Stack File                    
+.LNT                   lint/FlexeLint Configuration File                 
+.LPROJ                 Project Folder               
+.LSPROJ                Studio LightSwitch Project              
+.LTB                   Binary File                 
+.LUA                   Source File                 
+.LUCIDSNIPPET          Snippet File                        
+.LXSPROJ               XML Studio Project File                     
+.M                     C Implementation File           
+.M                     Source Code File           
+.M4                    Processor Library          
+.MAGIK                 Source Code File               
+.MARKDOWN              Documentation File                    
+.MCP                   Project                 
+.MD                    Documentation File          
+.MDZIP                 Project Archive               
+.MER                   Development Runtime File                 
+.MF                    Manifest File          
+.MFA                   Fusion Development File                 
+.ML                    Source Code File          
+.MM                    C++ Source File          
+.MO                    Object File          
+.MOD                   Module File                 
+.MOM                   Object Model                 
+.MPR                   Generated Menu Program                 
+.MRT                   Report File                 
+.MSHA                  Help Asset File                
+.MSHC                  Help Container File                
+.MSHI                  Help Index File                
+.MSL                   Specification Language File                 
+.MSP                   Page File                 
+.MSS                   Software Specification File                 
+.MV                    File          
+.MXML                  MXML Component                
+.MYAPP                 Studio Application XML File               
+.NBC                   Byte Codes Source Code File                 
+.NCB                   C++ IntelliSense Database                 
+.NED                   + Network Description File                 
+.NFM                   .NET Form File                 
+.NIB                   Builder User Interface File                 
+.NK                    Script          
+.NLS                   Source File                 
+.NQC                   Quite C Source Code File                 
+.NSH                   Header File                 
+.NSI                   Script                 
+.NUPKG                 Package               
+.NUSPEC                Specification File              
+.NVV                   Vertex Shader File                 
+.NW                    Webkit App Package          
+.NXC                   eXactly C Source Code File                 
+.O                     Object File           
+.OCA                   Control Library Type File                 
+.OCTEST                Objective-C Unit Test Bundle              
+.OCX                   Control                 
+.ODL                   Description Language File                 
+.OMO                   Object File                 
+.OWL                   Source Code File                 
+.P                     Source Code           
+.P3D                   Multifile                 
+.PAS                   Source File                 
+.PAS                   Unit Source File                 
+.PATCH                 File               
+.PB                    Source File          
+.PBG                   Bender Graph File                 
+.PBJ                   Bender Bytecode File                 
+.PBK                   Bender Kernel File                 
+.PBXBTREE              Auto-Complete File                    
+.PBXPROJ               Project Data File                     
+.PBXUSER               Project User Data File                     
+.PCH                   Header File                 
+.PCP                   Installer Patch Creation Properties File                 
+.PDE                   Development Environment Source Code File                 
+.PDM                   Project Information File                 
+.PH                    Header File          
+.PIKA                  Software Builder Project File                
+.PJX                   Project                 
+.PKGDEF                Studio Shell File              
+.PKGUNDEF              Studio Shell File                    
+.PL                    Script          
+.PL                    Source Code File          
+.PL1                   I Source Code                 
+.PLAYGROUND            Playground File                  
+.PLC                   B Source File                 
+.PLE                   Plus! Live Encrypted Log File                 
+.PLI                   I Source Code File                 
+.PM                    Module          
+.PO                    Object          
+.POD                   POD File                 
+.POT                   Object File                 
+.PPC                   Data Studio Project File                 
+.PRG                   FoxPro Program File                 
+.PRG                   Program File                 
+.PRI                   Project Include File                 
+.PRI                   Resource Index File                 
+.PRO                   Project File                 
+.PROTO                 Buffer File               
+.PSC                   Script                 
+.PSM1                  PowerShell Script Module File                
+.PTL                   Rose Petal File                 
+.PWN                   Source Code File                 
+.PXD                   Definition File                 
+.PY                    Script          
+.PYD                   Dynamic Module                 
+.PYW                   GUI Source File                 
+.PYX                   Source Code File                 
+.QPR                   Generated Query Program                 
+.R                     Source Code File           
+.R                     Script File           
+.R                     Script           
+.RAV                   Reports Project File                 
+.RB                    Source Code          
+.RBC                   C Script                 
+.RBP                   Studio Project File                 
+.RBW                   Script                 
+.RC                    Script          
+.RC2                   Studio Resources File                 
+.RDLC                  Studio Client Report Definition File                
+.REFRESH               Studio Refresh File                     
+.RES                   + Complied Resource Script                 
+.RES                   Resource File                 
+.RESJSON               JavaScript Resources File                     
+.RESOURCES             Studio Resource File                   
+.RESW                  Resources File                
+.RESX                  ET Managed Resources File                
+.REXX                  Source File                
+.RISE                  Editor Model File                
+.RKT                   Source Code File                 
+.RNC                   NG Compact Syntax File                 
+.RODL                  Definition Language File                
+.RPY                   Script                 
+.RSRC                  Resource File                
+.RSS                   Application Resource File                 
+.RUL                   Rules File                 
+.S                     Code File           
+.S19                   S19 File Record                 
+.SAS                   Program File                 
+.SB                    Project File          
+.SB2                   2.0 Project File                 
+.SB3                   3.0 Project File                 
+.SBPROJ                Shader Builder Project              
+.SC                    Source Code File          
+.SCC                   Source Code Control File                 
+.SCRIPTSUITE           Script Suite File                         
+.SCRIPTTERMINOLOGY     Script Terminology File                           
+.SDEF                  Dictionary Document                
+.SH                    Shell Script          
+.SLN                   Studio Solution File                 
+.SLOGO                 Project File               
+.SLTNG                 TNG Project File               
+.SMA                   Mod Plugin Source File                 
+.SMALI                 Smali Assembly Language File               
+.SNIPPET               Studio IntelliSense Code Snippet                     
+.SO                    Library          
+.SPEC                  Specification File                
+.SQLPROJ               Studio SQL Server Project                     
+.SRC                   Code                 
+.SRC                   PM	Red Hat Package Manager Source File                 
+.SS                    Source Code File          
+.SSC                   Status File                 
+.SSI                   Dreamweaver Server Side Include File                 
+.STORYBOARD            Builder Storyboard Document                  
+.SUD                   Project Analyzer File                 
+.SUO                   Studio Solution User Options File                 
+.SUP                   Project Definition File                 
+.SVN                   ASE	Subversion Base File                 
+.SWC                   Components Archive                 
+.SWD                   Debug File                 
+.SWIFT                 Source Code File               
+.SYM                   File                 
+.T                     Source Code File           
+.TARGETS               Targets File                     
+.TCL                   Script                 
+.TDS                   Debugger Symbols File                 
+.TESTRUNCONFIG         Studio Test Run Configuration File                       
+.TESTSETTINGS          Studio Test Settings File                        
+.TEXTFACTORY           Text Factory                         
+.TK                    Script          
+.TLD                   Library Descriptor File                 
+.TLH                   Generated C/C++ Header File                 
+.TLI                   Generated C/C++ Inline File                 
+.TMLANGUAGE            Language Grammar File                  
+.TMPROJ                Project File              
+.TNS                   Nspire Document                 
+.TPU                   Pascal Unit                 
+.TRX                   Studio Test Results File                 
+.TT                    Studio Text Template          
+.TU                    Source File          
+.TUR                   Program Source File                 
+.TWIG                  Template                
+.UI                    Interface File          
+.UML                   Data Object Model                 
+.V                     Source Code File           
+.V                     Source Code File           
+.V11                   UO	Visual Studio 2012 Solution User Options File                 
+.V12                   UO	Visual Studio 2013 Solution User Options File                 
+.VB                    Basic Project Item File          
+.VBG                   Basic Project Group File                 
+.VBP                   Basic Project File                 
+.VBPROJ                Studio Visual Basic Project              
+.VBX                   Basic Custom Control                 
+.VBZ                   Basic Project Template                 
+.VC                    Code File          
+.VCP                   Visual C++ Project File                 
+.VCPROJ                C++ Project File              
+.VCXPROJ               C++ Project                     
+.VDM                   Specification File                 
+.VDP                   Studio Deployment Project                 
+.VDPROJ                Studio Setup and Deployment Project              
+.VGC                   Code Generation Template                 
+.VHD                   Source File                 
+.VM                    Template          
+.VSMACROS              Studio Binary Macro Project                    
+.VSMDI                 Studio Test Metadata File               
+.VSMPROJ               Studio Text Macro Project                     
+.VSP                   Studio Performance Report File                 
+.VSPS                  Studio Serialized Performance Report                
+.VSPSCC                Studio Project Source Control File              
+.VSPX                  Studio Performance Report Data File                
+.VSSSCC                Studio Solution Source Control File              
+.VSZ                   Studio Wizard File                 
+.VTM                   Tool Markup Language Document                 
+.VTML                  Tool Markup Language File                
+.VTV                   Dreamweaver Validator Configuration File                 
+.W                     Architect Source Code File           
+.W32                   Makefile                 
+.WDGT                  Captivate Widget File                
+.WDGTPROJ              Widget Project                    
+.WDL                   Definition Language Script                 
+.WDP                   Project File                 
+.WDW                   Window File                 
+.WIQ                   Studio Work Item Query File                 
+.WIXLIB                Library File              
+.WIXMSP                XML Patch File              
+.WIXMST                Transform File              
+.WIXOBJ                Object File              
+.WIXOUT                XML Output File              
+.WIXPDB                Debug File              
+.WIXPROJ               Project File                     
+.WORKSPACE             Blocks Workspace File                   
+.WPW                   Mobile Window File                 
+.WSC                   Script Component                 
+.WSP                   Solution Package                 
+.WXI                   Include File                 
+.WXL                   Localization File                 
+.WXS                   Source File                 
+.XAML                  File                
+.XAMLX                 Studio Workflow Service File               
+.XAP                   Project                 
+.XCAPPDATA             App Data File                   
+.XCARCHIVE             Archive                   
+.XCCONFIG              Configuration Settings File                    
+.XCDATAMODELD          Core Data Model File                        
+.XCODEPROJ             Project                   
+.XCSNAPSHOTS           Snapshot                         
+.XCWORKSPACE           Workspace File                         
+.XIB                   Builder File                 
+.XOJO_BINARY_PROJECT   Binary Project File                                 
+.XOJO_MENU             Menu File                   
+.XOJO_PROJECT          Project File                        
+.XOJO_XML_PROJECT      XML Project File                            
+.XOML                  Workflow File                
+.XPP                   + Source Code File                 
+.XQ                    File          
+.XQL                   Query Language File                 
+.XQM                   Module                 
+.XQUERY                Source Code File              
+.XSD                   Schema Definition                 
+.XT                    Trace File          
+.Y                     Source File           
+.YAML                  Document                
+.YML                   Document                 
+.YMP                   Metapackage File                 
+.YPR                   Project File                 
