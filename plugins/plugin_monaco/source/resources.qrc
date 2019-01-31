@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-		<file alias="plugin.txt">resources/plugin.txt</file>
+        <file alias="plugin.txt">resources/plugin.txt</file>
         <file>resources/vs/loader.js</file>
         <file>resources/vs/base/worker/workerMain.js</file>
         <file>resources/vs/basic-languages/apex/apex.js</file>
@@ -74,5 +74,6 @@
         <file>resources/vs/language/typescript/tsWorker.js</file>
         <file>resources/index.html</file>
         <file>resources/wrap.js</file>
+        <file>resources/init.js</file>
     </qresource>
 </RCC>

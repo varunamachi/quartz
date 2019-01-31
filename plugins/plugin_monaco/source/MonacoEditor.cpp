@@ -6,18 +6,19 @@
 #include <QFileInfo>
 #include <QQueue>
 
-#include <core/logger/Logging.h>
+#include <plugin_base/PluginLogging.h>
 
 #include "MonacoEditor.h"
 
 
-#define EXEC(statement)                                 \
-    if (!m_data->m_initialized) {                       \
-        m_data->m_pendingCommands.append([=]() {        \
-            statement                                   \
-        });                                             \
-    }                                                   \
-    statement
+#define EXEC(statement)                                                 \
+    if (!m_data->m_initialized) {                                       \
+        m_data->m_pendingCommands.append([=]() {                        \
+            m_data->m_monaco->page()->runJavaScript(statement);         \
+        });                                                             \
+    } else {                                                            \
+        m_data->m_monaco->page()->runJavaScript(statement);             \
+    }                                                                   \
 
 namespace Quartz {
 
@@ -60,6 +61,7 @@ MonacoEditor::MonacoEditor(QWidget *parent)
     } else {
         m_data->m_monaco->setHtml(tr("<h2>Failed to load index.html</h2>"));
     }
+
     this->setLayout(layout);
 
     connect(m_data->m_monaco,
@@ -86,8 +88,31 @@ SharedObject *MonacoEditor::controller() const
 void MonacoEditor::setContent(const QString &content)
 {
     EXEC(
-        m_data->m_monaco->page()->runJavaScript(
-                "window.editor.setValue(`"+content+"`)");
+        "if (window.editor) {"
+            "window.editor.setValue(`"+content+"`);"
+         "}"
+    );
+}
+
+void MonacoEditor::setLanguage(const QString &language)
+{
+    EXEC(
+        "if (window.editor) {"
+            " monaco.editor.setModelLanguage("
+                "window.editor.getModel(), "
+                "`" + language + "`);"
+        "}"
+    );
+}
+
+void MonacoEditor::setTheme(const QString &theme)
+{
+    EXEC(
+        "if (window.editor) {"
+            " monaco.editor.setTheme("
+                "window.editor.getModel(), "
+                "`" + theme + "`);"
+        "}"
     );
 }
 
@@ -100,27 +125,9 @@ bool MonacoEditor::handle(QFile &file)
         file.close();
         result = true;
     } else {
-        QZ_ERROR("Cmn:Monaco") << "Could not load file at " << file.fileName();
+        QZP_ERROR << "Could not load file at " << file.fileName();
     }
     return result;
-}
-
-void MonacoEditor::setLanguage(const QString &language)
-{
-    EXEC(m_data->m_monaco->page()->runJavaScript(
-             "monaco.editor.setModelLanguage("
-             "window.editor.getModel(), "
-             "'" + language + "');");
-    );
-}
-
-void MonacoEditor::setTheme(const QString &theme)
-{
-    EXEC(m_data->m_monaco->page()->runJavaScript(
-             "monaco.editor.setTheme("
-             "window.editor.getModel(), "
-             "'" + theme + "');");
-    );
 }
 
 bool MonacoEditor::close()
@@ -135,11 +142,6 @@ bool MonacoEditor::close()
 bool MonacoEditor::save()
 {
     return false;
-}
-
-void MonacoEditor::set(const QString &/*method*/, const QString &/*value*/)
-{
-
 }
 
 
@@ -157,7 +159,7 @@ SharedObject::~SharedObject()
 
 void SharedObject::print(const QString &msg)
 {
-    QZ_INFO("Cmn:Monaco") << msg;
+    QZP_INFO << msg;
 }
 
 }

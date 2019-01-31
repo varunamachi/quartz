@@ -48,8 +48,6 @@ signals:
 public slots:
 
 private:
-    void set(const QString &method, const QString &value);
-
     struct Data;
     std::unique_ptr<Data> m_data;
 

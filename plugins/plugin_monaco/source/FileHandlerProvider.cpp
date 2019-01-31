@@ -27,6 +27,7 @@ FileHandlerProvider::FileHandlerProvider()
 QVector<std::shared_ptr<FileHandlerInfo>> FileHandlerProvider::handlerInfos()
 {
     auto extns = QStringList{
+            "json",
             "txt",
             "ts",
             "js",
