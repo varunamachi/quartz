@@ -4,6 +4,8 @@
 
 #include <base/explorer/AbstractFileHandler.h>
 
+class QFileInfo;
+
 namespace Quartz {
 
 class SharedObject : public QObject
@@ -31,17 +33,25 @@ public:
 
     SharedObject * controller() const;
 
-    void setContent(const QString &content);
+    void setContent(const QString &content, const QString &lang = "txt");
 
     void setLanguage(const QString &language);
 
     void setTheme(const QString &theme);
 
-    bool handle(QFile &file) override;
+    void setMinimapState(bool show);
+
+    void mapToLanguage(const QFileInfo &info);
+
+    bool handle(const QString &path) override;
+
+    QString path() const override;
 
     bool close() override;
 
     bool save() override;
+
+    static const QStringList & extension();
 
 signals:
 

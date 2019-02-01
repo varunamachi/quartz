@@ -24,7 +24,9 @@ public:
 
     virtual ~AbstractFileHandler() {}
 
-    virtual bool handle(QFile &file) = 0;
+    virtual bool handle(const QString &path) = 0;
+
+    virtual QString path() const = 0;
 
     virtual bool close() = 0;
 

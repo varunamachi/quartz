@@ -48,7 +48,6 @@
 .BRX                   Application Resource File                 
 .BS2                   Stamp 2 Code File                 
 .BSC                   Studio Source Browser Information File                 
-.C                     C++ Source Code File           
 .C                     C Script           
 .CAF                   Character Animation File                 
 .CAPROJ                Project File              

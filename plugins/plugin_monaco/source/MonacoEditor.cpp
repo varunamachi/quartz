@@ -22,6 +22,178 @@
 
 namespace Quartz {
 
+//const QStringList EXTENSION = {
+//    "c"
+//    "cpp",
+//    "cxx",
+//    "conf",
+
+//    "dart",
+
+//    "ini",
+
+//    "json",
+//    "js",
+//    "jsx",
+
+//    "go",
+
+//    "h",
+//    "hpp",
+//    "hxx",
+
+//    "py",
+//    "pro",
+
+//    "toml",
+//    "ts",
+//    "tsx",
+//    "txt",
+
+//    "vue",
+
+//    "xml",
+
+//    "yaml",
+//};
+
+const QHash<QString, QString> EXT_LANG = {
+    { "txt",                "plaintext" },
+    { "gitignore",          "plaintext" },
+    { "json",               "json" },
+    { "bowerrc",            "json" },
+    { "jshintrc",           "json" },
+    { "jscsrc",             "json" },
+    { "eslintrc",           "json" },
+    { "babelrc",            "json" },
+    { "bat",                "bat" },
+    { "cmd",                "bat" },
+    { "coffee",             "coffeescript" },
+    { "c",                  "c" },
+    { "h",                  "c" },
+    { "cpp",                "cpp" },
+    { "cc",                 "cpp" },
+    { "cxx",                "cpp" },
+    { "hpp",                "cpp" },
+    { "hh",                 "cpp" },
+    { "hxx",                "cpp" },
+    { "cs",                 "csharp" },
+    { "csx",                "csharp" },
+    { "cake",               "csharp" },
+    { "css",                "css" },
+    { "dockerfile",         "dockerfile" },
+    { "fs",                 "fsharp" },
+    { "fsi",                "fsharp" },
+    { "ml",                 "fsharp" },
+    { "mli",                "fsharp" },
+    { "fsx",                "fsharp" },
+    { "fsscript",           "fsharp" },
+    { "go",                 "go" },
+    { "handlebars",         "handlebars" },
+    { "hbs",                "handlebars" },
+    { "html",               "html" },
+    { "htm",                "html" },
+    { "shtml",              "html" },
+    { "xhtml",              "html" },
+    { "mdoc",               "html" },
+    { "jsp",                "html" },
+    { "asp",                "html" },
+    { "aspx",               "html" },
+    { "jshtm",              "html" },
+    { "ini",                "ini" },
+    { "properties",         "ini" },
+    { "gitconfig",          "ini" },
+    { "java",               "java" },
+    { "jav",                "java" },
+    { "js",                 "javascript" },
+    { "es6",                "javascript" },
+    { "jsx",                "javascript" },
+    { "less",               "less" },
+    { "lua",                "lua" },
+    { "md",                 "markdown" },
+    { "markdown",           "markdown" },
+    { "mdown",              "markdown" },
+    { "mkdn",               "markdown" },
+    { "mkd",                "markdown" },
+    { "mdwn",               "markdown" },
+    { "mdtxt",              "markdown" },
+    { "mdtext",             "markdown" },
+    { "dax",                "msdax" },
+    { "msdax",              "msdax" },
+    { "m",                  "objective-c" },
+    { "php",                "php" },
+    { "php4",               "php" },
+    { "php5",               "php" },
+    { "phtml",              "php" },
+    { "ctp",                "php" },
+    { "dats",               "postiats" },
+    { "sats",               "postiats" },
+    { "hats",               "postiats" },
+    { "pq",                 "powerquery" },
+    { "pqm",                "powerquery" },
+    { "ps1",                "powershell" },
+    { "psm1",               "powershell" },
+    { "psd1",               "powershell" },
+    { "jade",               "pug" },
+    { "pug",                "pug" },
+    { "py",                 "python" },
+    { "rpy",                "python" },
+    { "pyw",                "python" },
+    { "cpy",                "python" },
+    { "gyp",                "python" },
+    { "gypi",               "python" },
+    { "r",                  "r" },
+    { "rhistory",           "r" },
+    { "rprofile",           "r" },
+    { "rt",                 "r" },
+    { "cshtml",             "razor" },
+    { "redis",              "redis" },
+    { "rb",                 "ruby" },
+    { "rbx",                "ruby" },
+    { "rjs",                "ruby" },
+    { "gemspec",            "ruby" },
+    { "pp",                 "ruby" },
+    { "rs",                 "rust" },
+    { "rlib",               "rust" },
+    { "sb",                 "sb" },
+    { "scss",               "scss" },
+    { "sol",                "sol" },
+    { "sql",                "sql" },
+    { "st",                 "st" },
+    { "iecst",              "st" },
+    { "iecplc",             "st" },
+    { "lc3lib",             "st" },
+    { "swift",              "swift" },
+    { "ts",                 "typescript" },
+    { "tsx",                "typescript" },
+    { "vb",                 "vb" },
+    { "xml",                "xml" },
+    { "dtd",                "xml" },
+    { "ascx",               "xml" },
+    { "csproj",             "xml" },
+    { "config",             "xml" },
+    { "wxi",                "xml" },
+    { "wxl",                "xml" },
+    { "wxs",                "xml" },
+    { "xaml",               "xml" },
+    { "svg",                "xml" },
+    { "svgz",               "xml" },
+    { "yaml",               "yaml" },
+    { "yml",                "yaml" },
+    { "scm",                "scheme" },
+    { "ss",                 "scheme" },
+    { "sch",                "scheme" },
+    { "rkt",                "scheme" },
+    { "clj",                "clojure" },
+    { "clojure",            "clojure" },
+    { "sh",                 "shell" },
+    { "bash",               "shell" },
+    { "pl",                 "perl" },
+    { "azcli",              "azcli" },
+    { "cls",                "apex" },
+};
+
+
 struct MonacoEditor::Data
 {
     explicit Data(QWidget *parent)
@@ -40,9 +212,13 @@ struct MonacoEditor::Data
 
     bool m_initialized;
 
+    QString m_path;
+
     QFile m_file;
 
     QQueue<std::function<void()>> m_pendingCommands;
+
+    static QStringList s_extensions;
 };
 
 
@@ -85,11 +261,14 @@ SharedObject *MonacoEditor::controller() const
     return  m_data->m_qzwrapper;
 }
 
-void MonacoEditor::setContent(const QString &content)
+void MonacoEditor::setContent(const QString &content, const QString &lang)
 {
     EXEC(
         "if (window.editor) {"
-            "window.editor.setValue(`"+content+"`);"
+            "window.editor.setValue(String.raw`"+content+"`);"
+            "monaco.editor.setModelLanguage("
+                "window.editor.getModel(), "
+                "`" + lang+ "`);"
          "}"
     );
 }
@@ -116,18 +295,42 @@ void MonacoEditor::setTheme(const QString &theme)
     );
 }
 
-bool MonacoEditor::handle(QFile &file)
+void MonacoEditor::setMinimapState(bool show)
 {
+    EXEC(
+         "if (window.editor) {"
+//                " monaco.editor.setTheme("
+//                "window.editor.getModel(), "
+//                "`" + theme + "`);"
+         "}"
+                );
+}
+
+void MonacoEditor::mapToLanguage(const QFileInfo &info)
+{
+
+}
+
+bool MonacoEditor::handle(const QString &path)
+{
+    m_data->m_path = path;
+    QFile file{path};
+    QFileInfo info{path};
     auto result = false;
-    if (QFileInfo(file).isFile() && file.open(QFile::ReadOnly)) {
+    if ( info.isFile() && file.open(QFile::ReadOnly)) {
         auto content = file.readAll();
-        this->setContent(content);
+        this->setContent(content, EXT_LANG.value(info.suffix(), "txt"));
         file.close();
         result = true;
     } else {
         QZP_ERROR << "Could not load file at " << file.fileName();
     }
     return result;
+}
+
+QString MonacoEditor::path() const
+{
+    return m_data->m_path;
 }
 
 bool MonacoEditor::close()
@@ -148,6 +351,19 @@ bool MonacoEditor::save()
 {
     return false;
 }
+
+const QStringList &MonacoEditor::extension()
+{
+    static QStringList exts;
+    if (exts.isEmpty()) {
+        for (auto it = EXT_LANG.cbegin(); it != EXT_LANG.cend(); ++ it) {
+            exts.append(it.key());
+        }
+    }
+    return exts;
+}
+
+
 
 
 

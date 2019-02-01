@@ -27,7 +27,7 @@ struct FileHandlerManager::Data
 
     QHash<QString, FileHandlerInfo *> m_defaultHandlers;
 
-//    QHash<QString, AbstractFileHandler *> m_cache;
+    QHash<QString, AbstractFileHandler *> m_cache;
 };
 
 const QString FileHandlerManager::CONTENT_ID("qz.file_contet_manager");
@@ -72,21 +72,23 @@ void FileHandlerManager::registerFileHandler(
 
 void FileHandlerManager::handle(const QString &path)
 {
-//    auto hndlr = m_data->m_cache[path];
-//    //see if it is already opened, if so set it as current widget
-//    if (hndlr != nullptr) {
-//        m_data->m_stacker->setCurrentWidget(hndlr);
-//        return;
-//    }
+    auto hndlr = m_data->m_cache[path];
+    //see if it is already opened, if so set it as current widget
+    if (hndlr != nullptr) {
+        m_data->m_stacker->setCurrentWidget(hndlr);
+        return;
+    }
 
     QFileInfo info{path};
     if (m_data->m_defaultHandlers.contains(info.suffix())) {
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
         auto hndlr = creator->creator()(m_data->m_stacker);
-//        m_data->m_cache[path] = hndlr;
-        QFile file{path};
-        if (hndlr->handle(file)) {
-            m_data->m_stacker->addTab(hndlr, creator->icon(), info.fileName());
+        m_data->m_cache[path] = hndlr;
+        if (hndlr != nullptr && hndlr->handle(path)) {
+            auto index = m_data->m_stacker->addTab(hndlr,
+                                                   creator->icon(),
+                                                   info.fileName());
+            m_data->m_stacker->setCurrentIndex(index);
         } else {
             QZ_ERROR("Qz:Explorer")
                     << "Handler " << creator->name() << " failed to handle - "

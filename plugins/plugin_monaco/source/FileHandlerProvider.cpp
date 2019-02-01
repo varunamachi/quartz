@@ -26,19 +26,11 @@ FileHandlerProvider::FileHandlerProvider()
 
 QVector<std::shared_ptr<FileHandlerInfo>> FileHandlerProvider::handlerInfos()
 {
-    auto extns = QStringList{
-            "json",
-            "txt",
-            "ts",
-            "js",
-            "cpp",
-            "dart",
-    };
     QVector<std::shared_ptr<FileHandlerInfo>> infos;
     auto fhi = std::make_shared<FileHandlerInfo>(
                     QObject::tr("Monaco Editor"),
                     Quartz::FileHandlerType::Editor,
-                    extns,
+                    MonacoEditor::extension(),
                     getIcon(FAIcon::PencilAlt),
                     [](QWidget *parent) -> AbstractFileHandler * {
                         return new MonacoEditor(parent);

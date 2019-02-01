@@ -77,7 +77,8 @@ FileSystemSelector::~FileSystemSelector()
 
 void FileSystemSelector::selected()
 {
-    //    m_data->m_fsView->selectionModel()->set
+    appContext()->contentManager()->selectContent(
+                FileHandlerManager::CONTENT_ID);
 
 }
 

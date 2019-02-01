@@ -44,15 +44,16 @@
 <script src="vs/editor/editor.main.nls.js"></script>
 <script src="vs/editor/editor.main.js"></script>
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
-<script src="qrc:///resources/wrap.js"></script>
+<script src="wrap.js"></script>
 <script>
         var editor = monaco.editor.create(
             document.getElementById('container'), {
                 automaticLayout: true,
+                value: '',
         });
         window.editor = editor;
 </script>
-<script src="qrc:///resources/init.js"></script>
+<script src="init.js"></script>
 
 </body>
 </html>

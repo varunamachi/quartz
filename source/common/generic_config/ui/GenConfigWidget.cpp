@@ -30,6 +30,7 @@ GenConfigWidget::GenConfigWidget(Config *config, QWidget *parent)
     //proxy model
     view->setModel(m_data->m_model);
     view->setItemDelegate(new GenConfigDelegate(this));
+    view->setAlternatingRowColors(true);
     layout->addWidget(view);
     this->setLayout(layout);
 
