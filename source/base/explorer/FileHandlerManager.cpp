@@ -28,6 +28,7 @@ struct FileHandlerManager::Data
     QHash<QString, FileHandlerInfo *> m_defaultHandlers;
 
     QHash<QString, AbstractFileHandler *> m_cache;
+
 };
 
 const QString FileHandlerManager::CONTENT_ID("qz.file_contet_manager");
@@ -85,9 +86,15 @@ void FileHandlerManager::handle(const QString &path)
         auto hndlr = creator->creator()(m_data->m_stacker);
         m_data->m_cache[path] = hndlr;
         if (hndlr != nullptr && hndlr->handle(path)) {
+//            auto name = info.fileName().
+            auto name = QFontMetrics(
+                        m_data->m_stacker->font()).elidedText(
+                        info.fileName(),
+                        Qt::ElideMiddle,
+                        80);
             auto index = m_data->m_stacker->addTab(hndlr,
                                                    creator->icon(),
-                                                   info.fileName());
+                                                   name);
             m_data->m_stacker->setCurrentIndex(index);
         } else {
             QZ_ERROR("Qz:Explorer")

@@ -58,6 +58,8 @@ namespace Quartz {
 //};
 
 const QHash<QString, QString> EXT_LANG = {
+    { "conf",               "plaintext" },
+    { "config",             "plaintext" },
     { "txt",                "plaintext" },
     { "gitignore",          "plaintext" },
     { "json",               "json" },
@@ -82,6 +84,7 @@ const QHash<QString, QString> EXT_LANG = {
     { "cake",               "csharp" },
     { "css",                "css" },
     { "dockerfile",         "dockerfile" },
+    { "dart",               "dart" },
     { "fs",                 "fsharp" },
     { "fsi",                "fsharp" },
     { "ml",                 "fsharp" },
@@ -263,9 +266,12 @@ SharedObject *MonacoEditor::controller() const
 
 void MonacoEditor::setContent(const QString &content, const QString &lang)
 {
+    auto  ct = content;
+    ct.replace(QChar('\\'), QStringLiteral("\\\\"));
+    ct.replace(QChar('`'), QStringLiteral("\\`"));
     EXEC(
         "if (window.editor) {"
-            "window.editor.setValue(String.raw`"+content+"`);"
+            "window.editor.setValue(`"+ct+"`);"
             "monaco.editor.setModelLanguage("
                 "window.editor.getModel(), "
                 "`" + lang+ "`);"

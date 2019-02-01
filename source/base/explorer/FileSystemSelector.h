@@ -23,6 +23,9 @@ public:
     static const QString SELECTOR_ID;
     static const QString SELECTOR_NAME;
 
+public Q_SLOTS:
+    void setPath(const QString &path);
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
