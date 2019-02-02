@@ -24,7 +24,7 @@ public:
     }
 
     const QVariant retrieve(const QString &domain,
-                             const QString &key) const
+                            const QString &key) const
     {
         auto var = cachedValue(domain, key);
         if (var.isValid()) {
@@ -128,13 +128,8 @@ const QVariant dummy;
 ConfigManager::ConfigManager(
         std::unique_ptr<IConfigStorageStrategy> storageStragy,
         std::unique_ptr<AbstractConfigLoader> configLoader)
-//    : m_data(std::make_unique<ConfigManager::Data>(
-//                  std::move(storageStragy),
-//                  std::move(configLoader))
-    : m_impl(new ConfigManager::Impl(
-                  std::move(storageStragy),
-                  std::move(configLoader)))
-
+    : m_impl(std::make_unique<Impl>( std::move(storageStragy),
+                                     std::move(configLoader)))
 {
 }
 

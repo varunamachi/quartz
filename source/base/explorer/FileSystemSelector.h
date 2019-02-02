@@ -22,6 +22,8 @@ public:
 
     static const QString SELECTOR_ID;
     static const QString SELECTOR_NAME;
+    static const QString CONFIG_PATH;
+    static const QString CONFIG_RECENT_PATHS;
 
 public Q_SLOTS:
     void setPath(const QString &path);

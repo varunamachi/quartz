@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <QString>
+#include <QVariant>
 
 #include "../utils/Macros.h"
 #include "../QuartzCore.h"
@@ -31,13 +32,30 @@ public:
                 const QString &domain = QString());
 
     const QVariant retrieve(const QString &key,
-                             const QString &domain = QString{}) const;
+                             const QString &domain = "quartz") const;
+
+    template<typename T>
+    T get(const QString &key,
+          const T &def = {},
+          const QString &domain = "quartz") const {
+        if (this->has(key, domain)) {
+            return this->retrieve(key, domain).value<T>();
+        }
+        return def;
+    }
+
+    template<typename T>
+    void set(const QString &key,
+             const T &value,
+             const QString &domain = "quartz") {
+        this->store(key, QVariant::fromValue<T>(value), domain);
+    }
 
     bool has(const QString &key,
-              const QString &domain = QString{}) const;
+              const QString &domain = "quartz") const;
 
     void remove(const QString &key,
-                 const QString &domain = QString{});
+                 const QString &domain = "quartz");
 
     void batchLoad(const QByteArray &content);
 

@@ -9,6 +9,7 @@
 
 #include <core/logger/Logging.h>
 #include <common/iconstore/IconFontStore.h>
+#include <core/app_config/ConfigManager.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
@@ -19,6 +20,8 @@ namespace Quartz {
 
 const QString FileSystemSelector::SELECTOR_ID{ "qz.fs_selector" };
 const QString FileSystemSelector::SELECTOR_NAME("Explore");
+const QString FileSystemSelector::CONFIG_PATH("explorer.path");
+const QString FileSystemSelector::CONFIG_RECENT_PATHS("explorer.recent");
 
 struct FileSystemSelector::Data
 {
@@ -69,8 +72,9 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     this->setContentsMargins({});
 
     auto home = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    setPath(home);
-    m_data->m_pathEdit->setText(home);
+    auto path = appContext()->configManager()->get<QString>(CONFIG_PATH, home);
+    setPath(path);
+    m_data->m_pathEdit->setText(path);
 
     connect(m_data->m_fsView,
             &QTreeView::doubleClicked,
@@ -91,14 +95,17 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
         auto dirPath = QFileDialog::getExistingDirectory(
                     this,
                     tr("Explore directory"),
-                    home);
-        m_data->m_pathEdit->setText(dirPath);
-        this->setPath(dirPath);
+                    m_data->m_pathEdit->text());
+        if (! dirPath.isEmpty()) {
+            m_data->m_pathEdit->setText(dirPath);
+            this->setPath(dirPath);
+        }
     });
     connect(m_data->m_pathEdit,
             &QLineEdit::editingFinished,
             [=](){
-        this->setPath(m_data->m_pathEdit->text());
+        const auto &path = m_data->m_pathEdit->text();
+        this->setPath(path);
     });
 }
 
@@ -122,12 +129,15 @@ void FileSystemSelector::unselected()
 void FileSystemSelector::setPath(const QString &path)
 {
     QFileInfo info{path};
+    auto old = m_data->m_fsModel->rootPath();
     if (info.exists() && info.isDir()) {
         m_data->m_fsModel->setRootPath(path);
         m_data->m_fsView->setRootIndex(m_data->m_fsModel->index(path));
+        appContext()->configManager()->set(CONFIG_PATH, path);
     } else {
         QZ_ERROR("Qz:Explorer") << "Invalid directory path "
                                 << path << " given";
+        m_data->m_pathEdit->setText(old);
     }
 }
 

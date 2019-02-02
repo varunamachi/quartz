@@ -24,25 +24,32 @@ class QUARTZ_BASE_API FileHandlerManager
 public:
     explicit FileHandlerManager(QWidget *parent = nullptr);
 
-    ~FileHandlerManager();
+    ~FileHandlerManager() override;
 
     void registerFileHandler(
             std::shared_ptr<FileHandlerInfo> creator);
 
     void handle(const QString &path);
 
-    const QString &extensionType() const;
+    const QString &extensionType() const override;
 
-    const QString &extensionAdapterName() const;
+    const QString &extensionAdapterName() const override;
 
-    bool handleExtension(Ext::Extension *extension);
+    bool handleExtension(Ext::Extension *extension) override;
 
-    bool finalizeExtension();
+    bool finalizeExtension() override;
+
 
     static const QString CONTENT_ID;
     static const QString CONTENT_NAME;
     static const QString CONTENT_KIND;
     static const QString ADAPTER_NAME;
+
+private Q_SLOTS:
+    void remove(int index);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     struct Data;

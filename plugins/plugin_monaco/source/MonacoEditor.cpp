@@ -7,6 +7,7 @@
 #include <QQueue>
 
 #include <plugin_base/PluginLogging.h>
+#include <plugin_base/PluginContext.h>
 
 #include "MonacoEditor.h"
 
@@ -22,46 +23,13 @@
 
 namespace Quartz {
 
-//const QStringList EXTENSION = {
-//    "c"
-//    "cpp",
-//    "cxx",
-//    "conf",
-
-//    "dart",
-
-//    "ini",
-
-//    "json",
-//    "js",
-//    "jsx",
-
-//    "go",
-
-//    "h",
-//    "hpp",
-//    "hxx",
-
-//    "py",
-//    "pro",
-
-//    "toml",
-//    "ts",
-//    "tsx",
-//    "txt",
-
-//    "vue",
-
-//    "xml",
-
-//    "yaml",
-//};
-
 const QHash<QString, QString> EXT_LANG = {
+    { "",                   "plaintext" },
     { "conf",               "plaintext" },
     { "config",             "plaintext" },
     { "txt",                "plaintext" },
     { "gitignore",          "plaintext" },
+    { "cmake",              "cmake" },
     { "json",               "json" },
     { "bowerrc",            "json" },
     { "jshintrc",           "json" },
@@ -197,6 +165,26 @@ const QHash<QString, QString> EXT_LANG = {
 };
 
 
+QString readJS(QFile &file) {
+    QString content;
+    content.reserve(static_cast<int>(file.size()));
+    QTextStream stream{&file};
+    while (!stream.atEnd()) {
+        auto line = stream.readLine();
+        for (int i = 0; i < line.size(); ++ i) {
+            switch (line.at(i).toLatin1()) {
+            case '\\': content.append("\\\\"); break;
+            case '`' : content.append("\\`");  break;
+            case '\"': content.append("\\\""); break;
+            case '$' : content.append("\\$");  break;
+            default: content.append(line.at(i)); break;
+            }
+        }
+        content.append("\\n");
+    }
+    return content;
+}
+
 struct MonacoEditor::Data
 {
     explicit Data(QWidget *parent)
@@ -264,11 +252,12 @@ SharedObject *MonacoEditor::controller() const
     return  m_data->m_qzwrapper;
 }
 
-void MonacoEditor::setContent(const QString &content, const QString &lang)
+void MonacoEditor::setContent(const QString &ct, const QString &lang)
 {
-    auto  ct = content;
-    ct.replace(QChar('\\'), QStringLiteral("\\\\"));
-    ct.replace(QChar('`'), QStringLiteral("\\`"));
+//    auto  ct = content;
+//    ct.replace(QChar('\\'), QStringLiteral("\\\\"));
+//    ct.replace(QChar('`'), QStringLiteral("\\`"));
+//    ct.replace(QChar('\"'), QStringLiteral("\\\""));
     EXEC(
         "if (window.editor) {"
             "window.editor.setValue(`"+ct+"`);"
@@ -324,7 +313,8 @@ bool MonacoEditor::handle(const QString &path)
     QFileInfo info{path};
     auto result = false;
     if ( info.isFile() && file.open(QFile::ReadOnly)) {
-        auto content = file.readAll();
+//        auto content = file.readAll();
+        auto content = readJS(file);
         this->setContent(content, EXT_LANG.value(info.suffix(), "txt"));
         file.close();
         result = true;

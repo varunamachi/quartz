@@ -25,7 +25,6 @@ const QString REMOVE_QUERY =
 const QString STORE_QUERY =
         "INSERT OR REPLACE INTO Config(key, value, domain) VALUES(?, ?, ?)";
 
-
 class DefaultStorageStrategy::Impl
 {
 public:
