@@ -143,8 +143,6 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     auto fhman = new FileHandlerManager(this);
     m_data->m_content->addContent(fhman);
 
-
-
     auto configTree = new ConfigPageSelector(this);
     configTree->addPage(new BasicConfigPage(configTree));
 

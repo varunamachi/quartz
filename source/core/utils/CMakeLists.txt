@@ -10,5 +10,6 @@ vq_classes(
     Utils
     STLUtils
     Constants
+    History
 )
 

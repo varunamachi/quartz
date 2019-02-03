@@ -59,15 +59,12 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
 
     m_data->m_stacker->tabBar()->installEventFilter(this);
 
-
-
     auto closeAllAction = new QAction(tr("Close All"), this);
     auto closeRightAction = new QAction(tr("Close All - Right"), this);
     auto closeLeftAction = new QAction(tr("Close All - Left"), this);
     m_data->m_tabMenu->addAction(closeAllAction);
     m_data->m_tabMenu->addAction(closeLeftAction);
     m_data->m_tabMenu->addAction(closeRightAction);
-
 
     connect(m_data->m_stacker,
             &QTabWidget::tabCloseRequested,

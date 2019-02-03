@@ -26,7 +26,7 @@ public:
     static const QString CONFIG_RECENT_PATHS;
 
 public Q_SLOTS:
-    void setPath(const QString &path);
+    QString setPath(const QString &path);
 
 private:
     struct Data;

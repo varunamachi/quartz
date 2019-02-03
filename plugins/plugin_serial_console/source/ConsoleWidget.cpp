@@ -1,6 +1,8 @@
 #include <QTextBlock>
 
+#include <core/utils/History.h>
 #include <plugin_base/PluginLogging.h>
+
 
 #include "ConsoleWidget.h"
 
@@ -18,66 +20,69 @@ enum class HistoryDirection
 struct ConsoleWidget::Data
 {
     explicit Data(QWidget * /*parent*/)
-        : m_historyIndex(0)
-        , m_historyDirection(HistoryDirection::None)
+//        : m_historyIndex(0)
+//        , m_historyDirection(HistoryDirection::None)
     {
 
     }
 
-    inline bool isHistoryIndexValid() const
-    {
-        return ! m_history.isEmpty()
-                && m_historyIndex >= 0 && m_historyIndex <= m_history.size();
-    }
+//    inline bool isHistoryIndexValid() const
+//    {
+//        return ! m_history.isEmpty()
+//                && m_historyIndex >= 0 && m_historyIndex <= m_history.size();
+//    }
 
-    inline void addHistory(const QString &historyItem)
-    {
-        if (m_history.isEmpty() || m_history.last() != historyItem) {
-            m_history.push_back(historyItem);
-        }
-        m_historyIndex = m_history.size();
-        m_historyDirection = HistoryDirection::None;
-    }
+//    inline void addHistory(const QString &historyItem)
+//    {
+//        if (m_history.isEmpty() || m_history.last() != historyItem) {
+//            m_history.push_back(historyItem);
+//        }
+//        m_historyIndex = m_history.size();
+//        m_historyDirection = HistoryDirection::None;
+//    }
 
-    inline QString history() const
-    {
-        if (m_historyIndex < m_history.size()) {
-            return m_history[ m_historyIndex ];
-        }
-        return QStringLiteral("");
-    }
+//    inline QString history() const
+//    {
+//        if (m_historyIndex < m_history.size()) {
+//            return m_history[ m_historyIndex ];
+//        }
+//        return QStringLiteral("");
+//    }
 
-    QString nextCommand()
-    {
-        if (isHistoryIndexValid()) {
-            if (m_historyIndex < m_history.size()) {
-                ++ m_historyIndex;
-            }
-            m_historyDirection = HistoryDirection::Forward;
-        }
-        return history();
-    }
+//    QString nextCommand()
+//    {
+//        if (isHistoryIndexValid()) {
+//            if (m_historyIndex < m_history.size()) {
+//                ++ m_historyIndex;
+//            }
+//            m_historyDirection = HistoryDirection::Forward;
+//        }
+//        return history();
+//    }
 
-    QString prevCommand()
-    {
-        if (isHistoryIndexValid()) {
-            if (m_historyIndex > 0) {
-                -- m_historyIndex;
-            }
-            m_historyDirection = HistoryDirection::Backward;
-        }
-        return history();
-    }
+//    QString prevCommand()
+//    {
+//        if (isHistoryIndexValid()) {
+//            if (m_historyIndex > 0) {
+//                -- m_historyIndex;
+//            }
+//            m_historyDirection = HistoryDirection::Backward;
+//        }
+//        return history();
+//    }
 
-    int m_historyIndex;
+//    int m_historyIndex;
+
+//    HistoryDirection m_historyDirection;
+
+//    QVector<QString> m_history;
+
+    History m_history;
 
     int m_pos;
 
     int m_curLinePos;
 
-    HistoryDirection m_historyDirection;
-
-    QVector<QString> m_history;
 };
 
 
@@ -155,22 +160,24 @@ void ConsoleWidget::clearConsole()
 
 void ConsoleWidget::clearHistory()
 {
+//    m_data->m_history.clear();
+//    m_data->m_historyIndex = 0;
     m_data->m_history.clear();
-    m_data->m_historyIndex = 0;
 }
 
 void ConsoleWidget::keyPressEvent(QKeyEvent *evt)
 {
     switch (evt->key()) {
     case Qt::Key_Up: {
-        auto prev = m_data->prevCommand();
+//        auto prev = m_data->prevCommand();
+        auto prev = m_data->m_history.prev();
         if (! prev.isEmpty()) {
             insertCommand(prev);
         }
     }
         break;
     case Qt::Key_Down: {
-        auto prev = m_data->nextCommand();
+        auto prev = m_data->m_history.next();
         insertCommand(prev);
     }
         break;
@@ -215,7 +222,7 @@ void ConsoleWidget::keyPressEvent(QKeyEvent *evt)
             if (! str.isEmpty()) {
                 auto cmd = str.trimmed() + "\r\n";
                 emit sigDataEntered(cmd.toLocal8Bit());
-                m_data->addHistory(str);
+                m_data->m_history.add(str);
                 this->appendPlainText("");
                 m_data->m_pos = this->textCursor().position();
             }
