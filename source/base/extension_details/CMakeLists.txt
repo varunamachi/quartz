@@ -5,5 +5,7 @@ vq_classes(
     PluginItemModel
     ExtensionItemModel
     AdapterItemModel
+    DetailsHolder
+    PluginConfigPage
 )
 

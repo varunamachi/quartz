@@ -363,7 +363,7 @@ void PluginManager::registerPluginAdapter(IExtensionAdapter *adapter)
     m_impl->registerPluginAdapter(adptr);
 }
 
-const QVector< const Plugin * > PluginManager::plugins() const
+QVector< const Plugin * > PluginManager::plugins() const
 {
     QVector< const Plugin *> plugins;
     for (auto it = m_impl->m_plugins.begin();

@@ -11,7 +11,12 @@ namespace Quartz {
 class QUARTZ_CORE_API History
 {
 public:
-    History();
+    /**
+     * @brief History Simple class to hold command/navigation history
+     * @param overIndex - use last index to be one more than the size of the
+     *  history. This is useful for command history
+     */
+    History(bool overIndex = true);
 
     ~History();
 

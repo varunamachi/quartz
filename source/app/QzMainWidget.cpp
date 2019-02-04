@@ -26,7 +26,8 @@
 #include <base/settings/ConfigPageSelector.h>
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
-#include <base/extension_details/PluginSelector.h>
+//#include <base/extension_details/PluginSelector.h>
+#include <base/extension_details/PluginConfigPage.h>
 #include <base/title_bar/QuartzItem.h>
 #include <base/main_menu/MainMenuButton.h>
 #include <base/explorer/FileSystemSelector.h>
@@ -132,14 +133,6 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_content->addContent(configPageManager);
 
     auto nodeSelector = new GeneralSelector(this);
-    auto welcomeNode = nodeSelector->model()->addNode(
-                QStringList(),
-                tr("Welcome"),
-                "qz.inbuilt.welcome",
-                getIcon(MatIcon::Star));
-    m_data->m_content->addContent(
-                new WelcomePage(welcomeNode->nodeId(),
-                                m_data->m_content));
     auto fhman = new FileHandlerManager(this);
     m_data->m_content->addContent(fhman);
 
@@ -166,12 +159,23 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
         QZ_ERROR("App") << "Failed to load all available plugins";
     }
 
-    auto pluginSelector = new Ext::PluginSelector(this);
-    m_data->m_selector->addSelector(nodeSelector);
-    m_data->m_selector->addSelector(pluginSelector);
-    m_data->m_selector->addSelector(configTree);
+//    auto pluginSelector = new Ext::PluginSelector(this);
+//    m_data->m_selector->addSelector(pluginSelector);
+//    auto welcomeNode = nodeSelector->model()->addNode(
+//                QStringList(),
+//                tr("Welcome"),
+//                "qz.inbuilt.welcome",
+//                getIcon(MatIcon::Star));
+//    m_data->m_content->addContent(
+//                new WelcomePage(welcomeNode->nodeId(),
+//                                m_data->m_content));
+//    nodeSelector->setSelected(welcomeNode->nodeId());
+
     m_data->m_selector->addSelector(new FileSystemSelector(this));
-    nodeSelector->setSelected(welcomeNode->nodeId());
+    m_data->m_selector->addSelector(nodeSelector);
+    m_data->m_selector->addSelector(configTree);
+
+    configTree->addPage(new Ext::PluginConfigPage(configTree));
 }
 
 QzMainWidget::~QzMainWidget()

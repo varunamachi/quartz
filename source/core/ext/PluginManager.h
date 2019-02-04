@@ -35,7 +35,7 @@ public:
 
     void registerPluginAdapter(IExtensionAdapter *adapter);
 
-    const QVector< const Plugin *> plugins() const;
+    QVector< const Plugin *> plugins() const;
 
     const Plugin * plugin(const QString &pluginId) const;
 

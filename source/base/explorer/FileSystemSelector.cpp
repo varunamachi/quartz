@@ -45,6 +45,7 @@ struct FileSystemSelector::Data
         , m_upBtn(new QPushButton(getIcon(MatIcon::ArrowUpward), "", parent))
         , m_fwdBtn(new QPushButton(getIcon(MatIcon::ArrowForward), "", parent))
         , m_menu(new QMenu(parent))
+        , m_history(false)
     {
         m_fsView->setModel(m_fsModel);
         for (int i = 1; i < m_fsModel->columnCount(); ++i) {
@@ -85,26 +86,30 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     , m_data(std::make_unique<Data>(this))
 {
 
+
     auto topLayout = new QHBoxLayout();
     topLayout->addWidget(m_data->m_backBtn);
     topLayout->addWidget(m_data->m_upBtn);
     topLayout->addWidget(m_data->m_fwdBtn);
     topLayout->addStretch();
     topLayout->addWidget(m_data->m_browseBtn);
-    topLayout->setContentsMargins({5, 0, 0, 0});
+
+    m_data->m_pathEdit->setContentsMargins({2, 0, 0, 2});
+    topLayout->setContentsMargins({2, 0, 0, 2});
 
     auto lyt = new QVBoxLayout();
     lyt->addWidget(m_data->m_pathEdit);
     lyt->addLayout(topLayout);
     lyt->addWidget(m_data->m_fsView);
     this->setLayout(lyt);
-
     lyt->setContentsMargins({});
+
     m_data->m_fsView->setContentsMargins({});
     this->setContentsMargins({});
 
     auto home = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     auto path = appContext()->configManager()->get<QString>(CONFIG_PATH, home);
+    m_data->m_history.add(path);
     setPath(path);
     m_data->m_pathEdit->setText(path);
 
@@ -136,24 +141,21 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
                     m_data->m_pathEdit->text());
         if (! dirPath.isEmpty()) {
             m_data->m_pathEdit->setText(dirPath);
-            auto old = this->setPath(dirPath);
-            if (!old.isEmpty()) {
-                m_data->m_history.add(old);
-            }
+            this->setPath(dirPath);
+            m_data->m_history.add(dirPath);
         }
     });
     connect(m_data->m_pathEdit,
             &QLineEdit::editingFinished,
             [=](){
-        auto old = this->setPath(m_data->m_pathEdit->text());
-        if (!old.isEmpty()) {
-            m_data->m_history.add(old);
-        }
+        const auto &path = m_data->m_pathEdit->text();
+        this->setPath(path);
+        m_data->m_history.add(path);
     });
     connect(m_data->m_fsView,
             &QWidget::customContextMenuRequested,
             [this](const QPoint &pos) {
-        auto gpos = this->mapToGlobal(pos);
+        auto gpos = m_data->m_fsView->mapToGlobal(pos);
         auto index = m_data->m_fsView->indexAt(pos);
         m_data->m_contextPath = m_data->m_fsModel->filePath(index);
         m_data->m_menu->exec(gpos);
@@ -172,10 +174,8 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
             [this]() {
         if (!m_data->m_contextPath.isEmpty()) {
             m_data->m_pathEdit->setText(m_data->m_contextPath);
-            const auto old = this->setPath(m_data->m_contextPath);
-            if (!old.isEmpty()) {
-                m_data->m_history.add(old);
-            }
+            this->setPath(m_data->m_contextPath);
+            m_data->m_history.add(m_data->m_contextPath);
             m_data->m_contextPath = QStringLiteral("");
         }
     });
@@ -186,10 +186,8 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
         auto path = info.dir().path();
         if (!path.isEmpty()) {
             m_data->m_pathEdit->setText(path);
-            const auto old = this->setPath(path);
-            if (!old.isEmpty()) {
-                m_data->m_history.add(old);
-            }
+            this->setPath(path);
+            m_data->m_history.add(path);
         }
     });
     connect(m_data->m_backBtn,

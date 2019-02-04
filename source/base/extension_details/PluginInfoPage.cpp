@@ -79,10 +79,7 @@ const QString PluginInfoPage::CONTENT_NAME("Plugin Details");
 const QString PluginInfoPage::CONTENT_KIND{ "qz.info" };
 
 PluginInfoPage::PluginInfoPage(QWidget *parent)
-    : ContentWidget{ CONTENT_ID,
-                     CONTENT_NAME,
-                     CONTENT_KIND,
-                     parent }
+    : ContentWidget(CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent)
     , m_data(std::make_unique<Data>(this))
 {
 

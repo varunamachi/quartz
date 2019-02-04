@@ -15,7 +15,7 @@ class QUARTZ_BASE_API PluginSelector : public AbstractSelector
 public:
     explicit PluginSelector(QWidget *parent = nullptr);
 
-    ~PluginSelector();
+    ~PluginSelector() override;
 
     void selected() override;
 
