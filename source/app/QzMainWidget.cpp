@@ -171,11 +171,16 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
 //                                m_data->m_content));
 //    nodeSelector->setSelected(welcomeNode->nodeId());
 
+    configTree->addPage(new Ext::PluginConfigPage(configTree));
     m_data->m_selector->addSelector(new FileSystemSelector(this));
     m_data->m_selector->addSelector(nodeSelector);
     m_data->m_selector->addSelector(configTree);
 
-    configTree->addPage(new Ext::PluginConfigPage(configTree));
+    const auto welcomeID = QStringLiteral("qz.welcome");
+    m_data->m_content->addContent(
+                new WelcomePage(welcomeID, m_data->m_content));
+    m_data->m_content->selectContent(welcomeID);
+
 }
 
 QzMainWidget::~QzMainWidget()

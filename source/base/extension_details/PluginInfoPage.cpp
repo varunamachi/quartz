@@ -46,9 +46,9 @@ struct PluginInfoPage::Data
         m_extView->header()->setSectionResizeMode(
                     1, QHeaderView::ResizeToContents);
 
-        m_pluginName->setEnabled(false);
-        m_pluginId->setEnabled(false);
-        m_libName->setEnabled(false);
+        m_pluginName->setReadOnly(false);
+        m_pluginId->setReadOnly(false);
+        m_libName->setReadOnly(false);
     }
 
     const Plugin *m_plugin;

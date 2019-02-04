@@ -33,7 +33,9 @@ DetailsHolder::DetailsHolder(QWidget *parent)
     , m_data(std::make_unique<Data>(this))
 {
     auto selectorLayout = new QHBoxLayout();
-    selectorLayout->addWidget(new QLabel(tr("Select Plugin"), this));
+    auto label = new QLabel(tr("Select Plugin"), this);
+    label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    selectorLayout->addWidget(label);
     selectorLayout->addWidget(m_data->m_selector);
 
     auto lyt = new QVBoxLayout();
@@ -45,9 +47,9 @@ DetailsHolder::DetailsHolder(QWidget *parent)
     for (const auto &plugin : m_data->m_plugins) {
         m_data->m_selector->addItem(plugin->pluginName(), plugin->pluginId());
     }
-//    if (m_data->m_plugins.size() > 0) {
-//        m_data->m_infoPage->setPlugin(m_data->m_plugins[0]);
-//    }
+    if (m_data->m_plugins.size() > 0) {
+        m_data->m_infoPage->setPlugin(m_data->m_plugins[0]);
+    }
 
     connect(m_data->m_selector,
             qOverload<int>(&QComboBox::currentIndexChanged),
