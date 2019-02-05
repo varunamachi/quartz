@@ -1,6 +1,6 @@
 #include <base/explorer/AbstractFileHandlerProvider.h>
 
-namespace Quartz { namespace Ext { namespace Monaco {
+namespace Quartz { namespace Ext { namespace WebTech {
 
 class FileHandlerProvider : public AbstractFileHandlerProvider
 {

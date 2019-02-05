@@ -21,7 +21,7 @@
         m_data->m_monaco->page()->runJavaScript(statement);             \
     }                                                                   \
 
-namespace Quartz {
+namespace Quartz { namespace Ext { namespace WebTech {
 
 const QHash<QString, QString> EXT_LANG = {
     { "",                   "plaintext" },
@@ -379,5 +379,5 @@ void SharedObject::print(const QString &msg)
     QZP_INFO << msg;
 }
 
-}
+} } }
 

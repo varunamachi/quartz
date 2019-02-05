@@ -17,7 +17,7 @@ extern "C" {
 Q_DECL_EXPORT PluginWrapper getPluginWrapper(PluginInputWrapper *input)
 {
     initResource();
-    auto plugin = std::make_unique<Quartz::Ext::Monaco::Plugin>();
+    auto plugin = std::make_unique<Quartz::Ext::WebTech::Plugin>();
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::init(
                 std::move(plugin),

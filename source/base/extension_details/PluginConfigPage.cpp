@@ -25,11 +25,11 @@ struct PluginConfigPage::Data
 
 
 PluginConfigPage::PluginConfigPage(QWidget *parent)
-    : AbstractConfigPage{ QStringList(),
-                          CONFIG_PAGE_NAME,
-                          CONFIG_PAGE_ID,
-                          getIcon(MatIcon::Extension),
-                          parent }
+    : AbstractConfigPage(QStringList(),
+                         CONFIG_PAGE_NAME,
+                         CONFIG_PAGE_ID,
+                         getIcon(MatIcon::Extension),
+                         parent)
     , m_data(std::make_unique<Data>(this))
 {
     auto lyt = new QVBoxLayout();

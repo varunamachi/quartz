@@ -6,7 +6,7 @@
 
 class QFileInfo;
 
-namespace Quartz {
+namespace Quartz { namespace Ext { namespace WebTech {
 
 class SharedObject : public QObject
 {
@@ -64,4 +64,4 @@ private:
 
 };
 
-}
+} } }

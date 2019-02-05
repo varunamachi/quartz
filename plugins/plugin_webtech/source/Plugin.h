@@ -7,7 +7,7 @@ namespace Quartz {
 
 class QzAppContext;
 
-namespace Ext { namespace Monaco {
+namespace Ext { namespace WebTech {
 
 class Plugin : public Ext::Plugin
 {
@@ -15,7 +15,7 @@ class Plugin : public Ext::Plugin
 public:
     Plugin();
 
-    ~Plugin();
+    ~Plugin() override;
 
     const ExtensionList & extensions() const override;
 

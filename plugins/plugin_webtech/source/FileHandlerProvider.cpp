@@ -13,10 +13,10 @@
 #include "MonacoEditor.h"
 #include "FileHandlerProvider.h"
 
-namespace Quartz { namespace Ext { namespace Monaco {
+namespace Quartz { namespace Ext { namespace WebTech {
 
-const QString FileHandlerProvider::EXTENSION_ID{"qzp.editor.monaco"};
-const QString FileHandlerProvider::EXTENSION_NAME{"Monaco Editor"};
+const QString FileHandlerProvider::EXTENSION_ID{"qzp.webtech.fhandlers"};
+const QString FileHandlerProvider::EXTENSION_NAME{"WebTech Based Handlers"};
 
 FileHandlerProvider::FileHandlerProvider()
     : AbstractFileHandlerProvider(EXTENSION_ID, EXTENSION_NAME)

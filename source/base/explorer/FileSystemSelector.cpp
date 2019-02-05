@@ -85,8 +85,6 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
           parent)
     , m_data(std::make_unique<Data>(this))
 {
-
-
     auto topLayout = new QHBoxLayout();
     topLayout->addWidget(m_data->m_backBtn);
     topLayout->addWidget(m_data->m_upBtn);
@@ -98,9 +96,9 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     topLayout->setContentsMargins({2, 0, 0, 2});
 
     auto lyt = new QVBoxLayout();
+    lyt->addWidget(m_data->m_fsView);
     lyt->addWidget(m_data->m_pathEdit);
     lyt->addLayout(topLayout);
-    lyt->addWidget(m_data->m_fsView);
     this->setLayout(lyt);
     lyt->setContentsMargins({});
 
@@ -208,6 +206,10 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
             m_data->m_pathEdit->setText(path);
         }
     });
+
+    m_data->m_backBtn->setToolTip(tr("Go back to last location"));
+    m_data->m_fwdBtn->setToolTip(tr("Go to next location"));
+    m_data->m_upBtn->setToolTip(tr("Go to parent directory"));
 }
 
 FileSystemSelector::~FileSystemSelector()
@@ -235,11 +237,13 @@ QString FileSystemSelector::setPath(const QString &path)
         m_data->m_fsModel->setRootPath(path);
         m_data->m_fsView->setRootIndex(m_data->m_fsModel->index(path));
         appContext()->configManager()->set(CONFIG_PATH, path);
+        m_data->m_pathEdit->setToolTip(path);
         return old;
     }
     QZ_ERROR("Qz:Explorer") << "Invalid directory path "
                             << path << " given";
     m_data->m_pathEdit->setText(old);
+    m_data->m_pathEdit->setToolTip(old);
     return QStringLiteral("");
 }
 

@@ -143,6 +143,7 @@ void FileHandlerManager::handle(const QString &path)
             auto index = m_data->m_stacker->addTab(hndlr,
                                                    creator->icon(),
                                                    name);
+            m_data->m_stacker->setTabToolTip(index, path);
             m_data->m_stacker->setCurrentIndex(index);
         } else {
             QZ_ERROR("Qz:Explorer")

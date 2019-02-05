@@ -1,5 +1,5 @@
 
-project( plugin_monaco )
+project( plugin_webtech )
 cmake_minimum_required( VERSION 3.1 )
 include( $ENV{QUARTZ_ROOT}/cmake/quartz.cmake )
 include( $ENV{QUARTZ_ROOT}/cmake/plugins.cmake )
@@ -27,6 +27,7 @@ vq_classes(
     FileHandlerProvider
 )
 
+add_subdirectory(conf)
 
 qz_create_plugin()
 qz_install_plugin()

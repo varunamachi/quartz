@@ -7,11 +7,12 @@
 
 #include "Plugin.h"
 #include "FileHandlerProvider.h"
+#include "conf/ConfigPageProvider.h"
 
-namespace Quartz { namespace Ext { namespace Monaco {
+namespace Quartz { namespace Ext { namespace WebTech {
 
-const QString Plugin::PLUGIN_ID{ "qz.editor.monaco" };
-const QString Plugin::PLUGIN_NAME{ "Monaco " };
+const QString Plugin::PLUGIN_ID{ "qzp.webtech" };
+const QString Plugin::PLUGIN_NAME{ "WebTech" };
 
 struct Plugin::Data
 {
@@ -25,6 +26,7 @@ Plugin::Plugin()
     , m_data(std::make_unique<Data>())
 {
     m_data->m_extensions.append(std::make_shared<FileHandlerProvider>());
+    m_data->m_extensions.append(std::make_shared<ConfigPageProvider>());
 }
 
 Plugin::~Plugin()
