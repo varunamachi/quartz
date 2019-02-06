@@ -121,9 +121,9 @@ QByteArray DefaultStorageStrategy::Impl::retrieve(const QString &domain,
         auto rawData = query.value(0).toByteArray();
         return rawData;
     }
-    QZ_TRACE("Qz:Core:Config")
-            << "Failed to retrieve value for " << domain << "." << key
-            << " -- " << query.lastError().text();
+//    QZ_TRACE("Qz:Core:Config")
+//            << "Failed to retrieve value for " << domain << "." << key
+//            << " -- " << query.lastError().text();
     return QByteArray{};
 }
 

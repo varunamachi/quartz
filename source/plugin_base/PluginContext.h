@@ -28,11 +28,12 @@ public:
 
     PluginEnv * env() const;
 
+    void setPlugin(std::unique_ptr<Plugin> &&plugin);
+
     static void destroy();
 
-    static void init(std::unique_ptr<Plugin> plugin,
-                      std::unique_ptr<PluginEnv> env,
-                      QzAppContext *appContext);
+    static void init(std::unique_ptr<PluginEnv> env,
+                     QzAppContext *appContext);
 
     static PluginContext * instance();
 
@@ -42,9 +43,8 @@ private:
 
     static std::unique_ptr<PluginContext> s_instance;
 
-    PluginContext(std::unique_ptr<Plugin> plugin,
-                   std::unique_ptr<PluginEnv> env,
-                   QzAppContext *appContext);
+    PluginContext(std::unique_ptr<PluginEnv> &&env,
+                  QzAppContext *appContext);
 };
 
 } }

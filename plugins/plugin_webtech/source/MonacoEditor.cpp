@@ -185,6 +185,12 @@ QString readJS(QFile &file) {
     return content;
 }
 
+const QString MonacoEditor::escape(const QString &/*orig*/)
+{
+    //@TODO Implement above escape logic for strings
+    return "";
+}
+
 struct MonacoEditor::Data
 {
     explicit Data(QWidget *parent)
@@ -254,10 +260,6 @@ SharedObject *MonacoEditor::controller() const
 
 void MonacoEditor::setContent(const QString &ct, const QString &lang)
 {
-//    auto  ct = content;
-//    ct.replace(QChar('\\'), QStringLiteral("\\\\"));
-//    ct.replace(QChar('`'), QStringLiteral("\\`"));
-//    ct.replace(QChar('\"'), QStringLiteral("\\\""));
     EXEC(
         "if (window.editor) {"
             "window.editor.setValue(`"+ct+"`);"
@@ -283,27 +285,50 @@ void MonacoEditor::setTheme(const QString &theme)
 {
     EXEC(
         "if (window.editor) {"
-            " monaco.editor.setTheme("
-                "window.editor.getModel(), "
-                "`" + theme + "`);"
+            "monaco.editor.setTheme(`"+theme+"`)"
         "}"
     );
 }
 
-void MonacoEditor::setMinimapState(bool show)
+void MonacoEditor::showMinimap(bool show)
 {
     EXEC(
-         "if (window.editor) {"
-//                " monaco.editor.setTheme("
-//                "window.editor.getModel(), "
-//                "`" + theme + "`);"
-         "}"
-                );
+        QStringLiteral(
+        "if (window.editor) {"
+            "window.editor.updateOptions({"
+                "minimap: {"
+                    "enabled: ") + (show ? "true" : "false") +
+                "}"
+            "})"
+        "}"
+    );
 }
 
-void MonacoEditor::mapToLanguage(const QFileInfo &info)
+void MonacoEditor::showLineNumber(bool show)
 {
+    EXEC(
+        QStringLiteral(
+        "if (window.editor) {"
+            "window.editor.updateOptions({"
+                "lineNumbers: ") + (show ? "'on'" : "'off'") +
+            "})"
+        "}"
+    );
+}
 
+void MonacoEditor::setRulerAt(int len)
+{
+    QString arr;
+    if (len != 0) {
+        arr = QStringLiteral("%1").arg(len);
+    }
+    EXEC(
+        "if (window.editor) {"
+            "window.editor.updateOptions({"
+                "rulers:[" + arr + "]"
+            "})"
+        "}"
+    );
 }
 
 bool MonacoEditor::handle(const QString &path)
@@ -358,9 +383,6 @@ const QStringList &MonacoEditor::extension()
     }
     return exts;
 }
-
-
-
 
 
 SharedObject::SharedObject(QObject *parent)

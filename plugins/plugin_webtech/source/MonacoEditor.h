@@ -37,12 +37,18 @@ public:
 
     void setLanguage(const QString &language);
 
+
+    //Settings...
     void setTheme(const QString &theme);
 
-    void setMinimapState(bool show);
+    void showMinimap(bool show);
 
-    void mapToLanguage(const QFileInfo &info);
+    void showLineNumber(bool show);
 
+    void setRulerAt(int len);
+
+
+    //Override from AbstractFileHandler
     bool handle(const QString &path) override;
 
     QString path() const override;
@@ -52,6 +58,8 @@ public:
     bool save() override;
 
     static const QStringList & extension();
+
+    static const QString escape(const QString &orig);
 
 signals:
 

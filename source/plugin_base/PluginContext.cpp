@@ -9,11 +9,8 @@ namespace Quartz { namespace Ext {
 
 
 struct PluginContext::Data {
-    Data(std::unique_ptr<Plugin> plugin,
-          std::unique_ptr<PluginEnv> env,
-          QzAppContext *appContext)
-        : m_plugin(std::move(plugin))
-        , m_pluginEnv(std::move(env))
+    Data(std::unique_ptr<PluginEnv> &&env, QzAppContext *appContext)
+        : m_pluginEnv(std::move(env))
         , m_appContext(appContext)
     {
 
@@ -47,19 +44,22 @@ Plugin * PluginContext::plugin() const
     return m_data->m_plugin.get();
 }
 
+void PluginContext::setPlugin(std::unique_ptr<Plugin> &&plugin)
+{
+    m_data->m_plugin = std::move(plugin);
+}
+
 void PluginContext::destroy()
 {
     s_instance.release();
 }
 
-void PluginContext::init(std::unique_ptr<Plugin> plugin,
-                          std::unique_ptr<PluginEnv> env,
-                          QzAppContext *appContext)
+void PluginContext::init(std::unique_ptr<PluginEnv> env,
+                         QzAppContext *appCtx)
 {
-    s_instance = std::unique_ptr<PluginContext>{
-            new PluginContext{ std::move(plugin),
-                               std::move(env),
-                               appContext }};
+    //make_unique does not work here because the constructor is private
+    s_instance = std::unique_ptr<PluginContext>(
+                new PluginContext(std::move(env), appCtx));
 }
 
 PluginContext *PluginContext::instance()
@@ -67,12 +67,9 @@ PluginContext *PluginContext::instance()
     return s_instance.get();
 }
 
-PluginContext::PluginContext(std::unique_ptr<Plugin> plugin,
-                              std::unique_ptr<PluginEnv> env,
-                              QzAppContext *appContext)
-    : m_data{ new Data{ std::move(plugin),
-                        std::move(env),
-                        appContext }}
+PluginContext::PluginContext(std::unique_ptr<PluginEnv> &&env,
+                             QzAppContext *appContext)
+    : m_data(std::make_unique<Data>(std::move(env), appContext))
 {
 
 }

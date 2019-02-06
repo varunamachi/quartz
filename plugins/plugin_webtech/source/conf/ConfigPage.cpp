@@ -5,6 +5,7 @@
 #include <common/iconstore/IconFontStore.h>
 
 #include "ConfigPage.h"
+#include "EditorConfigPage.h"
 
 namespace Quartz { namespace Ext { namespace WebTech {
 
@@ -15,11 +16,15 @@ struct ConfigPage::Data
 {
     explicit Data(QWidget *parent)
         : m_tabWidget(new QTabWidget(parent))
+        , m_editorConf(new EditorConfigPage(parent))
     {
 
     }
 
     QTabWidget *m_tabWidget;
+
+    EditorConfigPage *m_editorConf;
+
 };
 
 ConfigPage::ConfigPage(QWidget *parent)
@@ -34,6 +39,9 @@ ConfigPage::ConfigPage(QWidget *parent)
     auto lyt = new QVBoxLayout();
     lyt->addWidget(m_data->m_tabWidget);
     this->setLayout(lyt);
+
+    m_data->m_tabWidget->addTab(m_data->m_editorConf,
+                                tr("Text Editor Settings"));
 }
 
 ConfigPage::~ConfigPage()

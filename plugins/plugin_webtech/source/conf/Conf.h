@@ -7,9 +7,9 @@ namespace Quartz { namespace Ext { namespace WebTech {
 
 struct Conf
 {
-    static const QString DOMAIN;
+    static const QString CONF_DOMAIN;
     static const QString EDITOR_THEME;
-    static const QString EDITOR_SHOW_VLINE;
+    static const QString EDITOR_VLINE_NUM;
     static const QString EDITOR_SHOW_MINIMAP;
     static const QString EDITOR_SHOW_LINENUM;
 };
@@ -18,13 +18,13 @@ struct Conf
 template<typename T>
 T conf(const QString &key, const T& def = {})
 {
-    return confman()->get<T>(key, def, Conf::DOMAIN);
+    return confman()->get<T>(key, def, Conf::CONF_DOMAIN);
 }
 
 template<typename T>
-T setConf(const QString &key, const T& val)
+void setConf(const QString &key, const T& val)
 {
-    return confman()->set<T>(key, val, Conf::DOMAIN);
+    confman()->set<T>(key, val, Conf::CONF_DOMAIN);
 }
 
 
