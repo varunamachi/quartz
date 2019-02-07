@@ -21,10 +21,10 @@ const QString FileHandlerProvider::EXTENSION_NAME{"WebTech Based Handlers"};
 
 auto createEditor(QWidget *parent) -> AbstractFileHandler * {
     auto editor = new MonacoEditor(parent);
-    editor->setTheme(conf<QString>(Conf::EDITOR_THEME, "vs-dark"));
-    editor->setRulerAt(conf<int>(Conf::EDITOR_VLINE_NUM, 80));
-    editor->showMinimap(conf<bool>(Conf::EDITOR_SHOW_MINIMAP, false));
-    editor->showLineNumber(conf<bool>(Conf::EDITOR_SHOW_LINENUM, true));
+//    editor->setTheme(conf<QString>(Conf::EDITOR_THEME, "vs-dark"));
+//    editor->setRulerAt(conf<int>(Conf::EDITOR_VLINE_NUM, 80));
+//    editor->showMinimap(conf<bool>(Conf::EDITOR_SHOW_MINIMAP, false));
+//    editor->showLineNumber(conf<bool>(Conf::EDITOR_SHOW_LINENUM, true));
     return editor;
 }
 

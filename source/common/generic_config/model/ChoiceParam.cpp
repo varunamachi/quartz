@@ -110,15 +110,23 @@ int ChoiceParam::numOption() const
 
 std::unique_ptr<Param> ChoiceParam::clone() const
 {
-    auto param = std::unique_ptr<ChoiceParam>{
-        new ChoiceParam(id(), name(), description(), parent())};
+    auto param = std::make_unique<ChoiceParam>(
+        id(), name(), description(), parent());
     param->setDefaultIndex(this->defaultIndex());
     for (auto it = m_data->m_choices.begin();
          it != m_data->m_choices.end();
          ++ it) {
         param->addOption(it.key(), it.value());
     }
-    return param;
+    return std::move(param);
+}
+
+QVariant ChoiceParam::fieldValue(int field) const
+{
+    if (field == 1) {
+        return m_data->m_names[m_data->m_index];
+    }
+    return Param::fieldValue(field);
 }
 
 }

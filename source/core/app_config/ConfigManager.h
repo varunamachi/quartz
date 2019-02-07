@@ -4,6 +4,7 @@
 
 #include <QString>
 #include <QVariant>
+#include <QObject>
 
 #include "../utils/Macros.h"
 #include "../QuartzCore.h"
@@ -13,11 +14,25 @@ class QString;
 
 namespace Quartz {
 
+//struct AbstractConfigChangeListener
+//{
+//    virtual const QString & domain() const = 0;
+
+//    virtual void onConfigChange(const QString &key, const QVariant &value) = 0;
+
+//    virtual ~AbstractConfigChangeListener() {}
+
+//    AbstractConfigChangeListener();
+//};
+
+
 QZ_INTERFACE IConfigStorageStrategy;
 class AbstractConfigLoader;
 
-class QUARTZ_CORE_API ConfigManager
+class QUARTZ_CORE_API ConfigManager : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit ConfigManager(
             std::unique_ptr<IConfigStorageStrategy> storageStragy,
@@ -58,6 +73,14 @@ public:
                  const QString &domain = "quartz");
 
     void batchLoad(const QByteArray &content);
+
+Q_SIGNALS:
+    void configChanged(const QString &key,
+                       const QVariant &val,
+                       const QString &domain);
+
+    void configRemoved(const QString &key,
+                       const QString &domain);
 
 private:
     class Impl;

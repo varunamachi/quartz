@@ -106,13 +106,13 @@ void RangeParam::setValue(const QVariant &value)
 
 std::unique_ptr<Param> RangeParam::clone() const
 {
-    auto param = std::unique_ptr<RangeParam>{
-        new RangeParam(id(), name(), description(), parent())};
+    auto param = std::make_unique<RangeParam>(
+                id(), name(), description(), parent());
     param->setMax(this->maxVal());
     param->setMin(this->minVal());
     param->setIncrement(this->inc());
     param->setDefaultValue(this->defaultValue());
-    return param;
+    return std::move(param);
 }
 
 }

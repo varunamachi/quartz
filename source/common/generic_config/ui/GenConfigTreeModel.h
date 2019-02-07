@@ -13,7 +13,7 @@ class QUARTZ_COMMON_API  GenConfigTreeModel : public AbstractTreeModel
 {
     Q_OBJECT
 public:
-    explicit GenConfigTreeModel(Config *config, QObject *parent);
+    explicit GenConfigTreeModel(QObject *parent);
 
     ~GenConfigTreeModel();
 

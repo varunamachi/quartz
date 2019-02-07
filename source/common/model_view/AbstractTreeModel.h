@@ -40,7 +40,7 @@ public:
 
     AbstractTreeModel(QObject *parent = nullptr, Options opts = Options{});
 
-    virtual ~AbstractTreeModel();
+    virtual ~AbstractTreeModel() override;
 
     QModelIndex index(int row,
                        int column,

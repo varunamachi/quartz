@@ -28,7 +28,7 @@ public:
            const QString &description,
            TreeNode *parent);
 
-    virtual ~Param();
+    virtual ~Param() override;
 
     const QString &id() const;
 

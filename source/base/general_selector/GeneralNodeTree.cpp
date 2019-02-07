@@ -29,7 +29,7 @@ const QString &GeneralNodeTree::extensionAdapterName() const
 bool GeneralNodeTree::handleExtension(Ext::Extension *extension)
 {
     bool result = true;
-    auto nodeProvider = dynamic_cast< AbstractGeneralNodeProvider *>(
+    auto nodeProvider = dynamic_cast<AbstractGeneralNodeProvider *>(
                 extension);
     if (nodeProvider != nullptr) {
        auto nodes = nodeProvider->nodes();

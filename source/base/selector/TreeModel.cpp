@@ -179,7 +179,7 @@ QModelIndex TreeModel::parent(const QModelIndex &childIndex) const
         return QModelIndex();
     }
     QModelIndex parentIndex{};
-    auto child = static_cast< Node * >(childIndex.internalPointer());
+    auto child = static_cast<Node * >(childIndex.internalPointer());
     if (child != nullptr) {
         auto parent = child->parent();
         if (parent != m_data->m_root.get()) {
@@ -200,7 +200,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
     int rows = 0;
     auto node = m_data->m_root.get();
     if (parent.isValid()) {
-        node = static_cast< Node *>(parent.internalPointer());
+        node = static_cast<Node *>(parent.internalPointer());
     }
     rows = static_cast<int>(node->numChildren());
     return rows;
@@ -240,7 +240,7 @@ bool TreeModel::hasChildren(const QModelIndex &parent) const
     bool result = false;
     auto node = m_data->m_root.get();
     if (parent.isValid()) {
-        node = static_cast< Node *>(parent.internalPointer());
+        node = static_cast<Node *>(parent.internalPointer());
     }
     result = node->numChildren() != 0;
     return result;

@@ -13,23 +13,18 @@ const QVector<QString> HEADERS{
 
 struct GenConfigTreeModel::Data
 {
-    explicit Data(Config *config)
-        : m_config(config)
-    {
+    explicit Data() { }
 
-    }
-
-    Config * m_config;
+    Config * m_config = nullptr;
 
 };
 
-GenConfigTreeModel::GenConfigTreeModel(Config *config, QObject *parent)
+GenConfigTreeModel::GenConfigTreeModel(QObject *parent)
     : AbstractTreeModel{
           parent,
           AbstractTreeModel::Options(2, false, false, HEADERS)}
-    , m_data(std::make_unique<Data>(config))
+    , m_data(std::make_unique<Data>())
 {
-
 }
 
 GenConfigTreeModel::~GenConfigTreeModel()
@@ -52,7 +47,10 @@ TreeNode *GenConfigTreeModel::rootAt(int /*rowIndex*/) const
 
 int GenConfigTreeModel::rootCount() const
 {
-    return m_data->m_config->numChildren() != 0 ? 1 : 0;
+    if (m_data->m_config != nullptr) {
+        return m_data->m_config->numChildren() != 0 ? 1 : 0;
+    }
+    return 0;
 }
 
 

@@ -69,7 +69,7 @@ const QString &TemplateManager::extensionAdapterName() const
 
 bool TemplateManager::handleExtension(Extension *extension)
 {
-    auto tmpProvider = dynamic_cast< AbstractTemplateProvider *>(extension);
+    auto tmpProvider = dynamic_cast<AbstractTemplateProvider *>(extension);
     if (tmpProvider != nullptr) {
         auto templates = tmpProvider->templates();
         foreach(auto &tmpl, templates) {

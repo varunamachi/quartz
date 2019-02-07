@@ -76,11 +76,11 @@ void TextParam::setDefaultValue(const QString &defaultValue)
 
 std::unique_ptr<Param> TextParam::clone() const
 {
-    auto param = std::unique_ptr<TextParam>{
-        new TextParam(id(), name(), description(), parent())};
+    auto param = std::make_unique<TextParam>(
+        id(), name(), description(), parent());
     param->setDefaultValue(this->defaultValue());
     param->setTextType(this->textType());
-    return param;
+    return std::move(param);
 }
 
 }

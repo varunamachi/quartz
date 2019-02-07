@@ -57,13 +57,13 @@ public:
         auto font = mat->font(fontName, drawSize);
         painter->setFont(font);
         painter->setRenderHint(QPainter::TextAntialiasing);
+        painter->setRenderHint(QPainter::Antialiasing);
         painter->drawText(
                     rect,
                     text,
                     { Qt::AlignTop| Qt::AlignVCenter });
         painter->restore();
     }
-
 };
 
 

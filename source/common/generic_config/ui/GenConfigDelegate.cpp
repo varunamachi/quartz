@@ -58,7 +58,7 @@ QWidget* GenConfigDelegate::createEditor(
 }
 
 void GenConfigDelegate::setEditorData(QWidget *editor,
-                                       const QModelIndex &index) const
+                                      const QModelIndex &index) const
 {
     auto node = treenode_cast<Param *>(index.data(Qt::UserRole));
     if (node != nullptr) {
@@ -68,20 +68,20 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
         }
             break;
         case ParamType::Text: {
-            auto tparam = static_cast< TextParam *> (node);
-            auto le = static_cast< QLineEdit *>(editor);
+            auto tparam = static_cast<TextParam *> (node);
+            auto le = static_cast<QLineEdit *>(editor);
             le->setText(tparam->value().toString());
         }
             break;
         case ParamType::Range: {
-            auto rparam = static_cast< RangeParam *> (node);
-            auto sl = static_cast< QSpinBox *>(editor);
+            auto rparam = static_cast<RangeParam *> (node);
+            auto sl = static_cast<QSpinBox *>(editor);
             sl->setValue(rparam->value().toInt());
         }
             break;
         case ParamType::Choice: {
-            auto cparam = static_cast< ChoiceParam *> (node);
-            auto combo = static_cast< QComboBox *>(editor);
+            auto cparam = static_cast<ChoiceParam *> (node);
+            auto combo = static_cast<QComboBox *>(editor);
             for (auto i = 0; i < cparam->numOption(); ++ i) {
                 auto opt = cparam->option(i);
                 combo->addItem(opt.first, opt.second);
@@ -110,17 +110,17 @@ void GenConfigDelegate::setModelData(QWidget *editor,
         }
             break;
         case ParamType::Text: {
-            auto le = static_cast< QLineEdit *>(editor);
+            auto le = static_cast<QLineEdit *>(editor);
             data = le->text();
         }
             break;
         case ParamType::Range: {
-            auto sl = static_cast< QSpinBox *>(editor);
+            auto sl = static_cast<QSpinBox *>(editor);
             data = sl->value();
         }
             break;
         case ParamType::Choice: {
-            auto combo = static_cast< QComboBox *>(editor);
+            auto combo = static_cast<QComboBox *>(editor);
             data = combo->currentIndex();
         }
             break;

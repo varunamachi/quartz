@@ -160,7 +160,7 @@ const QString & SelectorManager::extensionAdapterName() const
 bool SelectorManager::handleExtension(Ext::Extension *extension)
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractSelectorProvider *>(extension);
+    auto provider = dynamic_cast<AbstractSelectorProvider *>(extension);
     if (provider != nullptr) {
         auto selectors = provider->selectors();
         foreach(auto selector, selectors) {

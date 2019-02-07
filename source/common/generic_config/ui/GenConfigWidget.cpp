@@ -21,9 +21,9 @@ struct GenConfigWidget::Data
     GenConfigTreeModel *m_model;
 };
 
-GenConfigWidget::GenConfigWidget(Config *config, QWidget *parent)
+GenConfigWidget::GenConfigWidget(QWidget *parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(new GenConfigTreeModel(config, parent)))
+    , m_data(std::make_unique<Data>(new GenConfigTreeModel(parent)))
 {
     auto layout = new QVBoxLayout(this);
     auto view = new QzTreeView(this);

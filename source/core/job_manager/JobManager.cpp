@@ -236,7 +236,7 @@ void JobManager::run()
 bool JobManager::event(QEvent *event)
 {
     if (event->type() == CallbackEvent::EVENT_TYPE) {
-        CallbackEvent *callbackEvt = static_cast< CallbackEvent *>(event);
+        CallbackEvent *callbackEvt = static_cast<CallbackEvent *>(event);
         callbackEvt->invokeCallback();
     }
     return QThread::event(event);

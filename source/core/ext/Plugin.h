@@ -57,7 +57,7 @@ public:
     template< typename Context >
     Context * context() const
     {
-        return static_cast< Context *>(coreContext());
+        return static_cast<Context *>(coreContext());
     }
 
 private:

@@ -14,7 +14,7 @@ class QUARTZ_COMMON_API GenConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit GenConfigWidget(Config *config, QWidget *parent = nullptr);
+    explicit GenConfigWidget(QWidget *parent = nullptr);
 
     ~GenConfigWidget();
 

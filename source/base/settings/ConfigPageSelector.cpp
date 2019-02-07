@@ -147,7 +147,7 @@ const QString & ConfigPageSelector::extensionAdapterName() const
 bool ConfigPageSelector::handleExtension(Ext::Extension *extension)
 {
     bool result = true;
-    auto provider = dynamic_cast< AbstractConfigPageProvider *>(extension);
+    auto provider = dynamic_cast<AbstractConfigPageProvider *>(extension);
     if (provider != nullptr) {
         auto pages = provider->configPages();
         foreach(auto page, pages) {

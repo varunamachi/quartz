@@ -94,7 +94,7 @@ private:
 template< typename T >
 static T * context()
 {
-   return  dynamic_cast< T *>(QzCoreContext::get());
+   return  dynamic_cast<T *>(QzCoreContext::get());
 }
 
 }

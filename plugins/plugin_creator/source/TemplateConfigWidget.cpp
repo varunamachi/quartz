@@ -118,7 +118,6 @@ TemplateConfigWidget::TemplateConfigWidget(
     m_data->m_view->setModel(m_data->m_instanceProxy);
     m_data->m_view->setRootIsDecorated(false);
     m_data->m_configView->setModel(m_data->m_configProxy);
-//    m_data->m_configView->setModel(m_data->m_configModel);
     m_data->m_configView->setRootIsDecorated(false);
     m_data->m_configView->setItemDelegate(new GenConfigDelegate(this));
 
@@ -192,7 +191,7 @@ TemplateInstance * TemplateConfigWidget::instanceAt(int index)
 {
     TemplateInstance *tinst = nullptr;
     if (index < m_data->m_tmodel->rootCount()) {
-        tinst = static_cast< TemplateInstance * >(
+        tinst = static_cast<TemplateInstance * >(
                     m_data->m_tmodel->rootAt(index));
     }
     return tinst;

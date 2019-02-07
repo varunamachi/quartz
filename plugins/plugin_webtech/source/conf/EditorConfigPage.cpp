@@ -3,6 +3,14 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
+#include <QFile>
+
+#include <common/generic_config/model/ConfigParser.h>
+#include <common/generic_config/model/Config.h>
+#include <common/generic_config/ui/GenConfigTreeModel.h>
+#include <common/generic_config/ui/GenConfigWidget.h>
+
+#include <plugin_base/PluginLogging.h>
 
 #include "EditorConfigPage.h"
 #include "conf/Conf.h"
@@ -24,6 +32,8 @@ struct EditorConfigPage::Data
     QComboBox *m_rulerBox;
     QCheckBox *m_minimapShow;
     QCheckBox *m_lineNumShow;
+    std::shared_ptr<Config> m_config;
+
 
 };
 
@@ -79,10 +89,36 @@ EditorConfigPage::EditorConfigPage(QWidget *parent)
     grid->setColumnStretch(0, 0);
     grid->setColumnStretch(1, 1);
 
+
+
+
+//    parser->parse(
+//    view->setModel(m_data->m_instanceProxy);
+//    view->setRootIsDecorated(false);
+//    configView->setModel(m_data->m_configProxy);
+//    configView->setRootIsDecorated(false);
+//    configView->setItemDelegate(new GenConfigDelegate(this));
+
+    auto configView = new GenConfigWidget(this);
     auto lyt = new QVBoxLayout();
     lyt->addLayout(grid);
+    lyt->addWidget(configView);
     lyt->addStretch();
     this->setLayout(lyt);
+
+    QFile file{":/resources/EditorSettings.xml"};
+    if (file.open(QIODevice::ReadOnly)) {
+        ConfigParser parser;
+        auto configs = parser.parse(file.readAll());
+        if (! configs.isEmpty()) {
+            m_data->m_config = configs[0];
+            configView->setConfig(m_data->m_config.get());
+        } else {
+            QZP_ERROR << "Invalid config file EditorSettings.xml given";
+        }
+    } else {
+        QZP_ERROR << "Failed to open editor setting XML";
+    }
     refresh();
 }
 
@@ -114,6 +150,8 @@ void EditorConfigPage::refresh()
     m_data->m_lineNumShow->setChecked(
                 conf<bool>(Conf::EDITOR_SHOW_LINENUM, true));
 }
+
+
 
 
 

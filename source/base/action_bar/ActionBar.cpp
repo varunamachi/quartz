@@ -108,7 +108,7 @@ const QString & ActionBar::extensionAdapterName() const
 
 bool ActionBar::handleExtension(Ext::Extension *extension)
 {
-    auto itemProvider = dynamic_cast< AbstractActionItemProvider *>(extension);
+    auto itemProvider = dynamic_cast<AbstractActionItemProvider *>(extension);
     if (itemProvider != nullptr) {
         auto items = itemProvider->actionItems();
         foreach(auto item, items) {

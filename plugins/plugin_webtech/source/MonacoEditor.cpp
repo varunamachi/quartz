@@ -10,6 +10,7 @@
 #include <plugin_base/PluginContext.h>
 
 #include "MonacoEditor.h"
+#include "conf/Conf.h"
 
 
 #define EXEC(statement)                                                 \
@@ -244,6 +245,28 @@ MonacoEditor::MonacoEditor(QWidget *parent)
         while (!m_data->m_pendingCommands.empty()) {
             auto func = m_data->m_pendingCommands.takeFirst();
             func();
+        }
+    });
+
+    setTheme(conf<QString>(Conf::EDITOR_THEME, "vs-dark"));
+    setRulerAt(conf<int>(Conf::EDITOR_VLINE_NUM, 80));
+    showMinimap(conf<bool>(Conf::EDITOR_SHOW_MINIMAP, false));
+    showLineNumber(conf<bool>(Conf::EDITOR_SHOW_LINENUM, true));
+
+    connect(confman(), &ConfigManager::configChanged, [this](
+            const QString &key,
+            const QVariant &val,
+            const QString domain) {
+        if (domain == Conf::CONF_DOMAIN) {
+            if (key == Conf::EDITOR_THEME) {
+                this->setTheme(val.toString());
+            } else if (key == Conf::EDITOR_VLINE_NUM) {
+                this->setRulerAt(val.toInt());
+            } else if (key == Conf::EDITOR_SHOW_MINIMAP) {
+                this->showMinimap(val.toBool());
+            } else if (key == Conf::EDITOR_SHOW_LINENUM) {
+                this->showLineNumber(val.toBool());
+            }
         }
     });
 }

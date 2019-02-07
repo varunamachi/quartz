@@ -197,7 +197,7 @@ const QString & ViewManager::extensionAdapterName() const
 bool ViewManager::handleExtension(Ext::Extension *extension)
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractViewProvider *>(extension);
+    auto provider = dynamic_cast<AbstractViewProvider *>(extension);
     if (provider != nullptr) {
         auto views = provider->views();
         foreach(auto view, views) {

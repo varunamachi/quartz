@@ -63,10 +63,10 @@ void BooleanParam::setValue(const QVariant &value)
 
 std::unique_ptr<Param> BooleanParam::clone() const
 {
-    auto param = std::unique_ptr<BooleanParam>{
-        new BooleanParam(id(), name(), description(), parent())};
+    auto param = std::make_unique<BooleanParam>(
+                id(), name(), description(), parent());
     param->setDefaultValue(this->defaultValue());
-    return param;
+    return std::move(param);
 }
 
 }

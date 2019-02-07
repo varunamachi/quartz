@@ -139,7 +139,7 @@ const QString & ContentManager::extensionAdapterName() const
 bool ContentManager::handleExtension(Ext::Extension *ext)
 {
     bool result = true;
-    auto provider = dynamic_cast< AbstractContentProvider *>(ext);
+    auto provider = dynamic_cast<AbstractContentProvider *>(ext);
     if (provider != nullptr) {
         auto contents = provider->widgets();
         foreach(auto content, contents) {

@@ -1,0 +1,41 @@
+<configs>
+    <config id="editor_settings" name="Editor Settings">
+        <group name="Display">
+            <param
+                type="choice"
+                id="ed.theme"
+                name="Editor theme"
+                description="Choose editor theme"
+                default="0">
+                <option name="Dark" value="vs"/>
+                <option name="Light" value="vs-dark"/>
+                <option name="High Contrast" value="hc-black"/>
+           </param>
+           <param
+                type="choice"
+                id="ed.vlinenum"
+                name="Vertical ruler chars"
+                description="Choose num of characters to show vertcal ruler at"
+                default="0">
+                <option name="80" value="80"/>
+                <option name="100" value="100"/>
+                <option name="120" value="120"/>
+                <option name="None" value="0"/>
+           </param>
+           <param
+                type="boolean"
+                id="ed.minimap"
+                name="Show Minimap"
+                description="Show mini overview of file on the right"
+                default="false">
+           </param>
+           <param
+                type="boolean"
+                id="ed.linenum"
+                name="Show Line numbers"
+                description="Show line numbers"
+                default="true">
+           </param>
+        </group>
+    </config>
+</configs>

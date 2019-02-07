@@ -65,7 +65,7 @@ QModelIndex AbstractTreeModel::index(int row,
         return index;
     }
     if (! m_data->m_isFlat && parent.isValid()) {
-        auto node = static_cast< TreeNode * >(parent.internalPointer());
+        auto node = static_cast<TreeNode * >(parent.internalPointer());
         auto child = node->child(row);
         if (child != nullptr) {
             index = createIndex(row, column, child);
@@ -85,7 +85,7 @@ QModelIndex AbstractTreeModel::parent(const QModelIndex& childIndex) const
         return QModelIndex{};
     }
     auto index = QModelIndex{};
-    auto node = static_cast< TreeNode *>(childIndex.internalPointer());
+    auto node = static_cast<TreeNode *>(childIndex.internalPointer());
     if (node != nullptr && node->parent() != nullptr) {
         auto parent = node->parent();
         auto grandParent = parent->parent();
@@ -179,7 +179,7 @@ bool AbstractTreeModel::hasChildren(const QModelIndex& parent) const
         if (m_data->m_isFlat) {
             has = false;
         } else {
-            auto node = static_cast< TreeNode *>(parent.internalPointer());
+            auto node = static_cast<TreeNode *>(parent.internalPointer());
             has = node->numChildren() != 0;
         }
     }
@@ -192,7 +192,7 @@ bool AbstractTreeModel::setData(const QModelIndex &index,
 {
     bool set = false;
     if (index.isValid()) {
-        auto node = static_cast< TreeNode *>(index.internalPointer());
+        auto node = static_cast<TreeNode *>(index.internalPointer());
         if (node != nullptr) {
             auto col = m_data->m_selectable ? index.column() - 1
                                             : index.column();
@@ -217,7 +217,7 @@ bool AbstractTreeModel::setData(const QModelIndex &index,
 
 Qt::ItemFlags AbstractTreeModel::flags(const QModelIndex &index) const
 {
-    auto node = static_cast< TreeNode *>(index.internalPointer());
+    auto node = static_cast<TreeNode *>(index.internalPointer());
     if (! index.isValid() || node == nullptr) {
         return Qt::NoItemFlags;
     }

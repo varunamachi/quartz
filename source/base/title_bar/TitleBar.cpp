@@ -161,7 +161,7 @@ const QString & TitleBar::extensionAdapterName() const
 bool TitleBar::handleExtension(Ext::Extension *extension)
 {
     bool result = false;
-    auto itemProvider = dynamic_cast< AbstractTitleItemProvider *>(extension);
+    auto itemProvider = dynamic_cast<AbstractTitleItemProvider *>(extension);
     if (itemProvider != nullptr) {
         auto items = itemProvider->titleItems();
         foreach(auto item, items) {

@@ -15,7 +15,7 @@ public:
                           const QString &description,
                           TreeNode *parent);
 
-    ~ChoiceParam();
+    ~ChoiceParam() override;
 
     void addOption(const QString &name, const QString &value);
 
@@ -37,7 +37,9 @@ public:
 
     void setValue(const QVariant &value) override;
 
-    std::unique_ptr<Param> clone() const;
+    std::unique_ptr<Param> clone() const override;
+
+    QVariant fieldValue(int field) const override;
 
 private:
     struct Data;

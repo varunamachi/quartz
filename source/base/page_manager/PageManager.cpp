@@ -171,7 +171,7 @@ QuartzPage * PageManager::currentPage() const
         if (pageContnr != nullptr) {
             QString curPageId = pageContnr->currentId();
             QWidget *widget = pageContnr->widget(curPageId);
-            page = dynamic_cast< QuartzPage *>(widget);
+            page = dynamic_cast<QuartzPage *>(widget);
         }
         else {
             QZ_ERROR("Qz:PageManager")
@@ -245,7 +245,7 @@ const QString & PageManager::extensionAdapterName() const
 bool PageManager::handleExtension(Ext::Extension *extension)
 {
     auto result = false;
-    auto provider = dynamic_cast< AbstractPageProvider *>(extension);
+    auto provider = dynamic_cast<AbstractPageProvider *>(extension);
     if (provider != nullptr) {
         auto pages = provider->pages();
         foreach(auto page, pages) {
