@@ -121,7 +121,7 @@ void GenConfigDelegate::setModelData(QWidget *editor,
             break;
         case ParamType::Choice: {
             auto combo = static_cast<QComboBox *>(editor);
-            data = combo->currentIndex();
+            data = combo->currentData();
         }
             break;
         }

@@ -6,16 +6,27 @@
 
 #include <core/logger/Logging.h>
 
+#include "../model/Config.h"
+#include "../model/Param.h"
+#include "../model/BooleanParam.h"
+#include "../model/ChoiceParam.h"
+#include "../model/RangeParam.h"
+#include "../model/TextParam.h"
+#include "../model/Group.h"
 #include "ConfigParser.h"
-#include "Config.h"
-#include "Param.h"
-#include "BooleanParam.h"
-#include "ChoiceParam.h"
-#include "RangeParam.h"
-#include "TextParam.h"
-#include "Group.h"
 
 namespace Quartz {
+
+struct ConfigParser::Data
+{
+    explicit Data(ValueProvider provider)
+        : m_valueProvider(provider)
+    {
+
+    }
+
+    ValueProvider m_valueProvider;
+};
 
 ParamType toParamType(const QString &strType)
 {
@@ -59,7 +70,8 @@ void parseOptions(ChoiceParam *param, const QDomElement &choiceNode)
     }
 }
 
-ConfigParser::ConfigParser()
+ConfigParser::ConfigParser(ValueProvider valueProvider)
+    : m_data(std::make_unique<Data>(valueProvider))
 {
     //Nothing here...
 }
@@ -171,7 +183,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
     auto strDef     = nodeValue(attr, "default");
     auto type       = toParamType(strType);
     if (type == ParamType::Boolean) {
-        auto def = QString::compare(strDef, "true", Qt::CaseInsensitive);
+        auto def = QString::compare(strDef, "true", Qt::CaseInsensitive) == 0;
         auto bparam = std::make_shared<BooleanParam>(
                     id,
                     name,
@@ -221,6 +233,12 @@ std::shared_ptr<Param> ConfigParser::parseParam(
                     &config);
         tparam->setDefaultValue(strDef);
         param = tparam;
+    }
+    if (m_data->m_valueProvider != nullptr) {
+        auto val = m_data->m_valueProvider(id);
+        if (val.isValid()) {
+            param->setValue(val);
+        }
     }
     return param;
 }

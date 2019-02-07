@@ -1,5 +1,4 @@
 vq_classes(
-    ConfigParser
     Config
     Param
     BooleanParam
@@ -9,6 +8,4 @@ vq_classes(
     Group
 )
 
-vq_sources(
-    ConfigSample.xml
-)
+

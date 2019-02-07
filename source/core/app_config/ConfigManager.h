@@ -74,6 +74,8 @@ public:
 
     void batchLoad(const QByteArray &content);
 
+    QVariantHash allFromDomain(const QString &domain) const;
+
 Q_SIGNALS:
     void configChanged(const QString &key,
                        const QVariant &val,

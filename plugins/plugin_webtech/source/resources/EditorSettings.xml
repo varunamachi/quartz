@@ -6,9 +6,9 @@
                 id="ed.theme"
                 name="Editor theme"
                 description="Choose editor theme"
-                default="0">
-                <option name="Dark" value="vs"/>
-                <option name="Light" value="vs-dark"/>
+                default="vs-dark">
+                <option name="Dark" value="vs-dark"/>
+                <option name="Light" value="vs"/>
                 <option name="High Contrast" value="hc-black"/>
            </param>
            <param
@@ -16,7 +16,7 @@
                 id="ed.vlinenum"
                 name="Vertical ruler chars"
                 description="Choose num of characters to show vertcal ruler at"
-                default="0">
+                default="80">
                 <option name="80" value="80"/>
                 <option name="100" value="100"/>
                 <option name="120" value="120"/>

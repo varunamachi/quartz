@@ -18,7 +18,9 @@ struct ChoiceParam::Data {
 
     QVector<QString> m_names;
 
-    QHash< QString, QString > m_choices;
+    QVector<QString> m_values;
+
+    QHash<QString, QString> m_choices;
 
     int m_defaultIndex;
 
@@ -45,6 +47,7 @@ void ChoiceParam::addOption(const QString &name, const QString &value)
 
     if (! m_data->m_choices.contains(name)) {
         m_data->m_names.append(name);
+        m_data->m_values.append(value);
         m_data->m_choices.insert(name, value);
     }
     if (m_data->m_defaultIndex == -1) {
@@ -63,8 +66,10 @@ QPair< QString, QString > ChoiceParam::option(int index) const
 {
     QPair< QString, QString > result;
     if (m_data->m_names.size() > index && index >= 0) {
-        auto name = m_data->m_names.at(index);
-        result = QPair< QString, QString >{ name, optionValue(name)};
+        result = QPair< QString, QString >{
+            m_data->m_names[index],
+            m_data->m_values[index]
+        };
     }
     return result;
 }
@@ -86,11 +91,12 @@ int ChoiceParam::index() const
 
 void ChoiceParam::setValue(const QVariant &value)
 {
-    bool ok = false;
-    int val = value.toInt(&ok);
-    if (ok && val >= 0) {
-        m_data->m_index = val;
-    }
+//    bool ok = false;
+//    int val = value.toInt(&ok);
+//    if (ok && val >= 0) {
+//        m_data->m_index = val;
+//    }
+    m_data->m_index = m_data->m_values.indexOf(value.toString());
 }
 
 int ChoiceParam::defaultIndex() const
@@ -124,7 +130,9 @@ std::unique_ptr<Param> ChoiceParam::clone() const
 QVariant ChoiceParam::fieldValue(int field) const
 {
     if (field == 1) {
-        return m_data->m_names[m_data->m_index];
+        auto index = m_data->m_index >= 0 ? m_data->m_index
+                                          : 0;
+        return m_data->m_names[index];
     }
     return Param::fieldValue(field);
 }

@@ -45,7 +45,7 @@ public:
         }
     }
 
-    using Cache = QHash< QString, QHash< QString, QVariant >>;
+    using Cache = QHash< QString, QVariantHash>;
 
     std::unique_ptr<IConfigStorageStrategy> m_storage;
 
@@ -137,6 +137,13 @@ void  ConfigManager::batchLoad(const QByteArray &content)
     if (m_impl->m_configLoader != nullptr) {
         m_impl->m_configLoader->load(content);
     }
+}
+
+QVariantHash ConfigManager::allFromDomain(const QString &/*domain*/) const
+{
+    //@TODO implement in storage strategy and forward. Only write cache and
+    //dont read from it here
+    return {};
 }
 
 

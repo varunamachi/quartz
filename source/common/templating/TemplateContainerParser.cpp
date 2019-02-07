@@ -9,7 +9,7 @@
 
 #include <core/logger/Logging.h>
 
-#include "../generic_config/model/ConfigParser.h"
+#include "../generic_config/ops/ConfigParser.h"
 #include "../generic_config/model/Config.h"
 #include "Template.h"
 #include "TemplateContainerParser.h"
