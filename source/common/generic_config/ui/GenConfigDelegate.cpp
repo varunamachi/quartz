@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QSpinBox>
 #include <QSignalBlocker>
+#include <QCheckBox>
 
 #include "../../model_view/TreeNode.h"
 #include "../model/Param.h"
@@ -26,7 +27,7 @@ GenConfigDelegate::GenConfigDelegate(QWidget *parent)
 
 QWidget* GenConfigDelegate::createEditor(
         QWidget* parent,
-        const QStyleOptionViewItem &option,
+        const QStyleOptionViewItem &/*option*/,
         const QModelIndex &index) const
 {
     QWidget *widget = new QLineEdit(parent);
@@ -34,10 +35,6 @@ QWidget* GenConfigDelegate::createEditor(
     auto param = dynamic_cast<Param *>(node);
     if (param != nullptr) {
         switch(param->type()) {
-        case ParamType::Boolean: {
-            widget = QStyledItemDelegate::createEditor(parent, option, index);
-        }
-            break;
         case ParamType::Text: {
             auto le = new QLineEdit(parent);
             widget = le;
@@ -71,6 +68,18 @@ QWidget* GenConfigDelegate::createEditor(
             });
         }
             break;
+        case ParamType::Boolean: {
+//            widget = QStyledItemDelegate::createEditor(parent, option, index);
+            auto checkbox = new QCheckBox(parent);
+            connect(checkbox,
+                    &QCheckBox::stateChanged,
+                    [checkbox, this]() {
+                //I know, const_cast is bad...
+                emit const_cast<GenConfigDelegate*>(this)->commitData(checkbox);
+            });
+            widget = checkbox;
+        }
+            break;
         }
     }
     return widget;
@@ -83,7 +92,10 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
     if (node != nullptr) {
         switch(node->type()) {
         case ParamType::Boolean: {
-            QStyledItemDelegate::setEditorData(editor, index);
+//            QStyledItemDelegate::setEditorData(editor, index);
+            auto bparam = static_cast<BooleanParam *>(node);
+            auto cb = static_cast<QCheckBox *>(editor);
+            cb->setChecked(bparam->value().toBool());
         }
             break;
         case ParamType::Text: {
@@ -117,17 +129,19 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
 
 
 void GenConfigDelegate::setModelData(QWidget *editor,
-                                      QAbstractItemModel *model,
-                                      const  QModelIndex &index) const
+                                     QAbstractItemModel *model,
+                                     const  QModelIndex &index) const
 {
     auto node = treenode_cast<Param *>(index.data(Qt::UserRole));
     if (node != nullptr) {
         QVariant data;
         switch(node->type()) {
         case ParamType::Boolean: {
-            QStyledItemDelegate::setModelData(editor, model, index);
+//            QStyledItemDelegate::setModelData(editor, model, index);
+            auto cb = static_cast<QCheckBox *>(editor);
+            data = cb->checkState();
+            return;
         }
-            break;
         case ParamType::Text: {
             auto le = static_cast<QLineEdit *>(editor);
             data = le->text();

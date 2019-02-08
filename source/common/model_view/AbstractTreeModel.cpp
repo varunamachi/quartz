@@ -122,6 +122,11 @@ QVariant AbstractTreeModel::data(const QModelIndex& index,
     auto node = static_cast<TreeNode *>(index.internalPointer());
     if (index.isValid() && node != nullptr) {
         auto col = m_data->m_selectable ? index.column() - 1 : index.column();
+
+        if (role == Qt::UserRole) {
+            return QVariant::fromValue(node);
+        }
+
         if (m_data->m_selectable && index.column() == 0){
             switch(role) {
             case Qt::CheckStateRole:
@@ -145,9 +150,6 @@ QVariant AbstractTreeModel::data(const QModelIndex& index,
         }
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             return data;
-        }
-        if (role == Qt::UserRole) {
-            return QVariant::fromValue(node);
         }
         if (role == Qt::DecorationRole) {
             return node->decoration(col);
@@ -202,8 +204,7 @@ bool AbstractTreeModel::setData(const QModelIndex &index,
                 if (m_data->m_selectable && index.column() == 0) {
                     node->setSelected(val);
                     set = true;
-                }
-                else {
+                } else {
                     set = node->setData(col, val);
                 }
             }
