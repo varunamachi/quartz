@@ -2,6 +2,7 @@
 #include "GenConfigTreeModel.h"
 
 #include "../model/Config.h"
+#include "../ops/GenConfigUtils.h"
 
 namespace Quartz {
 
@@ -38,6 +39,13 @@ void GenConfigTreeModel::setConfig(Config *config)
     m_data->m_config = config;
     endResetModel();
 
+}
+
+void GenConfigTreeModel::setValues(const QVariantHash &values)
+{
+    beginResetModel();
+    GenConfigUtils::updateModel(values, m_data->m_config);
+    endResetModel();
 }
 
 TreeNode *GenConfigTreeModel::rootAt(int /*rowIndex*/) const

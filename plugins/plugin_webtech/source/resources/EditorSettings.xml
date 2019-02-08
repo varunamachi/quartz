@@ -6,36 +6,42 @@
                 id="ed.theme"
                 name="Editor theme"
                 description="Choose editor theme"
-                default="vs-dark">
+                default="vs-dark"
+                valueType="string"
+            >
                 <option name="Dark" value="vs-dark"/>
                 <option name="Light" value="vs"/>
                 <option name="High Contrast" value="hc-black"/>
-           </param>
-           <param
+            </param>
+            <param
                 type="choice"
                 id="ed.vlinenum"
                 name="Vertical ruler chars"
                 description="Choose num of characters to show vertcal ruler at"
-                default="80">
+                default="80"
+                valueType="int"
+            >
                 <option name="80" value="80"/>
                 <option name="100" value="100"/>
                 <option name="120" value="120"/>
                 <option name="None" value="0"/>
-           </param>
-           <param
+            </param>
+            <param
                 type="boolean"
                 id="ed.minimap"
                 name="Show Minimap"
                 description="Show mini overview of file on the right"
-                default="false">
-           </param>
-           <param
+                default="false"
+            >
+            </param>
+            <param
                 type="boolean"
                 id="ed.linenum"
                 name="Show Line numbers"
                 description="Show line numbers"
-                default="true">
-           </param>
+                default="true"
+            >
+            </param>
         </group>
     </config>
 </configs>

@@ -21,10 +21,14 @@ T conf(const QString &key, const T& def = {})
     return confman()->get<T>(key, def, Conf::CONF_DOMAIN);
 }
 
-template<typename T>
-void setConf(const QString &key, const T& val)
-{
-    confman()->set<T>(key, val, Conf::CONF_DOMAIN);
+//template<typename T>
+//void setConf(const QString &key, const T& val)
+//{
+//    confman()->set<T>(key, val, Conf::CONF_DOMAIN);
+//}
+
+inline void setConf(const QString &key, const QVariant &value) {
+    confman()->store(key, value, Conf::CONF_DOMAIN);
 }
 
 

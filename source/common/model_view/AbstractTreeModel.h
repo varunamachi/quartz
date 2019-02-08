@@ -68,6 +68,9 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+Q_SIGNALS:
+    void dataSet(TreeNode *node);
+
 protected:
     virtual TreeNode * rootAt(int rowIndex) const = 0;
 

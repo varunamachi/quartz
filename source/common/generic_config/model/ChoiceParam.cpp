@@ -18,9 +18,7 @@ struct ChoiceParam::Data {
 
     QVector<QString> m_names;
 
-    QVector<QString> m_values;
-
-    QHash<QString, QString> m_choices;
+    QVector<QVariant> m_values;
 
     int m_defaultIndex;
 
@@ -42,13 +40,12 @@ ChoiceParam::~ChoiceParam()
 
 }
 
-void ChoiceParam::addOption(const QString &name, const QString &value)
+void ChoiceParam::addOption(const QString &name, const QVariant &value)
 {
 
-    if (! m_data->m_choices.contains(name)) {
+    if (! m_data->m_names.contains(name)) {
         m_data->m_names.append(name);
         m_data->m_values.append(value);
-        m_data->m_choices.insert(name, value);
     }
     if (m_data->m_defaultIndex == -1) {
         m_data->m_defaultIndex = 0;
@@ -56,17 +53,11 @@ void ChoiceParam::addOption(const QString &name, const QString &value)
     }
 }
 
-QString ChoiceParam::optionValue(const QString &name) const
+QPair<QString, QVariant> ChoiceParam::option(int index) const
 {
-    QString value = m_data->m_choices.value(name, "");
-    return value;
-}
-
-QPair< QString, QString > ChoiceParam::option(int index) const
-{
-    QPair< QString, QString > result;
+    QPair<QString, QVariant> result;
     if (m_data->m_names.size() > index && index >= 0) {
-        result = QPair< QString, QString >{
+        result = QPair<QString, QVariant>{
             m_data->m_names[index],
             m_data->m_values[index]
         };
@@ -91,11 +82,6 @@ int ChoiceParam::index() const
 
 void ChoiceParam::setValue(const QVariant &value)
 {
-//    bool ok = false;
-//    int val = value.toInt(&ok);
-//    if (ok && val >= 0) {
-//        m_data->m_index = val;
-//    }
     m_data->m_index = m_data->m_values.indexOf(value.toString());
 }
 
@@ -109,9 +95,17 @@ void ChoiceParam::setDefaultIndex(int defaultIndex)
     m_data->m_defaultIndex = defaultIndex;
 }
 
+void ChoiceParam::setDefaultValue(const QVariant &value)
+{
+    auto index = m_data->m_values.indexOf(value);
+    if (index != -1) {
+        m_data->m_defaultIndex = index;
+    }
+}
+
 int ChoiceParam::numOption() const
 {
-    return m_data->m_choices.size();
+    return m_data->m_names.size();
 }
 
 std::unique_ptr<Param> ChoiceParam::clone() const
@@ -119,10 +113,9 @@ std::unique_ptr<Param> ChoiceParam::clone() const
     auto param = std::make_unique<ChoiceParam>(
         id(), name(), description(), parent());
     param->setDefaultIndex(this->defaultIndex());
-    for (auto it = m_data->m_choices.begin();
-         it != m_data->m_choices.end();
-         ++ it) {
-        param->addOption(it.key(), it.value());
+
+    for (auto i = 0; i < m_data->m_names.size(); ++i) {
+        param->addOption(m_data->m_names[i], m_data->m_values[i]);
     }
     return std::move(param);
 }

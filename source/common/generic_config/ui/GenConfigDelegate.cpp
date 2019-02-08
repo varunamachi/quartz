@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QApplication>
 #include <QSpinBox>
+#include <QSignalBlocker>
 
 #include "../../model_view/TreeNode.h"
 #include "../model/Param.h"
@@ -40,16 +41,34 @@ QWidget* GenConfigDelegate::createEditor(
         case ParamType::Text: {
             auto le = new QLineEdit(parent);
             widget = le;
+            connect(le,
+                    &QLineEdit::textEdited,
+                    [le, this]() {
+                //I know, const_cast is bad...
+               emit const_cast<GenConfigDelegate*>(this)->commitData(le);
+            });
         }
             break;
         case ParamType::Range: {
             auto sl = new QSpinBox(parent);
             widget = sl;
+            connect(sl,
+                    &QSpinBox::editingFinished,
+                    [sl, this]() {
+                //I know, const_cast is bad...
+                emit const_cast<GenConfigDelegate*>(this)->commitData(sl);
+            });
         }
             break;
         case ParamType::Choice: {
             auto combo = new QComboBox(parent);
             widget = combo;
+            connect(combo,
+                    qOverload<int>(&QComboBox::currentIndexChanged),
+                    [combo, this]() {
+                //I know, const_cast is bad...
+                emit const_cast<GenConfigDelegate*>(this)->commitData(combo);
+            });
         }
             break;
         }
@@ -89,7 +108,7 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
             if (cparam->numOption() > 0) {
                 combo->setCurrentIndex(cparam->index());
             }
-            combo->showPopup();
+//            combo->showPopup();
         }
             break;
         }
@@ -125,7 +144,7 @@ void GenConfigDelegate::setModelData(QWidget *editor,
         }
             break;
         }
-        node->setValue(data);
+        model->setData(index, data);
     }
 }
 

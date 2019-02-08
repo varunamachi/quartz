@@ -9,6 +9,7 @@
 namespace Quartz {
 
 class Config;
+class GenConfigTreeModel;
 
 class QUARTZ_COMMON_API GenConfigWidget : public QWidget
 {
@@ -19,6 +20,10 @@ public:
     ~GenConfigWidget();
 
     void setConfig(Config *config);
+
+    const GenConfigTreeModel * configModel() const;
+
+    GenConfigTreeModel * configModel();
 
 private:
     struct Data;

@@ -1,6 +1,7 @@
 #include <QVariant>
 #include <QDataStream>
 
+#include "../logger/Logging.h"
 #include "IConfigStorageStrategy.h"
 #include "AbstractConfigLoader.h"
 #include "ConfigManager.h"
@@ -139,11 +140,18 @@ void  ConfigManager::batchLoad(const QByteArray &content)
     }
 }
 
-QVariantHash ConfigManager::allFromDomain(const QString &/*domain*/) const
+QVariantHash ConfigManager::allFromDomain(const QString &domain) const
 {
-    //@TODO implement in storage strategy and forward. Only write cache and
-    //dont read from it here
-    return {};
+    auto decoder = [](const QByteArray &raw) -> QVariant {
+        QDataStream stream(raw);
+        stream.setVersion(QDataStream::Qt_5_2);
+        QVariant val;
+        stream >> val;
+        //print error if any?
+        return val;
+    };
+    auto values = m_impl->m_storage->allFromDomain(domain, decoder);
+    return values;
 }
 
 

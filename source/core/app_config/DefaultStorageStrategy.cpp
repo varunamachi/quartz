@@ -25,29 +25,29 @@ const QString REMOVE_QUERY =
 const QString STORE_QUERY =
         "INSERT OR REPLACE INTO Config(key, value, domain) VALUES(?, ?, ?)";
 
-class DefaultStorageStrategy::Impl
+class DefaultStorageStrategy::Data
 {
 public:
-    explicit Impl(const QString &dbPath);
+    explicit Data(const QString &dbPath)
+        : m_dbPath(dbPath)
+    {
 
-    bool createSchema();
+    }
 
-    bool store(const QString &domain,
-                const QString &key,
-                const QByteArray &value);
+    bool createSchema()
+    {
+        QSqlQuery query(CREATE_QUERY);
+        bool result = query.exec();
+        return result;
+    }
 
-    QByteArray retrieve(const QString &domain, const QString &key);
+    QString m_dbPath;
 
-    bool remove(const QString &domain, const QString &key);
-
-private:
     bool m_valid;
 };
 
-
-
-DefaultStorageStrategy::Impl::Impl(const QString &dbPath)
-    : m_valid(false)
+DefaultStorageStrategy::DefaultStorageStrategy(const QString &dbPath)
+    : m_data(std::make_unique<Data>(dbPath))
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setHostName("localHost");
@@ -58,39 +58,33 @@ DefaultStorageStrategy::Impl::Impl(const QString &dbPath)
                          "WHERE type='table' AND name='Config'");
         if (query.exec() && query.next()) {
             QZ_INFO("Qz:Core:Config") << "Database initialization successful";
-        }
-        else {
+        } else {
             //Database does not exists
             QZ_INFO("Qz:Core:Config") << "Creating database at "
                                         << dbPath;
-            if (createSchema()) {
+            if (m_data->createSchema()) {
                 QZ_INFO("Qz:Core:Config")
                         << "Database creation successfull";
-                m_valid = true;
-            }
-            else {
+                m_data->m_valid = true;
+            } else {
                 QZ_ERROR("Qz:Core:Config")
                         << "Database creation failed: "
                         << db.lastError().text();
             }
         }
-    }
-    else {
+    } else {
         QZ_ERROR("Qz:Core:Config")
                 << "Database creation failed: "
                 << db.lastError().text();
     }
 }
 
-
-bool DefaultStorageStrategy::Impl::createSchema()
+DefaultStorageStrategy::~DefaultStorageStrategy()
 {
-    QSqlQuery query(CREATE_QUERY);
-    bool result = query.exec();
-    return result;
+
 }
 
-bool DefaultStorageStrategy::Impl::store(const QString &domain,
+bool DefaultStorageStrategy::store(const QString &domain,
             const QString &key,
             const QByteArray &value)
 {
@@ -109,8 +103,8 @@ bool DefaultStorageStrategy::Impl::store(const QString &domain,
     return result;
 }
 
-QByteArray DefaultStorageStrategy::Impl::retrieve(const QString &domain,
-                     const QString &key)
+QByteArray DefaultStorageStrategy::retrieve(const QString &domain,
+                                            const QString &key) const
 {
     QSqlQuery query;
     query.prepare(RETRIEVE_QUERY);
@@ -121,14 +115,11 @@ QByteArray DefaultStorageStrategy::Impl::retrieve(const QString &domain,
         auto rawData = query.value(0).toByteArray();
         return rawData;
     }
-//    QZ_TRACE("Qz:Core:Config")
-//            << "Failed to retrieve value for " << domain << "." << key
-//            << " -- " << query.lastError().text();
     return QByteArray{};
 }
 
-bool DefaultStorageStrategy::Impl::remove(const QString &domain,
-             const QString &key)
+bool DefaultStorageStrategy::remove(const QString &domain,
+                                    const QString &key)
 {
     QSqlQuery query;
     query.prepare(REMOVE_QUERY);
@@ -144,41 +135,26 @@ bool DefaultStorageStrategy::Impl::remove(const QString &domain,
     return result;
 }
 
-//#################### Interface
-DefaultStorageStrategy::DefaultStorageStrategy(const QString &dbPath)
-//    : m_impl(std::make_unique<Impl>(dbPath))
-    : m_impl(new Impl(dbPath))
+QVariantHash DefaultStorageStrategy::allFromDomain(
+        const QString &domain,
+        BlobDecoder decoder) const
 {
-
+    QVariantHash values;
+    const auto q = QStringLiteral(
+                "SELECT * FROM Config WHERE domain = ?"
+    );
+    QSqlQuery query;
+    query.prepare(q);
+    query.addBindValue(domain);
+    bool result = query.exec();
+    if (result) {
+        while(query.next()) {
+            auto key = query.value("key").toString();
+            auto blob = query.value("value").toByteArray();
+            values[key] = decoder(blob);
+        }
+    }
+    return values;
 }
-
-
-DefaultStorageStrategy::~DefaultStorageStrategy()
-{
-
-}
-
-
-bool DefaultStorageStrategy::store(const QString &domain,
-                                    const QString &key,
-                                    const QByteArray &value)
-{
-    return m_impl->store(domain, key, value);
-}
-
-
-QByteArray DefaultStorageStrategy::retrieve(const QString &domain,
-                                             const QString &key) const
-{
-    return m_impl->retrieve(domain, key);
-}
-
-
-bool DefaultStorageStrategy::remove(const QString &domain,
-                                     const QString &key)
-{
-    return m_impl->remove(domain, key);
-}
-
 
 }

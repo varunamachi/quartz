@@ -48,6 +48,18 @@ void GenConfigWidget::setConfig(Config *config)
     m_data->m_model->setConfig(config);
 }
 
+const GenConfigTreeModel *GenConfigWidget::configModel() const
+{
+    return m_data->m_model;
+}
+
+GenConfigTreeModel *GenConfigWidget::configModel()
+{
+    return m_data->m_model;
+}
+
+
+
 
 
 }

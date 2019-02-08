@@ -191,8 +191,9 @@ bool AbstractTreeModel::setData(const QModelIndex &index,
                                  int role)
 {
     bool set = false;
+    TreeNode *node = nullptr;
     if (index.isValid()) {
-        auto node = static_cast<TreeNode *>(index.internalPointer());
+        node = static_cast<TreeNode *>(index.internalPointer());
         if (node != nullptr) {
             auto col = m_data->m_selectable ? index.column() - 1
                                             : index.column();
@@ -211,6 +212,9 @@ bool AbstractTreeModel::setData(const QModelIndex &index,
                 set = node->setData(col, value);
             }
         }
+    }
+    if (set) {
+        emit dataChanged(index, index);
     }
     return set;
 }

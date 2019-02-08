@@ -17,6 +17,12 @@
 
 namespace Quartz {
 
+enum class ChoiceType {
+    Int,
+    Bool,
+    String,
+};
+
 struct ConfigParser::Data
 {
     explicit Data(ValueProvider provider)
@@ -51,7 +57,9 @@ QString nodeValue(const QDomNamedNodeMap &attr, const QString &key)
     return QString{};
 }
 
-void parseOptions(ChoiceParam *param, const QDomElement &choiceNode)
+void parseOptions(ChoiceParam *param,
+                  const QDomElement &choiceNode,
+                  ChoiceType type)
 {
     auto oNodes = choiceNode.elementsByTagName("option");
     for (auto i = 0; i < oNodes.size(); ++ i) {
@@ -60,7 +68,13 @@ void parseOptions(ChoiceParam *param, const QDomElement &choiceNode)
         auto name = nodeValue(attr, "name");
         auto val = nodeValue(attr, "value");
         if (! name.isEmpty() && ! val.isEmpty()) {
-            param->addOption(name, val);
+            QVariant value = val;
+            if (type == ChoiceType::Int) {
+                value = val.toInt();
+            } else if (type == ChoiceType::Bool) {
+                value = QString::compare(val, "true", Qt::CaseInsensitive) == 0;
+            }
+            param->addOption(name, value);
         }
         else {
             QZ_ERROR("Qz:Cmn:GenParam")
@@ -193,14 +207,23 @@ std::shared_ptr<Param> ConfigParser::parseParam(
         param = bparam;
     }
     else if (type == ParamType::Choice) {
-        auto def = strDef.toInt();
+        auto def = QVariant(strDef);
+        auto valType = nodeValue(attr, "valueType");
+        auto choiceType = ChoiceType::String;
+        if (valType == "int") {
+            def = strDef.toInt();
+            choiceType = ChoiceType::Int;
+        } else if (valType == "boolean"){
+            def = QString::compare(valType, "bool", Qt::CaseInsensitive) == 0;
+            choiceType = ChoiceType::Bool;
+        }
         auto cparam = std::make_shared<ChoiceParam>(
                     id,
                     name,
                     desc,
                     &config);
-        cparam->setDefaultIndex(def);
-        parseOptions(cparam.get(), paramNode);
+        parseOptions(cparam.get(), paramNode, choiceType);
+        cparam->setDefaultValue(def);
         param = cparam;
     }
     else if (type == ParamType::Range) {

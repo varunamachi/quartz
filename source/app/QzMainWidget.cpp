@@ -159,18 +159,6 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
         QZ_ERROR("App") << "Failed to load all available plugins";
     }
 
-//    auto pluginSelector = new Ext::PluginSelector(this);
-//    m_data->m_selector->addSelector(pluginSelector);
-//    auto welcomeNode = nodeSelector->model()->addNode(
-//                QStringList(),
-//                tr("Welcome"),
-//                "qz.inbuilt.welcome",
-//                getIcon(MatIcon::Star));
-//    m_data->m_content->addContent(
-//                new WelcomePage(welcomeNode->nodeId(),
-//                                m_data->m_content));
-//    nodeSelector->setSelected(welcomeNode->nodeId());
-
     configTree->addPage(new Ext::PluginConfigPage(configTree));
     m_data->m_selector->addSelector(new FileSystemSelector(this));
     m_data->m_selector->addSelector(nodeSelector);

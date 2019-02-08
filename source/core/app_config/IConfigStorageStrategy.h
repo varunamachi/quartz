@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QHash>
+#include <functional>
 
+#include <QVariantHash>
 
 class QVariant;
 
@@ -11,6 +12,8 @@ namespace Quartz {
 
 QZ_INTERFACE IConfigStorageStrategy
 {
+    using BlobDecoder = std::function<QVariant(const QByteArray)>;
+
     virtual bool store(const QString &domain,
                         const QString &key,
                         const QByteArray &data) = 0;
@@ -21,6 +24,9 @@ QZ_INTERFACE IConfigStorageStrategy
 
     virtual bool remove(const QString &domain,
                          const QString &key) = 0;
+
+    virtual QVariantHash allFromDomain(const QString &domain,
+                                       BlobDecoder decoder) const = 0;
 
     virtual ~IConfigStorageStrategy() { }
 };

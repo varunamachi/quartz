@@ -11,21 +11,21 @@ class QUARTZ_COMMON_API ChoiceParam : public Param
 {
 public:
     explicit ChoiceParam(const QString &id,
-                          const QString &name,
-                          const QString &description,
-                          TreeNode *parent);
+                         const QString &name,
+                         const QString &description,
+                         TreeNode *parent);
 
     ~ChoiceParam() override;
 
-    void addOption(const QString &name, const QString &value);
+    void addOption(const QString &name, const QVariant &value);
 
-    QString optionValue(const QString &name) const;
-
-    QPair< QString, QString > option(int index) const;
+    QPair<QString, QVariant> option(int index) const;
 
     int defaultIndex() const;
 
     void setDefaultIndex(int defaultIndex);
+
+    void setDefaultValue(const QVariant &value);
 
     int numOption() const;
 

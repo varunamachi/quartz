@@ -19,6 +19,8 @@ public:
 
     void setConfig(Config *config);
 
+    void setValues(const QVariantHash &values);
+
 protected:
     TreeNode *rootAt(int rowIndex) const;
 

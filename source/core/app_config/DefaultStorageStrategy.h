@@ -1,18 +1,24 @@
 #pragma once
 
 #include <memory>
+#include <functional>
+
+#include <QVariantHash>
 
 #include "../QuartzCore.h"
 #include "IConfigStorageStrategy.h"
 
 namespace  Quartz {
 
+
 class QUARTZ_CORE_API DefaultStorageStrategy : public IConfigStorageStrategy
 {
 public:
+
+
     explicit DefaultStorageStrategy(const QString &dbPath);
 
-    ~DefaultStorageStrategy();
+    ~DefaultStorageStrategy() override;
 
     bool store(const QString &domain,
                 const QString &key,
@@ -24,9 +30,12 @@ public:
     bool remove(const QString &domain,
                  const QString &key) override;
 
+    QVariantHash allFromDomain(const QString &domain,
+                               BlobDecoder decoder) const override;
+
 private:
-    class Impl;
-    std::unique_ptr<Impl> m_impl;
+    class Data;
+    std::unique_ptr<Data> m_data;
 };
 
 }
