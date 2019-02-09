@@ -32,6 +32,9 @@ public:
 
     virtual bool save() = 0;
 
+Q_SIGNALS:
+    void dirtyStateChanged(bool value);
+
 };
 
 }

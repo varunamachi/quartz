@@ -107,8 +107,7 @@ private:
 
 } //end of anonymous namespace
 
-const QEvent::Type CallbackEvent::EVENT_TYPE
-                                          = static_cast<QEvent::Type>(2334);
+const QEvent::Type CallbackEvent::EVENT_TYPE = static_cast<QEvent::Type>(2334);
 
 
 JobManager::JobManager(QObject *parent)
@@ -164,8 +163,8 @@ bool JobManager::cancelJob(QString name)
 bool JobManager::cancelJobCategory(QString category)
 {
     SCOPE_LIMIT(m_lock.lockForWrite(), m_lock.unlock());
-    return m_cancelledCategories.insert(category)
-                                                != m_cancelledCategories.end();
+    return m_cancelledCategories.insert(
+                category) != m_cancelledCategories.end();
 }
 
 
@@ -240,6 +239,11 @@ bool JobManager::event(QEvent *event)
         callbackEvt->invokeCallback();
     }
     return QThread::event(event);
+}
+
+IJob::~IJob()
+{
+
 }
 
 }

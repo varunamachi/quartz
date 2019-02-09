@@ -8,19 +8,33 @@ class QFileInfo;
 
 namespace Quartz { namespace Ext { namespace WebTech {
 
+class MonacoEditor;
+
 class SharedObject : public QObject
 {
     Q_OBJECT
 public:
-    SharedObject(QObject *parent = nullptr);
+    SharedObject(MonacoEditor *parent = nullptr);
 
     ~SharedObject();
 
 
 public Q_SLOTS:
-    void print(const QString &msg);
+    void error(const QString &msg);
+
+    void info(const QString &msg);
+
+    void warn(const QString &msg);
+
+    void dirtyChanged(bool val);
+
+    void save();
 
 Q_SIGNALS:
+    void saved();
+
+private:
+    MonacoEditor *m_editor;
 };
 
 class MonacoEditor : public AbstractFileHandler
@@ -37,7 +51,6 @@ public:
 
     void setLanguage(const QString &language);
 
-
     //Settings...
     void setTheme(const QString &theme);
 
@@ -47,7 +60,7 @@ public:
 
     void setRulerAt(int len);
 
-
+public Q_SLOTS:
     //Override from AbstractFileHandler
     bool handle(const QString &path) override;
 
@@ -57,15 +70,14 @@ public:
 
     bool save() override;
 
+
     static const QStringList & extension();
 
     static const QString escape(const QString &orig);
 
-signals:
-
-public slots:
-
 private:
+    friend SharedObject;
+
     struct Data;
     std::unique_ptr<Data> m_data;
 

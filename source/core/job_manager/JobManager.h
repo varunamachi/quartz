@@ -46,7 +46,7 @@ QZ_INTERFACE IJob
 
     virtual RespFunc execute() = 0;
 
-    virtual ~IJob() {}
+    virtual ~IJob();
 };
 
 
@@ -90,7 +90,7 @@ protected:
 private:
     QReadWriteLock m_lock;
 
-    QQueue< IJob * > m_jobs;
+    QQueue<IJob *> m_jobs;
 
     QSet<QString> m_cancelledJobs;
 

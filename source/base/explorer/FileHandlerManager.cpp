@@ -135,8 +135,7 @@ void FileHandlerManager::handle(const QString &path)
         m_data->m_cache[path] = hndlr;
         if (hndlr != nullptr && hndlr->handle(path)) {
 //            auto name = info.fileName().
-            auto name = QFontMetrics(
-                        m_data->m_stacker->font()).elidedText(
+            auto name = QFontMetrics(m_data->m_stacker->font()).elidedText(
                         info.fileName(),
                         Qt::ElideMiddle,
                         80);
@@ -145,6 +144,15 @@ void FileHandlerManager::handle(const QString &path)
                                                    name);
             m_data->m_stacker->setTabToolTip(index, path);
             m_data->m_stacker->setCurrentIndex(index);
+            connect(hndlr,
+                    &AbstractFileHandler::dirtyStateChanged,
+                    [this, name, index](bool value) {
+                auto nm = name;
+                if (value) {
+                    nm = name + "*";
+                }
+                m_data->m_stacker->setTabText(index, nm);
+            });
         } else {
             QZ_ERROR("Qz:Explorer")
                     << "Handler " << creator->name() << " failed to handle - "

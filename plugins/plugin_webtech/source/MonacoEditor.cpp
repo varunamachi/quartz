@@ -5,6 +5,10 @@
 #include <QThread>
 #include <QFileInfo>
 #include <QQueue>
+#include <QFileDialog>
+
+#include <core/job_manager/JobManager.h>
+#include <core/utils/ScopedOperation.h>
 
 #include <plugin_base/PluginLogging.h>
 #include <plugin_base/PluginContext.h>
@@ -13,7 +17,8 @@
 #include "conf/Conf.h"
 
 
-#define EXEC(statement)                                                 \
+/*
+#define m_data->exec(statement)                                                 \
     if (!m_data->m_initialized) {                                       \
         m_data->m_pendingCommands.append([=]() {                        \
             m_data->m_monaco->page()->runJavaScript(statement);         \
@@ -21,6 +26,8 @@
     } else {                                                            \
         m_data->m_monaco->page()->runJavaScript(statement);             \
     }                                                                   \
+*/
+
 
 namespace Quartz { namespace Ext { namespace WebTech {
 
@@ -194,10 +201,11 @@ const QString MonacoEditor::escape(const QString &/*orig*/)
 
 struct MonacoEditor::Data
 {
-    explicit Data(QWidget *parent)
+    explicit Data(MonacoEditor *parent)
         : m_monaco(new QWebEngineView(parent))
         , m_qzwrapper(new SharedObject(parent))
         , m_initialized(false)
+        , m_dirty(false)
     {
         auto channel = new QWebChannel(parent);
         m_monaco->page()->setWebChannel(channel);
@@ -210,6 +218,8 @@ struct MonacoEditor::Data
 
     bool m_initialized;
 
+    bool m_dirty;
+
     QString m_path;
 
     QFile m_file;
@@ -217,6 +227,29 @@ struct MonacoEditor::Data
     QQueue<std::function<void()>> m_pendingCommands;
 
     static QStringList s_extensions;
+
+    inline void exec(const QString &statement) {
+        auto st = QString("if (window.editor) { %1 }").arg(statement);
+        if (!m_initialized) {
+            m_pendingCommands.append([=]() {
+                m_monaco->page()->runJavaScript(st);
+            });
+        } else {
+            m_monaco->page()->runJavaScript(st);
+        }
+    }
+
+    inline void exec(const QString &statement,
+                     QWebEngineCallback<const QVariant&> callback) {
+        auto st = QString("if (window.editor) { %1 }").arg(statement);
+        if (!m_initialized) {
+            m_pendingCommands.append([=]() {
+                m_monaco->page()->runJavaScript(st, callback);
+            });
+        } else {
+            m_monaco->page()->runJavaScript(st, callback);
+        }
+    }
 };
 
 
@@ -253,7 +286,7 @@ MonacoEditor::MonacoEditor(QWidget *parent)
     showMinimap(conf<bool>(Conf::EDITOR_SHOW_MINIMAP, false));
     showLineNumber(conf<bool>(Conf::EDITOR_SHOW_LINENUM, true));
 
-    connect(confman(), &ConfigManager::configChanged, [this](
+    connect(confman(), &ConfigManager::configChanged, this, [this](
             const QString &key,
             const QVariant &val,
             const QString domain) {
@@ -273,7 +306,6 @@ MonacoEditor::MonacoEditor(QWidget *parent)
 
 MonacoEditor::~MonacoEditor()
 {
-
 }
 
 SharedObject *MonacoEditor::controller() const
@@ -283,59 +315,47 @@ SharedObject *MonacoEditor::controller() const
 
 void MonacoEditor::setContent(const QString &ct, const QString &lang)
 {
-    EXEC(
-        "if (window.editor) {"
-            "window.editor.setValue(`"+ct+"`);"
-            "monaco.editor.setModelLanguage("
-                "window.editor.getModel(), "
-                "`" + lang+ "`);"
-         "}"
+    m_data->exec(
+//        "window.editor.setValue(`"+ct+"`);"
+        "setContent(`"+ct+"`);"
+        "monaco.editor.setModelLanguage("
+            "window.editor.getModel(), "
+            "`" + lang+ "`);"
     );
 }
 
 void MonacoEditor::setLanguage(const QString &language)
 {
-    EXEC(
-        "if (window.editor) {"
-            " monaco.editor.setModelLanguage("
-                "window.editor.getModel(), "
-                "`" + language + "`);"
-        "}"
+    m_data->exec(
+        "monaco.editor.setModelLanguage(window.editor.getModel(), "
+                                        "`" + language + "`);"
     );
 }
 
 void MonacoEditor::setTheme(const QString &theme)
 {
-    EXEC(
-        "if (window.editor) {"
-            "monaco.editor.setTheme(`"+theme+"`)"
-        "}"
+    m_data->exec(
+        "monaco.editor.setTheme(`"+theme+"`)"
     );
 }
 
 void MonacoEditor::showMinimap(bool show)
 {
-    EXEC(
-        QStringLiteral(
-        "if (window.editor) {"
-            "window.editor.updateOptions({"
-                "minimap: {"
-                    "enabled: ") + (show ? "true" : "false") +
-                "}"
-            "})"
-        "}"
+    m_data->exec(QStringLiteral(
+        "window.editor.updateOptions({"
+            "minimap: {"
+                "enabled: ") + (show ? "true" : "false") +
+            "}"
+        "})"
     );
 }
 
 void MonacoEditor::showLineNumber(bool show)
 {
-    EXEC(
-        QStringLiteral(
-        "if (window.editor) {"
-            "window.editor.updateOptions({"
-                "lineNumbers: ") + (show ? "'on'" : "'off'") +
-            "})"
-        "}"
+    m_data->exec(QStringLiteral(
+        "window.editor.updateOptions({"
+            "lineNumbers: ") + (show ? "'on'" : "'off'") +
+        "})"
     );
 }
 
@@ -345,12 +365,10 @@ void MonacoEditor::setRulerAt(int len)
     if (len != 0) {
         arr = QStringLiteral("%1").arg(len);
     }
-    EXEC(
-        "if (window.editor) {"
-            "window.editor.updateOptions({"
-                "rulers:[" + arr + "]"
-            "})"
-        "}"
+    m_data->exec(
+        "window.editor.updateOptions({"
+            "rulers:[" + arr + "]"
+        "})"
     );
 }
 
@@ -361,10 +379,9 @@ bool MonacoEditor::handle(const QString &path)
     QFileInfo info{path};
     auto result = false;
     if ( info.isFile() && file.open(QFile::ReadOnly)) {
-//        auto content = file.readAll();
+        AT_SCOPE_EXIT(file.close());
         auto content = readJS(file);
         this->setContent(content, EXT_LANG.value(info.suffix(), "txt"));
-        file.close();
         result = true;
     } else {
         QZP_ERROR << "Could not load file at " << file.fileName();
@@ -393,7 +410,28 @@ bool MonacoEditor::close()
 
 bool MonacoEditor::save()
 {
-    return false;
+    auto resp = [this](const QVariant &data) {
+        auto path = m_data->m_path;
+        if (!QFile::exists(path)) {
+             auto path = QFileDialog::getOpenFileName(
+                         this, tr("Get file name"));
+        }
+        QFile file{path};
+        if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            AT_SCOPE_EXIT(file.close());
+            auto bytes = data.toByteArray();
+            auto num = file.write(bytes);
+            if (num == bytes.size()) {
+                m_data->m_dirty = false;
+                emit this->dirtyStateChanged(false);
+                emit m_data->m_qzwrapper->saved();
+            } else {
+                QZP_ERROR << "Failed to save file at" << path;
+            }
+        }
+    };
+    m_data->exec("window.editor.getValue()", resp);
+    return true;
 }
 
 const QStringList &MonacoEditor::extension()
@@ -407,9 +445,9 @@ const QStringList &MonacoEditor::extension()
     return exts;
 }
 
-
-SharedObject::SharedObject(QObject *parent)
+SharedObject::SharedObject(MonacoEditor *parent)
     : QObject (parent)
+    , m_editor(parent)
 {
 
 }
@@ -419,10 +457,32 @@ SharedObject::~SharedObject()
 
 }
 
-void SharedObject::print(const QString &msg)
+void SharedObject::info(const QString &msg)
 {
     QZP_INFO << msg;
 }
+
+void SharedObject::error(const QString &msg)
+{
+    QZP_ERROR << msg;
+}
+
+void SharedObject::warn(const QString &msg)
+{
+    QZP_WARN << msg;
+}
+
+void SharedObject::dirtyChanged(bool val)
+{
+    m_editor->m_data->m_dirty = val;
+    emit m_editor->dirtyStateChanged(val);
+}
+
+void SharedObject::save()
+{
+    m_editor->save();
+}
+
 
 } } }
 

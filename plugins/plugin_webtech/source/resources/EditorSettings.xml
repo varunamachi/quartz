@@ -27,6 +27,18 @@
                 <option name="None" value="0"/>
             </param>
             <param
+                type="choice"
+                id="ed.tabWidth"
+                name="Tab width"
+                description="Width of a tab in number of characters"
+                default="4"
+                valueType="int"
+            >
+                <option name="2 spaces" value="2"/>
+                <option name="4 spaces" value="4"/>
+                <option name="8 spaces" value="8"/>
+            </param>
+            <param
                 type="boolean"
                 id="ed.minimap"
                 name="Show Minimap"
