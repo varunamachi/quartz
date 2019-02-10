@@ -31,7 +31,6 @@ vq_headers(
     ContentProvider.h
     NodeProvider.h
     Plugin.h
-    resources.qrc
 )
 
 qz_create_plugin()

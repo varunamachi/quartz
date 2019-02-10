@@ -19,7 +19,6 @@ vq_headers(
 )
 vq_headers(
     Plugin.h
-    resources.qrc
 )
 
 vq_classes(
