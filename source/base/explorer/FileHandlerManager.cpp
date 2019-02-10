@@ -9,9 +9,14 @@
 #include <QObject>
 #include <QDebug>
 #include <QMenu>
+#include <QTabBar>
+#include <QStackedWidget>
+#include <QToolButton>
 
 #include <core/logger/Logging.h>
 #include <core/app_config/ConfigManager.h>
+
+#include <common/iconstore/IconFontStore.h>
 
 #include "../QzAppContext.h"
 #include "AbstractFileHandler.h"
@@ -24,21 +29,30 @@ namespace Quartz {
 struct FileHandlerManager::Data
 {
     explicit Data(QWidget *parent)
-        : m_stacker(new QTabWidget(parent))
+        : m_tabber(new QTabWidget(parent))
         , m_tabMenu(new QMenu())
+        , m_menuButton(new QToolButton(parent))
     {
-        m_stacker->setTabsClosable(true);
+        m_tabber->setTabsClosable(true);
+        m_menuButton->setIcon(getIcon(MatIcon::Menu));
+        m_tabber->setCornerWidget(m_menuButton);
+        m_menuButton->setMenu(m_tabMenu);
+        m_menuButton->setPopupMode(QToolButton::InstantPopup);
     }
 
-    QTabWidget *m_stacker;
+    QTabWidget *m_tabber;
 
     QMenu *m_tabMenu;
+
+    QToolButton *m_menuButton;
 
     QMultiHash<QString, std::shared_ptr<FileHandlerInfo>> m_handlerMapping;
 
     QHash<QString, FileHandlerInfo *> m_defaultHandlers;
 
     QHash<QString, AbstractFileHandler *> m_cache;
+
+    std::shared_ptr<FileHandlerInfo> m_dirHandler;
 
     int m_index = -1;
 
@@ -54,10 +68,10 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
     , m_data(std::make_unique<Data>(this))
 {
     auto layout = new QVBoxLayout();
-    layout->addWidget(m_data->m_stacker);
+    layout->addWidget(m_data->m_tabber);
     this->setLayout(layout);
 
-    m_data->m_stacker->tabBar()->installEventFilter(this);
+    m_data->m_tabber->tabBar()->installEventFilter(this);
 
     auto closeAllAction = new QAction(tr("Close All"), this);
     auto closeRightAction = new QAction(tr("Close All - Right"), this);
@@ -66,14 +80,14 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
     m_data->m_tabMenu->addAction(closeLeftAction);
     m_data->m_tabMenu->addAction(closeRightAction);
 
-    connect(m_data->m_stacker,
+    connect(m_data->m_tabber,
             &QTabWidget::tabCloseRequested,
             this,
             &FileHandlerManager::remove);
     connect(closeAllAction,
             &QAction::triggered,
             [this]() {
-       m_data->m_stacker->clear();
+       m_data->m_tabber->clear();
        for (auto hnd : m_data->m_cache) {
            hnd->close();
            hnd->deleteLater();
@@ -83,8 +97,12 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
     connect(closeLeftAction,
             &QAction::triggered,
             [this]() {
-        if (m_data->m_index > 0)  {
-            while (m_data->m_stacker->count() != (m_data->m_index + 1)) {
+        if (m_data->m_index == -1) {
+            m_data->m_index = m_data->m_tabber->currentIndex();
+        }
+        auto count = m_data->m_tabber->count();
+        if (m_data->m_index > 0 && m_data->m_index < count)  {
+            for (auto i = 0; i < m_data->m_index; ++i) {
                 remove(0);
             }
         }
@@ -93,13 +111,16 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
     connect(closeRightAction,
             &QAction::triggered,
             [this]() {
-        if (m_data->m_index >= 0
-                && m_data->m_index < m_data->m_stacker->count()) {
-            while (m_data->m_stacker->count() != (m_data->m_index + 1)) {
-                remove(m_data->m_stacker->count() - 1);
-            }
-            m_data->m_index = -1;
+        if (m_data->m_index == -1) {
+            m_data->m_index = m_data->m_tabber->currentIndex();
         }
+        if (m_data->m_index >= 0
+                && m_data->m_index < m_data->m_tabber->count()) {
+            while (m_data->m_tabber->count() != (m_data->m_index + 1)) {
+                remove(m_data->m_tabber->count() - 1);
+            }
+        }
+        m_data->m_index = -1;
     });
 }
 
@@ -122,47 +143,49 @@ void FileHandlerManager::registerFileHandler(
 void FileHandlerManager::handle(const QString &path)
 {
     auto hndlr = m_data->m_cache[path];
-    //see if it is already opened, if so set it as current widget
+    QIcon icon;
     if (hndlr != nullptr) {
-        m_data->m_stacker->setCurrentWidget(hndlr);
+        m_data->m_tabber->setCurrentWidget(hndlr);
         return;
     }
 
     QFileInfo info{path};
-    if (m_data->m_defaultHandlers.contains(info.suffix())) {
+    if (info.isDir() && m_data->m_dirHandler != nullptr) {
+        //handle
+    } else if (m_data->m_defaultHandlers.contains(info.suffix())) {
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
-        auto hndlr = creator->creator()(m_data->m_stacker);
-        m_data->m_cache[path] = hndlr;
-        if (hndlr != nullptr && hndlr->handle(path)) {
-//            auto name = info.fileName().
-            auto name = QFontMetrics(m_data->m_stacker->font()).elidedText(
-                        info.fileName(),
-                        Qt::ElideMiddle,
-                        80);
-            auto index = m_data->m_stacker->addTab(hndlr,
-                                                   creator->icon(),
-                                                   name);
-            m_data->m_stacker->setTabToolTip(index, path);
-            m_data->m_stacker->setCurrentIndex(index);
-            connect(hndlr,
-                    &AbstractFileHandler::dirtyStateChanged,
-                    [this, name, index](bool value) {
-                auto nm = name;
-                if (value) {
-                    nm = name + "*";
-                }
-                m_data->m_stacker->setTabText(index, nm);
-            });
-        } else {
-            QZ_ERROR("Qz:Explorer")
-                    << "Handler " << creator->name() << " failed to handle - "
-                    << path;
-        }
+        hndlr = creator->creator()(m_data->m_tabber);
+        icon = creator->icon();
     } else if(info.isFile()){
-        QZ_ERROR("Qz:Explorer") << "Could not find default handler for file "
+        QZ_WARN("Qz:Explorer") << "Could not find default handler for file "
                                 << info.fileName();
-        //show error message / toast??
+        auto &creator = m_data->m_defaultHandlers[""];
+        hndlr = creator->creator()(m_data->m_tabber);
+        icon = creator->icon();
     }
+
+    m_data->m_cache[path] = hndlr;
+    if (hndlr != nullptr && hndlr->handle(path)) {
+        auto name = QFontMetrics(m_data->m_tabber->font()).elidedText(
+                    info.fileName(),
+                    Qt::ElideMiddle,
+                    80);
+        auto index = m_data->m_tabber->addTab(hndlr, icon, name);
+        m_data->m_tabber->setTabToolTip(index, path);
+        m_data->m_tabber->setCurrentIndex(index);
+        connect(hndlr,
+                &AbstractFileHandler::dirtyStateChanged,
+                [this, name, index](bool value) {
+            auto nm = name;
+            if (value) {
+                nm = name + "*";
+            }
+            m_data->m_tabber->setTabText(index, nm);
+        });
+    } else {
+        QZ_ERROR("Qz:Explorer") << "Failed to handle file at " << path;
+    }
+
 }
 
 const QString &FileHandlerManager::extensionType() const
@@ -199,11 +222,11 @@ bool FileHandlerManager::finalizeExtension()
 void FileHandlerManager::remove(int index)
 {
     auto handler = qobject_cast<AbstractFileHandler *>(
-                m_data->m_stacker->widget(index));
+                m_data->m_tabber->widget(index));
     if (handler->close()) {
         auto widget = m_data->m_cache.value(handler->path());
         m_data->m_cache.remove(handler->path());
-        m_data->m_stacker->removeTab(index);
+        m_data->m_tabber->removeTab(index);
         widget->deleteLater();
     }
 }

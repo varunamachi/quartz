@@ -316,7 +316,6 @@ SharedObject *MonacoEditor::controller() const
 void MonacoEditor::setContent(const QString &ct, const QString &lang)
 {
     m_data->exec(
-//        "window.editor.setValue(`"+ct+"`);"
         "setContent(`"+ct+"`);"
         "monaco.editor.setModelLanguage("
             "window.editor.getModel(), "
