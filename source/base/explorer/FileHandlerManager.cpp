@@ -31,18 +31,21 @@ struct FileHandlerManager::Data
     explicit Data(QWidget *parent)
         : m_tabber(new QTabWidget(parent))
         , m_tabMenu(new QMenu())
+        , m_menu(new QMenu())
         , m_menuButton(new QToolButton(parent))
     {
         m_tabber->setTabsClosable(true);
         m_menuButton->setIcon(getIcon(MatIcon::Menu));
         m_tabber->setCornerWidget(m_menuButton);
-        m_menuButton->setMenu(m_tabMenu);
+        m_menuButton->setMenu(m_menu);
         m_menuButton->setPopupMode(QToolButton::InstantPopup);
     }
 
     QTabWidget *m_tabber;
 
     QMenu *m_tabMenu;
+
+    QMenu *m_menu;
 
     QToolButton *m_menuButton;
 
@@ -73,26 +76,39 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
 
     m_data->m_tabber->tabBar()->installEventFilter(this);
 
-    auto closeAllAction = new QAction(tr("Close All"), this);
-    auto closeRightAction = new QAction(tr("Close All - Right"), this);
-    auto closeLeftAction = new QAction(tr("Close All - Left"), this);
-    m_data->m_tabMenu->addAction(closeAllAction);
+    auto closeOthersAction = new QAction(tr("Close others"), this);
+    auto closeRightAction = new QAction(tr("Close all to right"), this);
+    auto closeLeftAction = new QAction(tr("Close all to left"), this);
+    m_data->m_tabMenu->addAction(closeOthersAction);
     m_data->m_tabMenu->addAction(closeLeftAction);
     m_data->m_tabMenu->addAction(closeRightAction);
+
+    auto closeAllAction = new QAction(tr("Close All"), this);
+    auto saveAll = new QAction(tr("Save All"), this);
+    m_data->m_menu->addAction(closeAllAction);
+    m_data->m_menu->addAction(saveAll);
+
 
     connect(m_data->m_tabber,
             &QTabWidget::tabCloseRequested,
             this,
             &FileHandlerManager::remove);
-    connect(closeAllAction,
+
+    connect(closeOthersAction,
             &QAction::triggered,
             [this]() {
-       m_data->m_tabber->clear();
-       for (auto hnd : m_data->m_cache) {
-           hnd->close();
-           hnd->deleteLater();
-       }
-       m_data->m_cache.clear();
+        if (m_data->m_index == -1) {
+            m_data->m_index = m_data->m_tabber->currentIndex();
+        }
+        if (m_data->m_index < m_data->m_tabber->count())  {
+            for (auto i = 0; i < m_data->m_index; ++i) {
+                remove(0);
+            }
+            for (auto count = m_data->m_tabber->count(); count != 1; -- count) {
+                remove(m_data->m_tabber->count() - 1);
+            }
+        }
+        m_data->m_index = -1;
     });
     connect(closeLeftAction,
             &QAction::triggered,
@@ -122,6 +138,24 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
         }
         m_data->m_index = -1;
     });
+
+    connect(closeAllAction,
+            &QAction::triggered,
+            [this]() {
+       m_data->m_tabber->clear();
+       for (auto hnd : m_data->m_cache) {
+           hnd->close();
+           hnd->deleteLater();
+       }
+       m_data->m_cache.clear();
+    });
+    connect(saveAll,
+            &QAction::triggered,
+            [this]() {
+        for (auto &handler : m_data->m_cache) {
+            handler->save();
+        }
+    });
 }
 
 FileHandlerManager::~FileHandlerManager()
@@ -150,7 +184,7 @@ void FileHandlerManager::handle(const QString &path)
     }
 
     QFileInfo info{path};
-    if (info.isDir() && m_data->m_dirHandler != nullptr) {
+    if (info.isDir()) {
         //handle
     } else if (m_data->m_defaultHandlers.contains(info.suffix())) {
         auto &creator = m_data->m_defaultHandlers[info.suffix()];
@@ -182,7 +216,7 @@ void FileHandlerManager::handle(const QString &path)
             }
             m_data->m_tabber->setTabText(index, nm);
         });
-    } else {
+    } else if(!info.isDir()){
         QZ_ERROR("Qz:Explorer") << "Failed to handle file at " << path;
     }
 

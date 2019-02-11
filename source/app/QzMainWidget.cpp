@@ -118,7 +118,8 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     });
     mainMenu->addAction(about);
     mainMenu->setMaximumSize({50, 16});
-    viewContainer->addFixedWidget(mainMenu);
+//    viewContainer->addFixedWidget(mainMenu);
+    selectorContainer->addFixedWidget(mainMenu);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);

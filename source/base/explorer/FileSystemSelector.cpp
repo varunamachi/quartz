@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QClipboard>
+#include <QHeaderView>
 
 #include <core/logger/Logging.h>
 #include <core/utils/History.h>
@@ -51,6 +52,7 @@ struct FileSystemSelector::Data
         for (int i = 1; i < m_fsModel->columnCount(); ++i) {
             m_fsView->hideColumn(i);
         }
+        m_fsView->header()->hide();
     }
 
 
