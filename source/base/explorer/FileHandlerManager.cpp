@@ -17,6 +17,7 @@
 #include <core/app_config/ConfigManager.h>
 
 #include <common/iconstore/IconFontStore.h>
+#include <common/widgets/NotificationBox.h>
 
 #include "../QzAppContext.h"
 #include "AbstractFileHandler.h"
@@ -36,9 +37,9 @@ struct FileHandlerManager::Data
     {
         m_tabber->setTabsClosable(true);
         m_menuButton->setIcon(getIcon(MatIcon::Menu));
-        m_tabber->setCornerWidget(m_menuButton);
         m_menuButton->setMenu(m_menu);
         m_menuButton->setPopupMode(QToolButton::InstantPopup);
+        m_tabber->setCornerWidget(m_menuButton);
     }
 
     QTabWidget *m_tabber;
@@ -155,6 +156,7 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
         for (auto &handler : m_data->m_cache) {
             handler->save();
         }
+        NotificationBox::showMessage("All files saved", this);
     });
 }
 

@@ -8,4 +8,5 @@ vq_classes(
     RangeWidget
     QzTreeView
     SearchBox
+    NotificationBox
 )
