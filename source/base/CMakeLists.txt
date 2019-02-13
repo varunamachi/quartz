@@ -31,6 +31,7 @@ add_subdirectory( settings )
 add_subdirectory( extension_details )
 add_subdirectory( main_menu )
 add_subdirectory( explorer )
+add_subdirectory( notification )
 
 vq_create_sharedlib()
 vq_install()

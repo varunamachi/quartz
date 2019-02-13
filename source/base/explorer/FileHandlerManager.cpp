@@ -156,7 +156,7 @@ FileHandlerManager::FileHandlerManager(QWidget *parent)
         for (auto &handler : m_data->m_cache) {
             handler->save();
         }
-        NotificationBox::showMessage("All files saved", this);
+//        NotificationBox::show("All files saved", this);
     });
 }
 

@@ -24,7 +24,7 @@ struct StackedSplitContainer::Data
 StackedSplitContainer::StackedSplitContainer(
         int selectorDimention,
         int buttonDimention,
-        AbstractContainer::SelectorPosition selectorPosition,
+        AbstractContainer::Position selectorPosition,
         Qt::Orientation orientation,
         QWidget *parent)
     : AbstractContainer(selectorDimention,
@@ -77,7 +77,7 @@ StackedSplitContainer::StackedSplitContainer(
     policy.setVerticalPolicy(QSizePolicy::Expanding);
     m_data->m_splitter->setSizePolicy(policy);
 
-    if (selectorPosition == AbstractContainer::SelectorPosition::Before) {
+    if (selectorPosition == AbstractContainer::Position::Before) {
         m_data->m_splitter->addWidget(wrapper);
         m_data->m_splitter->addWidget(stackedWidget());
     }
@@ -107,9 +107,9 @@ StackedSplitContainer::~StackedSplitContainer()
 
 void StackedSplitContainer::setContentWidget(
         QWidget *widget,
-        AbstractContainer::SelectorPosition position)
+        AbstractContainer::Position position)
 {
-    if (position == AbstractContainer::SelectorPosition::Before) {
+    if (position == AbstractContainer::Position::Before) {
         m_data->m_splitter->insertWidget(0, widget);
     } else {
         m_data->m_splitter->addWidget(widget);
@@ -121,7 +121,7 @@ void StackedSplitContainer::setSizes(int selector, int stacked, int content)
 {
     QList<int> sizes;
     if (this->selectorPosition()
-            == AbstractContainer::SelectorPosition::Before) {
+            == AbstractContainer::Position::Before) {
         sizes << selector << stacked << content;
     } else {
         sizes << content << stacked << selector;
@@ -134,11 +134,16 @@ QString StackedSplitContainer::containerType() const
     return "StackedSplitContainer";
 }
 
-void StackedSplitContainer::addFixedWidget(QWidget *widget)
+void StackedSplitContainer::addFixedWidget(
+        QWidget *widget,
+        Position position)
 {
     widget->setContentsMargins({3, 3, 3, 3});
-    this->m_data->m_qzLayout->insertWidget(0, widget);
-//    this->m_data->m_qzLayout->addWidget(widget);
+    if (position == Position::Before) {
+        this->m_data->m_qzLayout->insertWidget(0, widget);
+    } else if (position == Position::After) {
+        this->m_data->m_qzLayout->addWidget(widget);
+    }
 }
 
 }

@@ -86,14 +86,14 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     auto viewContainer = new StackedSplitContainer(
                 25,
                 70,
-                AbstractContainer::SelectorPosition::After,
+                AbstractContainer::Position::After,
                 Qt::Horizontal,
                 this);
     viewContainer->setAutoSelectionPolicy(AutoSelectionPolicy::DoNotSelectAny);
     m_data->m_viewManager = new ViewManager(viewContainer, this);
     viewContainer->setContentWidget(
                 m_data->m_content,
-                AbstractContainer::SelectorPosition::Before);
+                AbstractContainer::Position::Before);
     viewContainer->setSizes(70, 300, 600);
 
     QSizePolicy policy;
@@ -103,7 +103,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     auto selectorContainer = new StackedSplitContainer(
                 50,
                 50,
-                AbstractContainer::SelectorPosition::Before,
+                AbstractContainer::Position::Before,
                 Qt::Vertical,
                 this);
     m_data->m_selector = new SelectorManager(selectorContainer, this);
@@ -118,8 +118,10 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     });
     mainMenu->addAction(about);
     mainMenu->setMaximumSize({50, 16});
-//    viewContainer->addFixedWidget(mainMenu);
     selectorContainer->addFixedWidget(mainMenu);
+    viewContainer->addFixedWidget(
+                new QPushButton(getIcon(MatIcon::Notifications), "", this),
+                StackedSplitContainer::Position::After);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);

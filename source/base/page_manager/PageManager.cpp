@@ -22,7 +22,7 @@ PageManager::PageManager(int categoryWidth,
     , m_catContainer(new StackedContainer(
                           categoryWidth,
                           40,
-                          AbstractContainer::SelectorPosition::Before,
+                          AbstractContainer::Position::Before,
                           Qt::Vertical,
                           this))
 {
@@ -43,7 +43,7 @@ void PageManager::addPage(QuartzPage *page)
             container = new StackedContainer(
                         m_holderHeight,
                         150,
-                        AbstractContainer::SelectorPosition::Before,
+                        AbstractContainer::Position::Before,
                         Qt::Horizontal,
                         this);
             m_catContainer->addWidget(page->pageCategoryId(),

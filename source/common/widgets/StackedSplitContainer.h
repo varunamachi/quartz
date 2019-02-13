@@ -11,21 +11,21 @@ class QUARTZ_COMMON_API StackedSplitContainer : public AbstractContainer
 public:
     explicit StackedSplitContainer(int selectorDimention,
                                int buttonDimention,
-                               SelectorPosition selectorPosition,
+                               Position selectorPosition,
                                Qt::Orientation orientation,
                                QWidget *parent = nullptr);
 
-    ~StackedSplitContainer();
+    ~StackedSplitContainer() override;
 
     void setContentWidget(
             QWidget *widget,
-            SelectorPosition position = SelectorPosition::After);
+            Position position = Position::After);
 
     void setSizes(int selector, int stacked, int content);
 
     QString containerType() const override;
 
-    void addFixedWidget(QWidget *widget);
+    void addFixedWidget(QWidget *widget, Position position = Position::Before);
 
 private:
     struct Data;

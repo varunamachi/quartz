@@ -18,13 +18,13 @@ class QUARTZ_BASE_API GeneralSelector : public AbstractSelector
 public:
     GeneralSelector(QWidget *parent = nullptr);
 
-    ~GeneralSelector();
-
-    GeneralNodeTree * model();
+    ~GeneralSelector() override;
 
     void selected() override;
 
     void unselected() override;
+
+    GeneralNodeTree * model();
 
     static const QString SELECTOR_ID;
 

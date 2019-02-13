@@ -43,7 +43,7 @@ struct AbstractContainer::Data
 {
     Data(int selectorDimention,
           int buttonDimention,
-          SelectorPosition selectorPosition,
+          Position selectorPosition,
           Qt::Orientation orientation,
           QzScroller *scroller,
           QStackedWidget *stackedWidget)
@@ -63,7 +63,7 @@ struct AbstractContainer::Data
 
     int m_btnWidth;
 
-    SelectorPosition m_selectorPosition;
+    Position m_selectorPosition;
 
     Qt::Orientation m_orientation;
 
@@ -81,7 +81,7 @@ struct AbstractContainer::Data
 
 AbstractContainer::AbstractContainer(int selectorDimention,
                                     int buttonDimention,
-                                    SelectorPosition selectorPosition,
+                                    Position selectorPosition,
                                     Qt::Orientation orientation,
                                     QWidget *parent)
     : QWidget(parent)
@@ -299,7 +299,7 @@ QzScroller *AbstractContainer::selector() const
     return m_data->m_selector;
 }
 
-AbstractContainer::SelectorPosition AbstractContainer::selectorPosition() const
+AbstractContainer::Position AbstractContainer::selectorPosition() const
 {
     return m_data->m_selectorPosition;
 }
@@ -358,7 +358,7 @@ bool AbstractContainer::isEmpty()
 StackedContainer::StackedContainer(
         int selectorDimention,
         int buttonDimention,
-        AbstractContainer::SelectorPosition selectorPosition,
+        AbstractContainer::Position selectorPosition,
         Qt::Orientation orientation,
         QWidget *parent)
     : AbstractContainer(selectorDimention,
@@ -373,7 +373,7 @@ StackedContainer::StackedContainer(
     } else {
         layout = new QVBoxLayout();
     }
-    if (selectorPosition == SelectorPosition::Before) {
+    if (selectorPosition == Position::Before) {
         layout->addWidget(selector());
         layout->addWidget(stackedWidget());
         layout->setAlignment(

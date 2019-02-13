@@ -24,7 +24,7 @@ class QUARTZ_COMMON_API AbstractContainer : public QWidget
 {
     Q_OBJECT
 public:
-    enum class SelectorPosition
+    enum class Position
     {
         Before,
         After
@@ -32,7 +32,7 @@ public:
 
     explicit AbstractContainer(int selectorDimention,
                                int buttonDimention,
-                               SelectorPosition selectorPosition,
+                               Position selectorPosition,
                                Qt::Orientation orientation,
                                QWidget *parent = nullptr);
 
@@ -55,7 +55,7 @@ public:
 
     QzScroller * selector() const;
 
-    SelectorPosition selectorPosition() const;
+    Position selectorPosition() const;
 
     Qt::Orientation containerOrientation() const;
 
@@ -114,7 +114,7 @@ class QUARTZ_COMMON_API StackedContainer : public AbstractContainer
 public:
     explicit StackedContainer(int selectorDimention,
                                int buttonDimention,
-                               SelectorPosition selectorPosition,
+                               Position selectorPosition,
                                Qt::Orientation orientation,
                                QWidget *parent = nullptr);
 
