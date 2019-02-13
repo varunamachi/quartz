@@ -18,6 +18,11 @@ struct Colors {
     QColor fg;
 };
 
+
+inline uint qHash(const NotificationType &t, uint seed) {
+    return ::qHash(static_cast<int>(t), seed);
+}
+
 const QHash<NotificationType, Colors> COL = {
     { NotificationType::Info,    { Qt::green,  Qt::white }},
     { NotificationType::Warning, { Qt::yellow, Qt::white }},

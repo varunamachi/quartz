@@ -11,6 +11,10 @@
 
 namespace Quartz { namespace Logger {
 
+struct _Str{};
+
+constexpr _Str Str;
+
 class QUARTZ_CORE_API LogLineHolder
 {
 public:
@@ -49,6 +53,11 @@ public:
             m_stream << manip;
         }
         return *this;
+    }
+
+    const QString & operator << (_Str &)
+    {
+        return m_msg->message();
     }
 
     ~LogLineHolder()
