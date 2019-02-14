@@ -35,12 +35,12 @@ void NotificationService::info(const QString &msg)
 
 void NotificationService::warn(const QString &msg)
 {
-    NotificationBox::show(NotificationType::Info, msg, m_data->m_widget);
+    NotificationBox::show(NotificationType::Warning, msg, m_data->m_widget);
 }
 
 void NotificationService::error(const QString &msg)
 {
-    NotificationBox::show(NotificationType::Info, msg, m_data->m_widget);
+    NotificationBox::show(NotificationType::Error, msg, m_data->m_widget);
 }
 
 }

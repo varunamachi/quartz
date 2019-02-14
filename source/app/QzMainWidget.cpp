@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QCoreApplication>
+#include <QRandomGenerator>
 
 #include <core/logger/Logging.h>
 #include <core/logger/AbstractLogDispatcher.h>
@@ -126,7 +127,13 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     nbtn->setObjectName("nbtn");
     appContext()->setNotificationService(ns);
     connect(nbtn, &QPushButton::released, nbtn, []() {
-        showInfo("Quick brown fox jumped over the lazy dog");
+        switch (QRandomGenerator::global()->bounded(3)) {
+        case 0: showInfo("Quick brown fox jumped over the lazy dog"); break;
+        case 1: showWarning("Quick brown fox jumped over the lazy dog"); break;
+        case 2: showError("Quick brown fox jumped over the lazy dog"); break;
+        };
+
+//        showError("Quick brown fox");
     });
 
     auto mainLayout = new QVBoxLayout();

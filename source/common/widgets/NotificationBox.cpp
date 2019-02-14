@@ -14,35 +14,56 @@
 #include <QDesktopWidget>
 #include <QCursor>
 
+#include "../iconstore/IconFontStore.h"
 #include "NotificationBox.h"
 
 namespace Quartz {
 
-struct Colors {
-    QColor bg;
-    QColor fg;
-};
 
-
-inline uint qHash(const NotificationType &t, uint seed) {
-    return ::qHash(static_cast<int>(t), seed);
-}
-
-const QHash<NotificationType, QString> COL = {
-    { NotificationType::Info,    {
-          "background-color: #AA03A556;  color: white" }
-    },
-    { NotificationType::Warning, {
-          "background-color: #AAB3A60B;  color: white" }
-    },
-    { NotificationType::Error,   {
-          "background-color: #AAB1543B;  color: white" }
-    },
-};
+const QString ICSS ="#ngbox {"
+                    "   border-color: rgba(24, 122, 220, 0.5);"
+                    "   border-left-color: rgba(24, 122, 220, 0.5);"
+                    "   border-style: solid;"
+                    "   border-width: 1px;"
+                    "   border-left-width: 6px;"
+                    "   padding: 10px;"
+                    "}";
+const QString WCSS ="#ngbox {"
+                    "   border-color: rgba(220, 199, 14, 0.5);"
+                    "   border-left-color: rgba(220, 199, 14, 0.5);"
+                    "   border-style: solid;"
+                    "   border-width: 1px;"
+                    "   border-left-width: 6px;"
+                    "   padding: 10px;"
+                    "}";
+const QString ECSS ="#ngbox {"
+                    "   border-color: rgba(220, 55, 14, 0.5);"
+                    "   border-left-color: rgba(220, 55, 14, 0.5);"
+                    "   border-style: solid;"
+                    "   border-width: 1px;"
+                    "   border-left-width: 6px;"
+                    "   padding: 10px;"
+                    "}";
 
 namespace
 {
-    const int DISPLAY_TIME = 1500;
+const QSize ICON_SIZE = {32, 32};
+const int DISPLAY_TIME = 1500;
+
+const QPixmap & icon(NotificationType type) {
+    if (type == NotificationType::Info) {
+        static auto INFO =
+                getIcon(MatIcon::Info, {24, 122, 220}).pixmap(ICON_SIZE);
+        return INFO;
+    } else if(type == NotificationType::Warning) {
+        static auto WARN =
+                getIcon(MatIcon::Warning, {220, 199, 14}).pixmap(ICON_SIZE);
+        return WARN;
+    }
+    static auto ERR  = getIcon(MatIcon::Error, {220, 55, 14}).pixmap(ICON_SIZE);
+    return ERR;
+}
+
 }
 
 struct NotificationBox::Data {
@@ -91,21 +112,34 @@ NotificationBox::NotificationBox(
                    | Qt::FramelessWindowHint
                    | Qt::WindowStaysOnTopHint
                    | Qt::Popup);
-
-//    setAttribute(Qt::WA_NoSystemBackground);
-//    setAttribute(Qt::WA_TranslucentBackground);
-//    setAttribute(Qt::WA_PaintOnScreen);
-//    setAttribute(Qt::WA_TransparentForMouseEvents);
+    setAttribute(Qt::WA_TranslucentBackground, true);
 
     auto label = new QLabel(this);
     label->setText(text);
+    label->setWordWrap(true);
+    auto icn = new QLabel(this);
+    icn->setPixmap(icon(type));
+
+    auto mainLayout = new QHBoxLayout();
+    mainLayout->addWidget(icn);
+    mainLayout->addWidget(label);
+
+    auto widget = new QWidget();
+    widget->setObjectName("ngbox");
+    widget->setLayout(mainLayout);
+
     auto lyt = new QVBoxLayout();
-    lyt->addWidget(label);
+//    lyt->addLayout(mainLayout);
+    lyt->addWidget(widget);
     this->setLayout(lyt);
-    auto point = m_data->m_parent->mapToGlobal(
-                QPoint(m_data->m_parent->width() / 2,
-                       m_data->m_parent->height() / 2));
-    this->setGeometry(point.x() - 200, point.y() - 30, 200, 30);
+
+    switch (type) {
+    case NotificationType::Info:    this->setStyleSheet(ICSS); break;
+    case NotificationType::Warning: this->setStyleSheet(WCSS); break;
+    case NotificationType::Error:   this->setStyleSheet(ECSS); break;
+    }
+    this->setMinimumSize({200, 50});
+    setContentsMargins({});
 }
 
 NotificationBox::~NotificationBox()
@@ -165,7 +199,10 @@ void NotificationBox::show(
 
 void NotificationBox::resizeEvent(QResizeEvent *event)
 {
-
+    auto point = m_data->m_parent->mapToGlobal({0, 0});
+//    this->move(point.x(), point.y());
+    this->move(static_cast<int>(point.x() - this->width() + 20),
+               static_cast<int>(point.y() - this->height()) + 10);
 }
 
 void NotificationBox::show(NotificationType type,
