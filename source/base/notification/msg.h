@@ -1,4 +1,4 @@
-#pragma one
+#pragma once
 
 #include "../QzAppContext.h"
 #include "NotificationService.h"

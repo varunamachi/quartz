@@ -8,6 +8,11 @@
 #include <QPropertyAnimation>
 #include <QDebug>
 #include <QStaticText>
+#include <QVBoxLayout>
+#include <QResizeEvent>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QCursor>
 
 #include "NotificationBox.h"
 
@@ -23,10 +28,16 @@ inline uint qHash(const NotificationType &t, uint seed) {
     return ::qHash(static_cast<int>(t), seed);
 }
 
-const QHash<NotificationType, Colors> COL = {
-    { NotificationType::Info,    { Qt::green,  Qt::white }},
-    { NotificationType::Warning, { Qt::yellow, Qt::white }},
-    { NotificationType::Error,   { Qt::red,    Qt::white }},
+const QHash<NotificationType, QString> COL = {
+    { NotificationType::Info,    {
+          "background-color: #AA03A556;  color: white" }
+    },
+    { NotificationType::Warning, {
+          "background-color: #AAB3A60B;  color: white" }
+    },
+    { NotificationType::Error,   {
+          "background-color: #AAB1543B;  color: white" }
+    },
 };
 
 namespace
@@ -35,11 +46,15 @@ namespace
 }
 
 struct NotificationBox::Data {
-    Data(NotificationType type, const QString &text, int milliseconds)
+    Data(NotificationType type,
+         const QString &text,
+         int milliseconds,
+         QWidget *parent)
         : m_type(type)
         , m_label(text)
         , m_opacity(1.0)
         , m_milliseconds(milliseconds)
+        , m_parent(parent)
     {
 
     }
@@ -51,12 +66,14 @@ struct NotificationBox::Data {
     qreal m_opacity;
 
     int m_milliseconds;
+
+    QWidget *m_parent;
 };
 
 NotificationBox::NotificationBox(NotificationType type,
                                  const QString& text,
                                  QWidget* parent)
-    : NotificationBox(type, text, this->font(), DISPLAY_TIME, parent)
+    : NotificationBox(type, text, QFont{}, DISPLAY_TIME, parent)
 {}
 
 NotificationBox::NotificationBox(
@@ -66,22 +83,29 @@ NotificationBox::NotificationBox(
         int milliseconds,
         QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(type, text, milliseconds))
+    , m_data(std::make_unique<Data>(type, text, milliseconds, parent))
 {
     setFont(font);
     m_data->m_label.prepare(QTransform(), font);
     setWindowFlags(windowFlags()
                    | Qt::FramelessWindowHint
-                   | Qt::WindowStaysOnTopHint);
-    if (parent) {
-        auto x = static_cast<int>(m_data->m_label.size().width() / 2 + 20);
-        auto y = static_cast<int>(m_data->m_label.size().height() / 2 + 20);
-        QPoint offset{x, y};
-        setGeometry({parent->rect().center() - offset,
-                     parent->rect().center() + offset});
-    } else {
-        resize(270, 80);
-    }
+                   | Qt::WindowStaysOnTopHint
+                   | Qt::Popup);
+
+//    setAttribute(Qt::WA_NoSystemBackground);
+//    setAttribute(Qt::WA_TranslucentBackground);
+//    setAttribute(Qt::WA_PaintOnScreen);
+//    setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    auto label = new QLabel(this);
+    label->setText(text);
+    auto lyt = new QVBoxLayout();
+    lyt->addWidget(label);
+    this->setLayout(lyt);
+    auto point = m_data->m_parent->mapToGlobal(
+                QPoint(m_data->m_parent->width() / 2,
+                       m_data->m_parent->height() / 2));
+    this->setGeometry(point.x() - 200, point.y() - 30, 200, 30);
 }
 
 NotificationBox::~NotificationBox()
@@ -97,6 +121,7 @@ void NotificationBox::showImmediatly()
 
 void NotificationBox::run()
 {
+
     QWidget::show();
     update();
     QTimer::singleShot(m_data->m_milliseconds,
@@ -138,6 +163,11 @@ void NotificationBox::show(
     (new NotificationBox(type, message, font, milliseconds, parent))->run();
 }
 
+void NotificationBox::resizeEvent(QResizeEvent *event)
+{
+
+}
+
 void NotificationBox::show(NotificationType type,
                            const QString& message,
                            QWidget* parent)
@@ -153,22 +183,20 @@ void NotificationBox::show(NotificationType type,
     show(type, message, font, DISPLAY_TIME, parent);
 }
 
-void NotificationBox::paintEvent(QPaintEvent* event)
-{
-    QPainter p{this};
+//void NotificationBox::paintEvent(QPaintEvent* event)
+//{
+//    QPainter p{this};
 
-    p.setOpacity(m_data->m_opacity);
-    p.fillRect(event->rect(), COL[m_data->m_type].bg);
-    p.setPen(COL[m_data->m_type].fg);
-    p.drawRect(event->rect().adjusted(0, 0, -1, -1));
-    p.setFont(font());
+//    p.setOpacity(m_data->m_opacity);
+//    p.fillRect(event->rect(), COL[m_data->m_type].bg);
+//    p.setPen(COL[m_data->m_type].fg);
+//    p.drawRect(event->rect().adjusted(0, 0, -1, -1));
+//    p.setFont(font());
 
-    auto halfSize = m_data->m_label.size().toSize() / 2;
-    auto pt = rect().center() - QPoint{halfSize.width(), halfSize.height()};
-    p.drawStaticText(pt, m_data->m_label);
-//    p.drawStaticText(rect().center() -= QPoint(
-//                halfSize.width(), halfSize.height()), m_data->m_label);
-}
+//    auto halfSize = m_data->m_label.size().toSize() / 2;
+//    auto pt = rect().center() - QPoint{halfSize.width(), halfSize.height()};
+//    p.drawStaticText(pt, m_data->m_label);
+//}
 
 
 }

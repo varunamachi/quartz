@@ -17,7 +17,8 @@
 #include <core/app_config/ConfigManager.h>
 
 #include <common/iconstore/IconFontStore.h>
-#include <common/widgets/NotificationBox.h>
+
+#include <base/notification/msg.h>
 
 #include "../QzAppContext.h"
 #include "AbstractFileHandler.h"
@@ -178,7 +179,7 @@ void FileHandlerManager::registerFileHandler(
 
 void FileHandlerManager::handle(const QString &path)
 {
-    auto hndlr = m_data->m_cache[path];
+    auto hndlr = m_data->m_cache.value(path);
     QIcon icon;
     if (hndlr != nullptr) {
         m_data->m_tabber->setCurrentWidget(hndlr);
@@ -200,8 +201,8 @@ void FileHandlerManager::handle(const QString &path)
         icon = creator->icon();
     }
 
-    m_data->m_cache[path] = hndlr;
     if (hndlr != nullptr && hndlr->handle(path)) {
+        m_data->m_cache[path] = hndlr;
         auto name = QFontMetrics(m_data->m_tabber->font()).elidedText(
                     info.fileName(),
                     Qt::ElideMiddle,
@@ -221,7 +222,7 @@ void FileHandlerManager::handle(const QString &path)
     } else if(!info.isDir()){
         QZ_ERROR("Qz:Explorer") << "Failed to handle file at " << path;
     }
-
+    showInfo("Hello!");
 }
 
 const QString &FileHandlerManager::extensionType() const

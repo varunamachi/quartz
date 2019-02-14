@@ -6,9 +6,10 @@
 
 #include "../QuartzCommon.h"
 
+class QLabel;
+
 namespace Quartz {
 
-class QLabel;
 
 enum class NotificationType
 {
@@ -66,13 +67,17 @@ public:
                      QWidget* parent);
 
 protected:
-    void paintEvent(QPaintEvent* event) override;
+
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 
 
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event);
 };
 
 }

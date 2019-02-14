@@ -26,12 +26,13 @@
 #include <base/settings/ConfigPageSelector.h>
 #include <base/settings/ConfigPageManager.h>
 #include <base/settings/BasicConfigPage.h>
-//#include <base/extension_details/PluginSelector.h>
 #include <base/extension_details/PluginConfigPage.h>
 #include <base/title_bar/QuartzItem.h>
 #include <base/main_menu/MainMenuButton.h>
 #include <base/explorer/FileSystemSelector.h>
 #include <base/explorer/FileHandlerManager.h>
+#include <base/notification/NotificationService.h>
+#include <base/notification/msg.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -82,7 +83,6 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     this->setObjectName("quartz_widget");
     this->setContentsMargins({});
 
-
     auto viewContainer = new StackedSplitContainer(
                 25,
                 70,
@@ -119,9 +119,15 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     mainMenu->addAction(about);
     mainMenu->setMaximumSize({50, 16});
     selectorContainer->addFixedWidget(mainMenu);
-    viewContainer->addFixedWidget(
-                new QPushButton(getIcon(MatIcon::Notifications), "", this),
-                StackedSplitContainer::Position::After);
+
+    auto nbtn = new QPushButton(getIcon(MatIcon::Notifications), "", this);
+    viewContainer->addFixedWidget(nbtn, StackedSplitContainer::Position::After);
+    auto ns = new NotificationService(nbtn);
+    nbtn->setObjectName("nbtn");
+    appContext()->setNotificationService(ns);
+    connect(nbtn, &QPushButton::released, nbtn, []() {
+        showInfo("Quick brown fox jumped over the lazy dog");
+    });
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);

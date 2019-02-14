@@ -153,7 +153,7 @@ CreatorWidget::CreatorWidget(std::shared_ptr<TemplateManager> tman,
 
     //Main layout
     auto  mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(new QLabel(tr("Create A Quartz Plugin: ")));
+//    mainLayout->addWidget(new QLabel(tr("Create A Quartz Plugin: ")));
     mainLayout->addLayout(layout);
     mainLayout->addWidget(gbx);
     this->setLayout(mainLayout);

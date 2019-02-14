@@ -5,7 +5,7 @@ namespace Quartz {
 
 struct NotificationDrawer::Data
 {
-    explicit Data(NotificationDrawer */*parent*/)
+    explicit Data(NotificationDrawer * /*parent*/ )
     {
 
     }
