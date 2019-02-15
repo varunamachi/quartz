@@ -29,6 +29,8 @@ public Q_SLOTS:
     QString setPath(const QString &path);
 
 private:
+    void makeConnections(QAction *copyPath, QAction *explore);
+
     struct Data;
     std::unique_ptr<Data> m_data;
 };

@@ -55,7 +55,6 @@ struct FileSystemSelector::Data
         m_fsView->header()->hide();
     }
 
-
     QFileSystemModel *m_fsModel;
 
     QTreeView *m_fsView;
@@ -95,11 +94,12 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     topLayout->addWidget(m_data->m_browseBtn);
 
     m_data->m_pathEdit->setContentsMargins({2, 0, 0, 2});
-    topLayout->setContentsMargins({2, 0, 0, 2});
+    m_data->m_fsView->setContentsMargins({});
+    topLayout->setContentsMargins({2, 2, 0, 2});
 
     auto lyt = new QVBoxLayout();
-    lyt->addWidget(m_data->m_fsView);
     lyt->addWidget(m_data->m_pathEdit);
+    lyt->addWidget(m_data->m_fsView);
     lyt->addLayout(topLayout);
     this->setLayout(lyt);
     lyt->setContentsMargins({});
@@ -119,6 +119,51 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     m_data->m_menu->addAction(explore);
     m_data->m_fsView->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    makeConnections(copyPath, explore);
+    m_data->m_backBtn->setToolTip(tr("Go back to last location"));
+    m_data->m_fwdBtn->setToolTip(tr("Go to next location"));
+    m_data->m_upBtn->setToolTip(tr("Go to parent directory"));
+}
+
+FileSystemSelector::~FileSystemSelector()
+{
+
+}
+
+void FileSystemSelector::selected()
+{
+    appContext()->contentManager()->selectContent(
+                FileHandlerManager::CONTENT_ID);
+
+}
+
+void FileSystemSelector::unselected()
+{
+
+}
+
+QString FileSystemSelector::setPath(const QString &path)
+{
+    QFileInfo info{path};
+    auto old = m_data->m_fsModel->rootPath();
+    if (info.exists() && info.isDir()) {
+        m_data->m_fsModel->setRootPath(path);
+        m_data->m_fsView->setRootIndex(m_data->m_fsModel->index(path));
+        appContext()->configManager()->set(CONFIG_PATH, path);
+        m_data->m_pathEdit->setToolTip(path);
+        return old;
+    }
+    QZ_ERROR("Qz:Explorer") << "Invalid directory path "
+                            << path << " given";
+    m_data->m_pathEdit->setText(old);
+    m_data->m_pathEdit->setToolTip(old);
+    return QStringLiteral("");
+}
+
+void FileSystemSelector::makeConnections(
+        QAction *copyPath,
+        QAction *explore)
+{
     connect(m_data->m_fsView,
             &QTreeView::doubleClicked,
             [this](const QModelIndex &index) {
@@ -208,45 +253,6 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
             m_data->m_pathEdit->setText(path);
         }
     });
-
-    m_data->m_backBtn->setToolTip(tr("Go back to last location"));
-    m_data->m_fwdBtn->setToolTip(tr("Go to next location"));
-    m_data->m_upBtn->setToolTip(tr("Go to parent directory"));
-}
-
-FileSystemSelector::~FileSystemSelector()
-{
-
-}
-
-void FileSystemSelector::selected()
-{
-    appContext()->contentManager()->selectContent(
-                FileHandlerManager::CONTENT_ID);
-
-}
-
-void FileSystemSelector::unselected()
-{
-
-}
-
-QString FileSystemSelector::setPath(const QString &path)
-{
-    QFileInfo info{path};
-    auto old = m_data->m_fsModel->rootPath();
-    if (info.exists() && info.isDir()) {
-        m_data->m_fsModel->setRootPath(path);
-        m_data->m_fsView->setRootIndex(m_data->m_fsModel->index(path));
-        appContext()->configManager()->set(CONFIG_PATH, path);
-        m_data->m_pathEdit->setToolTip(path);
-        return old;
-    }
-    QZ_ERROR("Qz:Explorer") << "Invalid directory path "
-                            << path << " given";
-    m_data->m_pathEdit->setText(old);
-    m_data->m_pathEdit->setToolTip(old);
-    return QStringLiteral("");
 }
 
 }

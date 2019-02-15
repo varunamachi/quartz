@@ -28,12 +28,12 @@ public:
 
     explicit NotificationBox(
             NotificationType ntype,
-            const QString& text,
+            const QStringList& texts,
             QWidget* parent = nullptr);
 
     explicit NotificationBox(
             NotificationType ntype,
-            const QString& text,
+            const QStringList& texts,
             const QFont& font,
             int milliseconds,
             QWidget* parent = nullptr);
@@ -56,28 +56,17 @@ public:
                      QWidget* parent);
 
     static void show(NotificationType type,
-                     const QString& message,
-                     const QFont& font,
+                     const QStringList& messages,
                      QWidget* parent);
 
-    static void show(NotificationType type,
-                     const QString& message,
-                     const QFont& font,
-                     int milliseconds,
-                     QWidget* parent);
 
 protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
-
-
-    // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent *event);
 };
 
 }

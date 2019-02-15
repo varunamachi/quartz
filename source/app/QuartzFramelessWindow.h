@@ -13,7 +13,7 @@ class QuartzFramelessWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit QuartzFramelessWindow(QWidget *parent = 0);
+    explicit QuartzFramelessWindow(QWidget *parent = nullptr);
 
     ~QuartzFramelessWindow();
 

@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QCursor>
+#include <QPushButton>
 
 #include "../iconstore/IconFontStore.h"
 #include "NotificationBox.h"
@@ -29,16 +30,16 @@ const QString ICSS ="#ngbox {"
                     "   padding: 10px;"
                     "}";
 const QString WCSS ="#ngbox {"
-                    "   border-color: rgba(220, 199, 14, 0.5);"
-                    "   border-left-color: rgba(220, 199, 14, 0.5);"
+                    "   border-color: rgba(179, 143, 0, 0.5);"
+                    "   border-left-color: rgba(179, 143, 0, 0.5);"
                     "   border-style: solid;"
                     "   border-width: 1px;"
                     "   border-left-width: 6px;"
                     "   padding: 10px;"
                     "}";
 const QString ECSS ="#ngbox {"
-                    "   border-color: rgba(220, 55, 14, 0.5);"
-                    "   border-left-color: rgba(220, 55, 14, 0.5);"
+                    "   border-color: rgba(204, 41, 0, 0.5);"
+                    "   border-left-color: rgba(204, 41, 0, 0.5);"
                     "   border-style: solid;"
                     "   border-width: 1px;"
                     "   border-left-width: 6px;"
@@ -48,19 +49,20 @@ const QString ECSS ="#ngbox {"
 namespace
 {
 const QSize ICON_SIZE = {32, 32};
-const int DISPLAY_TIME = 1500;
+const int DISPLAY_TIME = 2000;
 
 const QPixmap & icon(NotificationType type) {
     if (type == NotificationType::Info) {
-        static auto INFO =
-                getIcon(MatIcon::Info, {24, 122, 220}).pixmap(ICON_SIZE);
+        static auto INFO = getIcon(
+                    MatIcon::Done, {24, 122, 220}).pixmap(ICON_SIZE);
         return INFO;
     } else if(type == NotificationType::Warning) {
-        static auto WARN =
-                getIcon(MatIcon::Warning, {220, 199, 14}).pixmap(ICON_SIZE);
+        static auto WARN = getIcon(
+                    MatIcon::Warning, {179, 143, 0}).pixmap(ICON_SIZE);
         return WARN;
     }
-    static auto ERR  = getIcon(MatIcon::Error, {220, 55, 14}).pixmap(ICON_SIZE);
+    static auto ERR  = getIcon(
+                MatIcon::Error, {204, 41, 0}).pixmap(ICON_SIZE);
     return ERR;
 }
 
@@ -68,11 +70,9 @@ const QPixmap & icon(NotificationType type) {
 
 struct NotificationBox::Data {
     Data(NotificationType type,
-         const QString &text,
          int milliseconds,
          QWidget *parent)
         : m_type(type)
-        , m_label(text)
         , m_opacity(1.0)
         , m_milliseconds(milliseconds)
         , m_parent(parent)
@@ -82,7 +82,6 @@ struct NotificationBox::Data {
 
     NotificationType m_type;
 
-    QStaticText m_label;
 
     qreal m_opacity;
 
@@ -92,44 +91,69 @@ struct NotificationBox::Data {
 };
 
 NotificationBox::NotificationBox(NotificationType type,
-                                 const QString& text,
+                                 const QStringList& texts,
                                  QWidget* parent)
-    : NotificationBox(type, text, QFont{}, DISPLAY_TIME, parent)
+    : NotificationBox(type, texts, QFont{}, DISPLAY_TIME, parent)
 {}
 
 NotificationBox::NotificationBox(
         NotificationType type,
-        const QString& text,
+        const QStringList& texts,
         const QFont& font,
         int milliseconds,
         QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(type, text, milliseconds, parent))
+    , m_data(std::make_unique<Data>(type, milliseconds, parent))
 {
     setFont(font);
-    m_data->m_label.prepare(QTransform(), font);
     setWindowFlags(windowFlags()
                    | Qt::FramelessWindowHint
                    | Qt::WindowStaysOnTopHint
-                   | Qt::Popup);
-    setAttribute(Qt::WA_TranslucentBackground, true);
+                   | Qt::Popup
+                );
 
-    auto label = new QLabel(this);
-    label->setText(text);
-    label->setWordWrap(true);
-    auto icn = new QLabel(this);
-    icn->setPixmap(icon(type));
+//    auto label = new QLabel(this);
+//    label->setText(text);
+//    label->setWordWrap(true);
+//    auto icn = new QLabel(this);
+//    icn->setPixmap(icon(type));
+//    auto closeBtn = new QPushButton(getIcon(FAIcon::Times), "", this);
+//    connect(closeBtn, &QPushButton::released, [this]() {
+//        this->hide();
+//        this->deleteLater();
+//    });
 
-    auto mainLayout = new QHBoxLayout();
-    mainLayout->addWidget(icn);
-    mainLayout->addWidget(label);
+//    auto mainLayout = new QHBoxLayout();
+//    mainLayout->addWidget(icn);
+//    mainLayout->addWidget(label);
+//    mainLayout->addWidget(closeBtn);
 
+
+    auto mainLayout = new QVBoxLayout();
     auto widget = new QWidget();
     widget->setObjectName("ngbox");
     widget->setLayout(mainLayout);
 
+    for (const auto &msg : texts) {
+        auto label = new QLabel(this);
+        label->setText(msg);
+        label->setWordWrap(true);
+        auto icn = new QLabel(this);
+        icn->setPixmap(icon(type));
+        auto closeBtn = new QPushButton(getIcon(FAIcon::Times), "", this);
+        connect(closeBtn, &QPushButton::released, [this]() {
+            this->hide();
+            this->deleteLater();
+        });
+
+        auto ml = new QHBoxLayout();
+        ml->addWidget(icn);
+        ml->addWidget(label);
+        ml->addWidget(closeBtn);
+        mainLayout->addLayout(ml);
+    }
+
     auto lyt = new QVBoxLayout();
-//    lyt->addLayout(mainLayout);
     lyt->addWidget(widget);
     this->setLayout(lyt);
 
@@ -140,11 +164,12 @@ NotificationBox::NotificationBox(
     }
     this->setMinimumSize({200, 50});
     setContentsMargins({});
+    widget->setContentsMargins({});
+    lyt->setContentsMargins({});
 }
 
 NotificationBox::~NotificationBox()
 {
-
 }
 
 void NotificationBox::showImmediatly()
@@ -155,7 +180,6 @@ void NotificationBox::showImmediatly()
 
 void NotificationBox::run()
 {
-
     QWidget::show();
     update();
     QTimer::singleShot(m_data->m_milliseconds,
@@ -187,53 +211,25 @@ qreal NotificationBox::opacity() const
     return m_data->m_opacity;
 }
 
-void NotificationBox::show(
-        NotificationType type,
-        const QString& message,
-        const QFont& font,
-        int milliseconds,
-        QWidget* parent)
-{
-    (new NotificationBox(type, message, font, milliseconds, parent))->run();
-}
-
-void NotificationBox::resizeEvent(QResizeEvent *event)
+void NotificationBox::resizeEvent(QResizeEvent * /*event*/)
 {
     auto point = m_data->m_parent->mapToGlobal({0, 0});
-//    this->move(point.x(), point.y());
-    this->move(static_cast<int>(point.x() - this->width() + 20),
-               static_cast<int>(point.y() - this->height()) + 10);
+    this->move(static_cast<int>(point.x() - this->width() + 10),
+               static_cast<int>(point.y() - this->height()));
 }
 
 void NotificationBox::show(NotificationType type,
                            const QString& message,
                            QWidget* parent)
 {
-     (new NotificationBox(type, message, parent))->run();
+    (new NotificationBox(type, QStringList() << message, parent))->run();
 }
 
 void NotificationBox::show(NotificationType type,
-                           const QString& message,
-                           const QFont& font,
-                           QWidget* parent)
+                           const QStringList &messages,
+                           QWidget *parent)
 {
-    show(type, message, font, DISPLAY_TIME, parent);
+    (new NotificationBox(type, messages, parent))->run();
 }
-
-//void NotificationBox::paintEvent(QPaintEvent* event)
-//{
-//    QPainter p{this};
-
-//    p.setOpacity(m_data->m_opacity);
-//    p.fillRect(event->rect(), COL[m_data->m_type].bg);
-//    p.setPen(COL[m_data->m_type].fg);
-//    p.drawRect(event->rect().adjusted(0, 0, -1, -1));
-//    p.setFont(font());
-
-//    auto halfSize = m_data->m_label.size().toSize() / 2;
-//    auto pt = rect().center() - QPoint{halfSize.width(), halfSize.height()};
-//    p.drawStaticText(pt, m_data->m_label);
-//}
-
 
 }
