@@ -54,6 +54,9 @@ public:
 
     int id() const;
 
+Q_SIGNALS:
+    void closed();
+
 private:
     Msg m_msg;
 };
