@@ -27,11 +27,14 @@ public:
 
     void error(const QString &msg);
 
-    void run();
-
     void refresh();
 
     void add(NotificationType type, const QString &msg);
+
+    void clear();
+
+public Q_SLOTS:
+    void reposition();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

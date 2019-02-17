@@ -15,9 +15,7 @@
 
 #include <core/logger/Logging.h>
 #include <core/app_config/ConfigManager.h>
-
 #include <common/iconstore/IconFontStore.h>
-
 #include <base/notification/msg.h>
 
 #include "../QzAppContext.h"
@@ -194,8 +192,10 @@ void FileHandlerManager::handle(const QString &path)
         hndlr = creator->creator()(m_data->m_tabber);
         icon = creator->icon();
     } else if(info.isFile()){
-        QZ_WARN("Qz:Explorer") << "Could not find default handler for file "
-                                << info.fileName();
+        auto msg = QZ_WARN("Qz:Explorer")
+                << tr("Could not find default handler for file ")
+                << info.fileName() << Logger::Str;
+        showWarning(msg);
         auto &creator = m_data->m_defaultHandlers[""];
         hndlr = creator->creator()(m_data->m_tabber);
         icon = creator->icon();
@@ -220,9 +220,10 @@ void FileHandlerManager::handle(const QString &path)
             m_data->m_tabber->setTabText(index, nm);
         });
     } else if(!info.isDir()){
-        QZ_ERROR("Qz:Explorer") << "Failed to handle file at " << path;
+        auto msg = QZ_ERROR("Qz:Explorer")
+                << tr("Failed to handle file at ") << path << Logger::Str;
+        showError(msg);
     }
-    showInfo("Hello!");
 }
 
 const QString &FileHandlerManager::extensionType() const
@@ -245,7 +246,7 @@ bool FileHandlerManager::handleExtension(Ext::Extension *extension)
         }
     } else {
         QZ_ERROR("Qz:Explorer")
-                << "Invalid actionbar extension provided: "
+                << tr("Invalid file handler extension provided: ")
                 << (extension != nullptr ? extension->extensionId() : "<null>");
     }
     return false;

@@ -13,8 +13,9 @@
 
 #include <core/logger/Logging.h>
 #include <core/utils/History.h>
-#include <common/iconstore/IconFontStore.h>
 #include <core/app_config/ConfigManager.h>
+#include <common/iconstore/IconFontStore.h>
+#include <base/notification/msg.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"
@@ -153,8 +154,9 @@ QString FileSystemSelector::setPath(const QString &path)
         m_data->m_pathEdit->setToolTip(path);
         return old;
     }
-    QZ_ERROR("Qz:Explorer") << "Invalid directory path "
-                            << path << " given";
+    auto msg = QZ_ERROR("Qz:Explorer") << "Invalid directory path "
+                            << path << " given" << Logger::Str;
+    showError(msg);
     m_data->m_pathEdit->setText(old);
     m_data->m_pathEdit->setToolTip(old);
     return QStringLiteral("");

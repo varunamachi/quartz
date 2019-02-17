@@ -121,20 +121,26 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     mainMenu->setMaximumSize({50, 16});
     selectorContainer->addFixedWidget(mainMenu);
 
-    auto nbtn = new QPushButton(getIcon(MatIcon::Notifications), "", this);
+    auto nbtn = new QPushButton(getIcon(MatIcon::ClearAll), "", this);
     viewContainer->addFixedWidget(nbtn, StackedSplitContainer::Position::After);
     auto ns = new NotificationService(nbtn);
     nbtn->setObjectName("nbtn");
     appContext()->setNotificationService(ns);
-    connect(nbtn, &QPushButton::released, nbtn, []() {
+    connect(nbtn, &QPushButton::released, nbtn, [ns]() {
+        ns->clear();
+    });
+
+    auto gen = new QPushButton(getIcon(MatIcon::BeachAccess), "", this);
+    connect(gen, &QPushButton::released, []() {
         switch (QRandomGenerator::global()->bounded(3)) {
-        case 0: showInfo("Quick brown fox jumped over the lazy dog"); break;
+        case 0: showInfo("Quick brown fox jumped over the lazy dog "
+                         "Quick brown fox jumped over the lazy dog"); break;
         case 1: showWarning("Quick brown fox jumped over the lazy dog"); break;
         case 2: showError("Quick brown fox jumped over the lazy dog"); break;
-        };
-
-//        showError("Quick brown fox");
+        }
     });
+    viewContainer->addFixedWidget(
+                gen, StackedSplitContainer::Position::Before);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);
@@ -223,6 +229,14 @@ void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
     }
     else {
         painter.fillRect(this->rect(), QBrush(color));
+    }
+}
+
+void QzMainWidget::resizeEvent(QResizeEvent * /*event*/)
+{
+    auto notificationService = appContext()->notificationService();
+    if (notificationService != nullptr) {
+        notificationService->reposition();
     }
 }
 

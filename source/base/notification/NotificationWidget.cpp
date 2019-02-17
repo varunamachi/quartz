@@ -27,33 +27,15 @@ const QPixmap & icon(NotificationType type) {
     return ERR;
 }
 
-//const QString ICSS =
-//        "ngbox {"
-//                        "   border-color: rgba(24, 122, 220, 0.5);"
-//                        "   border-left-color: rgba(24, 122, 220, 0.5);"
-//                        "   border-style: solid;"
-//                        "   border-width: 1px;"
-//                        "   border-left-width: 6px;"
-//                        "   padding: 10px;"
-//                        "}";
-//const QString WCSS =
-//        "#ngbox {"
-//                        "   border-color: rgba(179, 143, 0, 0.5);"
-//                        "   border-left-color: rgba(179, 143, 0, 0.5);"
-//                        "   border-style: solid;"
-//                        "   border-width: 1px;"
-//                        "   border-left-width: 6px;"
-//                        "   padding: 10px;"
-//                        "}";
-//const QString ECSS =
-//        "#ngbox {"
-//                        "   border-color: rgba(204, 41, 0, 0.5);"
-//                        "   border-left-color: rgba(204, 41, 0, 0.5);"
-//                        "   border-style: solid;"
-//                        "   border-width: 1px;"
-//                        "   border-left-width: 6px;"
-//                        "   padding: 10px;"
-//                        "}";
+const QString ICSS =
+        "ngbox {"
+                        "   border-color: rgba(24, 122, 220, 0.5);"
+                        "   border-left-color: rgba(24, 122, 220, 0.5);"
+                        "   border-style: solid;"
+                        "   border-width: 1px;"
+                        "   border-left-width: 6px;"
+                        "   padding: 10px;"
+                        "}";
 }
 
 
@@ -78,14 +60,14 @@ NotificationWidget::NotificationWidget(Msg &&msg, QWidget *parent)
     ml->setStretch(0, 0);
     ml->setStretch(1, 1);
     ml->setStretch(2, 0);
-    this->setObjectName("ngbox");
     this->setLayout(ml);
-    this->setMinimumSize({300, 50});
-
+    this->setMinimumHeight(50);
+    this->setFixedWidth(300);
     connect(closeBtn,
             &QPushButton::released,
             this,
             &NotificationWidget::closed);
+    this->setLayout(ml);
 }
 
 const Msg &NotificationWidget::msg() const
@@ -97,9 +79,5 @@ int NotificationWidget::id() const
 {
     return m_msg.m_id;
 }
-
-
-
-
 
 }

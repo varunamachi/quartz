@@ -5,6 +5,7 @@
 #include <QWidget>
 
 class QMainWindow;
+class QResizeEvent;
 
 namespace Quartz {
 
@@ -30,8 +31,9 @@ protected:
     struct Data;
     std::unique_ptr<Data> m_data;
 
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 }

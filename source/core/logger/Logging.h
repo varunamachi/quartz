@@ -55,7 +55,7 @@ public:
         return *this;
     }
 
-    const QString & operator << (_Str &)
+    const QString & operator << (const _Str &)
     {
         return m_msg->message();
     }
