@@ -135,8 +135,10 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
         switch (QRandomGenerator::global()->bounded(3)) {
         case 0: showInfo("Quick brown fox jumped over the lazy dog "
                          "Quick brown fox jumped over the lazy dog"); break;
-        case 1: showWarning("Quick brown fox jumped over the lazy dog"); break;
-        case 2: showError("Quick brown fox jumped over the lazy dog"); break;
+        case 1: showWarning("Quick brown fox jumped over the lazy dog "
+                            "Quick brown fox jumped over the lazy dog"); break;
+        case 2: showError("Quick brown fox jumped over the lazy dog "
+                          "Quick brown fox jumped over the lazy dog"); break;
         }
     });
     viewContainer->addFixedWidget(

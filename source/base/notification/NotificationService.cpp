@@ -17,14 +17,7 @@
 
 namespace Quartz {
 
-const QString ECSS =
-        "#nwh {"
-        "   border-style: solid;"
-        "   border-width: 1px;"
-        "   border-color: rgba(63, 116, 191, 0.55);"
-        "}";
-
-const auto DURATION_SECS = 3;
+const auto DURATION_SECS = 5;
 
 struct NotificationService::Data
 {
@@ -59,30 +52,17 @@ NotificationService::NotificationService(QWidget *parent)
                    | Qt::Popup
                    | Qt::Dialog
                 );
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
-
-
+    this->setAttribute(Qt::WA_TranslucentBackground);
     m_data->m_layout->setSizeConstraint(QLayout::SetFixedSize);
+    this->setLayout(m_data->m_layout);
 
-    this->setStyleSheet(ECSS);
-    auto widget = new QWidget();
-    widget->setLayout(m_data->m_layout);
-    widget->setObjectName("nwh");
-    auto lyt = new QVBoxLayout();
-    lyt->addWidget(widget);
-    this->setLayout(lyt);
-    lyt->setSizeConstraint(QLayout::SetFixedSize);
     connect(m_data->m_timer,
             &QTimer::timeout,
             [=]() {
         this->refresh();
     });
     m_data->m_timer->start(1000);
-
-    setContentsMargins({});
     m_data->m_layout->setContentsMargins({});
-    widget->setContentsMargins({});
-    lyt->setContentsMargins({});
 }
 
 NotificationService::~NotificationService()
@@ -97,7 +77,7 @@ void NotificationService::refresh()
         if (nw == nullptr) {
             continue;
         }
-        if (nw->msg().m_time.secsTo(QTime::currentTime()) > DURATION_SECS) {
+        if (nw->msg()->m_time.secsTo(QTime::currentTime()) > DURATION_SECS) {
             m_data->m_layout->removeWidget(nw);
             nw->hide();
             nw->deleteLater();
@@ -114,13 +94,14 @@ void NotificationService::refresh()
 void NotificationService::add(NotificationType type, const QString &msg)
 {
     m_data->m_id = (m_data->m_id + 1) % 10000;
-    auto obj = Msg{
+    auto obj = std::make_shared<Msg>(
             m_data->m_id,
             msg,
             type,
             QTime::currentTime(),
-            QDateTime::currentDateTime()};
-    auto nw = new NotificationWidget(std::move(obj), this);
+            QDateTime::currentDateTime());
+    //add to model too...
+    auto nw = new NotificationWidget(obj, this);
     connect(nw, &NotificationWidget::closed, [=]() {
         m_data->m_layout->removeWidget(nw);
         nw->hide();
@@ -142,7 +123,7 @@ void NotificationService::clear()
         if (nw == nullptr) {
             continue;
         }
-        if (nw->msg().m_time.secsTo(time) > 0) {
+        if (nw->msg()->m_time.secsTo(time) > 0) {
             m_data->m_layout->removeWidget(nw);
             nw->hide();
             nw->deleteLater();

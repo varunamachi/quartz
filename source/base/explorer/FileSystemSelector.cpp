@@ -154,8 +154,8 @@ QString FileSystemSelector::setPath(const QString &path)
         m_data->m_pathEdit->setToolTip(path);
         return old;
     }
-    auto msg = QZ_ERROR("Qz:Explorer") << "Invalid directory path "
-                            << path << " given" << Logger::Str;
+    auto msg = QZ_ERROR("Qz:Explorer") << tr("Invalid directory path given: ")
+                            << path << Logger::Str;
     showError(msg);
     m_data->m_pathEdit->setText(old);
     m_data->m_pathEdit->setToolTip(old);

@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QDateTime>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 enum class NotificationType : int
@@ -44,21 +46,30 @@ struct Msg
 
 };
 
-class NotificationWidget : public QWidget
+class QUARTZ_BASE_API NotificationWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit NotificationWidget(Msg &&msg, QWidget *parent = nullptr);
+    explicit NotificationWidget(
+            std::shared_ptr<Msg> msg,
+            QWidget *parent = nullptr);
 
-    const Msg & msg() const;
+    ~NotificationWidget() override;
+
+    const Msg * msg() const;
 
     int id() const;
 
 Q_SIGNALS:
     void closed();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
-    Msg m_msg;
+    struct Data;
+    std::unique_ptr<Data> m_data;
+
 };
 
 

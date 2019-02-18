@@ -193,8 +193,9 @@ void FileHandlerManager::handle(const QString &path)
         icon = creator->icon();
     } else if(info.isFile()){
         auto msg = QZ_WARN("Qz:Explorer")
-                << tr("Could not find default handler for file ")
-                << info.fileName() << Logger::Str;
+                << tr("Could not find handler for file %1. "
+                      "Using default handler").arg(info.fileName())
+                << Logger::Str;
         showWarning(msg);
         auto &creator = m_data->m_defaultHandlers[""];
         hndlr = creator->creator()(m_data->m_tabber);
