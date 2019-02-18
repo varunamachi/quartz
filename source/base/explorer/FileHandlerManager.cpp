@@ -16,7 +16,7 @@
 #include <core/logger/Logging.h>
 #include <core/app_config/ConfigManager.h>
 #include <common/iconstore/IconFontStore.h>
-#include <base/notification/msg.h>
+#include <base/notification/show.h>
 
 #include "../QzAppContext.h"
 #include "AbstractFileHandler.h"

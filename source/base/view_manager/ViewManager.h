@@ -26,9 +26,9 @@ class QUARTZ_BASE_API ViewManager : public QWidget
     Q_OBJECT
 public:
     explicit ViewManager(AbstractContainer *container,
-                          QWidget *parent = 0);
+                          QWidget *parent = nullptr);
 
-    ~ViewManager();
+    ~ViewManager() override;
 
     void addView(QuartzView *view);
 
@@ -51,6 +51,12 @@ public:
     QList<QString> categories() const;
 
     void selectView(QString viewId);
+
+    template<typename T>
+    T *view(const QString &viewId) const
+    {
+        return dynamic_cast<T *>(view(viewId));
+    }
 
 public:
     const QString & extensionType() const override;

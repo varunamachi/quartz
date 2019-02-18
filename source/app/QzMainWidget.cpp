@@ -33,7 +33,8 @@
 #include <base/explorer/FileSystemSelector.h>
 #include <base/explorer/FileHandlerManager.h>
 #include <base/notification/NotificationService.h>
-#include <base/notification/msg.h>
+#include <base/notification/show.h>
+#include <base/notification/MsgView.h>
 
 #include "inbuilt/LogView.h"
 #include "WelcomePage.h"
@@ -167,6 +168,9 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_viewManager->addView(logView);
     QZ_LOGGER()->dispatcher()->addTarget(logView);
 
+    auto msgView = new MsgView(this);
+    m_data->m_viewManager->addView(msgView);
+
     m_data->m_pluginManager = std::make_unique<Ext::PluginManager>();
     m_data->m_pluginManager->registerPluginAdapter(m_data->m_actionBar);
     m_data->m_pluginManager->registerPluginAdapter(m_data->m_selector);
@@ -178,6 +182,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_pluginManager->registerPluginAdapter(fhman);
     appContext()->setPluginManager(m_data->m_pluginManager.get());
     appContext()->setContentManager(m_data->m_content);
+    appContext()->setViewManager(m_data->m_viewManager);
     auto execDir = QCoreApplication::applicationDirPath() + "/plugins";
     if (!m_data->m_pluginManager->loadFrom(execDir)) {
         QZ_ERROR("App") << "Failed to load all available plugins";

@@ -15,7 +15,7 @@
 #include <core/utils/History.h>
 #include <core/app_config/ConfigManager.h>
 #include <common/iconstore/IconFontStore.h>
-#include <base/notification/msg.h>
+#include <base/notification/show.h>
 
 #include "../QzAppContext.h"
 #include "../content_manager/ContentManager.h"

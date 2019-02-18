@@ -12,6 +12,10 @@
 
 #include <core/utils/ScopedOperation.h>
 
+#include "../QzAppContext.h"
+#include "view_manager/ViewManager.h"
+#include "Msg.h"
+#include "MsgView.h"
 #include "NotificationService.h"
 #include "NotificationWidget.h"
 
@@ -77,7 +81,7 @@ void NotificationService::refresh()
         if (nw == nullptr) {
             continue;
         }
-        if (nw->msg()->m_time.secsTo(QTime::currentTime()) > DURATION_SECS) {
+        if (nw->msg()->time().secsTo(QTime::currentTime()) > DURATION_SECS) {
             m_data->m_layout->removeWidget(nw);
             nw->hide();
             nw->deleteLater();
@@ -101,6 +105,10 @@ void NotificationService::add(NotificationType type, const QString &msg)
             QTime::currentTime(),
             QDateTime::currentDateTime());
     //add to model too...
+    auto view = appContext()->viewManager()->view<MsgView>(MsgView::VIEW_ID);
+    if (view != nullptr) {
+        view->addMessage(obj);
+    }
     auto nw = new NotificationWidget(obj, this);
     connect(nw, &NotificationWidget::closed, [=]() {
         m_data->m_layout->removeWidget(nw);
@@ -123,7 +131,7 @@ void NotificationService::clear()
         if (nw == nullptr) {
             continue;
         }
-        if (nw->msg()->m_time.secsTo(time) > 0) {
+        if (nw->msg()->time().secsTo(time) > 0) {
             m_data->m_layout->removeWidget(nw);
             nw->hide();
             nw->deleteLater();

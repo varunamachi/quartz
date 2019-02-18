@@ -16,6 +16,8 @@ class GeneralSelector;
 class ConfigPageManager;
 class ThemeManager;
 class NotificationService;
+class ViewManager;
+
 namespace Ext { class PlugginManager; }
 
 enum class StdPath
@@ -37,6 +39,7 @@ public:
     QZCONTEXT_FUNC_DECL(ConfigPageManager, configPageManager);
     QZCONTEXT_FUNC_DECL(ThemeManager, themeManager);
     QZCONTEXT_FUNC_DECL(NotificationService, notificationService);
+    QZCONTEXT_FUNC_DECL(ViewManager, viewManager);
 
     static QString expand(StdPath pathID);
 

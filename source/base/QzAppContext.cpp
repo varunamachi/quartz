@@ -8,6 +8,7 @@
 #include "settings/ConfigPageManager.h"
 #include "theme/ThemeManager.h"
 #include "notification/NotificationService.h"
+#include "view_manager/ViewManager.h"
 
 #include "QzAppContext.h"
 
@@ -27,6 +28,8 @@ struct QzAppContext::Data
     ThemeManager *m_themeManager;
 
     NotificationService *m_notificationService;
+
+    ViewManager *m_viewManager;
 };
 
 QzAppContext::QzAppContext()
@@ -64,5 +67,5 @@ QZCONTEXT_FUNC_DEFINE(QzAppContext, GeneralSelector, nodeSelector);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, ConfigPageManager, configPageManager);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, ThemeManager, themeManager);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, NotificationService, notificationService);
-
+QZCONTEXT_FUNC_DEFINE(QzAppContext, ViewManager, viewManager);
 }

@@ -1,9 +1,10 @@
 vq_classes(
     NotificationService
-    NotificationDrawer
     NotificationWidget
+    Msg
+    MsgView
 )
 
 vq_headers(
-    msg.h
+    show.h
 )

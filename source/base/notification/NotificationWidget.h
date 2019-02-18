@@ -9,42 +9,44 @@
 
 namespace Quartz {
 
-enum class NotificationType : int
-{
-    Info,
-    Warning,
-    Error,
-};
+class Msg;
 
-struct Msg
-{
-    Msg() {}
+//enum class NotificationType : int
+//{
+//    Info,
+//    Warning,
+//    Error,
+//};
 
-    Msg(int id,
-        const QString &msg,
-        NotificationType type,
-        QTime time,
-        QDateTime dateTime)
-        : m_id(id)
-        , m_msg(msg)
-        , m_type(type)
-        , m_time(time)
-        , m_dateTime(dateTime)
-    {
+//struct Msg
+//{
+//    Msg() {}
 
-    }
+//    Msg(int id,
+//        const QString &msg,
+//        NotificationType type,
+//        QTime time,
+//        QDateTime dateTime)
+//        : m_id(id)
+//        , m_msg(msg)
+//        , m_type(type)
+//        , m_time(time)
+//        , m_dateTime(dateTime)
+//    {
 
-    int m_id;
+//    }
 
-    QString m_msg;
+//    int m_id;
 
-    NotificationType m_type;
+//    QString m_msg;
 
-    QTime m_time;
+//    NotificationType m_type;
 
-    QDateTime m_dateTime;
+//    QTime m_time;
 
-};
+//    QDateTime m_dateTime;
+
+//};
 
 class QUARTZ_BASE_API NotificationWidget : public QWidget
 {
@@ -57,8 +59,6 @@ public:
     ~NotificationWidget() override;
 
     const Msg * msg() const;
-
-    int id() const;
 
 Q_SIGNALS:
     void closed();

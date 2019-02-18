@@ -58,7 +58,7 @@ class LogView : public QuartzView
 public:
     explicit LogView(QWidget *parent);
 
-    ~LogView();
+    ~LogView() override;
 
     void flush() override;
 

@@ -1,5 +1,3 @@
-#include "NotificationWidget.h"
-
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -7,6 +5,9 @@
 #include <QPaintEvent>
 
 #include <common/iconstore/IconFontStore.h>
+
+#include "Msg.h"
+#include "NotificationWidget.h"
 
 namespace Quartz {
 
@@ -51,9 +52,9 @@ NotificationWidget::NotificationWidget(
     auto label = new QLabel(this);
     label->setWordWrap(true);
 //    label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-    label->setText(m_data->m_msg->m_msg);
+    label->setText(m_data->m_msg->text());
     auto icn = new QLabel(this);
-    icn->setPixmap(icon(m_data->m_msg->m_type));
+    icn->setPixmap(icon(m_data->m_msg->type()));
     icn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     auto closeBtn = new QPushButton(getIcon(FAIcon::Times), "", this);
     auto ml = new QHBoxLayout();
@@ -92,16 +93,11 @@ const Msg* NotificationWidget::msg() const
     return m_data->m_msg.get();
 }
 
-int NotificationWidget::id() const
-{
-    return m_data->m_msg->m_id;
-}
-
 void NotificationWidget::paintEvent(QPaintEvent * event)
 {
     QPainter painter{this};
     QColor col;
-    switch (m_data->m_msg->m_type) {
+    switch (m_data->m_msg->type()) {
     case NotificationType::Info: col = COL_INF; break;
     case NotificationType::Warning: col = COL_WRN; break;
     case NotificationType::Error: col = COL_ERR; break;
