@@ -2,8 +2,8 @@
 #include <QHBoxLayout>
 
 #include <core/logger/Logging.h>
-
 #include <common/widgets/QzScroller.h>
+#include <base/notification/show.h>
 
 #include "../title_bar/QuartzItem.h"
 #include "AbstractActionItemProvider.h"
@@ -120,8 +120,8 @@ bool ActionBar::handleExtension(Ext::Extension *extension)
         auto extensionName = extension != nullptr ? extension->extensionId()
                                             : "<null>";
         QZ_ERROR("Qz:ActionBar")
-                << "Invalid actionbar extension provided: "
-                << extensionName;
+                << tr("Invalid actionbar extension provided: ")
+                << extensionName << Logger::Str;
     }
     return false;
 }

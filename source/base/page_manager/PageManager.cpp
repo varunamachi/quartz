@@ -3,7 +3,7 @@
 
 #include <common/widgets/QzScroller.h>
 #include <common/widgets/StackedContainer.h>
-
+#include <base/notification/show.h>
 
 #include "QuartzPage.h"
 #include "AbstractPageProvider.h"
@@ -69,9 +69,10 @@ void PageManager::removePage(const QString &pageId)
         removePage(pageId);
     }
     else {
-        QZ_ERROR("QzApp:PageMan")
-                << "Could not remove page with id "
-                << pageId << ". No page with given ID found";
+        auto msg = QZ_ERROR("QzApp:PageMan")
+                << tr("Could not remove page with id %1."
+                      " No page with given ID found").arg(pageId)
+                << Logger::Str;
     }
 }
 
@@ -95,19 +96,24 @@ void PageManager::removePage(QuartzPage *page)
             }
         }
         else {
-            QZ_ERROR("Qz:PageManager")
-                    << "Could not remove page with ID " << page->pageId()
-                    << ". Could not find the category of the page - "
-                    << page->pageCategoryId();
+            auto msg = QZ_ERROR("Qz:PageManager")
+                    << tr("Could not remove page with ID %1. Could not find "
+                          "the category of the page - ")
+                       .arg(page->pageId())
+                       .arg(page->pageCategoryId()) << Logger::Str;
+            showError(msg);
 
         }
         QZ_INFO("Qz:PageManager")
-                << "succesfully added  Page with id " << page->pageId()
-                << " of category " << page->pageCategoryId();
+                << tr("succesfully added  Page with id %1 of category %2")
+                   .arg(page->pageId())
+                   .arg(page->pageCategoryId());
     }
     else {
-        QZ_ERROR("Qz:PageManager")
-                << "Could not remove page with id Invalid page given";
+        auto msg = QZ_ERROR("Qz:PageManager")
+                << tr("Could not remove page with id - invalid page given")
+                << Logger::Str;
+        showError(msg);
     }
 }
 
@@ -227,8 +233,10 @@ void PageManager::selectPage(QString pageId)
         }
     }
     if (! result){
-        QZ_ERROR("Qz:PageManager")
-                << "Could not find a page with id " << pageId;
+        auto msg = QZ_ERROR("Qz:PageManager")
+                << tr("Could not find a page with id ") << pageId
+                << Logger::Str;
+        showError(msg);
     }
 }
 

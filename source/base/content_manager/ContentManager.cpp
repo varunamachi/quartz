@@ -4,6 +4,7 @@
 #include <QApplication>
 
 #include <core/logger/Logging.h>
+#include <base/notification/show.h>
 
 #include "ContentWidget.h"
 #include "AbstractContentProvider.h"
@@ -154,9 +155,10 @@ bool ContentManager::handleExtension(Ext::Extension *ext)
     else {
         auto pluginName = ext != nullptr ? ext->extensionId()
                                          : "<null>";
-        QZ_ERROR("Qz:ContentManager")
-                << "Invalid content plugin provided: "
-                << pluginName;
+        auto msg = QZ_ERROR("Qz:ContentManager")
+                << tr("Invalid content plugin provided: ")
+                << pluginName << Logger::Str;
+        showError(msg);
     }
     return result;
 }

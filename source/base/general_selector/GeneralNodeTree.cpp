@@ -2,6 +2,7 @@
 #include <core/logger/Logging.h>
 
 #include <common/iconstore/IconFontStore.h>
+#include <base/notification/show.h>
 
 #include "AbstractGeneralNodeProvider.h"
 #include "GeneralNodeTree.h"
@@ -47,8 +48,10 @@ bool GeneralNodeTree::handleExtension(Ext::Extension *extension)
     else {
         auto extensionName = extension != nullptr ? extension->extensionId()
                                                   : "<null>";
-        QZ_ERROR("Qz:NodeSelector")
-                << "Invalid node extension provided: " << extensionName;
+        auto msg = QZ_ERROR("Qz:NodeSelector")
+                << tr("Invalid node extension provided: ")
+                << extensionName << Logger::Str;
+        showError(msg);
     }
     return result;
 }
