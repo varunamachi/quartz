@@ -50,9 +50,15 @@ MsgView::MsgView(QWidget *parent)
                  parent)
     , m_data(std::make_unique<Data>(this))
 {
+    m_data->m_view->setRootIsDecorated(false);
+
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_view);
     this->setLayout(mainLayout);
+
+    this->setContentsMargins({});
+    mainLayout->setContentsMargins({});
+
 }
 
 MsgView::~MsgView()
@@ -64,6 +70,7 @@ void MsgView::addMessage(std::shared_ptr<Msg> msg)
 {
     m_data->m_msgs.append(msg);
     m_data->m_model->addRoot(msg.get());
+    m_data->m_view->scrollToBottom();
 }
 
 }

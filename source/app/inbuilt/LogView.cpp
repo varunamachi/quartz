@@ -191,7 +191,12 @@ LogView::LogView(QWidget *parent)
     m_data->m_model = new LogModel(this);
     m_data->m_view  = new QTreeView(this);
     m_data->m_view->setModel(m_data->m_model);
-    connect(this, &LogView::sigLogMessage, m_data->m_model, &LogModel::add);
+    connect(this,
+            &LogView::sigLogMessage,
+            m_data->m_model, [=](std::shared_ptr<LogData> ld) {
+        m_data->m_model->add(ld);
+        m_data->m_view->scrollToBottom();
+    });
 
     auto layout = new QVBoxLayout(this);
     layout->addWidget(m_data->m_view);

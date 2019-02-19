@@ -2,11 +2,13 @@
 
 #include <base/view_manager/QuartzView.h>
 
+#include "../QuartzBase.h"
+
 namespace Quartz {
 
 class Msg;
 
-class MsgView : public QuartzView
+class QUARTZ_BASE_API MsgView : public QuartzView
 {
     Q_OBJECT
 

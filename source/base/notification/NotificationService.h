@@ -11,7 +11,7 @@ class QString;
 
 namespace Quartz {
 
-struct Msg;
+class Msg;
 enum class NotificationType : int;
 
 class QUARTZ_BASE_API NotificationService : public QWidget

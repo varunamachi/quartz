@@ -7,6 +7,7 @@
 namespace Quartz {
 
 AboutDialog::AboutDialog(QWidget *parent)
+    : QDialog (parent)
 {
     auto layout = new QHBoxLayout();
     auto img = new QLabel(this);
