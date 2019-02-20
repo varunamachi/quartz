@@ -13,8 +13,7 @@ namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 class TemplateManager;
 
-//class ContentProvider : public AbstractContentProvider
-class {{CLASS_NAME}} : public Abstract{{CLASS_NAME}}
+class {{CLASS_NAME}} : public AbstractContentProvider
 {
 public:
     explicit {{CLASS_NAME}}();
