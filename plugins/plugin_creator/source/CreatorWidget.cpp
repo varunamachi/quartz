@@ -16,7 +16,7 @@
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/model_view/ArrayModel.h>
-
+#include <base/notification/show.h>
 
 #include <plugin_base/PluginLogging.h>
 
@@ -307,7 +307,7 @@ void CreatorWidget::onCreate()
         if (isSource(inst->name())) {
             sources.append(inst->name());
         }
-        else if (inst->name() != "CMakeLists.txt"){
+        else if (inst->instanceOf()->name() != "CMakeLists.txt"){
             headers.append(inst->name());
         }
         info.addTemplateInstance(inst);
@@ -325,15 +325,18 @@ void CreatorWidget::onCreate()
         m_data->m_nameEdit->clear();
         m_data->m_dirPath->clear();
 #endif
-        QZP_INFO << "Created plugin with id " << id << " at " << path;
-        auto msg = tr("plugin %1 created successfully").arg(id);
-        QMessageBox::information(this, tr("plugin Creator"), msg);
+        auto msg = QZP_INFO << tr("Created plugin with id %1 at %2")
+                               .arg(id)
+                               .arg(path)
+                            << Logger::Str;
+        showInfo(msg);
     }
     else {
-        QZP_ERROR << "Could not create plugin with " << id << " at " << path;
-        QMessageBox::critical(this,
-                              tr("plugin Creator"),
-                              generator.lastError());
+        auto msg = QZP_ERROR << tr("Could not create with id %1 at %2")
+                               .arg(id)
+                               .arg(path)
+                             << Logger::Str;
+        showError(msg + " : " + generator.lastError());
     }
 }
 

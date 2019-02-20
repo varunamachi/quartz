@@ -25,7 +25,7 @@ class ConfigModel : public AbstractTreeModel
 public:
     explicit ConfigModel(QObject *parent);
 
-    ~ConfigModel();
+    ~ConfigModel() override;
 
     void setConfig(Config *config);
 

@@ -16,7 +16,8 @@ enum class ParamType
     Boolean,
     Choice,
     Range,
-    Text
+    Text,
+    Fixed,
 };
 
 

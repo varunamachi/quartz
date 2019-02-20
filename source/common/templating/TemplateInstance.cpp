@@ -107,6 +107,7 @@ bool TemplateInstance::setData(int column, const QVariant &data)
 {
     if (column == 0) {
         m_data->m_name= data.toString();
+        m_data->m_config->setConstant("NAME", m_data->m_name);
         return true;
     }
     return false;
@@ -129,6 +130,11 @@ QVariantHash TemplateInstance::allParams() const
         it != m_data->m_config->allParams().begin();
         ++ it) {
         out[it.key()] = it.value()->value();
+    }
+    for (auto it = m_data->m_config->constants().begin();
+         it != m_data->m_config->constants().end();
+         ++ it) {
+        out[it.key()] = it.value();
     }
     return out;
 }

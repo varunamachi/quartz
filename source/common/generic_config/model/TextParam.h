@@ -27,7 +27,7 @@ public:
                         const QString &description,
                         TreeNode *parent);
 
-    ~TextParam();
+    ~TextParam() override;
 
     ParamType type() const override;
 
@@ -43,7 +43,7 @@ public:
 
     void setValue(const QVariant &value) override;
 
-    std::unique_ptr<Param> clone() const;
+    std::unique_ptr<Param> clone() const override;
 
 private:
     struct Data;

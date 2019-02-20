@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QLabel>
+#include <QFileInfo>
 
 #include <core/logger/Logging.h>
 
@@ -17,6 +18,7 @@
 #include <common/generic_config/ui/GenConfigDelegate.h>
 #include <common/generic_config/model/Config.h>
 #include <common/generic_config/model/Param.h>
+#include <common/generic_config/model/FixedParam.h>
 #include <common/widgets/QzTreeView.h>
 #include <common/widgets/SearchBox.h>
 #include <common/iconstore/IconFontStore.h>
@@ -133,7 +135,11 @@ TemplateConfigWidget::TemplateConfigWidget(
              &SearchBox::textChanged,
              m_data->m_configProxy,
              &BasicSortFilter::setExpression);
-    connect(m_data->m_removeBtn,
+    connect(m_data->m_clearBtn,
+            &QPushButton::clicked,
+            this,
+            &TemplateConfigWidget::clear);
+    connect(m_data->m_clearBtn,
             &QPushButton::clicked,
             this,
             &TemplateConfigWidget::clear);
@@ -177,6 +183,9 @@ TemplateInstance * TemplateConfigWidget::createInstanceOf(Template *tmpl)
     auto inst = std::make_shared<TemplateInstance>(name,
                                                    tmpl->config()->clone(),
                                                    tmpl);
+
+    auto className = QFileInfo{name}.baseName();
+    inst->instanceConfig()->setConstant("NAME", className);
     m_data->m_instances.insert(name, inst);
     m_data->m_tmodel->addRoot(inst.get());
     return inst.get();

@@ -19,7 +19,7 @@ class QUARTZ_COMMON_API Config : public TreeNode
 public:
     Config(const QString &id, const QString &name);
 
-    ~Config();
+    ~Config() override;
 
     const QString & id() const;
 
@@ -46,6 +46,10 @@ public:
     QVariant fieldValue(int field) const override;
 
     std::unique_ptr<Config> clone() const;
+
+    void setConstant(const QString &key, const QVariant &value);
+
+    const QVariantHash & constants() const;
 
     const QHash<QString, Param *> & allParams() const;
 private:

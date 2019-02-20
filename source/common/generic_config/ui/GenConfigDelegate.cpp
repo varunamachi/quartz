@@ -44,8 +44,7 @@ QWidget* GenConfigDelegate::createEditor(
                 //I know, const_cast is bad...
                emit const_cast<GenConfigDelegate*>(this)->commitData(le);
             });
-        }
-            break;
+        } break;
         case ParamType::Range: {
             auto sl = new QSpinBox(parent);
             widget = sl;
@@ -55,8 +54,7 @@ QWidget* GenConfigDelegate::createEditor(
                 //I know, const_cast is bad...
                 emit const_cast<GenConfigDelegate*>(this)->commitData(sl);
             });
-        }
-            break;
+        } break;
         case ParamType::Choice: {
             auto combo = new QComboBox(parent);
             widget = combo;
@@ -66,10 +64,8 @@ QWidget* GenConfigDelegate::createEditor(
                 //I know, const_cast is bad...
                 emit const_cast<GenConfigDelegate*>(this)->commitData(combo);
             });
-        }
-            break;
+        } break;
         case ParamType::Boolean: {
-//            widget = QStyledItemDelegate::createEditor(parent, option, index);
             auto checkbox = new QCheckBox(parent);
             connect(checkbox,
                     &QCheckBox::stateChanged,
@@ -78,7 +74,8 @@ QWidget* GenConfigDelegate::createEditor(
                 emit const_cast<GenConfigDelegate*>(this)->commitData(checkbox);
             });
             widget = checkbox;
-        }
+        } break;
+        case ParamType::Fixed: //no edit for fixed
             break;
         }
     }
@@ -96,20 +93,17 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
             auto bparam = static_cast<BooleanParam *>(node);
             auto cb = static_cast<QCheckBox *>(editor);
             cb->setChecked(bparam->value().toBool());
-        }
-            break;
+        } break;
         case ParamType::Text: {
             auto tparam = static_cast<TextParam *> (node);
             auto le = static_cast<QLineEdit *>(editor);
             le->setText(tparam->value().toString());
-        }
-            break;
+        } break;
         case ParamType::Range: {
             auto rparam = static_cast<RangeParam *> (node);
             auto sl = static_cast<QSpinBox *>(editor);
             sl->setValue(rparam->value().toInt());
-        }
-            break;
+        } break;
         case ParamType::Choice: {
             auto cparam = static_cast<ChoiceParam *> (node);
             auto combo = static_cast<QComboBox *>(editor);
@@ -121,7 +115,8 @@ void GenConfigDelegate::setEditorData(QWidget *editor,
                 combo->setCurrentIndex(cparam->index());
             }
 //            combo->showPopup();
-        }
+        } break;
+        case ParamType::Fixed: //no edit for fixed
             break;
         }
     }
@@ -137,25 +132,24 @@ void GenConfigDelegate::setModelData(QWidget *editor,
         QVariant data;
         switch(node->type()) {
         case ParamType::Boolean: {
-//            QStyledItemDelegate::setModelData(editor, model, index);
             auto cb = static_cast<QCheckBox *>(editor);
             data = cb->checkState();
-            return;
+            return; //?
         }
         case ParamType::Text: {
             auto le = static_cast<QLineEdit *>(editor);
             data = le->text();
-        }
-            break;
+        } break;
         case ParamType::Range: {
             auto sl = static_cast<QSpinBox *>(editor);
             data = sl->value();
-        }
-            break;
+        } break;
         case ParamType::Choice: {
             auto combo = static_cast<QComboBox *>(editor);
             data = combo->currentData();
-        }
+        } break;
+        case ParamType::Fixed: //no edit for fixed
+            data = node->value();
             break;
         }
         model->setData(index, data);

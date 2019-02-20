@@ -5,17 +5,17 @@
         </config>
         <content>
             <![CDATA[
-#include "ContentProvider.h"
+#include "{{NAME}}.h"
 
 namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 /********************** Provider ************************************/
-const QString ContentProvider::EXTENSION_ID(
+const QString {{NAME}}::EXTENSION_ID(
     "qzp.{{PLUGIN_NAME}}.provider.content");
-const QString ContentProvider::EXTENSION_NAME(
+const QString {{NAME}}::EXTENSION_NAME(
     "Quartz {{PLUGIN_DISPLAY_NAME}} Content");
 
-struct ContentProvider::Data
+struct {{NAME}}::Data
 {
     explicit Data()
     {
@@ -24,29 +24,29 @@ struct ContentProvider::Data
     QVector<ContentWidget *> m_widgets;
 };
 
-ContentProvider::ContentProvider()
+{{NAME}}::{{NAME}}()
     : AbstractContentProvider(EXTENSION_ID, EXTENSION_NAME)
     , m_data(std::make_unique<Data>())
 {
 
 }
 
-ContentProvider::~ContentProvider()
+{{NAME}}::~{{NAME}}()
 {
 
 }
 
-bool ContentProvider::init()
-{
-    return true;
-}
-
-bool ContentProvider::destroy()
+bool {{NAME}}::init()
 {
     return true;
 }
 
-QVector<ContentWidget *> ContentProvider::widgets()
+bool {{NAME}}::destroy()
+{
+    return true;
+}
+
+QVector<ContentWidget *> {{NAME}}::widgets()
 {
     return m_data->m_widgets;
 }

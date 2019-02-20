@@ -5,6 +5,7 @@ vq_classes(
     ChoiceParam
     RangeParam
     TextParam
+    FixedParam
     Group
 )
 

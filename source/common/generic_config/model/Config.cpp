@@ -28,7 +28,9 @@ struct Config::Data
 
     QVector<std::shared_ptr<Group>> m_groups;
 
-    QHash< QString, Param *> m_allParams;
+    QHash<QString, Param *> m_allParams;
+
+    QVariantHash m_constants;
 };
 
 Config::Config(const QString &id, const QString &name)
@@ -70,6 +72,7 @@ void Config::addChildParameter(std::shared_ptr<Param> param)
 {
     if (param) {
         m_data->m_params.push_back(param);
+        registerParam(param.get());
         addChild(param.get());
     }
 }
@@ -144,6 +147,20 @@ std::unique_ptr<Config> Config::clone() const
         new Config{ m_data->m_name, m_data->m_id }};
     copy(this, config.get());
     return config;
+}
+
+void Config::setConstant(const QString &key, const QVariant &value)
+{
+    if (m_data->m_constants.contains(key)) {
+        m_data->m_constants[key] = value;
+    } else {
+        m_data->m_constants.insert(key, value);
+    }
+}
+
+const QVariantHash &Config::constants() const
+{
+    return m_data->m_constants;
 }
 
 const QHash<QString, Param *> &Config::allParams() const
