@@ -21,37 +21,37 @@
 
 #include <base/selector/Node.h>
 
-#include "NodeProvider.h"
+#include "{{CLASS_NAME}}.h"
 
 namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
-const QString NodeProvider::EXTENSION_ID{
+const QString {{CLASS_NAME}}::EXTENSION_ID{
     "qzp.{{PLUGIN_NAME}}.provider.node" };
-const QString NodeProvider::EXTENSION_NAME{
+const QString {{CLASS_NAME}}::EXTENSION_NAME{
     "Quartz {{PLUGIN_DISPLAY_NAME}} Node" };
 
-NodeProvider::NodeProvider()
+{{CLASS_NAME}}::{{CLASS_NAME}}()
     : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
 {
 
 }
 
-NodeProvider::~NodeProvider()
+{{CLASS_NAME}}::~{{CLASS_NAME}}()
 {
 
 }
 
-bool NodeProvider::init()
-{
-    return true;
-}
-
-bool NodeProvider::destroy()
+bool {{CLASS_NAME}}::init()
 {
     return true;
 }
 
-QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
+bool {{CLASS_NAME}}::destroy()
+{
+    return true;
+}
+
+QVector<std::shared_ptr<NodeInfo>> {{CLASS_NAME}}::nodes() const
 {
     auto nodeInfo = std::make_shared<NodeInfo>(
                 QStringList{},

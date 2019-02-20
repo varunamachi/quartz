@@ -12,12 +12,12 @@
 
 namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
-class NodeProvider : public AbstractGeneralNodeProvider
+class {{CLASS_NAME}} : public AbstractGeneralNodeProvider
 {
 public:
-    NodeProvider();
+    {{CLASS_NAME}}();
 
-    ~NodeProvider();
+    ~{{CLASS_NAME}}();
 
     bool init() override;
 

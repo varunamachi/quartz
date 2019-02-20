@@ -15,6 +15,7 @@
 #include <common/templating/TemplateUtils.h>
 #include <common/templating/Template.h>
 #include <common/templating/TemplateInstance.h>
+#include <common/generic_config/model/Config.h>
 #include <common/model_view/ArrayModel.h>
 #include <base/notification/show.h>
 
@@ -310,6 +311,8 @@ void CreatorWidget::onCreate()
         else if (inst->instanceOf()->name() != "CMakeLists.txt"){
             headers.append(inst->name());
         }
+        auto className = QFileInfo{inst->name()}.baseName();
+        inst->instanceConfig()->setConstant("CLASS_NAME", className);
         info.addTemplateInstance(inst);
     }
     m_data->m_globalConfig->insert("sources", sources);

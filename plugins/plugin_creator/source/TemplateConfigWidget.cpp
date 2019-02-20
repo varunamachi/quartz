@@ -185,7 +185,6 @@ TemplateInstance * TemplateConfigWidget::createInstanceOf(Template *tmpl)
                                                    tmpl);
 
     auto className = QFileInfo{name}.baseName();
-    inst->instanceConfig()->setConstant("NAME", className);
     m_data->m_instances.insert(name, inst);
     m_data->m_tmodel->addRoot(inst.get());
     return inst.get();

@@ -145,8 +145,7 @@ std::unique_ptr<Template> TemplateContainerParser::parse(
         if (config != nullptr) {
             auto content = getTemplateContent(root);
             if (! content.isEmpty()) {
-                tmpl = std::unique_ptr<Template>{
-                        new Template(name, content)};
+                tmpl = std::make_unique<Template>(name, content);
                 tmpl->setConfig(std::move(config));
             }
             else {

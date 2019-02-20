@@ -14,12 +14,12 @@ namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 class TemplateManager;
 
 //class ContentProvider : public AbstractContentProvider
-class {{NAME}} : public Abstract{{NAME}}
+class {{CLASS_NAME}} : public Abstract{{CLASS_NAME}}
 {
 public:
-    explicit {{NAME}}();
+    explicit {{CLASS_NAME}}();
 
-    ~{{NAME}}();
+    ~{{CLASS_NAME}}();
 
     bool init() override;
 
