@@ -14,7 +14,7 @@
                 description="Unique ID of selection tree node"
                 default=""/>
         </config>
-        <content name="{{NAME}}.cpp">
+        <content name="{{NAME}}.h">
             <![CDATA[
 #pragma once
 
@@ -28,7 +28,7 @@ class {{NAME}} : public AbstractGeneralNodeProvider
 public:
     {{NAME}}();
 
-    ~{{NAME}}();
+    ~{{NAME}}() override;
 
     bool init() override;
 

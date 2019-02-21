@@ -29,7 +29,7 @@ Q_DECL_EXPORT PluginWrapper getPluginWrapper(PluginInputWrapper *input)
     auto plugin = std::make_unique<Quartz::Ext::{{PLUGIN_NAMESPACE}}::Plugin>();
     auto pluginPtr = plugin.get();
     Quartz::Ext::PluginContext::instance()->setPlugin(std::move(plugin));
-    return PluginWrapper{pluginPtr};
+    return PluginWrapper{pluginPtr, true};
 }
 
 Q_DECL_EXPORT void destroy()

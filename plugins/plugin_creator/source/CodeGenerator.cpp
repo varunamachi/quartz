@@ -49,7 +49,7 @@ bool CodeGenerator::generate(const QString &path,
     if (result) {
         QDir dir(path);
         QString msg;
-        if (dir.mkdir("resources")) {
+        if (dir.exists("resources") || dir.mkdir("resources")) {
             QFile ptxt{ dir.absoluteFilePath("resources/plugin.txt")};
             if (ptxt.open(QFile::ReadWrite)) {
                 QTextStream fstream{ &ptxt };
@@ -131,9 +131,10 @@ bool CodeGenerator::generateForInstance(const QString &path,
             auto fileContent = proc.process(content.m_text, vars);
             hasError = proc.hasError();
             if (!hasError) {
-                hasError = writeFile(filePath, fileContent);
-                if (!hasError) {
+                if (writeFile(filePath, fileContent)) {
                     out.append(name);
+                } else {
+                    hasError = true;
                 }
             }
         }

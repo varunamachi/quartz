@@ -2,7 +2,7 @@
     <template name="resources">
         <config id="resources" name="Resources">
         </config>
-        <content name="resource.qrc">
+        <content name="resources.qrc">
             <![CDATA[
 <RCC>
     <qresource prefix="/">

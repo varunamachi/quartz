@@ -122,9 +122,9 @@ int readContent(Template *tmpl, const QDomElement &root)
                             << path << "'";
                 }
             }
-            if (content.size() != 0) {
-                tmpl->addContent({name, content});
-            }
+        }
+        if (content.size() != 0) {
+            tmpl->addContent({name, content});
         }
     }
 //    else {

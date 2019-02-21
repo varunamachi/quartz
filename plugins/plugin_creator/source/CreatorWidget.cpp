@@ -334,6 +334,7 @@ void CreatorWidget::onCreate()
         m_data->m_globalConfig->insert("sources", sources);
         m_data->m_globalConfig->insert("headers", headers);
         info.clearTemplateInstances(); //clear the previous files
+        info.addTemplateInstance(cmakeInstance);
         CodeGenerator generator{&info};
         result = generator.generate(path, fileNames);
     }
