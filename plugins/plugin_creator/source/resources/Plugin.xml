@@ -1,0 +1,97 @@
+<templates type="mustache">
+    <template name="Plugin">
+        <config id="Plugin" name="Plugin Src">
+
+        </config>
+        <content name="Plugin.h">
+            <![CDATA[
+#pragma once
+
+#include <core/ext/Plugin.h>
+
+namespace Quartz {
+
+class QzAppContext;
+
+namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+class Plugin : public Ext::Plugin
+{
+
+public:
+    Plugin();
+
+    ~Plugin();
+
+    const ExtensionList & extensions() const override;
+
+    const DependencyList & dependencies() const override;
+
+    const AdapterList &adapters() const override;
+
+    static const QString PLUGIN_ID;
+
+    static const QString PLUGIN_NAME;
+
+private:
+    struct Data;
+    std::unique_ptr<Data> m_data;
+};
+
+} } }
+            ]]>
+        </content>        
+        <content name="Plugin.cpp">
+            <![CDATA[
+#include <base/QzAppContext.h>
+
+#include <core/ext/IExtensionAdapter.h>
+
+#include "Plugin.h"
+
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+const QString Plugin::PLUGIN_ID{ "{{PLUGIN_ID}}" };
+const QString Plugin::PLUGIN_NAME{ "{{PLUGIN_DISPLAY_NAME}}" };
+
+struct Plugin::Data
+{
+    AdapterList m_adapters;
+    ExtensionList m_extensions;
+    DependencyList m_dependencies;
+};
+
+Plugin::Plugin()
+    : Quartz::Ext::Plugin(PLUGIN_ID, PLUGIN_NAME)
+    , m_data(std::make_unique<Data>())
+{
+
+}
+
+Plugin::~Plugin()
+{
+
+}
+
+const ExtensionList & Plugin::extensions() const
+{
+    return m_data->m_extensions;
+}
+
+
+const DependencyList & Plugin::dependencies() const
+{
+    return m_data->m_dependencies;
+}
+
+const AdapterList & Plugin::adapters() const
+{
+    return m_data->m_adapters;
+}
+
+
+} } }
+            ]]>
+        </content>
+    </template>
+</templates>

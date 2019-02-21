@@ -120,6 +120,7 @@ Config * TemplateInstance::instanceConfig()
 QVariantHash TemplateInstance::allParams() const
 {
     QVariantHash out;
+    m_data->m_config->setConstant("NAME", name());
     for (auto it = m_data->m_globalConfig->begin();
         it != m_data->m_globalConfig->end();
         ++ it) {

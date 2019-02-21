@@ -1,9 +1,9 @@
 <templates type="mustache">
-    <template name="CMakeLists.txt">
-        <config id="CMakeLists.txt" name="CMake List">
+    <template name="CMakeLists">
+        <config id="CMakeLists" name="CMake List">
 
         </config>
-        <content>
+        <content name="CMakeLists.txt">
             <![CDATA[
 project( plugin_{{PLUGIN_NAME}} )
 cmake_minimum_required( VERSION 3.1 )

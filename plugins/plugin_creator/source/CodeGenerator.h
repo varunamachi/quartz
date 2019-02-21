@@ -3,6 +3,7 @@
 #include <memory>
 
 class QString;
+class QStringList;
 
 namespace Quartz {
 
@@ -20,14 +21,16 @@ public:
 
     virtual ~CodeGenerator();
 
-    virtual bool generate(const QString &path);
+    virtual bool generate(const QString &path,
+                          QStringList &out);
 
     const QString & lastError() const;
 
 protected:
     virtual bool generateForInstance(
             const QString &path,
-            const TemplateInstance *instance);
+            const TemplateInstance *instance,
+            QStringList &out);
 
 private:
     struct Data;

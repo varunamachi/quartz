@@ -11,11 +11,32 @@ namespace Quartz {
 
 class Config;
 
+struct Content
+{
+    Content()
+        : m_name(QStringLiteral(""))
+        , m_text(QStringLiteral(""))
+
+    {
+
+    }
+
+    Content(const QString &name, const QString &text)
+        : m_name(name)
+        , m_text(text)
+    {
+
+    }
+
+    QString m_name;
+
+    QString m_text;
+};
+
 class QUARTZ_COMMON_API Template : public TreeNode
 {
 public:
-    explicit Template(const QString &name,
-                       const QString &content);
+    explicit Template(const QString &name);
 
     ~Template() override;
 
@@ -25,7 +46,13 @@ public:
 
     Config * config() const;
 
-    const QString & content() const;
+    void addContent(const Content &content);
+
+    const Content & contentAt(int index) const;
+
+    const QVector<Content> & contents() const;
+
+    int numContents() const;
 
     QVariant fieldValue(int field) const override;
 

@@ -2,9 +2,11 @@
 
 #include <memory>
 
+#include <QVariant>
+
 #include "../QuartzCommon.h"
 
-class QTextStream;
+class QIODevice;
 
 namespace Quartz {
 
@@ -13,15 +15,17 @@ class TemplateInstance;
 class QUARTZ_COMMON_API MustacheTemplateProcessor
 {
 public:
-    explicit MustacheTemplateProcessor(const TemplateInstance *tmpl);
+    explicit MustacheTemplateProcessor();
 
     ~MustacheTemplateProcessor();
 
-    bool process(QTextStream &stream);
+    QString process(const QString &content, QVariantHash vars);
 
     const QString & lastError() const;
 
     void reset();
+
+    bool hasError() const;
 
 private:
     struct Data;

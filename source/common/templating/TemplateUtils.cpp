@@ -6,7 +6,6 @@
 
 #include <core/logger/Logging.h>
 
-#include "AdvancedTemplateProcessor.h"
 #include "Template.h"
 #include "TemplateUtils.h"
 #include "TemplateContainerParser.h"

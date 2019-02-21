@@ -1,0 +1,25 @@
+<templates type="mustache">
+    <template name="ActionProvider">
+        <config id="ActionProvider" name="Action Provider Src">
+        </config>
+        <content name="{{NAME}}.h">
+            <![CDATA[
+#pragma once
+
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+} } }
+            ]]>
+        </content>        
+        <content name="{{NAME}}.cpp">
+            <![CDATA[
+#include "{{NAME}}.h"
+
+namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
+
+} } }
+
+            ]]>
+        </content>
+    </template>
+</templates>

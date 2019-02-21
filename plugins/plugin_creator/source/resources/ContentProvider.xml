@@ -3,7 +3,7 @@
         <config id="ContentProvider" name="Content Provider Hdr">
 
         </config>
-        <content name="ContentProvider.h">
+        <content name="{{NAME}}.h">
             <![CDATA[
 #pragma once
 
@@ -13,12 +13,12 @@ namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 class TemplateManager;
 
-class {{CLASS_NAME}} : public AbstractContentProvider
+class {{NAME}} : public AbstractContentProvider
 {
 public:
-    explicit {{CLASS_NAME}}();
+    explicit {{NAME}}();
 
-    ~{{CLASS_NAME}}();
+    ~{{NAME}}();
 
     bool init() override;
 
@@ -38,19 +38,19 @@ private:
 } } }
             ]]>
         </content>
-        <content name="ContentProvider.cpp">
+        <content name="{{NAME}}.cpp">
             <![CDATA[
-#include "{{CLASS_NAME}}.h"
+#include "{{NAME}}.h"
 
 namespace Quartz { namespace Ext { namespace {{PLUGIN_NAMESPACE}} {
 
 /********************** Provider ************************************/
-const QString {{CLASS_NAME}}::EXTENSION_ID(
+const QString {{NAME}}::EXTENSION_ID(
     "qzp.{{PLUGIN_NAME}}.provider.content");
-const QString {{CLASS_NAME}}::EXTENSION_NAME(
+const QString {{NAME}}::EXTENSION_NAME(
     "Quartz {{PLUGIN_DISPLAY_NAME}} Content");
 
-struct {{CLASS_NAME}}::Data
+struct {{NAME}}::Data
 {
     explicit Data()
     {
@@ -59,29 +59,29 @@ struct {{CLASS_NAME}}::Data
     QVector<ContentWidget *> m_widgets;
 };
 
-{{CLASS_NAME}}::{{CLASS_NAME}}()
+{{NAME}}::{{NAME}}()
     : AbstractContentProvider(EXTENSION_ID, EXTENSION_NAME)
     , m_data(std::make_unique<Data>())
 {
 
 }
 
-{{CLASS_NAME}}::~{{CLASS_NAME}}()
+{{NAME}}::~{{NAME}}()
 {
 
 }
 
-bool {{CLASS_NAME}}::init()
-{
-    return true;
-}
-
-bool {{CLASS_NAME}}::destroy()
+bool {{NAME}}::init()
 {
     return true;
 }
 
-QVector<ContentWidget *> {{CLASS_NAME}}::widgets()
+bool {{NAME}}::destroy()
+{
+    return true;
+}
+
+QVector<ContentWidget *> {{NAME}}::widgets()
 {
     return m_data->m_widgets;
 }

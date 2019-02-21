@@ -106,4 +106,9 @@ void GenInfo::removeTemplateInstance(const QString &instanceName)
     }
 }
 
+void GenInfo::clearTemplateInstances()
+{
+    m_data->m_tmpInstances.clear();
+}
+
 } } }

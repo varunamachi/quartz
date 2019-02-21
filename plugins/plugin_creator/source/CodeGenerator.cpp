@@ -5,7 +5,6 @@
 
 #include <plugin_base/PluginLogging.h>
 
-#include <common/templating/AdvancedTemplateProcessor.h>
 #include <common/templating/MustacheTemplateProcessor.h>
 #include <common/templating/TemplateInstance.h>
 #include <common/templating/Template.h>
@@ -39,12 +38,13 @@ CodeGenerator::~CodeGenerator()
 
 }
 
-bool CodeGenerator::generate(const QString &path)
+bool CodeGenerator::generate(const QString &path,
+                             QStringList &out)
 {
     bool result = true;
     for (auto i = 0; i < m_data->m_info->numTemplateInstances(); ++ i) {
         auto tinst = m_data->m_info->templateInstanceAt(i);
-        result = this->generateForInstance(path, tinst) && result;
+        result = this->generateForInstance(path, tinst, out) && result;
     }
     if (result) {
         QDir dir(path);
@@ -59,16 +59,14 @@ bool CodeGenerator::generate(const QString &path)
                         << "display=" << m_data->m_info->display() << '\n'
                         << "ns=" << m_data->m_info->ns() << '\n'
                         << "version=0.0.0.0";
-            }
-            else {
+            } else {
                 QZP_ERROR << "Failed to create plugin.txt at " <<
                              path << "/resources";
                 m_data->m_lastError = QObject::tr(
                             "Failed to create plugin.txt in resource dir");
                 result = false;
             }
-        }
-        else {
+        } else {
             QZP_ERROR << "Failed to create resource directory at " << path;
             m_data->m_lastError =
                     QObject::tr("Failed to create resource dir at %1")
@@ -102,35 +100,78 @@ const QString & CodeGenerator::lastError() const
     return m_data->m_lastError;
 }
 
-bool CodeGenerator::generateForInstance(const QString &path,
-                                         const TemplateInstance *instance)
+bool writeFile(const QString &path, const QString &content)
 {
-    auto filePath = path + "/" + instance->name();
-    QFile genFile(filePath);
-    if (genFile.exists()) {
-        QZP_ERROR << "Could not generate file " << instance->name()
-                  << ", target already exists at: " << filePath;
-        m_data->m_lastError = QObject::tr(
-                    "Template Generation: output file %1 already exist, cannot "
-                    "overwrite").arg(path);
-        return false;
+    auto result = false;
+    QFile file{path};
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        auto ba = content.toUtf8();
+        result = ba.size() == file.write(ba);
     }
-    if (! genFile.open(QFile::ReadWrite)) {
-        QZP_ERROR << "Could not generate file " << instance->name()
-                  << ", failed to create" << filePath;
-        m_data->m_lastError = QObject::tr(
-                    "Template Generation: Failed to create file at %1")
-                .arg(path);
-        return false;
-    }
-    QTextStream stream{ &genFile };
-//    AdvancedTemplateProcessor tproc(instance);
-    MustacheTemplateProcessor tproc(instance);
-    auto result = tproc.process(stream);
-    if (! result) {
-        m_data->m_lastError = tproc.lastError();
+    if (!result) {
+        QZP_ERROR << "Failed to create template output at " << path;
     }
     return result;
+}
+
+bool CodeGenerator::generateForInstance(const QString &path,
+                                        const TemplateInstance *instance,
+                                        QStringList &out)
+{
+    auto result = true;
+    MustacheTemplateProcessor proc;
+    for (auto i = 0; i < instance->instanceOf()->numContents(); ++ i) {
+        const auto &content = instance->instanceOf()->contentAt(i);
+        const auto vars = instance->allParams();
+        const auto name = proc.process(content.m_name, vars);
+        auto hasError = proc.hasError();
+        if (!hasError) {
+            proc.reset();
+            auto filePath = path + "/" + name;
+            auto fileContent = proc.process(content.m_text, vars);
+            hasError = proc.hasError();
+            if (!hasError) {
+                hasError = writeFile(filePath, fileContent);
+                if (!hasError) {
+                    out.append(name);
+                }
+            }
+        }
+        if(hasError) {
+            QZP_ERROR << "Failed to generate code for template instance "
+                      << instance->name()<< ": " << proc.lastError();
+            result = false;
+        }
+        proc.reset();
+    }
+    return result;
+
+
+//    auto filePath = path + "/" + instance->name();
+//    QFile genFile(filePath);
+//    if (genFile.exists()) {
+//        QZP_ERROR << "Could not generate file " << instance->name()
+//                  << ", target already exists at: " << filePath;
+//        m_data->m_lastError = QObject::tr(
+//                    "Template Generation: output file %1 already exist, cannot "
+//                    "overwrite").arg(path);
+//        return false;
+//    }
+//    if (! genFile.open(QFile::ReadWrite)) {
+//        QZP_ERROR << "Could not generate file " << instance->name()
+//                  << ", failed to create" << filePath;
+//        m_data->m_lastError = QObject::tr(
+//                    "Template Generation: Failed to create file at %1")
+//                .arg(path);
+//        return false;
+//    }
+//    QTextStream stream{&genFile};
+//    MustacheTemplateProcessor tproc;
+//    auto result = tproc.process(instance->);
+//    if (! result) {
+//        m_data->m_lastError = tproc.lastError();
+//    }
+//    return result;
 }
 
 

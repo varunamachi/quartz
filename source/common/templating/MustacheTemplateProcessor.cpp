@@ -11,20 +11,14 @@
 namespace Quartz {
 
 struct MustacheTemplateProcessor::Data {
-    explicit Data(const TemplateInstance *tmpl)
-        : m_templateInst(tmpl)
-    {
-
-    }
-
-    const TemplateInstance *m_templateInst;
+    explicit Data() {     }
+    QTextStream m_stream;
 
     QString m_lastError;
 };
 
-MustacheTemplateProcessor::MustacheTemplateProcessor(
-        const TemplateInstance *tmpl)
-    : m_data(std::make_unique<Data>(tmpl))
+MustacheTemplateProcessor::MustacheTemplateProcessor()
+    : m_data(std::make_unique<Data>())
 {
 
 }
@@ -34,18 +28,19 @@ MustacheTemplateProcessor::~MustacheTemplateProcessor()
 
 }
 
-bool MustacheTemplateProcessor::process(QTextStream &stream)
+QString MustacheTemplateProcessor::process(const QString &content,
+                                           QVariantHash hash)
 {
-    auto hash = m_data->m_templateInst->allParams();
-    auto content = m_data->m_templateInst->instanceOf()->content();
+    QString output;
+    QTextStream stream(&output);
     Mustache::Renderer renderer;
     Mustache::QtVariantContext context(hash);
     stream << renderer.render(content, &context);
     if (renderer.errorPos() != -1) {
         m_data->m_lastError = renderer.error();
-        return false;
+        output = "";
     }
-    return true;
+    return output;
 }
 
 const QString & MustacheTemplateProcessor::lastError() const
@@ -55,8 +50,12 @@ const QString & MustacheTemplateProcessor::lastError() const
 
 void MustacheTemplateProcessor::reset()
 {
-    m_data->m_templateInst = nullptr;
     m_data->m_lastError = "";
+}
+
+bool MustacheTemplateProcessor::hasError() const
+{
+    return m_data->m_lastError != "";
 }
 
 }

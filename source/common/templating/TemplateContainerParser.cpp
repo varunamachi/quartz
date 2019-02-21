@@ -93,27 +93,27 @@ std::unique_ptr<Config> parseConfig(const QDomElement &root) {
     return config;
 }
 
-QString getTemplateContent(const QDomElement &root)
+int readContent(Template *tmpl, const QDomElement &root)
 {
     QString content;
+    auto count = 0;
     auto cntNodeList = root.elementsByTagName("content");
-    bool gotContent = false;
-    if (cntNodeList.size() == 1) {
-        auto children = cntNodeList.at(0).toElement().childNodes();
+    for (auto i = 0; i < cntNodeList.size(); ++ i) {
+        auto contentNode = cntNodeList.at(i);
+        auto name = contentNode.toElement().attribute("name");
+        auto children = contentNode.toElement().childNodes();
+        auto content = QStringLiteral("");
         for (auto i = 0; i < children.size(); ++ i) {
             auto child = children.at(i);
             if (child.isCDATASection()) {
                 auto cdata = child.toCDATASection();
                 content = cdata.data();
-                gotContent = true;
                 break;
-            }
-            else if (child.nodeName() == "file") {
+            } else if (child.nodeName() == "file") {
                 auto path = child.toElement().attribute("path");
                 QFile file(path);
                 if (file.open(QFile::ReadOnly)) {
                     content = file.readAll();
-                    gotContent = true;
                     break;
                 }
                 else {
@@ -122,17 +122,20 @@ QString getTemplateContent(const QDomElement &root)
                             << path << "'";
                 }
             }
+            if (content.size() != 0) {
+                tmpl->addContent({name, content});
+            }
         }
     }
-    else {
-        auto msg = cntNodeList.isEmpty() ? "Could not find valid content tag"
-                                         : "Found too many content tags";
-        QZ_ERROR("Qz:Cmn:Tmpl") << msg;
-    }
-    if (! gotContent) {
-        QZ_ERROR("Qz:Cmn:Tmpl") << "Failed to fetch template content";
-    }
-    return content;
+//    else {
+//        auto msg = cntNodeList.isEmpty() ? "Could not find valid content tag"
+//                                         : "Found too many content tags";
+//        QZ_ERROR("Qz:Cmn:Tmpl") << msg;
+//    }
+//    if (! gotContent) {
+//        QZ_ERROR("Qz:Cmn:Tmpl") << "Failed to fetch template content";
+//    }
+    return count;
 }
 
 std::unique_ptr<Template> TemplateContainerParser::parse(
@@ -143,12 +146,10 @@ std::unique_ptr<Template> TemplateContainerParser::parse(
     if (! name.isEmpty()) {
         auto config = parseConfig(root);
         if (config != nullptr) {
-            auto content = getTemplateContent(root);
-            if (! content.isEmpty()) {
-                tmpl = std::make_unique<Template>(name, content);
-                tmpl->setConfig(std::move(config));
-            }
-            else {
+            tmpl = std::make_unique<Template>(name);
+            tmpl->setConfig(std::move(config));
+            auto count = readContent(tmpl.get(), root);
+            if (count == 0) {
                 QZ_ERROR("Qz:Cmn:Tmpl")
                         << "Found empty template content";
             }

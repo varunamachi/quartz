@@ -1,9 +1,9 @@
 <templates type="mustache">
-    <template name="EntryPoint.cpp">
-        <config id="EntryPoint.cpp" name="Entry Point Src" >
+    <template name="EntryPoint">
+        <config id="EntryPoint" name="Entry Point Src" >
 
         </config>
-        <content>
+        <content name="EntryPoint.cpp">
             <![CDATA[
 
 #include <core/ext/PluginEnv.h>

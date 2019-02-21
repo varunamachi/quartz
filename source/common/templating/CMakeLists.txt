@@ -1,7 +1,6 @@
 
 vq_classes(
         TemplateUtils
-        AdvancedTemplateProcessor
         Template
         TemplateInstance
         TemplateContainerParser

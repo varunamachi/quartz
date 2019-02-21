@@ -41,7 +41,13 @@ static inline bool isSource(const QString &name) {
             || name.endsWith(".cxx")
             || name.endsWith(".cc")
             || name.endsWith("cx");
+}
 
+static inline bool isHeader(const QString &name) {
+    return name.endsWith(".cpp")
+            || name.endsWith(".cxx")
+            || name.endsWith(".cc")
+            || name.endsWith("cx");
 }
 
 struct CreatorWidget::Data
@@ -82,22 +88,22 @@ struct CreatorWidget::Data
     std::shared_ptr<GlobalConfig> m_globalConfig;
 };
 
-void addStandaredTemplates(TemplateManager *tman)
-{
-    QStringList names;
-    QDir inDir{ ":/resources" };
-    auto list = inDir.entryInfoList(names);
-    for (int i = 0; i < list.size(); ++ i) {
-        auto entry = list.at(i);
-        if (entry.suffix() == "template") {
-            auto key = entry.baseName();
-            QFile file{entry.absoluteFilePath()};
-            auto content = QString{file.readAll()};
-            auto tmpl = std::make_shared<Template>(key, content);
-            tman->addTemplate(tmpl);
-        }
-    }
-}
+//void addStandaredTemplates(TemplateManager *tman)
+//{
+//    QStringList names;
+//    QDir inDir{ ":/resources" };
+//    auto list = inDir.entryInfoList(names);
+//    for (int i = 0; i < list.size(); ++ i) {
+//        auto entry = list.at(i);
+//        if (entry.suffix() == "template") {
+//            auto key = entry.baseName();
+//            QFile file{entry.absoluteFilePath()};
+//            auto content = QString{file.readAll()};
+//            auto tmpl = std::make_shared<Template>(key);
+//            tman->addTemplate(tmpl);
+//        }
+//    }
+//}
 
 inline void error(CreatorWidget *obj, const QString &msg)
 {
@@ -301,24 +307,37 @@ void CreatorWidget::onCreate()
         return;
     }
     GenInfo info(id, name, display, ns);
-    QStringList sources, headers;
+    TemplateInstance *cmakeInstance = nullptr;
     for (auto i = 0; i < m_data->m_configWidget->numInstances(); ++ i) {
         auto inst = m_data->m_configWidget->instanceAt(i);
         inst->setGlobalConfig(m_data->m_globalConfig);
-        if (isSource(inst->name())) {
-            sources.append(inst->name());
+        if (inst->instanceOf()->name() != "CMakeLists") {
+            info.addTemplateInstance(inst);
+        } else {
+            cmakeInstance = inst;
         }
-        else if (inst->instanceOf()->name() != "CMakeLists.txt"){
-            headers.append(inst->name());
-        }
-        auto className = QFileInfo{inst->name()}.baseName();
-        inst->instanceConfig()->setConstant("CLASS_NAME", className);
-        info.addTemplateInstance(inst);
     }
-    m_data->m_globalConfig->insert("sources", sources);
-    m_data->m_globalConfig->insert("headers", headers);
+    QStringList fileNames;
     CodeGenerator generator{&info};
-    auto result = generator.generate(path);
+    auto result = generator.generate(path, fileNames);
+
+    //Now generate the cmake lists for the files generated
+    if (result && cmakeInstance != nullptr) {
+        QStringList sources, headers;
+        for (const auto &fn : fileNames) {
+            if (isSource(fn)) {
+                sources.append(fn);
+            } else {
+                headers.append(fn);
+            }
+        }
+        m_data->m_globalConfig->insert("sources", sources);
+        m_data->m_globalConfig->insert("headers", headers);
+        info.clearTemplateInstances(); //clear the previous files
+        CodeGenerator generator{&info};
+        result = generator.generate(path, fileNames);
+    }
+
     if (result) {
 #ifndef QT_DEBUG
         //create the resource directory and place the plugin.txt there

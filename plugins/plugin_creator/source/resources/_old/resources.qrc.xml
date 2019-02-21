@@ -1,8 +1,8 @@
 <templates type="mustache">
-    <template name="resources">
+    <template name="resources.qrc">
         <config id="resources" name="Resources">
         </config>
-        <content name="resource.qrc">
+        <content>
             <![CDATA[
 <RCC>
     <qresource prefix="/">

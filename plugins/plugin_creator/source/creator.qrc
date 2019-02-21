@@ -1,15 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/CMakeLists.txt.xml</file>
-        <file>resources/Plugin.cpp.xml</file>
         <file>resources/resources.qrc.xml</file>
-        <file>resources/ActionProvider.h.xml</file>
-        <file>resources/ActionProvider.cpp.xml</file>
-        <file>resources/ContentProvider.cpp.xml</file>
-        <file>resources/ContentProvider.h.xml</file>
-        <file>resources/Plugin.h.xml</file>
-        <file>resources/EntryPoint.cpp.xml</file>
-        <file>resources/NodeProvider.h.xml</file>
-        <file>resources/NodeProvider.cpp.xml</file>
+        <file>resources/ContentProvider.xml</file>
+        <file>resources/ActionProvider.xml</file>
+        <file>resources/EntryPoint.xml</file>
+        <file>resources/NodeProvider.xml</file>
+        <file>resources/Plugin.xml</file>
     </qresource>
 </RCC>

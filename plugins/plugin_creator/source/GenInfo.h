@@ -40,6 +40,8 @@ public:
 
     void removeTemplateInstance(const QString &instanceName);
 
+    void clearTemplateInstances();
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
