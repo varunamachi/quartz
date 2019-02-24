@@ -124,17 +124,10 @@ int readContent(Template *tmpl, const QDomElement &root)
             }
         }
         if (content.size() != 0) {
+            count = count + content.size();
             tmpl->addContent({name, content});
         }
     }
-//    else {
-//        auto msg = cntNodeList.isEmpty() ? "Could not find valid content tag"
-//                                         : "Found too many content tags";
-//        QZ_ERROR("Qz:Cmn:Tmpl") << msg;
-//    }
-//    if (! gotContent) {
-//        QZ_ERROR("Qz:Cmn:Tmpl") << "Failed to fetch template content";
-//    }
     return count;
 }
 

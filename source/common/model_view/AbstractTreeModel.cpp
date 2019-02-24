@@ -57,8 +57,8 @@ AbstractTreeModel::~AbstractTreeModel()
 }
 
 QModelIndex AbstractTreeModel::index(int row,
-                                      int column,
-                                      const QModelIndex &parent) const
+                                     int column,
+                                     const QModelIndex &parent) const
 {
     QModelIndex index;
     if (! hasIndex(row, column, parent)) {
@@ -86,8 +86,8 @@ QModelIndex AbstractTreeModel::parent(const QModelIndex& childIndex) const
     }
     auto index = QModelIndex{};
     auto node = static_cast<TreeNode *>(childIndex.internalPointer());
-    if (node != nullptr && node->parent() != nullptr) {
-        auto parent = node->parent();
+    auto parent = node->parent();
+    if (node != nullptr && parent != nullptr) {
         auto grandParent = parent->parent();
         auto row = 0;
         if (grandParent != nullptr) {

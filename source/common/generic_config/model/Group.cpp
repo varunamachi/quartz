@@ -125,10 +125,9 @@ Group * Group::subGroupAt(int index)
 QVariant Group::fieldValue(int field) const
 {
     switch(field) {
-    case 0: return m_data->m_id;
-    case 1: return m_data->m_name;
-    case 2: return m_data->m_params.size();
-    case 3: return m_data->m_subGroups.size();
+    case 0: return m_data->m_name;
+    case 1: return m_data->m_params.size() + m_data->m_subGroups.size();
+    case 2: return m_data->m_id;
     }
     return QVariant{};
 }
@@ -145,11 +144,10 @@ static void copy(const Group *source, Group *dest)
 
 std::unique_ptr<Group> Group::clone() const
 {
-    auto grp = std::unique_ptr<Group>{
-        new Group{ m_data->m_id,
-                   m_data->m_name,
-                   m_data->m_description,
-                   TreeNode::parent() }};
+    auto grp = std::make_unique<Group>(m_data->m_id,
+                                       m_data->m_name,
+                                       m_data->m_description,
+                                       this->parent());
     copy(this, grp.get());
     return grp;
 }

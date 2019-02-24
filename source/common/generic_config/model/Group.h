@@ -19,7 +19,7 @@ public:
            const QString &description,
            TreeNode *parent);
 
-    ~Group();
+    ~Group() override;
 
     const QString & id() const;
 

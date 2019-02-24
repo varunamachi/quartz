@@ -1,6 +1,6 @@
 <configs>
     <config id="editor_settings" name="Editor Settings">
-        <group name="Display">
+        <group name="Display" id="display" desc="Monaco display settings" >
             <param
                 type="choice"
                 id="ed.theme"
