@@ -15,20 +15,23 @@ class QUARTZ_COMMON_API  GenConfigTreeModel : public AbstractTreeModel
 public:
     explicit GenConfigTreeModel(QObject *parent);
 
-    ~GenConfigTreeModel();
+    ~GenConfigTreeModel() override;
 
     void setConfig(Config *config);
 
     void setValues(const QVariantHash &values);
 
 protected:
-    TreeNode *rootAt(int rowIndex) const;
+    TreeNode *rootAt(int rowIndex) const override;
 
-    int rootCount() const;
+    int rootCount() const override;
+
+    int indexOfRoot(TreeNode *node) const override;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
+
 };
 
 }

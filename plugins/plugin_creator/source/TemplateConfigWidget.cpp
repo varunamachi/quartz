@@ -270,5 +270,10 @@ int ConfigModel::rootCount() const
     return 0;
 }
 
+int ConfigModel::indexOfRoot(TreeNode *node) const
+{
+    return  m_config->indexOfChild(node);
+}
+
 
 } } }

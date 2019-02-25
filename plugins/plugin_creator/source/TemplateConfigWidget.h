@@ -34,6 +34,8 @@ protected:
 
     int rootCount() const override;
 
+    int indexOfRoot(TreeNode *node) const override;
+
 private:
     Config *m_config;
 };

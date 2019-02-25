@@ -19,7 +19,6 @@ struct Plugin::Data
     ExtensionList m_plugins;
 
     DependencyList m_dependencies;
-
 };
 
 Plugin::Plugin()
@@ -32,7 +31,6 @@ Plugin::Plugin()
 
     m_data->m_plugins.push_back(np);
     m_data->m_plugins.push_back(cp);
-
     m_data->m_adapters.push_back(tman);
 }
 

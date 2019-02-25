@@ -1,6 +1,7 @@
 <configs>
     <config id="editor_settings" name="Editor Settings">
         <group name="Display" id="display" desc="Monaco display settings" >
+            <group name="Something else" id="se" desc="Monaco display settings" >
             <param
                 type="choice"
                 id="ed.theme"
@@ -54,6 +55,7 @@
                 default="true"
             >
             </param>
+            </group>
         </group>
     </config>
 </configs>

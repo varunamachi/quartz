@@ -8,7 +8,7 @@ namespace Quartz {
 
 struct ArrayModel::Data
 {
-    QVector< TreeNode *> m_roots;
+    QVector<TreeNode *> m_roots;
 };
 
 ArrayModel::ArrayModel(
@@ -42,6 +42,11 @@ TreeNode * ArrayModel::rootAt(int rowIndex) const
 int ArrayModel::rootCount() const
 {
     return m_data->m_roots.size();
+}
+
+int ArrayModel::indexOfRoot(TreeNode *node) const
+{
+    return m_data->m_roots.indexOf(node);
 }
 
 void ArrayModel::addRoot(TreeNode *node)

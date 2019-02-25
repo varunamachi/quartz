@@ -76,6 +76,8 @@ protected:
 
     virtual int rootCount() const = 0;
 
+    virtual int indexOfRoot(TreeNode *node) const = 0;
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;

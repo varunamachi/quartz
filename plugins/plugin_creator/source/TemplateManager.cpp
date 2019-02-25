@@ -111,13 +111,13 @@ int TemplateManager::numTemplates() const
 
 bool TemplateManager::loadCoreTemplates()
 {
-    beginResetModel();
-    const QDir resDir{ ":/resources" };
-    auto tmps = TemplateUtils::templatesInDir(resDir);
-    foreach(auto &tmpl, tmps) {
-        addTemplate(tmpl);
-    }
-    endResetModel();
+//    beginResetModel();
+//    const QDir resDir{ ":/resources" };
+//    auto tmps = TemplateUtils::templatesInDir(resDir);
+//    foreach(auto &tmpl, tmps) {
+//        addTemplate(tmpl);
+//    }
+//    endResetModel();
     return true;
 }
 
@@ -154,6 +154,15 @@ TreeNode * TemplateManager::rootAt(int rowIndex) const
 int TemplateManager::rootCount() const
 {
     return m_data->m_templateList.size();
+}
+
+int TemplateManager::indexOfRoot(TreeNode *node) const
+{
+    auto tmpl = dynamic_cast<Template *>(node);
+    if (tmpl != nullptr) {
+        return m_data->m_templateList.indexOf(tmpl);
+    }
+    return -1;
 }
 
 } } }

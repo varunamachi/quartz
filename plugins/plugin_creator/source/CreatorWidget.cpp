@@ -341,7 +341,6 @@ void CreatorWidget::onCreate()
 
     if (result) {
 #ifndef QT_DEBUG
-        //create the resource directory and place the plugin.txt there
         m_data->m_idEdit->clear();
         m_data->m_fqIDEdit->clear();
         m_data->m_namespaceEdit->clear();

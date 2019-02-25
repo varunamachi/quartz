@@ -61,5 +61,14 @@ int GenConfigTreeModel::rootCount() const
     return 0;
 }
 
+int GenConfigTreeModel::indexOfRoot(TreeNode *node) const
+{
+    if (node == m_data->m_config) {
+        return 0;
+    }
+    return -1;
+}
 
 }
+
+

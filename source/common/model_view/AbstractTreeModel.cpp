@@ -1,4 +1,5 @@
 #include <QSize>
+#include <QDebug>
 
 #include "TreeNode.h"
 #include "AbstractTreeModel.h"
@@ -61,11 +62,11 @@ QModelIndex AbstractTreeModel::index(int row,
                                      const QModelIndex &parent) const
 {
     QModelIndex index;
-    if (! hasIndex(row, column, parent)) {
+    if (!hasIndex(row, column, parent)) {
         return index;
     }
-    if (! m_data->m_isFlat && parent.isValid()) {
-        auto node = static_cast<TreeNode * >(parent.internalPointer());
+    if (!m_data->m_isFlat && parent.isValid()) {
+        auto node = static_cast<TreeNode *>(parent.internalPointer());
         auto child = node->child(row);
         if (child != nullptr) {
             index = createIndex(row, column, child);
@@ -86,8 +87,8 @@ QModelIndex AbstractTreeModel::parent(const QModelIndex& childIndex) const
     }
     auto index = QModelIndex{};
     auto node = static_cast<TreeNode *>(childIndex.internalPointer());
-    auto parent = node->parent();
-    if (node != nullptr && parent != nullptr) {
+    if (node != nullptr &&  node->parent() != nullptr) {
+        auto parent = node->parent();
         auto grandParent = parent->parent();
         auto row = 0;
         if (grandParent != nullptr) {

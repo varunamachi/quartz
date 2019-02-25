@@ -24,6 +24,8 @@ public:
 
     int rootCount() const override;
 
+    int indexOfRoot(TreeNode *node) const override;
+
     void addRoot(TreeNode *node);
 
     void removeRoot(TreeNode *node);

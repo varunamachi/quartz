@@ -54,10 +54,11 @@ public:
     static const QString ADAPTER_NAME;
 
 protected:
-
     TreeNode *rootAt(int rowIndex) const override;
 
     int rootCount() const override;
+
+    int indexOfRoot(TreeNode *node) const override;
 
 private:
     struct Data;

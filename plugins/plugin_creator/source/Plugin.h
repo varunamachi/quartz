@@ -14,7 +14,7 @@ class Plugin : public Ext::Plugin
 public:
     Plugin();
 
-    ~Plugin();
+    ~Plugin() override;
 
     const ExtensionList & extensions() const override;
 
