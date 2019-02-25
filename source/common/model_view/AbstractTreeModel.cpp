@@ -93,6 +93,8 @@ QModelIndex AbstractTreeModel::parent(const QModelIndex& childIndex) const
         auto row = 0;
         if (grandParent != nullptr) {
             row = grandParent->indexOfChild(parent);
+        } else {
+            row = indexOfRoot(node->parent());
         }
         if (row != -1) {
             //only zeroth column ??

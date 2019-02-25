@@ -56,7 +56,8 @@ TreeNode *GenConfigTreeModel::rootAt(int /*rowIndex*/) const
 int GenConfigTreeModel::rootCount() const
 {
     if (m_data->m_config != nullptr) {
-        return m_data->m_config->numChildren() != 0 ? 1 : 0;
+//        return m_data->m_config->numChildren() != 0 ? 1 : 0;
+        return 1;
     }
     return 0;
 }
