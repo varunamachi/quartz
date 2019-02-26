@@ -5,6 +5,7 @@
 #include <QDomNamedNodeMap>
 
 #include <core/logger/Logging.h>
+#include <common/model_view/TreeNode.h>
 
 #include "../model/Config.h"
 #include "../model/Param.h"
@@ -156,7 +157,9 @@ std::unique_ptr<Config> ConfigParser::parse(const QDomElement &configRoot)
         for (auto paramNode = configRoot.firstChildElement("param");
              !paramNode.isNull();
              paramNode = paramNode.nextSiblingElement("param")) {
-            auto param = parseParam(*config, paramNode.toElement());
+            auto param = parseParam(*config,
+                                    config.get(),
+                                    paramNode.toElement());
             if (param != nullptr) {
                 config->registerParam(param.get());
                 config->addChildParameter(param);
@@ -169,7 +172,9 @@ std::unique_ptr<Config> ConfigParser::parse(const QDomElement &configRoot)
         for (auto groupNode = configRoot.firstChildElement("group");
              !groupNode.isNull();
              groupNode = groupNode.nextSiblingElement("group")) {
-            auto group = parseGroup(*config.get(), groupNode.toElement());
+            auto group = parseGroup(*config,
+                                    config.get(),
+                                    groupNode.toElement());
             if (group != nullptr) {
                 config->addGroup(group);
             } else {
@@ -186,6 +191,7 @@ std::unique_ptr<Config> ConfigParser::parse(const QDomElement &configRoot)
 
 std::shared_ptr<Param> ConfigParser::parseParam(
         Config &config,
+        TreeNode *parent,
         const QDomElement &paramNode)
 {
     std::shared_ptr<Param> param;
@@ -202,7 +208,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
                     id,
                     name,
                     desc,
-                    &config);
+                    parent);
         bparam->setDefaultValue(def);
         param = bparam;
     }
@@ -221,7 +227,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
                     id,
                     name,
                     desc,
-                    &config);
+                    parent);
         parseOptions(cparam.get(), paramNode, choiceType);
         cparam->setDefaultValue(def);
         param = cparam;
@@ -236,7 +242,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
                         id,
                         name,
                         desc,
-                        &config);
+                        parent);
             rparam->setDefaultValue(def);
             rparam->setMin(min);
             rparam->setMax(max);
@@ -253,7 +259,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
                     id,
                     name,
                     desc,
-                    &config);
+                    parent);
         tparam->setDefaultValue(strDef);
         param = tparam;
     }
@@ -268,6 +274,7 @@ std::shared_ptr<Param> ConfigParser::parseParam(
 
 std::shared_ptr<Group> ConfigParser::parseGroup(
         Config &config,
+        TreeNode *parent,
         const QDomElement &groupNode)
 {
     std::shared_ptr<Group> group;
@@ -279,11 +286,11 @@ std::shared_ptr<Group> ConfigParser::parseGroup(
                     id,
                     name,
                     desc,
-                    &config);
+                    parent);
         for (auto pn = groupNode.firstChildElement("param");
              !pn.isNull();
              pn = pn.nextSiblingElement("param")) {
-            auto param = parseParam(config, pn.toElement());
+            auto param = parseParam(config, group.get(), pn.toElement());
             if (param != nullptr) {
                 config.registerParam(param.get());
                 group->addParam(param);
@@ -296,7 +303,7 @@ std::shared_ptr<Group> ConfigParser::parseGroup(
         for (auto gn = groupNode.firstChildElement("group");
              !gn.isNull();
              gn = gn.nextSiblingElement("group")) {
-            auto subGroup = parseGroup(config, gn.toElement());
+            auto subGroup = parseGroup(config, group.get(), gn.toElement());
             if (subGroup != nullptr) {
                 group->addSubGroup(subGroup);
             }

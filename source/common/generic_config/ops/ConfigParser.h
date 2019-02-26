@@ -19,6 +19,7 @@ class Config;
 class Param;
 class Param;
 class Group;
+class TreeNode;
 
 class QUARTZ_COMMON_API ConfigParser
 {
@@ -35,10 +36,12 @@ public:
 protected:
     std::shared_ptr<Param> parseParam(
             Config &config,
+            TreeNode *parent,
             const QDomElement &paramNode);
 
     std::shared_ptr<Group> parseGroup(
             Config &config,
+            TreeNode *parent,
             const QDomElement &groupNode);
 
 private:
