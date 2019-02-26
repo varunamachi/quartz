@@ -111,13 +111,13 @@ int TemplateManager::numTemplates() const
 
 bool TemplateManager::loadCoreTemplates()
 {
-//    beginResetModel();
-//    const QDir resDir{ ":/resources" };
-//    auto tmps = TemplateUtils::templatesInDir(resDir);
-//    foreach(auto &tmpl, tmps) {
-//        addTemplate(tmpl);
-//    }
-//    endResetModel();
+    beginResetModel();
+    const QDir resDir{ ":/resources" };
+    auto tmps = TemplateUtils::templatesInDir(resDir);
+    foreach(auto &tmpl, tmps) {
+        addTemplate(tmpl);
+    }
+    endResetModel();
     return true;
 }
 

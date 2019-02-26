@@ -11,6 +11,7 @@ add_definitions( -DQUARTZ_COMMON )
 
 vq_headers(
     QuartzCommon.h
+    stdafx.h
 )
 
 add_subdirectory( generic_config )
