@@ -9,7 +9,6 @@ add_definitions( -DQUARTZ_CORE )
 
 vq_headers(
     QuartzCore.h
-    stdafx.h
 )
 
 

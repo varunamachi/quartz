@@ -12,7 +12,6 @@ add_definitions( -DQUARTZ_BASE )
 
 vq_headers(
     QuartzBase.h
-    stdafx.h
 )
 
 

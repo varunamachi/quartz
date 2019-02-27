@@ -26,10 +26,6 @@ vq_sources(
     quartz.rc
 )
 
-vq_headers(
-    stdafx.h
-)
-
 add_subdirectory( resources )
 add_subdirectory( adapted )
 add_subdirectory( inbuilt )

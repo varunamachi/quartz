@@ -18,7 +18,6 @@ vq_classes(
 
 vq_headers(
     PluginLogging.h
-    stdafx.h
 )
 
 
