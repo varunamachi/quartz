@@ -19,13 +19,15 @@ const auto COL_ERR = QColor{204, 41, 0};
 const QPixmap & icon(NotificationType type) {
     if (type == NotificationType::Info) {
         static auto INFO = getIcon(MatIcon::InfoOutline,
-                                   COL_INF).pixmap(ICON_SIZE);
+                                   Qt::white).pixmap(ICON_SIZE);
         return INFO;
     } else if(type == NotificationType::Warning) {
-        static auto WARN = getIcon(MatIcon::Warning, COL_WRN).pixmap(ICON_SIZE);
+        static auto WARN = getIcon(MatIcon::Warning,
+                                   Qt::white).pixmap(ICON_SIZE);
         return WARN;
     }
-    static auto ERR  = getIcon(MatIcon::Error, COL_ERR).pixmap(ICON_SIZE);
+    static auto ERR  = getIcon(MatIcon::Error,
+                               Qt::white).pixmap(ICON_SIZE);
     return ERR;
 }
 
@@ -36,6 +38,15 @@ struct NotificationWidget::Data
         : m_msg(msg)
     {
 
+    }
+
+    QColor color() const {
+        switch (m_msg->type()) {
+        case NotificationType::Info: return COL_INF;
+        case NotificationType::Warning: return COL_WRN;
+        case NotificationType::Error: return COL_ERR;
+        }
+        return COL_INF;
     }
 
     std::shared_ptr<Msg> m_msg;
@@ -63,10 +74,6 @@ NotificationWidget::NotificationWidget(
     ml->addWidget(closeBtn);
     ml->setSizeConstraint(QLayout::SetMinimumSize);
 
-//    this->setStyleSheet("border-style: solid; "
-//                        "border-width: 1px;"
-//                        "border-color: yellow;");
-
     ml->setAlignment(icn, Qt::AlignLeft);
     ml->setAlignment(label, Qt::AlignLeft);
     ml->setAlignment(closeBtn, Qt::AlignRight | Qt::AlignTop);
@@ -74,13 +81,16 @@ NotificationWidget::NotificationWidget(
     ml->setStretch(1, 1);
     ml->setStretch(2, 0);
     this->setLayout(ml);
-//    this->setMinimumHeight(10);
     this->setFixedWidth(300);
     connect(closeBtn,
             &QPushButton::released,
             this,
             &NotificationWidget::closed);
     this->setLayout(ml);
+
+    auto qss = QString("background-color: %1; color: white;").arg(
+                m_data->color().name(QColor::HexArgb));
+    this->setStyleSheet(qss);
 }
 
 NotificationWidget::~NotificationWidget()
@@ -96,19 +106,17 @@ const Msg* NotificationWidget::msg() const
 void NotificationWidget::paintEvent(QPaintEvent * event)
 {
     QPainter painter{this};
-    QColor col;
-    switch (m_data->m_msg->type()) {
-    case NotificationType::Info: col = COL_INF; break;
-    case NotificationType::Warning: col = COL_WRN; break;
-    case NotificationType::Error: col = COL_ERR; break;
-    }
+    QColor col = m_data->color();
     auto rect = event->rect();
-    painter.fillRect(rect, this->palette().window());
+    painter.fillRect(rect, col);
     painter.setPen(col);
-    painter.drawRect(rect.x()      + 1,
-                     rect.y()      + 1,
-                     rect.width()  - 2,
-                     rect.height() - 2 );
+    painter.drawRoundedRect(
+                rect.x()      + 1,
+                rect.y()      + 1,
+                rect.width()  - 2,
+                rect.height() - 2,
+                5,
+                5);
 
 }
 
