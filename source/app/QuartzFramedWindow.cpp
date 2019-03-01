@@ -1,6 +1,9 @@
 
 #include <QHBoxLayout>
 
+#include <base/QzAppContext.h>
+#include <base/notification/NotificationService.h>
+
 #include "QzMainWidget.h"
 #include "QuartzFramedWindow.h"
 
@@ -17,4 +20,14 @@ QuartzFramedWindow::~QuartzFramedWindow()
 {
 }
 
+void QuartzFramedWindow::moveEvent(QMoveEvent */*event*/)
+{
+    auto notificationService = appContext()->notificationService();
+    if (notificationService != nullptr) {
+        notificationService->reposition();
+    }
 }
+
+}
+
+

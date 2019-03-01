@@ -239,12 +239,12 @@ void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-void QzMainWidget::resizeEvent(QResizeEvent * /*event*/)
-{
-    auto notificationService = appContext()->notificationService();
-    if (notificationService != nullptr) {
-        notificationService->reposition();
-    }
-}
+//void QzMainWidget::resizeEvent(QResizeEvent * /*event*/)
+//{
+//    auto notificationService = appContext()->notificationService();
+//    if (notificationService != nullptr) {
+//        notificationService->reposition();
+//    }
+//}
 
 }

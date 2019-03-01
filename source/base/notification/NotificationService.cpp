@@ -179,4 +179,7 @@ void NotificationService::error(const QString &msg)
     });
 }
 
+
 }
+
+

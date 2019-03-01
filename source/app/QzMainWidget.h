@@ -16,9 +16,9 @@ class QzMainWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit QzMainWidget(QMainWindow *parent = 0);
+    explicit QzMainWidget(QMainWindow *parent = nullptr);
 
-    ~QzMainWidget();
+    ~QzMainWidget() override;
 
 public slots:
     void onAboutToQuit();
@@ -33,7 +33,7 @@ protected:
 
     void paintEvent(QPaintEvent *event) override;
 
-    void resizeEvent(QResizeEvent *event) override;
+//    void resizeEvent(QResizeEvent *event) override;
 };
 
 }
