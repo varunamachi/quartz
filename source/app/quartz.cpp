@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QDebug>
+#include <QStyleFactory>
 
 
 #include <core/logger/Logging.h>
@@ -137,10 +138,10 @@ bool initApp()
     context->setLogger(Logger::Logger::get());
     QzCoreContext::setInstance(std::move(context));
     qmlRegisterSingletonType<QzBinding>("qz.app",
-                                           1,
-                                           0,
-                                           "Service",
-                                           &QzBinding::qmlInstance);
+                                        1,
+                                        0,
+                                        "Service",
+                                        &QzBinding::qmlInstance);
     return true;
 }
 
@@ -157,7 +158,6 @@ void loadFonts() {
         {"://resources/MaterialIconsRegular.ttf"},
         {"://resources/FABrands.ttf"},
         {"://resources/FASolid.ttf"},
-//        {"://resources/FARegular.ttf"}
     };
     for (auto &f : files) {
         if (f.exists() && f.open(QFile::ReadOnly)) {
@@ -195,6 +195,7 @@ int main(int argc, char **argv)
 #endif
             Quartz::QuartzFramedWindow window;
             window.show();
+
             returnCode = app.exec();
         }
         uninit();

@@ -122,12 +122,10 @@ QuartzFramelessWindow::~QuartzFramelessWindow()
 
 }
 
-
 void QuartzFramelessWindow::onMinimize()
 {
     minimize();
 }
-
 
 void QuartzFramelessWindow::onMaximizeRestore()
 {
@@ -141,7 +139,6 @@ void QuartzFramelessWindow::onMaximizeRestore()
         maximize();
     }
 }
-
 
 void QuartzFramelessWindow::mousePressEvent(QMouseEvent* event)
 {
@@ -162,7 +159,6 @@ void QuartzFramelessWindow::mousePressEvent(QMouseEvent* event)
         QMainWindow::mousePressEvent(event);
     }
 }
-
 
 void QuartzFramelessWindow::mouseMoveEvent(QMouseEvent* event)
 {
@@ -188,7 +184,6 @@ void QuartzFramelessWindow::mouseMoveEvent(QMouseEvent* event)
     QWidget::mouseMoveEvent(event);
 }
 
-
 void QuartzFramelessWindow::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
@@ -198,7 +193,6 @@ void QuartzFramelessWindow::mouseReleaseEvent(QMouseEvent* event)
     QWidget::mouseReleaseEvent(event);
 }
 
-
 void QuartzFramelessWindow::showEvent(QShowEvent *evt)
 {
     if (m_data->m_geometry.isEmpty()) {
@@ -207,13 +201,10 @@ void QuartzFramelessWindow::showEvent(QShowEvent *evt)
     QWidget::showEvent(evt);
 }
 
-
 void QuartzFramelessWindow::resizeEvent(QResizeEvent *evt)
 {
     QWidget::resizeEvent(evt);
 }
-
-
 
 void QuartzFramelessWindow::maximize()
 {
@@ -230,7 +221,6 @@ void QuartzFramelessWindow::maximize()
     this->setGeometry(rect);
 }
 
-
 void QuartzFramelessWindow::restore()
 {
     if (! m_data->m_geometry.isEmpty()) {
@@ -242,14 +232,12 @@ void QuartzFramelessWindow::restore()
     }
 }
 
-
 void QuartzFramelessWindow::minimize()
 {
     if (! this->isMinimized()) {
         this->showMinimized();
     }
 }
-
 
 void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
 {

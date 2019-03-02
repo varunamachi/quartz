@@ -1,0 +1,42 @@
+<theme>
+    <declaration>
+        <item type="color"      name="" value=""/>
+        <item type="image"      name="" value=""/>
+        <item type="gradient"   name="" value=""/>
+    </declaration>
+    <palette>
+        <!-- 
+            these can refer values from declaration using mustache variables
+        -->
+        <color name="Window"            value=""/>
+        <color name="WindowText"        value=""/>
+        <color name="Base"              value=""/>
+        <color name="AlternateBase"     value=""/>
+        <color name="ToolTipBase"       value=""/>
+        <color name="ToolTipText"       value=""/>
+        <color name="Text"              value=""/>
+        <color name="Button"            value=""/>
+        <color name="ButtonText"        value=""/>
+        <color name="BrightText"        value=""/>
+        <color name="Link"              value=""/>
+        <color name="Highlight"         value=""/>
+        <color name="HighlightedText"   value=""/>
+    </palette>
+    <stylesheet>
+        <!-- 
+            Load stylesheet from seperate file and load it here. Items from the
+            declaration section can be refered using mustache template variables
+        -->
+        <file path=""/>
+        <content>
+            <!-- 
+                Put the style sheet here content in the CDATA section. 
+                Declaration can be  refered using mustache variables
+            -->
+            <![CDATA[ 
+            
+            
+            ]]>
+    </stylesheet>
+
+</theme>
