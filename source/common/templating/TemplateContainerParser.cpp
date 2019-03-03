@@ -59,13 +59,11 @@ QVector<std::shared_ptr<Template>> TemplateContainerParser::parse(
                 QZ_ERROR("Qz:Cmn:Tmpl")
                         << "Could not find 'template' tags inside 'templates'";
             }
-        }
-        else {
+        } else {
             QZ_ERROR("Qz:Cmn:Tmpl")
                     << "Could not find root 'templates' tag";
         }
-    }
-    else {
+    } else {
         QZ_ERROR("Qz:Cmn:Tmpl")
                 << "Failed to read config XML content at " << errorLine
                 << " Msg: " << errorMsg;
