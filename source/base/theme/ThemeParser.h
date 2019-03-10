@@ -17,13 +17,13 @@ public:
     std::unique_ptr<Theme> parse(const QString &content);
 
 private:
-    bool parseDeclarations(const QDomElement &el, Theme *theme);
+    bool parseDeclarations(const QDomElement &el, Theme &theme);
 
-    bool parsePalettes(const QDomElement &el, Theme *theme);
+    bool parsePalettes(const QDomElement &el, Theme &theme);
 
-    QString readStylesheet(const QDomElement &el, Theme *theme);
+    QString readStylesheet(const QDomElement &el, Theme &theme);
 
-    bool parseStylesheet(const QString &content, Theme *theme);
+    bool parseStylesheet(const QString &content, Theme &theme);
 
 };
 

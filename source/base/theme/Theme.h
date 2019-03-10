@@ -30,6 +30,10 @@ public:
 
     const QPalette & colorPalette() const;
 
+    void setColor(const QString &name, const QColor &color);
+
+    QColor color(const QString &name);
+
     void setImage(const QString &key, const QImage &image);
 
     const QImage & image(const QString &key) const;
