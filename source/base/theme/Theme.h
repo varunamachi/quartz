@@ -10,6 +10,7 @@ class QString;
 class QColor;
 class QPalette;
 class QImage;
+class QGradient;
 
 namespace Quartz {
 
@@ -29,6 +30,10 @@ public:
     void setColorPalette(const QPalette &palette);
 
     const QPalette & colorPalette() const;
+
+    void setGradient(const QString &name, const QGradient &gradient);
+
+    QGradient gradient(const QString &name);
 
     void setColor(const QString &name, const QColor &color);
 
