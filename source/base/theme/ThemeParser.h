@@ -23,7 +23,7 @@ private:
 
     QString readStylesheet(const QDomElement &el, Theme &theme);
 
-    bool parseStylesheet(const QString &content, Theme &theme);
+    bool parseStylesheet(const QDomElement &el, Theme &theme);
 
 };
 

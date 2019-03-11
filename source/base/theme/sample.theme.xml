@@ -2,7 +2,9 @@
     <declaration>
         <item type="color"      name="" value=""/>
         <item type="image"      name="" value=""/>
-        <item type="gradient"   name="" value=""/>
+
+        <!-- gradients not supported yet -->
+        <!-- item type="gradient"   name="" value=""/ -->
     </declaration>
     <palette>
         <!-- 
@@ -37,6 +39,7 @@
             
             
             ]]>
+        </content>
     </stylesheet>
 
 </theme>
