@@ -8,9 +8,10 @@
 #include <QImage>
 #include <QGradient>
 #include <QPalette>
+#include <QFile>
 
 #include <core/logger/Logging.h>
-
+#include <common/templating/MustacheTemplateProcessor.h>
 
 #include "Theme.h"
 #include "ThemeParser.h"
@@ -48,9 +49,6 @@ void updatePalatte(const QString &name, QColor value, QPalette &palette)
     }
 }
 
-QString loadCSSFile(const QString &path) {
-    return QStringLiteral();
-}
 
 ThemeParser::ThemeParser()
 {
@@ -97,6 +95,7 @@ bool ThemeParser::parseDeclarations(const QDomElement &el, Theme & theme)
         auto name = node.attribute("name");
         auto value = node.attribute("value");
         if (type != "" && name != "" && value != "") {
+            theme.addDeclaration(name, value);
             if (type == "color") {
                 auto color = QColor{value};
                 if (!color.isValid()) {
@@ -150,22 +149,54 @@ bool ThemeParser::parsePalettes(const QDomElement &el, Theme & /*theme*/)
     return result;
 }
 
-bool ThemeParser::parseStylesheet(const QDomElement &el, Theme & /*theme*/)
+bool ThemeParser::parseStylesheet(const QDomElement &el, Theme & theme)
 {
+    auto result = false;
+    auto css = QString();
+    //First check if this file refers to a CSS file
+    ///@TODO - relative path? then what is the root? From executable path?
+    ///User configuration directory?
     for (auto node = el.firstChildElement("file");
          !node.isNull();
          node = el.nextSiblingElement("file")) {
         auto path = node.attribute("path");
-        if (path != "") {
-            //load file
+        ///@TODO Need to expand path into absolute
+        QFile file(path);
+        if (file.exists() && file.open(QFile::ReadOnly)) {
+            css = QString{file.readAll()};
+            result = true;
         } else {
-            QZ_WARN("Qz:Theme") << "Invalid CSS file path given";
+            QZ_WARN("Qz:Theme") << "Invalid CSS file '" << path << "' given";
         }
     }
-    //consider only the first content tag
-    auto content = el.firstChildElement("content");
-    //load CDATA
-    return false;
+    //If we were successful in reading the CSS file, we ignore the CDATA section
+    if (!result) {
+        //consider only the first content tag
+        auto content = el.firstChildElement("content");
+        auto children = content.toElement().childNodes();
+        for (auto i = 0; i < children.size(); ++ i) {
+            auto child = children.at(i);
+            if (child.isCDATASection()) {
+                css = child.toCDATASection().data();
+            }
+        }
+    }
+    if (result) {
+        //Resolve mustache variables
+        MustacheTemplateProcessor tmplProcessor;
+        auto resolved = tmplProcessor.process(
+                    css,
+                    theme.declarations());
+        result = !tmplProcessor.hasError();
+        if (result) {
+            theme.setApplicationCSS(resolved);
+        } else {
+            QZ_WARN("Qz:Theme")
+                    << "Failed to generate application css: "
+                    << tmplProcessor.lastError();
+        }
+    }
+    return result;
 }
 
 }

@@ -3,3 +3,7 @@ vq_classes(
     ThemeManager
     ThemeParser
 )
+
+vq_headers(
+    sample.theme.xml
+)

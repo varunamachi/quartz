@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <QVariantHash>
+
 #include <core/utils/Macros.h>
 
 #include "../QuartzBase.h"
@@ -11,6 +13,7 @@ class QColor;
 class QPalette;
 class QImage;
 class QGradient;
+
 
 namespace Quartz {
 
@@ -40,6 +43,10 @@ public:
     QColor color(const QString &name);
 
     void setImage(const QString &key, const QImage &image);
+
+    const QVariantHash & declarations() const;
+
+    void addDeclaration(const QString &key, const QVariant &value);
 
     const QImage & image(const QString &key) const;
 

@@ -3,6 +3,7 @@
 #include <QPalette>
 #include <QImage>
 #include <QGradient>
+#include <QVariantHash>
 
 #include "Theme.h"
 
@@ -29,6 +30,8 @@ struct Theme::Data
     QHash<QString, QGradient> m_gradients;
 
     QHash< QString, QString > m_css;
+
+    QVariantHash m_declarations;
 
     static const QImage EMPTY_IMAGE;
 
@@ -99,6 +102,16 @@ QColor Theme::color(const QString &name)
 void Theme::setImage(const QString &key, const QImage &image)
 {
     m_data->m_images[key] = image;
+}
+
+const QVariantHash &Theme::declarations() const
+{
+    return m_data->m_declarations;
+}
+
+void Theme::addDeclaration(const QString &key, const QVariant &value)
+{
+    m_data->m_declarations[key] = value;
 }
 
 const QImage & Theme::image(const QString &key) const
