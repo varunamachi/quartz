@@ -39,13 +39,14 @@ At this time Quartz has following modules:
 
 Apart from this the default plugins are located at ```plugins``` directory. At the moment following plugins are implemented:
 - ```plugins/sample```: Plugin for testing and demonstrating the plugin system
-- ```plugns/orek_client```: Plugin that enables Quartz to be a client to Orek service ( https://github.com/varunamachi/orekng )
 - ```plugins/creator```: Work in progress for building a plugin that creates stub for developing other plugins
 
-
+<!--
 ## Screenshot
 On Linux:
 ![alt tag](https://raw.githubusercontent.com/varunamachi/quartz/master/extra/linux_screenshot.png)
-
+-->
+<!--
 On Windows:
 ![alt tag](https://raw.githubusercontent.com/varunamachi/quartz/master/extra/quartz_win10.png)
+-->
