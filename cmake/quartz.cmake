@@ -46,16 +46,34 @@ macro( qz_add_qt )
         Quick
         QuickWidgets
         Svg
-        Network)
+        Network
+        Sql
+
+    )
 endmacro( qz_add_qt )
 
 macro( qz_install )
     vq_install()
-    set( BIN_OUTPUT_DIR "bin/${CMAKE_BUILD_TYPE}" )
-    if( WIN32 )
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}.exe" )
-    else()
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}" )
+    if (WIN32)
+        find_package( "Qt5Core" )
+        get_filename_component(QT5_BINARY_DIR
+                               "${QT_QMAKE_EXECUTABLE}"
+                               DIRECTORY)
+        set(${WinDep} "${QT5_BINARY_DIR}/windeployqt.exe")
+        add_custom_command(
+            TARGET ${PROJECT_NAME}
+            POST_BUILD
+            COMMAND set PATH=%PATH%$<SEMICOLON>"${QT5_BINARY_DIR}"
+            COMMAND "windeployqt"
+                --dir "${CMAKE_CURRENT_BINARY_DIR}"
+                -xml
+                -sql
+                -serialport
+                -webengine
+                -webchannel
+                -webenginewidgets
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
+        )
     endif()
 endmacro( qz_install )
 
