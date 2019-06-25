@@ -5,6 +5,7 @@ build/*
 output/lib/*
 output/include/*
 output/bin/*
+output/*
 #exp/*
 archives/*
 *.autosave
