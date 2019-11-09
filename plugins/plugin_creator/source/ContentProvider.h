@@ -6,8 +6,7 @@ namespace Quartz { namespace Ext { namespace Creator {
 
 class TemplateManager;
 
-class ContentProvider : public AbstractContentProvider
-{
+class ContentProvider : public AbstractContentProvider {
 public:
     explicit ContentProvider(std::shared_ptr<TemplateManager> tman);
 
@@ -17,15 +16,15 @@ public:
 
     bool destroy() override;
 
-    QVector< ContentWidget *> widgets() override;
+    QVector<ContentWidget *> widgets() override;
 
-    static const QString     EXTENSION_ID;
+    static const QString EXTENSION_ID;
 
-    static const QString     EXTENSION_NAME;
+    static const QString EXTENSION_NAME;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}}} // namespace Quartz::Ext::Creator

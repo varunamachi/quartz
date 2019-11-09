@@ -4,21 +4,14 @@
 
 namespace Quartz { namespace Http {
 
-struct HttpConnection::Data {
+struct HttpConnection::Data {};
 
-};
-
-HttpConnection::HttpConnection( QObject *parent )
-    : QObject{ parent }
-    , m_data{ new Data{} }
-{
-
+HttpConnection::HttpConnection(QObject* parent)
+    : QObject{parent}
+    , m_data{new Data{}} {
 }
 
-HttpConnection::~HttpConnection()
-{
-
+HttpConnection::~HttpConnection() {
 }
 
-
-} }
+}} // namespace Quartz::Http
