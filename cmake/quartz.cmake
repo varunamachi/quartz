@@ -4,7 +4,7 @@ set( CMAKE_MODULE_PATH "${QUARTZ_ROOT}/cmake" ${CMAKE_MODULE_PATH} )
 set (CMAKE_CXX_STANDARD 14)
 
 set( PROJECT_ROOT ${QUARTZ_ROOT} )
-include( ${QUARTZ_ROOT}/cmake/DeployQt5.cmake)
+include( ${QUARTZ_ROOT}/cmake/WindeployQt.cmake)
 include( ${QUARTZ_ROOT}/cmake/cmake_lib/core.cmake)
 
 macro( qz_add_core )
@@ -46,16 +46,48 @@ macro( qz_add_qt )
         Quick
         QuickWidgets
         Svg
-        Network)
+        Network
+        Sql
+
+    )
 endmacro( qz_add_qt )
 
 macro( qz_install )
     vq_install()
-    set( BIN_OUTPUT_DIR "bin/${CMAKE_BUILD_TYPE}" )
-    if( WIN32 )
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}.exe" )
-    else()
-        install_qt5_executable( "${BIN_OUTPUT_DIR}/${PROJECT_NAME}" )
+    if (WIN32)
+        windeployqt(
+            ${PROJECT_NAME}
+            "bin/${CMAKE_BUILD_TYPE}"
+            -xml
+            -sql
+            -serialport
+            -webenginecore
+            -webengine
+            -webchannel
+            -webenginewidgets
+            -bluetooth
+            -concurrent
+            -core
+            -gui
+            -multimedia
+            -multimediawidgets
+#            -multimediaquick
+            -network
+            -opengl
+            -printsupport
+            -qml
+#            -qmltooling
+            -quick
+            -quickparticles
+            -quickwidgets
+            -svg
+            -websockets
+            -widgets
+            -winextras
+            -xmlpatterns
+            -webchannel
+            -webview
+        )
     endif()
 endmacro( qz_install )
 
