@@ -1,38 +1,36 @@
 /**
-  * Copyright 2014 mhcuervo
-  * Based on code from stackoverflow:
-  * http://stackoverflow.com/questions/23718827/qt-shadow-around-window
-  *
-  * As discussed here:
-  * http://meta.stackexchange.com/questions/54766
-  * /code-at-stackoverflow-under-any-license
-  * This is covered under CC-BY-SA, it can be found at:
-  * http://creativecommons.org/licenses/by-sa/4.0/
-  *
-  */
+ * Copyright 2014 mhcuervo
+ * Based on code from stackoverflow:
+ * http://stackoverflow.com/questions/23718827/qt-shadow-around-window
+ *
+ * As discussed here:
+ * http://meta.stackexchange.com/questions/54766
+ * /code-at-stackoverflow-under-any-license
+ * This is covered under CC-BY-SA, it can be found at:
+ * http://creativecommons.org/licenses/by-sa/4.0/
+ *
+ */
 
 #include "CustomShadowEffect.h"
 #include <QPainter>
 
-CustomShadowEffect::CustomShadowEffect(QObject *parent) :
-    QGraphicsEffect(parent),
-    _distance(static_cast<qreal>(4.0f)),
-    _blurRadius(static_cast<qreal>(10.0f)),
-    _color(0, 0, 0, 80)
-{
+CustomShadowEffect::CustomShadowEffect(QObject* parent)
+    : QGraphicsEffect(parent)
+    , _distance(static_cast<qreal>(4.0f))
+    , _blurRadius(static_cast<qreal>(10.0f))
+    , _color(0, 0, 0, 80) {
 }
 
 QT_BEGIN_NAMESPACE
-  extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p,
-                                             QImage &blurImage,
-                                             qreal radius, bool quality,
-                                             bool alphaOnly,
-                                             int transposed = 0);
+extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter* p,
+                                          QImage& blurImage,
+                                          qreal radius,
+                                          bool quality,
+                                          bool alphaOnly,
+                                          int transposed = 0);
 QT_END_NAMESPACE
 
-
-void CustomShadowEffect::draw(QPainter* painter)
-{
+void CustomShadowEffect::draw(QPainter* painter) {
     // if nothing to show outside the item, just draw source
     if ((blurRadius() + distance()) <= 0) {
         drawSource(painter);
@@ -52,7 +50,7 @@ void CustomShadowEffect::draw(QPainter* painter)
 
     // Calculate size for the background image
     QSize szi(px.size().width() + 2 * static_cast<int>(distance()),
-               px.size().height() + 2 * static_cast<int>(distance()));
+              px.size().height() + 2 * static_cast<int>(distance()));
 
     QImage tmp(szi, QImage::Format_ARGB32_Premultiplied);
     QPixmap scaled = px.scaled(szi);
@@ -87,9 +85,7 @@ void CustomShadowEffect::draw(QPainter* painter)
     painter->setWorldTransform(restoreTransform);
 }
 
-
-QRectF CustomShadowEffect::boundingRectfor (const QRectF& rect) const
-{
+QRectF CustomShadowEffect::boundingRectfor(const QRectF& rect) const {
     qreal delta = blurRadius() + distance();
     return rect.united(rect.adjusted(-delta, -delta, delta, delta));
 }

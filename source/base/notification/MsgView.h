@@ -8,12 +8,11 @@ namespace Quartz {
 
 class Msg;
 
-class QUARTZ_BASE_API MsgView : public QuartzView
-{
+class QUARTZ_BASE_API MsgView : public QuartzView {
     Q_OBJECT
 
 public:
-    MsgView(QWidget *parent);
+    MsgView(QWidget* parent);
 
     ~MsgView() override;
 
@@ -30,4 +29,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

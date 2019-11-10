@@ -11,26 +11,25 @@ class QIcon;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API SearchBox : public QWidget
-{
+class QUARTZ_COMMON_API SearchBox : public QWidget {
     Q_OBJECT
 
 public:
-    explicit SearchBox(QWidget *parent = nullptr);
+    explicit SearchBox(QWidget* parent = nullptr);
 
     ~SearchBox();
 
 public Q_SLOTS:
-    void setButtonIcon(const QIcon &icon);
+    void setButtonIcon(const QIcon& icon);
 
-    void setPlaceholderText(const QString &text);
+    void setPlaceholderText(const QString& text);
 
 Q_SIGNALS:
-    void textChanged(const QString &text);
+    void textChanged(const QString& text);
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

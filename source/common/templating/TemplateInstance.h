@@ -14,42 +14,41 @@ class Template;
 class Config;
 class Param;
 
-using GlobalConfig = QHash< QString, QVariant >;
+using GlobalConfig = QHash<QString, QVariant>;
 
-class QUARTZ_COMMON_API TemplateInstance : public TreeNode
-{
+class QUARTZ_COMMON_API TemplateInstance : public TreeNode {
 
 public:
-    TemplateInstance(const QString &name,
-                      std::unique_ptr<Config> config,
-                      Template *parent);
+    TemplateInstance(const QString& name,
+                     std::unique_ptr<Config> config,
+                     Template* parent);
 
     ~TemplateInstance() override;
 
-    const QString & name() const;
+    const QString& name() const;
 
-    Template * instanceOf() const;
+    Template* instanceOf() const;
 
     void setGlobalConfig(std::shared_ptr<GlobalConfig> gconf);
 
-    QVariant globalConfig(const QString &key) const;
+    QVariant globalConfig(const QString& key) const;
 
-    const Param * param(const QString &paramName) const;
+    const Param* param(const QString& paramName) const;
 
-    Param * param(const QString &paramName);
+    Param* param(const QString& paramName);
 
-    QVariant paramValue(const QString &paramName,
-                         const QString defValue = "") const;
+    QVariant paramValue(const QString& paramName,
+                        const QString defValue = "") const;
 
     QVariant fieldValue(int field) const override;
 
     bool isEditable(int column) const override;
 
-    bool setData(int column, const QVariant &data) override;
+    bool setData(int column, const QVariant& data) override;
 
-    const Config * instanceConfig() const;
+    const Config* instanceConfig() const;
 
-    Config * instanceConfig();
+    Config* instanceConfig();
 
     QVariantHash allParams() const;
 
@@ -58,4 +57,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

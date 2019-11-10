@@ -6,26 +6,21 @@
 
 #include "../QuartzBase.h"
 
-
-
 namespace Quartz {
 
 class AbstractSelector;
 class Node;
 using NodePtr = std::shared_ptr<Node>;
 
-struct NodeInfo
-{
-    NodeInfo(const QStringList &nodePath,
-              const QString &nodeName,
-              const QString &nodeId,
-              const QIcon &icon)
+struct NodeInfo {
+    NodeInfo(const QStringList& nodePath,
+             const QString& nodeName,
+             const QString& nodeId,
+             const QIcon& icon)
         : m_nodePath(nodePath)
         , m_nodeName(nodeName)
         , m_nodeId(nodeId)
-        , m_nodeIcon(icon)
-    {
-
+        , m_nodeIcon(icon) {
     }
 
     QStringList m_nodePath;
@@ -37,11 +32,10 @@ struct NodeInfo
     QIcon m_nodeIcon;
 };
 
-class QUARTZ_BASE_API AbstractGeneralNodeProvider : public Ext::Extension
-{
+class QUARTZ_BASE_API AbstractGeneralNodeProvider : public Ext::Extension {
 public:
-    AbstractGeneralNodeProvider(const QString &extensionId,
-                                 const QString &extensionName);
+    AbstractGeneralNodeProvider(const QString& extensionId,
+                                const QString& extensionName);
 
     ~AbstractGeneralNodeProvider();
 
@@ -52,4 +46,4 @@ public:
 private:
 };
 
-}
+} // namespace Quartz

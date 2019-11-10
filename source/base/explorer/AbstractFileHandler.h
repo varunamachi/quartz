@@ -11,20 +11,18 @@ class QFile;
 
 namespace Quartz {
 
-class QUARTZ_BASE_API AbstractFileHandler : public QWidget
-{
+class QUARTZ_BASE_API AbstractFileHandler : public QWidget {
     Q_OBJECT
 
 public:
-    AbstractFileHandler(QWidget *parent = nullptr)
-        : QWidget(parent)
-    {
-
+    AbstractFileHandler(QWidget* parent = nullptr)
+        : QWidget(parent) {
     }
 
-    virtual ~AbstractFileHandler() {}
+    virtual ~AbstractFileHandler() {
+    }
 
-    virtual bool handle(const QString &path) = 0;
+    virtual bool handle(const QString& path) = 0;
 
     virtual QString path() const = 0;
 
@@ -34,7 +32,6 @@ public:
 
 Q_SIGNALS:
     void dirtyStateChanged(bool value);
-
 };
 
-}
+} // namespace Quartz

@@ -11,26 +11,22 @@
 
 namespace Quartz {
 
-struct QzTreeView::Data
-{
-    explicit Data(QzTreeView *parent)
-        : m_contextMenu(new QMenu(parent))
-    {
-
+struct QzTreeView::Data {
+    explicit Data(QzTreeView* parent)
+        : m_contextMenu(new QMenu(parent)) {
     }
 
-//    QHash< QString, ContextMenuItem > m_items;
+    //    QHash< QString, ContextMenuItem > m_items;
 
-    QHash< QString, QAction *> m_actions;
+    QHash<QString, QAction*> m_actions;
 
-    QMenu *m_contextMenu;
+    QMenu* m_contextMenu;
 };
 
-QzTreeView::QzTreeView(QWidget *parent)
+QzTreeView::QzTreeView(QWidget* parent)
     : QTreeView(parent)
-    , m_data(std::make_unique<Data>(this))
-{
-//    this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    , m_data(std::make_unique<Data>(this)) {
+    //    this->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     this->header()->setSectionResizeMode(QHeaderView::Stretch);
     this->setAlternatingRowColors(true);
     this->setStyleSheet("QTreeView::item{ height: 20px; }");
@@ -38,39 +34,35 @@ QzTreeView::QzTreeView(QWidget *parent)
     //(const QPoint &)
     connect(this,
             &QTreeView::customContextMenuRequested,
-            [ this ](const QPoint &point){
-        QModelIndex index = this->indexAt(point);
-        if (index.isValid()) {
-            m_data->m_contextMenu->exec(
+            [this](const QPoint& point) {
+                QModelIndex index = this->indexAt(point);
+                if (index.isValid()) {
+                    m_data->m_contextMenu->exec(
                         this->viewport()->mapToGlobal(point));
-        }
-    });
+                }
+            });
 }
 
-QzTreeView::~QzTreeView()
-{
-
+QzTreeView::~QzTreeView() {
 }
 
-void QzTreeView::mousePressEvent(QMouseEvent *event)
-{
-//    if (event->button() == Qt::LeftButton) {
-//        QModelIndex index = indexAt(event->pos());
-//        auto node = index.data(Qt::UserRole).value<TreeNode *>();
-//        if (node != nullptrl
-//                && node->isEditable(index.column())
-//                && node-> != QVariant::) {
-//            edit(index);
-//        }
-//    }
+void QzTreeView::mousePressEvent(QMouseEvent* event) {
+    //    if (event->button() == Qt::LeftButton) {
+    //        QModelIndex index = indexAt(event->pos());
+    //        auto node = index.data(Qt::UserRole).value<TreeNode *>();
+    //        if (node != nullptrl
+    //                && node->isEditable(index.column())
+    //                && node-> != QVariant::) {
+    //            edit(index);
+    //        }
+    //    }
     QTreeView::mousePressEvent(event);
 }
 
-void QzTreeView::addContextAction(ContextMenuItem cm)
-{
+void QzTreeView::addContextAction(ContextMenuItem cm) {
 
-    auto action = new QAction{ cm.m_name, this };
-    connect(action, &QAction::triggered, [ cm, this ](){
+    auto action = new QAction{cm.m_name, this};
+    connect(action, &QAction::triggered, [cm, this]() {
         auto modelIdx = currentIndex();
         if (modelIdx.isValid()) {
             cm.m_func(modelIdx);
@@ -80,12 +72,11 @@ void QzTreeView::addContextAction(ContextMenuItem cm)
     m_data->m_actions.insert(cm.m_name, action);
 }
 
-void QzTreeView::removeContextMenu(const QString &name)
-{
+void QzTreeView::removeContextMenu(const QString& name) {
     auto action = m_data->m_actions.value(name);
     if (action != nullptr) {
         m_data->m_contextMenu->removeAction(action);
     }
 }
 
-}
+} // namespace Quartz

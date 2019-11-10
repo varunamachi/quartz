@@ -9,19 +9,18 @@ class QzAppContext;
 
 namespace Ext { namespace WebTech {
 
-class Plugin : public Ext::Plugin
-{
+class Plugin : public Ext::Plugin {
 
 public:
     Plugin();
 
     ~Plugin() override;
 
-    const ExtensionList & extensions() const override;
+    const ExtensionList& extensions() const override;
 
-    const DependencyList & dependencies() const override;
+    const DependencyList& dependencies() const override;
 
-    const AdapterList &adapters() const override;
+    const AdapterList& adapters() const override;
 
     static const QString PLUGIN_ID;
 
@@ -32,5 +31,5 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
-            
+}} // namespace Ext::WebTech
+} // namespace Quartz

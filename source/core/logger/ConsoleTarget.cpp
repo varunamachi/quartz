@@ -29,43 +29,34 @@
 #include "LogUtil.h"
 #include "AbstractLogTarget.h"
 
-#define FORMAT(x) (formatter() != nullptr ? formatter()->format(x)  \
-                                             : LogUtil::format(x))
+#define FORMAT(x)                                                              \
+    (formatter() != nullptr ? formatter()->format(x) : LogUtil::format(x))
 
 namespace Quartz { namespace Logger {
 
 const QString ConsoleTarget::TARGET_ID = "ConsoleLogger";
 
 ConsoleTarget::ConsoleTarget()
-    : AbstractLogTarget(TARGET_ID)
-{
+    : AbstractLogTarget(TARGET_ID) {
 }
 
-
-void ConsoleTarget::flush()
-{
-    //nothing here...
+void ConsoleTarget::flush() {
+    // nothing here...
 }
 
-
-void ConsoleTarget::write(const LogMessage *message)
-{
+void ConsoleTarget::write(const LogMessage* message) {
     if (message) {
         if (message->logLevel() <= LogLevel::Info) {
             qDebug() << FORMAT(message);
-        }
-        else if (message->logLevel() == LogLevel::Warn) {
+        } else if (message->logLevel() == LogLevel::Warn) {
             qWarning() << FORMAT(message);
-        }
-        else {
+        } else {
             qCritical() << FORMAT(message);
         }
     }
 }
 
-
-void ConsoleTarget::write(QString &&/*message*/)
-{
+void ConsoleTarget::write(QString&& /*message*/) {
 }
 
-} }//end of namespace
+}} // namespace Quartz::Logger

@@ -10,15 +10,11 @@ class QString;
 
 namespace Quartz {
 
-class AbstractConfigLoader
-{
+class AbstractConfigLoader {
 
 public:
-    using StoreFunc = std::function< void(const QString &,
-                                           const QString &,
-                                           const QVariant &)>;
-
-
+    using StoreFunc = std::function<
+        void(const QString&, const QString&, const QVariant&)>;
 
     virtual ~AbstractConfigLoader();
 
@@ -32,7 +28,6 @@ protected:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-}
+} // namespace Quartz

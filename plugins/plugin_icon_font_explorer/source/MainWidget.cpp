@@ -11,28 +11,22 @@ const QString MainWidget::CONTENT_NAME("IconFontExplorerMain");
 const QString MainWidget::CONTENT_KIND("meta");
 
 struct MainWidget::Data {
-    Data(QWidget *parent)
+    Data(QWidget* parent)
         : m_iconView(new IconView(parent)) {
-
     }
 
-    IconView *m_iconView;
-
+    IconView* m_iconView;
 };
 
-MainWidget::MainWidget(QWidget *parent)
+MainWidget::MainWidget(QWidget* parent)
     : ContentWidget(CONTENT_ID, CONTENT_NAME, CONTENT_KIND, parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_iconView);
     this->setLayout(mainLayout);
 }
 
-MainWidget::~MainWidget()
-{
-
+MainWidget::~MainWidget() {
 }
 
-
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

@@ -10,28 +10,28 @@ class QAction;
 
 namespace Quartz {
 
-class QUARTZ_BASE_API MainMenuButton : public QToolButton
-                                     , public Ext::IExtensionAdapter
-{
+class QUARTZ_BASE_API MainMenuButton
+    : public QToolButton
+    , public Ext::IExtensionAdapter {
     Q_OBJECT
 public:
-    explicit MainMenuButton(QWidget *parent = nullptr);
+    explicit MainMenuButton(QWidget* parent = nullptr);
 
     ~MainMenuButton();
 
-    void addAction(QAction *action);
+    void addAction(QAction* action);
 
-    QAction * addMenu(QMenu *menu);
+    QAction* addMenu(QMenu* menu);
 
     static const QString ADAPTER_NAME;
 
 public:
     // IExtensionAdapter interface
-    const QString &extensionType() const;
+    const QString& extensionType() const;
 
-    const QString &extensionAdapterName() const;
+    const QString& extensionAdapterName() const;
 
-    bool handleExtension(Ext::Extension *extension);
+    bool handleExtension(Ext::Extension* extension);
 
     bool finalizeExtension();
 
@@ -40,4 +40,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

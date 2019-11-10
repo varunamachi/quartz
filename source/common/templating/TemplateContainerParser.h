@@ -12,18 +12,17 @@ namespace Quartz {
 
 class Template;
 
-class QUARTZ_COMMON_API TemplateContainerParser
-{
+class QUARTZ_COMMON_API TemplateContainerParser {
 public:
     TemplateContainerParser();
 
     ~TemplateContainerParser();
 
-    QVector<std::shared_ptr<Template>> parse(const QString &content);
+    QVector<std::shared_ptr<Template>> parse(const QString& content);
 
-    std::unique_ptr<Template> parse(const QDomElement &root);
+    std::unique_ptr<Template> parse(const QDomElement& root);
 
 private:
 };
 
-}
+} // namespace Quartz

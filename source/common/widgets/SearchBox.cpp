@@ -7,39 +7,32 @@
 
 #include "SearchBox.h"
 
-
 namespace Quartz {
 
-struct SearchBox::Data
-{
-    explicit Data(QWidget *parent)
+struct SearchBox::Data {
+    explicit Data(QWidget* parent)
         : m_editor(new QLineEdit(parent))
-        , m_clrBtn(new QPushButton(parent))
-    {
+        , m_clrBtn(new QPushButton(parent)) {
         auto pixmap = getIcon(FAIcon::Broom).pixmap({20, 20});
         m_clrBtn->setIcon(pixmap);
         m_clrBtn->setFixedSize({20, 20});
         m_clrBtn->setObjectName("sbclrbtn");
         m_editor->setObjectName("scbox");
-        m_clrBtn->setStyleSheet(
-                    "QPushButton#sbclrbtn{"
-                        "border: none;"
-                        "padding: none;"
-                        "margin: none;"
-                    "}");
-
+        m_clrBtn->setStyleSheet("QPushButton#sbclrbtn{"
+                                "border: none;"
+                                "padding: none;"
+                                "margin: none;"
+                                "}");
     }
 
-    QLineEdit *m_editor;
+    QLineEdit* m_editor;
 
-    QPushButton *m_clrBtn;
+    QPushButton* m_clrBtn;
 };
 
-
-SearchBox::SearchBox( QWidget *parent)
+SearchBox::SearchBox(QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(parent))
-{
+    , m_data(std::make_unique<Data>(parent)) {
     auto layout = new QHBoxLayout();
     layout->addWidget(m_data->m_editor);
     layout->addWidget(m_data->m_clrBtn);
@@ -49,9 +42,9 @@ SearchBox::SearchBox( QWidget *parent)
     connect(m_data->m_editor,
             &QLineEdit::textChanged,
             this,
-            [this](const QString &text) {
-        emit this->textChanged(text);
-    });
+            [this](const QString& text) {
+                emit this->textChanged(text);
+            });
     connect(m_data->m_clrBtn,
             &QPushButton::released,
             m_data->m_editor,
@@ -63,19 +56,15 @@ SearchBox::SearchBox( QWidget *parent)
     this->setContentsMargins({});
 }
 
-SearchBox::~SearchBox()
-{
+SearchBox::~SearchBox() {
 }
 
-void SearchBox::setButtonIcon(const QIcon &icon)
-{
+void SearchBox::setButtonIcon(const QIcon& icon) {
     m_data->m_clrBtn->setIcon(icon);
 }
 
-void SearchBox::setPlaceholderText(const QString &text)
-{
+void SearchBox::setPlaceholderText(const QString& text) {
     m_data->m_editor->setPlaceholderText(text);
 }
 
-
-}
+} // namespace Quartz

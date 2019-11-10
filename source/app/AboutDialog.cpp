@@ -6,13 +6,12 @@
 
 namespace Quartz {
 
-AboutDialog::AboutDialog(QWidget *parent)
-    : QDialog (parent)
-{
+AboutDialog::AboutDialog(QWidget* parent)
+    : QDialog(parent) {
     auto layout = new QHBoxLayout();
     auto img = new QLabel(this);
     img->setPixmap(QPixmap("://resources/quartz32.png"));
-//    img->setMaximumSize()
+    //    img->setMaximumSize()
     auto desc = new QLabel(this);
     desc->setText(tr("This is quartz!"));
     layout->addWidget(img);
@@ -21,10 +20,7 @@ AboutDialog::AboutDialog(QWidget *parent)
     this->setMinimumSize({300, 100});
 }
 
-AboutDialog::~AboutDialog()
-{
-
+AboutDialog::~AboutDialog() {
 }
 
-
-}
+} // namespace Quartz

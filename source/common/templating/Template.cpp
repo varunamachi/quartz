@@ -10,12 +10,9 @@
 
 namespace Quartz {
 
-struct Template::Data
-{
-    Data(const QString &name)
-        : m_name(name)
-    {
-
+struct Template::Data {
+    Data(const QString& name)
+        : m_name(name) {
     }
 
     QString m_name;
@@ -27,66 +24,51 @@ struct Template::Data
 
 const auto EMPTY_CONTENT = Content{"", ""};
 
-
-
-Template::Template(const QString &name)
+Template::Template(const QString& name)
     : TreeNode(2, nullptr)
-    , m_data(std::make_unique<Data>(name))
-{
-
+    , m_data(std::make_unique<Data>(name)) {
 }
 
-Template::~Template()
-{
-
+Template::~Template() {
 }
 
-QString Template::name() const
-{
+QString Template::name() const {
     return m_data->m_name;
 }
 
-void Template::setConfig(std::unique_ptr<Config> config)
-{
+void Template::setConfig(std::unique_ptr<Config> config) {
     m_data->m_config = std::move(config);
 }
 
-Config * Template::config() const
-{
-    return  m_data->m_config.get();
+Config* Template::config() const {
+    return m_data->m_config.get();
 }
 
-void Template::addContent(const Content &content)
-{
+void Template::addContent(const Content& content) {
     m_data->m_contents.append(content);
 }
 
-const Content &Template::contentAt(int index) const
-{
+const Content& Template::contentAt(int index) const {
     if (index < m_data->m_contents.size()) {
         return m_data->m_contents.at(index);
     }
     return EMPTY_CONTENT;
 }
 
-const QVector<Content> &Template::contents() const
-{
+const QVector<Content>& Template::contents() const {
     return m_data->m_contents;
 }
 
-int Template::numContents() const
-{
+int Template::numContents() const {
     return m_data->m_contents.size();
 }
 
-
-QVariant Template::fieldValue(int column) const
-{
-    switch(column) {
+QVariant Template::fieldValue(int column) const {
+    switch (column) {
     case 0: return m_data->m_name;
     case 1: return numChildren();
     }
     return QVariant{};
 }
 
-}
+} // namespace Quartz

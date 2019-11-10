@@ -8,13 +8,12 @@ namespace Quartz { namespace Ext { namespace Creator {
 
 class TemplateManager;
 
-class CreatorWidget : public ContentWidget
-{
+class CreatorWidget : public ContentWidget {
     Q_OBJECT
 
 public:
     explicit CreatorWidget(std::shared_ptr<TemplateManager> tman,
-                           QWidget *parent = nullptr);
+                           QWidget* parent = nullptr);
 
     ~CreatorWidget();
 
@@ -29,16 +28,13 @@ public slots:
 
     void onCreate();
 
-    void autoPopulate(const QString &fqid);
+    void autoPopulate(const QString& fqid);
 
-//    void addTemplates() ;
+    //    void addTemplates() ;
 
 private:
-
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-
-} } }
+}}} // namespace Quartz::Ext::Creator

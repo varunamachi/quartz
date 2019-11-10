@@ -32,12 +32,10 @@
 
 namespace Quartz {
 
-typedef std::function< void() > RespFunc;
-typedef std::function< RespFunc() > JobFunc;
+typedef std::function<void()> RespFunc;
+typedef std::function<RespFunc()> JobFunc;
 
-
-QZ_INTERFACE IJob
-{
+QZ_INTERFACE IJob {
     virtual const QString& name() const = 0;
 
     virtual const QString& category() const = 0;
@@ -49,13 +47,11 @@ QZ_INTERFACE IJob
     virtual ~IJob();
 };
 
-
-class QUARTZ_CORE_API JobManager : public QThread
-{
+class QUARTZ_CORE_API JobManager : public QThread {
     Q_OBJECT
 
 public:
-    explicit JobManager(QObject *parent = nullptr);
+    explicit JobManager(QObject* parent = nullptr);
 
     bool hasPendingJobs();
 
@@ -69,12 +65,12 @@ signals:
     void jobDescarded(const QString name, const QString category);
 
 public slots:
-    void addJob(IJob *job);
+    void addJob(IJob* job);
 
     void addJob(QString name,
-                 JobFunc job,
-                 QString category = "general",
-                 bool postResponseToEventQueue = true);
+                JobFunc job,
+                QString category = "general",
+                bool postResponseToEventQueue = true);
 
     bool cancelJob(QString name);
 
@@ -85,12 +81,12 @@ public slots:
 protected:
     void run();
 
-    bool event(QEvent *event);
+    bool event(QEvent* event);
 
 private:
     QReadWriteLock m_lock;
 
-    QQueue<IJob *> m_jobs;
+    QQueue<IJob*> m_jobs;
 
     QSet<QString> m_cancelledJobs;
 
@@ -99,5 +95,4 @@ private:
     bool m_stopProcessing;
 };
 
-} //end of namespace
-
+} // namespace Quartz

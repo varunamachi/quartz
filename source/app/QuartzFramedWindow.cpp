@@ -9,25 +9,19 @@
 
 namespace Quartz {
 
-QuartzFramedWindow::QuartzFramedWindow(QWidget *parent)
-    : QMainWindow(parent)
-{
+QuartzFramedWindow::QuartzFramedWindow(QWidget* parent)
+    : QMainWindow(parent) {
     this->setCentralWidget(new QzMainWidget(this));
-
 }
 
-QuartzFramedWindow::~QuartzFramedWindow()
-{
+QuartzFramedWindow::~QuartzFramedWindow() {
 }
 
-void QuartzFramedWindow::moveEvent(QMoveEvent */*event*/)
-{
+void QuartzFramedWindow::moveEvent(QMoveEvent* /*event*/) {
     auto notificationService = appContext()->notificationService();
     if (notificationService != nullptr) {
         notificationService->reposition();
     }
 }
 
-}
-
-
+} // namespace Quartz

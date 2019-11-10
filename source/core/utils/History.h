@@ -8,8 +8,7 @@
 
 namespace Quartz {
 
-class QUARTZ_CORE_API History
-{
+class QUARTZ_CORE_API History {
 public:
     /**
      * @brief History Simple class to hold command/navigation history
@@ -22,15 +21,15 @@ public:
 
     bool isValid() const;
 
-    const QString & get() const;
+    const QString& get() const;
 
-    const QString & next() const;
+    const QString& next() const;
 
-    const QString & prev() const;
+    const QString& prev() const;
 
-    void add(const QString &val);
+    void add(const QString& val);
 
-    const QVector<QString> & all() const;
+    const QVector<QString>& all() const;
 
     void clear();
 
@@ -41,4 +40,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

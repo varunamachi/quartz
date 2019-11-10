@@ -6,15 +6,11 @@
 
 namespace Quartz {
 
-
-struct TextParam::Data
-{
-    Data(TextType type, const QString &defValue)
+struct TextParam::Data {
+    Data(TextType type, const QString& defValue)
         : m_textType(type)
         , m_defaultValue(defValue)
-        , m_value(defValue)
-    {
-
+        , m_value(defValue) {
     }
 
     TextType m_textType;
@@ -24,58 +20,46 @@ struct TextParam::Data
     QString m_value;
 };
 
-TextParam::TextParam(const QString &id,
-                    const QString &name,
-                    const QString &description,
-                    TreeNode *parent)
+TextParam::TextParam(const QString& id,
+                     const QString& name,
+                     const QString& description,
+                     TreeNode* parent)
     : Param(id, name, description, parent)
-    , m_data(std::make_unique<Data>(TextType::Any, ""))
-{
-
+    , m_data(std::make_unique<Data>(TextType::Any, "")) {
 }
 
-TextParam::~TextParam()
-{
-
+TextParam::~TextParam() {
 }
 
-ParamType TextParam::type() const
-{
+ParamType TextParam::type() const {
     return ParamType::Text;
 }
 
-QVariant TextParam::value() const
-{
-    return QVariant{ m_data->m_value };
+QVariant TextParam::value() const {
+    return QVariant{m_data->m_value};
 }
 
-void TextParam::setValue(const QVariant &value)
-{
+void TextParam::setValue(const QVariant& value) {
     m_data->m_value = value.toString();
 }
 
-TextType TextParam::textType() const
-{
+TextType TextParam::textType() const {
     return m_data->m_textType;
 }
 
-void TextParam::setTextType(TextType textType)
-{
+void TextParam::setTextType(TextType textType) {
     m_data->m_textType = textType;
 }
 
-const QString & TextParam::defaultValue() const
-{
+const QString& TextParam::defaultValue() const {
     return m_data->m_defaultValue;
 }
 
-void TextParam::setDefaultValue(const QString &defaultValue)
-{
+void TextParam::setDefaultValue(const QString& defaultValue) {
     m_data->m_defaultValue = defaultValue;
 }
 
-std::unique_ptr<Param> TextParam::clone() const
-{
+std::unique_ptr<Param> TextParam::clone() const {
     auto param = std::make_unique<TextParam>(
         id(), name(), description(), parent());
     param->setDefaultValue(this->defaultValue());
@@ -83,4 +67,4 @@ std::unique_ptr<Param> TextParam::clone() const
     return std::move(param);
 }
 
-}
+} // namespace Quartz

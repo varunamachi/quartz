@@ -8,15 +8,13 @@ namespace Quartz {
 
 class QuartzView;
 
-class QUARTZ_BASE_API AbstractViewProvider : public Ext::Extension
-{
+class QUARTZ_BASE_API AbstractViewProvider : public Ext::Extension {
 public:
-    AbstractViewProvider(const QString &pluginId,
-                          const QString &pluginName);
+    AbstractViewProvider(const QString& pluginId, const QString& pluginName);
 
-    virtual QVector< QuartzView *> views() const = 0;
+    virtual QVector<QuartzView*> views() const = 0;
 
     const static QString EXTENSION_TYPE;
 };
 
-}
+} // namespace Quartz

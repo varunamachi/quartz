@@ -4,14 +4,9 @@
 
 namespace Vam { namespace Quartz {
 
-class QuartzComponent : public QWidget
-{
+class QuartzComponent : public QWidget {
 public:
-
-
 private:
-
 };
 
-} }
-
+}} // namespace Vam::Quartz

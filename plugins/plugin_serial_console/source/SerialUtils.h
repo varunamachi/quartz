@@ -4,11 +4,9 @@
 
 #include <core/utils/Macros.h>
 
-
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class SerialUtils
-{
+class SerialUtils {
 public:
     QZ_MAKE_STATIC(SerialUtils);
 
@@ -24,9 +22,9 @@ public:
 
     static QStringList allBaudRates();
 
-    static void storeBaudRates(const QStringList &rates);
+    static void storeBaudRates(const QStringList& rates);
 
 private:
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

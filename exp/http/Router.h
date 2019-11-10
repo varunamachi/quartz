@@ -20,5 +20,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-
-} }
+}} // namespace Quartz::Http

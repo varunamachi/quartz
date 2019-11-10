@@ -6,13 +6,12 @@
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API BooleanParam : public Param
-{
+class QUARTZ_COMMON_API BooleanParam : public Param {
 public:
-    BooleanParam(const QString &id,
-                  const QString &name,
-                  const QString &description,
-                  TreeNode *parent);
+    BooleanParam(const QString& id,
+                 const QString& name,
+                 const QString& description,
+                 TreeNode* parent);
 
     ~BooleanParam();
 
@@ -24,14 +23,13 @@ public:
 
     QVariant value() const override;
 
-    void setValue(const QVariant &value) override;
+    void setValue(const QVariant& value) override;
 
     std::unique_ptr<Param> clone() const;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-}
+} // namespace Quartz

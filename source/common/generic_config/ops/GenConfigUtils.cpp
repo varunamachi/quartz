@@ -8,9 +8,8 @@
 
 namespace Quartz {
 
-void GenConfigUtils::updateModel(const QVariantHash &values, Config *config)
-{
-    for (auto it = values.begin(); it != values.end(); ++ it) {
+void GenConfigUtils::updateModel(const QVariantHash& values, Config* config) {
+    for (auto it = values.begin(); it != values.end(); ++it) {
         auto param = config->param(it.key());
         if (param != nullptr) {
             param->setValue(it.value());
@@ -18,4 +17,4 @@ void GenConfigUtils::updateModel(const QVariantHash &values, Config *config)
     }
 }
 
-}
+} // namespace Quartz

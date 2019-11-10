@@ -5,23 +5,20 @@
 
 namespace Quartz { namespace Ext { namespace Sample {
 
-class SampleContent : public ContentWidget
-{
+class SampleContent : public ContentWidget {
     Q_OBJECT
 
 public:
-    explicit SampleContent(QWidget *parent = nullptr);
+    explicit SampleContent(QWidget* parent = nullptr);
 
     static const QString CONTENT_ID;
 
     static const QString CONTENT_NAME;
 
     static const QString CONTENT_KIND;
-
 };
 
-class ContentProvider : public AbstractContentProvider
-{
+class ContentProvider : public AbstractContentProvider {
 public:
     ContentProvider();
 
@@ -31,11 +28,11 @@ public:
 
     bool destroy() override;
 
-    QVector< ContentWidget *> widgets() override;
+    QVector<ContentWidget*> widgets() override;
 
-    static const QString     EXTENSION_ID;
+    static const QString EXTENSION_ID;
 
-    static const QString     EXTENSION_NAME;
+    static const QString EXTENSION_NAME;
 };
 
-} } }
+}}} // namespace Quartz::Ext::Sample

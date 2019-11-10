@@ -6,11 +6,10 @@
 
 namespace Quartz { namespace Ext { namespace IconFontExplorer {
 
-class IconView : public QWidget
-{
+class IconView : public QWidget {
     Q_OBJECT
 public:
-    IconView(QWidget *parent = nullptr);
+    IconView(QWidget* parent = nullptr);
 
     ~IconView();
 
@@ -19,4 +18,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

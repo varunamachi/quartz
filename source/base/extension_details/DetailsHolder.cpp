@@ -10,28 +10,24 @@
 #include "PluginInfoPage.h"
 #include "DetailsHolder.h"
 
-
 namespace Quartz { namespace Ext {
 
-
-struct DetailsHolder::Data
-{
-    Data(QWidget *parent)
+struct DetailsHolder::Data {
+    Data(QWidget* parent)
         : m_infoPage(new PluginInfoPage(parent))
-        , m_selector(new QComboBox(parent))
-    {}
+        , m_selector(new QComboBox(parent)) {
+    }
 
-    PluginInfoPage *m_infoPage;
+    PluginInfoPage* m_infoPage;
 
-    QComboBox *m_selector;
+    QComboBox* m_selector;
 
-    QVector<const Plugin *> m_plugins;
+    QVector<const Plugin*> m_plugins;
 };
 
-DetailsHolder::DetailsHolder(QWidget *parent)
+DetailsHolder::DetailsHolder(QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     auto selectorLayout = new QHBoxLayout();
     auto label = new QLabel(tr("Select Plugin"), this);
     label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -44,7 +40,7 @@ DetailsHolder::DetailsHolder(QWidget *parent)
     this->setLayout(lyt);
 
     m_data->m_plugins = appContext()->pluginManager()->plugins();
-    for (const auto &plugin : m_data->m_plugins) {
+    for (const auto& plugin : m_data->m_plugins) {
         m_data->m_selector->addItem(plugin->pluginName(), plugin->pluginId());
     }
     if (m_data->m_plugins.size() > 0) {
@@ -54,14 +50,12 @@ DetailsHolder::DetailsHolder(QWidget *parent)
     connect(m_data->m_selector,
             qOverload<int>(&QComboBox::currentIndexChanged),
             [this](int index) {
-       auto plugin =  m_data->m_plugins[index];
-       m_data->m_infoPage->setPlugin(plugin);
-    });
+                auto plugin = m_data->m_plugins[index];
+                m_data->m_infoPage->setPlugin(plugin);
+            });
 }
 
-DetailsHolder::~DetailsHolder()
-{
-
+DetailsHolder::~DetailsHolder() {
 }
 
-} }
+}} // namespace Quartz::Ext

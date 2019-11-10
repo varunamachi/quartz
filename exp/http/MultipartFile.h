@@ -6,19 +6,18 @@
 
 namespace Quartz { namespace Http {
 
-class MultipartFile
-{
+class MultipartFile {
 public:
-    explicit MultipartFile( const QString &fileName,
-                            const QString &contentType,
-                            std::size_t offset = 0,
-                            std::size_t length = 0 );
+    explicit MultipartFile(const QString& fileName,
+                           const QString& contentType,
+                           std::size_t offset = 0,
+                           std::size_t length = 0);
 
     ~MultipartFile();
 
-    const QString & fileName() const;
+    const QString& fileName() const;
 
-    const QString & contentType() const;
+    const QString& contentType() const;
 
     std::size_t offset() const;
 
@@ -26,7 +25,7 @@ public:
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
-} }
+}} // namespace Quartz::Http

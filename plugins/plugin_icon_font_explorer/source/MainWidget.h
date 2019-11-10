@@ -8,8 +8,7 @@ class MainWidget : public ContentWidget {
     Q_OBJECT
 
 public:
-
-    MainWidget(QWidget *parent = nullptr);
+    MainWidget(QWidget* parent = nullptr);
 
     ~MainWidget();
 
@@ -22,7 +21,6 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

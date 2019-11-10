@@ -29,13 +29,10 @@
 
 namespace Quartz { namespace Ext { namespace Creator {
 
-const QVector<QString> TI_HEADERS{
-    QObject::tr("Instance")
-};
+const QVector<QString> TI_HEADERS{QObject::tr("Instance")};
 
-struct TemplateConfigWidget::Data
-{
-    explicit Data(TemplateManager *tman, TemplateConfigWidget *parent)
+struct TemplateConfigWidget::Data {
+    explicit Data(TemplateManager* tman, TemplateConfigWidget* parent)
         : m_tmodel(new ArrayModel(1, false, true, TI_HEADERS, parent))
         , m_instanceProxy(new BasicSortFilter(parent))
         , m_view(new QzTreeView(parent))
@@ -49,8 +46,7 @@ struct TemplateConfigWidget::Data
         , m_clearBtn(new QPushButton(getIcon(MatIcon::Clear), "", parent))
         , m_tman(tman)
         , m_selector(new TemplateSelectorDialog(tman, parent))
-        , m_emptyConfig("none", "None")
-    {
+        , m_emptyConfig("none", "None") {
         m_instanceProxy->setSourceModel(m_tmodel);
         m_configProxy->setSourceModel(m_configModel);
         m_filter->setPlaceholderText(tr("Filter Templates"));
@@ -60,33 +56,31 @@ struct TemplateConfigWidget::Data
         m_clearBtn->setToolTip(tr("Clear all templates"));
     }
 
-    ArrayModel *m_tmodel;
-    BasicSortFilter *m_instanceProxy;
-    QzTreeView *m_view;
-    SearchBox *m_filter;
+    ArrayModel* m_tmodel;
+    BasicSortFilter* m_instanceProxy;
+    QzTreeView* m_view;
+    SearchBox* m_filter;
 
-    ConfigModel *m_configModel;
-    BasicSortFilter *m_configProxy;
-    QzTreeView *m_configView;
-    SearchBox *m_configFilter;
+    ConfigModel* m_configModel;
+    BasicSortFilter* m_configProxy;
+    QzTreeView* m_configView;
+    SearchBox* m_configFilter;
 
-    QPushButton *m_addBtn;
-    QPushButton *m_removeBtn;
-    QPushButton *m_clearBtn;
+    QPushButton* m_addBtn;
+    QPushButton* m_removeBtn;
+    QPushButton* m_clearBtn;
 
-    TemplateManager *m_tman;
-    TemplateSelectorDialog *m_selector;
+    TemplateManager* m_tman;
+    TemplateSelectorDialog* m_selector;
 
-    QHash< QString, std::shared_ptr<TemplateInstance>> m_instances;
+    QHash<QString, std::shared_ptr<TemplateInstance>> m_instances;
     Config m_emptyConfig;
 };
 
-TemplateConfigWidget::TemplateConfigWidget(
-        TemplateManager *tman,
-        QWidget *parent)
+TemplateConfigWidget::TemplateConfigWidget(TemplateManager* tman,
+                                           QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(tman, this))
-{
+    , m_data(std::make_unique<Data>(tman, this)) {
     auto leftRightLayout = new QVBoxLayout();
     leftRightLayout->addStretch();
     leftRightLayout->addWidget(m_data->m_addBtn);
@@ -124,17 +118,17 @@ TemplateConfigWidget::TemplateConfigWidget(
     m_data->m_configView->setItemDelegate(new GenConfigDelegate(this));
 
     connect(m_data->m_view->selectionModel(),
-             &QItemSelectionModel::currentChanged,
-             this,
-             &TemplateConfigWidget::onSelection);
+            &QItemSelectionModel::currentChanged,
+            this,
+            &TemplateConfigWidget::onSelection);
     connect(m_data->m_filter,
-             &SearchBox::textChanged,
-             m_data->m_instanceProxy,
-             &BasicSortFilter::setExpression);
+            &SearchBox::textChanged,
+            m_data->m_instanceProxy,
+            &BasicSortFilter::setExpression);
     connect(m_data->m_configFilter,
-             &SearchBox::textChanged,
-             m_data->m_configProxy,
-             &BasicSortFilter::setExpression);
+            &SearchBox::textChanged,
+            m_data->m_configProxy,
+            &BasicSortFilter::setExpression);
     connect(m_data->m_clearBtn,
             &QPushButton::clicked,
             this,
@@ -143,17 +137,15 @@ TemplateConfigWidget::TemplateConfigWidget(
             &QPushButton::clicked,
             this,
             &TemplateConfigWidget::clear);
-    connect(m_data->m_addBtn, &QPushButton::clicked, [this](){
+    connect(m_data->m_addBtn, &QPushButton::clicked, [this]() {
         m_data->m_selector->exec();
         if (m_data->m_selector->result() == QDialog::Accepted) {
             const auto selected = m_data->m_selector->selectedTemplates();
-            foreach(auto t, selected) {
-                this->createInstanceOf(t);
-            }
+            foreach (auto t, selected) { this->createInstanceOf(t); }
         }
         m_data->m_selector->clearSelection();
     });
-    connect(m_data->m_removeBtn, &QPushButton::clicked, [this](){
+    connect(m_data->m_removeBtn, &QPushButton::clicked, [this]() {
         auto selected = m_data->m_view->selectionModel()->selectedRows();
         for (auto index : selected) {
             auto node = m_data->m_tmodel->rootAt(index.row());
@@ -163,26 +155,22 @@ TemplateConfigWidget::TemplateConfigWidget(
     });
 }
 
-TemplateConfigWidget::~TemplateConfigWidget()
-{
-
+TemplateConfigWidget::~TemplateConfigWidget() {
 }
 
-TemplateInstance * TemplateConfigWidget::createInstanceOf(Template *tmpl)
-{
+TemplateInstance* TemplateConfigWidget::createInstanceOf(Template* tmpl) {
     auto name = tmpl->name();
     auto index = 1;
-    //If there is a name clash, we suffix numbers
+    // If there is a name clash, we suffix numbers
     do {
-        if (! m_data->m_instances.contains(name)) {
+        if (!m_data->m_instances.contains(name)) {
             break;
         }
         name = tmpl->name() + "_" + QString::number(index);
-        ++ index;
-    } while (index <= 1000); //1000 should be enough
-    auto inst = std::make_shared<TemplateInstance>(name,
-                                                   tmpl->config()->clone(),
-                                                   tmpl);
+        ++index;
+    } while (index <= 1000); // 1000 should be enough
+    auto inst = std::make_shared<TemplateInstance>(
+        name, tmpl->config()->clone(), tmpl);
 
     auto className = QFileInfo{name}.baseName();
     m_data->m_instances.insert(name, inst);
@@ -190,33 +178,28 @@ TemplateInstance * TemplateConfigWidget::createInstanceOf(Template *tmpl)
     return inst.get();
 }
 
-int TemplateConfigWidget::numInstances() const
-{
+int TemplateConfigWidget::numInstances() const {
     return m_data->m_tmodel->rootCount();
 }
 
-TemplateInstance * TemplateConfigWidget::instanceAt(int index)
-{
-    TemplateInstance *tinst = nullptr;
+TemplateInstance* TemplateConfigWidget::instanceAt(int index) {
+    TemplateInstance* tinst = nullptr;
     if (index < m_data->m_tmodel->rootCount()) {
-        tinst = static_cast<TemplateInstance * >(
-                    m_data->m_tmodel->rootAt(index));
+        tinst = static_cast<TemplateInstance*>(m_data->m_tmodel->rootAt(index));
     }
     return tinst;
 }
 
-void TemplateConfigWidget::clear()
-{
+void TemplateConfigWidget::clear() {
     m_data->m_tmodel->clear();
     m_data->m_instances.clear();
     m_data->m_configModel->setConfig(&m_data->m_emptyConfig);
 }
 
-void TemplateConfigWidget::onSelection(const QModelIndex &current,
-                                        const QModelIndex &/*prev*/)
-{
-    auto node = current.data(Qt::UserRole).value<TreeNode *>();
-    auto ti = dynamic_cast<TemplateInstance *>(node);
+void TemplateConfigWidget::onSelection(const QModelIndex& current,
+                                       const QModelIndex& /*prev*/) {
+    auto node = current.data(Qt::UserRole).value<TreeNode*>();
+    auto ti = dynamic_cast<TemplateInstance*>(node);
     if (ti != nullptr) {
         if (ti->instanceOf()->config() != nullptr) {
             m_data->m_configModel->setConfig(ti->instanceConfig());
@@ -228,52 +211,43 @@ void TemplateConfigWidget::onSelection(const QModelIndex &current,
 
 //////////////////////// Config Model ///////////////////////////
 
-const QVector<QString> CONFIG_HEADERS{
-    QObject::tr("Name"),
-    QObject::tr("Value")
-};
+const QVector<QString> CONFIG_HEADERS{QObject::tr("Name"),
+                                      QObject::tr("Value")};
 
-ConfigModel::ConfigModel(QObject *parent)
-    : AbstractTreeModel{
-          parent,
-          AbstractTreeModel::Options(2, false, true, CONFIG_HEADERS)}
-    , m_config(nullptr)
-{
-
+ConfigModel::ConfigModel(QObject* parent)
+    : AbstractTreeModel{parent,
+                        AbstractTreeModel::Options(2,
+                                                   false,
+                                                   true,
+                                                   CONFIG_HEADERS)}
+    , m_config(nullptr) {
 }
 
-ConfigModel::~ConfigModel()
-{
-
+ConfigModel::~ConfigModel() {
 }
 
-void ConfigModel::setConfig(Config *config)
-{
+void ConfigModel::setConfig(Config* config) {
     beginResetModel();
     m_config = config;
     endResetModel();
 }
 
-TreeNode * ConfigModel::rootAt(int index) const
-{
+TreeNode* ConfigModel::rootAt(int index) const {
     if (m_config != nullptr && index < m_config->numChildParams()) {
         return m_config->childParamAt(index);
     }
     return nullptr;
 }
 
-int ConfigModel::rootCount() const
-{
+int ConfigModel::rootCount() const {
     if (m_config != nullptr) {
         return m_config->numChildParams();
     }
     return 0;
 }
 
-int ConfigModel::indexOfRoot(TreeNode *node) const
-{
-    return  m_config->indexOfChild(node);
+int ConfigModel::indexOfRoot(TreeNode* node) const {
+    return m_config->indexOfChild(node);
 }
 
-
-} } }
+}}} // namespace Quartz::Ext::Creator

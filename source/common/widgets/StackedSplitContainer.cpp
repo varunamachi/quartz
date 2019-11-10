@@ -12,31 +12,29 @@
 
 namespace Quartz {
 
-struct StackedSplitContainer::Data
-{
-    QSplitter *m_splitter = nullptr;
+struct StackedSplitContainer::Data {
+    QSplitter* m_splitter = nullptr;
 
-    QWidget *m_contentWidget = nullptr;
+    QWidget* m_contentWidget = nullptr;
 
-    QBoxLayout *m_qzLayout = nullptr;
+    QBoxLayout* m_qzLayout = nullptr;
 };
 
 StackedSplitContainer::StackedSplitContainer(
-        int selectorDimention,
-        int buttonDimention,
-        AbstractContainer::Position selectorPosition,
-        Qt::Orientation orientation,
-        QWidget *parent)
+    int selectorDimention,
+    int buttonDimention,
+    AbstractContainer::Position selectorPosition,
+    Qt::Orientation orientation,
+    QWidget* parent)
     : AbstractContainer(selectorDimention,
                         buttonDimention,
                         selectorPosition,
                         orientation,
                         parent)
-    , m_data(std::make_unique<Data>())
-{
-//    auto spor = orientation == Qt::Vertical ? Qt::Horizontal
-//                                            : Qt::Vertical;
-//    if
+    , m_data(std::make_unique<Data>()) {
+    //    auto spor = orientation == Qt::Vertical ? Qt::Horizontal
+    //                                            : Qt::Vertical;
+    //    if
     selector()->setObjectName("selector");
     QString qss;
     QTextStream qssStream;
@@ -46,8 +44,8 @@ StackedSplitContainer::StackedSplitContainer(
     col.setAlpha(30);
     qssStream << "border: none;"
                  "border-style: solid;"
-                 "background-color: " << col2.name(QColor::HexArgb) << ";"
-                 ;
+                 "background-color: "
+              << col2.name(QColor::HexArgb) << ";";
 
     auto spor = Qt::Horizontal;
     auto wrapper = new QWidget(this);
@@ -55,7 +53,7 @@ StackedSplitContainer::StackedSplitContainer(
         m_data->m_qzLayout = new QVBoxLayout();
         spor = Qt::Horizontal;
         wrapper->setMaximumWidth(selectorDimention);
-    } else  {
+    } else {
         wrapper->setMaximumHeight(selectorDimention);
         m_data->m_qzLayout = new QHBoxLayout();
         spor = Qt::Vertical;
@@ -80,8 +78,7 @@ StackedSplitContainer::StackedSplitContainer(
     if (selectorPosition == AbstractContainer::Position::Before) {
         m_data->m_splitter->addWidget(wrapper);
         m_data->m_splitter->addWidget(stackedWidget());
-    }
-    else {
+    } else {
         m_data->m_splitter->addWidget(stackedWidget());
         m_data->m_splitter->addWidget(wrapper);
     }
@@ -90,8 +87,8 @@ StackedSplitContainer::StackedSplitContainer(
     layout->addWidget(m_data->m_splitter);
     this->setLayout(layout);
     m_data->m_splitter->setObjectName("selector-splitter");
-    m_data->m_splitter->setStyleSheet(
-                "QSplitter#selector-splitter::handle {width: 2px; }");
+    m_data->m_splitter->setStyleSheet("QSplitter#selector-splitter::handle "
+                                      "{width: 2px; }");
 
     this->setContentsMargins({});
     m_data->m_splitter->setContentsMargins({});
@@ -100,15 +97,12 @@ StackedSplitContainer::StackedSplitContainer(
     wrapper->setContentsMargins({});
 }
 
-StackedSplitContainer::~StackedSplitContainer()
-{
-
+StackedSplitContainer::~StackedSplitContainer() {
 }
 
 void StackedSplitContainer::setContentWidget(
-        QWidget *widget,
-        AbstractContainer::Position position)
-{
+    QWidget* widget,
+    AbstractContainer::Position position) {
     if (position == AbstractContainer::Position::Before) {
         m_data->m_splitter->insertWidget(0, widget);
     } else {
@@ -117,11 +111,9 @@ void StackedSplitContainer::setContentWidget(
     m_data->m_contentWidget = widget;
 }
 
-void StackedSplitContainer::setSizes(int selector, int stacked, int content)
-{
+void StackedSplitContainer::setSizes(int selector, int stacked, int content) {
     QList<int> sizes;
-    if (this->selectorPosition()
-            == AbstractContainer::Position::Before) {
+    if (this->selectorPosition() == AbstractContainer::Position::Before) {
         sizes << selector << stacked << content;
     } else {
         sizes << content << stacked << selector;
@@ -129,15 +121,11 @@ void StackedSplitContainer::setSizes(int selector, int stacked, int content)
     m_data->m_splitter->setSizes(sizes);
 }
 
-QString StackedSplitContainer::containerType() const
-{
+QString StackedSplitContainer::containerType() const {
     return "StackedSplitContainer";
 }
 
-void StackedSplitContainer::addFixedWidget(
-        QWidget *widget,
-        Position position)
-{
+void StackedSplitContainer::addFixedWidget(QWidget* widget, Position position) {
     widget->setContentsMargins({3, 3, 3, 3});
     if (position == Position::Before) {
         this->m_data->m_qzLayout->insertWidget(0, widget);
@@ -146,4 +134,4 @@ void StackedSplitContainer::addFixedWidget(
     }
 }
 
-}
+} // namespace Quartz

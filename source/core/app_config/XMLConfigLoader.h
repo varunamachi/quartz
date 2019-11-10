@@ -7,21 +7,13 @@
 
 namespace Quartz {
 
-class QUARTZ_CORE_API XMLConfigLoader : public AbstractConfigLoader
-{
+class QUARTZ_CORE_API XMLConfigLoader : public AbstractConfigLoader {
 public:
     explicit XMLConfigLoader(StoreFunc storeFunc);
 
     ~XMLConfigLoader();
 
     bool load(const QByteArray content) const override;
-
 };
 
-
-
-
-
-
-
-}
+} // namespace Quartz

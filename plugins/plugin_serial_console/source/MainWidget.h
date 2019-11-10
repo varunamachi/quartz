@@ -6,11 +6,10 @@
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class MainWidget : public ContentWidget
-{
+class MainWidget : public ContentWidget {
     Q_OBJECT
 public:
-    explicit MainWidget(QWidget *parent = nullptr);
+    explicit MainWidget(QWidget* parent = nullptr);
 
     ~MainWidget();
 
@@ -30,4 +29,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

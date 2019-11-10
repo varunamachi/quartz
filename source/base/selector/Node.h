@@ -15,54 +15,52 @@ class Node;
 using NodePtr = std::shared_ptr<Node>;
 using NodeCountType = QVector<Node>::size_type;
 
-class QUARTZ_BASE_API Node
-{
+class QUARTZ_BASE_API Node {
 public:
-    explicit Node(Node *parent,
-                   const QString &nodeName,
-                   const QString &nodeId,
-                   QIcon icon = QIcon());
+    explicit Node(Node* parent,
+                  const QString& nodeName,
+                  const QString& nodeId,
+                  QIcon icon = QIcon());
 
-//    explicit Node(const QString &nodeId,
-//                   const QString &nodeName,
-//                   QIcon icon = QIcon());
+    //    explicit Node(const QString &nodeId,
+    //                   const QString &nodeName,
+    //                   QIcon icon = QIcon());
 
     ~Node();
 
-    const QString & nodeId() const;
+    const QString& nodeId() const;
 
-    const QString & nodeName() const;
+    const QString& nodeName() const;
 
-    const QVector<NodePtr> & children() const;
+    const QVector<NodePtr>& children() const;
 
-    QVector<NodePtr> & children();
+    QVector<NodePtr>& children();
 
     NodeCountType numChildren() const;
 
-    const Node * childAt(NodeCountType index) const;
+    const Node* childAt(NodeCountType index) const;
 
-    Node * childAt(NodeCountType index);
+    Node* childAt(NodeCountType index);
 
     void addChild(NodePtr node);
 
-    bool removeChild(const QString &nodeName);
+    bool removeChild(const QString& nodeName);
 
-    bool hasChild(const QString &nodeName) const;
+    bool hasChild(const QString& nodeName) const;
 
-    const Node * child(const QString &nodeName) const;
+    const Node* child(const QString& nodeName) const;
 
-    Node * child(const QString &nodeName);
+    Node* child(const QString& nodeName);
 
-    int indexOfChild(const Node *node);
+    int indexOfChild(const Node* node);
 
-    const QIcon & icon() const;
+    const QIcon& icon() const;
 
-    Node *parent() const;
+    Node* parent() const;
 
-    void setParent(Node *parent);
+    void setParent(Node* parent);
 
-    inline static QStringList toPath(const QString &pathStr)
-    {
+    inline static QStringList toPath(const QString& pathStr) {
         return pathStr.split(">");
     }
 
@@ -71,12 +69,12 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-template<typename T> T node_cast(QVariant &var) {
-    auto tn = var.value<Node *>();
+template <typename T>
+T node_cast(QVariant& var) {
+    auto tn = var.value<Node*>();
     return dynamic_cast<T>(tn);
 }
 
-}
+} // namespace Quartz
 
 Q_DECLARE_METATYPE(Quartz::Node*)
-

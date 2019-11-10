@@ -5,18 +5,15 @@
 
 namespace Quartz {
 
-struct AbstractConfigPage::Data
-{
-    Data(const QStringList &parentPath ,
-          const QString &name,
-          const QString &id,
-          const QIcon &icon)
+struct AbstractConfigPage::Data {
+    Data(const QStringList& parentPath,
+         const QString& name,
+         const QString& id,
+         const QIcon& icon)
         : m_id(id)
         , m_name(name)
         , m_parentPath(parentPath)
-        , m_icon(icon)
-    {
-
+        , m_icon(icon) {
     }
 
     const QString m_id;
@@ -26,44 +23,34 @@ struct AbstractConfigPage::Data
     const QStringList m_parentPath;
 
     const QIcon m_icon;
-
 };
 
-AbstractConfigPage::AbstractConfigPage(const QStringList &parentPath,
-                                        const QString &name,
-                                        const QString &id,
-                                        const QIcon &icon,
-                                        QWidget *parent)
+AbstractConfigPage::AbstractConfigPage(const QStringList& parentPath,
+                                       const QString& name,
+                                       const QString& id,
+                                       const QIcon& icon,
+                                       QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(parentPath, name, id, icon))
-{
-
+    , m_data(std::make_unique<Data>(parentPath, name, id, icon)) {
 }
 
-AbstractConfigPage::~AbstractConfigPage()
-{
-
+AbstractConfigPage::~AbstractConfigPage() {
 }
 
-const QString & AbstractConfigPage::configPageName() const
-{
+const QString& AbstractConfigPage::configPageName() const {
     return m_data->m_name;
 }
 
-const QStringList &AbstractConfigPage::parentPath() const
-{
+const QStringList& AbstractConfigPage::parentPath() const {
     return m_data->m_parentPath;
 }
 
-const QString & AbstractConfigPage::configPageId() const
-{
+const QString& AbstractConfigPage::configPageId() const {
     return m_data->m_id;
 }
 
-const QIcon &AbstractConfigPage::icon() const
-{
+const QIcon& AbstractConfigPage::icon() const {
     return m_data->m_icon;
 }
 
-
-}
+} // namespace Quartz

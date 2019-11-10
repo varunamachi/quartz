@@ -26,14 +26,12 @@ const QVector<QString> HEADERS = {
     QObject::tr("Font"),
 };
 
-struct IconView::Data
-{
-    explicit Data(QWidget *parent)
+struct IconView::Data {
+    explicit Data(QWidget* parent)
         : m_view(new QzTreeView(parent))
         , m_searchBox(new SearchBox(parent))
         , m_details(new IconDetails(parent))
-        , m_model(new ArrayModel(3, false, true, HEADERS, parent))
-    {
+        , m_model(new ArrayModel(3, false, true, HEADERS, parent)) {
         m_icons = IconNode::roots();
         m_proxy = new IconProxyModel(parent);
         m_proxy->setSourceModel(m_model);
@@ -41,44 +39,39 @@ struct IconView::Data
         m_view->setSelectionMode(QAbstractItemView::SingleSelection);
         m_view->setSelectionBehavior(QAbstractItemView::SelectRows);
         m_view->setItemDelegateForColumn(0, new IconDelegate(parent));
-        for (auto &ic : m_icons) {
+        for (auto& ic : m_icons) {
             m_model->addRoot(ic.get());
         }
         m_searchBox->setPlaceholderText(tr("Search Icons"));
-        m_view->header()->setSectionResizeMode(
-                    2, QHeaderView::ResizeToContents);
+        m_view->header()->setSectionResizeMode(2,
+                                               QHeaderView::ResizeToContents);
     }
 
-    QzTreeView *m_view;
+    QzTreeView* m_view;
 
-    SearchBox *m_searchBox;
+    SearchBox* m_searchBox;
 
-    IconDetails *m_details;
+    IconDetails* m_details;
 
-    ArrayModel *m_model;
+    ArrayModel* m_model;
 
-    IconProxyModel *m_proxy;
+    IconProxyModel* m_proxy;
 
     QVector<std::shared_ptr<IconNode>> m_icons;
 };
 
-IconView::IconView(QWidget *parent)
+IconView::IconView(QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     auto familySelector = new QComboBox(this);
+    familySelector->addItem("All", static_cast<int>(IconFontFamily::Any));
+    familySelector->addItem("Material",
+                            static_cast<int>(IconFontFamily::Material));
+    familySelector->addItem("Font Awesome",
+                            static_cast<int>(IconFontFamily::FontAwesome));
     familySelector->addItem(
-                "All",
-                static_cast<int>(IconFontFamily::Any));
-    familySelector->addItem(
-                "Material",
-                static_cast<int>(IconFontFamily::Material));
-    familySelector->addItem(
-                "Font Awesome",
-                static_cast<int>(IconFontFamily::FontAwesome));
-    familySelector->addItem(
-                "Font Awesome Brands",
-                static_cast<int>(IconFontFamily::FontAwesomeBrands));
+        "Font Awesome Brands",
+        static_cast<int>(IconFontFamily::FontAwesomeBrands));
     familySelector->setCurrentIndex(0);
 
     auto topLayout = new QHBoxLayout();
@@ -98,26 +91,24 @@ IconView::IconView(QWidget *parent)
             &IconProxyModel::setExpression);
     connect(m_data->m_view->selectionModel(),
             &QItemSelectionModel::selectionChanged,
-            [this](const QItemSelection &sel, const QItemSelection &/*dsel*/ ) {
-        auto indices = sel.indexes();
-        if (indices.size() > 0) {
-            auto tn = treenode_cast<IconNode *>(indices[0].data(Qt::UserRole));
-            m_data->m_details->setIconInfo(tn->iconInfo());
-        }
-    });
+            [this](const QItemSelection& sel, const QItemSelection& /*dsel*/) {
+                auto indices = sel.indexes();
+                if (indices.size() > 0) {
+                    auto tn = treenode_cast<IconNode*>(
+                        indices[0].data(Qt::UserRole));
+                    m_data->m_details->setIconInfo(tn->iconInfo());
+                }
+            });
     connect(familySelector,
             qOverload<int>(&QComboBox::currentIndexChanged),
             [this, familySelector](int index) {
-        auto data = familySelector->itemData(index);
-        m_data->m_proxy->setFont(static_cast<IconFontFamily>(data.toInt()));
-    });
+                auto data = familySelector->itemData(index);
+                m_data->m_proxy->setFont(
+                    static_cast<IconFontFamily>(data.toInt()));
+            });
 }
 
-IconView::~IconView()
-{
-
+IconView::~IconView() {
 }
 
-
-
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

@@ -9,16 +9,15 @@
 
 #include <common/model_view/AbstractTreeModel.h>
 
-
 namespace Quartz {
 
 class Template;
 
 namespace Ext { namespace Creator {
 
-class TemplateManager : public AbstractTreeModel
-                      , public IExtensionAdapter
-{
+class TemplateManager
+    : public AbstractTreeModel
+    , public IExtensionAdapter {
     Q_OBJECT
 public:
     explicit TemplateManager();
@@ -27,21 +26,21 @@ public:
 
     void addTemplate(std::shared_ptr<Template> tmplt);
 
-    QList< Template *> templates() const;
+    QList<Template*> templates() const;
 
-    const QString &extensionType() const override;
+    const QString& extensionType() const override;
 
-    const QString &extensionAdapterName() const override;
+    const QString& extensionAdapterName() const override;
 
-    bool handleExtension(Extension *plugin) override;
+    bool handleExtension(Extension* plugin) override;
 
     bool finalizeExtension() override;
 
-    void addVariable(const QString &key, const QString &value);
+    void addVariable(const QString& key, const QString& value);
 
-    QString variable(const QString &key);
+    QString variable(const QString& key);
 
-    Template * templateAt(int index) const;
+    Template* templateAt(int index) const;
 
     int numTemplates() const;
 
@@ -54,18 +53,16 @@ public:
     static const QString ADAPTER_NAME;
 
 protected:
-    TreeNode *rootAt(int rowIndex) const override;
+    TreeNode* rootAt(int rowIndex) const override;
 
     int rootCount() const override;
 
-    int indexOfRoot(TreeNode *node) const override;
+    int indexOfRoot(TreeNode* node) const override;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
-
 };
 
-
-} } }
+}} // namespace Ext::Creator
+} // namespace Quartz

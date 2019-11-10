@@ -26,21 +26,19 @@
 
 namespace Quartz { namespace Logger {
 
-class QUARTZ_CORE_API ConsoleTarget : public AbstractLogTarget
-{
+class QUARTZ_CORE_API ConsoleTarget : public AbstractLogTarget {
 public:
     ConsoleTarget();
 
     void flush() override;
 
-    void write(const LogMessage *message) override;
+    void write(const LogMessage* message) override;
 
-    void write(QString &&message) override;
+    void write(QString&& message) override;
 
     static const QString TARGET_ID;
 
 private:
-
 };
 
-} }//end of namespace
+}} // namespace Quartz::Logger

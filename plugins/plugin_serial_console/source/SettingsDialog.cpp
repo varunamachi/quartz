@@ -18,14 +18,13 @@
 #include "SerialSettings.h"
 #include "SerialUtils.h"
 
-//Some information is adapted from Qt's serial terminal example
-//Under BSD License - check License.txt in the same directory
+// Some information is adapted from Qt's serial terminal example
+// Under BSD License - check License.txt in the same directory
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-struct SettingsDialog::Data
-{
-    explicit Data(QWidget *parent)
+struct SettingsDialog::Data {
+    explicit Data(QWidget* parent)
         : m_nameCombo(new QComboBox(parent))
         , m_baudRateCombo(new QComboBox(parent))
         , m_dataBitsCombo(new QComboBox(parent))
@@ -40,100 +39,96 @@ struct SettingsDialog::Data
         , m_pid(new QLineEdit(parent))
         , m_okButton(new QPushButton(tr("Ok"), parent))
         , m_cancelButton(new QPushButton(tr("Cancel"), parent))
-        , m_intValidator(new QIntValidator(0, 40000000, parent))
-    {
-
+        , m_intValidator(new QIntValidator(0, 40000000, parent)) {
     }
 
     void setupUI();
 
-    QComboBox *m_nameCombo;
+    QComboBox* m_nameCombo;
 
-    QComboBox *m_baudRateCombo;
+    QComboBox* m_baudRateCombo;
 
-    QComboBox *m_dataBitsCombo;
+    QComboBox* m_dataBitsCombo;
 
-    QComboBox *m_parityCombo;
+    QComboBox* m_parityCombo;
 
-    QComboBox *m_stopBitsCombo;
+    QComboBox* m_stopBitsCombo;
 
-    QComboBox *m_flowControlCombo;
+    QComboBox* m_flowControlCombo;
 
-    QLineEdit *m_desc;
+    QLineEdit* m_desc;
 
-    QLineEdit *m_manufacturer;
+    QLineEdit* m_manufacturer;
 
-    QLineEdit *m_serialNum;
+    QLineEdit* m_serialNum;
 
-    QLineEdit *m_location;
+    QLineEdit* m_location;
 
-    QLineEdit *m_vid;
+    QLineEdit* m_vid;
 
-    QLineEdit *m_pid;
+    QLineEdit* m_pid;
 
-    QPushButton *m_okButton;
+    QPushButton* m_okButton;
 
-    QPushButton *m_cancelButton;
+    QPushButton* m_cancelButton;
 
-    QIntValidator *m_intValidator;
+    QIntValidator* m_intValidator;
 
-    QHash< QString, QSerialPortInfo > m_available;
+    QHash<QString, QSerialPortInfo> m_available;
 };
 
-
-SettingsDialog::SettingsDialog(QWidget *parent)
+SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     auto paramLayout = new QGridLayout{};
     auto row = 0;
 
     paramLayout->addWidget(new QLabel(tr("Baud Rate"), this), row, 0);
     paramLayout->addWidget(m_data->m_baudRateCombo, row, 1);
-    ++ row;
+    ++row;
 
     paramLayout->addWidget(new QLabel(tr("Data Bits"), this), row, 0);
     paramLayout->addWidget(m_data->m_dataBitsCombo, row, 1);
-    ++ row;
+    ++row;
 
     paramLayout->addWidget(new QLabel(tr("Parity"), this), row, 0);
     paramLayout->addWidget(m_data->m_parityCombo, row, 1);
-    ++ row;
+    ++row;
 
     paramLayout->addWidget(new QLabel(tr("Stop Bits"), this), row, 0);
     paramLayout->addWidget(m_data->m_stopBitsCombo, row, 1);
-    ++ row;
+    ++row;
 
     paramLayout->addWidget(new QLabel(tr("Flow Control"), this), row, 0);
     paramLayout->addWidget(m_data->m_flowControlCombo, row, 1);
-    ++ row;
+    ++row;
 
     auto infoLayout = new QGridLayout{};
     row = 0;
 
     infoLayout->addWidget(new QLabel(tr("Description"), this), row, 0);
     infoLayout->addWidget(m_data->m_desc, row, 1);
-    ++ row;
+    ++row;
 
     infoLayout->addWidget(new QLabel(tr("Manufacturer"), this), row, 0);
     infoLayout->addWidget(m_data->m_manufacturer, row, 1);
-    ++ row;
+    ++row;
 
     infoLayout->addWidget(new QLabel(tr("Serial Number"), this), row, 0);
     infoLayout->addWidget(m_data->m_serialNum, row, 1);
-    ++ row;
+    ++row;
 
     infoLayout->addWidget(new QLabel(tr("Location"), this), row, 0);
     infoLayout->addWidget(m_data->m_location, row, 1);
-    ++ row;
+    ++row;
 
     infoLayout->addWidget(new QLabel(tr("Vendor ID"), this), row, 0);
     infoLayout->addWidget(m_data->m_vid, row, 1);
-    ++ row;
+    ++row;
 
     infoLayout->addWidget(new QLabel(tr("Product ID"), this), row, 0);
     infoLayout->addWidget(m_data->m_pid, row, 1);
-    ++ row;
+    ++row;
 
     auto infoGroup = new QGroupBox(tr("Device Information"), this);
     infoGroup->setLayout(infoLayout);
@@ -161,87 +156,69 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     using ComboIdxFunc = void (QComboBox::*)(int);
     connect(m_data->m_nameCombo,
-             SIGNAL(currentIndexChanged(int)),
-             this,
-             SLOT(showPortDetails()));
-    connect(m_data->m_okButton,
-             &QPushButton::released,
-             this,
-             &QDialog::accept);
-    connect(m_data->m_cancelButton,
-             &QPushButton::released,
-             this,
-             &QDialog::reject);
+            SIGNAL(currentIndexChanged(int)),
+            this,
+            SLOT(showPortDetails()));
+    connect(m_data->m_okButton, &QPushButton::released, this, &QDialog::accept);
+    connect(
+        m_data->m_cancelButton, &QPushButton::released, this, &QDialog::reject);
 
     connect(m_data->m_nameCombo,
             static_cast<ComboIdxFunc>(&QComboBox::currentIndexChanged),
-             [ this ](int /*index*/) {
-        auto custom = (m_data->m_nameCombo->currentText() == "Custom");
-        m_data->m_nameCombo->setEditable(custom);
-        if (custom) {
-            m_data->m_nameCombo->clearEditText();
-        }
-    });
+            [this](int /*index*/) {
+                auto custom = (m_data->m_nameCombo->currentText() == "Custom");
+                m_data->m_nameCombo->setEditable(custom);
+                if (custom) {
+                    m_data->m_nameCombo->clearEditText();
+                }
+            });
 }
 
-SettingsDialog::~SettingsDialog()
-{
-
+SettingsDialog::~SettingsDialog() {
 }
 
-template< typename T >
-T param(QComboBox *box)
-{
-    return static_cast<T>(
-        box->itemData(box->currentIndex()).toInt());
+template <typename T>
+T param(QComboBox* box) {
+    return static_cast<T>(box->itemData(box->currentIndex()).toInt());
 }
 
-std::unique_ptr<SerialSettings> SettingsDialog::settings() const
-{
+std::unique_ptr<SerialSettings> SettingsDialog::settings() const {
     auto brate = param<qint32>(m_data->m_baudRateCombo);
     if (brate == 0) {
         brate = m_data->m_baudRateCombo->currentText().toInt();
     }
-    return std::unique_ptr<SerialSettings>(new SerialSettings {
+    return std::unique_ptr<SerialSettings>(new SerialSettings{
         m_data->m_nameCombo->currentText(),
         brate,
         param<QSerialPort::DataBits>(m_data->m_dataBitsCombo),
         param<QSerialPort::Parity>(m_data->m_parityCombo),
         param<QSerialPort::StopBits>(m_data->m_stopBitsCombo),
         param<QSerialPort::FlowControl>(m_data->m_flowControlCombo),
-        m_data->m_available.value(m_data->m_nameCombo->currentText())
-    });
+        m_data->m_available.value(m_data->m_nameCombo->currentText())});
 }
 
-void SettingsDialog::setSettings(const SerialSettings & /*settings*/)
-{
-
+void SettingsDialog::setSettings(const SerialSettings& /*settings*/) {
 }
 
-void SettingsDialog::open()
-{
+void SettingsDialog::open() {
     refresh();
     QDialog::open();
 }
 
-int SettingsDialog::exec()
-{
+int SettingsDialog::exec() {
     refresh();
     return QDialog::exec();
 }
 
-void SettingsDialog::updateBaudRates()
-{
+void SettingsDialog::updateBaudRates() {
     m_data->m_baudRateCombo->clear();
-    m_data->m_baudRateCombo->addItems(
-                SerialUtils::allBaudRates());
+    m_data->m_baudRateCombo->addItems(SerialUtils::allBaudRates());
 }
 
-void SettingsDialog::showPortDetails()
-{
+void SettingsDialog::showPortDetails() {
     auto selected = m_data->m_nameCombo->currentText();
     if (m_data->m_available.contains(selected)) {
-        const auto &info = m_data->m_available.value(selected);
+        const auto& info = m_data->m_available.value(selected);
         m_data->m_desc->setText(info.description());
         m_data->m_manufacturer->setText(info.manufacturer());
         m_data->m_serialNum->setText(info.serialNumber());
@@ -251,16 +228,15 @@ void SettingsDialog::showPortDetails()
     }
 }
 
-void SettingsDialog::refresh()
-{
+void SettingsDialog::refresh() {
     auto selected = m_data->m_nameCombo->currentText();
     auto selectedIndex = 0;
     m_data->m_available.clear();
     m_data->m_nameCombo->clear();
     const auto ports = QSerialPortInfo::availablePorts();
-    for (int i = 0; i < ports.size(); ++ i) {
-        const auto &port = ports.at(i);
-        if (! port.isBusy()) {
+    for (int i = 0; i < ports.size(); ++i) {
+        const auto& port = ports.at(i);
+        if (!port.isBusy()) {
             m_data->m_nameCombo->addItem(port.portName());
             m_data->m_available.insert(port.portName(), port);
             if (port.portName() == selected) {
@@ -275,8 +251,7 @@ void SettingsDialog::refresh()
     }
 }
 
-void SettingsDialog::Data::setupUI()
-{
+void SettingsDialog::Data::setupUI() {
     m_baudRateCombo->addItems(SerialUtils::allBaudRates());
 
     m_dataBitsCombo->addItem(QStringLiteral("5"), QSerialPort::Data5);
@@ -309,5 +284,4 @@ void SettingsDialog::Data::setupUI()
     m_pid->setEnabled(false);
 }
 
-
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

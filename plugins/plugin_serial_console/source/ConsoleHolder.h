@@ -8,12 +8,11 @@ namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class SerialSettings;
 
-class ConsoleHolder : public QWidget
-{
+class ConsoleHolder : public QWidget {
     Q_OBJECT
 public:
     explicit ConsoleHolder(std::unique_ptr<SerialSettings> settings,
-                            QWidget *parent = nullptr);
+                           QWidget* parent = nullptr);
 
     ~ConsoleHolder();
 
@@ -36,12 +35,11 @@ private slots:
     void setBaudRate(int index);
 
 signals:
-    void serialDisconnected(ConsoleHolder *holder);
+    void serialDisconnected(ConsoleHolder* holder);
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

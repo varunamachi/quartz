@@ -15,21 +15,18 @@ namespace Quartz {
 const QString MainMenuButton::ADAPTER_NAME("qz.main_menu");
 
 struct MainMenuButton::Data {
-    explicit Data(QWidget *parent)
-        : m_menu(new QMenu(parent))
-    {
-
+    explicit Data(QWidget* parent)
+        : m_menu(new QMenu(parent)) {
     }
 
-    QMenu *m_menu;
+    QMenu* m_menu;
 
-    QVector<QAction *> m_extActions;
+    QVector<QAction*> m_extActions;
 };
 
-MainMenuButton::MainMenuButton(QWidget *parent)
+MainMenuButton::MainMenuButton(QWidget* parent)
     : QToolButton(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     this->setMenu(m_data->m_menu);
     this->setPopupMode(QToolButton::InstantPopup);
     this->setArrowType(Qt::NoArrow);
@@ -43,50 +40,45 @@ MainMenuButton::MainMenuButton(QWidget *parent)
     QString qss;
     QTextStream qssStream;
     qssStream.setString(&qss);
-    qssStream <<
-               "QToolButton#menu_button{"
-                  "background-color: " << bgColor.name(QColor::HexArgb) << ";"
-                  "color: " << color.name(QColor::HexArgb) << ";"
-                  "border-width: 1px"
-               ";}"
+    qssStream << "QToolButton#menu_button{"
+                 "background-color: "
+              << bgColor.name(QColor::HexArgb)
+              << ";"
+                 "color: "
+              << color.name(QColor::HexArgb)
+              << ";"
+                 "border-width: 1px"
+                 ";}"
                  "QToolButton#menu_button:menu-indicator{"
-                    "width: 0px;"
-                 "}"
-                 ;
+                 "width: 0px;"
+                 "}";
     qssStream.flush();
     this->setStyleSheet(qss);
-//    this->setIcon(QIcon("://resources/quartz32.png"));
+    //    this->setIcon(QIcon("://resources/quartz32.png"));
     this->setContentsMargins({});
 }
 
-MainMenuButton::~MainMenuButton()
-{
-
+MainMenuButton::~MainMenuButton() {
 }
 
-void MainMenuButton::addAction(QAction *action)
-{
+void MainMenuButton::addAction(QAction* action) {
     m_data->m_menu->addAction(action);
 }
 
-QAction * MainMenuButton::addMenu(QMenu *menu)
-{
+QAction* MainMenuButton::addMenu(QMenu* menu) {
     return m_data->m_menu->addMenu(menu);
 }
 
-const QString &MainMenuButton::extensionType() const
-{
-    return  AbstractMenuProvider::EXTENSION_TYPE;
+const QString& MainMenuButton::extensionType() const {
+    return AbstractMenuProvider::EXTENSION_TYPE;
 }
 
-const QString &MainMenuButton::extensionAdapterName() const
-{
+const QString& MainMenuButton::extensionAdapterName() const {
     return ADAPTER_NAME;
 }
 
-bool MainMenuButton::handleExtension(Ext::Extension *extension)
-{
-    auto menuProvider = dynamic_cast<AbstractMenuProvider *>(extension);
+bool MainMenuButton::handleExtension(Ext::Extension* extension) {
+    auto menuProvider = dynamic_cast<AbstractMenuProvider*>(extension);
     if (menuProvider != nullptr) {
         for (auto actn : menuProvider->actions()) {
             addAction(actn);
@@ -103,16 +95,12 @@ bool MainMenuButton::handleExtension(Ext::Extension *extension)
     return false;
 }
 
-bool MainMenuButton::finalizeExtension()
-{
-    for (auto o: m_data->m_extActions) {
+bool MainMenuButton::finalizeExtension() {
+    for (auto o : m_data->m_extActions) {
         m_data->m_menu->removeAction(o);
-        delete  o;
+        delete o;
     }
     return true;
 }
 
-
-
-}
-
+} // namespace Quartz

@@ -6,31 +6,29 @@
 
 namespace Quartz { namespace Http {
 
-class HttpResponse
-{
+class HttpResponse {
 public:
-
-    HttpResponse( const QString &version, StatusCode status );
+    HttpResponse(const QString& version, StatusCode status);
 
     ~HttpResponse();
 
-    const QString & version() const;
+    const QString& version() const;
 
     StatusCode status() const;
 
-    QString header( const QString &key ) const;
+    QString header(const QString& key) const;
 
-    bool hasHeader( const QString &key ) const;
+    bool hasHeader(const QString& key) const;
 
-    void setHeader( const QString &key, const QString &value );
+    void setHeader(const QString& key, const QString& value);
 
-    void setRedirect( const QString &url );
+    void setRedirect(const QString& url);
 
-    void setContent( const QByteArray  &content, const QString &contentType );
+    void setContent(const QByteArray& content, const QString& contentType);
 
 private:
     struct Data;
-    std::unique_ptr< Data > m_data;
+    std::unique_ptr<Data> m_data;
 };
 
-} }
+}} // namespace Quartz::Http

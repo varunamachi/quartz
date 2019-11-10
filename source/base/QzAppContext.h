@@ -6,8 +6,6 @@
 
 #include "QuartzBase.h"
 
-
-
 namespace Quartz {
 
 class ContentManager;
@@ -18,16 +16,13 @@ class ThemeManager;
 class NotificationService;
 class ViewManager;
 
-namespace Ext { class PlugginManager; }
+namespace Ext {
+class PlugginManager;
+}
 
-enum class StdPath
-{
-    DataDirectory,
-    LogDirectory
-};
+enum class StdPath { DataDirectory, LogDirectory };
 
-class QUARTZ_BASE_API QzAppContext : public QzCoreContext
-{
+class QUARTZ_BASE_API QzAppContext : public QzCoreContext {
 public:
     explicit QzAppContext();
 
@@ -48,9 +43,8 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-inline QzAppContext * appContext()
-{
+inline QzAppContext* appContext() {
     return context<QzAppContext>();
 }
 
-}
+} // namespace Quartz

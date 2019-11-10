@@ -13,153 +13,130 @@ namespace Quartz {
 
 const QString PageManager::ADAPTER_NAME("page_manager");
 
-PageManager::PageManager(int categoryWidth,
-                          int pagerHeight,
-                          QWidget *parent)
+PageManager::PageManager(int categoryWidth, int pagerHeight, QWidget* parent)
     : QWidget(parent)
     , m_selectorWidth(categoryWidth)
     , m_holderHeight(pagerHeight)
-    , m_catContainer(new StackedContainer(
-                          categoryWidth,
-                          40,
-                          AbstractContainer::Position::Before,
-                          Qt::Vertical,
-                          this))
-{
-    QVBoxLayout *layout = new QVBoxLayout();
+    , m_catContainer(new StackedContainer(categoryWidth,
+                                          40,
+                                          AbstractContainer::Position::Before,
+                                          Qt::Vertical,
+                                          this)) {
+    QVBoxLayout* layout = new QVBoxLayout();
     layout->addWidget(m_catContainer);
     layout->setContentsMargins(QMargins());
     this->setLayout(layout);
-
 }
 
-
-void PageManager::addPage(QuartzPage *page)
-{
+void PageManager::addPage(QuartzPage* page) {
     if (page != nullptr) {
-        AbstractContainer *container = m_pageContainers.value(
-                    page->pageCategoryId());
+        AbstractContainer* container = m_pageContainers.value(
+            page->pageCategoryId());
         if (container == nullptr) {
             container = new StackedContainer(
-                        m_holderHeight,
-                        150,
-                        AbstractContainer::Position::Before,
-                        Qt::Horizontal,
-                        this);
-            m_catContainer->addWidget(page->pageCategoryId(),
-                                       page->pageCategoryName(),
-                                       container);
+                m_holderHeight,
+                150,
+                AbstractContainer::Position::Before,
+                Qt::Horizontal,
+                this);
+            m_catContainer->addWidget(
+                page->pageCategoryId(), page->pageCategoryName(), container);
             m_pageContainers.insert(page->pageCategoryId(), container);
         }
-        container->addWidget(page->pageId(),
-                              page->pageDisplayName(),
-                              page);
+        container->addWidget(page->pageId(), page->pageDisplayName(), page);
         m_pages.insert(page->pageId(), page);
-    }
-    else {
+    } else {
         QZ_ERROR("Qz:PageManager") << "Invalid page given";
     }
 }
 
-
-void PageManager::removePage(const QString &pageId)
-{
-    QuartzPage *page = m_pages.value(pageId);
+void PageManager::removePage(const QString& pageId) {
+    QuartzPage* page = m_pages.value(pageId);
     if (page != nullptr) {
         removePage(pageId);
-    }
-    else {
-        auto msg = QZ_ERROR("QzApp:PageMan")
-                << tr("Could not remove page with id %1."
-                      " No page with given ID found").arg(pageId)
-                << Logger::Str;
+    } else {
+        auto msg = QZ_ERROR("QzApp:PageMan") << tr("Could not remove page with "
+                                                   "id %1."
+                                                   " No page with given ID "
+                                                   "found")
+                                                    .arg(pageId)
+                                             << Logger::Str;
     }
 }
 
-
-void PageManager::removePage(QuartzPage *page)
-{
+void PageManager::removePage(QuartzPage* page) {
     if (page != nullptr) {
-        AbstractContainer *container =
-                m_pageContainers.value(page->pageCategoryId());
+        AbstractContainer* container = m_pageContainers.value(
+            page->pageCategoryId());
         if (container) {
             container->removeWidget(page->pageId());
             m_pages.remove(page->pageId());
             if (container->isEmpty()) {
-                QZ_INFO("Qz:PageManager")
-                        << "There are no pages left in the category with "
-                           "id " << page->pageCategoryId()
-                        << ". The container for this category will be "
-                           "removed";
+                QZ_INFO("Qz:PageManager") << "There are no pages left in the "
+                                             "category with "
+                                             "id "
+                                          << page->pageCategoryId()
+                                          << ". The container for this "
+                                             "category will be "
+                                             "removed";
                 m_pageContainers.remove(page->pageCategoryId());
                 delete container;
             }
-        }
-        else {
+        } else {
             auto msg = QZ_ERROR("Qz:PageManager")
-                    << tr("Could not remove page with ID %1. Could not find "
-                          "the category of the page - ")
+                << tr("Could not remove page with ID %1. Could not find "
+                      "the category of the page - ")
                        .arg(page->pageId())
-                       .arg(page->pageCategoryId()) << Logger::Str;
-            showError(msg);
-
-        }
-        QZ_INFO("Qz:PageManager")
-                << tr("succesfully added  Page with id %1 of category %2")
-                   .arg(page->pageId())
-                   .arg(page->pageCategoryId());
-    }
-    else {
-        auto msg = QZ_ERROR("Qz:PageManager")
-                << tr("Could not remove page with id - invalid page given")
+                       .arg(page->pageCategoryId())
                 << Logger::Str;
+            showError(msg);
+        }
+        QZ_INFO("Qz:PageManager") << tr("succesfully added  Page with id %1 of "
+                                        "category %2")
+                                         .arg(page->pageId())
+                                         .arg(page->pageCategoryId());
+    } else {
+        auto msg = QZ_ERROR("Qz:PageManager") << tr("Could not remove page "
+                                                    "with id - invalid page "
+                                                    "given")
+                                              << Logger::Str;
         showError(msg);
     }
 }
 
-
-void PageManager::removePageCategory(const QString &categoryId)
-{
-    AbstractContainer *container = m_pageContainers.value(categoryId);
+void PageManager::removePageCategory(const QString& categoryId) {
+    AbstractContainer* container = m_pageContainers.value(categoryId);
     if (container != nullptr) {
         QList<QString> allIds = container->allIds();
-        for (const QString &id : allIds) {
+        for (const QString& id : allIds) {
             m_pages.remove(id);
         }
         m_pageContainers.remove(categoryId);
         delete container;
-    }
-    else {
-        QZ_ERROR("Qz:PageManager")
-                << "Could not remove category " << categoryId
-                << ". No such category found";
+    } else {
+        QZ_ERROR("Qz:PageManager") << "Could not remove category " << categoryId
+                                   << ". No such category found";
     }
 }
 
-
-QuartzPage * PageManager::page(const QString &pageId) const
-{
-    QuartzPage *page = m_pages.value(pageId);
+QuartzPage* PageManager::page(const QString& pageId) const {
+    QuartzPage* page = m_pages.value(pageId);
     return page;
 }
 
-
-QList< QuartzPage * > PageManager::pages() const
-{
-    QList< QuartzPage *> pages;
+QList<QuartzPage*> PageManager::pages() const {
+    QList<QuartzPage*> pages;
     auto it = m_pages.begin();
-    for (; it != m_pages.end(); ++ it) {
+    for (; it != m_pages.end(); ++it) {
         pages.append(it.value());
     }
     return pages;
 }
 
-
-QList< QuartzPage * > PageManager::pages(const QString &categoryId) const
-{
-    QList< QuartzPage *> pages;
-    for (auto it = m_pages.begin(); it != m_pages.end(); ++ it) {
-        QuartzPage *page = it.value();
+QList<QuartzPage*> PageManager::pages(const QString& categoryId) const {
+    QList<QuartzPage*> pages;
+    for (auto it = m_pages.begin(); it != m_pages.end(); ++it) {
+        QuartzPage* page = it.value();
         if (page->pageCategoryId() == categoryId) {
             pages.append(page);
         }
@@ -167,120 +144,101 @@ QList< QuartzPage * > PageManager::pages(const QString &categoryId) const
     return pages;
 }
 
-
-QuartzPage * PageManager::currentPage() const
-{
-    QuartzPage *page = nullptr;
+QuartzPage* PageManager::currentPage() const {
+    QuartzPage* page = nullptr;
     QString curCategory = m_catContainer->currentId();
-    if (! curCategory.isEmpty()) {
-        AbstractContainer *pageContnr = m_pageContainers.value(curCategory);
+    if (!curCategory.isEmpty()) {
+        AbstractContainer* pageContnr = m_pageContainers.value(curCategory);
         if (pageContnr != nullptr) {
             QString curPageId = pageContnr->currentId();
-            QWidget *widget = pageContnr->widget(curPageId);
-            page = dynamic_cast<QuartzPage *>(widget);
+            QWidget* widget = pageContnr->widget(curPageId);
+            page = dynamic_cast<QuartzPage*>(widget);
+        } else {
+            QZ_ERROR("Qz:PageManager") << "Could not retrieve current page, "
+                                          "there are no "
+                                          "pages in the current category"
+                                       << curCategory;
         }
-        else {
-            QZ_ERROR("Qz:PageManager")
-                    << "Could not retrieve current page, there are no "
-                       "pages in the current category"
-                    << curCategory;
-        }
-    }
-    else {
-        QZ_ERROR("Qz:PageManager")
-                << "Could not retrieve current page There are no categories "
-                   "registered" << curCategory;
+    } else {
+        QZ_ERROR("Qz:PageManager") << "Could not retrieve current page There "
+                                      "are no categories "
+                                      "registered"
+                                   << curCategory;
     }
     return page;
 }
 
-
-const QString PageManager::currentCategory() const
-{
+const QString PageManager::currentCategory() const {
     QString curCategory = m_catContainer->currentId();
     return curCategory;
 }
 
-
-QStringList PageManager::categories() const
-{
+QStringList PageManager::categories() const {
     QStringList categoies;
     auto it = m_pageContainers.begin();
-    for (; it != m_pageContainers.end(); ++ it) {
+    for (; it != m_pageContainers.end(); ++it) {
         categoies.append(it.key());
     }
     return categoies;
 }
 
-
-void PageManager::selectCategory(QString categoryId)
-{
+void PageManager::selectCategory(QString categoryId) {
     m_catContainer->select(categoryId);
 }
 
-
-void PageManager::selectPage(QString pageId)
-{
+void PageManager::selectPage(QString pageId) {
     bool result = false;
-    QuartzPage *page = m_pages.value(pageId);
+    QuartzPage* page = m_pages.value(pageId);
     if (page != nullptr) {
         selectCategory(page->pageCategoryId());
-        AbstractContainer *pageCont = m_pageContainers.value(
-                    page->pageCategoryId());
+        AbstractContainer* pageCont = m_pageContainers.value(
+            page->pageCategoryId());
         if (pageCont) {
             pageCont->select(pageId);
             result = true;
         }
     }
-    if (! result){
+    if (!result) {
         auto msg = QZ_ERROR("Qz:PageManager")
-                << tr("Could not find a page with id ") << pageId
-                << Logger::Str;
+            << tr("Could not find a page with id ") << pageId << Logger::Str;
         showError(msg);
     }
 }
 
-const QString & PageManager::extensionType() const
-{
+const QString& PageManager::extensionType() const {
     return AbstractPageProvider::EXTENSION_TYPE;
 }
 
-const QString & PageManager::extensionAdapterName() const
-{
+const QString& PageManager::extensionAdapterName() const {
     return ADAPTER_NAME;
 }
 
-bool PageManager::handleExtension(Ext::Extension *extension)
-{
+bool PageManager::handleExtension(Ext::Extension* extension) {
     auto result = false;
-    auto provider = dynamic_cast<AbstractPageProvider *>(extension);
+    auto provider = dynamic_cast<AbstractPageProvider*>(extension);
     if (provider != nullptr) {
         auto pages = provider->pages();
-        foreach(auto page, pages) {
+        foreach (auto page, pages) {
             addPage(page);
             m_extensionPages.push_back(page);
         }
         result = true;
-    }
-    else {
+    } else {
         auto extensionName = extension != nullptr ? extension->extensionId()
-                                            : "<null>";
+                                                  : "<null>";
         QZ_ERROR("Qz:PageManager")
-                << "Invalid page extension provided: " << extensionName;
+            << "Invalid page extension provided: " << extensionName;
     }
     return result;
 }
 
-bool PageManager::finalizeExtension()
-{
-//    for (int i = 0; i < m_extensionPages.size(); ++ i) {
-//        auto page = m_extensionPages.at(i);
-//        removePage(page);
-//    }
+bool PageManager::finalizeExtension() {
+    //    for (int i = 0; i < m_extensionPages.size(); ++ i) {
+    //        auto page = m_extensionPages.at(i);
+    //        removePage(page);
+    //    }
     m_extensionPages.clear();
     return true;
 }
 
-}
-
-
+} // namespace Quartz

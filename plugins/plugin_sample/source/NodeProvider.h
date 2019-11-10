@@ -4,8 +4,7 @@
 
 namespace Quartz { namespace Ext { namespace Sample {
 
-class NodeProvider : public AbstractGeneralNodeProvider
-{
+class NodeProvider : public AbstractGeneralNodeProvider {
 public:
     NodeProvider();
 
@@ -22,5 +21,4 @@ public:
     static const QString EXTENSION_NAME;
 };
 
-
-} } }
+}}} // namespace Quartz::Ext::Sample

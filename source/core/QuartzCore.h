@@ -3,7 +3,7 @@
 #include <qcompilerdetection.h>
 
 #if defined(QUARTZ_CORE)
- #define QUARTZ_CORE_API Q_DECL_EXPORT
+    #define QUARTZ_CORE_API Q_DECL_EXPORT
 #else
- #define QUARTZ_CORE_API Q_DECL_IMPORT
+    #define QUARTZ_CORE_API Q_DECL_IMPORT
 #endif

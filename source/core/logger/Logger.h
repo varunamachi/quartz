@@ -6,7 +6,6 @@
 #include "../QuartzCore.h"
 #include "../utils/Macros.h"
 
-
 #define CUR_THREAD_ID std::uint64_t(0)
 
 class QDateTime;
@@ -17,13 +16,11 @@ class AbstractLogDispatcher;
 class LogMessage;
 enum class LogLevel : int;
 
-
-class QUARTZ_CORE_API Logger final
-{
+class QUARTZ_CORE_API Logger final {
 public:
-    void setDispatcher(std::unique_ptr<AbstractLogDispatcher> &&dispatcher);
+    void setDispatcher(std::unique_ptr<AbstractLogDispatcher>&& dispatcher);
 
-    AbstractLogDispatcher * dispatcher() const;
+    AbstractLogDispatcher* dispatcher() const;
 
     void setFilterLevel(LogLevel level);
 
@@ -37,17 +34,16 @@ public:
 
     void setEnabled(bool val);
 
-    void log(LogMessage *msg);
+    void log(LogMessage* msg);
 
-    Logger(std::unique_ptr<AbstractLogDispatcher> dispatcher,
-              LogLevel level);
+    Logger(std::unique_ptr<AbstractLogDispatcher> dispatcher, LogLevel level);
 
     ~Logger();
 
-    static Logger * get();
+    static Logger* get();
 
-    static bool init(std::unique_ptr<AbstractLogDispatcher> &&dispatcher,
-                      LogLevel level);
+    static bool init(std::unique_ptr<AbstractLogDispatcher>&& dispatcher,
+                     LogLevel level);
 
     static void destroy();
 
@@ -58,8 +54,4 @@ private:
     static std::unique_ptr<Logger> s_instance;
 };
 
-
-
-} }
-
-
+}} // namespace Quartz::Logger

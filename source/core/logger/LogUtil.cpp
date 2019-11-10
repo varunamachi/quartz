@@ -28,57 +28,48 @@
 #include "LogStructures.h"
 #include "LogMessage.h"
 
-
 namespace Quartz { namespace Logger {
 
-
-
-QString LogUtil::getSeverityString(LogLevel level)
-{
-    switch(level) {
-    case LogLevel::Trace  : return "[ TRACE ]";
-    case LogLevel::Debug  : return "[ DEBUG ]";
-    case LogLevel::Info   : return "[ INFO  ]";
-    case LogLevel::Warn   : return "[ WARNG ]";
-    case LogLevel::Error  : return "[ ERROR ]";
-    case LogLevel::Fatal  : return "[ FATAL ]";
+QString LogUtil::getSeverityString(LogLevel level) {
+    switch (level) {
+    case LogLevel::Trace: return "[ TRACE ]";
+    case LogLevel::Debug: return "[ DEBUG ]";
+    case LogLevel::Info: return "[ INFO  ]";
+    case LogLevel::Warn: return "[ WARNG ]";
+    case LogLevel::Error: return "[ ERROR ]";
+    case LogLevel::Fatal: return "[ FATAL ]";
     case LogLevel::Special: return "[ ***** ]";
-    case LogLevel::Method : return "[ ***** ]";
+    case LogLevel::Method: return "[ ***** ]";
     }
     return "";
 }
 
+QString LogUtil::format(const LogMessage* msg) {
 
-QString LogUtil::format(const LogMessage *msg)
-{
-
-
-//    QString strMsg{ msg->time().toString("yyyy-MM-dd hh:mm:ss")
-//            + " "
-//            + getSeverityString(msg->logLevel())
-//            + "  "
-//            + msg->message()
-//  /*          + " ["
-//            + msg->moduleName() + " | "
-//            + QString::number(msg->lineNum()) + " | "
-//            + QString::number(msg->threadId()) + " | "
-//            + msg->methodName() + " ] "*/
-//            + "@"
-//            + QString::number(msg->lineNum())
-//    };
-//    return strMsg;
-//}
+    //    QString strMsg{ msg->time().toString("yyyy-MM-dd hh:mm:ss")
+    //            + " "
+    //            + getSeverityString(msg->logLevel())
+    //            + "  "
+    //            + msg->message()
+    //  /*          + " ["
+    //            + msg->moduleName() + " | "
+    //            + QString::number(msg->lineNum()) + " | "
+    //            + QString::number(msg->threadId()) + " | "
+    //            + msg->methodName() + " ] "*/
+    //            + "@"
+    //            + QString::number(msg->lineNum())
+    //    };
+    //    return strMsg;
+    //}
     QString str;
-    QTextStream stream{ &str };
-    stream << msg->time().toString("yyyy-MM-dd hh:mm:ss")
-           << " " << getSeverityString(msg->logLevel())
-           << " - " << msg->moduleName()
+    QTextStream stream{&str};
+    stream << msg->time().toString("yyyy-MM-dd hh:mm:ss") << " "
+           << getSeverityString(msg->logLevel()) << " - " << msg->moduleName()
            << " - " << msg->message();
     if (msg->logLevel() >= LogLevel::Error) {
-           stream << " @ " << msg->fileName() << ":" << msg->lineNum();
+        stream << " @ " << msg->fileName() << ":" << msg->lineNum();
     }
     return str;
-
 }
 
-} } //end of namespces
+}} // namespace Quartz::Logger

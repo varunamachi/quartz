@@ -7,7 +7,6 @@
 #include "../QuartzCore.h"
 #include "../utils/Macros.h"
 
-
 class QString;
 
 namespace Quartz {
@@ -20,44 +19,35 @@ class Extension;
 class PluginEnv;
 QZ_INTERFACE IExtensionAdapter;
 
-
-enum class DependencyType
-{
-    Required,
-    Optional
-};
+enum class DependencyType { Required, Optional };
 
 using ExtensionList = QVector<std::shared_ptr<Extension>>;
-using DependencyList = QVector< QPair< QString, DependencyType >>;
+using DependencyList = QVector<QPair<QString, DependencyType>>;
 using AdapterList = QVector<std::shared_ptr<IExtensionAdapter>>;
 
-class QUARTZ_CORE_API Plugin
-{
+class QUARTZ_CORE_API Plugin {
 public:
-
-    Plugin(const QString &pluginId,
-            const QString &pluginName);
+    Plugin(const QString& pluginId, const QString& pluginName);
 
     virtual ~Plugin();
 
-    const QString & pluginId() const;
+    const QString& pluginId() const;
 
-    const QString & pluginName() const;
+    const QString& pluginName() const;
 
-    void setContext(QzCoreContext *context);
+    void setContext(QzCoreContext* context);
 
-    QzCoreContext * coreContext() const;
+    QzCoreContext* coreContext() const;
 
-    virtual const ExtensionList & extensions() const = 0;
+    virtual const ExtensionList& extensions() const = 0;
 
-    virtual const AdapterList & adapters() const = 0;
+    virtual const AdapterList& adapters() const = 0;
 
-    virtual const DependencyList & dependencies() const = 0;
+    virtual const DependencyList& dependencies() const = 0;
 
-    template< typename Context >
-    Context * context() const
-    {
-        return static_cast<Context *>(coreContext());
+    template <typename Context>
+    Context* context() const {
+        return static_cast<Context*>(coreContext());
     }
 
 private:
@@ -65,21 +55,19 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } //end of namespaces
+} // namespace Ext
+} // namespace Quartz
 
 extern "C" {
 
 struct PluginWrapper {
-    Quartz::Ext::Plugin *plugin;
+    Quartz::Ext::Plugin* plugin;
     bool enabled;
 };
 
 struct PluginInputWrapper {
     std::unique_ptr<Quartz::Ext::PluginEnv> env;
-    Quartz::QzCoreContext *appContext;
-
+    Quartz::QzCoreContext* appContext;
 };
 
-} //extern C
-
-
+} // extern C

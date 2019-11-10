@@ -11,37 +11,36 @@ namespace Quartz {
 
 class Param;
 
-class QUARTZ_COMMON_API Group : public TreeNode
-{
+class QUARTZ_COMMON_API Group : public TreeNode {
 public:
-    Group(const QString &id,
-           const QString &name,
-           const QString &description,
-           TreeNode *parent);
+    Group(const QString& id,
+          const QString& name,
+          const QString& description,
+          TreeNode* parent);
 
     ~Group() override;
 
-    const QString & id() const;
+    const QString& id() const;
 
-    const QString & name() const;
+    const QString& name() const;
 
-    const QString & description() const;
+    const QString& description() const;
 
     void addParam(std::shared_ptr<Param> param);
 
     int numParams() const;
 
-    Param * paramAt(int index) const;
+    Param* paramAt(int index) const;
 
-    Param * paramAt(int index);
+    Param* paramAt(int index);
 
     int numSubGroups() const;
 
     void addSubGroup(std::shared_ptr<Group> subGroup);
 
-    const Group * subGroupAt(int index) const;
+    const Group* subGroupAt(int index) const;
 
-    Group * subGroupAt(int index) ;
+    Group* subGroupAt(int index);
 
     QVariant fieldValue(int field) const override;
 
@@ -52,4 +51,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

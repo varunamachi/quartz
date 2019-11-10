@@ -7,12 +7,11 @@
 
 namespace Quartz {
 
-class QUARTZ_BASE_API FileSystemSelector : public AbstractSelector
-{
+class QUARTZ_BASE_API FileSystemSelector : public AbstractSelector {
     Q_OBJECT
 
 public:
-    FileSystemSelector(QWidget *parent);
+    FileSystemSelector(QWidget* parent);
 
     ~FileSystemSelector() override;
 
@@ -26,13 +25,13 @@ public:
     static const QString CONFIG_RECENT_PATHS;
 
 public Q_SLOTS:
-    QString setPath(const QString &path);
+    QString setPath(const QString& path);
 
 private:
-    void makeConnections(QAction *copyPath, QAction *explore);
+    void makeConnections(QAction* copyPath, QAction* explore);
 
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

@@ -28,12 +28,11 @@
 
 namespace Quartz { namespace Logger {
 
-class QUARTZ_CORE_API SpooledDispatcher: public AbstractLogDispatcher
-{
+class QUARTZ_CORE_API SpooledDispatcher : public AbstractLogDispatcher {
 public:
     SpooledDispatcher();
 
-    void write(LogMessage *message) override;
+    void write(LogMessage* message) override;
 
     void stopDispatch() override;
 
@@ -48,5 +47,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } // end of namespaces
-
+}} // namespace Quartz::Logger

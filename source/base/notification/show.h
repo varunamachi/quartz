@@ -5,19 +5,16 @@
 
 namespace Quartz {
 
-inline void showInfo(const QString &msg)
-{
+inline void showInfo(const QString& msg) {
     appContext()->notificationService()->info(msg);
 }
 
-inline void showWarning(const QString &msg)
-{
+inline void showWarning(const QString& msg) {
     appContext()->notificationService()->warn(msg);
 }
 
-inline void showError(const QString &msg)
-{
+inline void showError(const QString& msg) {
     appContext()->notificationService()->error(msg);
 }
 
-}
+} // namespace Quartz

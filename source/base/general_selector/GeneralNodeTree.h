@@ -6,25 +6,21 @@
 
 namespace Quartz {
 
-class GeneralNodeTree : public TreeModel
-                      , public Ext::IExtensionAdapter
-{
+class GeneralNodeTree
+    : public TreeModel
+    , public Ext::IExtensionAdapter {
     Q_OBJECT
 
 public:
-    explicit GeneralNodeTree(QObject *parent = nullptr);
+    explicit GeneralNodeTree(QObject* parent = nullptr);
 
-    const QString & extensionType() const override;
+    const QString& extensionType() const override;
 
-    const QString & extensionAdapterName() const override;
+    const QString& extensionAdapterName() const override;
 
-    bool handleExtension(Ext::Extension *extension) override;
+    bool handleExtension(Ext::Extension* extension) override;
 
     bool finalizeExtension() override;
-
-
 };
 
-
-
-}
+} // namespace Quartz

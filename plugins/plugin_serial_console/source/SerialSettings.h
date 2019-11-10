@@ -6,20 +6,19 @@
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class SerialSettings
-{
+class SerialSettings {
 public:
-    SerialSettings(const QString &name,
-                    const qint32 baudRate,
-                    const QSerialPort::DataBits dataBits,
-                    const QSerialPort::Parity parity,
-                    const QSerialPort::StopBits stopBits,
-                    const QSerialPort::FlowControl flowControl,
-                    const QSerialPortInfo &info);
+    SerialSettings(const QString& name,
+                   const qint32 baudRate,
+                   const QSerialPort::DataBits dataBits,
+                   const QSerialPort::Parity parity,
+                   const QSerialPort::StopBits stopBits,
+                   const QSerialPort::FlowControl flowControl,
+                   const QSerialPortInfo& info);
 
     ~SerialSettings();
 
-    const QString & name() const;
+    const QString& name() const;
 
     qint32 baudRate() const;
 
@@ -31,12 +30,11 @@ public:
 
     QSerialPort::FlowControl flowControl() const;
 
-    const QSerialPortInfo & info() const;
+    const QSerialPortInfo& info() const;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

@@ -16,7 +16,7 @@ public:
 
     bool destroy() override;
 
-    QVector<ContentWidget *> widgets() override;
+    QVector<ContentWidget*> widgets() override;
 
     static const QString EXTENSION_ID;
 

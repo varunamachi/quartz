@@ -11,12 +11,10 @@ namespace Quartz {
 
 class TitleBar;
 
-
-class QzMainWidget : public QWidget
-{
+class QzMainWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit QzMainWidget(QMainWindow *parent = nullptr);
+    explicit QzMainWidget(QMainWindow* parent = nullptr);
 
     ~QzMainWidget() override;
 
@@ -25,16 +23,15 @@ public slots:
 
     void setRoundedRect(bool useRoundedRect);
 
-    const TitleBar * titleBar() const;
+    const TitleBar* titleBar() const;
 
 protected:
     struct Data;
     std::unique_ptr<Data> m_data;
 
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent* event) override;
 
-//    void resizeEvent(QResizeEvent *event) override;
+    //    void resizeEvent(QResizeEvent *event) override;
 };
 
-}
-
+} // namespace Quartz

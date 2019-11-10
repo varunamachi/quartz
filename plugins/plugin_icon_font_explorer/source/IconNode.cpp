@@ -5,31 +5,23 @@
 
 namespace Quartz { namespace Ext { namespace IconFontExplorer {
 
-struct IconNode::Data
-{
-    explicit Data(const IconInfo *iconInfo)
-        : m_iconInfo(iconInfo)
-    {
-
+struct IconNode::Data {
+    explicit Data(const IconInfo* iconInfo)
+        : m_iconInfo(iconInfo) {
     }
 
-    const IconInfo *m_iconInfo;
+    const IconInfo* m_iconInfo;
 };
 
-IconNode::IconNode(const IconInfo *iconInfo)
+IconNode::IconNode(const IconInfo* iconInfo)
     : TreeNode(3)
-    , m_data(std::make_unique<Data>(iconInfo))
-{
-
+    , m_data(std::make_unique<Data>(iconInfo)) {
 }
 
-IconNode::~IconNode()
-{
-
+IconNode::~IconNode() {
 }
 
-QVariant IconNode::fieldValue(int column) const
-{
+QVariant IconNode::fieldValue(int column) const {
     switch (column) {
     case 1: return m_data->m_iconInfo->m_name;
     case 2: return m_data->m_iconInfo->m_fontName;
@@ -37,20 +29,16 @@ QVariant IconNode::fieldValue(int column) const
     return {};
 }
 
-const IconInfo *IconNode::iconInfo() const
-{
+const IconInfo* IconNode::iconInfo() const {
     return m_data->m_iconInfo;
 }
 
-QVector<std::shared_ptr<IconNode>> IconNode::roots()
-{
+QVector<std::shared_ptr<IconNode>> IconNode::roots() {
     QVector<std::shared_ptr<IconNode>> roots;
-    for (const auto &info : ICON_INFO) {
+    for (const auto& info : ICON_INFO) {
         roots.append(std::make_shared<IconNode>(&info));
     }
     return roots;
 }
 
-
-
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

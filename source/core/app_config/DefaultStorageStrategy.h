@@ -8,29 +8,24 @@
 #include "../QuartzCore.h"
 #include "IConfigStorageStrategy.h"
 
-namespace  Quartz {
+namespace Quartz {
 
-
-class QUARTZ_CORE_API DefaultStorageStrategy : public IConfigStorageStrategy
-{
+class QUARTZ_CORE_API DefaultStorageStrategy : public IConfigStorageStrategy {
 public:
-
-
-    explicit DefaultStorageStrategy(const QString &dbPath);
+    explicit DefaultStorageStrategy(const QString& dbPath);
 
     ~DefaultStorageStrategy() override;
 
-    bool store(const QString &domain,
-                const QString &key,
-                const QByteArray &value) override;
+    bool store(const QString& domain,
+               const QString& key,
+               const QByteArray& value) override;
 
-    QByteArray retrieve(const QString &domain,
-                         const QString &key) const override;
+    QByteArray retrieve(const QString& domain,
+                        const QString& key) const override;
 
-    bool remove(const QString &domain,
-                 const QString &key) override;
+    bool remove(const QString& domain, const QString& key) override;
 
-    QVariantHash allFromDomain(const QString &domain,
+    QVariantHash allFromDomain(const QString& domain,
                                BlobDecoder decoder) const override;
 
 private:
@@ -38,4 +33,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

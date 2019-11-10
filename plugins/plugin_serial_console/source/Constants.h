@@ -4,11 +4,10 @@ class QString;
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-struct Constants
-{
+struct Constants {
     static const QString KEY_BAUD_RATES;
 
     static const QString CONFIG_DOMAIN;
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

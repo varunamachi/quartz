@@ -2,11 +2,9 @@
 
 #include <base/general_selector/AbstractGeneralNodeProvider.h>
 
-
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class NodeProvider : public AbstractGeneralNodeProvider
-{
+class NodeProvider : public AbstractGeneralNodeProvider {
 public:
     NodeProvider();
 
@@ -23,5 +21,4 @@ public:
     static const QString EXTENSION_NAME;
 };
 
-
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

@@ -24,20 +24,17 @@
 
 #include <QString>
 
-
 namespace Quartz { namespace Logger {
 
-enum class LogLevel : int
-{
-    Method  = -1,
-    Trace   = 0,
-    Debug   = 1,
-    Info    = 2,
-    Warn    = 3,
-    Error   = 4,
-    Fatal   = 5,
+enum class LogLevel : int {
+    Method = -1,
+    Trace = 0,
+    Debug = 1,
+    Info = 2,
+    Warn = 3,
+    Error = 4,
+    Fatal = 5,
     Special = 6
 };
 
-
-} } //end of ns
+}} // namespace Quartz::Logger

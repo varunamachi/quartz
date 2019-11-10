@@ -2,7 +2,6 @@
 
 #include <memory>
 
-
 #include <core/ext/Extension.h>
 
 namespace Quartz {
@@ -11,11 +10,10 @@ class Template;
 
 namespace Ext { namespace Creator {
 
-class AbstractTemplateProvider : public Extension
-{
+class AbstractTemplateProvider : public Extension {
 public:
-    AbstractTemplateProvider(const QString &extensionID,
-                             const QString &extensionName);
+    AbstractTemplateProvider(const QString& extensionID,
+                             const QString& extensionName);
 
     ~AbstractTemplateProvider();
 
@@ -23,8 +21,8 @@ public:
 
     static const QString EXTENSION_TYPE;
 
-
 private:
 };
 
-} } }
+}} // namespace Ext::Creator
+} // namespace Quartz

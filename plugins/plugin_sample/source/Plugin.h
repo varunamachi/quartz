@@ -8,19 +8,18 @@ class QzAppContext;
 
 namespace Ext { namespace Sample {
 
-class Plugin : public Ext::Plugin
-{
+class Plugin : public Ext::Plugin {
 
 public:
     Plugin();
 
     ~Plugin();
 
-    const ExtensionList & extensions() const override;
+    const ExtensionList& extensions() const override;
 
-    const DependencyList & dependencies() const override;
+    const DependencyList& dependencies() const override;
 
-    const AdapterList &adapters() const override;
+    const AdapterList& adapters() const override;
 
     static const QString PLUGIN_ID;
 
@@ -29,7 +28,7 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} } }
+}} // namespace Ext::Sample
+} // namespace Quartz

@@ -19,30 +19,25 @@
 
 namespace Quartz { namespace Ext { namespace WebTech {
 
-struct EditorConfigPage::Data
-{
-    explicit Data(QWidget *parent)
-        : m_view(new GenConfigWidget(parent))
-    {
-
+struct EditorConfigPage::Data {
+    explicit Data(QWidget* parent)
+        : m_view(new GenConfigWidget(parent)) {
     }
 
     std::shared_ptr<Config> m_config;
-    GenConfigWidget *m_view;
+    GenConfigWidget* m_view;
 };
 
-EditorConfigPage::EditorConfigPage(QWidget *parent)
-    : QWidget (parent)
-    , m_data(std::make_unique<Data>(this))
-{
-
+EditorConfigPage::EditorConfigPage(QWidget* parent)
+    : QWidget(parent)
+    , m_data(std::make_unique<Data>(this)) {
 
     auto lyt = new QVBoxLayout();
     lyt->addWidget(m_data->m_view);
-//    lyt->addStretch();
+    //    lyt->addStretch();
     this->setLayout(lyt);
 
-    auto valueProvider = [](const QString &key) -> QVariant {
+    auto valueProvider = [](const QString& key) -> QVariant {
         return confman()->retrieve(key, Conf::CONF_DOMAIN);
     };
 
@@ -50,7 +45,7 @@ EditorConfigPage::EditorConfigPage(QWidget *parent)
     if (file.open(QIODevice::ReadOnly)) {
         ConfigParser parser{valueProvider};
         auto configs = parser.parse(file.readAll());
-        if (! configs.isEmpty()) {
+        if (!configs.isEmpty()) {
             m_data->m_config = configs[0];
             m_data->m_view->setConfig(m_data->m_config.get());
 
@@ -64,27 +59,20 @@ EditorConfigPage::EditorConfigPage(QWidget *parent)
 
     connect(m_data->m_view->configModel(),
             &GenConfigTreeModel::dataChanged,
-            [](const QModelIndex &idx, const QModelIndex &) {
-        auto param = treenode_cast<Param *>(idx.data(Qt::UserRole));
-        if (param != nullptr) {
-            setConf(param->id(), param->value());
-        }
-    });
-
+            [](const QModelIndex& idx, const QModelIndex&) {
+                auto param = treenode_cast<Param*>(idx.data(Qt::UserRole));
+                if (param != nullptr) {
+                    setConf(param->id(), param->value());
+                }
+            });
 }
 
-EditorConfigPage::~EditorConfigPage()
-{
+EditorConfigPage::~EditorConfigPage() {
 }
 
-void EditorConfigPage::refresh()
-{
+void EditorConfigPage::refresh() {
     auto hash = confman()->allFromDomain(Conf::CONF_DOMAIN);
     m_data->m_view->configModel()->setValues(hash);
 }
 
-
-
-
-
-} } }
+}}} // namespace Quartz::Ext::WebTech

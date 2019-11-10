@@ -8,11 +8,10 @@ namespace Quartz { namespace Ext { namespace SerialConsole {
 
 class SerialSettings;
 
-class SettingsDialog : public QDialog
-{
+class SettingsDialog : public QDialog {
     Q_OBJECT
 public:
-    explicit SettingsDialog(QWidget *parent = nullptr);
+    explicit SettingsDialog(QWidget* parent = nullptr);
 
     ~SettingsDialog();
 
@@ -20,13 +19,13 @@ public:
 
     void refresh();
 
-    void setSettings(const SerialSettings &settings);
+    void setSettings(const SerialSettings& settings);
 
     void open() override;
 
     int exec() override;
 
-    static void init(QWidget *parent);
+    static void init(QWidget* parent);
 
 public slots:
     void updateBaudRates();
@@ -39,5 +38,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

@@ -11,8 +11,7 @@ class QVariant;
 
 namespace Quartz {
 
-enum class ParamType
-{
+enum class ParamType {
     Boolean,
     Choice,
     Range,
@@ -20,30 +19,28 @@ enum class ParamType
     Fixed,
 };
 
-
-class QUARTZ_COMMON_API Param : public TreeNode
-{
+class QUARTZ_COMMON_API Param : public TreeNode {
 public:
-    Param(const QString &id,
-           const QString &name,
-           const QString &description,
-           TreeNode *parent);
+    Param(const QString& id,
+          const QString& name,
+          const QString& description,
+          TreeNode* parent);
 
     virtual ~Param() override;
 
-    const QString &id() const;
+    const QString& id() const;
 
-    const QString & name() const;
+    const QString& name() const;
 
-    const QString & description() const;
+    const QString& description() const;
 
     QVariant fieldValue(int field) const override;
 
-    bool setData(int field, const QVariant &value) override;
+    bool setData(int field, const QVariant& value) override;
 
     virtual QVariant value() const = 0;
 
-    virtual void setValue(const QVariant &value) = 0;
+    virtual void setValue(const QVariant& value) = 0;
 
     virtual ParamType type() const = 0;
 
@@ -54,7 +51,6 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-}
+} // namespace Quartz

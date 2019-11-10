@@ -4,18 +4,15 @@
 
 #include "../utils/Macros.h"
 
-
-
 namespace Quartz { namespace Logger {
 
 class LogMessage;
 
-QZ_INTERFACE ILogFormatter
-{
-    virtual QString format(const LogMessage *message) = 0;
+QZ_INTERFACE ILogFormatter {
+    virtual QString format(const LogMessage* message) = 0;
 
-    virtual ~ILogFormatter() { }
+    virtual ~ILogFormatter() {
+    }
 };
 
-
-} }
+}} // namespace Quartz::Logger

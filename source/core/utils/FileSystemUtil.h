@@ -32,13 +32,10 @@ class QDir;
 
 namespace Quartz {
 
-class QUARTZ_CORE_API FileSystemUtil
-{
+class QUARTZ_CORE_API FileSystemUtil {
     QZ_MAKE_STATIC(FileSystemUtil);
+
 public:
-
-
 };
 
-} // namespace Tanyatu
-
+} // namespace Quartz

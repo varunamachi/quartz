@@ -8,13 +8,12 @@ class QString;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API RangeParam : public Param
-{
+class QUARTZ_COMMON_API RangeParam : public Param {
 public:
-    RangeParam(const QString &id,
-                const QString &name,
-                const QString &description,
-                TreeNode *parent);
+    RangeParam(const QString& id,
+               const QString& name,
+               const QString& description,
+               TreeNode* parent);
 
     ~RangeParam();
 
@@ -38,7 +37,7 @@ public:
 
     QVariant value() const override;
 
-    void setValue(const QVariant &value) override;
+    void setValue(const QVariant& value) override;
 
     std::unique_ptr<Param> clone() const;
 
@@ -47,4 +46,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

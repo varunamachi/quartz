@@ -3,22 +3,18 @@
 
 namespace Quartz { namespace Http {
 
-struct MultipartFile::Data
-{
-    Data( const QString &fileName,
-          const QString &contentType,
-          std::size_t offset,
-          std::size_t length )
-        : m_fileName{ fileName }
-        , m_contentType{ contentType }
-        , m_offset{ offset }
-        , m_length{ length }
-    {
-
+struct MultipartFile::Data {
+    Data(const QString& fileName,
+         const QString& contentType,
+         std::size_t offset,
+         std::size_t length)
+        : m_fileName{fileName}
+        , m_contentType{contentType}
+        , m_offset{offset}
+        , m_length{length} {
     }
 
-    Data( const Data &other )
-    {
+    Data(const Data& other) {
         //@todo implement
     }
 
@@ -31,30 +27,23 @@ struct MultipartFile::Data
     std::size_t m_length;
 };
 
-
-MultipartFile::~MultipartFile()
-{
-
+MultipartFile::~MultipartFile() {
 }
 
-const QString & MultipartFile::fileName() const
-{
+const QString& MultipartFile::fileName() const {
     return m_data->m_fileName;
 }
 
-const QString & MultipartFile::contentType() const
-{
+const QString& MultipartFile::contentType() const {
     return m_data->m_contentType;
 }
 
-std::size_t MultipartFile::offset() const
-{
-   return m_data->m_offset;
+std::size_t MultipartFile::offset() const {
+    return m_data->m_offset;
 }
 
-std::size_t MultipartFile::length() const
-{
+std::size_t MultipartFile::length() const {
     return m_data->m_length;
 }
 
-} }
+}} // namespace Quartz::Http

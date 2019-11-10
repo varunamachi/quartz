@@ -7,43 +7,33 @@
 
 namespace Quartz { namespace Ext { namespace Sample {
 
-const QString NodeProvider::EXTENSION_ID{
-    "qzp.sample.provider.node" };
-const QString NodeProvider::EXTENSION_NAME{
-    "Quartz Sample Node" };
+const QString NodeProvider::EXTENSION_ID{"qzp.sample.provider.node"};
+const QString NodeProvider::EXTENSION_NAME{"Quartz Sample Node"};
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
-{
-
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME) {
 }
 
-NodeProvider::~NodeProvider()
-{
-
+NodeProvider::~NodeProvider() {
 }
 
-bool NodeProvider::init()
-{
+bool NodeProvider::init() {
     return true;
 }
 
-bool NodeProvider::destroy()
-{
+bool NodeProvider::destroy() {
     return true;
 }
 
-QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
-{
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const {
     auto path = Node::toPath("Plugin>Sample");
-    auto nodeInfo = std::make_shared<NodeInfo>(
-                path,
-                "Sample Node",
-                "qzp.sample.content.one",
-                getIcon(MatIcon::Gesture));
+    auto nodeInfo = std::make_shared<NodeInfo>(path,
+                                               "Sample Node",
+                                               "qzp.sample.content.one",
+                                               getIcon(MatIcon::Gesture));
     QVector<std::shared_ptr<NodeInfo>> nodes;
     nodes.push_back(nodeInfo);
     return nodes;
 }
 
-} } }
+}}} // namespace Quartz::Ext::Sample

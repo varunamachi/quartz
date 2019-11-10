@@ -10,21 +10,19 @@ namespace Quartz { namespace Ext { namespace WebTech {
 
 class MonacoEditor;
 
-class SharedObject : public QObject
-{
+class SharedObject : public QObject {
     Q_OBJECT
 public:
-    SharedObject(MonacoEditor *parent = nullptr);
+    SharedObject(MonacoEditor* parent = nullptr);
 
     ~SharedObject();
 
-
 public Q_SLOTS:
-    void error(const QString &msg);
+    void error(const QString& msg);
 
-    void info(const QString &msg);
+    void info(const QString& msg);
 
-    void warn(const QString &msg);
+    void warn(const QString& msg);
 
     void dirtyChanged(bool val);
 
@@ -34,25 +32,24 @@ Q_SIGNALS:
     void saved();
 
 private:
-    MonacoEditor *m_editor;
+    MonacoEditor* m_editor;
 };
 
-class MonacoEditor : public AbstractFileHandler
-{
+class MonacoEditor : public AbstractFileHandler {
     Q_OBJECT
 public:
-    explicit MonacoEditor(QWidget *parent = nullptr);
+    explicit MonacoEditor(QWidget* parent = nullptr);
 
     ~MonacoEditor() override;
 
-    SharedObject * controller() const;
+    SharedObject* controller() const;
 
-    void setContent(const QString &content, const QString &lang = "txt");
+    void setContent(const QString& content, const QString& lang = "txt");
 
-    void setLanguage(const QString &language);
+    void setLanguage(const QString& language);
 
-    //Settings...
-    void setTheme(const QString &theme);
+    // Settings...
+    void setTheme(const QString& theme);
 
     void showMinimap(bool show);
 
@@ -61,8 +58,8 @@ public:
     void setRulerAt(int len);
 
 public Q_SLOTS:
-    //Override from AbstractFileHandler
-    bool handle(const QString &path) override;
+    // Override from AbstractFileHandler
+    bool handle(const QString& path) override;
 
     QString path() const override;
 
@@ -70,18 +67,15 @@ public Q_SLOTS:
 
     bool save() override;
 
+    static const QStringList& extension();
 
-    static const QStringList & extension();
-
-    static const QString escape(const QString &orig);
+    static const QString escape(const QString& orig);
 
 private:
     friend SharedObject;
 
     struct Data;
     std::unique_ptr<Data> m_data;
-
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::WebTech

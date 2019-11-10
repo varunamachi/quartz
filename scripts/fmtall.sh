@@ -17,7 +17,6 @@ find "${dir}" -type f \(\
               -iname '*.cpp' -o \
               -iname '*.cxx' \
               \) \
-              ! -iname '*moc_*' \
-                # -exec "${formatter}" -style=file {} \; || exit -1
+                -exec "${formatter}" -style=file -i {} \; || exit -1
 done
 echo "Formatting done..."                

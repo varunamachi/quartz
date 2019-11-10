@@ -4,15 +4,14 @@
 
 namespace Quartz {
 
-class HoverMoveFilter : public QObject
-{
+class HoverMoveFilter : public QObject {
     Q_OBJECT;
+
 public:
-    HoverMoveFilter(QObject *parent = nullptr);
+    HoverMoveFilter(QObject* parent = nullptr);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject* obj, QEvent* event);
 };
 
-
-}
+} // namespace Quartz

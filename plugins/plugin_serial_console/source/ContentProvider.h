@@ -4,8 +4,7 @@
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class ContentProvider : public AbstractContentProvider
-{
+class ContentProvider : public AbstractContentProvider {
 
 public:
     ContentProvider();
@@ -16,11 +15,11 @@ public:
 
     bool destroy() override;
 
-    QVector< ContentWidget * > widgets() override;
+    QVector<ContentWidget*> widgets() override;
 
-    static const QString     EXTENSION_ID;
+    static const QString EXTENSION_ID;
 
-    static const QString     EXTENSION_NAME;
+    static const QString EXTENSION_NAME;
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

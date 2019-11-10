@@ -5,15 +5,13 @@
 
 namespace Quartz { namespace Ext {
 
-
 class Plugin;
 
-class QUARTZ_BASE_API PluginSelector : public AbstractSelector
-{
+class QUARTZ_BASE_API PluginSelector : public AbstractSelector {
     Q_OBJECT
 
 public:
-    explicit PluginSelector(QWidget *parent = nullptr);
+    explicit PluginSelector(QWidget* parent = nullptr);
 
     ~PluginSelector() override;
 
@@ -26,16 +24,14 @@ public:
     static const QString SELECTOR_NAME;
 
 Q_SIGNALS:
-    void sigPluginSelected(Plugin *plugin);
+    void sigPluginSelected(Plugin* plugin);
 
 private Q_SLOTS:
-    void onSelected(const QModelIndex &selcted,
-                     const QModelIndex &previous);
+    void onSelected(const QModelIndex& selcted, const QModelIndex& previous);
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} }
+}} // namespace Quartz::Ext

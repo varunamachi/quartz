@@ -1,28 +1,25 @@
 #pragma once
 
-#include<memory>
+#include <memory>
 
 #include "Param.h"
 #include "../../QuartzCommon.h"
 
-
-
 namespace Quartz {
 
-class QUARTZ_COMMON_API FixedParam : public Param
-{
+class QUARTZ_COMMON_API FixedParam : public Param {
 public:
-    FixedParam(const QString &id,
-               const QString &name,
-               const QString &description,
-               TreeNode *parent,
-               const QVariant &value);
+    FixedParam(const QString& id,
+               const QString& name,
+               const QString& description,
+               TreeNode* parent,
+               const QVariant& value);
 
     ~FixedParam() override;
 
     QVariant value() const override;
 
-    void setValue(const QVariant &value) override;
+    void setValue(const QVariant& value) override;
 
     ParamType type() const override;
 
@@ -35,4 +32,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

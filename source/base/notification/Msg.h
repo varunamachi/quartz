@@ -7,21 +7,19 @@ class QDateTime;
 
 namespace Quartz {
 
-enum class NotificationType : int
-{
+enum class NotificationType : int {
     Info,
     Warning,
     Error,
 };
 
-class Msg : public TreeNode
-{
+class Msg : public TreeNode {
 public:
     Msg(int id,
-        const QString &msg,
+        const QString& msg,
         const NotificationType type,
-        const QTime &time,
-        const QDateTime &dateTime);
+        const QTime& time,
+        const QDateTime& dateTime);
 
     ~Msg();
 
@@ -31,15 +29,15 @@ public:
 
     NotificationType type() const;
 
-    const QTime & time() const;
+    const QTime& time() const;
 
-    const QDateTime & dateTime() const;
+    const QDateTime& dateTime() const;
 
-    const QString & text();
+    const QString& text();
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

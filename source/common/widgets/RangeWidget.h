@@ -8,11 +8,10 @@
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API RangeWidget : public QWidget
-{
+class QUARTZ_COMMON_API RangeWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit RangeWidget(QWidget *parent = nullptr);
+    explicit RangeWidget(QWidget* parent = nullptr);
 
     ~RangeWidget();
 
@@ -27,9 +26,6 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-
-
-}
+} // namespace Quartz

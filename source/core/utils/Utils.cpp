@@ -1,3 +1,1 @@
- enum DontGiveWarning{
-     Ok
- };
+enum DontGiveWarning { Ok };

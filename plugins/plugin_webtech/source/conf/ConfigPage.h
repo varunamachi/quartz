@@ -6,12 +6,11 @@
 
 namespace Quartz { namespace Ext { namespace WebTech {
 
-class ConfigPage : public AbstractConfigPage
-{
+class ConfigPage : public AbstractConfigPage {
     Q_OBJECT
 
 public:
-    ConfigPage(QWidget *parent = nullptr);
+    ConfigPage(QWidget* parent = nullptr);
 
     ~ConfigPage() override;
 
@@ -25,7 +24,6 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::WebTech

@@ -17,18 +17,15 @@ namespace Quartz {
 class AbstractFileHandler;
 class FileHandlerInfo;
 
-class QUARTZ_BASE_API AbstractFileHandlerProvider : public Ext::Extension
-{
+class QUARTZ_BASE_API AbstractFileHandlerProvider : public Ext::Extension {
 public:
-    AbstractFileHandlerProvider(const QString &extID,
-                        const QString &extName);
+    AbstractFileHandlerProvider(const QString& extID, const QString& extName);
 
     ~AbstractFileHandlerProvider() override;
 
     virtual QVector<std::shared_ptr<FileHandlerInfo>> handlerInfos() = 0;
 
     static const QString EXTENSION_TYPE;
-
 };
 
-}
+} // namespace Quartz

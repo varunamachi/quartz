@@ -15,16 +15,14 @@
 
 namespace Quartz { namespace Ext { namespace IconFontExplorer {
 
-struct IconDetails::Data
-{
-    explicit Data(QWidget *parent)
+struct IconDetails::Data {
+    explicit Data(QWidget* parent)
         : m_icon(new QLabel(parent))
         , m_code(new QLineEdit(parent))
         , m_fontName(new QLineEdit(parent))
         , m_name(new QLineEdit(parent))
         , m_qzGet(new QLineEdit(parent))
-        , m_colorName(new QLineEdit(parent))
-    {
+        , m_colorName(new QLineEdit(parent)) {
         m_code->setReadOnly(true);
         m_fontName->setReadOnly(true);
         m_name->setReadOnly(true);
@@ -34,28 +32,26 @@ struct IconDetails::Data
         m_colorName->setValidator(validator);
     }
 
-    QLabel *m_icon;
+    QLabel* m_icon;
 
-    QLineEdit *m_code;
+    QLineEdit* m_code;
 
-    QLineEdit *m_fontName;
+    QLineEdit* m_fontName;
 
-    QLineEdit *m_name;
+    QLineEdit* m_name;
 
-    QLineEdit *m_qzGet;
+    QLineEdit* m_qzGet;
 
-    QLineEdit *m_colorName;
+    QLineEdit* m_colorName;
 
     QColor m_color = {};
 
-    const IconInfo *m_iconInfo = nullptr;
-
+    const IconInfo* m_iconInfo = nullptr;
 };
 
-IconDetails::IconDetails(QWidget *parent)
+IconDetails::IconDetails(QWidget* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     auto copyBtn = new QPushButton(getIcon(FAIcon::Copy), "", this);
     copyBtn->setToolTip(tr("Copy Quartz getIcon function"));
     auto colorBtn = new QPushButton(getIcon(FAIcon::Palette), "", this);
@@ -89,31 +85,23 @@ IconDetails::IconDetails(QWidget *parent)
 
     m_data->m_icon->setMinimumSize({160, 128});
 
-    connect(copyBtn,
-            &QPushButton::clicked,
-            [this](){
+    connect(copyBtn, &QPushButton::clicked, [this]() {
         auto clipboard = QApplication::clipboard();
         clipboard->setText(m_data->m_qzGet->text());
     });
-    connect(colorBtn,
-            &QPushButton::clicked,
-            [this](){
+    connect(colorBtn, &QPushButton::clicked, [this]() {
         auto color = QColorDialog::getColor(m_data->m_color, this);
         if (color.isValid()) {
             m_data->m_color = color;
             this->update();
         }
     });
-    connect(colorReset,
-            &QPushButton::clicked,
-            [this](){
+    connect(colorReset, &QPushButton::clicked, [this]() {
         m_data->m_color = QColor{};
         this->update();
     });
-    connect(m_data->m_colorName,
-            &QLineEdit::editingFinished,
-            [this]() {
-        const auto &colStr = m_data->m_colorName->text();
+    connect(m_data->m_colorName, &QLineEdit::editingFinished, [this]() {
+        const auto& colStr = m_data->m_colorName->text();
         if (colStr.size() % 2 != 0) {
             m_data->m_color = QColor(colStr);
             this->update();
@@ -121,19 +109,15 @@ IconDetails::IconDetails(QWidget *parent)
     });
 }
 
-IconDetails::~IconDetails()
-{
-
+IconDetails::~IconDetails() {
 }
 
-void IconDetails::setIconInfo(const IconInfo *info)
-{
+void IconDetails::setIconInfo(const IconInfo* info) {
     m_data->m_iconInfo = info;
     this->update();
 }
 
-void IconDetails::update()
-{
+void IconDetails::update() {
     if (m_data->m_iconInfo != nullptr) {
         QIcon icon;
         m_data->m_code->setText(m_data->m_iconInfo->m_strCode);
@@ -143,11 +127,11 @@ void IconDetails::update()
             icon = getIcon(m_data->m_iconInfo, m_data->m_color);
             m_data->m_colorName->setText(m_data->m_color.name(QColor::HexArgb));
             auto str = QString("getIcon(%1, QColor(%2, %3, %4, %5))")
-                    .arg(m_data->m_iconInfo->m_id)
-                    .arg(m_data->m_color.red())
-                    .arg(m_data->m_color.green())
-                    .arg(m_data->m_color.blue())
-                    .arg(m_data->m_color.alpha());
+                           .arg(m_data->m_iconInfo->m_id)
+                           .arg(m_data->m_color.red())
+                           .arg(m_data->m_color.green())
+                           .arg(m_data->m_color.blue())
+                           .arg(m_data->m_color.alpha());
             m_data->m_qzGet->setText(str);
         } else {
             icon = getIcon(m_data->m_iconInfo);
@@ -157,8 +141,6 @@ void IconDetails::update()
         }
         m_data->m_icon->setPixmap(icon.pixmap({150, 128}));
     }
-
 }
 
-
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

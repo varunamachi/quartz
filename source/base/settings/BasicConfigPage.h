@@ -10,12 +10,11 @@ class QWidget;
 
 namespace Quartz {
 
-class QUARTZ_BASE_API BasicConfigPage : public AbstractConfigPage
-{
+class QUARTZ_BASE_API BasicConfigPage : public AbstractConfigPage {
     Q_OBJECT
 
 public:
-    BasicConfigPage(QWidget *parent = nullptr);
+    BasicConfigPage(QWidget* parent = nullptr);
 
     ~BasicConfigPage();
 
@@ -32,5 +31,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-
-}
+} // namespace Quartz

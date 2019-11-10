@@ -11,23 +11,22 @@ namespace Quartz {
 class Config;
 class GenConfigTreeModel;
 
-class QUARTZ_COMMON_API GenConfigWidget : public QWidget
-{
+class QUARTZ_COMMON_API GenConfigWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit GenConfigWidget(QWidget *parent = nullptr);
+    explicit GenConfigWidget(QWidget* parent = nullptr);
 
     ~GenConfigWidget();
 
-    void setConfig(Config *config);
+    void setConfig(Config* config);
 
-    const GenConfigTreeModel * configModel() const;
+    const GenConfigTreeModel* configModel() const;
 
-    GenConfigTreeModel * configModel();
+    GenConfigTreeModel* configModel();
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

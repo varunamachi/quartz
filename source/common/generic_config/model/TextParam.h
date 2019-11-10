@@ -8,8 +8,7 @@ class QString;
 
 namespace Quartz {
 
-enum class TextType
-{
+enum class TextType {
     Any,
     Identifier,
     Alphanumeric,
@@ -18,14 +17,12 @@ enum class TextType
     Binary
 };
 
-class QUARTZ_COMMON_API  TextParam : public Param
-{
+class QUARTZ_COMMON_API TextParam : public Param {
 public:
-
-    explicit TextParam(const QString &id,
-                        const QString &name,
-                        const QString &description,
-                        TreeNode *parent);
+    explicit TextParam(const QString& id,
+                       const QString& name,
+                       const QString& description,
+                       TreeNode* parent);
 
     ~TextParam() override;
 
@@ -35,13 +32,13 @@ public:
 
     void setTextType(TextType textType);
 
-    const QString & defaultValue() const;
+    const QString& defaultValue() const;
 
-    void setDefaultValue(const QString &defaultValue);
+    void setDefaultValue(const QString& defaultValue);
 
     QVariant value() const override;
 
-    void setValue(const QVariant &value) override;
+    void setValue(const QVariant& value) override;
 
     std::unique_ptr<Param> clone() const override;
 
@@ -50,6 +47,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-
-
-}
+} // namespace Quartz

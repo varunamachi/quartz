@@ -11,10 +11,10 @@
         #define snprintf _snprintf_s
     #endif
     #ifndef S_ISREG
-        #define S_ISREG(m)  (((m)&S_IFREG)==S_IFREG)
+        #define S_ISREG(m) (((m)&S_IFREG) == S_IFREG)
     #endif
     #ifndef S_ISDIR
-        #define S_ISDIR(m)  (((m)&S_IFDIR)==S_IFDIR)
+        #define S_ISDIR(m) (((m)&S_IFDIR) == S_IFDIR)
     #endif
 
     #define WIN32_LEAN_AND_MEAN
@@ -25,7 +25,7 @@
     #undef min
     #undef max
 
-    typedef SOCKET socket_t;
+typedef SOCKET socket_t;
 #else
     #include <pthread.h>
     #include <unistd.h>
@@ -36,5 +36,5 @@
     #include <signal.h>
     #include <sys/socket.h>
 
-    typedef int socket_t;
+typedef int socket_t;
 #endif

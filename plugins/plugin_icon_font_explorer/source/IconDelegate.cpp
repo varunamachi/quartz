@@ -8,34 +8,27 @@
 
 namespace Quartz { namespace Ext { namespace IconFontExplorer {
 
-IconDelegate::IconDelegate(QObject *parent)
-    :QStyledItemDelegate (parent)
-{
-
+IconDelegate::IconDelegate(QObject* parent)
+    : QStyledItemDelegate(parent) {
 }
 
-IconDelegate::~IconDelegate()
-{
-
+IconDelegate::~IconDelegate() {
 }
 
-void IconDelegate::paint(QPainter *painter,
-                         const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const
-{
+void IconDelegate::paint(QPainter* painter,
+                         const QStyleOptionViewItem& option,
+                         const QModelIndex& index) const {
     QStyledItemDelegate::paint(painter, option, index);
-    auto iconNode = treenode_cast<IconNode *>(index.data(Qt::UserRole));
+    auto iconNode = treenode_cast<IconNode*>(index.data(Qt::UserRole));
     if (iconNode != nullptr) {
         auto icon = getIcon(iconNode->iconInfo());
         icon.paint(painter, option.rect);
     }
 }
 
-QSize IconDelegate::sizeHint(const QStyleOptionViewItem &/*option*/,
-                             const QModelIndex &/*index*/) const
-{
+QSize IconDelegate::sizeHint(const QStyleOptionViewItem& /*option*/,
+                             const QModelIndex& /*index*/) const {
     return {64, 64};
 }
 
-
-} } }
+}}} // namespace Quartz::Ext::IconFontExplorer

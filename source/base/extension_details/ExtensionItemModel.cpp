@@ -8,38 +8,28 @@ namespace Quartz { namespace Ext {
 
 const int NUM_COLS = 3;
 
-struct ExtensionItemModel::Data
-{
+struct ExtensionItemModel::Data {
     Data()
-        : m_extensions(nullptr)
-    {
-
+        : m_extensions(nullptr) {
     }
 
-    const ExtensionList *m_extensions;
-
+    const ExtensionList* m_extensions;
 };
 
-
-ExtensionItemModel::ExtensionItemModel(QObject *parent)
+ExtensionItemModel::ExtensionItemModel(QObject* parent)
     : QAbstractItemModel(parent)
-    , m_data(std::make_unique<Data>())
-{
-
+    , m_data(std::make_unique<Data>()) {
 }
 
-ExtensionItemModel::~ExtensionItemModel()
-{
-
+ExtensionItemModel::~ExtensionItemModel() {
 }
 
 QModelIndex ExtensionItemModel::index(int row,
-                                    int column,
-                                    const QModelIndex &parent) const
-{
+                                      int column,
+                                      const QModelIndex& parent) const {
     auto index = QModelIndex();
     if (hasIndex(row, column, parent)) {
-        const auto &ext = m_data->m_extensions->at(row);
+        const auto& ext = m_data->m_extensions->at(row);
         if (ext != nullptr) {
             index = createIndex(row, column, ext.get());
         }
@@ -47,36 +37,30 @@ QModelIndex ExtensionItemModel::index(int row,
     return index;
 }
 
-QModelIndex ExtensionItemModel::parent(const QModelIndex &/*child*/) const
-{
+QModelIndex ExtensionItemModel::parent(const QModelIndex& /*child*/) const {
     return QModelIndex();
 }
 
-int ExtensionItemModel::rowCount(const QModelIndex &/*parent*/) const
-{
+int ExtensionItemModel::rowCount(const QModelIndex& /*parent*/) const {
     auto size = m_data->m_extensions != nullptr ? m_data->m_extensions->size()
                                                 : 0;
     return size;
 }
 
-int ExtensionItemModel::columnCount(const QModelIndex &/*parent*/) const
-{
+int ExtensionItemModel::columnCount(const QModelIndex& /*parent*/) const {
     return NUM_COLS;
 }
 
-QVariant ExtensionItemModel::data(const QModelIndex &index, int role) const
-{
-    if (! index.isValid()
-            || m_data->m_extensions == nullptr
-            || index.row() >= m_data->m_extensions->size()) {
+QVariant ExtensionItemModel::data(const QModelIndex& index, int role) const {
+    if (!index.isValid() || m_data->m_extensions == nullptr
+        || index.row() >= m_data->m_extensions->size()) {
         return QVariant();
     }
     if (role == Qt::TextAlignmentRole) {
-        return int (Qt::AlignLeft | Qt::AlignVCenter);
-    }
-    else if (role == Qt::DisplayRole) {
-        const auto &ext = m_data->m_extensions->at(index.row());
-        switch(index.column()) {
+        return int(Qt::AlignLeft | Qt::AlignVCenter);
+    } else if (role == Qt::DisplayRole) {
+        const auto& ext = m_data->m_extensions->at(index.row());
+        switch (index.column()) {
         case 0: return ext->extensionType();
         case 1: return ext->extensionId();
         case 2: return ext->extensionName();
@@ -85,24 +69,20 @@ QVariant ExtensionItemModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool ExtensionItemModel::hasChildren(const QModelIndex &parent) const
-{
+bool ExtensionItemModel::hasChildren(const QModelIndex& parent) const {
     if (parent.isValid()) {
         return false;
     }
     return true;
 }
 
-QVariant ExtensionItemModel::headerData(
-        int section,
-        Qt::Orientation /*orientation*/,
-        int role) const
-{
+QVariant ExtensionItemModel::headerData(int section,
+                                        Qt::Orientation /*orientation*/,
+                                        int role) const {
     if (role == Qt::TextAlignmentRole) {
         return int(Qt::AlignLeft | Qt::AlignVCenter);
-    }
-    else if (role == Qt::DisplayRole) {
-        switch(section) {
+    } else if (role == Qt::DisplayRole) {
+        switch (section) {
         case 0: return tr("Type");
         case 1: return tr("Id");
         case 2: return tr("Name");
@@ -111,18 +91,16 @@ QVariant ExtensionItemModel::headerData(
     return QVariant();
 }
 
-void ExtensionItemModel::clear()
-{
+void ExtensionItemModel::clear() {
     beginResetModel();
     m_data->m_extensions = nullptr;
     endResetModel();
 }
 
-void ExtensionItemModel::setExtensionList(const ExtensionList *extensions)
-{
+void ExtensionItemModel::setExtensionList(const ExtensionList* extensions) {
     beginResetModel();
     m_data->m_extensions = extensions;
     endResetModel();
 }
 
-} }
+}} // namespace Quartz::Ext

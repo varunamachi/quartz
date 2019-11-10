@@ -5,12 +5,11 @@
 
 namespace Quartz { namespace Ext {
 
-class QUARTZ_BASE_API PluginConfigPage : public AbstractConfigPage
-{
+class QUARTZ_BASE_API PluginConfigPage : public AbstractConfigPage {
     Q_OBJECT
 
 public:
-    PluginConfigPage(QWidget *parent = nullptr);
+    PluginConfigPage(QWidget* parent = nullptr);
 
     ~PluginConfigPage() override;
 
@@ -27,4 +26,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} }
+}} // namespace Quartz::Ext

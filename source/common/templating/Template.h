@@ -11,21 +11,17 @@ namespace Quartz {
 
 class Config;
 
-struct Content
-{
+struct Content {
     Content()
         : m_name(QStringLiteral(""))
         , m_text(QStringLiteral(""))
 
     {
-
     }
 
-    Content(const QString &name, const QString &text)
+    Content(const QString& name, const QString& text)
         : m_name(name)
-        , m_text(text)
-    {
-
+        , m_text(text) {
     }
 
     QString m_name;
@@ -33,10 +29,9 @@ struct Content
     QString m_text;
 };
 
-class QUARTZ_COMMON_API Template : public TreeNode
-{
+class QUARTZ_COMMON_API Template : public TreeNode {
 public:
-    explicit Template(const QString &name);
+    explicit Template(const QString& name);
 
     ~Template() override;
 
@@ -44,13 +39,13 @@ public:
 
     void setConfig(std::unique_ptr<Config> config);
 
-    Config * config() const;
+    Config* config() const;
 
-    void addContent(const Content &content);
+    void addContent(const Content& content);
 
-    const Content & contentAt(int index) const;
+    const Content& contentAt(int index) const;
 
-    const QVector<Content> & contents() const;
+    const QVector<Content>& contents() const;
 
     int numContents() const;
 
@@ -61,4 +56,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

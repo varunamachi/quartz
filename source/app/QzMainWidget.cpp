@@ -43,59 +43,48 @@
 
 namespace Quartz {
 
-struct QzMainWidget::Data
-{
-    explicit Data(QWidget *parent)
+struct QzMainWidget::Data {
+    explicit Data(QWidget* parent)
         : m_roundedRect(true)
-        , m_aboutDialog(new AboutDialog(parent))
-    {
-
+        , m_aboutDialog(new AboutDialog(parent)) {
     }
 
     QString createStyleSheet();
 
     bool m_roundedRect;
 
-    AboutDialog *m_aboutDialog;
+    AboutDialog* m_aboutDialog;
 
-    TitleBar *m_titleBar;
+    TitleBar* m_titleBar;
 
-    SelectorManager *m_selector;
+    SelectorManager* m_selector;
 
-    ContentManager *m_content;
+    ContentManager* m_content;
 
-    ViewManager *m_viewManager;
+    ViewManager* m_viewManager;
 
-    ActionBar *m_actionBar;
+    ActionBar* m_actionBar;
 
-    QMenu *m_menu;
+    QMenu* m_menu;
 
     std::unique_ptr<Ext::PluginManager> m_pluginManager;
-
 };
 
-
-QzMainWidget::QzMainWidget(QMainWindow *parent)
+QzMainWidget::QzMainWidget(QMainWindow* parent)
     : QWidget(parent)
-    , m_data(std::make_unique<Data>(this))
-{
-    m_data->m_content   = new ContentManager(this);
+    , m_data(std::make_unique<Data>(this)) {
+    m_data->m_content = new ContentManager(this);
     m_data->m_actionBar = new ActionBar(20, this);
     m_data->m_menu = new QMenu(this);
     this->setObjectName("quartz_widget");
     this->setContentsMargins({});
 
     auto viewContainer = new StackedSplitContainer(
-                25,
-                70,
-                AbstractContainer::Position::After,
-                Qt::Horizontal,
-                this);
+        25, 70, AbstractContainer::Position::After, Qt::Horizontal, this);
     viewContainer->setAutoSelectionPolicy(AutoSelectionPolicy::DoNotSelectAny);
     m_data->m_viewManager = new ViewManager(viewContainer, this);
-    viewContainer->setContentWidget(
-                m_data->m_content,
-                AbstractContainer::Position::Before);
+    viewContainer->setContentWidget(m_data->m_content,
+                                    AbstractContainer::Position::Before);
     viewContainer->setSizes(70, 300, 600);
 
     QSizePolicy policy;
@@ -103,11 +92,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     m_data->m_content->setSizePolicy(policy);
 
     auto selectorContainer = new StackedSplitContainer(
-                50,
-                50,
-                AbstractContainer::Position::Before,
-                Qt::Vertical,
-                this);
+        50, 50, AbstractContainer::Position::Before, Qt::Vertical, this);
     m_data->m_selector = new SelectorManager(selectorContainer, this);
     appContext()->setSelectorManager(m_data->m_selector);
     selectorContainer->setContentWidget(m_data->m_viewManager);
@@ -116,7 +101,7 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     auto mainMenu = new MainMenuButton(this);
     auto about = new QAction("About", this);
     connect(about, &QAction::triggered, [this]() {
-       m_data->m_aboutDialog->exec();
+        m_data->m_aboutDialog->exec();
     });
     mainMenu->addAction(about);
     mainMenu->setMaximumSize({50, 16});
@@ -134,16 +119,21 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
     auto gen = new QPushButton(getIcon(MatIcon::BeachAccess), "", this);
     connect(gen, &QPushButton::released, []() {
         switch (QRandomGenerator::global()->bounded(3)) {
-        case 0: showInfo("Quick brown fox jumped over the lazy dog "
-                         "Quick brown fox jumped over the lazy dog"); break;
-        case 1: showWarning("Quick brown fox jumped over the lazy dog "
-                            "Quick brown fox jumped over the lazy dog"); break;
-        case 2: showError("Quick brown fox jumped over the lazy dog "
-                          "Quick brown fox jumped over the lazy dog"); break;
+        case 0:
+            showInfo("Quick brown fox jumped over the lazy dog "
+                     "Quick brown fox jumped over the lazy dog");
+            break;
+        case 1:
+            showWarning("Quick brown fox jumped over the lazy dog "
+                        "Quick brown fox jumped over the lazy dog");
+            break;
+        case 2:
+            showError("Quick brown fox jumped over the lazy dog "
+                      "Quick brown fox jumped over the lazy dog");
+            break;
         }
     });
-    viewContainer->addFixedWidget(
-                gen, StackedSplitContainer::Position::Before);
+    viewContainer->addFixedWidget(gen, StackedSplitContainer::Position::Before);
 
     auto mainLayout = new QVBoxLayout();
     mainLayout->addWidget(m_data->m_selector);
@@ -195,35 +185,27 @@ QzMainWidget::QzMainWidget(QMainWindow *parent)
 
     const auto welcomeID = QStringLiteral("qz.welcome");
     m_data->m_content->addContent(
-                new WelcomePage(welcomeID, m_data->m_content));
+        new WelcomePage(welcomeID, m_data->m_content));
     m_data->m_content->selectContent(welcomeID);
-
 }
 
-QzMainWidget::~QzMainWidget()
-{
+QzMainWidget::~QzMainWidget() {
     m_data->m_pluginManager->destroy();
     QZ_LOGGER()->dispatcher()->removeTarget(LogView::LOG_TARGET_ID);
 }
 
-void QzMainWidget::onAboutToQuit()
-{
-
+void QzMainWidget::onAboutToQuit() {
 }
 
-void QzMainWidget::setRoundedRect(bool useRoundedRect)
-{
+void QzMainWidget::setRoundedRect(bool useRoundedRect) {
     m_data->m_roundedRect = useRoundedRect;
 }
 
-const TitleBar *QzMainWidget::titleBar() const
-{
+const TitleBar* QzMainWidget::titleBar() const {
     return m_data->m_titleBar;
 }
 
-
-void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
-{
+void QzMainWidget::paintEvent(QPaintEvent* /*event*/) {
     QPainter painter(this);
     auto color = this->palette().color(QPalette::Background);
     if (m_data->m_roundedRect) {
@@ -233,13 +215,12 @@ void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setRenderHint(QPainter::HighQualityAntialiasing);
         painter.fillPath(path, brush);
-    }
-    else {
+    } else {
         painter.fillRect(this->rect(), QBrush(color));
     }
 }
 
-//void QzMainWidget::resizeEvent(QResizeEvent * /*event*/)
+// void QzMainWidget::resizeEvent(QResizeEvent * /*event*/)
 //{
 //    auto notificationService = appContext()->notificationService();
 //    if (notificationService != nullptr) {
@@ -247,4 +228,4 @@ void QzMainWidget::paintEvent(QPaintEvent * /*event*/)
 //    }
 //}
 
-}
+} // namespace Quartz

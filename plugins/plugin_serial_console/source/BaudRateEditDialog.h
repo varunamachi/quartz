@@ -6,12 +6,11 @@
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-class BaudRateEditDialog : public QDialog
-{
+class BaudRateEditDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit BaudRateEditDialog(QWidget *parent);
+    explicit BaudRateEditDialog(QWidget* parent);
 
     ~BaudRateEditDialog();
 
@@ -23,10 +22,9 @@ private slots:
 signals:
     void baudRateChanged();
 
-
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

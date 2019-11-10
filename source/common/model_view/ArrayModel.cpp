@@ -6,73 +6,62 @@
 
 namespace Quartz {
 
-struct ArrayModel::Data
-{
-    QVector<TreeNode *> m_roots;
+struct ArrayModel::Data {
+    QVector<TreeNode*> m_roots;
 };
 
-ArrayModel::ArrayModel(
-        int numFields,
-        bool selectable,
-        bool isFlat,
-        const QVector<QString> &headers,
-        QObject *parent)
-    : AbstractTreeModel{
-          parent,
-          AbstractTreeModel::Options(numFields, selectable, isFlat, headers)}
-    , m_data{ new Data{} }
-{
-
+ArrayModel::ArrayModel(int numFields,
+                       bool selectable,
+                       bool isFlat,
+                       const QVector<QString>& headers,
+                       QObject* parent)
+    : AbstractTreeModel{parent,
+                        AbstractTreeModel::Options(numFields,
+                                                   selectable,
+                                                   isFlat,
+                                                   headers)}
+    , m_data{new Data{}} {
 }
 
-ArrayModel::~ArrayModel()
-{
-
+ArrayModel::~ArrayModel() {
 }
 
-TreeNode * ArrayModel::rootAt(int rowIndex) const
-{
-    TreeNode *root = nullptr;
+TreeNode* ArrayModel::rootAt(int rowIndex) const {
+    TreeNode* root = nullptr;
     if (rowIndex < m_data->m_roots.size()) {
         root = m_data->m_roots.at(rowIndex);
     }
     return root;
 }
 
-int ArrayModel::rootCount() const
-{
+int ArrayModel::rootCount() const {
     return m_data->m_roots.size();
 }
 
-int ArrayModel::indexOfRoot(TreeNode *node) const
-{
+int ArrayModel::indexOfRoot(TreeNode* node) const {
     return m_data->m_roots.indexOf(node);
 }
 
-void ArrayModel::addRoot(TreeNode *node)
-{
-        beginResetModel();
-        m_data->m_roots.push_back(node);
-        endResetModel();
+void ArrayModel::addRoot(TreeNode* node) {
+    beginResetModel();
+    m_data->m_roots.push_back(node);
+    endResetModel();
 }
 
-void ArrayModel::removeRoot(TreeNode *node)
-{
-        beginResetModel();
-        m_data->m_roots.removeAll(node);
-        endResetModel();
+void ArrayModel::removeRoot(TreeNode* node) {
+    beginResetModel();
+    m_data->m_roots.removeAll(node);
+    endResetModel();
 }
 
-bool ArrayModel::contains(TreeNode *node)
-{
+bool ArrayModel::contains(TreeNode* node) {
     return m_data->m_roots.contains(node);
 }
 
-void ArrayModel::clear()
-{
+void ArrayModel::clear() {
     beginResetModel();
     m_data->m_roots.clear();
     endResetModel();
 }
 
-}
+} // namespace Quartz

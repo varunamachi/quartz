@@ -3,94 +3,83 @@
 #include <core/utils/History.h>
 #include <plugin_base/PluginLogging.h>
 
-
 #include "ConsoleWidget.h"
 
-//Taken from Qt example
+// Taken from Qt example
 
 namespace Quartz { namespace Ext { namespace SerialConsole {
 
-enum class HistoryDirection
-{
-    Backward,
-    Forward,
-    None
-};
+enum class HistoryDirection { Backward, Forward, None };
 
-struct ConsoleWidget::Data
-{
-    explicit Data(QWidget * /*parent*/)
-//        : m_historyIndex(0)
-//        , m_historyDirection(HistoryDirection::None)
+struct ConsoleWidget::Data {
+    explicit Data(QWidget* /*parent*/)
+    //        : m_historyIndex(0)
+    //        , m_historyDirection(HistoryDirection::None)
     {
-
     }
 
-//    inline bool isHistoryIndexValid() const
-//    {
-//        return ! m_history.isEmpty()
-//                && m_historyIndex >= 0 && m_historyIndex <= m_history.size();
-//    }
+    //    inline bool isHistoryIndexValid() const
+    //    {
+    //        return ! m_history.isEmpty()
+    //                && m_historyIndex >= 0 && m_historyIndex <=
+    //                m_history.size();
+    //    }
 
-//    inline void addHistory(const QString &historyItem)
-//    {
-//        if (m_history.isEmpty() || m_history.last() != historyItem) {
-//            m_history.push_back(historyItem);
-//        }
-//        m_historyIndex = m_history.size();
-//        m_historyDirection = HistoryDirection::None;
-//    }
+    //    inline void addHistory(const QString &historyItem)
+    //    {
+    //        if (m_history.isEmpty() || m_history.last() != historyItem) {
+    //            m_history.push_back(historyItem);
+    //        }
+    //        m_historyIndex = m_history.size();
+    //        m_historyDirection = HistoryDirection::None;
+    //    }
 
-//    inline QString history() const
-//    {
-//        if (m_historyIndex < m_history.size()) {
-//            return m_history[ m_historyIndex ];
-//        }
-//        return QStringLiteral("");
-//    }
+    //    inline QString history() const
+    //    {
+    //        if (m_historyIndex < m_history.size()) {
+    //            return m_history[ m_historyIndex ];
+    //        }
+    //        return QStringLiteral("");
+    //    }
 
-//    QString nextCommand()
-//    {
-//        if (isHistoryIndexValid()) {
-//            if (m_historyIndex < m_history.size()) {
-//                ++ m_historyIndex;
-//            }
-//            m_historyDirection = HistoryDirection::Forward;
-//        }
-//        return history();
-//    }
+    //    QString nextCommand()
+    //    {
+    //        if (isHistoryIndexValid()) {
+    //            if (m_historyIndex < m_history.size()) {
+    //                ++ m_historyIndex;
+    //            }
+    //            m_historyDirection = HistoryDirection::Forward;
+    //        }
+    //        return history();
+    //    }
 
-//    QString prevCommand()
-//    {
-//        if (isHistoryIndexValid()) {
-//            if (m_historyIndex > 0) {
-//                -- m_historyIndex;
-//            }
-//            m_historyDirection = HistoryDirection::Backward;
-//        }
-//        return history();
-//    }
+    //    QString prevCommand()
+    //    {
+    //        if (isHistoryIndexValid()) {
+    //            if (m_historyIndex > 0) {
+    //                -- m_historyIndex;
+    //            }
+    //            m_historyDirection = HistoryDirection::Backward;
+    //        }
+    //        return history();
+    //    }
 
-//    int m_historyIndex;
+    //    int m_historyIndex;
 
-//    HistoryDirection m_historyDirection;
+    //    HistoryDirection m_historyDirection;
 
-//    QVector<QString> m_history;
+    //    QVector<QString> m_history;
 
     History m_history;
 
     int m_pos;
 
     int m_curLinePos;
-
 };
 
-
-
-ConsoleWidget::ConsoleWidget(QWidget *parent)
+ConsoleWidget::ConsoleWidget(QWidget* parent)
     : QPlainTextEdit(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     document()->setMaximumBlockCount(100);
     QPalette p = palette();
     p.setColor(QPalette::Base, Qt::black);
@@ -102,16 +91,12 @@ ConsoleWidget::ConsoleWidget(QWidget *parent)
 #else
     this->setFont(QFont("Ubuntu Mono", 12));
 #endif
-
 }
 
-ConsoleWidget::~ConsoleWidget()
-{
-
+ConsoleWidget::~ConsoleWidget() {
 }
 
-void ConsoleWidget::putData(const QByteArray &data)
-{
+void ConsoleWidget::putData(const QByteArray& data) {
     this->moveCursor(QTextCursor::End);
     this->insertPlainText(data);
     this->moveCursor(QTextCursor::End);
@@ -119,8 +104,7 @@ void ConsoleWidget::putData(const QByteArray &data)
     m_data->m_curLinePos = this->textCursor().position();
 }
 
-QString ConsoleWidget::currentCommand()
-{
+QString ConsoleWidget::currentCommand() {
     auto cursor = this->textCursor();
     auto endCursor = cursor;
     endCursor.movePosition(QTextCursor::End);
@@ -131,16 +115,14 @@ QString ConsoleWidget::currentCommand()
     return selected;
 }
 
-QString ConsoleWidget::currentLine()
-{
+QString ConsoleWidget::currentLine() {
     auto doc = this->document();
     int curLine = doc->lineCount() - 1;
     auto txt = doc->findBlockByLineNumber(curLine);
     return txt.text();
 }
 
-void ConsoleWidget::insertCommand(const QString &cmd)
-{
+void ConsoleWidget::insertCommand(const QString& cmd) {
     auto cursor = this->textCursor();
     auto endCursor = cursor;
     endCursor.movePosition(QTextCursor::End);
@@ -152,74 +134,63 @@ void ConsoleWidget::insertCommand(const QString &cmd)
     m_data->m_curLinePos = cursor.position();
 }
 
-void ConsoleWidget::clearConsole()
-{
+void ConsoleWidget::clearConsole() {
     clear();
     printPrompt();
 }
 
-void ConsoleWidget::clearHistory()
-{
-//    m_data->m_history.clear();
-//    m_data->m_historyIndex = 0;
+void ConsoleWidget::clearHistory() {
+    //    m_data->m_history.clear();
+    //    m_data->m_historyIndex = 0;
     m_data->m_history.clear();
 }
 
-void ConsoleWidget::keyPressEvent(QKeyEvent *evt)
-{
+void ConsoleWidget::keyPressEvent(QKeyEvent* evt) {
     switch (evt->key()) {
     case Qt::Key_Up: {
-//        auto prev = m_data->prevCommand();
+        //        auto prev = m_data->prevCommand();
         auto prev = m_data->m_history.prev();
-        if (! prev.isEmpty()) {
+        if (!prev.isEmpty()) {
             insertCommand(prev);
         }
-    }
-        break;
+    } break;
     case Qt::Key_Down: {
         auto prev = m_data->m_history.next();
         insertCommand(prev);
-    }
-        break;
+    } break;
     case Qt::Key_Home: {
         auto cursor = this->textCursor();
         if (evt->modifiers() & Qt::CTRL) {
             cursor.setPosition(m_data->m_pos);
-        }
-        else {
+        } else {
             cursor.setPosition(m_data->m_curLinePos);
         }
         this->setTextCursor(cursor);
-    }
-        break;
+    } break;
     case Qt::Key_End: {
         auto cursor = this->textCursor();
         if (evt->modifiers() & Qt::CTRL) {
             cursor.movePosition(QTextCursor::End);
-        }
-        else {
+        } else {
             cursor.movePosition(QTextCursor::EndOfLine);
         }
         this->setTextCursor(cursor);
-    }
-        break;
+    } break;
 
     case Qt::Key_Left:
     case Qt::Key_Backspace: {
         if (this->textCursor().position() > m_data->m_pos) {
             QPlainTextEdit::keyPressEvent(evt);
         }
-    }
-        break;
+    } break;
 
     case Qt::Key_Return:
     case Qt::Key_Enter: {
         if (evt->modifiers() & Qt::AltModifier) {
             this->appendPlainText("");
-        }
-        else {
+        } else {
             auto str = currentCommand();
-            if (! str.isEmpty()) {
+            if (!str.isEmpty()) {
                 auto cmd = str.trimmed() + "\r\n";
                 emit sigDataEntered(cmd.toLocal8Bit());
                 m_data->m_history.add(str);
@@ -229,38 +200,28 @@ void ConsoleWidget::keyPressEvent(QKeyEvent *evt)
             printPrompt();
         }
         m_data->m_curLinePos = this->textCursor().position();
-    }
-        break;
-    default:
-        QPlainTextEdit::keyPressEvent(evt);
+    } break;
+    default: QPlainTextEdit::keyPressEvent(evt);
     }
 }
 
-void ConsoleWidget::mousePressEvent(QMouseEvent * /*evt*/)
-{
+void ConsoleWidget::mousePressEvent(QMouseEvent* /*evt*/) {
     setFocus();
 }
 
-void ConsoleWidget::mouseDoubleClickEvent(QMouseEvent * /*evt*/)
-{
-
+void ConsoleWidget::mouseDoubleClickEvent(QMouseEvent* /*evt*/) {
 }
 
-void ConsoleWidget::contextMenuEvent(QContextMenuEvent * /*evt*/)
-{
-
+void ConsoleWidget::contextMenuEvent(QContextMenuEvent* /*evt*/) {
 }
 
-void ConsoleWidget::printPrompt()
-{
-    this->appendHtml(
-                QString{ "<font color = 'red'><b>\n>></b></font> " });
+void ConsoleWidget::printPrompt() {
+    this->appendHtml(QString{"<font color = 'red'><b>\n>></b></font> "});
     auto cur = this->textCursor();
     cur.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
     this->setTextCursor(cur);
     m_data->m_pos = cur.position();
     m_data->m_curLinePos = m_data->m_pos;
-
 }
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

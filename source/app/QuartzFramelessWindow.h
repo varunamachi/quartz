@@ -8,12 +8,11 @@ namespace Quartz {
 
 class QzMainWidget;
 
-class QuartzFramelessWindow : public QMainWindow
-{
+class QuartzFramelessWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit QuartzFramelessWindow(QWidget *parent = nullptr);
+    explicit QuartzFramelessWindow(QWidget* parent = nullptr);
 
     ~QuartzFramelessWindow();
 
@@ -31,9 +30,9 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent* event);
 
-    void showEvent(QShowEvent *evt);
+    void showEvent(QShowEvent* evt);
 
-    void resizeEvent(QResizeEvent *evt);
+    void resizeEvent(QResizeEvent* evt);
 
 private:
     struct Data;
@@ -46,4 +45,4 @@ private:
     void minimize();
 };
 
-}
+} // namespace Quartz

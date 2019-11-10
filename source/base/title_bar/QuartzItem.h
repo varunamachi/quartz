@@ -8,14 +8,12 @@
 
 namespace Quartz {
 
-class QUARTZ_BASE_API QuartzItem : public QWidget
-{
+class QUARTZ_BASE_API QuartzItem : public QWidget {
     Q_OBJECT
 public:
-
-    QuartzItem(const QString &itemId,
-                const QString &category,
-                QWidget *widget = nullptr);
+    QuartzItem(const QString& itemId,
+               const QString& category,
+               QWidget* widget = nullptr);
 
     ~QuartzItem();
 
@@ -28,4 +26,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

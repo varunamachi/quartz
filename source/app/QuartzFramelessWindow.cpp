@@ -20,20 +20,16 @@
 
 #define WINDOW_MARGIN 5
 
-
 namespace Quartz {
 
-struct QuartzFramelessWindow::Data
-{
-    Data(QMainWindow *parent)
+struct QuartzFramelessWindow::Data {
+    Data(QMainWindow* parent)
         : m_mainWidget(new QzMainWidget(parent))
         , m_moving(false)
-        , m_maximised(false)
-    {
-
+        , m_maximised(false) {
     }
 
-    QzMainWidget *m_mainWidget;
+    QzMainWidget* m_mainWidget;
 
     bool m_moving;
 
@@ -43,9 +39,9 @@ struct QuartzFramelessWindow::Data
 
     QByteArray m_geometry;
 
-    QHBoxLayout *m_layout;
+    QHBoxLayout* m_layout;
 
-    QWidget *m_containerWidget;
+    QWidget* m_containerWidget;
 
     bool m_cursorAtLeft;
 
@@ -54,13 +50,11 @@ struct QuartzFramelessWindow::Data
     bool m_cursorAtBottom;
 
     bool m_resizing;
-
 };
 
-QuartzFramelessWindow::QuartzFramelessWindow(QWidget *parent)
+QuartzFramelessWindow::QuartzFramelessWindow(QWidget* parent)
     : QMainWindow(parent)
-    , m_data(std::make_unique<Data>(this))
-{
+    , m_data(std::make_unique<Data>(this)) {
     m_data->m_containerWidget = new QWidget(this);
 
     setMouseTracking(true);
@@ -73,7 +67,7 @@ QuartzFramelessWindow::QuartzFramelessWindow(QWidget *parent)
     m_data->m_containerWidget->setLayout(m_data->m_layout);
 
     this->setWindowFlags(Qt::FramelessWindowHint
-                          | Qt::WindowMinimizeButtonHint);
+                         | Qt::WindowMinimizeButtonHint);
 #if 0
     m_data->m_containerWidget->setAttribute(Qt::WA_TranslucentBackground,
                                              true);
@@ -92,11 +86,11 @@ QuartzFramelessWindow::QuartzFramelessWindow(QWidget *parent)
     m_data->m_layout->setContentsMargins(0, 0, 0, 0);
     this->setStyleSheet("QMainWindow{ border: 1px solid #FFA858; }");
 
-//    CustomShadowEffect *effect = new CustomShadowEffect(this);
-//    effect->setBlurRadius(10.0);
-//    effect->setDistance(3.0);
-//    effect->setColor(QColor(0xA0, 0x52, 0x2D, 0x80));
-//    this->setGraphicsEffect(effect);
+    //    CustomShadowEffect *effect = new CustomShadowEffect(this);
+    //    effect->setBlurRadius(10.0);
+    //    effect->setDistance(3.0);
+    //    effect->setColor(QColor(0xA0, 0x52, 0x2D, 0x80));
+    //    this->setGraphicsEffect(effect);
 
 #endif
 
@@ -104,44 +98,38 @@ QuartzFramelessWindow::QuartzFramelessWindow(QWidget *parent)
     this->setCentralWidget(m_data->m_containerWidget);
 
     connect(m_data->m_mainWidget->titleBar(),
-             SIGNAL(sigCloseRequested()),
-             this,
-             SLOT(close()));
+            SIGNAL(sigCloseRequested()),
+            this,
+            SLOT(close()));
     connect(m_data->m_mainWidget->titleBar(),
-             SIGNAL(sigMaxRestoreRequested()),
-             this,
-             SLOT(onMaximizeRestore()));
-    connect(m_data->m_mainWidget->titleBar() ,
-             SIGNAL(sigMinimizeRequested()),
-             this,
-             SLOT(onMinimize()));
+            SIGNAL(sigMaxRestoreRequested()),
+            this,
+            SLOT(onMaximizeRestore()));
+    connect(m_data->m_mainWidget->titleBar(),
+            SIGNAL(sigMinimizeRequested()),
+            this,
+            SLOT(onMinimize()));
 }
 
-QuartzFramelessWindow::~QuartzFramelessWindow()
-{
-
+QuartzFramelessWindow::~QuartzFramelessWindow() {
 }
 
-void QuartzFramelessWindow::onMinimize()
-{
+void QuartzFramelessWindow::onMinimize() {
     minimize();
 }
 
-void QuartzFramelessWindow::onMaximizeRestore()
-{
+void QuartzFramelessWindow::onMaximizeRestore() {
     if (m_data->m_maximised) {
         m_data->m_maximised = false;
         restore();
-    }
-    else {
+    } else {
         m_data->m_geometry = saveGeometry();
         m_data->m_maximised = true;
         maximize();
     }
 }
 
-void QuartzFramelessWindow::mousePressEvent(QMouseEvent* event)
-{
+void QuartzFramelessWindow::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         m_data->m_moving = true;
         if (m_data->m_cursorAtLeft) {
@@ -152,31 +140,26 @@ void QuartzFramelessWindow::mousePressEvent(QMouseEvent* event)
         }
         if (m_data->m_cursorAtBottom) {
             m_data->m_lastMousePosition.setY(height() - event->pos().y());
-        }
-        else {
+        } else {
             m_data->m_lastMousePosition = event->globalPos();
         }
         QMainWindow::mousePressEvent(event);
     }
 }
 
-void QuartzFramelessWindow::mouseMoveEvent(QMouseEvent* event)
-{
-    if (event->buttons().testFlag(Qt::LeftButton)
-            && m_data->m_moving
-            && ! m_data->m_resizing) {
+void QuartzFramelessWindow::mouseMoveEvent(QMouseEvent* event) {
+    if (event->buttons().testFlag(Qt::LeftButton) && m_data->m_moving
+        && !m_data->m_resizing) {
         QPoint newPos = this->pos()
-                + (event->globalPos() - m_data->m_lastMousePosition);
+            + (event->globalPos() - m_data->m_lastMousePosition);
         if (newPos.y() <= 0) {
             m_data->m_maximised = true;
             emit maximize();
-        }
-        else if (m_data->m_maximised && newPos.y() >= 10) {
+        } else if (m_data->m_maximised && newPos.y() >= 10) {
             m_data->m_maximised = false;
             restore();
             move(event->globalX() - this->width() / 2, event->globalY());
-        }
-        else {
+        } else {
             move(newPos);
         }
         m_data->m_lastMousePosition = event->globalPos();
@@ -184,8 +167,7 @@ void QuartzFramelessWindow::mouseMoveEvent(QMouseEvent* event)
     QWidget::mouseMoveEvent(event);
 }
 
-void QuartzFramelessWindow::mouseReleaseEvent(QMouseEvent* event)
-{
+void QuartzFramelessWindow::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         m_data->m_moving = false;
         m_data->m_resizing = false;
@@ -193,22 +175,19 @@ void QuartzFramelessWindow::mouseReleaseEvent(QMouseEvent* event)
     QWidget::mouseReleaseEvent(event);
 }
 
-void QuartzFramelessWindow::showEvent(QShowEvent *evt)
-{
+void QuartzFramelessWindow::showEvent(QShowEvent* evt) {
     if (m_data->m_geometry.isEmpty()) {
         m_data->m_geometry = this->saveGeometry();
     }
     QWidget::showEvent(evt);
 }
 
-void QuartzFramelessWindow::resizeEvent(QResizeEvent *evt)
-{
+void QuartzFramelessWindow::resizeEvent(QResizeEvent* evt) {
     QWidget::resizeEvent(evt);
 }
 
-void QuartzFramelessWindow::maximize()
-{
-    QDesktopWidget *desktop = QApplication::desktop();
+void QuartzFramelessWindow::maximize() {
+    QDesktopWidget* desktop = QApplication::desktop();
     // Because reserved space can be on all sides of the scren
     // you have to both move and resize the window
     m_data->m_layout->setSpacing(0);
@@ -217,13 +196,12 @@ void QuartzFramelessWindow::maximize()
     m_data->m_mainWidget->setRoundedRect(false);
 
     QRect rect = desktop->availableGeometry(
-                desktop->screenNumber(QCursor::pos()));
+        desktop->screenNumber(QCursor::pos()));
     this->setGeometry(rect);
 }
 
-void QuartzFramelessWindow::restore()
-{
-    if (! m_data->m_geometry.isEmpty()) {
+void QuartzFramelessWindow::restore() {
+    if (!m_data->m_geometry.isEmpty()) {
         m_data->m_layout->setSpacing(0);
         m_data->m_layout->setContentsMargins(5, 5, 0, 0);
         m_data->m_containerWidget->setContentsMargins(5, 5, 5, 5);
@@ -232,15 +210,13 @@ void QuartzFramelessWindow::restore()
     }
 }
 
-void QuartzFramelessWindow::minimize()
-{
-    if (! this->isMinimized()) {
+void QuartzFramelessWindow::minimize() {
+    if (!this->isMinimized()) {
         this->showMinimized();
     }
 }
 
-void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
-{
+void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos) {
     if (m_data->m_moving) {
         int dx = newPos.x() - oldPos.x();
         int dy = newPos.y() - oldPos.y();
@@ -256,8 +232,7 @@ void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
                 if (dx > 0) {
                     dx = 0;
                 }
-            }
-            else if (dx > 0 && g.width() - dx < minSize.width()) {
+            } else if (dx > 0 && g.width() - dx < minSize.width()) {
                 dx = g.width() - minSize.width();
             }
             g.setLeft(g.left() + dx);
@@ -265,8 +240,8 @@ void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
         if (m_data->m_cursorAtRight) {
             // Fix a bug when you try to resize to less than minimum size and
             // then the mouse goes right again.
-            if (dx > 0 && (width() - newPos.x()
-                            > m_data->m_lastMousePosition.x())) {
+            if (dx > 0
+                && (width() - newPos.x() > m_data->m_lastMousePosition.x())) {
                 dx -= width() - newPos.x() - m_data->m_lastMousePosition.x();
                 if (dx < 0) {
                     dx = 0;
@@ -277,8 +252,8 @@ void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
         if (m_data->m_cursorAtBottom) {
             // Fix a bug when you try to resize to less than minimum size and
             // then the mouse goes down again.
-            if (dy > 0 && (height() - newPos.y()
-                            > m_data->m_lastMousePosition.y())) {
+            if (dy > 0
+                && (height() - newPos.y() > m_data->m_lastMousePosition.y())) {
                 dy -= height() - newPos.y() - m_data->m_lastMousePosition.y();
                 if (dy < 0) {
                     dy = 0;
@@ -290,36 +265,31 @@ void QuartzFramelessWindow::mouseMove(QPoint newPos, QPoint oldPos)
 
     } else {
         QRect r = rect();
-        m_data->m_cursorAtLeft =
-                (qAbs(newPos.x()- r.left()) <= WINDOW_MARGIN)
-                && newPos.y() > m_data->m_mainWidget->titleBar()->height();
-        m_data->m_cursorAtRight =
-                (qAbs(newPos.x() - r.right()) <= WINDOW_MARGIN)
-                && newPos.y() > m_data->m_mainWidget->titleBar()->height();
-        m_data->m_cursorAtBottom =
-                (qAbs(newPos.y() - r.bottom()) <= WINDOW_MARGIN);
+        m_data->m_cursorAtLeft = (qAbs(newPos.x() - r.left()) <= WINDOW_MARGIN)
+            && newPos.y() > m_data->m_mainWidget->titleBar()->height();
+        m_data->m_cursorAtRight = (qAbs(newPos.x() - r.right())
+                                   <= WINDOW_MARGIN)
+            && newPos.y() > m_data->m_mainWidget->titleBar()->height();
+        m_data->m_cursorAtBottom = (qAbs(newPos.y() - r.bottom())
+                                    <= WINDOW_MARGIN);
         bool horizontal = m_data->m_cursorAtLeft || m_data->m_cursorAtRight;
 
         m_data->m_resizing = true;
         if (horizontal && m_data->m_cursorAtBottom) {
             if (m_data->m_cursorAtLeft) {
                 setCursor(Qt::SizeBDiagCursor);
-            }
-            else {
+            } else {
                 setCursor(Qt::SizeFDiagCursor);
             }
-        }
-        else if (horizontal) {
+        } else if (horizontal) {
             setCursor(Qt::SizeHorCursor);
-        }
-        else if (m_data->m_cursorAtBottom) {
+        } else if (m_data->m_cursorAtBottom) {
             setCursor(Qt::SizeVerCursor);
-        }
-        else {
+        } else {
             setCursor(Qt::ArrowCursor);
             m_data->m_resizing = false;
         }
     }
 }
 
-}
+} // namespace Quartz

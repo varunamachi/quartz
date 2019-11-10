@@ -8,16 +8,15 @@ struct IconInfo;
 
 namespace Ext { namespace IconFontExplorer {
 
-class IconNode : public TreeNode
-{
+class IconNode : public TreeNode {
 public:
-    IconNode(const IconInfo *iconInfo);
+    IconNode(const IconInfo* iconInfo);
 
     ~IconNode() override;
 
     QVariant fieldValue(int column) const override;
 
-    const IconInfo * iconInfo() const;
+    const IconInfo* iconInfo() const;
 
     static QVector<std::shared_ptr<IconNode>> roots();
 
@@ -26,4 +25,5 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}} // namespace Ext::IconFontExplorer
+} // namespace Quartz

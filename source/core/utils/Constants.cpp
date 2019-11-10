@@ -7,5 +7,4 @@ namespace Quartz {
 
 const QString Constants::EMPTY_STRING("");
 
-
 }

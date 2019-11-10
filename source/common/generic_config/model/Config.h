@@ -14,47 +14,47 @@ namespace Quartz {
 class Param;
 class Group;
 
-class QUARTZ_COMMON_API Config : public TreeNode
-{
+class QUARTZ_COMMON_API Config : public TreeNode {
 public:
-    Config(const QString &id, const QString &name);
+    Config(const QString& id, const QString& name);
 
     ~Config() override;
 
-    const QString & id() const;
+    const QString& id() const;
 
-    const QString & name() const;
+    const QString& name() const;
 
     int numChildParams() const;
 
-    Param * childParamAt(int index) const;
+    Param* childParamAt(int index) const;
 
     void addChildParameter(std::shared_ptr<Param> param);
 
     int numGroups() const;
 
-    Group * groupAt(int index) const;
+    Group* groupAt(int index) const;
 
     void addGroup(std::shared_ptr<Group> group);
 
-    const Param * param(const QString &id) const;
+    const Param* param(const QString& id) const;
 
-    Param * param(const QString &id);
+    Param* param(const QString& id);
 
-    bool registerParam(Param *param);
+    bool registerParam(Param* param);
 
     QVariant fieldValue(int field) const override;
 
     std::unique_ptr<Config> clone() const;
 
-    void setConstant(const QString &key, const QVariant &value);
+    void setConstant(const QString& key, const QVariant& value);
 
-    const QVariantHash & constants() const;
+    const QVariantHash& constants() const;
 
-    const QHash<QString, Param *> & allParams() const;
+    const QHash<QString, Param*>& allParams() const;
+
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
 };
 
-}
+} // namespace Quartz

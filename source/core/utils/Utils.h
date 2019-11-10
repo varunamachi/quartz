@@ -24,15 +24,11 @@
 #include "../QuartzCore.h"
 #include "Macros.h"
 
-namespace Quartz
-{
-class QUARTZ_CORE_API Utils
-{
+namespace Quartz {
+class QUARTZ_CORE_API Utils {
     QZ_MAKE_STATIC(Utils);
+
 public:
-
-
 private:
 };
-}
-
+} // namespace Quartz

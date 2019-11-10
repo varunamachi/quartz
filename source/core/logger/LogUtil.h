@@ -22,7 +22,6 @@
 
 #pragma once
 
-
 #include <QString>
 
 #include "../QuartzCore.h"
@@ -32,16 +31,15 @@ namespace Quartz { namespace Logger {
 enum class LogLevel : int;
 class LogMessage;
 
-class QUARTZ_CORE_API  LogUtil
-{
+class QUARTZ_CORE_API LogUtil {
 public:
-    static QString format(const LogMessage *message);
+    static QString format(const LogMessage* message);
 
     static QString getSeverityString(LogLevel level);
 
 private:
-    LogUtil() { }
+    LogUtil() {
+    }
 };
 
-
-} } //end of ns tanyatu
+}} // namespace Quartz::Logger

@@ -10,28 +10,24 @@ class BaudRateEditDialog;
 class SerialSettings;
 using SerialSettingsPtr = std::unique_ptr<SerialSettings>;
 
-
-class Dialogs
-{
+class Dialogs {
 public:
-
-    static void init(QWidget *parent);
+    static void init(QWidget* parent);
 
     static void destroy();
 
     static SerialSettingsPtr openSettings();
 
-    static SerialSettingsPtr openSettings(const SerialSettings &inSettings);
+    static SerialSettingsPtr openSettings(const SerialSettings& inSettings);
 
     static void openBaudRateEditor();
 
-    static BaudRateEditDialog * baudRateEditDialog();
+    static BaudRateEditDialog* baudRateEditDialog();
 
     ~Dialogs();
 
-
 private:
-    Dialogs(QWidget *parent);
+    Dialogs(QWidget* parent);
 
     static std::unique_ptr<Dialogs> s_instance;
 
@@ -39,4 +35,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}}} // namespace Quartz::Ext::SerialConsole

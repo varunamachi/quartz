@@ -12,30 +12,24 @@ namespace Quartz { namespace Ext { namespace WebTech {
 const QString ConfigPage::CONFIG_PAGE_NAME = QStringLiteral("WebTech");
 const QString ConfigPage::CONFIG_PAGE_ID = QStringLiteral("qzp.webtech.config");
 
-struct ConfigPage::Data
-{
-    explicit Data(QWidget *parent)
+struct ConfigPage::Data {
+    explicit Data(QWidget* parent)
         : m_tabWidget(new QTabWidget(parent))
-        , m_editorConf(new EditorConfigPage(parent))
-    {
-
+        , m_editorConf(new EditorConfigPage(parent)) {
     }
 
-    QTabWidget *m_tabWidget;
+    QTabWidget* m_tabWidget;
 
-    EditorConfigPage *m_editorConf;
-
+    EditorConfigPage* m_editorConf;
 };
 
-ConfigPage::ConfigPage(QWidget *parent)
-    : AbstractConfigPage(
-          {},
-          CONFIG_PAGE_NAME,
-          CONFIG_PAGE_ID,
-          getIcon(FAIcon::PencilAlt),
-          parent)
-    , m_data(std::make_unique<Data>(this))
-{
+ConfigPage::ConfigPage(QWidget* parent)
+    : AbstractConfigPage({},
+                         CONFIG_PAGE_NAME,
+                         CONFIG_PAGE_ID,
+                         getIcon(FAIcon::PencilAlt),
+                         parent)
+    , m_data(std::make_unique<Data>(this)) {
     auto lyt = new QVBoxLayout();
     lyt->addWidget(m_data->m_tabWidget);
     this->setLayout(lyt);
@@ -44,19 +38,15 @@ ConfigPage::ConfigPage(QWidget *parent)
                                 tr("Text Editor Settings"));
 }
 
-ConfigPage::~ConfigPage()
-{
-
+ConfigPage::~ConfigPage() {
 }
 
-bool ConfigPage::apply()
-{
+bool ConfigPage::apply() {
     return true;
 }
 
-bool ConfigPage::setDefaults()
-{
+bool ConfigPage::setDefaults() {
     return true;
 }
 
-} } }
+}}} // namespace Quartz::Ext::WebTech

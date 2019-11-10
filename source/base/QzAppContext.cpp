@@ -12,49 +12,42 @@
 
 #include "QzAppContext.h"
 
-
 namespace Quartz {
 
-struct QzAppContext::Data
-{
-    ContentManager *m_contentManager;
+struct QzAppContext::Data {
+    ContentManager* m_contentManager;
 
-    SelectorManager *m_selectorManager;
+    SelectorManager* m_selectorManager;
 
-    GeneralSelector *m_nodeSelector;
+    GeneralSelector* m_nodeSelector;
 
-    ConfigPageManager *m_configPageManager;
+    ConfigPageManager* m_configPageManager;
 
-    ThemeManager *m_themeManager;
+    ThemeManager* m_themeManager;
 
-    NotificationService *m_notificationService;
+    NotificationService* m_notificationService;
 
-    ViewManager *m_viewManager;
+    ViewManager* m_viewManager;
 };
 
 QzAppContext::QzAppContext()
-//    : m_data(std::make_unique<Data>())
-    : m_data(std::make_unique<Data>())
-{
-
+    //    : m_data(std::make_unique<Data>())
+    : m_data(std::make_unique<Data>()) {
 }
 
-QzAppContext::~QzAppContext()
-{
-
+QzAppContext::~QzAppContext() {
 }
 
-QString QzAppContext::expand(StdPath pathID)
-{
-    //version?
-    switch(pathID) {
+QString QzAppContext::expand(StdPath pathID) {
+    // version?
+    switch (pathID) {
     case StdPath::DataDirectory: {
-        return QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation) + "/.quartz/";
+        return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/.quartz/";
     }
     case StdPath::LogDirectory: {
         auto path = QStandardPaths::writableLocation(
-                    QStandardPaths::AppDataLocation);
+            QStandardPaths::AppDataLocation);
         return path + "/.quartz/logs";
     }
     }
@@ -68,4 +61,4 @@ QZCONTEXT_FUNC_DEFINE(QzAppContext, ConfigPageManager, configPageManager);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, ThemeManager, themeManager);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, NotificationService, notificationService);
 QZCONTEXT_FUNC_DEFINE(QzAppContext, ViewManager, viewManager);
-}
+} // namespace Quartz

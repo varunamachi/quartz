@@ -26,16 +26,11 @@
 #include "../QuartzCore.h"
 #include "AbstractLogTarget.h"
 
-
 namespace Quartz { namespace Logger {
 
-
-
-class QUARTZ_CORE_API FileTarget : public AbstractLogTarget
-{
+class QUARTZ_CORE_API FileTarget : public AbstractLogTarget {
 public:
-    explicit FileTarget(const QString &logDirPaht,
-                         const QString &fileSuffix);
+    explicit FileTarget(const QString& logDirPaht, const QString& fileSuffix);
 
     ~FileTarget();
 
@@ -44,13 +39,11 @@ public:
     static const QString TARGET_ID;
 
 private:
-    void write(QString &&message) override;
+    void write(QString&& message) override;
 
 private:
     class Impl;
     std::unique_ptr<Impl> m_impl;
-
 };
 
-} } // end of namespaces
-
+}} // namespace Quartz::Logger

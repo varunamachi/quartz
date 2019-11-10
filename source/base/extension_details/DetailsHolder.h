@@ -6,10 +6,9 @@
 
 namespace Quartz { namespace Ext {
 
-class QUARTZ_BASE_API DetailsHolder : public QWidget
-{
+class QUARTZ_BASE_API DetailsHolder : public QWidget {
 public:
-    DetailsHolder(QWidget *parent = nullptr);
+    DetailsHolder(QWidget* parent = nullptr);
 
     ~DetailsHolder();
 
@@ -18,4 +17,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} }
+}} // namespace Quartz::Ext

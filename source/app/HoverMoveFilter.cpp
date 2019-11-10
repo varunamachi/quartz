@@ -6,24 +6,19 @@
 
 namespace Quartz {
 
-HoverMoveFilter::HoverMoveFilter(QObject *parent)
-    : QObject(parent)
-{
-
+HoverMoveFilter::HoverMoveFilter(QObject* parent)
+    : QObject(parent) {
 }
 
-bool HoverMoveFilter::eventFilter(QObject *obj, QEvent *event)
-{
+bool HoverMoveFilter::eventFilter(QObject* obj, QEvent* event) {
     if (event->type() == QEvent::HoverMove) {
-        QHoverEvent *mouseHoverEvent = static_cast<QHoverEvent *>(event);
-        QuartzFramelessWindow *qzwindow = static_cast<
-                QuartzFramelessWindow *>(obj);
-        qzwindow->mouseMove(mouseHoverEvent->pos(),
-                             mouseHoverEvent->oldPos());
+        QHoverEvent* mouseHoverEvent = static_cast<QHoverEvent*>(event);
+        QuartzFramelessWindow* qzwindow = static_cast<QuartzFramelessWindow*>(
+            obj);
+        qzwindow->mouseMove(mouseHoverEvent->pos(), mouseHoverEvent->oldPos());
     }
     // standard event processing
     return QObject::eventFilter(obj, event);
 }
 
-
-}
+} // namespace Quartz

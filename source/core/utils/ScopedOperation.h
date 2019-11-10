@@ -6,35 +6,37 @@
 
 namespace Quartz {
 
-class ScopedOperation
-{
+class ScopedOperation {
 public:
-    ScopedOperation(std::function< void() > entry,
-                     std::function< void() > exit)
-        : m_exitTask(exit)
-    {
+    ScopedOperation(std::function<void()> entry, std::function<void()> exit)
+        : m_exitTask(exit) {
         if (entry != nullptr) {
             entry();
         }
     }
 
-    ~ScopedOperation()
-    {
+    ~ScopedOperation() {
         if (m_exitTask) {
             m_exitTask();
         }
     }
 
 private:
-    std::function< void() > m_exitTask;
+    std::function<void()> m_exitTask;
 };
 
-}
+} // namespace Quartz
 
+#define AT_SCOPE_EXIT(x)                                                       \
+    Quartz::ScopedOperation LINE_VAR(tnt_scpop)(nullptr, [&]() {               \
+        x;                                                                     \
+    })
 
-#define AT_SCOPE_EXIT(x) \
-    Quartz::ScopedOperation LINE_VAR(tnt_scpop)(nullptr, [ & ]() { x; })
-
-#define SCOPE_LIMIT(x, y) \
-    Quartz::ScopedOperation LINE_VAR(tnt_scpop)([ & ]() { x; },  \
-                                                [ & ]() { y; })
+#define SCOPE_LIMIT(x, y)                                                      \
+    Quartz::ScopedOperation LINE_VAR(tnt_scpop)(                               \
+        [&]() {                                                                \
+            x;                                                                 \
+        },                                                                     \
+        [&]() {                                                                \
+            y;                                                                 \
+        })

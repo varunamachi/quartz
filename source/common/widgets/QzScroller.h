@@ -11,24 +11,23 @@ class QResizeEvent;
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API QzScroller : public QWidget
-{
+class QUARTZ_COMMON_API QzScroller : public QWidget {
     Q_OBJECT
 public:
     explicit QzScroller(Qt::Orientation orientation,
-                         int minimumDim,
-                         int maximumDim,
-                         QWidget *parent = nullptr);
+                        int minimumDim,
+                        int maximumDim,
+                        QWidget* parent = nullptr);
 
     QWidgetList widgets() const;
 
 public slots:
-    void addWidget(QWidget *widget);
+    void addWidget(QWidget* widget);
 
-    void removeWidget(QWidget *widget);
+    void removeWidget(QWidget* widget);
 
 protected:
-    void resizeEvent(QResizeEvent *event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 private slots:
     void start();
@@ -42,18 +41,17 @@ private slots:
 private:
     Qt::Orientation m_orientation;
 
-    QBoxLayout *m_layout;
+    QBoxLayout* m_layout;
 
-    QScrollArea *m_scroll;
+    QScrollArea* m_scroll;
 
-    QPushButton *m_bckButton;
+    QPushButton* m_bckButton;
 
-    QPushButton *m_fwdButton;
+    QPushButton* m_fwdButton;
 
-    QTimer *m_timer;
+    QTimer* m_timer;
 
     int m_timeout;
-
 };
 
-}
+} // namespace Quartz

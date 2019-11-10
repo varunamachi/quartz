@@ -20,31 +20,31 @@ class QuartzView;
 class AbstractContainer;
 class QzScroller;
 
-class QUARTZ_BASE_API ViewManager : public QWidget
-                                  , public Ext::IExtensionAdapter
-{
+class QUARTZ_BASE_API ViewManager
+    : public QWidget
+    , public Ext::IExtensionAdapter {
     Q_OBJECT
 public:
-    explicit ViewManager(AbstractContainer *container,
-                          QWidget *parent = nullptr);
+    explicit ViewManager(AbstractContainer* container,
+                         QWidget* parent = nullptr);
 
     ~ViewManager() override;
 
-    void addView(QuartzView *view);
+    void addView(QuartzView* view);
 
-    void removeView(const QString &viewId);
+    void removeView(const QString& viewId);
 
-    void removeView(QuartzView *view);
+    void removeView(QuartzView* view);
 
-    void removeViewCategory(const QString &categoryId);
+    void removeViewCategory(const QString& categoryId);
 
-    QuartzView * view(const QString &viewId) const;
+    QuartzView* view(const QString& viewId) const;
 
-    QList< QuartzView *> views() const;
+    QList<QuartzView*> views() const;
 
-    QList< QuartzView *> views(const QString &categoryId) const;
+    QList<QuartzView*> views(const QString& categoryId) const;
 
-    QuartzView * currentView() const;
+    QuartzView* currentView() const;
 
     const QString currentCategory() const;
 
@@ -52,18 +52,17 @@ public:
 
     void selectView(QString viewId);
 
-    template<typename T>
-    T *view(const QString &viewId) const
-    {
-        return dynamic_cast<T *>(view(viewId));
+    template <typename T>
+    T* view(const QString& viewId) const {
+        return dynamic_cast<T*>(view(viewId));
     }
 
 public:
-    const QString & extensionType() const override;
+    const QString& extensionType() const override;
 
-    const QString & extensionAdapterName() const override;
+    const QString& extensionAdapterName() const override;
 
-    bool handleExtension(Ext::Extension *extension) override;
+    bool handleExtension(Ext::Extension* extension) override;
 
     bool finalizeExtension() override;
 
@@ -72,7 +71,6 @@ public:
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-}
+} // namespace Quartz

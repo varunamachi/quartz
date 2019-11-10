@@ -11,20 +11,19 @@ namespace Quartz { namespace Http {
 class HttpRequest;
 class HttpResponse;
 
-class HttpParserUtil
-{
+class HttpParserUtil {
 public:
     HttpParserUtil() = delete;
 
     ~HttpParserUtil() = delete;
 
-    static std::unique_ptr<HttpRequest> parseRequest(QByteArray &data);
+    static std::unique_ptr<HttpRequest> parseRequest(QByteArray& data);
 
-    static std::unique_ptr<HttpResponse> parseResponse(QByteArray &data);
+    static std::unique_ptr<HttpResponse> parseResponse(QByteArray& data);
 
-    static Method toMethod(const QString &meth);
+    static Method toMethod(const QString& meth);
 
 private:
 };
 
-} }
+}} // namespace Quartz::Http

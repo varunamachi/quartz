@@ -18,8 +18,7 @@
 
 namespace Quartz {
 
-void updatePalatte(const QString &name, QColor value, QPalette &palette)
-{
+void updatePalatte(const QString& name, QColor value, QPalette& palette) {
     if (name == "Window") {
         palette.setColor(QPalette::Window, value);
     } else if (name == "WindowText") {
@@ -49,14 +48,10 @@ void updatePalatte(const QString &name, QColor value, QPalette &palette)
     }
 }
 
-
-ThemeParser::ThemeParser()
-{
-
+ThemeParser::ThemeParser() {
 }
 
-std::unique_ptr<Theme> ThemeParser::parse(const QString &content)
-{
+std::unique_ptr<Theme> ThemeParser::parse(const QString& content) {
     std::unique_ptr<Theme> theme;
     if (content.isNull()) {
         QZ_ERROR("Qz:Cmn:Theme") << "Theme content empty";
@@ -69,7 +64,7 @@ std::unique_ptr<Theme> ThemeParser::parse(const QString &content)
         auto root = doc.documentElement();
         if (root.tagName() == "theme") {
             auto name = root.toElement().attribute("name");
-            if (! name.isEmpty()) {
+            if (!name.isEmpty()) {
                 theme = std::make_unique<Theme>(name);
             } else {
                 QZ_ERROR("Qz:Cmn:Theme") << "Theme name is empty";
@@ -78,18 +73,15 @@ std::unique_ptr<Theme> ThemeParser::parse(const QString &content)
             QZ_ERROR("Qz:Cmn:Theme") << "Failed to find theme tag at the root";
         }
     } else {
-        QZ_ERROR("Qz:Cmn:Theme")
-                << "Failed to read config XML content at " << errorLine
-                << " Msg: " << errorMsg;
+        QZ_ERROR("Qz:Cmn:Theme") << "Failed to read config XML content at "
+                                 << errorLine << " Msg: " << errorMsg;
     }
     return theme;
 }
 
-bool ThemeParser::parseDeclarations(const QDomElement &el, Theme & theme)
-{
+bool ThemeParser::parseDeclarations(const QDomElement& el, Theme& theme) {
     auto result = true;
-    for (auto node = el.firstChildElement("item");
-         !node.isNull();
+    for (auto node = el.firstChildElement("item"); !node.isNull();
          node = el.nextSiblingElement("item")) {
         auto type = node.attribute("type");
         auto name = node.attribute("name");
@@ -112,7 +104,8 @@ bool ThemeParser::parseDeclarations(const QDomElement &el, Theme & theme)
                 theme.setImage(name, img);
             } else if (type == "gradient") {
                 QZ_WARN("Qz:Theme") << "Gradients are not supported at "
-                                       "this time, name: " << name;
+                                       "this time, name: "
+                                    << name;
             } else {
                 QZ_WARN("Qz:Theme") << "Invalid declaration type '" << type
                                     << "' given. Ignoring...";
@@ -124,12 +117,10 @@ bool ThemeParser::parseDeclarations(const QDomElement &el, Theme & theme)
     return result;
 }
 
-bool ThemeParser::parsePalettes(const QDomElement &el, Theme & /*theme*/)
-{
+bool ThemeParser::parsePalettes(const QDomElement& el, Theme& /*theme*/) {
     auto result = true;
     QPalette palette;
-    for (auto node = el.firstChildElement("color");
-         !node.isNull();
+    for (auto node = el.firstChildElement("color"); !node.isNull();
          node = el.nextSiblingElement("color")) {
         auto name = node.attribute("name");
         auto value = node.attribute("value");
@@ -149,15 +140,13 @@ bool ThemeParser::parsePalettes(const QDomElement &el, Theme & /*theme*/)
     return result;
 }
 
-bool ThemeParser::parseStylesheet(const QDomElement &el, Theme & theme)
-{
+bool ThemeParser::parseStylesheet(const QDomElement& el, Theme& theme) {
     auto result = false;
     auto css = QString();
-    //First check if this file refers to a CSS file
+    // First check if this file refers to a CSS file
     ///@TODO - relative path? then what is the root? From executable path?
-    ///User configuration directory?
-    for (auto node = el.firstChildElement("file");
-         !node.isNull();
+    /// User configuration directory?
+    for (auto node = el.firstChildElement("file"); !node.isNull();
          node = el.nextSiblingElement("file")) {
         auto path = node.attribute("path");
         ///@TODO Need to expand path into absolute
@@ -169,12 +158,13 @@ bool ThemeParser::parseStylesheet(const QDomElement &el, Theme & theme)
             QZ_WARN("Qz:Theme") << "Invalid CSS file '" << path << "' given";
         }
     }
-    //If we were successful in reading the CSS file, we ignore the CDATA section
+    // If we were successful in reading the CSS file, we ignore the CDATA
+    // section
     if (!result) {
-        //consider only the first content tag
+        // consider only the first content tag
         auto content = el.firstChildElement("content");
         auto children = content.toElement().childNodes();
-        for (auto i = 0; i < children.size(); ++ i) {
+        for (auto i = 0; i < children.size(); ++i) {
             auto child = children.at(i);
             if (child.isCDATASection()) {
                 css = child.toCDATASection().data();
@@ -182,21 +172,18 @@ bool ThemeParser::parseStylesheet(const QDomElement &el, Theme & theme)
         }
     }
     if (result) {
-        //Resolve mustache variables
+        // Resolve mustache variables
         MustacheTemplateProcessor tmplProcessor;
-        auto resolved = tmplProcessor.process(
-                    css,
-                    theme.declarations());
+        auto resolved = tmplProcessor.process(css, theme.declarations());
         result = !tmplProcessor.hasError();
         if (result) {
             theme.setApplicationCSS(resolved);
         } else {
-            QZ_WARN("Qz:Theme")
-                    << "Failed to generate application css: "
-                    << tmplProcessor.lastError();
+            QZ_WARN("Qz:Theme") << "Failed to generate application css: "
+                                << tmplProcessor.lastError();
         }
     }
     return result;
 }
 
-}
+} // namespace Quartz

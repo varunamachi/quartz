@@ -8,7 +8,6 @@
 
 class QStackedWidget;
 
-
 namespace Quartz {
 
 class QzScroller;
@@ -20,28 +19,23 @@ enum class AutoSelectionPolicy {
     DoNotSelectAny,
 };
 
-class QUARTZ_COMMON_API AbstractContainer : public QWidget
-{
+class QUARTZ_COMMON_API AbstractContainer : public QWidget {
     Q_OBJECT
 public:
-    enum class Position
-    {
-        Before,
-        After
-    };
+    enum class Position { Before, After };
 
     explicit AbstractContainer(int selectorDimention,
                                int buttonDimention,
                                Position selectorPosition,
                                Qt::Orientation orientation,
-                               QWidget *parent = nullptr);
+                               QWidget* parent = nullptr);
 
     ~AbstractContainer();
 
 public:
-    QWidget * widget(const QString &id) const;
+    QWidget* widget(const QString& id) const;
 
-    QWidget * selectedWidget() const;
+    QWidget* selectedWidget() const;
 
     QString currentId() const;
 
@@ -51,9 +45,9 @@ public:
 
     bool isEmpty();
 
-    QStackedWidget * stackedWidget() const;
+    QStackedWidget* stackedWidget() const;
 
-    QzScroller * selector() const;
+    QzScroller* selector() const;
 
     Position selectorPosition() const;
 
@@ -70,33 +64,32 @@ public:
     virtual QString containerType() const = 0;
 
 public Q_SLOTS:
-    void addWidget(const QString &id,
-                    const QString &displayName,
-                    const QIcon &icon,
-                    const QIcon &activeIcon,
-                    QWidget *widget);
+    void addWidget(const QString& id,
+                   const QString& displayName,
+                   const QIcon& icon,
+                   const QIcon& activeIcon,
+                   QWidget* widget);
 
-    void addWidget(const QString &id,
-                    const QString &displayName,
-                    QWidget *widget);
+    void addWidget(const QString& id,
+                   const QString& displayName,
+                   QWidget* widget);
 
-    void removeWidget(const QString &id);
+    void removeWidget(const QString& id);
 
-    void removeWidget(QWidget *widget);
+    void removeWidget(QWidget* widget);
 
-    void select(const QString &id);
+    void select(const QString& id);
 
     void hideAll();
 
     void setAutoSelectionPolicy(AutoSelectionPolicy policy);
 
 Q_SIGNALS:
-    void sigSelected(const QString &id, QWidget *widget);
+    void sigSelected(const QString& id, QWidget* widget);
 
-    void sigAdded(const QString &id, QWidget *widget);
+    void sigAdded(const QString& id, QWidget* widget);
 
-    void sigRemoved(const QString &id);
-
+    void sigRemoved(const QString& id);
 
 private Q_SLOTS:
     void updateIndeces();
@@ -106,23 +99,19 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-
-class QUARTZ_COMMON_API StackedContainer : public AbstractContainer
-{
+class QUARTZ_COMMON_API StackedContainer : public AbstractContainer {
     Q_OBJECT
 
 public:
     explicit StackedContainer(int selectorDimention,
-                               int buttonDimention,
-                               Position selectorPosition,
-                               Qt::Orientation orientation,
-                               QWidget *parent = nullptr);
+                              int buttonDimention,
+                              Position selectorPosition,
+                              Qt::Orientation orientation,
+                              QWidget* parent = nullptr);
 
     ~StackedContainer();
 
     QString containerType() const override;
 };
 
-
-}
-
+} // namespace Quartz

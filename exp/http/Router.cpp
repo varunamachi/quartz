@@ -3,20 +3,13 @@
 
 namespace Quartz { namespace Http {
 
-struct Router::Data {
-
-};
+struct Router::Data {};
 
 Router::Router()
-    : m_data(std::make_unique<Data>())
-{
-
+    : m_data(std::make_unique<Data>()) {
 }
 
-Router::~Router()
-{
-
+Router::~Router() {
 }
 
-
-} }
+}} // namespace Quartz::Http

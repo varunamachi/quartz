@@ -16,29 +16,26 @@ class AbstractFileHandler;
 class FileHandlerInfo;
 
 class QUARTZ_BASE_API FileHandlerManager
-        : public ContentWidget
-        , public Ext::IExtensionAdapter
-{
+    : public ContentWidget
+    , public Ext::IExtensionAdapter {
     Q_OBJECT
 
 public:
-    explicit FileHandlerManager(QWidget *parent = nullptr);
+    explicit FileHandlerManager(QWidget* parent = nullptr);
 
     ~FileHandlerManager() override;
 
-    void registerFileHandler(
-            std::shared_ptr<FileHandlerInfo> creator);
+    void registerFileHandler(std::shared_ptr<FileHandlerInfo> creator);
 
-    void handle(const QString &path);
+    void handle(const QString& path);
 
-    const QString &extensionType() const override;
+    const QString& extensionType() const override;
 
-    const QString &extensionAdapterName() const override;
+    const QString& extensionAdapterName() const override;
 
-    bool handleExtension(Ext::Extension *extension) override;
+    bool handleExtension(Ext::Extension* extension) override;
 
     bool finalizeExtension() override;
-
 
     static const QString CONTENT_ID;
     static const QString CONTENT_NAME;
@@ -49,13 +46,11 @@ private Q_SLOTS:
     void remove(int index);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
-
 };
 
-}
+} // namespace Quartz

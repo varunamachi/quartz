@@ -22,16 +22,15 @@
 
 namespace Quartz {
 
-class QUARTZ_COMMON_API OrientationButton : public QPushButton
-{
+class QUARTZ_COMMON_API OrientationButton : public QPushButton {
 public:
     OrientationButton(QWidget* parent = 0);
 
     OrientationButton(const QString& text, QWidget* parent = 0);
 
     OrientationButton(const QIcon& icon,
-                       const QString& text,
-                       QWidget* parent = 0);
+                      const QString& text,
+                      QWidget* parent = 0);
 
     ~OrientationButton();
 
@@ -62,5 +61,4 @@ private:
     bool m_mirrored;
 };
 
-}
-
+} // namespace Quartz

@@ -7,11 +7,10 @@
 
 namespace Quartz { namespace Ext { namespace Sample {
 
-class TitleBarButton : public QuartzItem
-{
+class TitleBarButton : public QuartzItem {
     Q_OBJECT
 public:
-    explicit TitleBarButton(QWidget *parent = nullptr);
+    explicit TitleBarButton(QWidget* parent = nullptr);
 
     ~TitleBarButton();
 
@@ -20,9 +19,7 @@ public:
     static const QString ITEM_CATERGORY;
 };
 
-
-class TitleItemProvider : public AbstractTitleItemProvider
-{
+class TitleItemProvider : public AbstractTitleItemProvider {
 public:
     TitleItemProvider();
 
@@ -32,14 +29,13 @@ public:
 
     bool destroy() override;
 
-    QVector< QuartzItem *> titleItems() const override;
+    QVector<QuartzItem*> titleItems() const override;
 
-    static const QString     EXTENSION_ID;
+    static const QString EXTENSION_ID;
 
-    static const QString     EXTENSION_NAME;
+    static const QString EXTENSION_NAME;
 
 private:
-
 };
 
-} } }
+}}} // namespace Quartz::Ext::Sample

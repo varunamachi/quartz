@@ -10,16 +10,15 @@ struct IconInfo;
 
 namespace Ext { namespace IconFontExplorer {
 
-class IconDetails : public QWidget
-{
+class IconDetails : public QWidget {
     Q_OBJECT
 public:
-    IconDetails(QWidget *parent = nullptr);
+    IconDetails(QWidget* parent = nullptr);
 
     ~IconDetails();
 
 public slots:
-    void setIconInfo(const IconInfo *info);
+    void setIconInfo(const IconInfo* info);
 
     void update();
 
@@ -28,4 +27,5 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} } }
+}} // namespace Ext::IconFontExplorer
+} // namespace Quartz

@@ -19,54 +19,38 @@
 
 #include "OrientationButton.h"
 
-
 namespace Quartz {
 
-
 OrientationButton::OrientationButton(QWidget* parent)
-        : QPushButton(parent)
-{
+    : QPushButton(parent) {
     init();
 }
 
-
-OrientationButton::OrientationButton(const QString& text,
-                                      QWidget* parent)
-    : QPushButton(text, parent)
-{
+OrientationButton::OrientationButton(const QString& text, QWidget* parent)
+    : QPushButton(text, parent) {
     init();
 }
 
-
-OrientationButton::OrientationButton(const QIcon &icon,
-                                      const QString &text,
-                                      QWidget *parent)
-    : QPushButton(icon, text, parent)
-{
+OrientationButton::OrientationButton(const QIcon& icon,
+                                     const QString& text,
+                                     QWidget* parent)
+    : QPushButton(icon, text, parent) {
     init();
 }
 
-
-OrientationButton::~OrientationButton()
-{
+OrientationButton::~OrientationButton() {
 }
 
-
-void OrientationButton::init()
-{
+void OrientationButton::init() {
     m_orientation = Qt::Horizontal;
     m_mirrored = false;
 }
 
-
-Qt::Orientation OrientationButton::orientation() const
-{
+Qt::Orientation OrientationButton::orientation() const {
     return m_orientation;
 }
 
-
-void OrientationButton::setOrientation(Qt::Orientation orientation)
-{
+void OrientationButton::setOrientation(Qt::Orientation orientation) {
     m_orientation = orientation;
     switch (orientation) {
     case Qt::Horizontal:
@@ -79,21 +63,15 @@ void OrientationButton::setOrientation(Qt::Orientation orientation)
     }
 }
 
-
-bool OrientationButton::mirrored() const
-{
+bool OrientationButton::mirrored() const {
     return m_mirrored;
 }
 
-
-void OrientationButton::setMirrored(bool mirrored)
-{
+void OrientationButton::setMirrored(bool mirrored) {
     m_mirrored = mirrored;
 }
 
-
-QSize OrientationButton::sizeHint() const
-{
+QSize OrientationButton::sizeHint() const {
     QSize size = QPushButton::sizeHint();
     if (m_orientation == Qt::Vertical) {
         size.transpose();
@@ -101,9 +79,7 @@ QSize OrientationButton::sizeHint() const
     return size;
 }
 
-
-QSize OrientationButton::minimumSizeHint() const
-{
+QSize OrientationButton::minimumSizeHint() const {
     QSize size = originalSizeHint();
     if (m_orientation == Qt::Vertical) {
         size.transpose();
@@ -111,25 +87,21 @@ QSize OrientationButton::minimumSizeHint() const
     return size;
 }
 
-
-void OrientationButton::paintEvent(QPaintEvent* event)
-{
+void OrientationButton::paintEvent(QPaintEvent* event) {
     Q_UNUSED(event);
     QStylePainter p(this);
-    switch(m_orientation)
-    {
+    switch (m_orientation) {
     case Qt::Horizontal:
         if (m_mirrored) {
             p.rotate(180);
-            p.translate(- width(), - height());
+            p.translate(-width(), -height());
         }
         break;
     case Qt::Vertical:
         if (m_mirrored) {
             p.rotate(-90);
             p.translate(-height(), 0);
-        }
-        else {
+        } else {
             p.rotate(90);
             p.translate(0, -width());
         }
@@ -138,14 +110,11 @@ void OrientationButton::paintEvent(QPaintEvent* event)
     p.drawControl(QStyle::CE_PushButton, getStyleOption());
 }
 
-QSize OrientationButton::originalSizeHint() const
-{
+QSize OrientationButton::originalSizeHint() const {
     return QPushButton::minimumSizeHint();
 }
 
-
-QStyleOptionButton OrientationButton::getStyleOption() const
-{
+QStyleOptionButton OrientationButton::getStyleOption() const {
     QStyleOptionButton opt;
     opt.initFrom(this);
     if (m_orientation == Qt::Vertical) {
@@ -172,7 +141,7 @@ QStyleOptionButton OrientationButton::getStyleOption() const
     if (isChecked()) {
         opt.state |= QStyle::State_On;
     }
-    if (! isFlat() && ! isDown()) {
+    if (!isFlat() && !isDown()) {
         opt.state |= QStyle::State_Raised;
     }
     opt.text = text();
@@ -181,4 +150,4 @@ QStyleOptionButton OrientationButton::getStyleOption() const
     return opt;
 }
 
-}
+} // namespace Quartz

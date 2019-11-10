@@ -7,42 +7,32 @@
 
 namespace Quartz { namespace Ext { namespace Creator {
 
-const QString NodeProvider::EXTENSION_ID{
-    "qzp.creator.provider.node" };
-const QString NodeProvider::EXTENSION_NAME{
-    "Quartz Creator Node" };
+const QString NodeProvider::EXTENSION_ID{"qzp.creator.provider.node"};
+const QString NodeProvider::EXTENSION_NAME{"Quartz Creator Node"};
 
 NodeProvider::NodeProvider()
-    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME)
-{
-
+    : AbstractGeneralNodeProvider(EXTENSION_ID, EXTENSION_NAME) {
 }
 
-NodeProvider::~NodeProvider()
-{
-
+NodeProvider::~NodeProvider() {
 }
 
-bool NodeProvider::init()
-{
+bool NodeProvider::init() {
     return true;
 }
 
-bool NodeProvider::destroy()
-{
+bool NodeProvider::destroy() {
     return true;
 }
 
-QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const
-{
-    auto nodeInfo = std::make_shared<NodeInfo>(
-                QStringList{},
-                "Creator",
-                "qzp.creator.content.main",
-                getIcon(FAIcon::Magic));
+QVector<std::shared_ptr<NodeInfo>> NodeProvider::nodes() const {
+    auto nodeInfo = std::make_shared<NodeInfo>(QStringList{},
+                                               "Creator",
+                                               "qzp.creator.content.main",
+                                               getIcon(FAIcon::Magic));
     QVector<std::shared_ptr<NodeInfo>> nodes;
     nodes.push_back(nodeInfo);
     return nodes;
 }
 
-} } }
+}}} // namespace Quartz::Ext::Creator

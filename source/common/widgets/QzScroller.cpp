@@ -13,16 +13,15 @@
 namespace Quartz {
 
 QzScroller::QzScroller(Qt::Orientation orientation,
-                        int minimumDim,
-                        int maximumDim,
-                        QWidget *parent)
+                       int minimumDim,
+                       int maximumDim,
+                       QWidget* parent)
     : QWidget(parent)
     , m_orientation(orientation)
     , m_bckButton(new QPushButton("<", this))
     , m_fwdButton(new QPushButton(">", this))
     , m_timer(new QTimer(this))
-    , m_timeout(0)
-{
+    , m_timeout(0) {
     m_scroll = new QScrollArea(this);
     m_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -30,22 +29,21 @@ QzScroller::QzScroller(Qt::Orientation orientation,
     m_scroll->setContentsMargins(QMargins());
     m_scroll->setObjectName("qzscroller");
     m_scroll->setStyleSheet("QScrollArea#qzscroller{ border: 0px; }");
-//    auto bgc = QApplication::palette().color(QPalette::Window);
-//    bgc.setRed(bgc.red() + 10);
-//    this->setStyleSheet("background-color: " + bgc.name(QColor::HexArgb));
-    QWidget *innerWidget = new QWidget(this);
+    //    auto bgc = QApplication::palette().color(QPalette::Window);
+    //    bgc.setRed(bgc.red() + 10);
+    //    this->setStyleSheet("background-color: " + bgc.name(QColor::HexArgb));
+    QWidget* innerWidget = new QWidget(this);
     if (orientation == Qt::Horizontal) {
         m_layout = new QHBoxLayout();
         m_scroll->setMaximumHeight(maximumDim);
         m_scroll->setMinimumHeight(minimumDim);
-    }
-    else {
+    } else {
         m_layout = new QVBoxLayout();
         m_scroll->setMaximumWidth(maximumDim);
         m_scroll->setMinimumWidth(minimumDim);
     }
     m_layout->setContentsMargins(QMargins());
-//    m_layout->setMargin(0);
+    //    m_layout->setMargin(0);
     m_layout->setSpacing(0);
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     innerWidget->setLayout(m_layout);
@@ -56,13 +54,13 @@ QzScroller::QzScroller(Qt::Orientation orientation,
     m_fwdButton->setVisible(false);
     m_bckButton->setVisible(false);
 
-//    QStringList items;
-//    items << "One" << "Two" << "Three" << "Four";
-//    for (int i = 0; i < 10; ++ i) {
-//        QComboBox *box = new QComboBox(innerWidget);
-//        box->addItems(items);
-//        m_layout->addWidget(box);
-//    }
+    //    QStringList items;
+    //    items << "One" << "Two" << "Three" << "Four";
+    //    for (int i = 0; i < 10; ++ i) {
+    //        QComboBox *box = new QComboBox(innerWidget);
+    //        box->addItems(items);
+    //        m_layout->addWidget(box);
+    //    }
 
     m_bckButton->setMaximumWidth(20);
     m_fwdButton->setMaximumWidth(20);
@@ -74,7 +72,7 @@ QzScroller::QzScroller(Qt::Orientation orientation,
     m_fwdButton->setContentsMargins({});
 
     m_scroll->setWidget(innerWidget);
-    QBoxLayout *mainLayout = nullptr;
+    QBoxLayout* mainLayout = nullptr;
     if (orientation == Qt::Horizontal) {
         mainLayout = new QHBoxLayout();
         mainLayout->addWidget(m_bckButton);
@@ -82,52 +80,33 @@ QzScroller::QzScroller(Qt::Orientation orientation,
         mainLayout->addWidget(m_scroll);
         mainLayout->addWidget(m_fwdButton);
         mainLayout->setAlignment(m_fwdButton, Qt::AlignRight);
-//        this->setContentsMargins(5, 0, 5, 0);
-    }
-    else {
+        //        this->setContentsMargins(5, 0, 5, 0);
+    } else {
         mainLayout = new QVBoxLayout();
         mainLayout->addWidget(m_bckButton);
         mainLayout->setAlignment(m_bckButton, Qt::AlignTop);
         mainLayout->addWidget(m_scroll);
         mainLayout->addWidget(m_fwdButton);
         mainLayout->setAlignment(m_fwdButton, Qt::AlignBottom);
-//        this->setContentsMargins(0, 5, 0, 5);
+        //        this->setContentsMargins(0, 5, 0, 5);
     }
     this->setContentsMargins(QMargins{});
     mainLayout->setContentsMargins(QMargins());
     this->setLayout(mainLayout);
 
-    connect(m_fwdButton,
-             &QAbstractButton::pressed,
-             this,
-             &QzScroller::start);
-    connect(m_fwdButton,
-             &QAbstractButton::released,
-             this,
-             &QzScroller::stop);
-    connect(m_bckButton,
-             &QAbstractButton::pressed,
-             this,
-             &QzScroller::start);
-    connect(m_bckButton,
-             &QAbstractButton::released,
-             this,
-             &QzScroller::stop);
-    connect(m_timer,
-             &QTimer::timeout,
-             this,
-             &QzScroller::onTimeout);
-//    this->setStyleSheet("background-color: red");
-
+    connect(m_fwdButton, &QAbstractButton::pressed, this, &QzScroller::start);
+    connect(m_fwdButton, &QAbstractButton::released, this, &QzScroller::stop);
+    connect(m_bckButton, &QAbstractButton::pressed, this, &QzScroller::start);
+    connect(m_bckButton, &QAbstractButton::released, this, &QzScroller::stop);
+    connect(m_timer, &QTimer::timeout, this, &QzScroller::onTimeout);
+    //    this->setStyleSheet("background-color: red");
 }
 
-
-QWidgetList QzScroller::widgets() const
-{
+QWidgetList QzScroller::widgets() const {
     QWidgetList widgets;
-    for (int i = 0; i < m_layout->count(); ++ i) {
-        QLayoutItem *item = m_layout->itemAt(i);
-        QWidget *widget = item->widget();
+    for (int i = 0; i < m_layout->count(); ++i) {
+        QLayoutItem* item = m_layout->itemAt(i);
+        QWidget* widget = item->widget();
         if (widget != nullptr) {
             widgets.append(widget);
         }
@@ -135,77 +114,61 @@ QWidgetList QzScroller::widgets() const
     return widgets;
 }
 
-
-void QzScroller::addWidget(QWidget *widget)
-{
+void QzScroller::addWidget(QWidget* widget) {
     if (widget != nullptr) {
-//        m_layout->insertWidget(m_layout->count() - 1, widget);
+        //        m_layout->insertWidget(m_layout->count() - 1, widget);
         m_layout->addWidget(widget);
         adjustArrows();
     }
 }
 
-
-void QzScroller::removeWidget(QWidget *widget)
-{
+void QzScroller::removeWidget(QWidget* widget) {
     if (widget != nullptr) {
         m_layout->removeWidget(widget);
         adjustArrows();
     }
 }
 
-void QzScroller::resizeEvent(QResizeEvent *event)
-{
+void QzScroller::resizeEvent(QResizeEvent* event) {
     adjustArrows();
     QWidget::resizeEvent(event);
 }
 
-
-
-void QzScroller::start()
-{
+void QzScroller::start() {
     m_timeout = 100;
     onTimeout();
 }
 
-
-void QzScroller::stop()
-{
+void QzScroller::stop() {
     m_timer->stop();
 }
 
-
-void QzScroller::onTimeout()
-{
+void QzScroller::onTimeout() {
     if (m_timeout > 10) {
         m_timer->start(m_timeout);
         m_timeout = m_timeout - 10;
     }
-    QScrollBar *bar = m_orientation == Qt::Horizontal
-            ? m_scroll->horizontalScrollBar()
-            : m_scroll->verticalScrollBar();
+    QScrollBar* bar = m_orientation == Qt::Horizontal
+        ? m_scroll->horizontalScrollBar()
+        : m_scroll->verticalScrollBar();
     int val = bar->value();
     if (m_fwdButton->isDown()) {
         bar->setValue(val + 8);
-    }
-    else if (m_bckButton->isDown()){
+    } else if (m_bckButton->isDown()) {
         bar->setValue(val - 8);
     }
 }
 
-
-void QzScroller::adjustArrows()
-{
+void QzScroller::adjustArrows() {
     int occupied = 0;
-    for (int i = 0; i < m_layout->count(); ++ i) {
-        QLayoutItem *item = m_layout->itemAt(i);
+    for (int i = 0; i < m_layout->count(); ++i) {
+        QLayoutItem* item = m_layout->itemAt(i);
         QRect rect = item->geometry();
-        //Consider only if its not a spacer
-        if (item->spacerItem() == nullptr)  {
+        // Consider only if its not a spacer
+        if (item->spacerItem() == nullptr) {
             if (m_orientation == Qt::Horizontal) {
                 occupied += rect.width();
-            }
-            else {
+            } else {
                 occupied += rect.height();
             }
         }
@@ -213,17 +176,14 @@ void QzScroller::adjustArrows()
     if (m_orientation == Qt::Horizontal && occupied > this->width()) {
         m_fwdButton->setVisible(true);
         m_bckButton->setVisible(true);
-    }
-    else if (m_orientation == Qt::Vertical && occupied > this->height()) {
+    } else if (m_orientation == Qt::Vertical && occupied > this->height()) {
         m_fwdButton->setVisible(true);
         m_bckButton->setVisible(true);
-    }
-    else {
+    } else {
         m_fwdButton->setVisible(false);
         m_bckButton->setVisible(false);
     }
     m_layout->update();
 }
 
-
-}
+} // namespace Quartz

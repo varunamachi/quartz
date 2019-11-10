@@ -34,46 +34,41 @@ class AbstractLogTarget;
 class LogMessage;
 QZ_INTERFACE ILogFilter;
 
-class QUARTZ_CORE_API AbstractLogDispatcher
-{
+class QUARTZ_CORE_API AbstractLogDispatcher {
 public:
     AbstractLogDispatcher();
 
     virtual ~AbstractLogDispatcher();
 
-    bool addTarget(std::unique_ptr<AbstractLogTarget> &&target);
+    bool addTarget(std::unique_ptr<AbstractLogTarget>&& target);
 
-    bool addTarget(AbstractLogTarget *target);
+    bool addTarget(AbstractLogTarget* target);
 
-    AbstractLogTarget * target(QString targetId);
+    AbstractLogTarget* target(QString targetId);
 
-    bool setTargetEnabledState(const QString &trgId, bool value);
+    bool setTargetEnabledState(const QString& trgId, bool value);
 
-    bool removeTarget(const QString &targetId);
+    bool removeTarget(const QString& targetId);
 
-    bool installFilter(std::unique_ptr<ILogFilter> &&filter,
-                        const QString &trgtId);
+    bool installFilter(std::unique_ptr<ILogFilter>&& filter,
+                       const QString& trgtId);
 
-    bool installFilter(ILogFilter *filter, const QString &targetId);
+    bool installFilter(ILogFilter* filter, const QString& targetId);
 
-    bool uninstallFilter(const QString &filterId,
-                          const QString &trgtId);
+    bool uninstallFilter(const QString& filterId, const QString& trgtId);
 
     virtual void flush();
 
-    virtual void write(LogMessage *message) = 0;
+    virtual void write(LogMessage* message) = 0;
 
     virtual void stopDispatch() = 0;
 
-
 protected:
-    void writeToTargets(LogMessage *msg);
+    void writeToTargets(LogMessage* msg);
 
 private:
     class Impl;
     std::unique_ptr<Impl> m_impl;
-
 };
 
-} } // end of namespaces
-
+}} // namespace Quartz::Logger

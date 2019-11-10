@@ -24,19 +24,16 @@
 #include <QDateTime>
 #include <QDebug>
 
-
 #include "FileTarget.h"
 #include "LogUtil.h"
 
 namespace Quartz { namespace Logger {
 
-class FileTarget::Impl
-{
+class FileTarget::Impl {
 public:
-    Impl(const QString &logDirPath,
-          const QString &fileSuffix);
+    Impl(const QString& logDirPath, const QString& fileSuffix);
 
-    void write(const QString &&message);
+    void write(const QString&& message);
 
     void flush();
 
@@ -56,24 +53,17 @@ private:
     QTextStream m_stream;
 
     bool m_valid;
-
 };
 
-
-
-FileTarget::Impl::Impl(const QString &logDirPath,
-                        const QString &fileSuffix)
+FileTarget::Impl::Impl(const QString& logDirPath, const QString& fileSuffix)
     : m_logDirPath(logDirPath)
     , m_fileSuffix(fileSuffix)
     , m_prevDate(QDateTime::currentDateTime())
-    , m_valid(false)
-{
+    , m_valid(false) {
     initFile();
 }
 
-
-void FileTarget::Impl::write(const QString &&message)
-{
+void FileTarget::Impl::write(const QString&& message) {
     if (m_prevDate.daysTo(QDateTime::currentDateTime()) != 0) {
         m_stream.flush();
         initFile();
@@ -83,62 +73,45 @@ void FileTarget::Impl::write(const QString &&message)
     }
 }
 
-
-void FileTarget::Impl::flush()
-{
+void FileTarget::Impl::flush() {
     if (m_valid) {
         m_stream.flush();
     }
 }
 
-
-void FileTarget::Impl::initFile()
-{
-    QString fileName = m_prevDate.toString("yyyy_MM_dd_")
-                       + m_fileSuffix
-                       + ".log";
+void FileTarget::Impl::initFile() {
+    QString fileName = m_prevDate.toString("yyyy_MM_dd_") + m_fileSuffix
+        + ".log";
     auto filePath = m_logDirPath + "/" + fileName;
     m_stream.reset();
     m_logFile = std::unique_ptr<QFile>(new QFile(filePath));
-    if (m_logFile->open(QIODevice::WriteOnly
-                         | QIODevice::Append
-                         | QIODevice::Unbuffered)) {
+    if (m_logFile->open(QIODevice::WriteOnly | QIODevice::Append
+                        | QIODevice::Unbuffered)) {
         m_stream.setDevice(m_logFile.get());
         m_valid = true;
-    }
-    else {
+    } else {
         qDebug() << "Could not open the file " << filePath;
         m_valid = false;
     }
 }
 
-
-
 //---------------- File Target -----------------------------
 const QString FileTarget::TARGET_ID = QString("FileLogger");
 
-FileTarget::FileTarget(const QString &logDirPath,
-                        const QString &fileSuffix)
+FileTarget::FileTarget(const QString& logDirPath, const QString& fileSuffix)
     : AbstractLogTarget(TARGET_ID)
-    , m_impl(new Impl(logDirPath, fileSuffix))
-{
-
+    , m_impl(new Impl(logDirPath, fileSuffix)) {
 }
 
-FileTarget::~FileTarget()
-{
+FileTarget::~FileTarget() {
 }
 
-
-void FileTarget::write(QString &&message)
-{
+void FileTarget::write(QString&& message) {
     m_impl->write(std::move(message));
 }
 
-void FileTarget::flush()
-{
+void FileTarget::flush() {
     m_impl->flush();
 }
 
-
-} } //end of namespaces
+}} // namespace Quartz::Logger

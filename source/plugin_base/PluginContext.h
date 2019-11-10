@@ -10,32 +10,32 @@ namespace Quartz {
 
 class QzAppContext;
 class ConfigManager;
-namespace Logger { class Logger; }
+namespace Logger {
+class Logger;
+}
 
 namespace Ext {
 
 class Plugin;
 class PluginEnv;
 
-class PluginContext
-{
+class PluginContext {
 public:
     ~PluginContext();
 
-    QzAppContext * appContext() const;
+    QzAppContext* appContext() const;
 
-    Plugin * plugin() const;
+    Plugin* plugin() const;
 
-    PluginEnv * env() const;
+    PluginEnv* env() const;
 
-    void setPlugin(std::unique_ptr<Plugin> &&plugin);
+    void setPlugin(std::unique_ptr<Plugin>&& plugin);
 
     static void destroy();
 
-    static void init(std::unique_ptr<PluginEnv> env,
-                     QzAppContext *appContext);
+    static void init(std::unique_ptr<PluginEnv> env, QzAppContext* appContext);
 
-    static PluginContext * instance();
+    static PluginContext* instance();
 
 private:
     struct Data;
@@ -43,34 +43,28 @@ private:
 
     static std::unique_ptr<PluginContext> s_instance;
 
-    PluginContext(std::unique_ptr<PluginEnv> &&env,
-                  QzAppContext *appContext);
+    PluginContext(std::unique_ptr<PluginEnv>&& env, QzAppContext* appContext);
 };
 
-} }
+} // namespace Ext
+} // namespace Quartz
 
-
-inline Quartz::Ext::PluginContext * pluginContext()
-{
+inline Quartz::Ext::PluginContext* pluginContext() {
     return Quartz::Ext::PluginContext::instance();
 }
 
-inline Quartz::QzAppContext * appContext()
-{
+inline Quartz::QzAppContext* appContext() {
     return Quartz::Ext::PluginContext::instance()->appContext();
 }
 
-inline Quartz::Ext::PluginEnv * pluginEnv()
-{
+inline Quartz::Ext::PluginEnv* pluginEnv() {
     return Quartz::Ext::PluginContext::instance()->env();
 }
 
-inline Quartz::Ext::Plugin * plugin()
-{
+inline Quartz::Ext::Plugin* plugin() {
     return pluginContext()->plugin();
 }
 
-inline Quartz::ConfigManager * confman()
-{
+inline Quartz::ConfigManager* confman() {
     return pluginContext()->appContext()->configManager();
 }

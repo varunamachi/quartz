@@ -12,21 +12,20 @@ class QStringList;
 
 namespace Quartz { namespace Ext {
 
-class QUARTZ_CORE_API Extension
-{
+class QUARTZ_CORE_API Extension {
 
 public:
-    Extension(const QString &extensionId,
-               const QString &extensionName,
-               const QString &extensionType);
+    Extension(const QString& extensionId,
+              const QString& extensionName,
+              const QString& extensionType);
 
     virtual ~Extension();
 
-    const QString & extensionId() const;
+    const QString& extensionId() const;
 
-    const QString & extensionName() const;
+    const QString& extensionName() const;
 
-    const QString & extensionType() const;
+    const QString& extensionType() const;
 
     virtual bool init();
 
@@ -37,5 +36,4 @@ private:
     std::unique_ptr<Data> m_data;
 };
 
-} }
-
+}} // namespace Quartz::Ext

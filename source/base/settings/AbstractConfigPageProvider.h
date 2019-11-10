@@ -7,22 +7,18 @@ class AbstractConfigPage;
 
 namespace Quartz {
 
-class QUARTZ_BASE_API AbstractConfigPageProvider : public Ext::Extension
-{
+class QUARTZ_BASE_API AbstractConfigPageProvider : public Ext::Extension {
 public:
-    AbstractConfigPageProvider(const QString &pluginId,
-                                const QString &pluginName);
+    AbstractConfigPageProvider(const QString& pluginId,
+                               const QString& pluginName);
 
     ~AbstractConfigPageProvider();
 
-    virtual QVector< AbstractConfigPage *> configPages() const = 0;
+    virtual QVector<AbstractConfigPage*> configPages() const = 0;
 
     static const QString EXTENSION_TYPE;
 
 private:
-
 };
 
-
-
-}
+} // namespace Quartz

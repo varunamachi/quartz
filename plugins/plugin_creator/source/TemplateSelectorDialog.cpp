@@ -17,32 +17,26 @@
 
 namespace Quartz { namespace Ext { namespace Creator {
 
-struct TemplateSelectorDialog::Data
-{
-    Data(TemplateManager *templateManager,
-          TemplateSelectorDialog *parent)
+struct TemplateSelectorDialog::Data {
+    Data(TemplateManager* templateManager, TemplateSelectorDialog* parent)
         : m_templateManager(templateManager)
         , m_filterEdit(new QLineEdit(parent))
-        , m_view(new QzTreeView(parent))
-    {
-
+        , m_view(new QzTreeView(parent)) {
     }
 
-    TemplateManager *m_templateManager;
+    TemplateManager* m_templateManager;
 
-    QLineEdit *m_filterEdit;
+    QLineEdit* m_filterEdit;
 
-    QzTreeView *m_view;
+    QzTreeView* m_view;
 
     //    QHash< TemplateInstance *, VarConfigWidget *> m_configWidgets;
 };
 
-TemplateSelectorDialog::TemplateSelectorDialog(
-        TemplateManager *templateManager,
-        QWidget* parent)
+TemplateSelectorDialog::TemplateSelectorDialog(TemplateManager* templateManager,
+                                               QWidget* parent)
     : QDialog(parent)
-    , m_data(std::make_unique<Data>(templateManager, this))
-{
+    , m_data(std::make_unique<Data>(templateManager, this)) {
     auto basicFilter = new BasicSortFilter(this);
     basicFilter->setSourceModel(m_data->m_templateManager);
     m_data->m_view->setModel(basicFilter);
@@ -65,33 +59,30 @@ TemplateSelectorDialog::TemplateSelectorDialog(
     this->setLayout(main);
     this->setMinimumSize(QSize(500, 600));
 
-    connect(okBtn, &QPushButton::released, [ this ](){
+    connect(okBtn, &QPushButton::released, [this]() {
         this->accept();
     });
-    connect(cancelBtn, &QPushButton::released, [ this ](){
+    connect(cancelBtn, &QPushButton::released, [this]() {
         this->reject();
     });
-    connect(selectBtn, &QPushButton::released, [ this ](){
+    connect(selectBtn, &QPushButton::released, [this]() {
         m_data->m_templateManager->selectAll();
     });
-    connect(deselectBtn, &QPushButton::released, [ this ](){
+    connect(deselectBtn, &QPushButton::released, [this]() {
         m_data->m_templateManager->deselectAll();
     });
     connect(m_data->m_filterEdit,
-             &QLineEdit::textChanged,
-             basicFilter,
-             &BasicSortFilter::setExpression);
+            &QLineEdit::textChanged,
+            basicFilter,
+            &BasicSortFilter::setExpression);
 }
 
-TemplateSelectorDialog::~TemplateSelectorDialog()
-{
-
+TemplateSelectorDialog::~TemplateSelectorDialog() {
 }
 
-QVector< Template * > TemplateSelectorDialog::selectedTemplates() const
-{
-    QVector< Template * > selected;
-    for (auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i) {
+QVector<Template*> TemplateSelectorDialog::selectedTemplates() const {
+    QVector<Template*> selected;
+    for (auto i = 0; i < m_data->m_templateManager->numTemplates(); ++i) {
         auto t = m_data->m_templateManager->templateAt(i);
         if (t->isSelected()) {
             selected.append(t);
@@ -100,15 +91,14 @@ QVector< Template * > TemplateSelectorDialog::selectedTemplates() const
     return selected;
 }
 
-void TemplateSelectorDialog::clearSelection()
-{
-    for (auto i = 0; i < m_data->m_templateManager->numTemplates(); ++ i) {
+void TemplateSelectorDialog::clearSelection() {
+    for (auto i = 0; i < m_data->m_templateManager->numTemplates(); ++i) {
         auto t = m_data->m_templateManager->templateAt(i);
         if (t != nullptr) {
             t->setSelected(false);
         }
-//        m_data->m_templateManager->templateAt(i)->setSelected(false);
+        //        m_data->m_templateManager->templateAt(i)->setSelected(false);
     }
 }
 
-} } }
+}}} // namespace Quartz::Ext::Creator

@@ -8,15 +8,14 @@ namespace Quartz {
 
 class QuartzItem;
 
-class QUARTZ_BASE_API AbstractActionItemProvider : public Ext::Extension
-{
+class QUARTZ_BASE_API AbstractActionItemProvider : public Ext::Extension {
 public:
-    AbstractActionItemProvider(const QString &pluginId,
-                                const QString &pluginName);
+    AbstractActionItemProvider(const QString& pluginId,
+                               const QString& pluginName);
 
-    virtual QVector< QuartzItem * > actionItems() const = 0;
+    virtual QVector<QuartzItem*> actionItems() const = 0;
 
     const static QString EXTENSION_TYPE;
 };
 
-}
+} // namespace Quartz

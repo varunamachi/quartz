@@ -24,21 +24,15 @@
 
 namespace Quartz {
 
-const QString FileSystemSelector::SELECTOR_ID{ "qz.fs_selector" };
+const QString FileSystemSelector::SELECTOR_ID{"qz.fs_selector"};
 const QString FileSystemSelector::SELECTOR_NAME("Explore");
 const QString FileSystemSelector::CONFIG_PATH("explorer.path");
 const QString FileSystemSelector::CONFIG_RECENT_PATHS("explorer.recent");
 
-enum class HistoryDirection
-{
-    Backward,
-    Forward,
-    None
-};
+enum class HistoryDirection { Backward, Forward, None };
 
-struct FileSystemSelector::Data
-{
-    explicit Data(QWidget *parent)
+struct FileSystemSelector::Data {
+    explicit Data(QWidget* parent)
         : m_fsModel(new QFileSystemModel(parent))
         , m_fsView(new QTreeView(parent))
         , m_pathEdit(new QLineEdit(parent))
@@ -47,8 +41,7 @@ struct FileSystemSelector::Data
         , m_upBtn(new QPushButton(getIcon(MatIcon::ArrowUpward), "", parent))
         , m_fwdBtn(new QPushButton(getIcon(MatIcon::ArrowForward), "", parent))
         , m_menu(new QMenu(parent))
-        , m_history(false)
-    {
+        , m_history(false) {
         m_fsView->setModel(m_fsModel);
         for (int i = 1; i < m_fsModel->columnCount(); ++i) {
             m_fsView->hideColumn(i);
@@ -56,37 +49,34 @@ struct FileSystemSelector::Data
         m_fsView->header()->hide();
     }
 
-    QFileSystemModel *m_fsModel;
+    QFileSystemModel* m_fsModel;
 
-    QTreeView *m_fsView;
+    QTreeView* m_fsView;
 
-    QLineEdit *m_pathEdit;
+    QLineEdit* m_pathEdit;
 
-    QPushButton *m_browseBtn;
+    QPushButton* m_browseBtn;
 
-    QPushButton *m_backBtn;
+    QPushButton* m_backBtn;
 
-    QPushButton *m_upBtn;
+    QPushButton* m_upBtn;
 
-    QPushButton *m_fwdBtn;
+    QPushButton* m_fwdBtn;
 
-    QMenu *m_menu;
+    QMenu* m_menu;
 
     QString m_contextPath = QStringLiteral("");
 
     History m_history;
-
 };
 
-FileSystemSelector::FileSystemSelector(QWidget *parent)
-    : AbstractSelector(
-          SELECTOR_ID,
-          SELECTOR_NAME,
-          getNormalIcon(FAIcon::Eye),
-          getActiveIcon(FAIcon::Eye),
-          parent)
-    , m_data(std::make_unique<Data>(this))
-{
+FileSystemSelector::FileSystemSelector(QWidget* parent)
+    : AbstractSelector(SELECTOR_ID,
+                       SELECTOR_NAME,
+                       getNormalIcon(FAIcon::Eye),
+                       getActiveIcon(FAIcon::Eye),
+                       parent)
+    , m_data(std::make_unique<Data>(this)) {
     auto topLayout = new QHBoxLayout();
     topLayout->addWidget(m_data->m_backBtn);
     topLayout->addWidget(m_data->m_upBtn);
@@ -126,25 +116,18 @@ FileSystemSelector::FileSystemSelector(QWidget *parent)
     m_data->m_upBtn->setToolTip(tr("Go to parent directory"));
 }
 
-FileSystemSelector::~FileSystemSelector()
-{
-
+FileSystemSelector::~FileSystemSelector() {
 }
 
-void FileSystemSelector::selected()
-{
+void FileSystemSelector::selected() {
     appContext()->contentManager()->selectContent(
-                FileHandlerManager::CONTENT_ID);
-
+        FileHandlerManager::CONTENT_ID);
 }
 
-void FileSystemSelector::unselected()
-{
-
+void FileSystemSelector::unselected() {
 }
 
-QString FileSystemSelector::setPath(const QString &path)
-{
+QString FileSystemSelector::setPath(const QString& path) {
     QFileInfo info{path};
     auto old = m_data->m_fsModel->rootPath();
     if (info.exists() && info.isDir()) {
@@ -154,71 +137,58 @@ QString FileSystemSelector::setPath(const QString &path)
         m_data->m_pathEdit->setToolTip(path);
         return old;
     }
-    auto msg = QZ_ERROR("Qz:Explorer") << tr("Invalid directory path given: ")
-                            << path << Logger::Str;
+    auto msg = QZ_ERROR("Qz:Explorer")
+        << tr("Invalid directory path given: ") << path << Logger::Str;
     showError(msg);
     m_data->m_pathEdit->setText(old);
     m_data->m_pathEdit->setToolTip(old);
     return QStringLiteral("");
 }
 
-void FileSystemSelector::makeConnections(
-        QAction *copyPath,
-        QAction *explore)
-{
+void FileSystemSelector::makeConnections(QAction* copyPath, QAction* explore) {
     connect(m_data->m_fsView,
             &QTreeView::doubleClicked,
-            [this](const QModelIndex &index) {
-        auto path = m_data->m_fsModel->filePath(index);
-        appContext()->contentManager()->selectContent(
+            [this](const QModelIndex& index) {
+                auto path = m_data->m_fsModel->filePath(index);
+                appContext()->contentManager()->selectContent(
                     FileHandlerManager::CONTENT_ID);
-        auto page = appContext()->contentManager()->content(
+                auto page = appContext()->contentManager()->content(
                     FileHandlerManager::CONTENT_ID);
-        auto fhMan = qobject_cast<FileHandlerManager *>(page);
-        if (fhMan != nullptr) {
-            fhMan->handle(path);
-        }
-    });
-    connect(m_data->m_browseBtn,
-            &QPushButton::released,
-            [=]() {
+                auto fhMan = qobject_cast<FileHandlerManager*>(page);
+                if (fhMan != nullptr) {
+                    fhMan->handle(path);
+                }
+            });
+    connect(m_data->m_browseBtn, &QPushButton::released, [=]() {
         auto dirPath = QFileDialog::getExistingDirectory(
-                    this,
-                    tr("Explore directory"),
-                    m_data->m_pathEdit->text());
-        if (! dirPath.isEmpty()) {
+            this, tr("Explore directory"), m_data->m_pathEdit->text());
+        if (!dirPath.isEmpty()) {
             m_data->m_pathEdit->setText(dirPath);
             this->setPath(dirPath);
             m_data->m_history.add(dirPath);
         }
     });
-    connect(m_data->m_pathEdit,
-            &QLineEdit::editingFinished,
-            [=](){
-        const auto &path = m_data->m_pathEdit->text();
+    connect(m_data->m_pathEdit, &QLineEdit::editingFinished, [=]() {
+        const auto& path = m_data->m_pathEdit->text();
         this->setPath(path);
         m_data->m_history.add(path);
     });
     connect(m_data->m_fsView,
             &QWidget::customContextMenuRequested,
-            [this](const QPoint &pos) {
-        auto gpos = m_data->m_fsView->mapToGlobal(pos);
-        auto index = m_data->m_fsView->indexAt(pos);
-        m_data->m_contextPath = m_data->m_fsModel->filePath(index);
-        m_data->m_menu->exec(gpos);
-    });
-    connect(copyPath,
-            &QAction::triggered,
-            [this]() {
+            [this](const QPoint& pos) {
+                auto gpos = m_data->m_fsView->mapToGlobal(pos);
+                auto index = m_data->m_fsView->indexAt(pos);
+                m_data->m_contextPath = m_data->m_fsModel->filePath(index);
+                m_data->m_menu->exec(gpos);
+            });
+    connect(copyPath, &QAction::triggered, [this]() {
         if (!m_data->m_contextPath.isEmpty()) {
             auto clipboard = QApplication::clipboard();
             clipboard->setText(m_data->m_contextPath);
             m_data->m_contextPath = QStringLiteral("");
         }
     });
-    connect(explore,
-            &QAction::triggered,
-            [this]() {
+    connect(explore, &QAction::triggered, [this]() {
         if (!m_data->m_contextPath.isEmpty()) {
             m_data->m_pathEdit->setText(m_data->m_contextPath);
             this->setPath(m_data->m_contextPath);
@@ -226,9 +196,7 @@ void FileSystemSelector::makeConnections(
             m_data->m_contextPath = QStringLiteral("");
         }
     });
-    connect(m_data->m_upBtn,
-            &QPushButton::released,
-            [this]() {
+    connect(m_data->m_upBtn, &QPushButton::released, [this]() {
         QFileInfo info{m_data->m_fsModel->rootPath()};
         auto path = info.dir().path();
         if (!path.isEmpty()) {
@@ -237,24 +205,20 @@ void FileSystemSelector::makeConnections(
             m_data->m_history.add(path);
         }
     });
-    connect(m_data->m_backBtn,
-            &QPushButton::released,
-            [this]() {
-        const auto &path = m_data->m_history.prev();
-        if (! path.isEmpty()) {
+    connect(m_data->m_backBtn, &QPushButton::released, [this]() {
+        const auto& path = m_data->m_history.prev();
+        if (!path.isEmpty()) {
             this->setPath(path);
             m_data->m_pathEdit->setText(path);
         }
     });
-    connect(m_data->m_fwdBtn,
-            &QPushButton::released,
-            [this]() {
-        const auto &path = m_data->m_history.next();
-        if (! path.isEmpty()) {
+    connect(m_data->m_fwdBtn, &QPushButton::released, [this]() {
+        const auto& path = m_data->m_history.next();
+        if (!path.isEmpty()) {
             this->setPath(path);
             m_data->m_pathEdit->setText(path);
         }
     });
 }
 
-}
+} // namespace Quartz

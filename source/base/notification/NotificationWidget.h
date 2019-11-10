@@ -11,14 +11,14 @@ namespace Quartz {
 
 class Msg;
 
-//enum class NotificationType : int
+// enum class NotificationType : int
 //{
 //    Info,
 //    Warning,
 //    Error,
 //};
 
-//struct Msg
+// struct Msg
 //{
 //    Msg() {}
 
@@ -48,29 +48,25 @@ class Msg;
 
 //};
 
-class QUARTZ_BASE_API NotificationWidget : public QWidget
-{
+class QUARTZ_BASE_API NotificationWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit NotificationWidget(
-            std::shared_ptr<Msg> msg,
-            QWidget *parent = nullptr);
+    explicit NotificationWidget(std::shared_ptr<Msg> msg,
+                                QWidget* parent = nullptr);
 
     ~NotificationWidget() override;
 
-    const Msg * msg() const;
+    const Msg* msg() const;
 
 Q_SIGNALS:
     void closed();
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent* event) override;
 
 private:
     struct Data;
     std::unique_ptr<Data> m_data;
-
 };
 
-
-}
+} // namespace Quartz

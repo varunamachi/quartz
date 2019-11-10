@@ -6,29 +6,24 @@
 
 #include "Msg.h"
 
-
-namespace Quartz
-{
+namespace Quartz {
 
 const auto COL_INF = QColor{24, 122, 220};
 const auto COL_WRN = QColor{179, 143, 0};
 const auto COL_ERR = QColor{204, 41, 0};
 
-struct Msg::Data
-{
+struct Msg::Data {
 
     Data(int id,
-        const QString &msg,
-        NotificationType type,
-        QTime time,
-        QDateTime dateTime)
+         const QString& msg,
+         NotificationType type,
+         QTime time,
+         QDateTime dateTime)
         : m_id(id)
         , m_msg(msg)
         , m_type(type)
         , m_time(time)
-        , m_dateTime(dateTime)
-    {
-
+        , m_dateTime(dateTime) {
     }
 
     int m_id;
@@ -40,27 +35,21 @@ struct Msg::Data
     QTime m_time;
 
     QDateTime m_dateTime;
-
 };
 
 Msg::Msg(int id,
-         const QString &msg,
+         const QString& msg,
          const NotificationType type,
-         const QTime &time,
-         const QDateTime &dateTime)
+         const QTime& time,
+         const QDateTime& dateTime)
     : TreeNode(3)
-    , m_data(std::make_unique<Data>(id, msg, type, time, dateTime))
-{
-
+    , m_data(std::make_unique<Data>(id, msg, type, time, dateTime)) {
 }
 
-Msg::~Msg()
-{
-
+Msg::~Msg() {
 }
 
-QVariant Msg::fieldValue(int column) const
-{
+QVariant Msg::fieldValue(int column) const {
     switch (column) {
     case 0: {
         switch (m_data->m_type) {
@@ -75,39 +64,33 @@ QVariant Msg::fieldValue(int column) const
     return QVariant{};
 }
 
-QVariant Msg::decoration(int column) const
-{
+QVariant Msg::decoration(int column) const {
     if (column == 0) {
         switch (m_data->m_type) {
         case NotificationType::Info:
             return getIcon(MatIcon::InfoOutline, COL_INF);
         case NotificationType::Warning:
             return getIcon(MatIcon::Warning, COL_WRN);
-        case NotificationType::Error:
-            return getIcon(MatIcon::Error, COL_ERR);
+        case NotificationType::Error: return getIcon(MatIcon::Error, COL_ERR);
         }
     }
     return QVariant{};
 }
 
-NotificationType Msg::type() const
-{
+NotificationType Msg::type() const {
     return m_data->m_type;
 }
 
-const QTime &Msg::time() const
-{
+const QTime& Msg::time() const {
     return m_data->m_time;
 }
 
-const QDateTime &Msg::dateTime() const
-{
+const QDateTime& Msg::dateTime() const {
     return m_data->m_dateTime;
 }
 
-const QString &Msg::text()
-{
+const QString& Msg::text() {
     return m_data->m_msg;
 }
 
-}
+} // namespace Quartz
